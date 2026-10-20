@@ -14,9 +14,8 @@ const CASTRA_V_BAL = {
   hurtMinutesWin: 3,          // lichte blessure na winst met veel schade
   typeAdv: 1.5, typeDis: 0.75,
   defendTakes: 0.5, maxRounds: 12,
-  xpWin: 10, xpPerEnemyLvl: 5, xpPerLvl: 20,
+  xpWin: 10, xpPerEnemyLvl: 1.5,
   lootAes: [8,16], lootFrumentum: [6,12],
-  soldierMaxLvlPerPraetorium: 4,
   dux: { vita:44, impetus:10, tutela:8, celeritas:6, ambitus:1 },
   wildMult: 1.0,              // wilde vijanden in Latium iets zwakker dan een geworven soldaat
 };
@@ -37,15 +36,15 @@ function castraTypeMult(att, def){
   return 1;
 }
 
-// Maak een wilde vijand voor deze regio/terrein; level schaalt met het praetorium.
+// Maak een wilde vijand voor deze regio/terrein: tier 60/28/10/2% (begrensd door het praetorium-level),
+// volk uit de regio, vorm gewogen op het terrein, level passend bij de tier (castraWildPick, castra-troops.js).
 function castraMakeEncounter(regionId, terrainId){
   const reg = CASTRA_VENATIO[regionId];
   const rng = castraRng((CASTRA.seed ^ 0x51ed270b)>>>0); CASTRA.seed = (CASTRA.seed + 7)>>>0;
   const terrain = (terrainId && reg.terrains.find(t=>t.id===terrainId)) || reg.terrains[Math.floor(rng()*reg.terrains.length)];
-  const pick = castraWeightedPick(terrain.lines, rng);
-  const e = castraRollSoldier(pick.id, 0);
-  const cap = Math.min(reg.max, reg.min + castraLvl("praetorium") - 1);
-  e.lvl = reg.min + Math.floor(rng()*(Math.max(reg.min,cap)-reg.min+1));
+  const pick = castraWildPick(reg, terrain, rng);
+  const e = castraRollSoldier(pick.form.id);
+  e.lvl = pick.lvl;
   const st = castraStats(e);
   Object.keys(st).forEach(k=>{ st[k] = Math.max(1, Math.round(st[k]*CASTRA_V_BAL.wildMult)); });
   return { region:regionId, terrain, enemy:e, stats:st };
@@ -115,7 +114,7 @@ function castraVFight(sid){
   const V = CASTRA_V; if(!V) return;
   let mine;
   if(sid==="dux"){
-    mine = { id:"dux", dux:true, line:"legioen", stage:0, lvl:1, xp:0, indoles:{}, ingenium:"fortis", name:"Dux", hurtUntil:0 };
+    mine = { id:"dux", dux:true, line:"rom_hastatus", lvl:1, xp:0, indoles:{}, ingenium:"fortis", name:"Dux", hurtUntil:0 };
     V.myStats = { ...CASTRA_V_BAL.dux };
     V.myType = "inf";
   } else {
@@ -195,9 +194,8 @@ function castraVFinish(){
     CASTRA.res.gloria += 1;
     V.loot = { aes, fru };
     if(soldier){
-      soldier.xp += CASTRA_V_BAL.xpWin + CASTRA_V_BAL.xpPerEnemyLvl*V.enemy.lvl;
-      const maxL = CASTRA_V_BAL.soldierMaxLvlPerPraetorium*castraLvl("praetorium");
-      while(soldier.lvl<maxL && soldier.xp >= CASTRA_V_BAL.xpPerLvl*soldier.lvl){ soldier.xp -= CASTRA_V_BAL.xpPerLvl*soldier.lvl; soldier.lvl++; V.leveled = true; }
+      soldier.xp += CASTRA_V_BAL.xpWin + Math.floor(CASTRA_V_BAL.xpPerEnemyLvl*V.enemy.lvl);
+      const before = soldier.lvl; castraLevelUp(soldier); V.leveled = soldier.lvl > before;
     }
     V.quests = (typeof castraQuestOnWin==="function") ? castraQuestOnWin(V) : [];
     const reg = CASTRA_VENATIO[V.region];

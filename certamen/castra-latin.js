@@ -136,12 +136,14 @@ const CASTRA_LA = {
   nihil_offerre:   { la:"Nihil offers.", nl:"Je biedt niets aan." },
   nulla_oblata:    { la:"Nulla oblata sunt.", nl:"Er is geen aanbod." },
   nullus_miles_idoneus:{ la:"Nullus miles idoneus est.", nl:"Geen enkele soldaat is beschikbaar." },
+  deest:           { la:"deest", nl:"ontbreekt" },
   perge:           { la:"Perge!", nl:"Ga verder!" },
   vestigia:        { la:"Vestigia viri magni vides.", nl:"Je ziet sporen van een groot man." },
 };
 
 /* ---- Typen in het Latijn: meervoud (verkenningsbericht) en enkelvoud (je eigen soldaat) ---- */
 const CASTRA_TYPE_LA = {
+  rec:  { pl:"tirones",   sg:"tiro",       nl_pl:"rekruten",     nl_sg:"rekruut" },
   inf:  { pl:"pedites",   sg:"pedes",       nl_pl:"voetsoldaten",  nl_sg:"voetsoldaat" },
   cav:  { pl:"equites",   sg:"eques",       nl_pl:"ruiters",       nl_sg:"ruiter" },
   rng:  { pl:"sagittarii",sg:"sagittarius", nl_pl:"boogschutters", nl_sg:"boogschutter" },
@@ -157,47 +159,36 @@ const CASTRA_INGENIUM_NL = {
 
 /* ---- Terreinen per regio (zeldzaamheid: sommige lijnen alleen op bepaald terrein) ---- */
 const CASTRA_VENATIO = {
+  // folk = gewicht per volk (een vreemdeling komt af en toe voor); terrein: prefs = gewicht per categorie
+  // (inf/rng/cav/sup/navy) voor tier 2+; myth = kans op een mythisch wezen uit die lijnen. Levels gelden voor
+  // rekruten; hogere tiers beginnen op hun evolutiedrempel (castraWildPick).
   latium: {
-    nm:"Latium", min:1, max:3,
+    nm:"Latium", min:3, max:10, folk:{ rom:94, gal:4, ger:2 },
     terrains:[
-      { id:"silva",  la:"In silva",  nl:"In het bos",
-        lines:[ {id:"legioen",w:3},{id:"licht",w:3},{id:"rangen",w:1},{id:"saters",w:1} ] },
-      { id:"campus", la:"In campo",  nl:"Op het veld",
-        lines:[ {id:"legioen",w:3},{id:"ruiterij",w:3},{id:"rangen",w:2},{id:"licht",w:1} ] },
-      { id:"via",    la:"In via",    nl:"Op de weg",
-        lines:[ {id:"rangen",w:2},{id:"ruiterij",w:2},{id:"legioen",w:2},{id:"licht",w:2} ] },
-      { id:"tiberis",la:"Ad Tiberim",nl:"Bij de Tiber",
-        lines:[ {id:"vloot",w:3},{id:"legioen",w:2},{id:"licht",w:2},{id:"nimfen",w:1} ] },
+      { id:"silva",  la:"In silva",  nl:"In het bos",    prefs:{ rng:3, inf:2, sup:1 }, myth:{ p:0.12, taks:["Saters","Nimfen","Wolven van Mars"] } },
+      { id:"campus", la:"In campo",  nl:"Op het veld",   prefs:{ inf:3, cav:3, rng:1 }, myth:{ p:0.05, taks:["Wolven van Mars"] } },
+      { id:"via",    la:"In via",    nl:"Op de weg",     prefs:{ inf:2, cav:2, rng:2, sup:1 }, myth:{ p:0.05, taks:["Adelaars van Jupiter"] } },
+      { id:"tiberis",la:"Ad Tiberim",nl:"Bij de Tiber",  prefs:{ navy:3, inf:1, rng:1 }, myth:{ p:0.10, taks:["Nimfen"] } },
     ],
-    // Kans op een spoor naar een held na een gewonnen jacht (missieketen volgt in fase 3).
-    traces:[ "aeneas","romulus","horatius","cloelia","mucius","camilla" ],
-    traceChance:0.15,
+    traces:[ "aeneas","romulus","horatius","cloelia","mucius","camilla" ], traceChance:0.15,
   },
   graecia: {
-    nm:"Graecia", min:3, max:6,
+    nm:"Graecia", min:10, max:19, folk:{ gra:80, spa:15, tro:5 },
     terrains:[
-      { id:"mons",  la:"In monte", nl:"Op de berg",
-        lines:[ {id:"phalanx",w:3},{id:"psili",w:3},{id:"gryps",w:1},{id:"saters",w:1} ] },
-      { id:"olea",  la:"In oleis", nl:"In de olijfgaarden",
-        lines:[ {id:"kreta",w:2},{id:"psili",w:2},{id:"nimfen",w:1},{id:"phalanx",w:2} ] },
-      { id:"litus", la:"Ad litus", nl:"Aan de kust",
-        lines:[ {id:"vloot",w:3},{id:"phalanx",w:2},{id:"harpijen",w:1} ] },
-      { id:"urbs",  la:"In urbe", nl:"In de stad",
-        lines:[ {id:"phalanx",w:3},{id:"macedonie",w:2},{id:"kreta",w:1} ] },
+      { id:"mons",  la:"In monte", nl:"Op de berg",         prefs:{ inf:3, rng:3 }, myth:{ p:0.15, taks:["Grijpvogels","Saters","Centauren"] } },
+      { id:"olea",  la:"In oleis", nl:"In de olijfgaarden", prefs:{ rng:3, inf:2, cav:1 }, myth:{ p:0.15, taks:["Nimfen","Saters"] } },
+      { id:"litus", la:"Ad litus", nl:"Aan de kust",        prefs:{ inf:2, rng:2 }, myth:{ p:0.20, taks:["Harpijen","Sirenen","Zeepaarden"] } },
+      { id:"urbs",  la:"In urbe",  nl:"In de stad",         prefs:{ inf:3, cav:2, rng:1 }, myth:{ p:0.05, taks:["Gezaaide mannen","Myrmidonen"] } },
     ],
     traces:[ "hercules","perseus","theseus","atalanta","iason" ], traceChance:0.15,
   },
   troia: {
-    nm:"Troia", min:6, max:9,
+    nm:"Troia", min:19, max:29, folk:{ tro:80, gra:15, ama:5 },
     terrains:[
-      { id:"muros",     la:"Ante muros", nl:"Voor de muren",
-        lines:[ {id:"phalanx",w:3},{id:"psili",w:2},{id:"macedonie",w:2},{id:"rangen",w:1} ] },
-      { id:"campus",    la:"In campo", nl:"Op het veld",
-        lines:[ {id:"macedonie",w:3},{id:"kreta",w:2},{id:"phalanx",w:2},{id:"ruiterij",w:1} ] },
-      { id:"litus",     la:"Ad litus", nl:"Aan de kust",
-        lines:[ {id:"vloot",w:3},{id:"harpijen",w:1},{id:"phalanx",w:2},{id:"kreta",w:1} ] },
-      { id:"scamander", la:"Ad Scamandrum", nl:"Bij de Scamander",
-        lines:[ {id:"nimfen",w:2},{id:"psili",w:2},{id:"vloot",w:1},{id:"gryps",w:1} ] },
+      { id:"muros",     la:"Ante muros",    nl:"Voor de muren",    prefs:{ inf:3, rng:2, cav:1 }, myth:{ p:0.05, taks:["Cyclopen"] } },
+      { id:"campus",    la:"In campo",      nl:"Op het veld",      prefs:{ cav:3, inf:2, rng:1 }, myth:{ p:0.05, taks:["Centauren"] } },
+      { id:"litus",     la:"Ad litus",      nl:"Aan de kust",      prefs:{ inf:2, rng:2 }, myth:{ p:0.15, taks:["Harpijen","Sirenen"] } },
+      { id:"scamander", la:"Ad Scamandrum", nl:"Bij de Scamander", prefs:{ rng:2, sup:1, inf:1 }, myth:{ p:0.15, taks:["Nimfen","Zeepaarden"] } },
     ],
     traces:[ "achilles","hector","ulixes","penthesilea" ], traceChance:0.15,
   },
@@ -225,7 +216,7 @@ const CASTRA_GLOSS = {
   "dicit":"zegt", "te":"jou", "sequar":"ik zal volgen", "visne":"wil je?", "eum":"hem",
   "castra":"kamp", "recipere":"opnemen", "recipio":"ik neem op", "dimitto":"ik laat gaan",
   "plena":"vol", "redi":"keer terug!", "iterum":"opnieuw", "vestigia":"sporen",
-  "viri":"van een man", "pugnes":"(opdat) je vecht", "legio":"legioen", "commercium":"handel", "ut":"om te / zodat", "cum":"met", "legione":"legioen (met het legioen)", "intra":"ga naar binnen / log in!", "nulla":"geen", "convenit":"komt samen",
+  "viri":"van een man", "tiro":"rekruut", "tirones":"rekruten", "bonus":"goed", "fiet":"zal worden", "pedes":"voetsoldaat", "eques":"ruiter", "pugnes":"(opdat) je vecht", "legio":"legioen", "commercium":"handel", "ut":"om te / zodat", "cum":"met", "legione":"legioen (met het legioen)", "intra":"ga naar binnen / log in!", "nulla":"geen", "convenit":"komt samen",
   "omnes":"allen", "post":"na / over", "incipit":"begint", "pugnat":"vecht", "finita":"afgelopen", "haec":"deze", "pugna":"vecht!", "victoria":"overwinning", "defendistis":"jullie hebben verdedigd", "capta":"ingenomen",
   "oblata":"aanbod", "mea":"mijn", "aliorum":"van anderen", "offer":"bied aan!", "revoca":"trek in!", "commuta":"ruil!", "quem":"wie / welke", "das":"je geeft", "commutatio":"ruil", "facta":"gedaan", "iam":"al", "captum":"genomen",
   "nihil":"niets", "offers":"je biedt aan", "idoneus":"geschikt", "legionarii":"legioensoldaten", "nullus":"geen", "adsum":"ik ben er", "hodie":"vandaag",
@@ -288,10 +279,16 @@ function castraHelpSync(kind, key, text){
     fbDB.ref().update(upd).catch(()=>{});
   }catch(e){}
 }
+let _castraFormWords = null;
+function castraFormGloss(w){
+  if(typeof CASTRA_FORM_LIST==="undefined") return null;
+  if(!_castraFormWords){ _castraFormWords = {}; CASTRA_FORM_LIST.forEach(f=>{ f.nm.split(" ").forEach(p=>{ const k = castraNorm(p); if(k && !_castraFormWords[k]) _castraFormWords[k] = f.nm; }); }); }
+  const nm = _castraFormWords[w]; return nm ? "soldatentype of volk: "+nm : null;
+}
 function castraTapWord(ev, node){
   ev.stopPropagation();
   const w = node.getAttribute("data-w");
-  const meaning = CASTRA_GLOSS[w] || "(geen vertaling beschikbaar)";
+  const meaning = CASTRA_GLOSS[w] || castraFormGloss(w) || "(geen vertaling beschikbaar)";
   castraLogHelp("words", w, node.textContent);
   let box = document.getElementById("castraGloss");
   if(!box){

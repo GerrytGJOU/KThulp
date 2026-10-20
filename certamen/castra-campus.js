@@ -15,8 +15,8 @@ function castraTrainToday(){
 }
 function castraTrainXp(){ const T = CASTRA_BAL.train; return Math.floor((T.xpBase + T.xpPerCampusLvl*castraLvl("campus")) * (100+((typeof castraHeroBonus==="function")?castraHeroBonus("campus"):0))/100); }
 function castraLevelUp(s){
-  const maxL = CASTRA_V_BAL.soldierMaxLvlPerPraetorium*castraLvl("praetorium"); let up = false;
-  while(s.lvl<maxL && s.xp >= CASTRA_V_BAL.xpPerLvl*s.lvl){ s.xp -= CASTRA_V_BAL.xpPerLvl*s.lvl; s.lvl++; up = true; }
+  const maxL = castraSoldierCap(); let up = false;
+  while(s.lvl<maxL && s.xp >= castraXpToNext(s.lvl)){ s.xp -= castraXpToNext(s.lvl); s.lvl++; up = true; }
   return up;
 }
 function castraTrainingNow(){ return CASTRA.soldiers.filter(s=>s.trainUntil); }
@@ -37,19 +37,19 @@ function castraTrainCollect(sid){
   s.trainUntil = 0; s.xp += castraTrainXp(); castraLevelUp(s); castraSave(); return true;
 }
 
-// Welk volgend stadium kan deze soldaat nu in? (max = al op het hoogste stadium)
+// Evolutie (troepenbomen): level- en campus-eis, kosten, en per optie een eventueel ontbrekend gebouw.
 function castraEvoInfo(s){
-  const line = castraLine(s.line), next = s.stage+1;
-  if(next >= line.stages.length) return { max:true };
-  const req = CASTRA_BAL.evo[s.stage] || CASTRA_BAL.evo[CASTRA_BAL.evo.length-1];
-  const ok = s.lvl >= req.lvl && castraLvl("campus") >= req.campus;
-  return { max:false, req, ok, options: Array.isArray(line.stages[next]) ? line.stages[next] : null };
+  const f = castraLine(s.line);
+  if(!f.next.length) return { max:true };
+  const need = castraEvoLevel(f), campusReq = CASTRA_EVO.campus[f.tier-1] || 5, cost = CASTRA_EVO.cost[f.tier-1] || CASTRA_EVO.cost[CASTRA_EVO.cost.length-1];
+  const options = f.next.map(id=>{ const n = castraLine(id); return { id, f:n, missing: (n.needs && castraLvl(n.needs)<1) ? n.needs : null }; });
+  return { max:false, need, campusReq, cost, lvlOk: s.lvl>=need && castraLvl("campus")>=campusReq, canPay:castraCanPay(cost), options };
 }
-function castraEvolve(sid, branch){
+function castraEvolve(sid, formId){
   const s = CASTRA.soldiers.find(x=>x.id===sid); if(!s) return false;
-  const info = castraEvoInfo(s); if(info.max || !info.ok) return false;
-  s.stage++; s.branch = info.options ? (branch||0) : 0;
-  castraSave(); return true;
+  const info = castraEvoInfo(s); if(info.max || !info.lvlOk || !info.canPay) return false;
+  const opt = info.options.find(o=>o.id===formId); if(!opt || opt.missing) return false;
+  castraPay(info.cost); s.line = formId; castraSave(); return true;       // de keuze is definitief
 }
 function castraRelease(sid){
   const i = CASTRA.soldiers.findIndex(s=>s.id===sid); if(i<0) return false;
@@ -72,14 +72,22 @@ function castraCampusOpen(){
     else act = `<button class="btn" onclick="castraDoTrain('${s.id}')">${castraLaText("exerce")} <small>${castraRes("frumentum").icon} ${T.cost.frumentum}</small></button>`;
     let ev = "";
     if(!evo.max){
-      const nxt = castraLine(s.line).stages[s.stage+1];
-      const nm = Array.isArray(nxt) ? nxt.join(" / ") : nxt;
-      ev = evo.ok
-        ? (evo.options ? `<div><small>${castraLaText("elige_viam")}</small> ${evo.options.map((o,i)=>`<button class="btn btn-gold" onclick="castraDoEvolve('${s.id}',${i})">${esc(o)}</button>`).join(" ")}</div>`
-                       : `<button class="btn btn-gold" onclick="castraDoEvolve('${s.id}',0)">${castraLaText("evolve")} → ${esc(nm)}</button>`)
-        : `<small style="opacity:.75">→ ${esc(nm)}: miles ${castraLaText("gradus")} ${evo.req.lvl} + campus ${castraLaText("gradus")} ${evo.req.campus}</small>`;
+      const names = evo.options.map(o=>o.f.nm).join(" / ");
+      if(!evo.lvlOk){
+        ev = `<small style="opacity:.75">→ ${esc(names)}: miles ${castraLaText("gradus")} ${evo.need} + campus ${castraLaText("gradus")} ${evo.campusReq}</small>`;
+      } else {
+        const adv = castraAdvice(s), costTxt2 = Object.keys(evo.cost).map(r=>castraRes(r).icon+" "+evo.cost[r]).join(" ");
+        ev = `<div style="font-size:15px;margin-bottom:4px">${adv?castraLaHTML(adv.la, adv.nl, "adv_"+s.line):""}</div>
+          <div><small>${castraLaText("elige_viam")} · ${costTxt2}</small></div>` +
+          evo.options.map(o=>{
+            const st = castraStats({ ...s, line:o.id }), dis = !evo.canPay || o.missing;
+            return `<div style="margin:3px 0"><button class="btn ${adv&&adv.pick===o.id?"btn-gold":""}" ${dis?"disabled":""} onclick="castraDoEvolve('${s.id}','${o.id}')">${castraLaText("evolve")} → ${esc(o.f.nm)}</button>
+              <small>${esc(o.f.tak)} · ${esc((CASTRA_TYPE_LA[o.f.type]||{}).sg||"")} · ${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" ")}</small>
+              ${o.missing?`<small> · ${esc(castraBuilding(o.missing)?castraBuilding(o.missing).nm:o.missing)} ${castraLaText("deest")}</small>`:""}</div>`;
+          }).join("");
+      }
     }
-    return `<div style="padding:6px 0;border-top:1px solid #4a3d2c"><b>${s.insignis?"✨ ":""}${esc(castraSoldierName(s))}</b> · ${castraLaText("gradus")} ${s.lvl} <small>(XP ${s.xp}/${CASTRA_V_BAL.xpPerLvl*s.lvl})</small>
+    return `<div style="padding:6px 0;border-top:1px solid #4a3d2c"><b>${s.insignis?"✨ ":""}${esc(castraSoldierName(s))}</b> <small>(${esc(castraLine(s.line).tak)} · tier ${castraLine(s.line).tier})</small> · ${castraLaText("gradus")} ${s.lvl} <small>(XP ${s.xp}/${castraXpToNext(s.lvl)})</small>
       <div style="margin-top:4px">${act}</div>${ev?`<div style="margin-top:4px">${ev}</div>`:""}</div>`;
   }).join("") || `<div class="note">${castraLa("nullus_exercitus")}</div>`;
   const up = lvl>=maxL ? `<div class="note">${castraLa(lvl>=castraBuilding("campus").maxLvl?"gradus_max":"praetorium_prius")}</div>`
@@ -91,7 +99,7 @@ function castraCampusOpen(){
 }
 function castraDoTrain(sid){ const e = castraTrainStart(sid); if(e) castraToastLa(e); castraRenderRes(); castraCampusOpen(); }
 function castraDoCollectTrain(sid){ if(castraTrainCollect(sid)) castraToastLa("exercitatio_finita", "+"+castraTrainXp()+" XP"); castraCampusOpen(); }
-function castraDoEvolve(sid, b){ const s = CASTRA.soldiers.find(x=>x.id===sid); if(castraEvolve(sid,b)) castraToastLa("promotus", castraSoldierName(s)); castraCampusOpen(); }
+function castraDoEvolve(sid, formId){ const s = CASTRA.soldiers.find(x=>x.id===sid); if(castraEvolve(sid,formId)) castraToastLa("promotus", castraSoldierName(s)); castraRenderRes(); castraCampusOpen(); }
 function castraDoRelease(sid){
   const s = CASTRA.soldiers.find(x=>x.id===sid); if(!s) return;
   if(!confirm(CASTRA_LA.visne_dimittere.la+"\n("+CASTRA_LA.visne_dimittere.nl+")")) return;

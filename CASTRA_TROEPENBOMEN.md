@@ -1,6 +1,6 @@
 # Castra Heroum — troepenbomen per volk (151 vormen)
 
-Wijzigingsverzoek van Gerben, 2026-10-20 · status: **voorstel, nog niets gebouwd** · hoort bij `CASTRA_HEROUM.md`.
+Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1 gebouwd (2026-10-29), wacht op goedkeuring voor M2** · hoort bij `CASTRA_HEROUM.md`.
 Dit document is de bron van waarheid voor de troepenbomen; het vervangt de huidige losse evolutielijnen (`CASTRA_LINES` in `certamen/castra-data.js`). De 15 helden (`CASTRA_HERO_DATA`) blijven ongewijzigd.
 
 ## 1. Idee en regels
@@ -103,7 +103,30 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 - **Werkwijze:** bouwen in mijlpalen met een stop na elke mijlpaal voor goedkeuring; `node --check` na elke JS-wijziging.
 - **Huisstijl:** Nederlandse UI met speltekst in het Latijn, footer "© Gerben de Jong · 2026".
 
-## 7. Voorstel mijlpalen en open punten
+## 7a. Besluiten (Gerben, 2026-10-29) en wat M1 daarvan gemaakt heeft
+
+| Punt | Besluit | In M1 |
+| --- | --- | --- |
+| 1 Kosten per evolutie | *Duurder* | tier 2: 50 frumentum + 25 aes · tier 3: 100 + 50 · tier 4: 200 + 100 (`CASTRA_EVO.cost`) |
+| 2 Levels | "Meer zoals Pokémon: rond level 16, 32, 50, afhankelijk van type en tier" | evolueren bij level **16 / 32 / 50** (rekruut en infanterie), ruiterij 18/34/50, afstand 14/30/46, ondersteuning 14/28/44, mythisch 12/26/42 (`CASTRA_EVO.lvl`) |
+| 2b Level-schaal | *Cap 10 × praetorium* | levelcap = 10 × praetorium-level (max 50); XP naar het volgende level = 3 × level (`castraXpToNext`); +2,5% stats per level; tier-vermenigvuldiger 1 / 1,6 / 2,4 / 3,2. Oude levels ×3,2 bij migratie (max 50). |
+| 3 Stabula/Navalia | *Zichtbaar, niet kiesbaar* tot M2 | opties met `needs` tonen "Stabula deest" en zijn uitgeschakeld |
+| 4 Certamen-klassen | *In M5* | nog niet gedaan |
+| 5 Stijl | *Huidige stijl houden* | ongewijzigd (Palatino) |
+| 6 Sprites | *Avatar-lagen per rol/volk* | `castraFormLook`: uiterlijk per volk, rol en tier uit bestaande top-down lagen |
+
+**Gebouwd in M1** (`certamen/castra-troops.js`, aanpassingen in castra.js, castra-campus.js, castra-venatio.js, castra-medical.js, castra-proelium.js, castra-legio.js, castra-commercium.js, castra-latin.js):
+- Vormencatalogus met alle **151 vormen** (volk, tier, tak, type, ouders, gebouweis; id ≤ 20 tekens voor de Legio-regels). Gecontroleerd: aantallen per volk kloppen met §2, elke vorm vanaf tier 2 heeft een ouder, *Primus palus* en *Rudiarius* hebben alle 6 tier-2-gladiatoren als ouder, *Nympha* heeft 4 keuzes. Een soldaat blijft `{line, lvl, xp, indoles, ingenium, insignis}`; `line` is nu het vorm-id.
+- **Evolutiescherm** in de campus: bij voldoende level en campus-niveau toont elke soldaat het Latijnse advies van de trainer (*Hic tiro robustus est; bonus hastatus fiet.*, op basis van de beste aanleg) en per optie tak, rol en stats; de keuze is definitief en kost grondstoffen.
+- **Migratie** van bestaande saves (eenmalig, `troopsV`): oude lijn + stadium + tak → nieuwe vorm. Miles → Tiro; Tubicen → Signifer; oude Tiro (arena) → Novicius; arena-keuze → Murmillo/Retiarius/Secutor; Optio, Centurio, Hippotoxota, Hetairus, Lochagus en de overige vormen ongewijzigd. IV's, karakter, insignis en uitrusting blijven; XP wordt 0; levels ×3,2. Ook ontvangen ruilsoldaten en cloud-saves worden gemigreerd.
+- **Wild** (basis van M3): tier 60 / 28 / 10 / 2%, **maar begrensd door het praetorium-level** (tier 2 vanaf praetorium 2, tier 3 vanaf 4, tier 4 vanaf 5) zodat vroege spelers niet tegen veel te sterke wilde soldaten komen; volk uit de regio (Latium: 94% Romeinen, 4% Galliërs, 2% Germanen; Graecia en Troia met eigen mengsels), vorm gewogen op het terrein, mythische wezens per terrein; hogere tiers beginnen op hun evolutiedrempel (tier 2 vanaf 12–19, tier 3 28–36, tier 4 46–50). Gemeten verdeling (2000 trekkingen, praetorium 5): 61 / 28 / 9 / 2%.
+- **Werving (Dilectus)** biedt rekruten van de geopende volken aan (Romeinen; Grieken en Spartanen vanaf Graecia; Trojanen vanaf Troia).
+- **Missies en Legio** gebruiken nu vormen uit de bomen (tier en level groeien mee met de regio) en zijn opnieuw afgesteld met de gesimuleerde proef (`hpMult` m1 0,6 · m2 3,9 · m3 3,4 · g1 3,4 · g2 5,8 · t1 4,7 · t2 5,6 · Legio 4,5): winnen met ±4–6 levens bij de bedoelde opstelling, verliezen bij 70% van dat level, comfortabel winnen bij 130%.
+- Uiterlijk van eenheden in het proelium en bij de NPC's: avatar-lagen volgens `castraFormLook` (volk, rol, tier).
+
+**Nog niet (volgende mijlpalen):** M2 stabula en navalia (nu ontbreekt het gebouw dus kiezen kan niet), M3 uitwerking van wild/werving (vreemdelingen per regio, Dilectus per volk en tier), M4 codex, M5 Certamen-klassen, M6 sprites-pijplijn, M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
+
+## 7. Voorstel mijlpalen en open punten (oorspronkelijk)
 
 | Mijlpaal | Inhoud | Stop voor goedkeuring |
 | --- | --- | --- |

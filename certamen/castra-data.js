@@ -90,13 +90,14 @@ const CASTRA_MAP = {
    type: inf (infanterie) > cav (ruiterij) > rng (afstand) > inf; sup/myth vallen
    buiten de driehoek. stages: naam per stadium; een array = vertakking. */
 const CASTRA_TYPES = {
+  rec:  { nm:"Rekruut",    beats:null },
   inf:  { nm:"Infanterie", beats:"cav" },
   cav:  { nm:"Ruiterij",   beats:"rng" },
   rng:  { nm:"Afstand",    beats:"inf" },
   sup:  { nm:"Ondersteuning", beats:null },
   myth: { nm:"Mythisch",   beats:null },
 };
-const CASTRA_LINES = [
+const CASTRA_LINES_LEGACY = [   // alleen voor de migratie van oude saves; de troepenbomen staan in castra-troops.js
   { id:"legioen",   type:"inf",  role:"Zware infanterie, blokkeert het pad", stages:["Hastatus","Princeps","Triarius"] },
   { id:"rangen",    type:"inf",  role:"Leider, versterkt soldaten om zich heen", stages:["Miles","Optio","Centurio"] },
   { id:"licht",     type:"rng",  role:"Afstand", stages:["Veles","Funditor","Sagittarius"] },
@@ -119,6 +120,7 @@ const CASTRA_LINES = [
 
 /* Basiswaarden per type (stadium 1); elk volgend stadium ×CASTRA_STAGE_MULT. */
 const CASTRA_BASE_STATS = {
+  rec:  { vita:24, impetus:5, tutela:4, celeritas:4, ambitus:2 },
   inf:  { vita:30, impetus:6, tutela:8, celeritas:3, ambitus:1 },
   cav:  { vita:24, impetus:8, tutela:4, celeritas:7, ambitus:1 },
   rng:  { vita:18, impetus:7, tutela:2, celeritas:4, ambitus:5 },

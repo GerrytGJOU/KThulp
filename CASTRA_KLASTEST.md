@@ -84,12 +84,12 @@ forum/templum/ludus/fabrica/navalia/stabula/bibliotheca/murus, oppugnatio en baa
 
 Open eerst Castra Heroum (zodat het spel geladen is), open daarna de browserconsole en plak één van onderstaande blokken. Het werkt alleen op jouw apparaat/save.
 
-**Kit A — halverwege (alles level 3, 6 soldaten Gr. 6, veel grondstoffen):**
+**Kit A — halverwege (alles level 3, 6 rekruten op level 20 — klaar om te evolueren zodra de campus op niveau 2 staat —, veel grondstoffen):**
 
 ```js
 (()=>{ const C=CASTRA; C.res={frumentum:500,lignum:600,aes:600,gloria:10};
   Object.keys(C.b).forEach(k=>{ if(k!=="principia") C.b[k].lvl=3; });
-  ["legioen","rangen","licht","ruiterij","legioen","licht"].forEach(l=>{ const s=castraRollSoldier(l,0); s.lvl=6; C.soldiers.push(s); });
+  ["rom_tiro","rom_tiro","rom_tiro","rom_tiro","rom_tiro","rom_tiro"].forEach(l=>{ const s=castraRollSoldier(l); s.lvl=20; C.soldiers.push(s); });
   C.introSeen=true; castraSave(); go("castraHome"); })()
 ```
 

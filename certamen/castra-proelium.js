@@ -33,66 +33,58 @@ const CASTRA_P_MAPS = {
        trees:[[6,5],[7,5],[6,6],[12,4],[12,5],[1,5],[1,6],[5,10],[8,9],[9,9],[13,9],[7,0],[5,0]] },
 };
 
-/* Missies in Latium. waves: [ [ {line, n, gap, lvl} ] ] — gap = ticks tussen twee vijanden. */
+/* Missies. waves: [ [ {line: vorm-id, n, gap, lvl} ] ] — gap = ticks tussen twee vijanden. De vijanden zijn vormen uit de
+   troepenbomen (tier en level groeien mee met de regio); hpMult stemt de zwaarte af (gesimuleerd, zie CASTRA_HEROUM.md). */
+const _fid = (v,n)=>castraFormByName(v,n).id;
 const CASTRA_P_MISSIONS = [
-  { id:"m1", nm:"Defensio castrorum", nl:"De verdediging van het kamp", map:"a", seed:1101, hpMult:2.0,
-    waves:[ [ {line:"legioen",n:4,gap:26,lvl:1} ],
-            [ {line:"ruiterij",n:3,gap:22,lvl:1} ],
-            [ {line:"licht",n:4,gap:24,lvl:1}, {line:"legioen",n:2,gap:26,lvl:1} ] ],
+  { id:"m1", nm:"Defensio castrorum", nl:"De verdediging van het kamp", map:"a", seed:1101, hpMult:0.6,
+    waves:[ [ {line:_fid("rom","Hastatus"),n:4,gap:26,lvl:3} ],
+            [ {line:_fid("rom","Eques"),n:3,gap:22,lvl:3} ],
+            [ {line:_fid("rom","Veles"),n:4,gap:24,lvl:3}, {line:_fid("rom","Hastatus"),n:2,gap:26,lvl:3} ] ],
     reward:{ aes:40, frumentum:30, gloria:3 } },
-  { id:"m2", nm:"Via Latina", nl:"De Latijnse weg", map:"b", seed:1202, hpMult:2.4, needs:"m1",
-    waves:[ [ {line:"ruiterij",n:4,gap:20,lvl:2} ],
-            [ {line:"legioen",n:5,gap:24,lvl:2}, {line:"rangen",n:1,gap:24,lvl:2} ],
-            [ {line:"licht",n:5,gap:20,lvl:2} ],
-            [ {line:"ruiterij",n:3,gap:18,lvl:2}, {line:"licht",n:3,gap:20,lvl:2}, {line:"legioen",n:3,gap:22,lvl:2} ] ],
+  { id:"m2", nm:"Via Latina", nl:"De Latijnse weg", map:"b", seed:1202, hpMult:3.9, needs:"m1",
+    waves:[ [ {line:_fid("rom","Eques"),n:4,gap:20,lvl:10} ],
+            [ {line:_fid("rom","Hastatus"),n:5,gap:24,lvl:10}, {line:_fid("rom","Veles"),n:1,gap:24,lvl:10} ],
+            [ {line:_fid("rom","Veles"),n:5,gap:20,lvl:10} ],
+            [ {line:_fid("rom","Eques"),n:3,gap:18,lvl:10}, {line:_fid("rom","Veles"),n:3,gap:20,lvl:10}, {line:_fid("rom","Hastatus"),n:3,gap:22,lvl:10} ] ],
     reward:{ aes:70, frumentum:50, gloria:5 } },
-  { id:"m3", nm:"Oppugnatio Ardeae", nl:"De aanval op Ardea", map:"a", seed:1303, hpMult:3.0, needs:"m2",
-    waves:[ [ {line:"legioen",n:6,gap:22,lvl:3} ],
-            [ {line:"saters",n:4,gap:20,lvl:3}, {line:"licht",n:3,gap:20,lvl:3} ],
-            [ {line:"ruiterij",n:5,gap:16,lvl:3} ],
-            [ {line:"rangen",n:2,gap:24,lvl:3}, {line:"legioen",n:6,gap:20,lvl:3}, {line:"licht",n:4,gap:18,lvl:3} ] ],
+  { id:"m3", nm:"Oppugnatio Ardeae", nl:"De aanval op Ardea", map:"a", seed:1303, hpMult:3.4, needs:"m2",
+    waves:[ [ {line:_fid("rom","Princeps"),n:6,gap:22,lvl:20} ],
+            [ {line:_fid("myt","Satyrus"),n:4,gap:20,lvl:20}, {line:_fid("rom","Funditor"),n:3,gap:20,lvl:20} ],
+            [ {line:_fid("rom","Decurio"),n:5,gap:16,lvl:20} ],
+            [ {line:_fid("rom","Optio"),n:2,gap:24,lvl:20}, {line:_fid("rom","Princeps"),n:6,gap:20,lvl:20}, {line:_fid("rom","Funditor"),n:4,gap:18,lvl:20} ] ],
     reward:{ aes:110, frumentum:80, gloria:8 } },
   /* Graecia (opent na m2) */
-  { id:"g1", region:"graecia", nm:"Labor primus", nl:"De eerste labor", map:"b", seed:2101, hpMult:4.4, needs:"m2",
-    waves:[ [ {line:"phalanx",n:5,gap:22,lvl:5} ],
-            [ {line:"kreta",n:5,gap:20,lvl:5} ],
-            [ {line:"macedonie",n:4,gap:18,lvl:5}, {line:"psili",n:4,gap:20,lvl:5} ],
-            [ {line:"phalanx",n:4,gap:20,lvl:5}, {line:"saters",n:3,gap:20,lvl:5} ] ],
+  { id:"g1", region:"graecia", nm:"Labor primus", nl:"De eerste labor", map:"b", seed:2101, hpMult:3.4, needs:"m2",
+    waves:[ [ {line:_fid("gra","Epilectus"),n:5,gap:22,lvl:24} ],
+            [ {line:_fid("gra","Toxota"),n:5,gap:20,lvl:24} ],
+            [ {line:_fid("gra","Prodromus"),n:4,gap:18,lvl:24}, {line:_fid("gra","Peltasta"),n:4,gap:20,lvl:24} ],
+            [ {line:_fid("gra","Epilectus"),n:4,gap:20,lvl:24}, {line:_fid("myt","Silenus"),n:3,gap:20,lvl:24} ] ],
     reward:{ aes:150, frumentum:100, gloria:10 } },
-  { id:"g2", region:"graecia", nm:"Labyrinthus", nl:"Het labyrint", map:"a", seed:2202, hpMult:5.6, needs:"g1",
-    waves:[ [ {line:"psili",n:6,gap:18,lvl:6} ],
-            [ {line:"phalanx",n:6,gap:20,lvl:6}, {line:"kreta",n:3,gap:20,lvl:6} ],
-            [ {line:"macedonie",n:6,gap:16,lvl:6} ],
-            [ {line:"gryps",n:3,gap:24,lvl:6}, {line:"phalanx",n:6,gap:18,lvl:6}, {line:"psili",n:4,gap:18,lvl:6} ] ],
+  { id:"g2", region:"graecia", nm:"Labyrinthus", nl:"Het labyrint", map:"a", seed:2202, hpMult:5.8, needs:"g1",
+    waves:[ [ {line:_fid("gra","Peltasta"),n:6,gap:18,lvl:28} ],
+            [ {line:_fid("gra","Epilectus"),n:6,gap:20,lvl:28}, {line:_fid("gra","Toxota"),n:3,gap:20,lvl:28} ],
+            [ {line:_fid("gra","Prodromus"),n:6,gap:16,lvl:28} ],
+            [ {line:_fid("myt","Gryps"),n:3,gap:24,lvl:28}, {line:_fid("gra","Lochagus"),n:6,gap:18,lvl:28}, {line:_fid("gra","Peltasta"),n:4,gap:18,lvl:28} ] ],
     reward:{ aes:190, frumentum:130, gloria:12 } },
   /* Troia (opent na g1) */
-  { id:"t1", region:"troia", nm:"Muri Troiae", nl:"De muren van Troje", map:"b", seed:3101, hpMult:5.0, needs:"g1",
-    waves:[ [ {line:"phalanx",n:6,gap:20,lvl:8} ],
-            [ {line:"macedonie",n:5,gap:18,lvl:8}, {line:"psili",n:4,gap:18,lvl:8} ],
-            [ {line:"kreta",n:6,gap:16,lvl:8} ],
-            [ {line:"phalanx",n:6,gap:16,lvl:8}, {line:"macedonie",n:4,gap:16,lvl:8}, {line:"rangen",n:2,gap:20,lvl:8} ] ],
+  { id:"t1", region:"troia", nm:"Muri Troiae", nl:"De muren van Troje", map:"b", seed:3101, hpMult:4.7, needs:"g1",
+    waves:[ [ {line:_fid("tro","Propugnator"),n:6,gap:20,lvl:32} ],
+            [ {line:_fid("tro","Bellator curru"),n:5,gap:18,lvl:32}, {line:_fid("tro","Sagittarius Lycius"),n:4,gap:18,lvl:32} ],
+            [ {line:_fid("tro","Sagittarius Lycius"),n:6,gap:16,lvl:32} ],
+            [ {line:_fid("tro","Custos Pergami"),n:6,gap:16,lvl:32}, {line:_fid("tro","Bellator curru"),n:4,gap:16,lvl:32}, {line:_fid("gra","Lochagus"),n:2,gap:20,lvl:32} ] ],
     reward:{ aes:240, frumentum:160, gloria:14 } },
-  { id:"t2", region:"troia", nm:"Equus ligneus", nl:"Het houten paard", map:"a", seed:3202, hpMult:6.5, needs:"t1",
-    waves:[ [ {line:"macedonie",n:7,gap:16,lvl:9} ],
-            [ {line:"phalanx",n:7,gap:18,lvl:9}, {line:"kreta",n:4,gap:18,lvl:9} ],
-            [ {line:"harpijen",n:4,gap:20,lvl:9}, {line:"psili",n:6,gap:16,lvl:9} ],
-            [ {line:"gryps",n:3,gap:22,lvl:9}, {line:"macedonie",n:6,gap:14,lvl:9}, {line:"phalanx",n:6,gap:16,lvl:9} ] ],
+  { id:"t2", region:"troia", nm:"Equus ligneus", nl:"Het houten paard", map:"a", seed:3202, hpMult:5.6, needs:"t1",
+    waves:[ [ {line:_fid("tro","Bellator curru"),n:7,gap:16,lvl:38} ],
+            [ {line:_fid("tro","Custos Pergami"),n:7,gap:18,lvl:38}, {line:_fid("tro","Sagittarius Lycius"),n:4,gap:18,lvl:38} ],
+            [ {line:_fid("myt","Harpyia"),n:4,gap:20,lvl:38}, {line:_fid("tro","Propugnator"),n:6,gap:16,lvl:38} ],
+            [ {line:_fid("myt","Gryps"),n:3,gap:22,lvl:38}, {line:_fid("tro","Bellator curru"),n:6,gap:14,lvl:38}, {line:_fid("tro","Custos Pergami"),n:6,gap:16,lvl:38} ] ],
     reward:{ aes:300, frumentum:200, gloria:18 } },
 ];
 for(const m of CASTRA_P_MISSIONS){ if(!m.region) m.region = "latium"; }
 
-/* Uiterlijk per soldatenlijn (alleen lagen waarvoor top-down sprites bestaan). */
-const CASTRA_P_LOOK = {
-  legioen:{ armor:"middel", helm:"open" }, rangen:{ armor:"middel", helm:"standard", cape:"kort", capekleur:"rood" },
-  licht:{ armor:"vodden", helm:"bandana" }, ruiterij:{ armor:"robe", cape:"lang", capekleur:"blauw" },
-  vaandel:{ armor:"ceremonieel", cape:"kort", capekleur:"rood" }, zorg:{ armor:"robe", capekleur:"groen" },
-  beleg:{ armor:"vodden", helm:"standard" }, verkenning:{ armor:"vodden", helm:"bandana" }, vloot:{ armor:"middel", helm:"bandana" },
-  arena:{ armor:"ceremonieel", helm:"open" }, phalanx:{ armor:"middel", helm:"open" }, psili:{ armor:"vodden", helm:"bandana" },
-  kreta:{ armor:"vodden", helm:"bandana" }, macedonie:{ armor:"ceremonieel", helm:"standard" },
-  saters:{ armor:"vodden", cape:"duivelsvleugels" }, nimfen:{ armor:"robe", cape:"vlindervleugels" },
-  harpijen:{ armor:"vodden", cape:"engelenvleugels" }, gryps:{ armor:"vodden", cape:"engelenvleugels" },
-};
-function castraPLook(lineId){ return { schild:"geen", wapen:"zwaard", helm:"geen", ...(CASTRA_P_LOOK[lineId]||{}) }; }
+/* Uiterlijk per vorm: avatar-lagen per volk, rol en tier (castraFormLook, castra-troops.js). */
+function castraPLook(lineId){ return castraFormLook(castraLine(lineId)); }
 
 /* ---------- pad ---------- */
 function castraPPath(mapId){
@@ -137,7 +129,7 @@ function castraPScout(m){
 function castraPEnemyStats(lineId, lvl, rng, hpMult){
   const indoles = {}; CASTRA_STATS.forEach(st=>{ indoles[st.id] = Math.floor(rng()*8); });
   const ing = CASTRA_INGENIA[Math.floor(rng()*CASTRA_INGENIA.length)].id;
-  const s = { line:lineId, stage:0, lvl, indoles, ingenium:ing };
+  const s = { line:lineId, lvl, indoles, ingenium:ing };
   const st = castraStats(s);
   st.vita = Math.max(1, Math.round(st.vita * hpMult));
   return st;

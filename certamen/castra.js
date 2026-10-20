@@ -16,7 +16,6 @@ let CASTRA_UI = { px:0, py:0, dir:"up", frame:1, moving:false, panel:null, keyFn
 
 /* ---------- hulpjes ---------- */
 function castraBuilding(id){ return CASTRA_BUILDINGS.find(b=>b.id===id); }
-function castraLine(id){ return CASTRA_LINES.find(l=>l.id===id); }
 function castraRes(id){ return CASTRA_RES.find(r=>r.id===id); }
 function castraNow(){ return Date.now(); }
 
@@ -66,6 +65,13 @@ function castraAdoptIdentity(){
     }).catch(()=>{});
   }catch(e){}
 }
+// Oude soldaten (lijn + stadium + tak) naar de troepenbomen; eenmalig per save (s.troopsV).
+function castraMigrateState(s){
+  if(s.troopsV===1) return s;
+  s.soldiers = (s.soldiers||[]).map(castraMigrateSoldier);
+  if(s.dilectus && s.dilectus.cands) s.dilectus.cands = s.dilectus.cands.map(castraMigrateSoldier);
+  s.troopsV = 1; return s;
+}
 function castraLoad(){
   castraAdoptIdentity();
   CASTRA_KEY = castraSaveKey();
@@ -74,6 +80,7 @@ function castraLoad(){
   if(!s || s.v!==CASTRA_SAVE_VER) s = castraNewState();
   // Gebouwen die er sinds deze save bij gekomen zijn (phase 1) aanvullen.
   CASTRA_BUILDINGS.filter(x=>x.phase===1).forEach(x=>{ if(!s.b[x.id]) s.b[x.id]={lvl:1,t:castraNow()}; });
+  s = castraMigrateState(s);
   if(!s.help) s.help = { words:{}, sentences:{} };
   if(!s.traces) s.traces = {};
   CASTRA = s;
@@ -102,7 +109,7 @@ function castraPullRemote(done){
     fbDB.ref("identities/"+i.klascode+"/"+i.leerlingcode+"/castra").once("value").then(snap=>{
       let r=null; try{ r=JSON.parse(snap.val()||"null"); }catch(e){}
       if(r && r.v===CASTRA_SAVE_VER && (r.savedAt||0) > (CASTRA.savedAt||0)){
-        CASTRA = r; try{ localStorage.setItem(CASTRA_KEY, JSON.stringify(CASTRA)); }catch(e){}
+        CASTRA = castraMigrateState(r); try{ localStorage.setItem(CASTRA_KEY, JSON.stringify(CASTRA)); }catch(e){}
         done(true);
       } else done(false);
     }).catch(()=>done(false));
@@ -162,45 +169,40 @@ function castraUpgrade(id){
 }
 
 /* ---------- soldaten ---------- */
-// Stats van een soldaat: basis(type) × stadiumfactor + aanleg, karakter ±10%,
-// level +8% per level. Helden komen later (vaste waarden, geen aanleg).
+// Stats van een soldaat: type-basis × tier-vermenigvuldiger (castra-troops.js) + aanleg, karakter ±10%,
+// en +2,5% per level boven 1. Helden hebben vaste waarden (castra-heroes.js).
 function castraStats(s){
-  const line = castraLine(s.line), base = CASTRA_BASE_STATS[line.type];
-  const mult = CASTRA_STAGE_MULT[Math.min(s.stage, CASTRA_STAGE_MULT.length-1)];
+  const f = castraLine(s.line), base = CASTRA_BASE_STATS[f.type] || CASTRA_BASE_STATS.rec;
+  const mult = CASTRA_TIER_MULT[Math.max(0, Math.min(CASTRA_TIER_MULT.length-1, f.tier-1))];
   const ing = CASTRA_INGENIA.find(i=>i.id===s.ingenium);
   const out = {};
   CASTRA_STATS.forEach(st=>{
     let v = base[st.id]*mult + (s.indoles[st.id]||0)*0.5;
     if(ing && ing.up===st.id) v*=1.1;
     if(ing && ing.down===st.id) v*=0.9;
-    v *= 1 + 0.08*((s.lvl||1)-1);
+    v *= 1 + CASTRA_LVL_GROWTH*((s.lvl||1)-1);
     out[st.id] = Math.round(v);
   });
   return out;
 }
-function castraRollSoldier(lineId, stage=0){
+function castraRollSoldier(lineId){
   const rng = castraRng(CASTRA.seed); CASTRA.seed = (CASTRA.seed + 1)>>>0;
   const indoles = {}; CASTRA_STATS.forEach(st=>{ indoles[st.id] = Math.floor(rng()*(CASTRA_INDOLES_MAX+1)); });
   const insignis = rng() < CASTRA_INSIGNIS_CHANCE;
   if(insignis) CASTRA_STATS.forEach(st=>{ indoles[st.id] = Math.min(CASTRA_INDOLES_MAX, indoles[st.id]+3); });
   return {
     id: "s"+castraNow().toString(36)+Math.floor(rng()*1e6).toString(36),
-    line:lineId, stage, lvl:1, xp:0, indoles,
+    line:lineId, lvl:1, xp:0, indoles,
     ingenium: CASTRA_INGENIA[Math.floor(rng()*CASTRA_INGENIA.length)].id,
     insignis, hurtUntil:0,
   };
 }
-function castraSoldierName(s){
-  const line = castraLine(s.line), n = line.stages[Math.min(s.stage,line.stages.length-1)];
-  return Array.isArray(n) ? n[s.branch||0] : n;
-}
+function castraSoldierName(s){ return castraLine(s.line).nm; }
 function castraRecruitTest(){
   if(CASTRA.soldiers.length >= castraBarracksCap()) return "castra_plena";
   if(!castraCanPay(CASTRA_BAL.recruitCost)) return "frumentum_deest";
   castraPay(CASTRA_BAL.recruitCost);
-  const starters = CASTRA_LINES.filter(l=>["legioen","rangen","licht","ruiterij"].includes(l.id));
-  const rng = castraRng((CASTRA.seed ^ 0x9e3779b9)>>>0);
-  const s = castraRollSoldier(starters[Math.floor(rng()*starters.length)].id, 0);
+  const s = castraRollSoldier("rom_tiro");
   CASTRA.soldiers.push(s); castraSave();
   return null;
 }
