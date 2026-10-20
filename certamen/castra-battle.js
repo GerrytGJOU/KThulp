@@ -36,7 +36,7 @@ function castraPLeave(){ CASTRA.pos = { x:14, y:5 }; castraSave(); go("castraHom
 /* ---------- gevecht ---------- */
 function castraBHealthy(){
   const list = (CASTRA.heroes||[]).map(castraHeroAsUnit).concat(CASTRA.soldiers.filter(s=>!castraIsHurt(s)));
-  return list.length ? list : [ { id:"dux", dux:true, line:"legioen", stage:0, lvl:1, name:"Dux" } ];
+  return list.length ? list : [ { id:"dux", dux:true, line:"rom_hastatus", lvl:1, name:"Dux" } ];
 }
 function castraBCap(){ return 4 + 2*castraLvl("praetorium"); }
 function castraBStart(missionId){

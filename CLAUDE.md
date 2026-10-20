@@ -30,9 +30,9 @@ spelregels, features of het datamodel raakt:
   gaten, docent-testkit) en `CASTRA_LEERLINGTEST.md` (script voor leerlingen).
   De avatar-sprites voor de top-down weergave staan in
   `certamen/assets/sprites-topdown/` (README daar).
-- `CASTRA_TROEPENBOMEN.md` — voorstel (2026-10-20, nog niets gebouwd): troepenbomen per
-  volk met 151 vormen (Mount & Blade-stijl) die de huidige soldatenlijnen van
-  Castra Heroum vervangen; mijlpalen M1–M7 met een stop voor goedkeuring na elke.
+- `CASTRA_TROEPENBOMEN.md` — troepenbomen per volk met 151 vormen (Mount & Blade-stijl) die de
+  soldatenlijnen van Castra Heroum vervangen. Status (2026-10-29): M1 gebouwd (catalogus,
+  evolutiekeuze, migratie, wild, herafgestelde missies); M2–M7 wachten op goedkeuring.
 - `Chronica.md` — Single Player Mode "Chronica Classica": narratieve,
   offline-first RPG (proloog t/m Hoofdstuk 16 speelbaar, Hoofdstuk 17
   gebouwd maar nog niet gekoppeld; campagne-metadata loopt door tot

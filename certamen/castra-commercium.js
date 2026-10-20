@@ -31,15 +31,15 @@ function castraTradeAttach(){
 function castraTradeDetach(){ if(CASTRA_T){ try{ CASTRA_T.ref.off("value", CASTRA_T.fn); }catch(e){} CASTRA_T = null; } }
 
 function castraTradeSerialize(s){ const c = { ...s }; delete c.hurtUntil; delete c.trainUntil; return JSON.stringify(c).slice(0,1500); }
-// Valideert een ontvangen soldaat; geeft een schoon object met nieuw id, of null.
+// Valideert een ontvangen soldaat; geeft een schoon object met nieuw id, of null. Oude soldaten (lijn+stadium)
+// worden eerst naar de troepenbomen gemigreerd.
 function castraTradeParse(str){
   try{
-    const o = JSON.parse(str), line = CASTRA_LINES.find(l=>l.id===o.line); if(!line) return null;
-    const stage = Math.max(0, Math.min(line.stages.length-1, parseInt(o.stage,10)||0));
+    let o = JSON.parse(str); o = castraMigrateSoldier(o);
+    const f = CASTRA_FORMS[o.line]; if(!f) return null;
     const indoles = {}; CASTRA_STATS.forEach(st=>{ indoles[st.id] = Math.max(0, Math.min(CASTRA_INDOLES_MAX, parseInt((o.indoles||{})[st.id],10)||0)); });
     const ing = CASTRA_INGENIA.some(i=>i.id===o.ingenium) ? o.ingenium : CASTRA_INGENIA[0].id;
-    const branch = Array.isArray(line.stages[stage]) ? Math.max(0, Math.min(line.stages[stage].length-1, parseInt(o.branch,10)||0)) : 0;
-    return { id:"s"+castraNow().toString(36)+Math.floor(Math.random()*1e6).toString(36), line:line.id, stage, branch, lvl:Math.max(1, Math.min(40, parseInt(o.lvl,10)||1)),
+    return { id:"s"+castraNow().toString(36)+Math.floor(Math.random()*1e6).toString(36), line:f.id, lvl:Math.max(1, Math.min(50, parseInt(o.lvl,10)||1)),
              xp:Math.max(0, parseInt(o.xp,10)||0), indoles, ingenium:ing, insignis:!!o.insignis, hurtUntil:0 };
   }catch(e){ return null; }
 }

@@ -84,10 +84,10 @@ function castraAppraisal(s){
   return { la, nl, strong, weak };
 }
 function castraDilectusPool(){
-  const lines = CASTRA_LINES.filter(l=>["legioen","rangen","licht","ruiterij","vaandel","zorg","vloot"].includes(l.id));
-  if(castraRegionOpen("graecia")) lines.push(...CASTRA_LINES.filter(l=>["phalanx","psili","kreta","macedonie"].includes(l.id)));
-  if(castraRegionOpen("troia")) lines.push(...CASTRA_LINES.filter(l=>["saters","nimfen"].includes(l.id)));
-  return lines;
+  const folks = ["rom"];
+  if(castraRegionOpen("graecia")) folks.push("gra","spa");
+  if(castraRegionOpen("troia")) folks.push("tro");
+  return folks.map(castraFormRec).filter(Boolean);
 }
 function castraDilectusRefresh(force){
   const D = CASTRA.dilectus;
@@ -100,7 +100,7 @@ function castraDilectusRefresh(force){
     let best = null;
     // hoger level = meer pogingen, de beste aanleg blijft staan
     for(let k=0;k<1+Math.floor((lvl-1)/2);k++){
-      const s = castraRollSoldier(line.id, 0); const sum = Object.values(s.indoles).reduce((a,b)=>a+b,0);
+      const s = castraRollSoldier(line.id); const sum = Object.values(s.indoles).reduce((a,b)=>a+b,0);
       if(!best || sum > best.sum) best = { s, sum };
     }
     cands.push(best.s);
