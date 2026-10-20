@@ -46,6 +46,7 @@ function castraBStart(missionId){
   CASTRA_B = { mission:m, sim:castraPSim(m, []), sel:null, timer:null, speed:opts.speed||1, auto:!!opts.auto, units:{}, fx:[], placed:{}, lastDir:{}, finished:false,
                boons:[], pick:null, offeredFor:-2, rewardMult:1, autoT:0, ctlSig:"" };
   CASTRA_B.sim.mods = { dmg:1, cd:1, rng:1, spd:1 };
+  if(typeof castraCardApply==="function") castraCardApply(CASTRA_B);   // kaartbonussen (alleen solo)
   // vormsprites (indien aanwezig) vooraf controleren: alle vijanden van de missie en je eigen soldaten
   const ids = {}; m.waves.forEach(w=>w.forEach(g=>ids[g.line]=1)); (CASTRA.soldiers||[]).forEach(s=>ids[s.line]=1);
   castraFsprProbe(Object.keys(ids).map(i=>[i,"td"]), null);
@@ -178,7 +179,8 @@ function castraBRenderCtl(){
   const pickHtml = B.pick ? `<div style="margin:8px 0;padding:8px;border:2px solid #d4af37;border-radius:10px;background:rgba(212,175,55,.12)">
       <div style="font-size:16px;margin-bottom:6px">${castraLaHTML("Elige donum!", "Kies een gunst voor de rest van de missie!", "donum_elige")}</div>
       ${B.pick.map((d,k)=>`<button class="btn btn-gold" style="margin:3px 6px 3px 0;min-height:44px" onclick="castraBPick(${k})"><b>${esc(d.la)}</b> <small>${esc(d.nl)}</small></button>`).join("")}</div>` : "";
-  const have = B.boons.length ? `<div style="font-size:12px;opacity:.8;margin-top:4px">${B.boons.map(id=>{ const d = CASTRA_DONA.find(x=>x.id===id); return esc(d.la); }).join(" · ")}</div>` : "";
+  const cardTxt = (B.cardInfo && typeof castraCardSummary==="function") ? castraCardSummary(B.cardInfo) : "";
+  const have = (B.boons.length || cardTxt) ? `<div style="font-size:12px;opacity:.8;margin-top:4px">${B.boons.map(id=>{ const d = CASTRA_DONA.find(x=>x.id===id); return esc(d.la); }).join(" · ")}${cardTxt?`<div>🃏 ${esc(cardTxt)}</div>`:""}</div>` : "";
   c.innerHTML = pickHtml + `<button class="btn btn-gold" ${s.waveActive||s.over||B.pick?"disabled":""} onclick="castraBStartWave()">${castraLaText("incipe")} ${!s.waveActive&&nextWave<B.mission.waves.length?"("+(nextWave+1)+"/"+B.mission.waves.length+")":""}</button>
     <button class="btn" style="min-height:44px" onclick="castraBSpeed()">${B.speed===1?"▶":"⏩"} ${B.speed}× ${castraLaText("celerius")}</button>
     <button class="btn ${B.auto?"btn-gold":""}" style="min-height:44px" onclick="castraBAutoToggle()" title="Start de volgende golf automatisch">⟳ Auto ${B.auto?"aan":"uit"}</button>` + have;
@@ -275,11 +277,11 @@ function castraBFinish(){
     const lines = [];
     s.towers.forEach(t=>{
       if(String(t.sid).indexOf("hero_")===0){
-        const hh = castraHero(String(t.sid).slice(5)); if(hh){ hh.xp += 12 + 6*m.waves.length; if(castraHeroLevelUp(hh)) lines.push(CASTRA_HERO_DATA[hh.id].nm); }
+        const hh = castraHero(String(t.sid).slice(5)); if(hh){ hh.xp += castraCardXp(12 + 6*m.waves.length); if(castraHeroLevelUp(hh)) lines.push(CASTRA_HERO_DATA[hh.id].nm); }
         return;
       }
       const sol = CASTRA.soldiers.find(x=>x.id===t.sid); if(!sol) return;
-      sol.xp += 12 + 6*m.waves.length; if(castraLevelUp(sol)) lines.push(castraSoldierName(sol));
+      sol.xp += castraCardXp(12 + 6*m.waves.length); if(castraLevelUp(sol)) lines.push(castraSoldierName(sol));
     });
     (CASTRA.proelium || (CASTRA.proelium = { done:{} })).done = CASTRA.proelium.done || {};
     CASTRA.proelium.done[m.id] = true; castraSave();

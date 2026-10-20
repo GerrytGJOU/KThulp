@@ -140,7 +140,7 @@ function castraPending(id){
   const b = castraBuilding(id), st = CASTRA.b[id];
   if(!b || !b.prod || !st) return 0;
   const hours = Math.min(CASTRA_BAL.producerStoreHours, Math.max(0,(castraNow()-st.t)/3600000));
-  const bonus = (typeof castraHeroBonus==="function") ? castraHeroBonus(id) : 0;
+  const bonus = ((typeof castraHeroBonus==="function") ? castraHeroBonus(id) : 0) + ((typeof castraCardBonus==="function") ? castraCardBonus().prod : 0);
   return Math.floor(hours * b.prod.perHour * st.lvl * CASTRA_BAL.prodPerLevelMult * (100+bonus)/100);
 }
 function castraCollect(id){
