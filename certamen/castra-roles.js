@@ -77,9 +77,11 @@ function castraEdictChips(m){
 
 /* ---------- uitleg bij eerste verschijning (pauzeert het gevecht) ---------- */
 function castraTDSeen(){ return CASTRA.seenTD || (CASTRA.seenTD = {}); }
+function castraIntroData(it){ return it.k==="role" ? CASTRA_P_ROLES[it.id] : it.k==="edict" ? CASTRA_EDICTA[it.id] : it.k==="syn" ? CASTRA_P_SYNINFO[it.id] : CASTRA_P_CMDINFO[it.id]; }
 function castraBIntroStart(){
   const B = CASTRA_B; if(!B || B.legio || B.endless) return;
   B.introQ = B.introQ || [];
+  if(B.sim.cmdOn && !castraTDSeen()["c:cmd"]) B.introQ.push({ k:"cmd", id:"cmd" });
   (B.mission.edicta||[]).forEach(id=>{ if(!castraTDSeen()["e:"+id]) B.introQ.push({ k:"edict", id }); });
   if(B.introQ.length){ B.paused = true; castraBIntroNext(); }
 }
@@ -101,13 +103,14 @@ function castraBIntroShow(items, mark, cur){
   o = document.createElement("div"); o.id = "cbIntro";
   o.style.cssText = "position:fixed;left:0;top:0;right:0;bottom:0;z-index:100000;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:16px";
   const card = it=>{
-    const D = it.k==="role" ? CASTRA_P_ROLES[it.id] : CASTRA_EDICTA[it.id];
+    const D = castraIntroData(it);
     return `<div style="margin:8px 0;padding-bottom:6px;${items.length>1?"border-bottom:1px solid rgba(138,109,47,.4)":""}">
       <div style="font-size:20px;font-weight:bold;margin-bottom:4px">${D.icon} ${esc(D.la)} <small style="font-weight:normal;opacity:.75">— ${esc(D.nl)}</small></div>
       <div style="font-size:18px">${castraLaHTML(D.ex.la, D.ex.nl, "intro_"+it.k+"_"+it.id)}</div>
+      <div style="font-size:15px;margin-top:6px">${esc(D.ex.nl)}</div>
       ${D.ex.tip?`<div style="font-size:14px;margin-top:6px;opacity:.9">${esc(D.ex.tip)}</div>`:""}</div>`;
   };
-  const title = mark ? (cur.k==="role" ? "Nieuwe vijand!" : "Nieuwe regel voor deze missie!") : "Vijanden en regels in deze missie";
+  const title = mark ? ({ role:"Nieuwe vijand!", edict:"Nieuwe regel voor deze missie!", syn:"Nieuwe synergie!", cmd:"Bevelen!" })[cur.k] : "Vijanden, regels en synergieën";
   o.innerHTML = `<div style="max-width:520px;width:100%;max-height:90vh;overflow:auto;background:#f1e6c4;color:#2b1d0e;border:3px solid #8a6d2f;border-radius:14px;padding:16px 18px;box-shadow:0 8px 30px rgba(0,0,0,.6)">
     <div style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;opacity:.7">${title}</div>${items.map(card).join("")}
     <button class="btn btn-gold" style="min-height:48px;margin-top:8px;width:100%;font-size:18px" onclick="castraBIntroClose(${mark?"true":"false"})">Intellexi <small>(begrepen)</small></button></div>`;
@@ -117,16 +120,83 @@ function castraBIntroShow(items, mark, cur){
 function castraBIntroClose(mark){
   const o = document.getElementById("cbIntro"), cur = o && o._cur;
   if(o) o.remove();
-  if(mark && cur){ castraTDSeen()[(cur.k==="role"?"r:":"e:")+cur.id] = 1; castraSave(); }
+  if(mark && cur){ castraTDSeen()[({ role:"r:", edict:"e:", syn:"s:", cmd:"c:" })[cur.k]+cur.id] = 1; castraSave(); }
   if(mark) castraBIntroNext();
 }
 // Overzicht van alle rollen en regels in de lopende missie (knop ⓘ).
 function castraBInfo(){
   const B = CASTRA_B; if(!B) return;
   const roles = {}; B.mission.waves.forEach(w=>w.forEach(g=>{ if(g.role) roles[g.role] = 1; }));
-  const items = Object.keys(roles).map(id=>({ k:"role", id })).concat((B.mission.edicta||[]).map(id=>({ k:"edict", id })));
-  if(!items.length){ toast("ⓘ", "In deze missie zijn geen bijzondere vijanden of regels."); return; }
+  const items = Object.keys(roles).map(id=>({ k:"role", id })).concat((B.mission.edicta||[]).map(id=>({ k:"edict", id })))
+    .concat(Object.keys(CASTRA_P_SYNINFO).map(id=>({ k:"syn", id }))).concat(B.sim.cmdOn ? [ { k:"cmd", id:"cmd" } ] : []);
   castraBIntroShow(items, false, null);
+}
+
+/* ---------- synergieën ---------- */
+const CASTRA_P_SYNINFO = {
+  muri:   { icon:"🧱", la:"Murus et sagittae", nl:"Muur en pijlen",
+            ex:{ la:"Pedites hostes tardant, et sagittarii eos feriunt.", nl:"Infanterie vertraagt vijanden met 25% zolang er een boogschutter binnen 3 tegels staat. De boogschutter heeft zo meer tijd om te schieten.",
+                 tip:"Tip: zet een infanterist vlak naast een boogschutter. De verbonden soldaten zie je met een gouden lijn." } },
+  pers:   { icon:"🐎", la:"Persecutio", nl:"Achtervolging",
+            ex:{ la:"Equites hostes fessos persequuntur.", nl:"Cavalerie doet 50% extra schade aan vijanden die nog maar de helft van hun levenspunten hebben.",
+                 tip:"Tip: laat eerst andere soldaten schade doen en bewaar de cavalerie voor het eind van het pad." } },
+  acies:  { icon:"🏹", la:"Acies sagittariorum", nl:"Slagorde van boogschutters",
+            ex:{ la:"Signifer sagittarios adiuvat.", nl:"Een boogschutter binnen het bereik van een ondersteuner krijgt 15% extra bereik, naast de gewone buff van de ondersteuner.",
+                 tip:"Tip: zet je ondersteuner in het midden van je boogschutters." } },
+};
+// Welke synergieën zijn actief voor deze torens? (zelfde regels als de simulatie, alleen voor weergave.)
+function castraSynLinks(towers){
+  const out = { muri:[], acies:[], pers:[] }, R2 = CASTRA_P_SYN.muriR*CASTRA_P_SYN.muriR, B2 = CASTRA_P.buffRadius*CASTRA_P.buffRadius;
+  towers.forEach(a=>{
+    if(a.type==="inf"){ const b = towers.find(x=>x.type==="rng" && (a.cx-x.cx)**2+(a.cy-x.cy)**2 <= R2); if(b) out.muri.push([a,b]); }
+    else if(a.type==="rng"){ const b = towers.find(x=>x.type==="sup" && (a.cx-x.cx)**2+(a.cy-x.cy)**2 <= B2); if(b) out.acies.push([a,b]); }
+    else if(a.type==="cav") out.pers.push([a,a]);
+  });
+  return out;
+}
+function castraBRenderSyn(notify){
+  const B = CASTRA_B, svg = document.getElementById("cbSyn"); if(!B || !svg) return;
+  const L = castraSynLinks(B.sim.towers);
+  const line = (a,b,col)=>`<line x1="${a.x*48+24}" y1="${a.y*48+24}" x2="${b.x*48+24}" y2="${b.y*48+24}" stroke="${col}" stroke-width="3" stroke-dasharray="6 5" opacity=".75"/>`;
+  svg.innerHTML = L.muri.map(([a,b])=>line(a,b,"#e9c46a")).join("") + L.acies.map(([a,b])=>line(a,b,"#8ecae6")).join("")
+    + L.pers.map(([a])=>`<circle cx="${a.x*48+24}" cy="${a.y*48+24}" r="22" fill="none" stroke="#e76f51" stroke-width="3" stroke-dasharray="3 4" opacity=".7"/>`).join("");
+  const on = Object.keys(L).filter(k=>L[k].length), chips = el("cbSynChips");
+  B.synOn = on;
+  if(chips) chips.innerHTML = on.map(k=>`<span title="${esc(CASTRA_P_SYNINFO[k].ex.nl)}" style="display:inline-block;margin:2px 6px 2px 0;padding:1px 8px;border:1px solid #8a6d2f;border-radius:10px;background:rgba(212,175,55,.12)">✨ ${esc(CASTRA_P_SYNINFO[k].la)}</span>`).join("");
+  if(notify) on.forEach(k=>{ if(!castraTDSeen()["s:"+k] && !(B.introQ||[]).some(x=>x.k==="syn" && x.id===k)){ (B.introQ = B.introQ || []).push({ k:"syn", id:k }); B.paused = true; if(!document.getElementById("cbIntro")) castraBIntroNext(); } });
+}
+
+/* ---------- bevelen (energia) ---------- */
+const CASTRA_P_CMDINFO = {
+  cmd: { icon:"⚡", la:"Imperia", nl:"Bevelen",
+         ex:{ la:"Imperator, imperia tua milites iuvant!", nl:"Tijdens een golf kun je twee bevelen geven. Impete! (Val aan!): 8 seconden lang +25% schade en 30% snellere aanvallen. State! (Houd stand!): 4 seconden lang lopen alle vijanden op 40% snelheid. Elk bevel kost 1 energie (⚡): je begint met 1 en krijgt er 1 bij na elke golf en na elke 15 verslagen vijanden (max. 3).",
+              tip:"Tip: bewaar je energie voor het moment dat een zware golf bijna doorbreekt." } },
+};
+function castraBCmd(id){
+  const B = CASTRA_B; if(!B || B.sim.over || !B.sim.cmdOn || B.paused) return;
+  if(B.sim.energy<1 || !B.sim.waveActive) return;
+  B.sim.cmdQ.push({ at:B.sim.tick+1, id });
+  B.cmdUsed = (B.cmdUsed||0)+1; B.cmdIds = B.cmdIds || {}; B.cmdIds[id] = (B.cmdIds[id]||0)+1;
+}
+function castraBCmdFlash(id){
+  const w = el("cbWrap"); if(w){ w.style.boxShadow = id==="impete" ? "0 0 18px 4px rgba(233,196,106,.9)" : "0 0 18px 4px rgba(120,190,255,.9)"; }
+  castraToastBattle(id==="impete" ? "⚔️ Impete!" : "🛡️ State!");
+}
+function castraToastBattle(t){ let d = document.getElementById("cbFlashTxt"); const map = el("cbWrap"); if(!map) return;
+  if(!d){ d = document.createElement("div"); d.id = "cbFlashTxt"; d.style.cssText = "position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:7;padding:4px 16px;border-radius:12px;background:rgba(20,14,6,.85);color:#f6dd8e;font-size:22px;font-weight:bold;pointer-events:none;transition:opacity .6s"; map.appendChild(d); }
+  d.textContent = t; d.style.opacity = "1"; clearTimeout(d._t); d._t = setTimeout(()=>{ d.style.opacity = "0"; }, 900);
+}
+function castraBRenderCmd(){
+  const B = CASTRA_B, c = el("cbCmd"); if(!B || !c) return; const s = B.sim;
+  if(!s.cmdOn || B.legio){ c.innerHTML = ""; return; }
+  const a = s.waveActive, i = s.cmd.impete>s.tick, st = s.cmd.state>s.tick;
+  const w = el("cbWrap"); if(w && !i && !st && w.style.boxShadow) w.style.boxShadow = "";
+  const sig = [s.energy, a, i, st, B.paused?1:0, s.over].join("|"); if(sig===B.cmdSig) return; B.cmdSig = sig;
+  const pips = Array.from({length:CASTRA_P_CMD.energyMax}, (_,k)=>`<span style="font-size:22px;${k<s.energy?"":"opacity:.25;filter:grayscale(1)"}">⚡</span>`).join("");
+  const btn = (id, la, nl, on)=>`<button class="btn ${on?"btn-gold":""}" ${(!a || s.energy<1 || s.over || B.paused)?"disabled":""} style="min-height:48px;flex:1;min-width:130px" onclick="castraBCmd('${id}')"><b>${la}</b> <small>${nl}${on?" ✓":""}</small></button>`;
+  c.innerHTML = `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span title="Energia">${pips}</span>
+    ${btn("impete","Impete!","val aan",i)}${btn("state","State!","houd stand",st)}</div>
+`;
 }
 
 /* ---------- extra kaartlayouts (16 × 11) ---------- */
@@ -209,5 +279,6 @@ Object.assign(CASTRA_GLOSS, {
   "celer":"snel", "velox":"snel", "sine":"zonder", "heroibus":"helden (zonder helden)", "sagittariis":"boogschutters (zonder)", "donis":"gunsten (zonder)", "celeriores":"sneller", "cito":"snel", "currit":"rent", "sed":"maar", "infirmus":"zwak", "gravis":"zwaar", "tardus":"langzaam", "fortis":"sterk", "scutarius":"schilddrager", "socios":"kameraden (4e naamval)", "tegit":"beschermt",
   "medicus":"genezer, arts", "sanat":"geneest", "ventus":"wind", "flat":"blaast", "nox":"nacht", "minus":"minder", "vident":"zien", "pluvia":"regen", "cadit":"valt", "arcus":"bogen", "madidi":"nat",
   "aestus":"hitte", "magnus":"groot", "equites":"ruiters", "fessi":"moe", "frigus":"kou", "lentius":"langzamer", "pugnant":"vechten", "acies":"slagorde", "angusta":"smal", "quinque":"vijf", "sufficiunt":"zijn genoeg",
+  "pedites":"voetsoldaten", "sagittae":"pijlen", "persecutio":"achtervolging", "sagittariorum":"van de boogschutters", "tardant":"vertragen", "sagittarii":"boogschutters", "feriunt":"treffen", "eos":"hen (4e naamval)", "persequuntur":"achtervolgen", "fessos":"vermoeide (4e naamval)", "signifer":"vaandeldrager", "sagittarios":"boogschutters (4e naamval)", "adiuvat":"helpt", "imperator":"bevelhebber", "imperia":"bevelen", "tua":"jouw", "milites":"soldaten", "iuvant":"helpen", "equites":"ruiters",
   "heroes":"helden", "hodie":"vandaag", "sagittarii":"boogschutters", "dona":"gunsten", "sunt":"zijn", "est":"is", "non":"niet", "hostes":"vijanden", "hostis":"vijand",
 });
