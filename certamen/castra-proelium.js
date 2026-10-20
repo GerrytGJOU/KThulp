@@ -42,142 +42,142 @@ const CASTRA_P_MISSIONS = [
             [ {line:_fid("rom","Eques"),n:3,gap:22,lvl:3} ],
             [ {line:_fid("rom","Veles"),n:4,gap:24,lvl:3}, {line:_fid("rom","Hastatus"),n:2,gap:26,lvl:3} ] ],
     reward:{ aes:40, frumentum:30, gloria:3 } },
-  { id:"m2", nm:"Via Latina", nl:"De Latijnse weg", map:"b", seed:1202, hpMult:3.9, needs:"m1",
+  { id:"m2", nm:"Via Latina", nl:"De Latijnse weg", map:"b", seed:1202, hpMult:4.4, needs:"m1",
     waves:[ [ {line:_fid("rom","Eques"),n:4,gap:20,lvl:10} ],
             [ {line:_fid("rom","Hastatus"),n:5,gap:24,lvl:10}, {line:_fid("rom","Veles"),n:1,gap:24,lvl:10} ],
             [ {line:_fid("rom","Veles"),n:5,gap:20,lvl:10} ],
             [ {line:_fid("rom","Eques"),n:3,gap:18,lvl:10}, {line:_fid("rom","Veles"),n:3,gap:20,lvl:10}, {line:_fid("rom","Hastatus"),n:3,gap:22,lvl:10} ] ],
     reward:{ aes:70, frumentum:50, gloria:5 } },
-  { id:"m3", nm:"Oppugnatio Ardeae", nl:"De aanval op Ardea", map:"a", seed:1303, hpMult:3.4, needs:"m2",
+  { id:"m3", nm:"Oppugnatio Ardeae", nl:"De aanval op Ardea", map:"a", seed:1303, hpMult:5.5, needs:"m2",
     waves:[ [ {line:_fid("rom","Princeps"),n:6,gap:22,lvl:20} ],
             [ {line:_fid("myt","Satyrus"),n:4,gap:20,lvl:20}, {line:_fid("rom","Funditor"),n:3,gap:20,lvl:20} ],
             [ {line:_fid("rom","Decurio"),n:5,gap:16,lvl:20} ],
             [ {line:_fid("rom","Optio"),n:2,gap:24,lvl:20}, {line:_fid("rom","Princeps"),n:6,gap:20,lvl:20}, {line:_fid("rom","Funditor"),n:4,gap:18,lvl:20} ] ],
     reward:{ aes:110, frumentum:80, gloria:8 } },
   /* Graecia (opent na m2) */
-  { id:"g1", region:"graecia", nm:"Labor primus", nl:"De eerste labor", map:"b", seed:2101, hpMult:3.4, needs:"m2",
+  { id:"g1", region:"graecia", nm:"Labor primus", nl:"De eerste labor", map:"b", seed:2101, hpMult:5.1, needs:"m2",
     waves:[ [ {line:_fid("gra","Epilectus"),n:5,gap:22,lvl:24} ],
             [ {line:_fid("gra","Toxota"),n:5,gap:20,lvl:24} ],
             [ {line:_fid("gra","Prodromus"),n:4,gap:18,lvl:24}, {line:_fid("gra","Peltasta"),n:4,gap:20,lvl:24} ],
             [ {line:_fid("gra","Epilectus"),n:4,gap:20,lvl:24}, {line:_fid("myt","Silenus"),n:3,gap:20,lvl:24} ] ],
     reward:{ aes:150, frumentum:100, gloria:10 } },
-  { id:"g2", region:"graecia", nm:"Labyrinthus", nl:"Het labyrint", map:"a", seed:2202, hpMult:5.8, needs:"g1",
+  { id:"g2", region:"graecia", nm:"Labyrinthus", nl:"Het labyrint", map:"a", seed:2202, hpMult:9.8, needs:"g1",
     waves:[ [ {line:_fid("gra","Peltasta"),n:6,gap:18,lvl:28} ],
             [ {line:_fid("gra","Epilectus"),n:6,gap:20,lvl:28}, {line:_fid("gra","Toxota"),n:3,gap:20,lvl:28} ],
             [ {line:_fid("gra","Prodromus"),n:6,gap:16,lvl:28} ],
             [ {line:_fid("myt","Gryps"),n:3,gap:24,lvl:28}, {line:_fid("gra","Lochagus"),n:6,gap:18,lvl:28}, {line:_fid("gra","Peltasta"),n:4,gap:18,lvl:28} ] ],
     reward:{ aes:190, frumentum:130, gloria:12 } },
   /* Troia (opent na g1) */
-  { id:"t1", region:"troia", nm:"Muri Troiae", nl:"De muren van Troje", map:"b", seed:3101, hpMult:4.7, needs:"g1",
+  { id:"t1", region:"troia", nm:"Muri Troiae", nl:"De muren van Troje", map:"b", seed:3101, hpMult:5.4, needs:"g1",
     waves:[ [ {line:_fid("tro","Propugnator"),n:6,gap:20,lvl:32} ],
             [ {line:_fid("tro","Bellator curru"),n:5,gap:18,lvl:32}, {line:_fid("tro","Sagittarius Lycius"),n:4,gap:18,lvl:32} ],
             [ {line:_fid("tro","Sagittarius Lycius"),n:6,gap:16,lvl:32} ],
             [ {line:_fid("tro","Custos Pergami"),n:6,gap:16,lvl:32}, {line:_fid("tro","Bellator curru"),n:4,gap:16,lvl:32}, {line:_fid("gra","Lochagus"),n:2,gap:20,lvl:32} ] ],
     reward:{ aes:240, frumentum:160, gloria:14 } },
-  { id:"t2", region:"troia", nm:"Equus ligneus", nl:"Het houten paard", map:"a", seed:3202, hpMult:5.6, needs:"t1",
+  { id:"t2", region:"troia", nm:"Equus ligneus", nl:"Het houten paard", map:"a", seed:3202, hpMult:10.1, needs:"t1",
     waves:[ [ {line:_fid("tro","Bellator curru"),n:7,gap:16,lvl:38} ],
             [ {line:_fid("tro","Custos Pergami"),n:7,gap:18,lvl:38}, {line:_fid("tro","Sagittarius Lycius"),n:4,gap:18,lvl:38} ],
             [ {line:_fid("myt","Harpyia"),n:4,gap:20,lvl:38}, {line:_fid("tro","Propugnator"),n:6,gap:16,lvl:38} ],
             [ {line:_fid("myt","Gryps"),n:3,gap:22,lvl:38}, {line:_fid("tro","Bellator curru"),n:6,gap:14,lvl:38}, {line:_fid("tro","Custos Pergami"),n:6,gap:16,lvl:38} ] ],
     reward:{ aes:300, frumentum:200, gloria:18 } },
   /* Gallia (opent na t2) */
-  { id:"ga1", region:"gallia", nm:"Silva Gallica", nl:"Het Gallische woud", map:"b", seed:4101, hpMult:11.5, needs:"t2",
+  { id:"ga1", region:"gallia", nm:"Silva Gallica", nl:"Het Gallische woud", map:"b", seed:4101, hpMult:20.2, needs:"t2",
     waves:[ [ {line:_fid("gal","Gaesatus"),n:6,gap:20,lvl:40} ],
             [ {line:_fid("gal","Eques Gallus"),n:5,gap:18,lvl:40} ],
             [ {line:_fid("gal","Bardus"),n:5,gap:18,lvl:40}, {line:_fid("gal","Bellator Gallus"),n:4,gap:20,lvl:40} ],
             [ {line:_fid("ger","Frameatus"),n:6,gap:16,lvl:40}, {line:_fid("ger","Eques Germanus"),n:4,gap:16,lvl:40} ] ],
     reward:{ aes:340, frumentum:230, gloria:20 } },
-  { id:"ga2", region:"gallia", nm:"Alesia", nl:"Het beleg van Alesia", map:"a", seed:4202, hpMult:7.4, needs:"ga1",
+  { id:"ga2", region:"gallia", nm:"Alesia", nl:"Het beleg van Alesia", map:"a", seed:4202, hpMult:13.0, needs:"ga1",
     waves:[ [ {line:_fid("gal","Bellator Gallus"),n:7,gap:16,lvl:46} ],
             [ {line:_fid("gal","Eques nobilis"),n:6,gap:16,lvl:46}, {line:_fid("gal","Druida"),n:3,gap:20,lvl:46} ],
             [ {line:_fid("ger","Centenus"),n:7,gap:14,lvl:46} ],
             [ {line:_fid("gal","Soldurius"),n:3,gap:20,lvl:48}, {line:_fid("ger","Batavus"),n:5,gap:14,lvl:46}, {line:_fid("gal","Bellator Gallus"),n:6,gap:14,lvl:46} ] ],
     reward:{ aes:420, frumentum:290, gloria:24 } },
   /* Aegyptus (opent na ga2) */
-  { id:"ae1", region:"aegyptus", nm:"Ad Nilum", nl:"Aan de Nijl", map:"a", seed:5101, hpMult:13.3, needs:"ga2",
+  { id:"ae1", region:"aegyptus", nm:"Ad Nilum", nl:"Aan de Nijl", map:"a", seed:5101, hpMult:21.9, needs:"ga2",
     waves:[ [ {line:_fid("aeg","Machimus"),n:6,gap:18,lvl:46} ],
             [ {line:_fid("aeg","Sagittarius Aegyptius"),n:6,gap:16,lvl:46} ],
             [ {line:_fid("aeg","Auriga Aegyptius"),n:5,gap:16,lvl:46}, {line:_fid("aeg","Scriba"),n:3,gap:20,lvl:46} ],
             [ {line:_fid("aeg","Satelles"),n:5,gap:16,lvl:46}, {line:_fid("aeg","Sagittarius Nubius"),n:4,gap:16,lvl:46} ] ],
     reward:{ aes:480, frumentum:330, gloria:26 } },
-  { id:"ae2", region:"aegyptus", nm:"Pyramides", nl:"De piramiden", map:"b", seed:5202, hpMult:5.9, needs:"ae1",
+  { id:"ae2", region:"aegyptus", nm:"Pyramides", nl:"De piramiden", map:"b", seed:5202, hpMult:9.9, needs:"ae1",
     waves:[ [ {line:_fid("aeg","Satelles"),n:7,gap:14,lvl:50} ],
             [ {line:_fid("aeg","Bellator curru Aegyptius"),n:6,gap:14,lvl:50}, {line:_fid("aeg","Sacerdos Isidis"),n:3,gap:20,lvl:50} ],
             [ {line:_fid("aeg","Sagittarius Nubius"),n:7,gap:12,lvl:50} ],
             [ {line:_fid("aeg","Custos Pharaonis"),n:3,gap:20,lvl:50}, {line:_fid("aeg","Bellator curru Aegyptius"),n:6,gap:12,lvl:50}, {line:_fid("aeg","Satelles"),n:6,gap:12,lvl:50} ] ],
     reward:{ aes:560, frumentum:390, gloria:30 } },
   /* Persis (opent na ae2) */
-  { id:"pe1", region:"persis", nm:"Via regia", nl:"De koningsweg", map:"b", seed:6101, hpMult:7, needs:"ae2",
+  { id:"pe1", region:"persis", nm:"Via regia", nl:"De koningsweg", map:"b", seed:6101, hpMult:12.6, needs:"ae2",
     waves:[ [ {line:_fid("per","Sparabara"),n:7,gap:16,lvl:50} ],
             [ {line:_fid("per","Eques Persa"),n:6,gap:14,lvl:50}, {line:_fid("per","Magus"),n:3,gap:20,lvl:50} ],
             [ {line:_fid("per","Sagittarius Scytha"),n:7,gap:14,lvl:50} ],
             [ {line:_fid("per","Immortalis"),n:6,gap:14,lvl:50}, {line:_fid("per","Cataphractus"),n:4,gap:16,lvl:50} ] ],
     reward:{ aes:640, frumentum:440, gloria:34 } },
-  { id:"pe2", region:"persis", nm:"Persepolis", nl:"Persepolis", map:"a", seed:6202, hpMult:5.3, needs:"pe1",
+  { id:"pe2", region:"persis", nm:"Persepolis", nl:"Persepolis", map:"a", seed:6202, hpMult:9.6, needs:"pe1",
     waves:[ [ {line:_fid("per","Immortalis"),n:8,gap:12,lvl:50} ],
             [ {line:_fid("per","Cataphractus"),n:6,gap:12,lvl:50}, {line:_fid("per","Archimagus"),n:3,gap:18,lvl:50} ],
             [ {line:_fid("per","Sagittarius Scytha"),n:8,gap:10,lvl:50} ],
             [ {line:_fid("per","Melophorus"),n:4,gap:16,lvl:50}, {line:_fid("per","Clibanarius"),n:5,gap:14,lvl:50}, {line:_fid("per","Immortalis"),n:6,gap:12,lvl:50} ] ],
     reward:{ aes:740, frumentum:510, gloria:38 } },
   /* Africa (opent na pe2) */
-  { id:"af1", region:"africa", nm:"Carthago", nl:"Het beleg van Carthago", map:"a", seed:7101, hpMult:11.1, needs:"pe2",
+  { id:"af1", region:"africa", nm:"Carthago", nl:"Het beleg van Carthago", map:"a", seed:7101, hpMult:18.9, needs:"pe2",
     waves:[ [ {line:_fid("car","Libyus"),n:7,gap:16,lvl:50} ],
             [ {line:_fid("car","Funditor Balearicus"),n:7,gap:14,lvl:50} ],
             [ {line:_fid("car","Eques Numida"),n:6,gap:14,lvl:50}, {line:_fid("car","Veteranus Libyus"),n:4,gap:18,lvl:50} ],
             [ {line:_fid("car","Elephantus bellicus"),n:3,gap:24,lvl:50}, {line:_fid("car","Veteranus Libyus"),n:6,gap:14,lvl:50} ] ],
     reward:{ aes:820, frumentum:570, gloria:42 } },
-  { id:"af2", region:"africa", nm:"Ad Zamam", nl:"Bij Zama", map:"b", seed:7202, hpMult:4.4, needs:"af1",
+  { id:"af2", region:"africa", nm:"Ad Zamam", nl:"Bij Zama", map:"b", seed:7202, hpMult:7.8, needs:"af1",
     waves:[ [ {line:_fid("car","Veteranus Libyus"),n:8,gap:12,lvl:50} ],
             [ {line:_fid("car","Numida nobilis"),n:7,gap:12,lvl:50}, {line:_fid("car","Funditor Balearicus"),n:5,gap:14,lvl:50} ],
             [ {line:_fid("car","Elephantus bellicus"),n:5,gap:18,lvl:50} ],
             [ {line:_fid("car","Elephantus turritus"),n:3,gap:24,lvl:50}, {line:_fid("car","Miles sacer"),n:6,gap:12,lvl:50}, {line:_fid("car","Numida nobilis"),n:5,gap:12,lvl:50} ] ],
     reward:{ aes:920, frumentum:640, gloria:46 } },
   /* Roma (opent na af2) en Laconia (opent na ro2) */
-  { id:"ro1", region:"roma", nm:"Forum Romanum", nl:"Het Forum", map:"a", seed:8101, hpMult:4.3, needs:"af2",
+  { id:"ro1", region:"roma", nm:"Forum Romanum", nl:"Het Forum", map:"a", seed:8101, hpMult:8.1, needs:"af2",
     waves:[ [ {line:_fid("rom","Triarius"),n:6,gap:16,lvl:50} ],
             [ {line:_fid("rom","Sagittarius"),n:6,gap:14,lvl:50}, {line:_fid("rom","Medicus"),n:2,gap:20,lvl:50} ],
             [ {line:_fid("rom","Praefectus alae"),n:5,gap:14,lvl:50} ],
             [ {line:_fid("rom","Centurio"),n:3,gap:20,lvl:50}, {line:_fid("rom","Triarius"),n:6,gap:12,lvl:50}, {line:_fid("rom","Speculator"),n:3,gap:16,lvl:50} ] ],
     reward:{ aes:1000, frumentum:700, gloria:50 } },
-  { id:"ro2", region:"roma", nm:"Arena", nl:"De arena", map:"b", seed:8202, hpMult:8.4, needs:"ro1",
+  { id:"ro2", region:"roma", nm:"Arena", nl:"De arena", map:"b", seed:8202, hpMult:15.8, needs:"ro1",
     waves:[ [ {line:_fid("gla","Murmillo"),n:6,gap:14,lvl:50}, {line:_fid("gla","Retiarius"),n:4,gap:16,lvl:50} ],
             [ {line:_fid("gla","Thraex"),n:6,gap:12,lvl:50}, {line:_fid("gla","Secutor"),n:4,gap:14,lvl:50} ],
             [ {line:_fid("gla","Dimachaerus"),n:5,gap:12,lvl:50}, {line:_fid("gla","Essedarius"),n:4,gap:14,lvl:50} ],
             [ {line:_fid("gla","Primus palus"),n:4,gap:18,lvl:50}, {line:_fid("gla","Hoplomachus"),n:6,gap:12,lvl:50}, {line:_fid("gla","Rudiarius"),n:3,gap:16,lvl:50} ] ],
     reward:{ aes:1100, frumentum:770, gloria:54 } },
-  { id:"la1", region:"laconia", nm:"Thermopylae", nl:"Thermopylae", map:"b", seed:9101, hpMult:6.2, needs:"ro2",
+  { id:"la1", region:"laconia", nm:"Thermopylae", nl:"Thermopylae", map:"b", seed:9101, hpMult:11.3, needs:"ro2",
     waves:[ [ {line:_fid("spa","Spartiates"),n:7,gap:14,lvl:50} ],
             [ {line:_fid("spa","Sciritas"),n:6,gap:14,lvl:50}, {line:_fid("spa","Perioecus"),n:4,gap:14,lvl:50} ],
             [ {line:_fid("spa","Trecentus"),n:6,gap:12,lvl:50} ],
             [ {line:_fid("spa","Polemarchus"),n:3,gap:18,lvl:50}, {line:_fid("spa","Trecentus"),n:6,gap:12,lvl:50}, {line:_fid("spa","Sciritas"),n:4,gap:12,lvl:50} ] ],
     reward:{ aes:1200, frumentum:840, gloria:58 } },
-  { id:"la2", region:"laconia", nm:"Sparta", nl:"De strijd om Sparta", map:"a", seed:9202, hpMult:5.3, needs:"la1",
+  { id:"la2", region:"laconia", nm:"Sparta", nl:"De strijd om Sparta", map:"a", seed:9202, hpMult:9.2, needs:"la1",
     waves:[ [ {line:_fid("spa","Trecentus"),n:8,gap:12,lvl:50} ],
             [ {line:_fid("spa","Sciritas"),n:8,gap:10,lvl:50}, {line:_fid("spa","Polemarchus"),n:2,gap:20,lvl:50} ],
             [ {line:_fid("spa","Trecentus"),n:7,gap:10,lvl:50}, {line:_fid("myt","Lupus Martius"),n:3,gap:20,lvl:50} ],
             [ {line:_fid("spa","Polemarchus"),n:5,gap:14,lvl:50}, {line:_fid("spa","Trecentus"),n:8,gap:10,lvl:50}, {line:_fid("spa","Sciritas"),n:6,gap:10,lvl:50} ] ],
     reward:{ aes:1300, frumentum:910, gloria:62 } },
   /* Germania (opent na la2) */
-  { id:"gm1", region:"germania", nm:"Saltus Teutoburgiensis", nl:"Het Teutoburgerwoud", map:"b", seed:10101, hpMult:6.2, needs:"la2",
+  { id:"gm1", region:"germania", nm:"Saltus Teutoburgiensis", nl:"Het Teutoburgerwoud", map:"b", seed:10101, hpMult:10.2, needs:"la2",
     waves:[ [ {line:_fid("ger","Centenus"),n:7,gap:14,lvl:50} ],
             [ {line:_fid("ger","Batavus"),n:6,gap:14,lvl:50}, {line:_fid("ger","Saga"),n:3,gap:20,lvl:50} ],
             [ {line:_fid("ger","Centenus"),n:7,gap:12,lvl:50}, {line:_fid("myt","Lupus Martius"),n:3,gap:20,lvl:50} ],
             [ {line:_fid("ger","Comes"),n:3,gap:20,lvl:50}, {line:_fid("ger","Batavus"),n:6,gap:12,lvl:50}, {line:_fid("ger","Vates Germana"),n:3,gap:18,lvl:50} ] ],
     reward:{ aes:1400, frumentum:980, gloria:66 } },
-  { id:"gm2", region:"germania", nm:"Ad Rhenum", nl:"Aan de Rijn", map:"a", seed:10202, hpMult:4, needs:"gm1",
+  { id:"gm2", region:"germania", nm:"Ad Rhenum", nl:"Aan de Rijn", map:"a", seed:10202, hpMult:7.2, needs:"gm1",
     waves:[ [ {line:_fid("ger","Comes"),n:6,gap:12,lvl:50} ],
             [ {line:_fid("ger","Batavus"),n:8,gap:10,lvl:50}, {line:_fid("ger","Vates Germana"),n:3,gap:18,lvl:50} ],
             [ {line:_fid("ger","Centenus"),n:9,gap:10,lvl:50} ],
             [ {line:_fid("ger","Comes"),n:5,gap:14,lvl:50}, {line:_fid("ger","Batavus"),n:8,gap:10,lvl:50}, {line:_fid("myt","Draco"),n:2,gap:26,lvl:50} ] ],
     reward:{ aes:1500, frumentum:1050, gloria:70 } },
   /* Themiscyra (opent na gm2) */
-  { id:"th1", region:"themiscyra", nm:"Themiscyra", nl:"Het rijk van de Amazones", map:"a", seed:11101, hpMult:7.5, needs:"gm2",
+  { id:"th1", region:"themiscyra", nm:"Themiscyra", nl:"Het rijk van de Amazones", map:"a", seed:11101, hpMult:13.8, needs:"gm2",
     waves:[ [ {line:_fid("ama","Sagittaria"),n:8,gap:14,lvl:50} ],
             [ {line:_fid("ama","Peltasta Amazon"),n:7,gap:14,lvl:50} ],
             [ {line:_fid("ama","Sagittaria equestris"),n:6,gap:14,lvl:50}, {line:_fid("ama","Sagittaria"),n:4,gap:14,lvl:50} ],
             [ {line:_fid("ama","Securifera"),n:6,gap:14,lvl:50}, {line:_fid("ama","Sagittaria equestris"),n:5,gap:12,lvl:50} ] ],
     reward:{ aes:1600, frumentum:1120, gloria:74 } },
-  { id:"th2", region:"themiscyra", nm:"Hippolyte", nl:"De strijd om Hippolyte", map:"b", seed:11202, hpMult:4.3, needs:"th1",
+  { id:"th2", region:"themiscyra", nm:"Hippolyte", nl:"De strijd om Hippolyte", map:"b", seed:11202, hpMult:7.1, needs:"th1",
     waves:[ [ {line:_fid("ama","Securifera"),n:8,gap:12,lvl:50} ],
             [ {line:_fid("ama","Sagittaria equestris"),n:8,gap:10,lvl:50}, {line:_fid("ama","Peltasta Amazon"),n:4,gap:14,lvl:50} ],
             [ {line:_fid("ama","Sagittaria"),n:9,gap:10,lvl:50}, {line:_fid("myt","Gryps"),n:3,gap:20,lvl:50} ],
@@ -247,12 +247,15 @@ function castraPSim(mission, towerSoldiers){
   return sim;
 }
 function castraPMakeTower(sim, s, x, y){
-  let st, type, look = null;
-  if(s.snap){ st = s.snap.st; type = s.snap.type; look = s.snap.look || null; }
-  else if(s.hero){ st = castraHeroStats(s.h); type = CASTRA_HERO_DATA[s.h.id].type; look = CASTRA_HERO_DATA[s.h.id].look; }
-  else { st = s.dux ? { ...CASTRA_V_BAL.dux } : castraStats(s); type = castraLine(s.line).type; }
+  let st, type, look = null, skIds = [];
+  if(s.snap){ st = s.snap.st; type = s.snap.type; look = s.snap.look || null; skIds = s.snap.sk || []; }
+  else if(s.hero){ st = castraHeroStats(s.h); type = CASTRA_HERO_DATA[s.h.id].type; look = CASTRA_HERO_DATA[s.h.id].look; skIds = castraHeroSkillIds(s.h); }
+  else { st = s.dux ? { ...CASTRA_V_BAL.dux } : castraStats(s); type = castraLine(s.line).type; if(!s.dux) skIds = castraSkillIds(s); }
+  const sk = castraSkillAgg(skIds);
+  const range = Math.round((CASTRA_P.rangeBase + st.ambitus*CASTRA_P.rangePerAmb)*(100+sk.rng)/100);
+  const cooldown = Math.max(CASTRA_P.cdMin, Math.round((CASTRA_P.cdBase - st.celeritas*CASTRA_P.cdPerCel)*(100-sk.cd)/100));
   return { id:sim.nextId++, sid:s.id, line:s.line, look, type, owner:s.owner||null, x, y, cx:x*1000+500, cy:y*1000+500, st, cd:0,
-           range: CASTRA_P.rangeBase + st.ambitus*CASTRA_P.rangePerAmb, cooldown: Math.max(CASTRA_P.cdMin, CASTRA_P.cdBase - st.celeritas*CASTRA_P.cdPerCel), buffed:false };
+           range, cooldown, buffed:false, sk, skIds, hits:0, charge: sk.charge ? sk.charge.hits : 0, aura:0 };
 }
 // Start de volgende golf (maakt de spawnrij).
 function castraPStartWave(sim){
@@ -260,6 +263,7 @@ function castraPStartWave(sim){
   sim.wave++;
   if(sim.wave >= sim.mission.waves.length){ sim.wave = sim.mission.waves.length-1; return false; }
   sim.waveActive = true;
+  sim.towers.forEach(t=>{ if(t.sk && t.sk.charge) t.charge = t.sk.charge.hits; });
   let t = sim.tick + CASTRA_P.startDelay;
   sim.mission.waves[sim.wave].forEach(g=>{
     for(let i=0;i<g.n;i++){ sim.queue.push({ at:t, line:g.line, lvl:g.lvl }); t += g.gap; }
@@ -283,30 +287,54 @@ function castraPStep(sim){
       prog:0, speed: Math.round((CASTRA_P.speedBase + st.celeritas*CASTRA_P.speedPerCel) * ((sim.mods&&sim.mods.spd)||1)), x:0, y:0 });
   }
   // bewegen
-  sim.enemies.forEach(e=>{ e.prog += e.speed; const p = castraPPos(sim.path, e.prog); e.x = p[0]; e.y = p[1]; });
+  sim.enemies.forEach(e=>{ e.prog += (e.slowUntil>sim.tick ? Math.round(e.speed*(100-e.slowPct)/100) : e.speed); const p = castraPPos(sim.path, e.prog); e.x = p[0]; e.y = p[1]; });
   // support-buff (sup-type verhoogt de schade van torens in de buurt)
   sim.towers.forEach(t=>{ t.buffed = false; });
   sim.towers.filter(t=>t.type==="sup").forEach(b=>{
     sim.towers.forEach(t=>{ if(t!==b){ const dx=t.cx-b.cx, dy=t.cy-b.cy; if(dx*dx+dy*dy <= CASTRA_P.buffRadius*CASTRA_P.buffRadius) t.buffed = true; } });
   });
+  // auras (vaardigheden): torens in de buurt van een aura-toren krijgen extra schade; "global" geldt voor iedereen
+  let gsum = 0;
+  sim.towers.forEach(t=>{ t.aura = 0; if(t.sk) gsum += t.sk.global; });
+  sim.towers.forEach(b=>{
+    if(!b.sk || !b.sk.auraDmg) return; const r2 = b.sk.auraRadius*b.sk.auraRadius;
+    sim.towers.forEach(t=>{ if(t!==b){ const dx=t.cx-b.cx, dy=t.cy-b.cy; if(dx*dx+dy*dy <= r2) t.aura += b.sk.auraDmg; } });
+  });
   // aanvallen: kies de vijand die het verst op het pad is binnen bereik
   const mods = sim.mods || null, rr = mods && mods.rng ? Math.round(1000*mods.rng)/1000 : 1;
+  const hitOne = (t, e, mult)=>{
+    const m = castraPTypeMul(t.type, e.type), sk = t.sk;
+    let dmg = Math.floor(t.st.impetus*m[0]/m[1]) - Math.floor(e.st.tutela*2/5*(100-sk.pierce)/100);
+    dmg = Math.max(1, dmg);
+    if(t.buffed) dmg = Math.max(1, Math.floor(dmg*(100+CASTRA_P.buffPct)/100));
+    const pct = sk.dmg + t.aura + gsum; if(pct) dmg = Math.max(1, Math.floor(dmg*(100+pct)/100));
+    if(mods && mods.dmg) dmg = Math.max(1, Math.floor(dmg*mods.dmg));
+    return Math.max(1, Math.floor(dmg*(mult||1)));
+  };
   sim.towers.forEach(t=>{
     if(t.cd>0){ t.cd--; return; }
-    let best = null;
+    let best = null, second = null;
     const rng2 = (t.range*rr)*(t.range*rr);
     sim.enemies.forEach(e=>{
       const dx=e.x-t.cx, dy=e.y-t.cy;
-      if(dx*dx+dy*dy <= rng2 && (!best || e.prog > best.prog)) best = e;
+      if(dx*dx+dy*dy <= rng2){
+        if(!best || e.prog > best.prog){ second = best; best = e; } else if(!second || e.prog > second.prog) second = e;
+      }
     });
     if(!best) return;
-    const m = castraPTypeMul(t.type, best.type);
-    let dmg = Math.floor(t.st.impetus*m[0]/m[1]) - Math.floor(best.st.tutela*2/5);
-    dmg = Math.max(1, dmg);
-    if(t.buffed) dmg = Math.max(1, Math.floor(dmg*(100+CASTRA_P.buffPct)/100));
-    if(mods && mods.dmg) dmg = Math.max(1, Math.floor(dmg*mods.dmg));
+    const sk = t.sk; t.hits++;
+    let mult = 1;
+    if(sk.nth && t.hits % sk.nth.n === 0) mult *= sk.nth.mult;
+    if(t.charge > 0){ mult *= sk.charge.mult; t.charge--; }
+    const dmg = hitOne(t, best, mult);
     best.hp -= dmg; t.cd = mods && mods.cd ? Math.max(CASTRA_P.cdMin, Math.round(t.cooldown*mods.cd)) : t.cooldown;
     sim.events.push({ k:"hit", t:t.id, e:best.id, dmg });
+    if(sk.slow && t.hits % sk.slow.every === 0){ best.slowPct = Math.max(best.slowPct||0, sk.slow.pct); best.slowUntil = sim.tick + sk.slow.ticks; }
+    if(sk.doubleEvery && second && t.hits % sk.doubleEvery === 0){ const d2 = hitOne(t, second, mult); second.hp -= d2; sim.events.push({ k:"hit", t:t.id, e:second.id, dmg:d2 }); }
+    if(sk.splash){
+      const r2 = sk.splash.radius*sk.splash.radius;
+      sim.enemies.forEach(o=>{ if(o!==best && o.hp>0){ const dx=o.x-best.x, dy=o.y-best.y; if(dx*dx+dy*dy <= r2) o.hp -= Math.max(1, Math.floor(dmg*sk.splash.pct/100)); } });
+    }
   });
   // doden en doorbraken
   const alive = [];
@@ -319,6 +347,8 @@ function castraPStep(sim){
   if(sim.baseHp<=0){ sim.baseHp = 0; sim.over = "lose"; return; }
   if(sim.waveActive && !sim.queue.length && !sim.enemies.length){
     sim.waveActive = false;
+    let rg = 0; sim.towers.forEach(t=>{ if(t.sk) rg += t.sk.regen; });
+    if(rg && sim.baseHp < CASTRA_P.baseHp) sim.baseHp = Math.min(CASTRA_P.baseHp, sim.baseHp + rg);
     if(sim.wave >= sim.mission.waves.length-1) sim.over = "win";
   }
 }

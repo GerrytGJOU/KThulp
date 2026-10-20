@@ -268,6 +268,8 @@ function castraBFinish(){
   let h = `<div class="panel">`;
   if(s.over==="win"){
     const cap = castraWalletCap();
+    let skR = 0; s.towers.forEach(t=>{ if(t.sk) skR += t.sk.reward; });
+    B.rewardMult = (B.rewardMult||1) * (1 + skR/100);
     const rw = {}; Object.keys(m.reward).forEach(r=>{ rw[r] = Math.round(m.reward[r]*(B.rewardMult||1)); });
     Object.keys(rw).forEach(r=>{ CASTRA.res[r] = r==="gloria" ? (CASTRA.res[r]||0)+rw[r] : Math.min(cap, (CASTRA.res[r]||0)+rw[r]); });
     const lines = [];

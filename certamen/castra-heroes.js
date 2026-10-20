@@ -305,8 +305,9 @@ function castraHeroStats(h){
   Object.keys(b).forEach(k=>{ o[k] = Math.round(b[k]*m); }); return o;
 }
 function castraHeroLevelUp(h){
-  let up = false;
+  let up = false; const lvl0 = h.lvl;
   while(h.lvl < castraHeroCap(h) && h.xp >= CASTRA_H.xpPerLvl*h.lvl){ h.xp -= CASTRA_H.xpPerLvl*h.lvl; h.lvl++; up = true; }
+  if(up && typeof castraSkillLearned==="function") castraSkillLearned({ hero:true, h }, lvl0, h.lvl);
   return up;
 }
 function castraHeroRecruit(id){
