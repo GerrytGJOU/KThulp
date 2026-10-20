@@ -24,6 +24,17 @@ const CASTRA_P = {
   enemyHpMult: 1.0,           // schaalt de vita van vijanden (per missie overschreven)
   cols:16, rows:11,
 };
+/* Synergieën en bevelen (alles in gehele getallen, deterministisch; uitleg en namen in castra-roles.js). */
+const CASTRA_P_SYN = {
+  muriR:3000, muriSlow:25, muriTicks:30,     // infanterie vertraagt vijanden als er een boogschutter binnen 3 tegels staat
+  persN:3, persD:2,                          // cavalerie: ×3/2 schade tegen vijanden onder de helft van hun levenspunten
+  aciesPct:115,                              // boogschutter bij een ondersteuner: 115% bereik
+};
+const CASTRA_P_CMD = {
+  energyMax:3, energyStart:1, perKills:15, perWave:1,
+  impeteTicks:160, impeteDmg:125, impeteCd:70,   // Impete!: 8 s lang 25% meer schade en 30% snellere aanvallen
+  stateTicks:80, stateSpd:40,                    // State!: 4 s lang lopen alle vijanden op 40% snelheid
+};
 
 /* Het pad (waypoints in tegels) en hindernissen; twee lay-outs. */
 const CASTRA_P_MAPS = {
@@ -248,6 +259,7 @@ function castraPSim(mission, towerSoldiers){
   const sim = {
     mission, path, paths, spawnN:0, tick:0, rng: castraRng(mission.seed), baseHp: CASTRA_P.baseHp, wave:-1, waveActive:false,
     queue:[], enemies:[], towers:[], nextId:1, kills:0, leaked:0, over:null, events:[],
+    cmdOn:false, energy:0, cmd:{ impete:0, state:0 }, cmdQ:[], cmdLog:[],      // bevelen (alleen aan in solo-gevechten, zie castraBStart)
   };
   towerSoldiers.forEach(t=>sim.towers.push(castraPMakeTower(sim, t.s, t.x, t.y)));
   return sim;
@@ -320,6 +332,13 @@ function castraPRoles(sim){
 function castraPStep(sim){
   if(sim.over) return;
   sim.tick++; sim.events.length = 0;
+  while(sim.cmdQ.length && sim.cmdQ[0].at <= sim.tick){
+    const c = sim.cmdQ.shift();
+    if(sim.cmdOn && sim.energy>=1 && (c.id==="impete" || c.id==="state")){
+      sim.energy--; sim.cmd[c.id] = sim.tick + (c.id==="impete" ? CASTRA_P_CMD.impeteTicks : CASTRA_P_CMD.stateTicks);
+      sim.cmdLog.push({ at:sim.tick, id:c.id }); sim.events.push({ k:"cmd", id:c.id });
+    }
+  }
   { const aw = sim.mission.autoWaves; if(aw && sim.wave+1 < sim.mission.waves.length && sim.tick >= aw.first + (sim.wave+1)*aw.interval) castraPAutoWave(sim); }
   // spawns
   while(sim.queue.length && sim.queue[0].at <= sim.tick){
@@ -332,7 +351,7 @@ function castraPStep(sim){
     if(R){ sim.hasRoles = true; sim.events.push({ k:"newrole", role:q.role }); }
   }
   // bewegen
-  sim.enemies.forEach(e=>{ e.prog += (e.slowUntil>sim.tick ? Math.round(e.speed*(100-e.slowPct)/100) : e.speed); const p = castraPPos(sim.paths[e.lane||0], e.prog); e.x = p[0]; e.y = p[1]; });
+  sim.enemies.forEach(e=>{ let sp = (e.slowUntil>sim.tick ? Math.round(e.speed*(100-e.slowPct)/100) : e.speed); if(sim.cmd.state>sim.tick) sp = Math.round(sp*CASTRA_P_CMD.stateSpd/100); e.prog += sp; const p = castraPPos(sim.paths[e.lane||0], e.prog); e.x = p[0]; e.y = p[1]; });
   if(sim.hasRoles) castraPRoles(sim);
   // support-buff (sup-type verhoogt de schade van torens in de buurt)
   sim.towers.forEach(t=>{ t.buffed = false; });
@@ -346,6 +365,12 @@ function castraPStep(sim){
     if(!b.sk || !b.sk.auraDmg) return; const r2 = b.sk.auraRadius*b.sk.auraRadius;
     sim.towers.forEach(t=>{ if(t!==b){ const dx=t.cx-b.cx, dy=t.cy-b.cy; if(dx*dx+dy*dy <= r2) t.aura += b.sk.auraDmg; } });
   });
+  // synergieën (vaste regels op basis van type en plek)
+  sim.towers.forEach(t=>{ t.synMuri = false; t.synAcies = false; });
+  sim.towers.forEach(a=>{
+    if(a.type==="inf") sim.towers.some(b=>{ if(b.type==="rng"){ const dx=a.cx-b.cx, dy=a.cy-b.cy; if(dx*dx+dy*dy <= CASTRA_P_SYN.muriR*CASTRA_P_SYN.muriR){ a.synMuri = true; return true; } } return false; });
+    else if(a.type==="rng") sim.towers.some(b=>{ if(b.type==="sup"){ const dx=a.cx-b.cx, dy=a.cy-b.cy; if(dx*dx+dy*dy <= CASTRA_P.buffRadius*CASTRA_P.buffRadius){ a.synAcies = true; return true; } } return false; });
+  });
   // aanvallen: kies de vijand die het verst op het pad is binnen bereik
   const mods = sim.mods || null, rr = mods && mods.rng ? Math.round(1000*mods.rng)/1000 : 1;
   const hitOne = (t, e, mult)=>{
@@ -355,12 +380,14 @@ function castraPStep(sim){
     if(t.buffed) dmg = Math.max(1, Math.floor(dmg*(100+CASTRA_P.buffPct)/100));
     const pct = sk.dmg + t.aura + gsum + (mods && mods.type ? (mods.type[t.type]||0) : 0); if(pct) dmg = Math.max(1, Math.floor(dmg*(100+pct)/100));
     if(mods && mods.dmg) dmg = Math.max(1, Math.floor(dmg*mods.dmg));
+    if(t.type==="cav" && e.hp*CASTRA_P_SYN.persD < e.maxHp) dmg = Math.max(1, Math.floor(dmg*CASTRA_P_SYN.persN/CASTRA_P_SYN.persD));   // Persecutio
+    if(sim.cmd.impete>sim.tick) dmg = Math.max(1, Math.floor(dmg*CASTRA_P_CMD.impeteDmg/100));                                          // Impete!
     return Math.max(1, Math.floor(dmg*(mult||1)));
   };
   sim.towers.forEach(t=>{
     if(t.cd>0){ t.cd--; return; }
     let best = null, second = null;
-    const rng2 = (t.range*rr)*(t.range*rr);
+    const trr = t.synAcies ? t.range*rr*CASTRA_P_SYN.aciesPct/100 : t.range*rr, rng2 = trr*trr;
     let bestR = 0, secondR = 0;
     sim.enemies.forEach(e=>{
       const dx=e.x-t.cx, dy=e.y-t.cy;
@@ -376,6 +403,8 @@ function castraPStep(sim){
     if(t.charge > 0){ mult *= sk.charge.mult; t.charge--; }
     const dmg = hitOne(t, best, mult);
     best.hp -= (best.red||best.prot) ? castraPDmgTaken(best, dmg) : dmg; t.cd = mods && mods.cd ? Math.max(CASTRA_P.cdMin, Math.round(t.cooldown*mods.cd)) : t.cooldown;
+    if(sim.cmd.impete>sim.tick) t.cd = Math.max(CASTRA_P.cdMin, Math.round(t.cd*CASTRA_P_CMD.impeteCd/100));
+    if(t.synMuri){ best.slowPct = Math.max(best.slowPct||0, CASTRA_P_SYN.muriSlow); best.slowUntil = Math.max(best.slowUntil||0, sim.tick + CASTRA_P_SYN.muriTicks); }   // Murus et sagittae
     sim.events.push({ k:"hit", t:t.id, e:best.id, dmg });
     if(sk.slow && t.hits % sk.slow.every === 0){ best.slowPct = Math.max(best.slowPct||0, sk.slow.pct); best.slowUntil = sim.tick + sk.slow.ticks; }
     if(sk.doubleEvery && second && t.hits % sk.doubleEvery === 0){ const d2 = hitOne(t, second, mult); second.hp -= (second.red||second.prot) ? castraPDmgTaken(second, d2) : d2; sim.events.push({ k:"hit", t:t.id, e:second.id, dmg:d2 }); }
@@ -387,7 +416,7 @@ function castraPStep(sim){
   // doden en doorbraken
   const alive = [];
   sim.enemies.forEach(e=>{
-    if(e.hp<=0){ sim.kills++; sim.events.push({ k:"kill", e:e.id }); }
+    if(e.hp<=0){ sim.kills++; sim.events.push({ k:"kill", e:e.id }); if(sim.cmdOn && sim.kills % CASTRA_P_CMD.perKills === 0) sim.energy = Math.min(CASTRA_P_CMD.energyMax, sim.energy+1); }
     else if(e.prog >= sim.paths[e.lane||0].len-1){ sim.baseHp -= (e.type==="myth"?2:1) + (e.role ? CASTRA_P_ROLES[e.role].leak : 0); sim.leaked++; sim.events.push({ k:"leak", e:e.id }); }
     else alive.push(e);
   });
@@ -395,6 +424,7 @@ function castraPStep(sim){
   if(sim.baseHp<=0){ sim.baseHp = 0; sim.over = "lose"; return; }
   if(sim.waveActive && !sim.queue.length && !sim.enemies.length){
     sim.waveActive = false;
+    if(sim.cmdOn) sim.energy = Math.min(CASTRA_P_CMD.energyMax, sim.energy + CASTRA_P_CMD.perWave);
     let rg = 0; sim.towers.forEach(t=>{ if(t.sk) rg += t.sk.regen; });
     if(rg && sim.baseHp < CASTRA_P.baseHp) sim.baseHp = Math.min(CASTRA_P.baseHp, sim.baseHp + rg);
     if(sim.wave >= sim.mission.waves.length-1) sim.over = "win";

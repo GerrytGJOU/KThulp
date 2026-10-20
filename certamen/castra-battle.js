@@ -48,6 +48,7 @@ function castraBStart(missionId){
   CASTRA_B = { mission:m, sim:castraPSim(m, []), sel:null, timer:null, speed:opts.speed||1, auto:!!opts.auto, units:{}, fx:[], placed:{}, lastDir:{}, finished:false,
                boons:[], pick:null, offeredFor:-2, rewardMult:1, autoT:0, ctlSig:"" };
   CASTRA_B.sim.mods = { dmg:1, cd:1, rng:1, spd:1 };
+  if(typeof castraUnlocked==="function" ? castraUnlocked("dona") : true){ CASTRA_B.sim.cmdOn = true; CASTRA_B.sim.energy = CASTRA_P_CMD.energyStart; }   // bevelen (Impete!/State!)
   if(typeof castraCardApply==="function") castraCardApply(CASTRA_B);   // kaartbonussen (alleen solo)
   if(typeof castraEdictApply==="function") castraEdictApply(CASTRA_B);   // missieregels (castra-roles.js)
   // vormsprites (indien aanwezig) vooraf controleren: alle vijanden van de missie en je eigen soldaten
@@ -65,13 +66,15 @@ SCREENS.castraBattle = function(){
   <div id="cbWrap" style="position:relative;width:100%;overflow:hidden;border:2px solid var(--hi,#d4af37);border-radius:10px;background:#2c3a1f;touch-action:manipulation">
     <div id="cbMap" style="position:absolute;top:0;left:0;width:${CASTRA_P.cols*48}px;height:${CASTRA_P.rows*48}px;transform-origin:top left"></div>
   </div>
+  <div id="cbSynChips" style="font-size:13px;margin-top:6px"></div>
+  <div id="cbCmd" style="margin:8px 0 0"></div>
   <div id="cbCtl" style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap"></div>
   <div id="cbCards"></div>
   <div id="cbResult"></div>
   ${foot()}`);
   castraBBuildMap();
   castraBFit();
-  castraBRenderHud(); castraBRenderCtl(); castraBRenderCards();
+  castraBRenderHud(); castraBRenderCtl(); castraBRenderCards(); if(typeof castraBRenderCmd==="function") castraBRenderCmd();
   B.resizeFn = castraBFit; window.addEventListener("resize", B.resizeFn);
   B.timer = setInterval(B.legio ? castraLegioTick : castraBTick, CASTRA_P.tickMs);
   if(typeof castraBIntroStart==="function") castraBIntroStart();   // uitleg van nieuwe missieregels (pauzeert tot begrepen)
@@ -85,13 +88,14 @@ function castraBBuildMap(){
   const B = CASTRA_B, mp = CASTRA_P_MAPS[B.mission.map], cols = CASTRA_P.cols, rows = CASTRA_P.rows;
   const g = castraGroundGrid(cols, rows, "grass"), cells = castraPPathCells(B.mission.map);
   Object.keys(cells).forEach(k=>{ const [x,y] = k.split(",").map(Number); g[y][x] = "sand"; });
-  const pieces = mp.trees.map((t,i)=>({ o:(i%2?"tree_a":"tree_b"), x:t[0], y:t[1]-1 }));
+  const pieces = mp.trees.map((t,i)=>({ o:"tree_a", x:t[0], y:t[1]-1 }));
   // bomen staan op de aangegeven cel (stam); de boomtop valt een tegel erboven
   B.cells = cells; B.blockedTrees = {}; mp.trees.forEach(t=>{ B.blockedTrees[t[0]+","+t[1]] = 1; });
   B.built = castraMapLogic({ cols, rows, ground:g, pieces, walls:[] });
   const map = el("cbMap");
   map.innerHTML = `<canvas id="cbBelow" style="position:absolute;left:0;top:0;image-rendering:pixelated"></canvas>
     <div id="cbPlace" style="position:absolute;left:0;top:0;width:100%;height:100%;z-index:2"></div>
+    <svg id="cbSyn" width="${cols*48}" height="${rows*48}" style="position:absolute;left:0;top:0;z-index:3;pointer-events:none"></svg>
     <div id="cbUnits" style="position:absolute;left:0;top:0;z-index:3;pointer-events:none"></div>
     <canvas id="cbFx" width="${cols*48}" height="${rows*48}" style="position:absolute;left:0;top:0;pointer-events:none;z-index:4"></canvas>
     <canvas id="cbAbove" style="position:absolute;left:0;top:0;pointer-events:none;image-rendering:pixelated;z-index:5"></canvas>`;
@@ -103,6 +107,7 @@ function castraBBuildMap(){
     + `<div style="position:absolute;left:${last[0]*48}px;top:${last[1]*48}px;width:48px;height:48px;background:rgba(63,157,82,.35)"></div>`;
   // torens die al staan (bij hergebruik na een golf)
   B.sim.towers.forEach(castraBDrawTower);
+  if(typeof castraBRenderSyn==="function") castraBRenderSyn();
 }
 function castraBFit(){
   const w = el("cbWrap"); if(!w || !CASTRA_B) return;
@@ -132,12 +137,14 @@ function castraBMapTap(e){
   B.sim.towers.push(tower); B.placed[s0.id] = true; B.sel = null;
   if(B.actions) B.actions.push({ t:B.sim.tick, k:"place", sid:s0.id, x, y });
   castraBDrawTower(tower); castraBRenderCards(); castraBRenderHud();
+  if(typeof castraBRenderSyn==="function") castraBRenderSyn(true);
 }
 function castraBRemoveTower(tw){
   const B = CASTRA_B; B.sim.towers = B.sim.towers.filter(t=>t!==tw);
   if(B.actions) B.actions.push({ t:B.sim.tick, k:"take", sid:tw.sid });
   delete B.placed[tw.sid]; const d = document.getElementById("cbT"+tw.id); if(d) d.remove();
   castraBRenderCards(); castraBRenderHud();
+  if(typeof castraBRenderSyn==="function") castraBRenderSyn();
 }
 function castraBDrawTower(t){
   const box = el("cbUnits"); if(!box) return;
@@ -226,10 +233,11 @@ function castraBTick(){
       if(ev.k==="hit"){ const t = B.sim.towers.find(x=>x.id===ev.t), e = B.sim.enemies.find(x=>x.id===ev.e); if(t&&e) B.fx.push({ x1:t.cx, y1:t.cy, x2:e.x, y2:e.y, ttl:3, type:t.type }); }
       else if(ev.k==="heal"){ const m = B.sim.enemies.find(x=>x.id===ev.m), e = B.sim.enemies.find(x=>x.id===ev.e); if(m&&e) B.fx.push({ x1:m.x, y1:m.y, x2:e.x, y2:e.y, ttl:4, col:"#6f6" }); }
       else if(ev.k==="newrole" && typeof castraBIntroRole==="function"){ if(castraBIntroRole(ev.role)) stop = true; }
+      else if(ev.k==="cmd" && typeof castraBCmdFlash==="function") castraBCmdFlash(ev.id);
     });
     if(stop) break;
   }
-  castraBDrawUnits(); castraBDrawFx(); castraBRenderHud();
+  castraBDrawUnits(); castraBDrawFx(); castraBRenderHud(); if(typeof castraBRenderCmd==="function") castraBRenderCmd();
   if(B.sim.over && !B.finished){ B.finished = true; castraBFinish(); }
   else if(!B.sim.waveActive){
     castraBOfer(); castraBRenderCtl();

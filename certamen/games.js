@@ -1819,6 +1819,7 @@ SCREENS.teacherClass = function(){
   <div id="tpChronicaStats"></div>
   <div id="tpCastraLegio"></div>
   <div id="tpCastraStats"></div>
+  <div id="tpCastraTD"></div>
   <div id="tpStudentList"><div class="note" style="text-align:center;padding:16px">Laden…</div></div>
   <div id="tpOtherApps"></div>
   ${foot()}`);
@@ -1826,6 +1827,7 @@ SCREENS.teacherClass = function(){
   tpRenderClassAnalytics();
   tpRenderChronicaAnalytics();
   tpRenderCastraAnalytics();
+  tpRenderCastraTD();
   tpRenderCastraLegio();
 };
 
@@ -1927,6 +1929,37 @@ function tpRenderCastraAnalytics(){
     cont.innerHTML=`<div class="panel"><h3>Castra Heroum — vertaalhulp deze maand</h3>
       ${tbl("Woorden — meest opgezocht",words,"Woord")}${tbl("Zinnen — meest vertaald",sents,"Zin")}</div>`;
   }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon Castra-statistieken niet laden.</div></div>`; });
+}
+
+// Castra Heroum — tower defence-meetpunten voor de klastest, geaggregeerd per klas/maand (castra-metrics.js).
+function tpRenderCastraTD(){
+  const cont=el("tpCastraTD"); if(!cont) return;
+  const klas=_tpCurrentClass;
+  if(!klas || !initFirebase()){ cont.innerHTML=""; return; }
+  const month=new Date().toISOString().slice(0,7);
+  fbDB.ref("classAnalyticsCastraTD/"+klas+"/"+month).once("value").then(snap=>{
+    const D=snap.val()||{}, g=(k,f)=>((D[k]||{})[f]||0);
+    const mids=Object.keys(D).filter(k=>k.indexOf("m_")===0).map(k=>k.slice(2));
+    if(!mids.length){ cont.innerHTML=`<div class="panel"><h3>Castra Heroum — tower defence deze maand</h3><div class="note">Nog geen gegevens — speel een missie ingelogd met deze klascode.</div></div>`; return; }
+    const pct=(a,b)=>b>0?Math.round(100*a/b)+"%":"–";
+    const nm=id=>{ const m=(typeof CASTRA_P_MISSIONS!=="undefined")?CASTRA_P_MISSIONS.find(x=>x.id===id):null; return m?m.nm:id; };
+    const order=(typeof CASTRA_P_MISSIONS!=="undefined")?CASTRA_P_MISSIONS.map(m=>m.id):mids;
+    const rows=mids.sort((a,b)=>order.indexOf(a)-order.indexOf(b)).map(id=>{
+      const k="m_"+id, s=g(k,"s"), w=g(k,"w"), l=g(k,"l"), a=g(k,"a"), done=w+l, v=g(k,"v"), r=g(k,"r");
+      return `<tr><td>${esc(nm(id))}</td><td>${s}</td><td>${pct(w,done)}</td><td>${done?Math.round(g(k,"t")/done*0.05/6)/10+" min":"–"}</td><td>${pct(a,s)}</td><td>${pct(v,v+r)}</td><td>${s?(g(k,"c")/s).toFixed(1):"–"}</td></tr>`; }).join("");
+    const grp=(pre,label,names)=>{ const ks=Object.keys(D).filter(k=>k.indexOf(pre)===0); if(!ks.length) return ""; return `<h4 style="margin:12px 0 4px">${label}</h4><table class="bm-tbl"><thead><tr><th>Naam</th><th>Gevechten</th><th>Gewonnen</th></tr></thead><tbody>${ks.map(k=>`<tr><td>${esc(names&&names[k.slice(pre.length)]||k.slice(pre.length))}</td><td>${g(k,"s")}</td><td>${pct(g(k,"w"),g(k,"s"))}</td></tr>`).join("")}</tbody></table>`; };
+    const edNames={}; if(typeof CASTRA_EDICTA!=="undefined") Object.keys(CASTRA_EDICTA).forEach(i=>edNames[i]=CASTRA_EDICTA[i].la+" ("+CASTRA_EDICTA[i].nl+")");
+    const roNames={}; if(typeof CASTRA_P_ROLES!=="undefined") Object.keys(CASTRA_P_ROLES).forEach(i=>roNames[i]=CASTRA_P_ROLES[i].la+" ("+CASTRA_P_ROLES[i].nl+")");
+    const types=["inf","rng","cav","sup","myth"].filter(t=>g("ty_"+t,"n")), totT=types.reduce((a,t)=>a+g("ty_"+t,"n"),0);
+    const syn=Object.keys(D).filter(k=>k.indexOf("y_")===0), cmd=Object.keys(D).filter(k=>k.indexOf("cmd_")===0);
+    const days=Object.keys(D).filter(k=>k.indexOf("d_")===0).sort(), ret=["new","d1","d2_6","d7"].map(k=>[k,g("ret_"+k,"n")]);
+    cont.innerHTML=`<div class="panel"><h3>Castra Heroum — tower defence deze maand</h3>
+      <table class="bm-tbl"><thead><tr><th>Missie</th><th>Gestart</th><th>Gewonnen</th><th>Duur (gem.)</th><th>Afgebroken</th><th>Ander team dan vorige poging</th><th>Bevelen per gevecht</th></tr></thead><tbody>${rows}</tbody></table>
+      ${grp("e_","Missieregels",edNames)}${grp("r_","Vijandrollen",roNames)}
+      ${types.length?`<h4 style="margin:12px 0 4px">Opstelling (aandeel per soort)</h4><div class="note">${types.map(t=>t+" "+pct(g("ty_"+t,"n"),totT)).join(" · ")}</div>`:""}
+      ${syn.length||cmd.length?`<h4 style="margin:12px 0 4px">Synergieën en bevelen</h4><div class="note">${syn.map(k=>k.slice(2)+": "+g(k,"n")+"×").concat(cmd.map(k=>k.slice(4)+": "+g(k,"n")+"×")).join(" · ")}</div>`:""}
+      ${days.length?`<h4 style="margin:12px 0 4px">Spelers per dag en terugkeer</h4><div class="note">${days.map(k=>k.slice(2)+"e: "+g(k,"n")).join(" · ")}<br>Eerste speeldag ${ret[0][1]} · terug na 1 dag ${ret[1][1]} · na 2–6 dagen ${ret[2][1]} · na 7+ dagen ${ret[3][1]} (tellingen, geen namen)</div>`:""}</div>`;
+  }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon de tower defence-gegevens niet laden.</div></div>`; });
 }
 
 // Castra Heroum — Legio-evenement starten voor deze klas (castra-legio.js: castraLegioTeacher*).
