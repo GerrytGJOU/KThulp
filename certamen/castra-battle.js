@@ -43,6 +43,9 @@ function castraBStart(missionId){
   const m = CASTRA_P_MISSIONS.find(x=>x.id===missionId); if(!m || !castraPMissionOpen(m)) return;
   if(CASTRA_B){ clearInterval(CASTRA_B.timer); window.removeEventListener("resize", CASTRA_B.resizeFn); }
   CASTRA_B = { mission:m, sim:castraPSim(m, []), sel:null, timer:null, speed:1, units:{}, fx:[], placed:{}, lastDir:{}, finished:false };
+  // vormsprites (indien aanwezig) vooraf controleren: alle vijanden van de missie en je eigen soldaten
+  const ids = {}; m.waves.forEach(w=>w.forEach(g=>ids[g.line]=1)); (CASTRA.soldiers||[]).forEach(s=>ids[s.line]=1);
+  castraFsprProbe(Object.keys(ids).map(i=>[i,"td"]), null);
   go("castraBattle");
 }
 SCREENS.castraBattle = function(){
@@ -128,7 +131,7 @@ function castraBDrawTower(t){
   const box = el("cbUnits"); if(!box) return;
   const d = document.createElement("div"); d.id = "cbT"+t.id;
   d.style.cssText = `position:absolute;left:${t.x*48}px;top:${t.y*48}px;width:48px;height:48px`;
-  d.innerHTML = castraAvatarHTML(t.look || castraPLook(t.line), "down", 1, 48) + (t.type==="sup"?`<div style="position:absolute;top:-4px;right:0;font-size:12px">✨</div>`:"");
+  d.innerHTML = (t.look ? castraAvatarHTML(t.look, "down", 1, 48) : castraFsprHTML(t.line, "td", 48, castraAvatarHTML(castraPLook(t.line), "down", 1, 48))) + (t.type==="sup"?`<div style="position:absolute;top:-4px;right:0;font-size:12px">✨</div>`:"");
   box.appendChild(d);
 }
 
@@ -195,7 +198,13 @@ function castraBDrawUnits(){
     const dx = px-u.px, dy = py-u.py;
     const dir = Math.abs(dx) > Math.abs(dy) ? (dx>0?"right":"left") : (dy>0?"down":(dy<0?"up":u.dir));
     const frame = [0,1,2,1][(tick>>2)&3];
-    if(dir!==u.dir || frame!==u.frame){ u.dir = dir; u.frame = frame; u.d.firstChild.innerHTML = castraAvatarHTML(castraPLook(e.line), dir, frame, 48); }
+    if(dir!==u.dir || frame!==u.frame){
+      u.dir = dir; u.frame = frame;
+      if(castraFsprHas(e.line,"td")===true){
+        // één stilstaand plaatje: spiegelen bij links, lichte huppel in de looptakt
+        u.d.firstChild.innerHTML = `<div style="transform:translateY(${frame===1?0:-2}px)">${castraFsprHTML(e.line,"td",48,"",dir==="left")}</div>`;
+      } else u.d.firstChild.innerHTML = castraAvatarHTML(castraPLook(e.line), dir, frame, 48);
+    }
     u.px = px; u.py = py;
     u.d.style.transform = `translate(${px-24}px,${py-24}px)`;
     u.d.querySelector(".hp").style.width = Math.max(0, Math.round(100*e.hp/e.maxHp))+"%";

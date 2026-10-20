@@ -40,7 +40,7 @@ function castraCodexForm(f, seen){
     if(lore) body += `<div style="margin-top:4px;font-size:15px">${castraLaHTML(lore.la, lore.nl, "codex_"+f.id)}</div>`;
   } else body += `<div style="font-size:13px;opacity:.6">Nog niet ontmoet.</div>`;
   return `<div style="padding:5px 8px;margin:3px 0;border:1px solid ${seen?"#8a6d2f":"#4a3d2c"};border-radius:8px;background:rgba(0,0,0,.18)">
-    ${seen?"":"❔ "}${nm} ${castraClassBadge(f)} <small>(${esc(t.sg)} · tier ${f.tier})</small>${need}${body}</div>`;
+    ${seen&&castraFsprHas(f.id,"td")===true?`<span style="float:right">${castraFsprHTML(f.id,"td",48,"")}</span>`:""}${seen?"":"❔ "}${nm} ${castraClassBadge(f)} <small>(${esc(t.sg)} · tier ${f.tier})</small>${need}${body}</div>`;
 }
 
 // Boom per tak: wortels (geen ouder) met kinderen eronder; een vorm met twee ouders staat onder de eerste.
@@ -87,6 +87,7 @@ function castraCodexOpen(tab){
     return `<button class="btn ${on?"btn-gold":""}" style="margin:2px;min-height:44px" onclick="castraCodexOpen('${k}')">${esc(nm)}</button>`;
   }).join("");
   const total = CASTRA_FORM_LIST.length, seen = Object.keys(CASTRA.codex||{}).length;
+  if(CASTRA_CX.tab!=="helden"){ const pend = CASTRA_FORM_LIST.filter(f=>f.volk===CASTRA_CX.tab && castraFsprHas(f.id,"td")===undefined).map(f=>[f.id,"td"]); if(pend.length) castraFsprProbe(pend, ()=>{ if(CASTRA_UI.panel==="codex") castraCodexOpen(); }); }
   const body = CASTRA_CX.tab==="helden" ? castraCodexHeroes() : castraCodexTree(CASTRA_CX.tab);
   castraOpenPanel(`<div class="panel"><h3>📖 Codex <small>· ${seen} / ${total} vormen ontmoet</small></h3>
     <div style="margin:6px 0">${tabs}</div>${body}
