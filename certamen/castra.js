@@ -302,20 +302,22 @@ function castraRenderMap(){
       ${pend>0?`<div style="position:absolute;top:-6px;right:-6px;font-size:11px;background:#d4af37;color:#2a2118;border-radius:10px;padding:1px 6px;font-weight:700;animation:pulse 1.4s infinite">+${pend}</div>`:""}
     </div>`;
   });
-  // poortborden: een houten bord met letters op de kampmuur naast de poort (valt zo in de scène)
+  // poortborden: een houten bord met letters op de kampmuur naast de poort (valt zo in de scène).
+  // Poorten in de bovenmuur krijgen een liggend bord, poorten in de zijmuur een staand bord (tekst verticaal) zodat het niets bedekt.
   CASTRA_MAP.gates.forEach(g=>{
-    const f=g.tiles[0], horiz = g.tiles[0].y===g.tiles[1].y, w = 2.9*t, hgt = 0.98*t;
+    const f=g.tiles[0], e=g.tiles[1], horiz = f.y===e.y, vert = !horiz;
+    const w = vert ? 0.88*t : 2.9*t, hgt = vert ? 3.3*t : 0.98*t;
     const sub = ({ venatio:"→ de jacht", proelium:"→ campagne" })[g.to] || "";
-    const e = g.tiles[1];
-    const lx = horiz ? (e.x+1)*t + 0.12*t : CASTRA_MAP.cols*t - w - 0.5*t;       // naast de poort op de muur, zonder gebouwlabels te bedekken
-    const ly = horiz ? 0.04*t : (e.y+1)*t + 0.14*t;
+    const lx = horiz ? (e.x+1)*t + 0.12*t : CASTRA_MAP.cols*t - t + 0.06*t;       // zijmuur: precies op de muurtegel
+    const ly = horiz ? 0.04*t : Math.max(0.1*t, f.y*t - hgt - 0.12*t);
+    const nail = pos=>`<span style="position:absolute;${pos};width:4px;height:4px;border-radius:50%;background:#2c1a0a;box-shadow:inset 0 0 1px #c9a46a"></span>`;
+    const txt = vert ? "writing-mode:vertical-rl;" : "";
     h += `<div style="position:absolute;left:${lx}px;top:${ly}px;width:${w}px;height:${hgt}px;z-index:3;pointer-events:none;box-sizing:border-box;border:2px solid #3a2410;border-radius:4px;
-      background:repeating-linear-gradient(180deg,rgba(0,0,0,.18) 0 1px,transparent 1px 11px),linear-gradient(#b07a40,#8a5a2a 60%,#7a4e24);box-shadow:0 2px 3px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,220,160,.35);
-      display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;text-align:center">
-      <span style="position:absolute;left:4px;top:3px;width:4px;height:4px;border-radius:50%;background:#2c1a0a;box-shadow:inset 0 0 1px #c9a46a"></span><span style="position:absolute;right:4px;top:3px;width:4px;height:4px;border-radius:50%;background:#2c1a0a;box-shadow:inset 0 0 1px #c9a46a"></span>
-      <span style="position:absolute;left:4px;bottom:3px;width:4px;height:4px;border-radius:50%;background:#2c1a0a;box-shadow:inset 0 0 1px #c9a46a"></span><span style="position:absolute;right:4px;bottom:3px;width:4px;height:4px;border-radius:50%;background:#2c1a0a;box-shadow:inset 0 0 1px #c9a46a"></span>
-      <b style="font-size:15px;letter-spacing:.05em;color:#f6e6bd;text-shadow:0 1px 0 #3a2410,0 0 2px #3a2410;font-variant:small-caps">${esc(g.nm)}</b>
-      <span style="font-size:11px;color:#ead2a0;text-shadow:0 1px 0 #3a2410">${sub}</span></div>`;
+      background:repeating-linear-gradient(${vert?"90deg":"180deg"},rgba(0,0,0,.18) 0 1px,transparent 1px 11px),linear-gradient(${vert?"90deg":"#b07a40"}${vert?",#b07a40,#8a5a2a 60%,#7a4e24":",#8a5a2a 60%,#7a4e24"});box-shadow:0 2px 3px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,220,160,.35);
+      display:flex;flex-direction:${vert?"row":"column"};align-items:center;justify-content:center;gap:${vert?4:0}px;line-height:1.05;text-align:center">
+      ${nail("left:3px;top:3px")}${nail("right:3px;top:3px")}${nail("left:3px;bottom:3px")}${nail("right:3px;bottom:3px")}
+      <b style="${txt}font-size:${vert?14:15}px;letter-spacing:.05em;color:#f6e6bd;text-shadow:0 1px 0 #3a2410,0 0 2px #3a2410;font-variant:small-caps;white-space:nowrap">${esc(g.nm)}</b>
+      <span style="${txt}font-size:${vert?10:11}px;color:#ead2a0;text-shadow:0 1px 0 #3a2410;white-space:nowrap">${sub}</span></div>`;
   });
   h += `<div id="castraAv" style="position:absolute;width:${t}px;height:${t}px;transition:left .16s linear,top .16s linear;pointer-events:none;z-index:5"></div>`;
   h += `<canvas id="cmAbove" style="position:absolute;left:0;top:0;pointer-events:none;image-rendering:pixelated;z-index:6"></canvas>`;
