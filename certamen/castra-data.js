@@ -179,6 +179,7 @@ const CASTRA_REGIONS = [
   { id:"roma",   nm:"Roma",    nl:"Rome" },
   { id:"laconia", nm:"Laconia", nl:"Laconië" },
   { id:"germania", nm:"Germania", nl:"Germanië" },
+  { id:"themiscyra", nm:"Themiscyra", nl:"Themiscyra" },
   { id:"inferi",  nm:"Inferi",  nl:"De Onderwereld" },
 ];
 
