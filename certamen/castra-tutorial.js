@@ -65,6 +65,8 @@ function castraDlgClose(silent){
   CASTRA_DLG = null;
   const b = document.getElementById("castraDlg"); if(b) b.remove();
   if(!silent && D && D.done) D.done(D.chosen);
+  // daarna eventuele ontgrendelingen (nieuw Castra-niveau) laten volgen
+  if(!silent && typeof castraUnlockShow==="function") setTimeout(()=>{ if(!CASTRA_DLG && (document.getElementById("castraMap")||document.getElementById("cwMap"))) castraUnlockShow(); }, 450);
 }
 function castraDlgPortrait(d){
   return `<div style="flex:0 0 112px;width:112px;height:112px;overflow:hidden;border-radius:8px;background:#d9c590;border:2px solid #4a3416;position:relative">
@@ -128,7 +130,7 @@ function castraTutInit(){
 function castraTutPick(k){
   const D = CASTRA_DLG, s = CASTRA_TUT_STARTERS[k]; if(!D || !s || CASTRA.tut.step!==0) return;
   const sol = castraRollSoldier(s.form); sol.lvl = CASTRA_TUT_STARTER_LVL;
-  CASTRA.soldiers.push(sol); CASTRA.tut.step = 1; castraSave();
+  CASTRA.soldiers.push(sol); CASTRA.tut.step = 1; castraSave(); if(typeof castraPxpAdd==="function") castraPxpAdd(5);
   castraDlgOpen(CASTRA_TUT_GUIDE, CASTRA_TUT_TEXT.chosen, ()=>{ castraTutBar(); });
   castraRenderRes();
 }
@@ -142,7 +144,7 @@ function castraTutBar(){
 // Aangeroepen aan het eind van SCREENS.castraHome.
 function castraTutOnHome(){
   if(!CASTRA) return;
-  castraTutInit();
+  castraTutInit(); if(typeof castraUnlockCheck==="function") castraUnlockCheck();
   const T = CASTRA.tut; castraTutBar();
   if(CASTRA_DLG) return;
   if(T.step===0){
@@ -155,6 +157,8 @@ function castraTutOnHome(){
     const cap = castraWalletCap();
     Object.keys(CASTRA_TUT_REWARD).forEach(r=>{ CASTRA.res[r] = Math.min(r==="gloria"?1e9:cap, (CASTRA.res[r]||0)+CASTRA_TUT_REWARD[r]); });
     castraSave(); castraRenderRes();
+    if(typeof castraPxpAdd==="function") castraPxpAdd(40, "Tutorial afgerond");
+    if(typeof castraCardToken==="function") castraCardToken(1, "tutorial afgerond", true);
     castraDlgOpen(CASTRA_TUT_GUIDE, CASTRA_TUT_TEXT.done, ()=>{ castraTutBar(); castraToastLa("recte", "🎁 "+Object.keys(CASTRA_TUT_REWARD).map(r=>castraRes(r).icon+" "+CASTRA_TUT_REWARD[r]).join(" ")); });
-  }
+  } else if(typeof castraUnlockShow==="function") castraUnlockShow();
 }

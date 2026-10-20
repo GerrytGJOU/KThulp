@@ -97,7 +97,7 @@ function castraNpcAccept(id){
 }
 function castraNpcNext(id){
   const q = castraQState(id); if(!castraStepSatisfied(id)) return;
-  q.step++; q.acc = false; q.n = 0; castraSave();
+  q.step++; q.acc = false; q.n = 0; castraSave(); if(typeof castraPxpAdd==="function") castraPxpAdd(25);
   castraNpcTalk(id); castraNpcRefreshHud();
 }
 function castraNpcPersuade(id, k){

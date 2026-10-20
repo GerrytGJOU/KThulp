@@ -78,7 +78,9 @@ function castraCodexSee(id){
   CASTRA.codex = CASTRA.codex || {};
   // een vorm ontmoeten = ook zijn voorouders kennen
   const todo = [id];
-  while(todo.length){ const k = todo.pop(); if(CASTRA.codex[k]) continue; CASTRA.codex[k] = 1; CASTRA_FORMS[k].from.forEach(p=>todo.push(p)); }
+  let nieuw = 0;
+  while(todo.length){ const k = todo.pop(); if(CASTRA.codex[k]) continue; CASTRA.codex[k] = 1; nieuw++; CASTRA_FORMS[k].from.forEach(p=>todo.push(p)); }
+  if(nieuw && typeof castraPxpAdd==="function") castraPxpAdd(4*nieuw);
   castraCollCheck();
 }
 function castraCodexSync(){ (CASTRA.soldiers||[]).forEach(s=>castraCodexSee(s.line)); }

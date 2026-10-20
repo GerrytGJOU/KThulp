@@ -100,7 +100,10 @@ function castraWItems(){ return CASTRA.items || (CASTRA.items = {}); }
 function castraWQ(id){ const q = CASTRA.wq || (CASTRA.wq = {}); return q[id] || (q[id] = { step:0 }); }
 function castraWEnts(){ return CASTRA_WENT.filter(e=>e.region===CASTRA_W_REGION); }
 function castraWBuilt(bid){ return !!(CASTRA.wbuilt && CASTRA.wbuilt[bid]); }
+// Welke ontgrendeling een object nodig heeft (castra-unlocks.js).
+function castraWFeat(e){ if(e.role==="builder" || e.kind==="bld") return "bouwen"; if(e.role==="puzzle") return "puzzels"; return "wereld"; }
 function castraWEntVisible(e){
+  if(typeof castraUnlocked==="function" && !castraUnlocked(castraWFeat(e))) return false;
   if(e.kind==="pickup"){
     if(castraWItems()[e.item]) return false;                            // al opgepakt
     if(e.needs && castraWQ(e.needs.qid).step!==e.needs.step) return false;
@@ -131,6 +134,7 @@ function castraWobjSpots(rid){ return CASTRA_WENT.filter(e=>e.region===rid).map(
 // Kaartstukken van gebouwen of de bouwplaats (solide).
 function castraWobjPieces(rid){
   const out = [];
+  if(typeof castraUnlocked==="function" && !castraUnlocked("bouwen")) return out;
   Object.keys(CASTRA_WBUILD).filter(b=>CASTRA_WBUILD[b].rid===rid).forEach(b=>{
     const B = CASTRA_WBUILD[b], T = CASTRA_WBT[B.type];
     if(castraWBuilt(b)) T.built.forEach(([o,dx])=>out.push({ o, x:B.site.x+dx, y:B.site.y }));
@@ -180,7 +184,7 @@ function castraWRefreshHud(){ const h = el("cwHud"); if(h) h.innerHTML = castraQ
 function castraWPickupCheck(x,y){
   const e = castraWEnts().find(e=>e.kind==="pickup" && e.x===x && e.y===y && castraWEntVisible(e)); if(!e) return;
   const it = CASTRA_ITEMS[e.item]; castraWItems()[e.item] = 1; castraSave(); castraWobjDraw();
-  toast(it.icon+" "+it.nm, "Je hebt een "+it.nl+" gevonden!"); castraWRefreshHud();
+  toast(it.icon+" "+it.nm, "Je hebt een "+it.nl+" gevonden!"); castraWRefreshHud(); if(typeof castraPxpAdd==="function") castraPxpAdd(3);
 }
 
 /* ---------- kisten ---------- */
@@ -191,7 +195,7 @@ function castraWChest(e){
   const res = {}; res[a] = Math.round(castraWRoll(CASTRA_WCHEST[a], rng)*sc); if(b!==a && rng()<0.5) res[b] = Math.round(castraWRoll(CASTRA_WCHEST[b], rng)*sc); if(rng()<0.15) res.gloria = 1;
   (CASTRA.wchest || (CASTRA.wchest = {}))[e.id] = castraWDay();
   const txt = castraWGive(res); castraSave(); castraWobjDraw();
-  toast("🧰 "+castraLaText("recte"), txt);
+  toast("🧰 "+castraLaText("recte"), txt); if(typeof castraPxpAdd==="function") castraPxpAdd(4);
 }
 
 /* ---------- gebouwen met dagelijks effect ---------- */
@@ -243,7 +247,7 @@ function castraWNpcTalk(e){
     if(q.step===0){ castraWSay(e, T.ask, ()=>{ q.step = 1; castraSave(); castraWobjDraw(); castraWRefreshHud(); }); }
     else if(q.step===1){
       if(castraWItems()[g.item]){
-        castraWSay(e, T.done, ()=>{ delete castraWItems()[g.item]; q.step = 2; const t = castraWGive(castraWScaled(CASTRA_WREWARD.quest, castraWScale(rid))); castraSave(); toast(CASTRA_ITEMS[g.item].icon+" "+castraLaText("recte"), t); castraWobjDraw(); castraWRefreshHud(); });
+        castraWSay(e, T.done, ()=>{ delete castraWItems()[g.item]; q.step = 2; const t = castraWGive(castraWScaled(CASTRA_WREWARD.quest, castraWScale(rid))); castraSave(); toast(CASTRA_ITEMS[g.item].icon+" "+castraLaText("recte"), t); castraWobjDraw(); castraWRefreshHud(); if(typeof castraPxpAdd==="function") castraPxpAdd(30, "Opdracht voltooid"); if(typeof castraCardToken==="function") castraCardToken(1, "opdracht voltooid"); });
       } else castraWSay(e, T.wait, null);
     } else castraWSay(e, T.after, null);
   } else if(e.role==="builder"){
@@ -258,7 +262,7 @@ function castraWNpcTalk(e){
         castraPay(B.cost); (CASTRA.wbuilt || (CASTRA.wbuilt = {}))[bid] = true;
         const t = castraWGive(CASTRA_WREWARD.build); castraSave();
         CASTRA_WORLD_BUILT[B.rid] = null;                       // kaart opnieuw opbouwen met het gebouw
-        castraWorldRender(); toast("🏗️ "+CASTRA_WBT[B.type].la, "Gebouwd! "+t); castraWRefreshHud();
+        castraWorldRender(); toast("🏗️ "+CASTRA_WBT[B.type].la, "Gebouwd! "+t); castraWRefreshHud(); if(typeof castraPxpAdd==="function") castraPxpAdd(40, "Gebouwd"); if(typeof castraCardToken==="function") castraCardToken(1, "gebouwd");
       }
     });
   } else if(e.role==="puzzle"){
@@ -315,7 +319,7 @@ function castraPuzzleKey(){ return "puzzle_"+(CASTRA_PUZ?CASTRA_PUZ.rid:CASTRA_W
 function castraPuzzleReward(){
   const Z = CASTRA_PUZ; Z.done = true;
   const w = CASTRA.wday || (CASTRA.wday = {}), k = castraPuzzleKey();
-  if(w[k]!==castraWDay()){ w[k] = castraWDay(); const t = castraWGive(castraWScaled(CASTRA_WREWARD.puzzle, castraWScale(Z.rid))); castraSave(); toast("🧩 "+castraLaText("recte"), t); }
+  if(w[k]!==castraWDay()){ w[k] = castraWDay(); const t = castraWGive(castraWScaled(CASTRA_WREWARD.puzzle, castraWScale(Z.rid))); castraSave(); toast("🧩 "+castraLaText("recte"), t); if(typeof castraPxpAdd==="function") castraPxpAdd(12); }
 }
 function castraPuzzleRender(){
   const Z = CASTRA_PUZ, panel = el("cwPanel"); if(!Z || !panel) return;
