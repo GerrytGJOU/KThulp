@@ -150,8 +150,12 @@ function castraWorldBuilt(){
 SCREENS.castraWorld = function(){
   document.body.classList.remove("greek");
   if(!CASTRA) castraLoad();
-  const W = castraWorldCfg(), st = (CASTRA.worlds && CASTRA.worlds[W.id]) || (W.id==="latium" && CASTRA.world) || W.start;
-  CASTRA_W_UI.px = st.x; CASTRA_W_UI.py = st.y; CASTRA_W_UI.dir = "up"; CASTRA_W_UI.frame = 1; CASTRA_W_UI.moving = false;
+  const W = castraWorldCfg(), st0 = (CASTRA.worlds && CASTRA.worlds[W.id]) || (W.id==="latium" && CASTRA.world) || W.start;
+  // aankomst via een poort of reisplek (castra-geo.js) gaat voor op de bewaarde plek
+  const sp = (typeof CASTRA_GEO_SPAWN!=="undefined") ? CASTRA_GEO_SPAWN : null; if(typeof CASTRA_GEO_SPAWN!=="undefined") CASTRA_GEO_SPAWN = null;
+  const st = sp || st0;
+  if(typeof castraGeoMark==="function") castraGeoMark(W.id);
+  CASTRA_W_UI.px = st.x; CASTRA_W_UI.py = st.y; CASTRA_W_UI.dir = (sp && sp.dir) || "up"; CASTRA_W_UI.frame = 1; CASTRA_W_UI.moving = false;
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="castraWorldLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>${W.icon} ${W.nm}</h2></div>
   <div id="cwWrap" style="position:relative;width:100%;margin:0 auto;overflow:hidden;border:2px solid var(--hi,#d4af37);border-radius:10px;background:#2c3a1f">
@@ -189,7 +193,7 @@ function castraWorldSavePos(x, y){
 }
 function castraWorldLeave(){
   castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraWorldDetach();
-  go("castraRegions");
+  if(typeof castraGeoToCamp==="function") castraGeoToCamp(); else go("castraRegions");
 }
 function castraWorldRender(){
   const map = el("cwMap"); if(!map) return; const W = castraWorldCfg();
@@ -252,7 +256,7 @@ function castraWStep(dir){
   setTimeout(()=>{
     CASTRA_W_UI.moving = false; CASTRA_W_UI.frame = 1; castraWorldAvatar();
     castraWorldSavePos(nx, ny);
-    if(W.exit.some(e=>e.x===nx&&e.y===ny)){ castraWorldLeave(); return; }
+    if(W.exit.some(e=>e.x===nx&&e.y===ny)){ if(typeof castraGeoExit==="function") castraGeoExit(nx,ny); else castraWorldLeave(); return; }
     const terrain = castraWorldBuilt().tall[nx+","+ny];
     if(terrain && Math.random() < W.encounterChance) castraWorldEncounter(terrain);
   }, 170);

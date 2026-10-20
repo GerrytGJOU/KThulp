@@ -18,6 +18,7 @@ const CASTRA_MENU_ITEMS = [
   { id:"codex",  la:"Codex",    nl:"alle soldaten en helden", unl:"codex" },
   { id:"milites",la:"Milites",  nl:"je team" },
   { id:"heroes", la:"Heroes",   nl:"je helden" },
+  { id:"mundus", la:"Tabula",   nl:"wereldkaart" },
   { id:"vergelijk",la:"Compara", nl:"vergelijken", unl:"vergelijk" },
   { id:"sacculus",la:"Sacculus",nl:"voorraad" },
   { id:"tabulae",la:"Tabulae",  nl:"kaarten met bonussen", unl:"tabulae" },
@@ -29,9 +30,11 @@ const CASTRA_MENU_ITEMS = [
 ];
 let CASTRA_MENU = { open:false, view:null };
 
-function castraMenuBtn(){
-  if(document.getElementById("castraMenuBtn") || !document.getElementById("castraWrap")) return;
-  const wrap = document.getElementById("castraWrap");
+function castraMenuBtn(wrapId){
+  wrapId = wrapId || "castraWrap";
+  const old = document.getElementById("castraMenuBtn"); if(old && old.parentNode && old.parentNode.id===wrapId) return; if(old) old.remove();
+  if(!document.getElementById(wrapId)) return;
+  const wrap = document.getElementById(wrapId);
   const b = document.createElement("button");
   b.id = "castraMenuBtn"; b.setAttribute("aria-label","Menu");
   b.style.cssText = "position:absolute;top:6px;right:6px;z-index:60;min-width:44px;min-height:44px;font-size:22px;line-height:1;background:linear-gradient(#efe1b9,#e4d2a1);color:#2b1d0e;border:3px solid #4a3416;border-radius:8px;box-shadow:0 0 0 2px #c9a24a;cursor:pointer;font-family:inherit";
@@ -94,6 +97,7 @@ function castraMenuView(id){
   if(id==="sacculus") return castraMenuBag();
   if(id==="tabulae") return castraCardsView();
   if(id==="vergelijk") return castraMenuCompare();
+  if(id==="mundus") return castraGeoMapView();
   if(id==="opus") return castraMenuQuest();
   if(id==="profiel") return castraMenuProfile();
   if(id==="restart") return castraMenuRestart();
