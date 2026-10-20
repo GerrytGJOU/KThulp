@@ -159,7 +159,8 @@ function castraMenuProfile(){
     ["Codex", `${seen} / ${tot} vormen`],
   ];
   const av = (typeof BM_IDENT!=="undefined" && BM_IDENT && BM_IDENT.avatar) ? `<div style="flex:0 0 96px;width:96px;height:96px;position:relative">${castraAvatarHTML(BM_IDENT.avatar,"down",1,96)}</div>` : "";
-  return `<h3 style="margin:0 0 6px">${esc(name)}</h3><div style="display:flex;gap:12px;align-items:center">${av}<div style="flex:1">${rows.map(r=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid #c2a96f"><span>${r[0]}</span><b>${r[1]}</b></div>`).join("")}</div></div>`;
+  const ti = typeof castraTitle==="function" ? castraTitle() : null, stars = Object.keys(CASTRA.coll||{}).filter(k=>k[0]==="v").length;
+  return `<h3 style="margin:0 0 2px">${esc(name)}</h3><div style="font-size:14px;margin-bottom:6px;color:#7a2a14"><b>${ti?esc(ti.title):"—"}</b> <small>${ti?"("+esc(ti.nl)+")":""}</small>${stars?` · ⭐ ${stars}`:""}</div><div style="display:flex;gap:12px;align-items:center">${av}<div style="flex:1">${rows.map(r=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid #c2a96f"><span>${r[0]}</span><b>${r[1]}</b></div>`).join("")}</div></div>`;
 }
 
 /* ---------- Restart (alles wissen en opnieuw beginnen, met tutorial) ---------- */

@@ -280,7 +280,7 @@ function castraPStep(sim){
   while(sim.queue.length && sim.queue[0].at <= sim.tick){
     const q = sim.queue.shift(), st = castraPEnemyStats(q.line, q.lvl, sim.rng, sim.mission.hpMult*CASTRA_P.enemyHpMult);
     sim.enemies.push({ id:sim.nextId++, line:q.line, type:castraLine(q.line).type, lvl:q.lvl, st, hp:st.vita, maxHp:st.vita,
-      prog:0, speed: CASTRA_P.speedBase + st.celeritas*CASTRA_P.speedPerCel, x:0, y:0 });
+      prog:0, speed: Math.round((CASTRA_P.speedBase + st.celeritas*CASTRA_P.speedPerCel) * ((sim.mods&&sim.mods.spd)||1)), x:0, y:0 });
   }
   // bewegen
   sim.enemies.forEach(e=>{ e.prog += e.speed; const p = castraPPos(sim.path, e.prog); e.x = p[0]; e.y = p[1]; });
@@ -290,19 +290,22 @@ function castraPStep(sim){
     sim.towers.forEach(t=>{ if(t!==b){ const dx=t.cx-b.cx, dy=t.cy-b.cy; if(dx*dx+dy*dy <= CASTRA_P.buffRadius*CASTRA_P.buffRadius) t.buffed = true; } });
   });
   // aanvallen: kies de vijand die het verst op het pad is binnen bereik
+  const mods = sim.mods || null, rr = mods && mods.rng ? Math.round(1000*mods.rng)/1000 : 1;
   sim.towers.forEach(t=>{
     if(t.cd>0){ t.cd--; return; }
     let best = null;
+    const rng2 = (t.range*rr)*(t.range*rr);
     sim.enemies.forEach(e=>{
       const dx=e.x-t.cx, dy=e.y-t.cy;
-      if(dx*dx+dy*dy <= t.range*t.range && (!best || e.prog > best.prog)) best = e;
+      if(dx*dx+dy*dy <= rng2 && (!best || e.prog > best.prog)) best = e;
     });
     if(!best) return;
     const m = castraPTypeMul(t.type, best.type);
     let dmg = Math.floor(t.st.impetus*m[0]/m[1]) - Math.floor(best.st.tutela*2/5);
     dmg = Math.max(1, dmg);
     if(t.buffed) dmg = Math.max(1, Math.floor(dmg*(100+CASTRA_P.buffPct)/100));
-    best.hp -= dmg; t.cd = t.cooldown;
+    if(mods && mods.dmg) dmg = Math.max(1, Math.floor(dmg*mods.dmg));
+    best.hp -= dmg; t.cd = mods && mods.cd ? Math.max(CASTRA_P.cdMin, Math.round(t.cooldown*mods.cd)) : t.cooldown;
     sim.events.push({ k:"hit", t:t.id, e:best.id, dmg });
   });
   // doden en doorbraken
