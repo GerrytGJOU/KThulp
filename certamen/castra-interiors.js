@@ -24,17 +24,36 @@ const CASTRA_INTERIORS = {
     // uitgesneden ruimtes [x, y, breedte, hoogte]; alles daarbuiten is rots
     carve:[ [11,15,4,5], [4,8,18,7], [3,3,6,5], [17,3,6,5], [11,2,4,6] ],
     zone:{ t:"specus", x:6, y:9, w:14, h:5 },                       // ontmoetingsgebied (lichtere vloer)
-    doors:[ { x:12, y:19, to:"latium", spawn:{ x:9, y:23, dir:"down" } }, { x:13, y:19, to:"latium", spawn:{ x:9, y:23, dir:"down" } } ],
+    doors:[ { x:12, y:19, to:"latium", spawn:{ x:9, y:23, dir:"down" } }, { x:13, y:19, to:"latium", spawn:{ x:9, y:23, dir:"down" } },
+            { x:12, y:2, to:"specus_altus", icon:"🪜", spawn:{ x:12, y:4, dir:"down" } }, { x:13, y:2, to:"specus_altus", icon:"🪜", spawn:{ x:13, y:4, dir:"down" } } ],   // trap naar beneden
     chests:[ [4,4,"kist_specus1"], [21,4,"kist_specus2"], [12,3,"kist_specus3"] ],
+    npcs:[ { id:"eremita", role:"eremita", nm:"Eremita", x:14, y:5, dir:"left", look:{ huid:"getint", haar:"lang", haarkleur:"grijs", baard:"baard", cape:"geen", helm:"geen", schild:"geen", wapen:"geen", armor:"vodden" } } ],
+  },
+  specus_altus: {
+    parent:"latium", kind:"cave", nm:"Specus altus", nl:"De diepe grot", icon:"🕳️", cols:26, rows:20, start:{ x:12, y:4 },
+    carve:[ [11,2,4,6], [3,8,20,7], [3,3,6,5], [17,3,6,5], [3,15,6,4], [10,15,6,4], [17,15,6,4] ],
+    zone:{ t:"specus", x:5, y:9, w:16, h:5 },
+    doors:[ { x:12, y:2, to:"specus_latium", icon:"🪜", spawn:{ x:12, y:4, dir:"up" } }, { x:13, y:2, to:"specus_latium", icon:"🪜", spawn:{ x:13, y:4, dir:"up" } } ],
+    chests:[ [4,4,"kist_altus1"], [21,4,"kist_altus2"], [4,17,"kist_altus3"], [21,17,"kist_altus4"] ],
+    pickups:[ { id:"aqua", item:"aqua", x:12, y:17, needs:{ qid:"eremita", step:1 } } ],
   },
   villa_latium: {
     parent:"latium", kind:"house", nm:"Hospitium", nl:"De herberg", icon:"🏠", cols:20, rows:14,
     start:{ x:10, y:11 },
-    doors:[ { x:10, y:13, to:"latium", spawn:{ x:38, y:36, dir:"down" } } ],
+    doors:[ { x:10, y:13, to:"latium", spawn:{ x:38, y:36, dir:"down" } },
+            { x:19, y:6, to:"solarium_latium", icon:"🪜", feat:"puzzels", spawn:{ x:1, y:6, dir:"right" } } ],      // trap naar de zolder (vanaf niveau 13)
     furniture:[ ["barrel",2,1],["pot",3,1],["crate_a",16,1],["crate_b",17,1],["bucket",2,2],["plant_a",1,11],["plant_b",18,11],["flower_o",17,11],["stump",14,8],["barrel",5,8],["crate_c",4,10] ],
     chests:[ [16,3,"kist_villa1"] ],
     host:{ x:10, y:4, id:"matrona_villa" },
     book:{ x:3, y:3, id:"boek_villa" },
+  },
+  solarium_latium: {
+    parent:"latium", kind:"house", nm:"Solarium", nl:"De zolder van de herberg", icon:"🏠", cols:16, rows:12, start:{ x:2, y:6 },
+    doors:[ { x:0, y:6, to:"villa_latium", icon:"🪜", spawn:{ x:18, y:6, dir:"left" } } ],
+    furniture:[ ["barrel",1,1],["pot",14,1],["crate_d",1,10],["flower_w",14,10],["plant_a",7,10],["plant_c",8,10] ],
+    chests:[ [13,8,"kist_solarium1"] ],
+    npcs:[ { id:"senator", role:"senator", nm:"Senator", x:8, y:4, dir:"down", look:{ huid:"licht", haar:"kort", haarkleur:"grijs", baard:"geen", cape:"lang", capekleur:"paars", helm:"geen", schild:"geen", wapen:"geen", armor:"ceremonieel" } } ],
+    books:[ { id:"boek_solarium1", x:3, y:2, off:1 }, { id:"boek_solarium2", x:12, y:2, off:2 } ],
   },
 };
 const CASTRA_MATRONA_LOOK = { huid:"licht", haar:"knot", haarkleur:"bruin", baard:"geen", cape:"geen", helm:"geen", schild:"geen", wapen:"geen", armor:"robe" };
@@ -57,7 +76,10 @@ const CASTRA_PROVERBIA = [
       start:I.start, exit:[], roads:[], water:[], zones:[], seed:7000+id.length, base: I.kind==="cave"?"stoneb":"plank", doors:I.doors, encounterChance:0.2, trees:["tree_a","tree_b"], big:"tree_big", sparse:0, dense:0, denseZone:"" };
     (I.chests||[]).forEach(c=>CASTRA_WENT.push({ id:c[2], region:id, kind:"chest", x:c[0], y:c[1] }));
     if(I.host) CASTRA_WENT.push({ id:I.host.id, region:id, kind:"npc", role:"host", nm:"Matrona", x:I.host.x, y:I.host.y, dir:"down", look:CASTRA_MATRONA_LOOK });
-    if(I.book) CASTRA_WENT.push({ id:I.book.id, region:id, kind:"book", x:I.book.x, y:I.book.y });
+    if(I.book) CASTRA_WENT.push({ id:I.book.id, region:id, kind:"book", x:I.book.x, y:I.book.y, off:0 });
+    (I.books||[]).forEach(b=>CASTRA_WENT.push({ id:b.id, region:id, kind:"book", x:b.x, y:b.y, off:b.off||0 }));
+    (I.npcs||[]).forEach(n=>CASTRA_WENT.push({ id:n.id, region:id, kind:"npc", role:n.role, nm:n.nm, x:n.x, y:n.y, dir:n.dir||"down", look:n.look }));
+    (I.pickups||[]).forEach(p=>CASTRA_WENT.push({ id:p.id, region:id, kind:"pickup", item:p.item, x:p.x, y:p.y, needs:p.needs }));
   });
   // deuren van Latium aan de moederregio's
 })();
@@ -86,7 +108,7 @@ function castraInteriorDef(W){
 /* ---------- deuren ---------- */
 function castraGeoDoor(x, y){
   const W = castraWorldCfg(); const d = (W.doors||[]).find(d=>d.x===x && d.y===y); if(!d) return false;
-  if(typeof castraUnlocked==="function" && !castraUnlocked("wereld")) return false;                 // vóór niveau 3 doet de deur niets
+  if(typeof castraUnlocked==="function" && !castraUnlocked(d.feat || "wereld")) return false;      // vóór het vereiste niveau doet de deur niets
   castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraWorldDetach();
   const to = CASTRA_WORLDS[d.to];
   CASTRA_W_REGION = d.to; CASTRA_GEO_SPAWN = d.spawn;
@@ -122,8 +144,8 @@ castraWobjDraw = function(){
   const W = castraWorldCfg(), unl = (typeof castraUnlocked!=="function") || castraUnlocked("wereld");
   let html = "";
   (W.doors||[]).forEach(d=>{
-    const to = CASTRA_WORLDS[d.to], enter = to && to.interior;
-    html += `<div style="position:absolute;left:${d.x*48}px;top:${d.y*48}px;width:48px;height:48px;z-index:3;display:flex;align-items:center;justify-content:center;font-size:30px;pointer-events:none;${unl||!enter?"":"opacity:.35;filter:grayscale(1)"}">${enter ? to.icon : "🚪"}</div>`;
+    const to = CASTRA_WORLDS[d.to], enter = to && to.interior, ok = unl && (!d.feat || castraUnlocked(d.feat));
+    html += `<div style="position:absolute;left:${d.x*48}px;top:${d.y*48}px;width:48px;height:48px;z-index:3;display:flex;align-items:center;justify-content:center;font-size:30px;pointer-events:none;${ok||!enter?"":"opacity:.35;filter:grayscale(1)"}">${d.icon || (enter ? to.icon : "🚪")}</div>`;
   });
   castraWEnts().filter(e=>e.kind==="book").forEach(e=>{
     html += `<div style="position:absolute;left:${e.x*48}px;top:${e.y*48}px;width:48px;height:48px;z-index:3;display:flex;align-items:center;justify-content:center;font-size:32px;pointer-events:none">📚</div>`;
@@ -136,7 +158,10 @@ const _castraNpcTalkInt0 = castraNpcTalk;
 castraNpcTalk = function(id){
   id = String(id);
   if(id==="w:matrona_villa"){ castraMatronaTalk(); return; }
-  if(id==="w:boek_villa"){ castraBoekLees(); return; }
+  if(id.indexOf("w:boek_")===0){ castraBoekLees(id); return; }
+  if(id==="w:eremita"){ castraEremitaTalk(); return; }
+  if(id==="w:senator"){ castraQuizOpen(); return; }
+  if(id==="w:venator_latium"){ castraBountyTalk(); return; }
   return _castraNpcTalkInt0(id);
 };
 function castraMatronaTalk(){
@@ -154,9 +179,10 @@ function castraMatronaTalk(){
     }
   });
 }
-function castraBoekLees(){
-  const w = CASTRA.wday || (CASTRA.wday = {}), d = castraWDay(), idx = Math.floor(castraNow()/86400000) % CASTRA_PROVERBIA.length, p = CASTRA_PROVERBIA[idx], first = w.boek!==d;
-  if(first){ w.boek = d; castraSave(); if(typeof castraPxpAdd==="function") castraPxpAdd(3); }
+function castraBoekLees(id){
+  const e = CASTRA_WENT.find(x=>"w:"+x.id===String(id)) || {}, off = e.off || 0, key = "boek_"+(e.id||"villa");
+  const w = CASTRA.wday || (CASTRA.wday = {}), d = castraWDay(), idx = (Math.floor(castraNow()/86400000) + off) % CASTRA_PROVERBIA.length, p = CASTRA_PROVERBIA[idx], first = w[key]!==d;
+  if(first){ w[key] = d; castraSave(); if(typeof castraPxpAdd==="function") castraPxpAdd(3); }
   const panel = el("cwPanel"); if(!panel) return;
   panel.innerHTML = `<div class="panel"><h3 style="margin:0 0 6px">📚 Proverbium diei <small>spreekwoord van de dag</small></h3>
     <div style="font-size:22px;margin:6px 0">${castraLaHTML(p.la, p.nl, "prov_"+idx)}</div>
