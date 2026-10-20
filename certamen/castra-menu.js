@@ -129,12 +129,14 @@ function castraMenuBag(){
   const cap = castraWalletCap();
   const res = CASTRA_RES.map(r=>`<div style="${CASTRA_MV_ROW}"><span style="font-size:24px;width:32px;text-align:center">${r.icon}</span><div style="flex:1"><b>${esc(r.nm)}</b> <small style="opacity:.6">${esc(r.nl)}</small></div><b>${CASTRA.res[r.id]||0}</b>${r.id!=="gloria"?`<small style="opacity:.6"> / ${cap}</small>`:""}</div>`).join("");
   const bld = CASTRA_BUILDINGS.filter(b=>b.phase===1 && !b.fixed).map(b=>`<span style="display:inline-block;margin:2px 6px 2px 0;font-size:13px">${b.icon||"🏠"} ${esc(b.nm)} <b>${castraLvl(b.id)||"🔨"}</b></span>`).join("");
-  return `<h3 style="margin:0 0 6px">Sacculus <small>voorraad</small></h3>${res}<h4 style="margin:10px 0 2px">Aedificia</h4><div>${bld}</div>`;
+  const its = Object.keys(CASTRA.items||{}).filter(k=>CASTRA.items[k] && CASTRA_ITEMS[k]).map(k=>`<span style="display:inline-block;margin:2px 8px 2px 0;font-size:15px">${CASTRA_ITEMS[k].icon} ${esc(CASTRA_ITEMS[k].nm)} <small style="opacity:.6">${esc(CASTRA_ITEMS[k].nl)}</small></span>`).join("");
+  return `<h3 style="margin:0 0 6px">Sacculus <small>voorraad</small></h3>${res}<h4 style="margin:10px 0 2px">Res <small>voorwerpen</small></h4><div>${its||"<small style='opacity:.6'>Nog geen voorwerpen. Zoek ze in de regio's (✨).</small>"}</div><h4 style="margin:10px 0 2px">Aedificia</h4><div>${bld}</div>`;
 }
 function castraMenuQuest(){
   const T = CASTRA.tut, out = [];
   if(T && T.step===1) out.push(CASTRA_TUT_TEXT.bar1);
   if(T && T.step===2) out.push(CASTRA_TUT_TEXT.bar2);
+  (typeof castraWobjOpus==="function" ? castraWobjOpus() : []).forEach(t=>out.push(t));
   Object.keys(CASTRA.quests||{}).forEach(id=>{
     if(typeof castraHero==="function" && castraHero(id)) return;            // al in je heroum
     const d = CASTRA_HERO_DATA[id]; if(!d || !CASTRA.quests[id].acc) return;
@@ -178,7 +180,7 @@ function castraMenuRestart(){
       <button class="btn" style="min-height:44px;border-color:#8a1c10;color:#8a1c10" onclick="castraRestartNow()">Ja, alles wissen</button></div>`;
 }
 function castraRestartNow(){
-  castraDlgClose(true);
+  castraDlgClose(true); CASTRA_WORLD_BUILT = {};
   CASTRA = castraNewState();
   CASTRA.help = { words:{}, sentences:{} }; CASTRA.traces = {};
   castraSave(); castraSync();                  // meteen ook naar de cloud, anders haalt een herlaad de oude save terug

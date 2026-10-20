@@ -72,7 +72,7 @@ function castraDlgPortrait(d){
 }
 function castraDlgLine(){
   const D = CASTRA_DLG, box = document.getElementById("castraDlg"); if(!D || !box) return;
-  const ln = D.lines[D.i], d = CASTRA_HERO_DATA[D.who];
+  const ln = D.lines[D.i], d = (typeof D.who==='string') ? CASTRA_HERO_DATA[D.who] : D.who;
   D.shown = false; const laTxt = castraSub(ln.la);
   box.innerHTML = `<div style="width:min(100%,860px);box-sizing:border-box;display:flex;gap:12px;align-items:stretch;background:linear-gradient(#efe1b9,#e4d2a1);border:4px solid #4a3416;border-radius:14px;padding:12px;box-shadow:0 0 0 2px #c9a24a,0 6px 24px rgba(0,0,0,.55)">
     ${castraDlgPortrait(d)}
@@ -101,17 +101,22 @@ function castraDlgShown(){
   if(!laEl) return;
   laEl.innerHTML = castraLaHTML(ln.la, ln.nl, "tut_"+D.who+"_"+D.i);
   nlEl.textContent = castraSub(ln.nl);
-  if(ln.choose){
+  if(ln.opts){
+    ch.innerHTML = ln.opts.map((o,k)=>`<button class="btn btn-gold" style="margin:3px 6px 3px 0;min-height:44px" onclick="castraDlgOpt(${k})"><b>${esc(o.la)}</b> <small>${esc(castraSub(o.nl||""))}</small></button>`).join("");
+  } else if(ln.choose){
     ch.innerHTML = CASTRA_TUT_STARTERS.map((s,k)=>`<button class="btn btn-gold" style="margin:3px 6px 3px 0;min-height:44px" onclick="castraTutPick(${k})"><b>${esc(s.la)}</b> <small>${esc(s.nl)}</small></button>`).join("");
   } else ar.style.visibility = "visible";
 }
 function castraDlgNext(){
   const D = CASTRA_DLG; if(!D) return;
   if(!D.shown){ castraDlgShown(); return; }
-  const ln = D.lines[D.i]; if(ln.choose) return;       // eerst kiezen
+  const ln = D.lines[D.i]; if(ln.choose || ln.opts) return;       // eerst kiezen
   if(D.i >= D.lines.length-1){ castraDlgClose(false); return; }
   D.i++; castraDlgLine();
 }
+
+// Keuze in een regel met opts: sluit het venster en geeft de gekozen index aan de done-callback.
+function castraDlgOpt(k){ const D = CASTRA_DLG; if(!D) return; D.chosen = k; castraDlgClose(false); }
 
 /* ---------- tutorial ---------- */
 function castraTutInit(){
