@@ -165,6 +165,9 @@ const CASTRA_FORMS = {};
 })();
 const CASTRA_FORM_LIST = Object.keys(CASTRA_FORMS).map(k=>CASTRA_FORMS[k]);
 function castraLine(id){ return CASTRA_FORMS[id] || CASTRA_FORMS["rom_tiro"]; }
+function castraFolkNm(formId){ const f = CASTRA_FORMS[formId]; return f ? (CASTRA_FOLKS[f.volk]||{nm:""}).nm : ""; }
+// Hoofdvolk van een regio = het volk met het hoogste gewicht; alles daarbuiten is een "vreemdeling".
+function castraMainFolk(region){ let best = null; Object.keys(region.folk).forEach(k=>{ if(!best || region.folk[k]>region.folk[best]) best = k; }); return best; }
 function castraFormByName(volk, nm){ return CASTRA_FORM_LIST.find(f=>f.volk===volk && f.nm===nm); }
 function castraFormRec(volk){ return CASTRA_FORM_LIST.find(f=>f.volk===volk && f.tier===1 && f.type==="rec") || null; }
 // Gebouweis: een vorm van tier t vraagt het gebouw op niveau max(1, t−1) (stabula voor ruiterij/wagens/olifanten, navalia voor de vloot).

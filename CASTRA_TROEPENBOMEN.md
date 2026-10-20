@@ -1,6 +1,6 @@
 # Castra Heroum — troepenbomen per volk (151 vormen)
 
-Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1 en M2 gebouwd (2026-10-30), wacht op goedkeuring voor M3** · hoort bij `CASTRA_HEROUM.md`.
+Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M3 gebouwd (M3: 2026-10-31), wacht op goedkeuring voor M4** · hoort bij `CASTRA_HEROUM.md`.
 Dit document is de bron van waarheid voor de troepenbomen; het vervangt de huidige losse evolutielijnen (`CASTRA_LINES` in `certamen/castra-data.js`). De 15 helden (`CASTRA_HERO_DATA`) blijven ongewijzigd.
 
 ## 1. Idee en regels
@@ -131,7 +131,9 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 - Getest: bouwen kost het juiste bedrag; Eques is vóór de stabula niet te kiezen en erna wel; Decurio vraagt stabula niveau 2 en bij level 34 + stabula 2 + campus 4 lukt de evolutie; bouwplaats blokkeert zijn voetafdruk; alle Latijnse teksten hebben een glossarium-entry.
 - Niet gedaan: een extra bonus van het gebouwniveau op de stats (alleen de ontgrendeling), en navalia geeft nog geen toegang tot waterregio's.
 
-**Nog niet (volgende mijlpalen):** M3 uitwerking van wild/werving (vreemdelingen per regio, Dilectus per volk en tier), M4 codex, M5 Certamen-klassen, M6 sprites-pijplijn, M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
+**M3 (2026-10-31):** wildmengsels per regio met zeldzame vreemdelingen (Latium: 80% Romeinen, rest Gladiatoren/Galliërs/Germanen/Grieken/Carthagers/Egyptenaren/Perzen; Graecia 66% Grieken; Troia 72% Trojanen), tierplafond per regio (Latium/Graecia 3, Troia 4), vreemdelingen krijgen de melding *Hostis peregrinus est*. Dilectus werft per volk en tier: tier 2 vanaf Dilectus 3 + praetorium 2 (25%), tier 3 vanaf Dilectus 5 + praetorium 4 (10%), hogere tiers komen op hun evolutiedrempel-level, geen vlootvormen/stallen-vormen in het aanbod, kosten tier 1/2/3 = 40+20 / 100+50 / 200+100.
+
+**Nog niet (volgende mijlpalen):** M4 codex, M5 Certamen-klassen, M6 sprites-pijplijn, M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
 
 ## 7. Voorstel mijlpalen en open punten (oorspronkelijk)
 
