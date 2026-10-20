@@ -19,6 +19,7 @@ const CASTRA_MENU_ITEMS = [
   { id:"milites",la:"Milites",  nl:"je team" },
   { id:"heroes", la:"Heroes",   nl:"je helden" },
   { id:"sacculus",la:"Sacculus",nl:"voorraad" },
+  { id:"tabulae",la:"Tabulae",  nl:"kaarten met bonussen" },
   { id:"opus",   la:"Opus",     nl:"opdracht" },
   { id:"profiel",la:"",         nl:"jouw kaart" },          // la = naam van de speler
   { id:"servare",la:"Servare",  nl:"opslaan" },
@@ -89,6 +90,7 @@ function castraMenuView(id){
   if(id==="milites") return castraMenuTeam();
   if(id==="heroes") return castraMenuHeroes();
   if(id==="sacculus") return castraMenuBag();
+  if(id==="tabulae") return castraCardsView();
   if(id==="opus") return castraMenuQuest();
   if(id==="profiel") return castraMenuProfile();
   if(id==="restart") return castraMenuRestart();
@@ -107,7 +109,7 @@ function castraMenuTeam(){
         <div style="font-size:12px;opacity:.7">${castraClassBadge(f,true)} ${esc(castraFolkNm(s.line))} · tier ${f.tier}${hurt?` · 🩹 ${castraHurtMin(s)} min`:""}${s.trainUntil?" · 🏋️":""}</div>
         <div style="display:flex;align-items:center;gap:6px;margin-top:3px"><small style="width:24px">${esc(CASTRA_STATS[0].nm.slice(0,3))}</small><div style="flex:1">${castraMenuBar(hurt?0:st.vita, st.vita, hurt?"#c33":"#3a3")}</div><b style="font-size:12px;width:64px;text-align:right">${hurt?0:st.vita}/${st.vita}</b></div>
         <div style="display:flex;align-items:center;gap:6px"><small style="width:24px">XP</small><div style="flex:1">${castraMenuBar(s.xp, need, "#38c")}</div><b style="font-size:12px;width:64px;text-align:right">${s.xp}/${need}</b></div>
-        ${det}${sel?castraSkillsHTML(s):""}</div></div>`;
+        ${det}${sel?castraSkillsHTML(s,"s",s.id):""}</div></div>`;
   }).join("") || `<div class="note">Nullus miles. <small>Nog geen soldaten.</small></div>`;
   return `<h3 style="margin:0 0 6px">Milites <small>${list.length} / ${castraBarracksCap()}</small></h3>${rows}`;
 }
@@ -115,13 +117,14 @@ function castraMenuHeroes(){
   const have = CASTRA.heroes || [];
   const rows = have.map(h=>{
     const d = CASTRA_HERO_DATA[h.id], st = castraHeroStats(h), cap = castraHeroCap(h), need = CASTRA_H.xpPerLvl*h.lvl;
-    return `<div style="${CASTRA_MV_ROW}">
+    const hsel = CASTRA_MENU.hsel===h.id;
+    return `<div style="${CASTRA_MV_ROW};cursor:pointer" onclick="CASTRA_MENU.hsel=${hsel?'null':JSON.stringify(h.id)};castraMenuRender()">
       <div style="flex:0 0 52px;width:52px;height:52px;position:relative">${castraAvatarHTML(d.look,"down",1,52)}</div>
       <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><b>${esc(d.nm)}</b><span>Lv ${h.lvl} / ${cap}</span></div>
         <div style="font-size:12px;opacity:.7">${esc(CASTRA_TYPE_LA[d.type].sg)} · ${esc((CASTRA_VENATIO[d.region]||{nm:d.region}).nm)}${h.assigned?` · leidt ${esc(castraBuilding(h.assigned).nm)}`:""}</div>
         <div style="display:flex;align-items:center;gap:6px;margin-top:3px"><small style="width:30px">Fides</small><div style="flex:1">${castraMenuBar(h.fides||0,100,"#d4a017")}</div><b style="font-size:12px;width:40px;text-align:right">${h.fides||0}</b></div>
         <div style="display:flex;align-items:center;gap:6px"><small style="width:30px">XP</small><div style="flex:1">${castraMenuBar(h.xp,need,"#38c")}</div><b style="font-size:12px;width:40px;text-align:right">${h.xp}</b></div>
-        <div style="font-size:12px;margin-top:2px">${CASTRA_STATS.map(x=>`${esc(x.nm.slice(0,3))} ${st[x.id]}`).join(" · ")}</div>${castraSkillsHTML({ hero:true, h })}</div></div>`;
+        <div style="font-size:12px;margin-top:2px">${CASTRA_STATS.map(x=>`${esc(x.nm.slice(0,3))} ${st[x.id]}`).join(" · ")}</div>${hsel?castraSkillsHTML({ hero:true, h },"h",h.id):"<div style=\"font-size:12px;opacity:.6;margin-top:2px\">🎓 "+castraSkillIds({ hero:true, h }).length+" / 4 artes — tik voor details</div>"}</div></div>`;
   }).join("") || `<div class="note">Nullus heros. <small>Nog geen helden: zoek sporen tijdens de jacht en praat met hen.</small></div>`;
   return `<h3 style="margin:0 0 6px">Heroes <small>${have.length} / ${Object.keys(CASTRA_HERO_DATA).length}</small></h3>${rows}`;
 }
@@ -187,4 +190,14 @@ function castraRestartNow(){
   castraSave(); castraSync();                  // meteen ook naar de cloud, anders haalt een herlaad de oude save terug
   castraMenuClose();
   go("castraHome");
+}
+
+// Arte aan/uit zetten vanuit het menu (soldaat of held).
+function castraMenuSkill(kind, id, skillId){
+  const unit = kind==="h" ? { hero:true, h:(CASTRA.heroes||[]).find(x=>x.id===id) } : (CASTRA.soldiers||[]).find(x=>x.id===id);
+  if(!unit || (kind==="h" && !unit.h)) return;
+  const err = castraSkillToggle(unit, skillId);
+  if(err==="vol") toast("Maximaal 4 artes", "Zet eerst een andere arte uit om deze te kiezen.");
+  else if(err==="gevecht") toast("Niet tijdens een gevecht", "Kies je artes in het kamp.");
+  castraMenuRender();
 }

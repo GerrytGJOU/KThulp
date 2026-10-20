@@ -201,7 +201,7 @@ function castraVFinish(){
     CASTRA.res.gloria += 1;
     V.loot = { aes, fru };
     if(soldier){
-      soldier.xp += CASTRA_V_BAL.xpWin + Math.floor(CASTRA_V_BAL.xpPerEnemyLvl*V.enemy.lvl);
+      soldier.xp += castraCardXp(CASTRA_V_BAL.xpWin + Math.floor(CASTRA_V_BAL.xpPerEnemyLvl*V.enemy.lvl));
       const before = soldier.lvl; castraLevelUp(soldier); V.leveled = soldier.lvl > before;
     }
     V.quests = (typeof castraQuestOnWin==="function") ? castraQuestOnWin(V) : [];

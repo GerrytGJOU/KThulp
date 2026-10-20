@@ -23,7 +23,7 @@
 
 const CASTRA_LEGIO = { prepTicks:1200, gapTicks:200, lead:12, perPlayer:2, joinTicks:0 };
 const CASTRA_LEGIO_MISSIONS = {
-  legio1: { nm:"Obsidio Troiae", nl:"Het beleg van Troje", map:"a", hpMult:6.8,
+  legio1: { nm:"Obsidio Troiae", nl:"Het beleg van Troje", map:"a", hpMult:7.6,
     waves:[ [ {line:_fid("gra","Epilectus"),n:4,gap:14,lvl:26} ],
             [ {line:_fid("gra","Prodromus"),n:3,gap:14,lvl:26}, {line:_fid("gra","Peltasta"),n:3,gap:14,lvl:26} ],
             [ {line:_fid("gra","Toxota"),n:4,gap:12,lvl:26}, {line:_fid("gra","Epilectus"),n:3,gap:14,lvl:26} ],
