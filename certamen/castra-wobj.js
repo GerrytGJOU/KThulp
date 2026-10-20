@@ -101,7 +101,7 @@ function castraWQ(id){ const q = CASTRA.wq || (CASTRA.wq = {}); return q[id] || 
 function castraWEnts(){ return CASTRA_WENT.filter(e=>e.region===CASTRA_W_REGION); }
 function castraWBuilt(bid){ return !!(CASTRA.wbuilt && CASTRA.wbuilt[bid]); }
 // Welke ontgrendeling een object nodig heeft (castra-unlocks.js).
-function castraWFeat(e){ if(e.kind==="hub") return "hub"; if(e.role==="builder" || e.kind==="bld") return "bouwen"; if(e.role==="puzzle") return "puzzels"; return "wereld"; }
+function castraWFeat(e){ if(e.kind==="hub" || e.kind==="sign") return "hub"; if(e.role==="builder" || e.kind==="bld") return "bouwen"; if(e.role==="puzzle") return "puzzels"; return "wereld"; }
 function castraWEntVisible(e){
   if(typeof castraUnlocked==="function" && !castraUnlocked(castraWFeat(e))) return false;
   if(e.kind==="pickup"){

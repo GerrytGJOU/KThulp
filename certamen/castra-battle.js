@@ -29,16 +29,17 @@ SCREENS.castraProelium = function(){
   }).join("");
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="castraPLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>⚔️ ${castraLa("proelium_titel")}</h2></div>
-  ${cards}${foot()}`);
+  ${typeof castraColoCard==="function"?castraColoCard():""}${cards}${foot()}`);
 };
 function castraPLeave(){ CASTRA.pos = { x:14, y:5 }; castraSave(); go("castraHome"); }
 
 /* ---------- gevecht ---------- */
 function castraBHealthy(){
+  if(CASTRA_B && CASTRA_B.endless && typeof castraColoUnits==="function") return castraColoUnits(CASTRA_B.div);
   const list = (CASTRA.heroes||[]).map(castraHeroAsUnit).concat(CASTRA.soldiers.filter(s=>!castraIsHurt(s)));
   return list.length ? list : [ { id:"dux", dux:true, line:"rom_hastatus", lvl:1, name:"Dux" } ];
 }
-function castraBCap(){ return 4 + 2*castraLvl("praetorium"); }
+function castraBCap(){ if(CASTRA_B && CASTRA_B.endless) return CASTRA_COLO.cap[CASTRA_B.div] || 8; return 4 + 2*castraLvl("praetorium"); }
 function castraBStart(missionId){
   const m = CASTRA_P_MISSIONS.find(x=>x.id===missionId); if(!m || !castraPMissionOpen(m)) return;
   if(CASTRA_B){ clearInterval(CASTRA_B.timer); window.removeEventListener("resize", CASTRA_B.resizeFn); }
@@ -118,16 +119,18 @@ function castraBMapTap(e){
   const x = Math.floor((e.clientX-r.left)/s/48), y = Math.floor((e.clientY-r.top)/s/48);
   if(B.legio){ castraLegioTap(x, y); return; }
   const tw = B.sim.towers.find(t=>t.x===x && t.y===y);
-  if(tw){ if(!B.sim.waveActive){ castraBRemoveTower(tw); } return; }   // eigen soldaat terugnemen (alleen tussen golven)
+  if(tw){ if(!B.sim.waveActive || B.endless){ castraBRemoveTower(tw); } return; }   // eigen soldaat terugnemen (alleen tussen golven)
   if(!B.sel || !castraBTileFree(x,y)) return;
   if(B.sim.towers.length >= castraBCap()){ castraToastLa("acies_plena"); return; }
   const s0 = castraBHealthy().find(q=>q.id===B.sel); if(!s0) return;
   const tower = castraPMakeTower(B.sim, s0, x, y);
   B.sim.towers.push(tower); B.placed[s0.id] = true; B.sel = null;
+  if(B.actions) B.actions.push({ t:B.sim.tick, k:"place", sid:s0.id, x, y });
   castraBDrawTower(tower); castraBRenderCards(); castraBRenderHud();
 }
 function castraBRemoveTower(tw){
   const B = CASTRA_B; B.sim.towers = B.sim.towers.filter(t=>t!==tw);
+  if(B.actions) B.actions.push({ t:B.sim.tick, k:"take", sid:tw.sid });
   delete B.placed[tw.sid]; const d = document.getElementById("cbT"+tw.id); if(d) d.remove();
   castraBRenderCards(); castraBRenderHud();
 }
@@ -157,7 +160,7 @@ const CASTRA_DONA = [
 ];
 function castraBOfer(){
   const B = CASTRA_B, s = B.sim;
-  if(B.legio || (typeof castraUnlocked==="function" && !castraUnlocked("dona")) || s.over || s.waveActive || s.wave<0 || s.wave>=B.mission.waves.length-1 || B.offeredFor===s.wave) return;
+  if(B.legio || B.endless || (typeof castraUnlocked==="function" && !castraUnlocked("dona")) || s.over || s.waveActive || s.wave<0 || s.wave>=B.mission.waves.length-1 || B.offeredFor===s.wave) return;
   B.offeredFor = s.wave;
   const pool = CASTRA_DONA.slice(); const a = pool.splice(Math.floor(Math.random()*pool.length),1)[0], b = pool.splice(Math.floor(Math.random()*pool.length),1)[0];
   B.pick = [a,b]; B.autoT = 0; castraBRenderCtl();
@@ -265,6 +268,7 @@ function castraBDrawFx(){
 
 /* ---------- einde ---------- */
 function castraBFinish(){
+  if(CASTRA_B && CASTRA_B.endless){ castraColoFinish(); return; }
   const B = CASTRA_B, m = B.mission, s = B.sim, box = el("cbResult");
   clearInterval(B.timer);
   let h = `<div class="panel">`;

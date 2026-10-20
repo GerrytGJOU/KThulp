@@ -258,6 +258,16 @@ function castraPMakeTower(sim, s, x, y){
   return { id:sim.nextId++, sid:s.id, line:s.line, look, type, owner:s.owner||null, x, y, cx:x*1000+500, cy:y*1000+500, st, cd:0,
            range, cooldown, buffed:false, sk, skIds, hits:0, charge: sk.charge ? sk.charge.hits : 0, aura:0 };
 }
+// Automatische golf (eindeloze Colosseum-modus): golf k start op een vaste tick, ook als de vorige nog loopt.
+function castraPAutoWave(sim){
+  sim.wave++; sim.waveActive = true;
+  sim.towers.forEach(t=>{ if(t.sk && t.sk.charge) t.charge = t.sk.charge.hits; });
+  let t = sim.tick + CASTRA_P.startDelay;
+  sim.mission.waves[sim.wave].forEach(g=>{
+    for(let i=0;i<g.n;i++){ sim.queue.push({ at:t, line:g.line, lvl:g.lvl, hp:g.hp }); t += g.gap; }
+  });
+  sim.queue.sort((a,b)=>a.at-b.at);
+}
 // Start de volgende golf (maakt de spawnrij).
 function castraPStartWave(sim){
   if(sim.over || sim.waveActive) return false;
@@ -267,7 +277,7 @@ function castraPStartWave(sim){
   sim.towers.forEach(t=>{ if(t.sk && t.sk.charge) t.charge = t.sk.charge.hits; });
   let t = sim.tick + CASTRA_P.startDelay;
   sim.mission.waves[sim.wave].forEach(g=>{
-    for(let i=0;i<g.n;i++){ sim.queue.push({ at:t, line:g.line, lvl:g.lvl }); t += g.gap; }
+    for(let i=0;i<g.n;i++){ sim.queue.push({ at:t, line:g.line, lvl:g.lvl, hp:g.hp }); t += g.gap; }
   });
   sim.queue.sort((a,b)=>a.at-b.at);
   return true;
@@ -281,9 +291,10 @@ function castraPTypeMul(att, def){
 function castraPStep(sim){
   if(sim.over) return;
   sim.tick++; sim.events.length = 0;
+  { const aw = sim.mission.autoWaves; if(aw && sim.wave+1 < sim.mission.waves.length && sim.tick >= aw.first + (sim.wave+1)*aw.interval) castraPAutoWave(sim); }
   // spawns
   while(sim.queue.length && sim.queue[0].at <= sim.tick){
-    const q = sim.queue.shift(), st = castraPEnemyStats(q.line, q.lvl, sim.rng, sim.mission.hpMult*CASTRA_P.enemyHpMult);
+    const q = sim.queue.shift(), st = castraPEnemyStats(q.line, q.lvl, sim.rng, sim.mission.hpMult*CASTRA_P.enemyHpMult*(q.hp||1));
     sim.enemies.push({ id:sim.nextId++, line:q.line, type:castraLine(q.line).type, lvl:q.lvl, st, hp:st.vita, maxHp:st.vita,
       prog:0, speed: Math.round((CASTRA_P.speedBase + st.celeritas*CASTRA_P.speedPerCel) * ((sim.mods&&sim.mods.spd)||1)), x:0, y:0 });
   }
