@@ -59,15 +59,15 @@ const CASTRA_WBT = {
 const CASTRA_WPOS = {
   latium:     { chests:[[4,11],[34,3],[34,9],[10,11],[25,10],[9,43],[18,16],[5,37]], pickup:[14,9], quest:[45,12], faber:[20,40], magistra:[47,42], site:[22,40] },
   graecia:    { chests:[[5,4],[19,4],[39,12],[53,16],[12,26],[29,27],[40,38],[52,41]], pickup:[27,6], quest:[39,22], faber:[19,35], magistra:[26,12], site:[57,27] },
-  troia:      { chests:[[24,5],[24,10],[24,19]],pickup:[18,10],quest:[23,2],  faber:[5,2],   magistra:[6,5],   site:[5,17] },
+  troia:      { chests:[[7,19],[17,7],[35,3],[50,23],[7,35],[27,34],[41,40],[50,38]], pickup:[42,5], quest:[50,11], faber:[15,37], magistra:[8,10], site:[44,27] },
   gallia:     { chests:[[9,15],[27,4],[39,7],[57,23],[5,32],[23,29],[34,38],[60,41]], pickup:[10,26], quest:[48,26], faber:[27,36], magistra:[20,14], site:[53,28] },
   aegyptus:   { chests:[[7,20],[20,9],[46,8],[60,6],[15,35],[20,41],[36,30],[55,37]], pickup:[56,14], quest:[52,26], faber:[21,29], magistra:[11,12], site:[44,26] },
-  persis:     { chests:[[21,5],[9,9],[24,19]],  pickup:[3,2],  quest:[25,9],  faber:[22,16], magistra:[6,10],  site:[6,5] },
-  africa:     { chests:[[23,8],[21,18],[8,18]], pickup:[8,6],  quest:[3,8],   faber:[3,13],  magistra:[19,3],  site:[19,15] },
+  persis:     { chests:[[7,3],[25,13],[43,13],[59,11],[10,26],[29,38],[37,38],[60,37]], pickup:[11,10], quest:[51,36], faber:[5,33], magistra:[6,17], site:[51,26] },
+  africa:     { chests:[[12,4],[26,18],[47,5],[55,10],[10,35],[27,32],[43,29],[60,32]], pickup:[48,34], quest:[52,27], faber:[15,31], magistra:[12,11], site:[35,36] },
   roma:       { chests:[[5,6],[66,6],[20,20],[58,19],[6,46],[26,40],[62,46],[40,36]], pickup:[14,22], quest:[57,21], faber:[38,47], magistra:[24,30], site:[42,42] },
-  laconia:    { chests:[[18,7],[22,18],[9,3]],  pickup:[12,10],quest:[25,5],  faber:[7,18],  magistra:[22,6],  site:[7,10] },
-  germania:   { chests:[[25,3],[11,8],[7,17]],  pickup:[3,17], quest:[25,19], faber:[7,2],   magistra:[18,6],  site:[2,6] },
-  themiscyra: { chests:[[8,17],[22,8],[4,4]],   pickup:[12,3], quest:[21,4],  faber:[5,16],  magistra:[19,9],  site:[22,15] },
+  laconia:    { chests:[[10,11],[23,16],[38,16],[51,23],[14,37],[29,37],[34,34],[54,32]], pickup:[45,27], quest:[48,12], faber:[27,28], magistra:[14,17], site:[55,39] },
+  germania:   { chests:[[8,19],[20,4],[34,7],[54,5],[9,28],[18,32],[44,39],[50,29]], pickup:[29,13], quest:[38,31], faber:[12,34], magistra:[4,10], site:[55,32] },
+  themiscyra: { chests:[[15,23],[28,16],[37,3],[57,16],[7,33],[21,31],[39,35],[52,30]], pickup:[45,27], quest:[44,4], faber:[26,38], magistra:[25,9], site:[47,33] },
 };
 const CASTRA_WNPC_ARMOR = { quest:"vodden", builder:"middel", puzzle:"robe" };
 const CASTRA_WCHEST = { aes:[20,60], frumentum:[15,40], lignum:[20,50] };
