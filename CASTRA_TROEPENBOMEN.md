@@ -153,7 +153,7 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 
 **M7 — regio 8: Themiscyra (2026-11-10).** Opent na missie gm2. Woud, bergen, veld en kust (Zwarte Zee), terreinen *In silva / In montibus / In campo / Ad litus*, 80% Amazones, rekruten level 46–50, tierplafond 3 (Amazones hebben geen tier-4 vorm); mythisch: Nimfen, Centauren, Grijpvogels, Harpijen, Sirenen, Gevleugelde paarden. Dilectus werft er Amazones. Missies **th1 Themiscyra** (hpMult 7,5) en **th2 Hippolyte** (hpMult 4,3, met Gryps en Equus alatus), zelfde proef als de andere regio's. Geen helden of sporen.
 
-**M7 is hiermee af**: Latium, Graecia, Troia, Gallia, Aegyptus, Persis, Africa, Roma, Laconia, Germania en Themiscyra zijn speelbaar (11 werelden, 24 missies). Alle volken uit de catalogus hebben nu een eigen regio. Resterend, buiten dit verzoek: helden meeschalen met de nieuwe level-schaal, regio-eigen helden of sporen, en een klastest van de hele keten.
+**M7 is hiermee af**: Latium, Graecia, Troia, Gallia, Aegyptus, Persis, Africa, Roma, Laconia, Germania en Themiscyra zijn speelbaar (11 werelden, 23 missies). Alle volken uit de catalogus hebben nu een eigen regio. Resterend, buiten dit verzoek: helden meeschalen met de nieuwe level-schaal, regio-eigen helden of sporen, en een klastest van de hele keten.
 
 **Nog niet (volgende mijlpalen):** de overige M7-regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
 
