@@ -1,6 +1,6 @@
 # Castra Heroum — troepenbomen per volk (151 vormen)
 
-Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1 gebouwd (2026-10-29), wacht op goedkeuring voor M2** · hoort bij `CASTRA_HEROUM.md`.
+Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1 en M2 gebouwd (2026-10-30), wacht op goedkeuring voor M3** · hoort bij `CASTRA_HEROUM.md`.
 Dit document is de bron van waarheid voor de troepenbomen; het vervangt de huidige losse evolutielijnen (`CASTRA_LINES` in `certamen/castra-data.js`). De 15 helden (`CASTRA_HERO_DATA`) blijven ongewijzigd.
 
 ## 1. Idee en regels
@@ -124,7 +124,14 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 - **Missies en Legio** gebruiken nu vormen uit de bomen (tier en level groeien mee met de regio) en zijn opnieuw afgesteld met de gesimuleerde proef (`hpMult` m1 0,6 · m2 3,9 · m3 3,4 · g1 3,4 · g2 5,8 · t1 4,7 · t2 5,6 · Legio 4,5): winnen met ±4–6 levens bij de bedoelde opstelling, verliezen bij 70% van dat level, comfortabel winnen bij 130%.
 - Uiterlijk van eenheden in het proelium en bij de NPC's: avatar-lagen volgens `castraFormLook` (volk, rol, tier).
 
-**Nog niet (volgende mijlpalen):** M2 stabula en navalia (nu ontbreekt het gebouw dus kiezen kan niet), M3 uitwerking van wild/werving (vreemdelingen per regio, Dilectus per volk en tier), M4 codex, M5 Certamen-klassen, M6 sprites-pijplijn, M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
+**M2 — Stabula en Navalia (gebouwd 2026-10-30):**
+- Twee nieuwe gebouwen op het kamp: *Stabula* (🐎, ontgrendelt ruiterij, strijdwagens en olifanten) en *Navalia* (⚓, ontgrendelt de vloot). Ze **starten op niveau 0 (nog te bouwen)**: een bouwplaats met kisten en blokken, bouwknop *Aedifica* (stabula 90 lignum + 60 aes, navalia 120 + 80; hogere niveaus volgen de gewone upgradekosten en blijven begrensd door het praetorium).
+- **Gebouweis per tier:** een vorm van tier t vraagt het gebouw op niveau max(1, t−1): tier 2 stabula/navalia 1, tier 3 niveau 2, tier 4 niveau 3 (`castraNeedLvl`). In het evolutiescherm staat bij een geblokkeerde optie bv. "Stabula Gradus 2 deest". Het gebouwpaneel toont per niveau welke vormen het opent.
+- Het kamp is **3 rijen hoger** (16×15 tegels; startplek (8,13); weg tot de onderste muur) om ruimte te maken; alle gebouwen blijven bereikbaar (gecontroleerd met de padzoeker).
+- Getest: bouwen kost het juiste bedrag; Eques is vóór de stabula niet te kiezen en erna wel; Decurio vraagt stabula niveau 2 en bij level 34 + stabula 2 + campus 4 lukt de evolutie; bouwplaats blokkeert zijn voetafdruk; alle Latijnse teksten hebben een glossarium-entry.
+- Niet gedaan: een extra bonus van het gebouwniveau op de stats (alleen de ontgrendeling), en navalia geeft nog geen toegang tot waterregio's.
+
+**Nog niet (volgende mijlpalen):** M3 uitwerking van wild/werving (vreemdelingen per regio, Dilectus per volk en tier), M4 codex, M5 Certamen-klassen, M6 sprites-pijplijn, M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
 
 ## 7. Voorstel mijlpalen en open punten (oorspronkelijk)
 

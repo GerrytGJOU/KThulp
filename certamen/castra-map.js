@@ -91,6 +91,8 @@ const CASTRA_BUILDING_ART = {
   heroum:      { fw:3, fh:3, pieces:[ {o:"tent_beige",dx:0,dy:0} ] },
   valetudinarium:{ fw:2, fh:2, pieces:[ {o:"pot",dx:0,dy:0}, {o:"bucket",dx:1,dy:0}, {o:"flower_w",dx:0,dy:1}, {o:"barrel",dx:1,dy:1} ] },
   dilectus:    { fw:2, fh:2, pieces:[ {o:"sign",dx:0,dy:0}, {o:"crate_a",dx:1,dy:0}, {o:"barrel",dx:0,dy:1}, {o:"stump",dx:1,dy:1} ] },
+  stabula:     { fw:2, fh:2, pieces:[ {o:"fence",dx:0,dy:0}, {o:"fence",dx:1,dy:0}, {o:"crate_c",dx:0,dy:1}, {o:"barrel",dx:1,dy:1} ] },
+  navalia:     { fw:2, fh:2, pieces:[ {o:"logs",dx:0,dy:0}, {o:"logs",dx:1,dy:0}, {o:"barrel",dx:0,dy:1}, {o:"bucket",dx:1,dy:1} ] },
   principia:   { fw:2, fh:2, pieces:[ {o:"sign",dx:0,dy:0}, {o:"pot",dx:1,dy:0}, {o:"well",dx:0,dy:1}, {o:"barrel",dx:1,dy:1} ] },
 };
 
@@ -139,7 +141,7 @@ function castraGroundGrid(cols, rows, key){ return Array.from({length:rows},()=>
 function castraCampDef(){
   const T = CASTRA_MAP, cols = T.cols, rows = T.rows, g = castraGroundGrid(cols, rows, "grass");
   const rect = (x0,y0,x1,y1,k)=>{ for(let y=y0;y<=y1;y++) for(let x=x0;x<=x1;x++) if(g[y]&&g[y][x]) g[y][x]=k; };
-  rect(7,0,8,10,"sand"); rect(9,5,15,6,"sand"); rect(2,4,13,4,"sand"); rect(6,4,9,7,"stone");
+  rect(7,0,8,rows-2,"sand"); rect(9,5,15,6,"sand"); rect(2,4,13,4,"sand"); rect(6,4,9,7,"stone");
   const walls = [];
   for(let x=0;x<cols;x++){ walls.push([x,0],[x,rows-1]); g[0][x]=g[rows-1][x]="wall"; }
   for(let y=0;y<rows;y++){ walls.push([0,y],[cols-1,y]); g[y][0]=g[y][cols-1]="wall"; }
@@ -147,11 +149,14 @@ function castraCampDef(){
   const pieces = [];
   CASTRA_BUILDINGS.filter(b=>b.phase===1&&b.slot).forEach(b=>{
     const art = CASTRA_BUILDING_ART[b.id]; if(!art) return;
-    art.pieces.forEach(p=>pieces.push({ o:p.o, x:b.slot.x+p.dx, y:b.slot.y+p.dy, owner:b.id }));
+    const site = b.start===0 && typeof CASTRA!=="undefined" && CASTRA && castraLvl(b.id)===0 && art.fw===2 && art.fh===2;
+    (site ? CASTRA_BUILDING_SITE : art.pieces).forEach(p=>pieces.push({ o:p.o, x:b.slot.x+p.dx, y:b.slot.y+p.dy, owner:b.id }));
   });
-  [ ["tree_a",1,2],["tree_b",2,1],["tree_a",14,9],["tree_b",1,9],["tree_a",14,5] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
-  [ ["flower_w",9,2],["flower_p",6,3],["flower_b",11,6],["flower_o",3,10],["plant_c",6,9],["fern",11,10],["flower_p",1,6],["stones",9,4] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
+  [ ["tree_a",1,2],["tree_b",2,1],["tree_a",14,9],["tree_b",1,9],["tree_a",14,5],["tree_a",1,12],["tree_b",6,11],["tree_b",14,12],["tree_a",10,12] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
+  [ ["flower_w",9,2],["flower_p",6,3],["flower_b",11,6],["flower_o",3,10],["plant_c",6,9],["fern",11,10],["flower_p",1,6],["stones",9,4],["flower_w",5,12],["flower_b",10,11],["plant_a",1,10],["fern",6,13],["flower_o",9,13] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
   return { cols, rows, ground:g, pieces, walls };
 }
+// Bouwplaats: gebouwen op niveau 0 (nog te bouwen) tonen dit i.p.v. hun eigen kunst (zelfde voetafdruk, altijd solide).
+const CASTRA_BUILDING_SITE = [ {o:"logs",dx:0,dy:0}, {o:"stump",dx:1,dy:0}, {o:"crate_a",dx:0,dy:1}, {o:"crate_b",dx:1,dy:1} ];
 // Gebouwvoetafdruk voor tikken/interactie (fw×fh uit de tegelkunst).
 function castraBuildingFoot(b){ const a = CASTRA_BUILDING_ART[b.id]; return a ? { fw:a.fw, fh:a.fh } : { fw:2, fh:2 }; }

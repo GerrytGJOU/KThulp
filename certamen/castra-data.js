@@ -68,8 +68,10 @@ const CASTRA_BUILDINGS = [
     lat:"Hic milites novi conscribuntur.", desc:"Elke paar uur nieuwe rekruten; de trainer beoordeelt hun aanleg in het Latijn." },
   { id:"templum",      nm:"Templum",      nl:"Zegen van een god", phase:9, slot:null, maxLvl:5, cost:{ lignum:90, aes:90 } },
   { id:"forum",        nm:"Forum",        nl:"Ruilen",         phase:9, slot:null, maxLvl:5, cost:{ lignum:70, aes:70 } },
-  { id:"navalia",      nm:"Navalia",      nl:"Scheepswerf",    phase:9, slot:null, maxLvl:5, cost:{ lignum:120, aes:80 } },
-  { id:"stabula",      nm:"Stabula",      nl:"Stallen",        phase:9, slot:null, maxLvl:5, cost:{ lignum:90, aes:60 } },
+  { id:"navalia",      nm:"Navalia",      nl:"Scheepswerf",    icon:"⚓", phase:1, slot:{x:12,y:11}, start:0, maxLvl:5, cost:{ lignum:120, aes:80 },
+    lat:"Hic naves aedificantur.", desc:"Scheepswerf: ontgrendelt de vlootvormen (Remex, Classiarius, Navarchus)." },
+  { id:"stabula",      nm:"Stabula",      nl:"Stallen",        icon:"🐎", phase:1, slot:{x:2,y:11}, start:0, maxLvl:5, cost:{ lignum:90, aes:60 },
+    lat:"Hic equi et currus parantur.", desc:"Stallen: ontgrendelt ruiterij, strijdwagens en olifanten in de troepenbomen." },
   { id:"bibliotheca",  nm:"Bibliotheca",  nl:"Codex",          phase:9, slot:null, maxLvl:5, cost:{ lignum:70, aes:50 } },
   { id:"murus",        nm:"Murus",        nl:"Verdediging",    phase:9, slot:null, maxLvl:5, cost:{ lignum:100, aes:60 } },
   { id:"arcus",        nm:"Arcus triumphalis", nl:"Decoratie", phase:9, slot:null, maxLvl:1, cost:{ lignum:0, aes:0 } },
@@ -77,8 +79,8 @@ const CASTRA_BUILDINGS = [
 
 /* ---- Kaart van de castra (tegels van 48px) ---- */
 const CASTRA_MAP = {
-  cols:16, rows:12, tile:48,
-  start:{ x:8, y:10, dir:"up" },
+  cols:16, rows:15, tile:48,
+  start:{ x:8, y:13, dir:"up" },
   // Poorten liggen in de kampmuur; erdoor lopen = activiteit kiezen.
   gates:[
     { id:"decumana",  nm:"Porta decumana",  to:"venatio",  nl:"Naar de jacht (venatio)",     tiles:[{x:7,y:0},{x:8,y:0}] },

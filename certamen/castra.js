@@ -35,7 +35,7 @@ function castraRng(seed){
 /* ---------- staat + opslag ---------- */
 function castraNewState(){
   const b = {};
-  CASTRA_BUILDINGS.filter(x=>x.phase===1).forEach(x=>{ b[x.id] = { lvl:1, t:castraNow() }; });
+  CASTRA_BUILDINGS.filter(x=>x.phase===1).forEach(x=>{ b[x.id] = { lvl:(x.start!==undefined?x.start:1), t:castraNow() }; });
   return {
     v:CASTRA_SAVE_VER, savedAt:castraNow(),
     seed: (Math.random()*4294967296)>>>0,
@@ -79,7 +79,7 @@ function castraLoad(){
   try{ s = JSON.parse(localStorage.getItem(CASTRA_KEY)||"null"); }catch(e){}
   if(!s || s.v!==CASTRA_SAVE_VER) s = castraNewState();
   // Gebouwen die er sinds deze save bij gekomen zijn (phase 1) aanvullen.
-  CASTRA_BUILDINGS.filter(x=>x.phase===1).forEach(x=>{ if(!s.b[x.id]) s.b[x.id]={lvl:1,t:castraNow()}; });
+  CASTRA_BUILDINGS.filter(x=>x.phase===1).forEach(x=>{ if(!s.b[x.id]) s.b[x.id]={lvl:(x.start!==undefined?x.start:1),t:castraNow()}; });
   s = castraMigrateState(s);
   if(!s.help) s.help = { words:{}, sentences:{} };
   if(!s.traces) s.traces = {};
@@ -125,7 +125,7 @@ function castraMaxLvl(id){
   return id==="praetorium" ? b.maxLvl : Math.min(b.maxLvl, castraLvl("praetorium"));
 }
 function castraUpgradeCost(id){
-  const b = castraBuilding(id), L = castraLvl(id), c = {};
+  const b = castraBuilding(id), L = Math.max(1, castraLvl(id)), c = {};
   Object.keys(b.cost||{}).forEach(r=>{ c[r] = Math.round(b.cost[r]*Math.pow(L, CASTRA_BAL.costExp)); });
   return c;
 }
@@ -293,7 +293,7 @@ function castraRenderMap(){
   CASTRA_BUILDINGS.filter(b=>b.phase===1&&b.slot).forEach(b=>{
     const f = castraBuildingFoot(b), lvl = castraLvl(b.id), pend = b.prod ? castraPending(b.id) : 0;
     h += `<div onclick="castraOpen('${b.id}')" style="position:absolute;left:${b.slot.x*t}px;top:${b.slot.y*t}px;width:${f.fw*t}px;height:${f.fh*t}px;cursor:pointer;z-index:3">
-      <div style="position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-size:var(--lbl,11px);font-weight:700;color:#f1e6c4;background:rgba(27,21,14,.85);border:1px solid #8a6d2f;border-radius:6px;padding:0 6px;white-space:nowrap">${b.icon} ${esc(b.nm)}${b.fixed?"":` · ${lvl}`}</div>
+      <div style="position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-size:var(--lbl,11px);font-weight:700;color:#f1e6c4;background:rgba(27,21,14,.85);border:1px solid #8a6d2f;border-radius:6px;padding:0 6px;white-space:nowrap">${b.icon} ${esc(b.nm)}${b.fixed?"":` · ${lvl||"🔨"}`}</div>
       ${pend>0?`<div style="position:absolute;top:-6px;right:-6px;font-size:11px;background:#d4af37;color:#2a2118;border-radius:10px;padding:1px 6px;font-weight:700;animation:pulse 1.4s infinite">+${pend}</div>`:""}
     </div>`;
   });
@@ -414,6 +414,10 @@ function castraOpen(id){
     extra += `<div class="note">${castraLaText("proventus")}: ${b.prod.perHour*lvl} ${r.icon} / hora · ${castraLaText("paratum")}: <b>${pend}</b> ${r.icon}</div>
       <button class="btn btn-gold" ${pend>0?"":"disabled"} onclick="castraDoCollect('${id}')">${castraLaText("collige")}</button> `;
   }
+  if(id==="stabula" || id==="navalia"){
+    const info = castraNeedsInfo(id);
+    extra += `<div class="note">${lvl===0?castraLa("non_aedificatum")+" ":""}${castraLaText("aperit")}:` + Object.keys(info).sort().map(l=>`<div style="margin-top:3px"><b>${castraLaText("gradus")} ${l}</b>: <small>${esc(info[l].join(", "))}</small></div>`).join("") + `</div>`;
+  }
   if(id==="horreum") extra += `<div class="note">${castraLaText("capacitas")}: ${castraWalletCap()}</div>`;
   if(id==="contubernia"){
     const list = CASTRA.soldiers.map(s=>{
@@ -429,7 +433,7 @@ function castraOpen(id){
   if(b.fixed) extra += `<div class="note">${castraLa("legio_mox")}</div>`;
   const up = b.fixed ? "" : (lvl>=maxL
     ? `<div class="note">${castraLa(lvl>=b.maxLvl?"gradus_max":"praetorium_prius")}</div>`
-    : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('${id}')">${castraLaText("meliora")} → ${castraLaText("gradus")} ${lvl+1} — ${costTxt}</button>`);
+    : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('${id}')">${lvl===0?castraLaText("aedifica"):castraLaText("meliora")+" → "+castraLaText("gradus")+" "+(lvl+1)} — ${costTxt}</button>`);
   castraOpenPanel(`<div class="panel"><h3>${b.icon} ${esc(b.nm)} ${b.fixed?"":`<small>${castraLaText("gradus")} ${lvl}</small>`}</h3>
     <div style="font-style:italic;margin-bottom:6px">${castraLaHTML(b.lat||"", b.desc||b.nl||"", "bld_"+id)}</div>${extra}${up}
     <div style="margin-top:8px"><button class="btn" onclick="castraClosePanel()">${castraLaText("claude")}</button></div></div>`);

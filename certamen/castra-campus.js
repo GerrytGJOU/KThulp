@@ -42,7 +42,7 @@ function castraEvoInfo(s){
   const f = castraLine(s.line);
   if(!f.next.length) return { max:true };
   const need = castraEvoLevel(f), campusReq = CASTRA_EVO.campus[f.tier-1] || 5, cost = CASTRA_EVO.cost[f.tier-1] || CASTRA_EVO.cost[CASTRA_EVO.cost.length-1];
-  const options = f.next.map(id=>{ const n = castraLine(id); return { id, f:n, missing: (n.needs && castraLvl(n.needs)<1) ? n.needs : null }; });
+  const options = f.next.map(id=>{ const n = castraLine(id), nl = castraNeedLvl(n); return { id, f:n, needLvl:nl, missing: (n.needs && castraLvl(n.needs)<nl) ? n.needs : null }; });
   return { max:false, need, campusReq, cost, lvlOk: s.lvl>=need && castraLvl("campus")>=campusReq, canPay:castraCanPay(cost), options };
 }
 function castraEvolve(sid, formId){
@@ -83,7 +83,7 @@ function castraCampusOpen(){
             const st = castraStats({ ...s, line:o.id }), dis = !evo.canPay || o.missing;
             return `<div style="margin:3px 0"><button class="btn ${adv&&adv.pick===o.id?"btn-gold":""}" ${dis?"disabled":""} onclick="castraDoEvolve('${s.id}','${o.id}')">${castraLaText("evolve")} → ${esc(o.f.nm)}</button>
               <small>${esc(o.f.tak)} · ${esc((CASTRA_TYPE_LA[o.f.type]||{}).sg||"")} · ${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" ")}</small>
-              ${o.missing?`<small> · ${esc(castraBuilding(o.missing)?castraBuilding(o.missing).nm:o.missing)} ${castraLaText("deest")}</small>`:""}</div>`;
+              ${o.missing?`<small> · ${esc(castraBuilding(o.missing)?castraBuilding(o.missing).nm:o.missing)} ${castraLaText("gradus")} ${o.needLvl} ${castraLaText("deest")}</small>`:""}</div>`;
           }).join("");
       }
     }
