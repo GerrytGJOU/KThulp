@@ -15,10 +15,13 @@ const CASTRA_WORLD_BASE = { cols:32, rows:24, view:{ cols:16, rows:11 }, start:{
 // bomenset. De NPC's (helden) staan in CASTRA_HERO_DATA[id].world / .region.
 const CASTRA_WORLDS = {
   latium: { ...CASTRA_WORLD_BASE, id:"latium", nm:"Latium", icon:"🌿", seed:20261020, base:"grass", road:"sand", bank:"sand2",
-    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:12,x1:29,y1:13} ],
-    water:[ { x0:27, x1:28, bridgeY:[12,13] } ],               // de Tiber; alleen de brug is begaanbaar
-    zones:[ { t:"silva", x:2, y:3, w:11, h:10 }, { t:"via", x:14, y:1, w:4, h:9 }, { t:"campus", x:18, y:11, w:12, h:9 }, { t:"tiberis", x:21, y:2, w:6, h:8 } ],
-    trees:["tree_a","tree_b"], big:"tree_big", sparse:0.07, dense:0.22, denseZone:"silva" },
+    cols:64, rows:48, start:{ x:31, y:46 },                       // grote regio (64×48); de andere regio's zijn nog 32×24
+    roads:[ {x0:31,y0:1,x1:32,y1:47}, {x0:2,y0:24,x1:61,y1:25} ],
+    water:[ { x0:54, x1:56, bridgeY:[24,25] } ],                   // de Tiber; alleen de brug is begaanbaar
+    zones:[ { t:"silva", x:4, y:6, w:22, h:20 }, { t:"via", x:28, y:2, w:8, h:18 }, { t:"campus", x:36, y:22, w:18, h:22 }, { t:"tiberis", x:42, y:4, w:12, h:16 } ],
+    trees:["tree_a","tree_b"], big:"tree_big", sparse:0.07, dense:0.22, denseZone:"silva",
+    doors:[ { x:9,  y:22, to:"specus_latium", spawn:{ x:12, y:17, dir:"up" } },       // grot in het bos
+            { x:38, y:35, to:"villa_latium",  spawn:{ x:10, y:11, dir:"up" } } ] },  // herberg bij de weg
   graecia: { ...CASTRA_WORLD_BASE, id:"graecia", nm:"Graecia", icon:"🏛️", seed:20261101, base:"sand2", road:"stone", bank:"sand",
     roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:8,x1:26,y1:9} ],
     water:[ { x0:28, x1:29, bridgeY:null } ],                    // de Egeïsche Zee
@@ -79,6 +82,7 @@ let CASTRA_WORLD_BUILT = {};   // per regio gecachet
 let CASTRA_W_UI = { px:0, py:0, dir:"up", frame:1, moving:false, scale:1, keyFn:null, resizeFn:null };
 
 function castraWorldDef(){
+  if(castraWorldCfg().interior && typeof castraInteriorDef==="function") return castraInteriorDef(castraWorldCfg());
   const W = castraWorldCfg(), cols = W.cols, rows = W.rows, rng = castraMapRng(W.seed);
   const g = castraGroundGrid(cols, rows, W.base), tall = {}, used = {}, pieces = [], walls = [];
   const road = (x,y)=>W.roads.some(r=>x>=r.x0&&x<=r.x1&&y>=r.y0&&y<=r.y1);
@@ -150,7 +154,7 @@ function castraWorldBuilt(){
 SCREENS.castraWorld = function(){
   document.body.classList.remove("greek");
   if(!CASTRA) castraLoad();
-  const W = castraWorldCfg(), st0 = (CASTRA.worlds && CASTRA.worlds[W.id]) || (W.id==="latium" && CASTRA.world) || W.start;
+  const W = castraWorldCfg(), st0 = (W.id==="latium" && CASTRA.latV!==2) ? W.start : ((CASTRA.worlds && CASTRA.worlds[W.id]) || (W.id==="latium" && CASTRA.world) || W.start);
   // aankomst via een poort of reisplek (castra-geo.js) gaat voor op de bewaarde plek
   const sp = (typeof CASTRA_GEO_SPAWN!=="undefined") ? CASTRA_GEO_SPAWN : null; if(typeof CASTRA_GEO_SPAWN!=="undefined") CASTRA_GEO_SPAWN = null;
   const st = sp || st0;
@@ -189,7 +193,7 @@ function castraWorldDetach(){
   if(CASTRA_W_UI.resizeFn) window.removeEventListener("resize", CASTRA_W_UI.resizeFn);
 }
 function castraWorldSavePos(x, y){
-  const w = CASTRA.worlds || (CASTRA.worlds = {}); w[CASTRA_W_REGION] = { x, y }; castraSave();
+  const w = CASTRA.worlds || (CASTRA.worlds = {}); w[CASTRA_W_REGION] = { x, y }; if(CASTRA_W_REGION==="latium") CASTRA.latV = 2; castraSave();
 }
 function castraWorldLeave(){
   castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraWorldDetach();
@@ -256,6 +260,7 @@ function castraWStep(dir){
   setTimeout(()=>{
     CASTRA_W_UI.moving = false; CASTRA_W_UI.frame = 1; castraWorldAvatar();
     castraWorldSavePos(nx, ny);
+    if(typeof castraGeoDoor==="function" && castraGeoDoor(nx,ny)) return;
     if(W.exit.some(e=>e.x===nx&&e.y===ny)){ if(typeof castraGeoExit==="function") castraGeoExit(nx,ny); else castraWorldLeave(); return; }
     const terrain = castraWorldBuilt().tall[nx+","+ny];
     if(terrain && Math.random() < W.encounterChance) castraWorldEncounter(terrain);
@@ -264,7 +269,7 @@ function castraWStep(dir){
 }
 function castraWorldEncounter(terrainId){
   castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraSave(); castraWorldDetach();
-  CASTRA_V = castraMakeEncounter(CASTRA_W_REGION, terrainId);
+  CASTRA_V = castraMakeEncounter(castraWorldCfg().parent || CASTRA_W_REGION, terrainId);
   CASTRA_V.log = []; CASTRA_V.round = 0; CASTRA_V.fromWorld = true;
   CASTRA_V_PENDING = true;
   go("castraVenatio");

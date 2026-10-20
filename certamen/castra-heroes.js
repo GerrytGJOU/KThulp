@@ -27,7 +27,7 @@ const CASTRA_H = {
 /* ketenstappen: kill (n vijanden in terrein), win (proelium-missie), persuade (keuzevraag) */
 const CASTRA_HERO_DATA = {
   aeneas: {
-    nm:"Aeneas", region:"latium", type:"inf", affinity:"praetorium", always:true, world:{ x:13, y:11, dir:"right" },
+    nm:"Aeneas", region:"latium", type:"inf", affinity:"praetorium", always:true, world:{ x:26, y:22, dir:"right" },
     base:{ vita:64, impetus:13, tutela:12, celeritas:6, ambitus:3 },
     look:{ huid:"getint", haar:"kort", haarkleur:"bruin", baard:"baard", armor:"ceremonieel", cape:"lang", capekleur:"rood", helm:"geen", schild:"geen", wapen:"zwaard" },
     chain:[
@@ -56,7 +56,7 @@ const CASTRA_HERO_DATA = {
     ],
   },
   romulus: {
-    nm:"Romulus", region:"latium", type:"inf", affinity:"praetorium", world:{ x:14, y:5, dir:"right" },
+    nm:"Romulus", region:"latium", type:"inf", affinity:"praetorium", world:{ x:28, y:10, dir:"right" },
     base:{ vita:58, impetus:15, tutela:10, celeritas:7, ambitus:3 },
     look:{ huid:"licht", haar:"wild", haarkleur:"zwart", baard:"geen", armor:"ceremonieel", cape:"kort", capekleur:"rood", helm:"geen", schild:"geen", wapen:"zwaard" },
     chain:[
@@ -85,7 +85,7 @@ const CASTRA_HERO_DATA = {
     ],
   },
   horatius: {
-    nm:"Horatius Cocles", region:"latium", type:"inf", affinity:"campus", world:{ x:26, y:11, dir:"down" },
+    nm:"Horatius Cocles", region:"latium", type:"inf", affinity:"campus", world:{ x:52, y:22, dir:"down" },
     base:{ vita:70, impetus:12, tutela:15, celeritas:5, ambitus:2 },
     look:{ huid:"olijf", haar:"kort", haarkleur:"zwart", baard:"snor", armor:"middel", cape:"kort", capekleur:"rood", helm:"open", schild:"geen", wapen:"zwaard" },
     chain:[
@@ -127,7 +127,7 @@ const _WIN_M1 = ["Proelium primum vince.","Win het eerste gevecht."];
 
 Object.assign(CASTRA_HERO_DATA, {
   /* ----- Latium ----- */
-  cloelia: { nm:"Cloelia", region:"latium", type:"cav", affinity:"lignatio", world:{ x:24, y:16, dir:"left" },
+  cloelia: { nm:"Cloelia", region:"latium", type:"cav", affinity:"lignatio", world:{ x:48, y:32, dir:"left" },
     base:{ vita:48, impetus:14, tutela:7, celeritas:11, ambitus:3 },
     look:_look({ huid:"licht", haar:"vlecht", haarkleur:"bruin", armor:"robe", cape:"kort", capekleur:"blauw" }),
     chain:[
@@ -140,7 +140,7 @@ Object.assign(CASTRA_HERO_DATA, {
       _T(["Equum capio et Tiberim transeo.","Ik pak een paard en steek de Tiber over."], ["Quid Cloelia capit?","Wat pakt Cloelia?"], ["Equum.","Een paard."], ["Gladium.","Een zwaard."], ["Navem.","Een schip."]),
       _T(["Romani me laudant. Statua mea in via est.","De Romeinen prijzen mij. Mijn standbeeld staat aan de weg."], ["Quis Cloeliam laudat?","Wie prijst Cloelia?"], ["Romani.","De Romeinen."], ["Hostes.","De vijanden."], ["Nemo.","Niemand."]),
     ] },
-  mucius: { nm:"Mucius Scaevola", region:"latium", type:"inf", affinity:"metallum", world:{ x:20, y:7, dir:"down" },
+  mucius: { nm:"Mucius Scaevola", region:"latium", type:"inf", affinity:"metallum", world:{ x:40, y:14, dir:"down" },
     base:{ vita:62, impetus:15, tutela:11, celeritas:6, ambitus:2 },
     look:_look({ huid:"getint", haar:"kort", haarkleur:"zwart", baard:"sikensnor", armor:"middel", cape:"lang", capekleur:"groen", helm:"bandana" }),
     chain:[
@@ -153,7 +153,7 @@ Object.assign(CASTRA_HERO_DATA, {
       _T(["Dextram in ignem pono.","Ik leg mijn rechterhand in het vuur."], ["Quid Mucius in ignem ponit?","Wat legt Mucius in het vuur?"], ["Dextram.","Zijn rechterhand."], ["Librum.","Een boek."], ["Pedem.","Zijn voet."]),
       _T(["Rex me dimittit. Nomen meum Scaevola est.","De koning laat mij gaan. Mijn naam is Scaevola."], ["Quis Mucium dimittit?","Wie laat Mucius gaan?"], ["Rex.","De koning."], ["Mater.","Zijn moeder."], ["Dux.","De leider."]),
     ] },
-  camilla: { nm:"Camilla", region:"latium", type:"rng", affinity:"lignatio", world:{ x:6, y:9, dir:"right" },
+  camilla: { nm:"Camilla", region:"latium", type:"rng", affinity:"lignatio", world:{ x:12, y:18, dir:"right" },
     base:{ vita:44, impetus:15, tutela:6, celeritas:12, ambitus:7 },
     look:_look({ huid:"olijf", haar:"lang", haarkleur:"zwart", armor:"vodden", cape:"lang", capekleur:"groen", helm:"bandana" }),
     chain:[

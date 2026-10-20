@@ -57,7 +57,7 @@ const CASTRA_WBT = {
 };
 // Vaste plekken per regio (x,y); site = linkerhelft van de bouwplaats (de rechterhelft staat op x+1).
 const CASTRA_WPOS = {
-  latium:     { chests:[[4,5],[24,5],[27,17],[14,3]], pickup:[8,6],  quest:[20,21], faber:[11,16], magistra:[12,20], site:[9,16] },
+  latium:     { chests:[[4,11],[34,3],[34,9],[10,11],[25,10],[9,43],[18,16],[5,37]], pickup:[14,9], quest:[45,12], faber:[20,40], magistra:[47,42], site:[22,40] },
   graecia:    { chests:[[6,4],[19,16],[25,2]],  pickup:[11,5], quest:[9,17],  faber:[3,3],   magistra:[21,13], site:[9,12] },
   troia:      { chests:[[24,5],[24,10],[24,19]],pickup:[18,10],quest:[23,2],  faber:[5,2],   magistra:[6,5],   site:[5,17] },
   gallia:     { chests:[[23,13],[25,9],[2,7]],  pickup:[8,7],  quest:[24,3],  faber:[19,2],  magistra:[2,3],   site:[19,7] },
@@ -74,7 +74,7 @@ const CASTRA_WCHEST = { aes:[20,60], frumentum:[15,40], lignum:[20,50] };
 // Beloningen (basis; × schaal per regio)
 const CASTRA_WREWARD = { quest:{ aes:60, frumentum:30 }, puzzle:{ aes:25, frumentum:15, gloria:1 }, build:{ gloria:2 } };
 // Latium behoudt zijn oorspronkelijke sleutels (bestaande saves): agricola, puteus, kist1-4, amphora.
-const CASTRA_WLEG = { latium:{ qid:"agricola", bid:"puteus", chest:["kist1","kist2","kist3","kist4"] } };
+const CASTRA_WLEG = { latium:{ qid:"agricola", bid:"puteus", chest:["kist1","kist2","kist3","kist4","kist5","kist6","kist7","kist8"] } };
 
 const CASTRA_WBUILD = {};   // bid -> { rid, type, site:{x,y}, cost }
 const CASTRA_WENT = [];     // alle entiteiten
