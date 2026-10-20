@@ -78,6 +78,21 @@ const CASTRA_OBJ = {
   flower_p:   { s:"B", c:1,  r:12, w:1, h:1, solid:"none" },
   flower_b:   { s:"B", c:2,  r:12, w:1, h:1, solid:"none" },
   flower_o:   { s:"B", c:3,  r:12, w:1, h:1, solid:"none" },
+  // biomen: woestijn en bos (Outside_B)
+  palm2:      { s:"B", c:13, r:5,  w:1, h:2, solid:"bottom" },
+  dead_a:     { s:"B", c:8,  r:5,  w:1, h:2, solid:"bottom" },
+  dead_b:     { s:"B", c:9,  r:5,  w:1, h:2, solid:"bottom" },
+  cactus:     { s:"B", c:14, r:5,  w:1, h:1, solid:"all" },
+  bush_pink:  { s:"B", c:13, r:6,  w:1, h:1, solid:"all" },
+  stump_g:    { s:"B", c:11, r:6,  w:1, h:1, solid:"all" },
+  hay:        { s:"B", c:8,  r:7,  w:1, h:1, solid:"all" },
+  mush_b:     { s:"B", c:10, r:5,  w:1, h:1, solid:"none" },
+  mush_r:     { s:"B", c:11, r:5,  w:1, h:1, solid:"none" },
+  fern_big:   { s:"B", c:14, r:6,  w:1, h:1, solid:"none" },
+  dry_grass:  { s:"B", c:11, r:7,  w:1, h:1, solid:"none" },
+  dry_plant:  { s:"B", c:15, r:5,  w:1, h:1, solid:"none" },
+  dry_fern:   { s:"B", c:15, r:6,  w:1, h:1, solid:"none" },
+  leaves:     { s:"B", c:12, r:7,  w:1, h:1, solid:"none" },
 };
 
 /* ---- gebouwen: tegelkunst per gebouw (relatief aan slot; fw×fh = voetafdruk) ---- */

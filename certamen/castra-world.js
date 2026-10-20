@@ -97,6 +97,15 @@ function castraWorldDef(){
   const g = castraGroundGrid(cols, rows, W.base), tall = {}, used = {}, pieces = [], walls = [];
   const road = (x,y)=>W.roads.some(r=>x>=r.x0&&x<=r.x1&&y>=r.y0&&y<=r.y1);
   for(let y=0;y<rows;y++) for(let x=0;x<cols;x++) if(road(x,y)) g[y][x]=W.road;
+  // bioom: gebiedsgrond (z.g) en vlekken van een andere grondsoort (zachte ruis, eigen willekeur zodat de rest van de kaart gelijk blijft)
+  const BIO = W.biome || {};
+  W.zones.forEach(z=>{ if(!z.g) return; for(let y=z.y;y<z.y+z.h;y++) for(let x=z.x;x<z.x+z.w;x++) if(!road(x,y) && g[y] && g[y][x]) g[y][x] = z.g; });
+  if(BIO.patch){
+    const pr = castraMapRng(W.seed+99), cell = BIO.patch.cell||5, gw = Math.ceil(cols/cell)+2, gh = Math.ceil(rows/cell)+2, nz = [];
+    for(let i=0;i<gw*gh;i++) nz.push(pr());
+    const val = (x,y)=>{ const fx = x/cell, fy = y/cell, ix = Math.floor(fx), iy = Math.floor(fy), tx = fx-ix, ty = fy-iy, a = nz[iy*gw+ix], b = nz[iy*gw+ix+1], c = nz[(iy+1)*gw+ix], d = nz[(iy+1)*gw+ix+1]; return (a*(1-tx)+b*tx)*(1-ty)+(c*(1-tx)+d*tx)*ty; };
+    for(let y=1;y<rows-1;y++) for(let x=1;x<cols-1;x++) if(!road(x,y) && g[y][x]===W.base && val(x,y)>BIO.patch.thr) g[y][x] = BIO.patch.g;
+  }
   const zoneAt = (x,y)=>W.zones.find(z=>x>=z.x&&x<z.x+z.w&&y>=z.y&&y<z.y+z.h);
   const exitCell = (x,y)=>W.exit.some(e=>e.x===x&&e.y===y);
   // rand: bomen langs de rand (solide muur van bomen), met de uitgang open
@@ -123,22 +132,23 @@ function castraWorldDef(){
   W.zones.forEach(z=>{
     for(let y=z.y;y<z.y+z.h;y++) for(let x=z.x;x<z.x+z.w;x++){
       if(road(x,y) || used[x+","+y]) continue;
-      if(rng() < 0.55){ g[y][x]="grass2"; tall[x+","+y]=z.t; }
+      if(rng() < 0.55){ g[y][x]=z.g ? "grass2" : (BIO.tallGround||"grass2"); tall[x+","+y]=z.t; }
     }
   });
   // hoog gras zichtbaar maken: een bladpol op elke ontmoetingstegel
-  Object.keys(tall).forEach((k,i)=>{ const [x,y]=k.split(",").map(Number); pieces.push({ o:(i%3===0?"fern":"plant_c"), x, y }); });
+  Object.keys(tall).forEach((k,i)=>{ const [x,y]=k.split(",").map(Number); pieces.push({ o:(i%3===0 ? (BIO.tallPieces?BIO.tallPieces[0]:"fern") : (BIO.tallPieces?BIO.tallPieces[1]:"plant_c")), x, y }); });
   // verspreide bomen en decor; vrij van wegen, hoog gras en de startplek
   const free = (x,y)=>!used[x+","+y] && !road(x,y) && !tall[x+","+y] && !(Math.abs(x-W.start.x)<4 && Math.abs(y-W.start.y)<4);
   for(let y=2;y<rows-3;y++) for(let x=1;x<cols-1;x++){
     if(!free(x,y)) continue;
     const z = zoneAt(x,y), p = z && z.t===W.denseZone ? W.dense : W.sparse, r = rng();
     if(r < p && free(x,y+1)){
-      const big = rng()<0.25 && free(x+1,y) && free(x+1,y+1);
+      const big = (rng()<0.25 && !BIO.noBig) && free(x+1,y) && free(x+1,y+1);
       if(big){ pieces.push({ o:W.big, x, y }); [[x,y],[x+1,y],[x,y+1],[x+1,y+1]].forEach(c=>used[c[0]+","+c[1]]=1); }
       else { pieces.push({ o:W.trees[rng()<0.5?0:1], x, y }); used[x+","+y]=1; used[x+","+(y+1)]=1; }
-    } else if(r < p+0.06){
-      pieces.push({ o:["flower_w","flower_p","flower_b","flower_o","plant_a","plant_b","fern","rock_brown","stones"][Math.floor(rng()*9)], x, y }); used[x+","+y]=1;
+    } else if(r < p+(BIO.decorP||0.06)){
+      const dl = BIO.decor || ["flower_w","flower_p","flower_b","flower_o","plant_a","plant_b","fern","rock_brown","stones"];
+      pieces.push({ o:dl[Math.floor(rng()*dl.length)], x, y }); used[x+","+y]=1;
     }
   }
   // bord naar het kamp bij de uitgang
@@ -169,7 +179,8 @@ SCREENS.castraWorld = function(){
     st0 = (sv && svSize===W.cols+"x"+W.rows) ? sv : W.start;   // bewaarde plek geldt alleen bij dezelfde kaartmaat (regio's zijn vergroot)
   // aankomst via een poort of reisplek (castra-geo.js) gaat voor op de bewaarde plek
   const sp = (typeof CASTRA_GEO_SPAWN!=="undefined") ? CASTRA_GEO_SPAWN : null; if(typeof CASTRA_GEO_SPAWN!=="undefined") CASTRA_GEO_SPAWN = null;
-  const st = sp || st0;
+  let st = sp || st0;
+  if(!sp && castraWorldBuilt().blocked[st.x+","+st.y]) st = W.start;   // bewaarde plek ligt nu in een obstakel (kaart is aangepast): terug naar de start
   if(typeof castraGeoMark==="function") castraGeoMark(W.id);
   CASTRA_W_UI.px = st.x; CASTRA_W_UI.py = st.y; CASTRA_W_UI.dir = (sp && sp.dir) || "up"; CASTRA_W_UI.frame = 1; CASTRA_W_UI.moving = false;
   H(brand(true)+`
