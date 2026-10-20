@@ -140,6 +140,7 @@ const CASTRA_LA = {
   aedifica:        { la:"Aedifica", nl:"Bouw" },
   non_aedificatum: { la:"Nondum aedificatum est.", nl:"Nog niet gebouwd." },
   aperit:          { la:"Aperit", nl:"Opent" },
+  peregrinus:      { la:"Hostis peregrinus est.", nl:"De vijand is een vreemdeling." },
   perge:           { la:"Perge!", nl:"Ga verder!" },
   vestigia:        { la:"Vestigia viri magni vides.", nl:"Je ziet sporen van een groot man." },
 };
@@ -166,7 +167,7 @@ const CASTRA_VENATIO = {
   // (inf/rng/cav/sup/navy) voor tier 2+; myth = kans op een mythisch wezen uit die lijnen. Levels gelden voor
   // rekruten; hogere tiers beginnen op hun evolutiedrempel (castraWildPick).
   latium: {
-    nm:"Latium", min:3, max:10, folk:{ rom:94, gal:4, ger:2 },
+    nm:"Latium", min:3, max:10, tierMax:3, folk:{ rom:80, gla:6, gal:4, ger:3, gra:3, car:2, aeg:1, per:1 },
     terrains:[
       { id:"silva",  la:"In silva",  nl:"In het bos",    prefs:{ rng:3, inf:2, sup:1 }, myth:{ p:0.12, taks:["Saters","Nimfen","Wolven van Mars"] } },
       { id:"campus", la:"In campo",  nl:"Op het veld",   prefs:{ inf:3, cav:3, rng:1 }, myth:{ p:0.05, taks:["Wolven van Mars"] } },
@@ -176,7 +177,7 @@ const CASTRA_VENATIO = {
     traces:[ "aeneas","romulus","horatius","cloelia","mucius","camilla" ], traceChance:0.15,
   },
   graecia: {
-    nm:"Graecia", min:10, max:19, folk:{ gra:80, spa:15, tro:5 },
+    nm:"Graecia", min:10, max:19, tierMax:3, folk:{ gra:66, spa:14, tro:5, per:5, aeg:3, gla:3, rom:2, ama:2 },
     terrains:[
       { id:"mons",  la:"In monte", nl:"Op de berg",         prefs:{ inf:3, rng:3 }, myth:{ p:0.15, taks:["Grijpvogels","Saters","Centauren"] } },
       { id:"olea",  la:"In oleis", nl:"In de olijfgaarden", prefs:{ rng:3, inf:2, cav:1 }, myth:{ p:0.15, taks:["Nimfen","Saters"] } },
@@ -186,7 +187,7 @@ const CASTRA_VENATIO = {
     traces:[ "hercules","perseus","theseus","atalanta","iason" ], traceChance:0.15,
   },
   troia: {
-    nm:"Troia", min:19, max:29, folk:{ tro:80, gra:15, ama:5 },
+    nm:"Troia", min:19, max:29, tierMax:4, folk:{ tro:72, gra:12, ama:6, per:4, aeg:3, spa:2, car:1 },
     terrains:[
       { id:"muros",     la:"Ante muros",    nl:"Voor de muren",    prefs:{ inf:3, rng:2, cav:1 }, myth:{ p:0.05, taks:["Cyclopen"] } },
       { id:"campus",    la:"In campo",      nl:"Op het veld",      prefs:{ cav:3, inf:2, rng:1 }, myth:{ p:0.05, taks:["Centauren"] } },
@@ -219,7 +220,7 @@ const CASTRA_GLOSS = {
   "dicit":"zegt", "te":"jou", "sequar":"ik zal volgen", "visne":"wil je?", "eum":"hem",
   "castra":"kamp", "recipere":"opnemen", "recipio":"ik neem op", "dimitto":"ik laat gaan",
   "plena":"vol", "redi":"keer terug!", "iterum":"opnieuw", "vestigia":"sporen",
-  "viri":"van een man", "aedifica":"bouw!", "aedificatum":"gebouwd", "nondum":"nog niet", "aperit":"opent", "equi":"paarden", "currus":"strijdwagens", "parantur":"worden klaargemaakt", "aedificantur":"worden gebouwd", "tiro":"rekruut", "tirones":"rekruten", "bonus":"goed", "fiet":"zal worden", "pedes":"voetsoldaat", "eques":"ruiter", "pugnes":"(opdat) je vecht", "legio":"legioen", "commercium":"handel", "ut":"om te / zodat", "cum":"met", "legione":"legioen (met het legioen)", "intra":"ga naar binnen / log in!", "nulla":"geen", "convenit":"komt samen",
+  "viri":"van een man", "peregrinus":"vreemdeling / uit den vreemde", "aedifica":"bouw!", "aedificatum":"gebouwd", "nondum":"nog niet", "aperit":"opent", "equi":"paarden", "currus":"strijdwagens", "parantur":"worden klaargemaakt", "aedificantur":"worden gebouwd", "tiro":"rekruut", "tirones":"rekruten", "bonus":"goed", "fiet":"zal worden", "pedes":"voetsoldaat", "eques":"ruiter", "pugnes":"(opdat) je vecht", "legio":"legioen", "commercium":"handel", "ut":"om te / zodat", "cum":"met", "legione":"legioen (met het legioen)", "intra":"ga naar binnen / log in!", "nulla":"geen", "convenit":"komt samen",
   "omnes":"allen", "post":"na / over", "incipit":"begint", "pugnat":"vecht", "finita":"afgelopen", "haec":"deze", "pugna":"vecht!", "victoria":"overwinning", "defendistis":"jullie hebben verdedigd", "capta":"ingenomen",
   "oblata":"aanbod", "mea":"mijn", "aliorum":"van anderen", "offer":"bied aan!", "revoca":"trek in!", "commuta":"ruil!", "quem":"wie / welke", "das":"je geeft", "commutatio":"ruil", "facta":"gedaan", "iam":"al", "captum":"genomen",
   "nihil":"niets", "offers":"je biedt aan", "idoneus":"geschikt", "legionarii":"legioensoldaten", "nullus":"geen", "adsum":"ik ben er", "hodie":"vandaag",

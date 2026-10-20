@@ -21,7 +21,9 @@ const CASTRA_MED = {
   cureCost:{ aes:10 },           // direct genezen
   hurtLoseMin:10, hurtLeakMin:4, // gewond na verlies / per doorbraak (basis, minuten)
   refreshHours:8, candsBase:2,   // aanbod: 2 + dilectus-level kandidaten
-  hireCost:{ frumentum:40, aes:20 },
+  hireCost:{ frumentum:40, aes:20 },                                   // tier 1 (rekruut)
+  hireCostTier:[ { frumentum:40, aes:20 }, { frumentum:100, aes:50 }, { frumentum:200, aes:100 } ],
+  tier2:{ dilectus:3, prae:2, chance:0.25 }, tier3:{ dilectus:5, prae:4, chance:0.10 },   // kans op een hogere tier in het aanbod
 };
 
 /* ---------- gewonden ---------- */
@@ -83,26 +85,36 @@ function castraAppraisal(s){
   const nl = `Deze ${t.nl_sg} blinkt uit in ${CASTRA_STAT_ABL_NL[strong]}, maar is ${CASTRA_STAT_WEAK[weak][1]}.`;
   return { la, nl, strong, weak };
 }
-function castraDilectusPool(){
+// Volken van de geopende regio's: de Dilectus werft rekruten van hen, en bij een hoger Dilectus-niveau
+// ook ervaren soldaten (tier 2 vanaf Dilectus 3 + praetorium 2, tier 3 vanaf Dilectus 5 + praetorium 4).
+function castraDilectusFolks(){
   const folks = ["rom"];
   if(castraRegionOpen("graecia")) folks.push("gra","spa");
   if(castraRegionOpen("troia")) folks.push("tro");
-  return folks.map(castraFormRec).filter(Boolean);
+  return folks;
 }
+function castraHireCost(s){ const t = castraLine(s.line).tier; return CASTRA_MED.hireCostTier[Math.min(CASTRA_MED.hireCostTier.length, Math.max(1,t))-1]; }
 function castraDilectusRefresh(force){
   const D = CASTRA.dilectus;
   if(!force && D && D.until > castraNow()) return D;
-  const lvl = castraLvl("dilectus"), n = CASTRA_MED.candsBase + lvl, pool = castraDilectusPool();
+  const lvl = castraLvl("dilectus"), prae = castraLvl("praetorium"), n = CASTRA_MED.candsBase + lvl, folks = castraDilectusFolks();
   const rng = castraRng((CASTRA.seed ^ (Math.floor(castraNow()/3600000)*2654435761))>>>0); CASTRA.seed = (CASTRA.seed+5)>>>0;
   const cands = [];
   for(let i=0;i<n;i++){
-    const line = pool[Math.floor(rng()*pool.length)];
+    const volk = folks[Math.floor(rng()*folks.length)];
+    let tier = 1;
+    if(lvl>=CASTRA_MED.tier3.dilectus && prae>=CASTRA_MED.tier3.prae && rng()<CASTRA_MED.tier3.chance) tier = 3;
+    else if(lvl>=CASTRA_MED.tier2.dilectus && prae>=CASTRA_MED.tier2.prae && rng()<CASTRA_MED.tier2.chance) tier = 2;
+    let pool = CASTRA_FORM_LIST.filter(f=>f.volk===volk && f.tier===tier && f.type!=="myth" && !f.needs);
+    if(!pool.length) pool = [castraFormRec(volk)];
+    const form = pool[Math.floor(rng()*pool.length)];
     let best = null;
     // hoger level = meer pogingen, de beste aanleg blijft staan
     for(let k=0;k<1+Math.floor((lvl-1)/2);k++){
-      const s = castraRollSoldier(line.id); const sum = Object.values(s.indoles).reduce((a,b)=>a+b,0);
+      const s = castraRollSoldier(form.id); const sum = Object.values(s.indoles).reduce((a,b)=>a+b,0);
       if(!best || sum > best.sum) best = { s, sum };
     }
+    if(form.tier>=2) best.s.lvl = Math.min(50, castraEvoLevel(CASTRA_FORMS[form.from[0]]) + Math.floor(rng()*3));
     cands.push(best.s);
   }
   CASTRA.dilectus = { until: castraNow() + CASTRA_MED.refreshHours*3600000, cands };
@@ -113,8 +125,9 @@ function castraHire(sid){
   const D = CASTRA.dilectus; if(!D) return "?";
   const i = D.cands.findIndex(c=>c.id===sid); if(i<0) return "?";
   if(CASTRA.soldiers.length >= castraBarracksCap()) return "castra_plena";
-  if(!castraCanPay(CASTRA_MED.hireCost)) return "frumentum_deest";
-  castraPay(CASTRA_MED.hireCost);
+  const hc = castraHireCost(D.cands[i]);
+  if(!castraCanPay(hc)) return "frumentum_deest";
+  castraPay(hc);
   CASTRA.soldiers.push(D.cands.splice(i,1)[0]); castraSave(); return null;
 }
 function castraDilectusOpen(){
@@ -122,13 +135,12 @@ function castraDilectusOpen(){
   const b = castraBuilding("dilectus"), lvl = castraLvl("dilectus"), maxL = castraMaxLvl("dilectus"), cost = castraUpgradeCost("dilectus");
   const costTxt = Object.keys(cost).map(r=>`${castraRes(r).icon} ${cost[r]}`).join("  ");
   const D = castraDilectusRefresh(false), left = Math.max(0, Math.ceil((D.until-castraNow())/60000));
-  const hireTxt = Object.keys(CASTRA_MED.hireCost).map(r=>castraRes(r).icon+" "+CASTRA_MED.hireCost[r]).join(" ");
   const cards = D.cands.map(s=>{
     const ap = castraAppraisal(s), ing = CASTRA_INGENIA.find(i=>i.id===s.ingenium), t = CASTRA_TYPE_LA[castraLine(s.line).type];
     return `<div style="padding:8px 0;border-top:1px solid #4a3d2c">
-      <div style="font-size:17px">${s.insignis?"✨ ":""}<b>${esc(castraSoldierName(s))}</b> <small>(${esc(t.sg)})</small> · <i>${esc(ing?ing.nm:"")}</i></div>
+      <div style="font-size:17px">${s.insignis?"✨ ":""}<b>${esc(castraSoldierName(s))}</b> <small>(${esc(castraFolkNm(s.line))} · ${esc(t.sg)} · tier ${castraLine(s.line).tier}${s.lvl>1?" · "+castraLaText("gradus")+" "+s.lvl:""})</small> · <i>${esc(ing?ing.nm:"")}</i></div>
       <div style="font-size:16px;margin:4px 0">${castraLaHTML(ap.la, ap.nl, "apr_"+ap.strong+"_"+ap.weak)}</div>
-      <button class="btn btn-gold" onclick="castraDoHire('${s.id}')">${castraLaText("conscribe_hunc")} (${hireTxt})</button></div>`;
+      <button class="btn btn-gold" onclick="castraDoHire('${s.id}')">${castraLaText("conscribe_hunc")} (${Object.keys(castraHireCost(s)).map(r=>castraRes(r).icon+" "+castraHireCost(s)[r]).join(" ")})</button></div>`;
   }).join("") || `<div class="note">${castraLa("nulli_candidati")}</div>`;
   const up = lvl>=maxL ? `<div class="note">${castraLa(lvl>=b.maxLvl?"gradus_max":"praetorium_prius")}</div>`
     : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('dilectus')">${castraLaText("meliora")} → ${castraLaText("gradus")} ${lvl+1} — ${costTxt}</button>`;

@@ -47,7 +47,7 @@ function castraMakeEncounter(regionId, terrainId){
   e.lvl = pick.lvl;
   const st = castraStats(e);
   Object.keys(st).forEach(k=>{ st[k] = Math.max(1, Math.round(st[k]*CASTRA_V_BAL.wildMult)); });
-  return { region:regionId, terrain, enemy:e, stats:st };
+  return { region:regionId, terrain, enemy:e, stats:st, stranger: pick.form.volk!=="myt" && pick.form.volk!==castraMainFolk(reg) };
 }
 
 /* ---------- scherm ---------- */
@@ -74,8 +74,8 @@ function castraVRender(stage){
   } else if(stage==="scout"){
     const V = CASTRA_V, tl = CASTRA_TYPE_LA[castraLine(V.enemy.line).type];
     const ing = V.enemy.ingenium;
-    const la = `${V.terrain.la} ${tl.pl} adsunt. Hostis ${ing} est.`;
-    const nl = `${V.terrain.nl} zijn ${tl.nl_pl}. De vijand is ${CASTRA_INGENIUM_NL[ing]||ing}.`;
+    const la = `${V.terrain.la} ${tl.pl} adsunt. Hostis ${ing} est.${V.stranger?" "+CASTRA_LA.peregrinus.la:""}`;
+    const nl = `${V.terrain.nl} zijn ${tl.nl_pl}. De vijand is ${CASTRA_INGENIUM_NL[ing]||ing}.${V.stranger?" "+CASTRA_LA.peregrinus.nl:""}`;
     const healthy = CASTRA.soldiers.filter(s=>!castraIsHurt(s));
     const cards = healthy.map(s=>{
       const st = castraStats(s), t = CASTRA_TYPE_LA[castraLine(s.line).type];
