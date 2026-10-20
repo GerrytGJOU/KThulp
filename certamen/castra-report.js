@@ -54,12 +54,19 @@ function castraBReportHTML(B){
   if(st.imp)  eff.push(row("⚔️","crE2",st.imp,"extra schade door Impete!"));
   if(st.prev) eff.push(row("🛡️","crE3",st.prev,"schade voorkomen door pantser en schilden"));
   if(st.heal) eff.push(row("⚕️","crE4",st.heal,"levenspunten hersteld door genezers"));
+  const xpRows = (B._xp||[]).map((e,i)=>{ const id = "crX"+i; anim.push({ id:id+"n", val:e.gain }); anim.push({ xbar:id, from:e.pct0, to:e.pct1, up:e.up, lbl:id+"l", lvl1:e.lvl1 });
+    return `<div style="margin-top:10px"><div class="bm-gain-row" style="justify-content:space-between;max-width:320px;margin:0 auto"><span style="font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:55%">${esc(e.nm)}</span><span><b class="bm-gain-plus" id="${id}n" style="font-size:18px">+0</b> <span class="bm-gain-lbl">xp</span></span></div>
+      <div class="bm-xpbar" style="margin:4px auto 2px"><div class="bm-xpbar-fill" id="${id}" style="width:${e.pct0}%"></div></div>
+      <div class="note" id="${id}l" style="text-align:center;margin:0">${castraLaText("gradus")} ${e.lvl0}${e.capped?" · maximaal voor je campus: bouw de campus uit om verder te groeien":""}</div>
+      ${e.up?`<div class="bm-gain-lvup" id="${id}u" style="display:none;text-align:center">🎉 Niveau omhoog! ${esc(e.nm)} is nu ${castraLaText("gradus")} ${e.lvl1}</div>`:""}</div>`; }).join("");
+  anim.push({ delayUps:(B._xp||[]).some(e=>e.up) });
   const why = !win ? `<div id="cbWhy" style="margin-top:12px;padding-top:8px;border-top:1px solid rgba(138,109,47,.4)"><div style="font-size:15px">${castraLaHTML("Quid difficile erat?", "Wat was moeilijk? (optioneel)", "why_q")}</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${[["hard","te moeilijk"],["unclear","onduidelijk"],["setup","verkeerde opstelling"],["long","te lang"],["other","anders"]].map(([k,t])=>`<button class="btn" style="min-height:40px" onclick="castraBFeedback('${k}')">${t}</button>`).join("")}</div></div>` : "";
   B._rep = anim;
   return `<div class="panel" style="margin-top:10px"><h3>📊 Gevechtsrapport</h3><div class="bm-gain" style="max-width:340px;margin:0 auto;align-items:stretch">${hp}
     <div class="note" style="margin:12px 0 0;text-align:center">Schade per soldaat</div>${soldiers}
-    ${eff.length?`<div class="note" style="margin:14px 0 0;text-align:center">Wat gebeurde er nog meer</div>${eff.join("")}`:""}</div>
+    ${eff.length?`<div class="note" style="margin:14px 0 0;text-align:center">Wat gebeurde er nog meer</div>${eff.join("")}`:""}
+    ${xpRows?`<div class="note" style="margin:14px 0 0;text-align:center">Ervaring</div>${xpRows}`:""}</div>
     ${D.obs.length?`<div style="margin-top:12px;font-size:14px;opacity:.95">${D.obs.map(o=>"💡 "+esc(o)).join("<br>")}</div>`:""}${why}</div>`;
 }
 // Balken laten vollopen en getallen laten oplopen (zoals bmRenderXpGain in battle.js); bij uitgeschakelde animaties direct.
@@ -69,9 +76,18 @@ function castraBReportAnimate(B){
   list.forEach((a,i)=>{
     const go = ()=>{
       if(a.bar){ const e = document.getElementById(a.bar); if(e) e.style.width = a.pct+"%"; }
-      else if(typeof bmCountTo==="function") bmCountTo(a.id, 0, a.val, dur, a.plain ? "" : "+");
-      else { const e = document.getElementById(a.id); if(e) e.textContent = (a.plain?"":"+")+a.val; }
+      else if(a.xbar){
+        const bar = document.getElementById(a.xbar), lbl = document.getElementById(a.lbl), up = document.getElementById(a.xbar+"u"); if(!bar) return;
+        const setLbl = ()=>{ if(lbl) lbl.textContent = castraLaText("gradus")+" "+a.lvl1; };
+        if(!dur){ bar.style.width = a.to+"%"; if(a.up){ setLbl(); if(up) up.style.display = ""; } return; }
+        if(a.up){            // eerst vol laten lopen, dan verder op het nieuwe niveau (zoals Battle Mode)
+          requestAnimationFrame(()=>{ bar.style.width = "100%"; });
+          setTimeout(()=>{ bar.style.transition = "none"; bar.style.width = "0%"; setLbl(); requestAnimationFrame(()=>{ bar.style.transition = ""; bar.style.width = a.to+"%"; if(up) up.style.display = ""; }); }, dur);
+        } else requestAnimationFrame(()=>{ bar.style.width = a.to+"%"; });
+      }
+      else if(a.id){ if(typeof bmCountTo==="function") bmCountTo(a.id, 0, a.val, dur, a.plain ? "" : "+"); else { const e = document.getElementById(a.id); if(e) e.textContent = (a.plain?"":"+")+a.val; } }
     };
+    if(a.delayUps!==undefined) return;
     if(!dur) go(); else setTimeout(()=>requestAnimationFrame(go), 120 + Math.floor(i/2)*110);
   });
 }
@@ -80,10 +96,26 @@ function castraBFeedback(k){
   castraTDSync({ ["m_"+B.mission.id+"/fb_"+k]:1 });
   box.innerHTML = `<div style="font-size:15px">${castraLaHTML("Gratias tibi ago!", "Bedankt! Je antwoord helpt het spel beter te maken.", "why_thx")}</div>`;
 }
+// ervaring: stand vóór en ná het gevecht (de eigenlijke uitkering gebeurt in castraBFinish / castraWeeklyResult)
+function castraRepUnit(t){
+  const sid = String(t.sid||"");
+  if(sid.indexOf("hero_")===0){ const h = castraHero(sid.slice(5)); return h ? { u:h, hero:true, need:l=>CASTRA_H.xpPerLvl*l, cap:()=>castraHeroCap(h) } : null; }
+  const so = (CASTRA.soldiers||[]).find(x=>x.id===t.sid); return so ? { u:so, hero:false, need:l=>castraXpToNext(l), cap:()=>castraSoldierCap() } : null;
+}
+function castraRepSnap(B){
+  const out = []; B.sim.towers.forEach(t=>{ const r = castraRepUnit(t); if(r) out.push({ t, r, lvl:r.u.lvl, xp:r.u.xp||0 }); }); return out;
+}
+function castraRepXp(snap){
+  return snap.map(x=>{ const u = x.r.u, lvl1 = u.lvl, xp1 = u.xp||0; let gain = xp1 - x.xp; for(let l=x.lvl; l<lvl1; l++) gain += x.r.need(l);
+    const atCap = lvl1 >= x.r.cap();
+    return { nm:castraRepName(x.t), lvl0:x.lvl, lvl1, gain, pct0:Math.min(100, Math.round(100*x.xp/x.r.need(x.lvl))), pct1: atCap ? 100 : Math.min(100, Math.round(100*xp1/x.r.need(lvl1))), up:lvl1>x.lvl, capped:atCap && xp1 >= x.r.need(lvl1) }; }).filter(e=>e.gain>0 || e.up);
+}
 const _castraBFinishRep0 = castraBFinish;
 castraBFinish = function(){
+  const B0 = CASTRA_B, snap = (B0 && !B0.legio && !B0.endless && B0.sim.over==="win") ? castraRepSnap(B0) : null;
   _castraBFinishRep0();
   const B = CASTRA_B; if(!B || B.legio || B.endless) return;
+  if(snap) B._xp = castraRepXp(snap);
   const box = el("cbResult"); if(!box) return;
   try{ box.insertAdjacentHTML("beforeend", castraBReportHTML(B)); castraBReportAnimate(B); }catch(e){}
 };
