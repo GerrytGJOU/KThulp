@@ -2,7 +2,7 @@
 
 Voor Gerben · opgesteld 2026-10-25 · hoort bij `CASTRA_HEROUM.md` (ontwerp en bouwstand) en `CASTRA_LEERLINGTEST.md` (script voor de leerlingen).
 
-**Stand in één alinea:** Castra Heroum is speelbaar van kamp tot Troje (kamp, jacht in drie regio's, campus, tower defence met 7 missies, heroum met 15 helden). De Legio (klassenevenementen) en het valetudinarium bestaan nog niet. Alles is lokaal getest (browser, gesimuleerde aanraking, gesimuleerde gevechten); **niets is nog op een echte iPad of telefoon of met een echte klas gespeeld.**
+**Stand in één alinea:** Castra Heroum is speelbaar van kamp tot Troje (kamp, jacht in drie regio's, campus, tower defence met 7 missies, heroum met 15 helden, troepenbomen met 151 vormen, stabula en navalia). De Legio (klassenevenementen) en het valetudinarium bestaan nog niet. Alles is lokaal getest (browser, gesimuleerde aanraking, gesimuleerde gevechten); **niets is nog op een echte iPad of telefoon of met een echte klas gespeeld.**
 
 ---
 

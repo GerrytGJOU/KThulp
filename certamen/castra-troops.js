@@ -167,6 +167,13 @@ const CASTRA_FORM_LIST = Object.keys(CASTRA_FORMS).map(k=>CASTRA_FORMS[k]);
 function castraLine(id){ return CASTRA_FORMS[id] || CASTRA_FORMS["rom_tiro"]; }
 function castraFormByName(volk, nm){ return CASTRA_FORM_LIST.find(f=>f.volk===volk && f.nm===nm); }
 function castraFormRec(volk){ return CASTRA_FORM_LIST.find(f=>f.volk===volk && f.tier===1 && f.type==="rec") || null; }
+// Gebouweis: een vorm van tier t vraagt het gebouw op niveau max(1, t−1) (stabula voor ruiterij/wagens/olifanten, navalia voor de vloot).
+function castraNeedLvl(f){ return f.needs ? Math.max(1, f.tier-1) : 0; }
+function castraNeedsInfo(bid){
+  const rows = {};
+  CASTRA_FORM_LIST.filter(f=>f.needs===bid).forEach(f=>{ (rows[castraNeedLvl(f)] = rows[castraNeedLvl(f)] || []).push(f.nm); });
+  return rows;
+}
 function castraEvoLevel(f){ const t = (CASTRA_EVO.lvl[f.type]||CASTRA_EVO.lvl.inf); return t[Math.min(t.length-1, f.tier-1)]; }
 
 /* ---- uiterlijk (avatar-lagen per volk, rol en tier; alleen bestaande top-down onderdelen) ---- */
