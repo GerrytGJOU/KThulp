@@ -175,6 +175,7 @@ const CASTRA_REGIONS = [
   { id:"gallia",  nm:"Gallia",  nl:"Gallië" },
   { id:"aegyptus", nm:"Aegyptus", nl:"Egypte" },
   { id:"persis", nm:"Persis", nl:"Perzië" },
+  { id:"africa", nm:"Africa", nl:"Noord-Afrika" },
   { id:"inferi",  nm:"Inferi",  nl:"De Onderwereld" },
 ];
 

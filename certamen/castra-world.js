@@ -44,11 +44,16 @@ const CASTRA_WORLDS = {
     water:[ { x0:28, x1:29, bridgeY:null } ],                    // de Perzische Golf
     zones:[ { t:"mons", x:2, y:2, w:10, h:9 }, { t:"via", x:13, y:1, w:5, h:9 }, { t:"urbs", x:19, y:2, w:7, h:9 }, { t:"campus", x:18, y:15, w:9, h:6 } ],
     trees:["palm","tree_a"], big:"tree_big2", sparse:0.05, dense:0.10, denseZone:"mons" },
+  africa: { ...CASTRA_WORLD_BASE, id:"africa", nm:"Africa", icon:"🐘", seed:20261601, base:"sand2", road:"sand", bank:"sand",
+    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:10,x1:27,y1:11} ],
+    water:[ { x0:28, x1:29, bridgeY:null } ],                    // de Middellandse Zee
+    zones:[ { t:"deserto", x:2, y:2, w:11, h:20 }, { t:"urbs", x:17, y:2, w:7, h:7 }, { t:"campus", x:17, y:13, w:7, h:8 }, { t:"litus", x:25, y:2, w:3, h:20 } ],
+    trees:["palm","palm"], big:"tree_big2", sparse:0.04, dense:0.08, denseZone:"litus" },
 };
 let CASTRA_W_REGION = "latium";
 function castraWorldCfg(){ return CASTRA_WORLDS[CASTRA_W_REGION]; }
 // Regio's ontgrendelen via proelium-missies (zie CASTRA_P_MISSIONS)
-const CASTRA_REGION_NEEDS = { latium:null, graecia:"m2", troia:"g1", gallia:"t2", aegyptus:"ga2", persis:"ae2" };
+const CASTRA_REGION_NEEDS = { latium:null, graecia:"m2", troia:"g1", gallia:"t2", aegyptus:"ga2", persis:"ae2", africa:"pe2" };
 function castraRegionOpen(id){ const n = CASTRA_REGION_NEEDS[id]; return !n || castraPMissionDone(n); }
 let CASTRA_WORLD_BUILT = {};   // per regio gecachet
 let CASTRA_W_UI = { px:0, py:0, dir:"up", frame:1, moving:false, scale:1, keyFn:null, resizeFn:null };
