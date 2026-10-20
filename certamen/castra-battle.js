@@ -42,7 +42,8 @@ function castraBHealthy(){
 }
 function castraBCap(){ if(CASTRA_B && CASTRA_B.endless) return CASTRA_COLO.cap[CASTRA_B.div] || 8; return Math.min(4 + 2*castraLvl("praetorium"), (CASTRA_B && CASTRA_B.ed) ? CASTRA_B.ed.cap : 99); }
 function castraBStart(missionId){
-  const m = CASTRA_P_MISSIONS.find(x=>x.id===missionId); if(!m || !castraPMissionOpen(m)) return;
+  const m = (missionId==="weekly" && typeof castraWeeklyMission==="function") ? castraWeeklyMission() : CASTRA_P_MISSIONS.find(x=>x.id===missionId);
+  if(!m || (!m.weekly && !castraPMissionOpen(m))) return;
   if(CASTRA_B){ clearInterval(CASTRA_B.timer); window.removeEventListener("resize", CASTRA_B.resizeFn); }
   const opts = (CASTRA.opts || (CASTRA.opts = {}));
   CASTRA_B = { mission:m, sim:castraPSim(m, []), sel:null, timer:null, speed:opts.speed||1, auto:!!opts.auto, units:{}, fx:[], placed:{}, lastDir:{}, finished:false,
@@ -293,7 +294,9 @@ function castraBFinish(){
   const B = CASTRA_B, m = B.mission, s = B.sim, box = el("cbResult");
   clearInterval(B.timer);
   let h = `<div class="panel">`;
-  if(s.over==="win"){
+  if(m.weekly){
+    h += castraWeeklyResult(B);
+  } else if(s.over==="win"){
     const cap = castraWalletCap();
     let skR = 0; s.towers.forEach(t=>{ if(t.sk) skR += t.sk.reward; });
     B.rewardMult = (B.rewardMult||1) * (1 + skR/100);

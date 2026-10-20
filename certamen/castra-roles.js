@@ -176,6 +176,7 @@ const CASTRA_P_CMDINFO = {
 function castraBCmd(id){
   const B = CASTRA_B; if(!B || B.sim.over || !B.sim.cmdOn || B.paused) return;
   if(B.sim.energy<1 || !B.sim.waveActive) return;
+  if(B.mission.cmdMax!=null && (B.cmdUsed||0) >= B.mission.cmdMax) return;      // wekelijkse uitdaging: beperkt aantal bevelen
   { const s = B.sim, front = s.enemies.reduce((m,e)=>Math.max(m, e.prog), 0), path = s.paths[0], dist = Math.max(0, Math.round((path.len-front)/1000));
     (B.cmdMeta = B.cmdMeta || []).push({ id, hp:s.baseHp, dist: s.enemies.length ? dist : 99, wave:s.wave+1 }); }
   B.sim.cmdQ.push({ at:B.sim.tick+1, id });
@@ -194,11 +195,13 @@ function castraBRenderCmd(){
   if(!s.cmdOn || B.legio){ c.innerHTML = ""; return; }
   const a = s.waveActive, i = s.cmd.impete>s.tick, st = s.cmd.state>s.tick;
   const w = el("cbWrap"); if(w && !i && !st && w.style.boxShadow) w.style.boxShadow = "";
-  const sig = [s.energy, a, i, st, B.paused?1:0, s.over].join("|"); if(sig===B.cmdSig) return; B.cmdSig = sig;
+  const lim = B.mission.cmdMax!=null && (B.cmdUsed||0) >= B.mission.cmdMax;
+  const sig = [s.energy, a, i, st, B.paused?1:0, s.over, B.cmdUsed||0].join("|"); if(sig===B.cmdSig) return; B.cmdSig = sig;
   const pips = Array.from({length:CASTRA_P_CMD.energyMax}, (_,k)=>`<span style="font-size:22px;${k<s.energy?"":"opacity:.25;filter:grayscale(1)"}">⚡</span>`).join("");
-  const btn = (id, la, nl, on)=>`<button class="btn ${on?"btn-gold":""}" ${(!a || s.energy<1 || s.over || B.paused)?"disabled":""} style="min-height:48px;flex:1;min-width:130px" onclick="castraBCmd('${id}')"><b>${la}</b> <small>${nl}${on?" ✓":""}</small></button>`;
+  const btn = (id, la, nl, on)=>`<button class="btn ${on?"btn-gold":""}" ${(!a || s.energy<1 || s.over || B.paused || lim)?"disabled":""} style="min-height:48px;flex:1;min-width:130px" onclick="castraBCmd('${id}')"><b>${la}</b> <small>${nl}${on?" ✓":""}</small></button>`;
   c.innerHTML = `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span title="Energia">${pips}</span>
     ${btn("impete","Impete!","val aan",i)}${btn("state","State!","houd stand",st)}</div>
+    ${B.mission.cmdMax!=null ? `<div style="font-size:13px;margin-top:4px">⚡ In deze uitdaging mag je maximaal ${B.mission.cmdMax} ${B.mission.cmdMax===1?"bevel":"bevelen"} geven (${Math.max(0,B.mission.cmdMax-(B.cmdUsed||0))} over).</div>` : ""}
 `;
 }
 

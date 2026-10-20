@@ -1942,7 +1942,7 @@ function tpRenderCastraTD(){
     const mids=Object.keys(D).filter(k=>k.indexOf("m_")===0).map(k=>k.slice(2));
     if(!mids.length){ cont.innerHTML=`<div class="panel"><h3>Castra Heroum — tower defence deze maand</h3><div class="note">Nog geen gegevens — speel een missie ingelogd met deze klascode.</div></div>`; return; }
     const pct=(a,b)=>b>0?Math.round(100*a/b)+"%":"–";
-    const nm=id=>{ const m=(typeof CASTRA_P_MISSIONS!=="undefined")?CASTRA_P_MISSIONS.find(x=>x.id===id):null; return m?m.nm:id; };
+    const nm=id=>{ if(id==="weekly") return "Wekelijkse uitdaging"; const m=(typeof CASTRA_P_MISSIONS!=="undefined")?CASTRA_P_MISSIONS.find(x=>x.id===id):null; return m?m.nm:id; };
     const order=(typeof CASTRA_P_MISSIONS!=="undefined")?CASTRA_P_MISSIONS.map(m=>m.id):mids;
     const rows=mids.sort((a,b)=>order.indexOf(a)-order.indexOf(b)).map(id=>{
       const k="m_"+id, s=g(k,"s"), w=g(k,"w"), l=g(k,"l"), a=g(k,"a"), done=w+l, v=g(k,"v"), r=g(k,"r");
