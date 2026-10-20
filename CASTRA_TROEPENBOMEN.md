@@ -285,3 +285,19 @@ Is de weg naar een volgende regio nog dicht, dan staat er nu iets fysieks in de 
 - **Senator** (Solarium, vanaf niveau 13): woordenquiz van 5 Latijnse woorden met drie antwoorden (40 woorden); eerste ronde per dag levert beloning (15 aes + 8 frumentum per goed antwoord vanaf 3 goed, 5/5 geeft ook een kaarttrekking). Oefenen mag onbeperkt.
 - **Venator** (zuidingang van Latium, vanaf niveau 3): **dagelijkse jachtopdracht**: "versla 3 vijanden in <terrein van de dag>" (bos, veld, weg, Tiber-oever of grot, wisselt per dag); voortgang telt mee bij elke gewonnen jacht (via `castraQuestOnWin`), beloning 50 aes + 25 frumentum + 1 roem + XP, eenmaal per dag. De opdracht staat in het menu (Opus) en in de balk boven de wereld.
 Alle nieuwe objecten, trappen en aankomsttegels zijn gecontroleerd op bereikbaarheid, het Latijn staat in het glossarium en de drie opdrachten zijn volledig doorlopen (Eremita, quiz, jachtopdracht).
+
+## 21. Roma uitgebouwd: 72 × 54 met vijf binnenruimtes (2026-12-02)
+
+**Roma is de tweede grote regio** (72 × 54 = 3888 tegels): twee kruisende hoofdstraten plus de Via Sacra (dwarsstraat op rij 14, waar de tenten staan), de Tiber in het oosten, vier gebieden met hoog gras (arena, forum, legerkamp, Via Appia) en een veilige stad in het noorden. Het gesloten Colosseum (drie witte tenten + bordje 🚧) staat nu links van het midden bij de hoofdstraat.
+
+**Engine-uitbreidingen** (`castra-interiors.js`, `castra-venatio.js`, `castra-latium.js`): `castraInteriorRegister(id)` registreert elke binnenruimte (ook uit latere bestanden); deuren kunnen een `label` krijgen (naam boven de ingang, ook bij Latium); binnenruimtes kennen `floor`, een `pool` (water, niet begaanbaar) en `bosses` (vaste vijand, 👻 op de kaart); `castraForcedEncounter(regio, terrein, {form, lvl, boss})` start een gedwongen gevecht; bij winst roept `castraVFinish` `castraBossWon(V)` aan (beloning eenmaal per dag per sleutel). De dagelijkse jachtopdracht staat nu per regio in `CASTRA.bounties[regio]` (oude `CASTRA.bounty` wordt vanzelf omgezet), de quiz heeft een soort (`CASTRA_QUIZ_KIND`: woorden of zinnen).
+
+**Binnenruimtes in Roma** (`certamen/castra-roma.js`):
+- **Ludus gladiatorius** (tent linksboven): Lanista laat je eenmaal per dag vechten tegen een kampioen (Primus palus, niv. 20); beloning 90 aes + 40 frumentum (geschaald), 2 gloria, 25 XP en een kaarttrekking. 2 kisten.
+- **Tabularium**: vier boekenkasten, elk met een eigen spreekwoord van de dag (+3 XP per kast per dag), 1 kist.
+- **Curia** (vanaf niveau 13): Consul met de vertaalquiz *Senatus consultum* (hele Latijnse zinnen, 18 zinnen, 5 vragen, beloning als bij de Senator), boekenkast, 2 kisten.
+- **Thermae**: Balneator laat je eenmaal per dag baden (alle soldaten genezen + 12 XP); zwembad in het midden.
+- **Catacumbae I + II** (trap naast de Via Appia): donkere grotten met nieuw verborgen terrein *catacumbae* (40% mythisch, schimmen). Custos vraagt om zijn **lucerna** (🪔, diep in Catacumbae II); beloning 150 aes + 75 frumentum, 2 gloria, 45 XP, kaarttrekking. De baas **Larva** (niv. 22) wordt dagelijks opnieuw wakker: 120 aes + 60 frumentum, 2 gloria, 30 XP, kaarttrekking. 5 kisten.
+- **Venator Romanus** bij de zuidingang: dagelijkse jachtopdracht (net als in Latium).
+
+Controles: alle objecten, deuren en aankomsttegels zijn bereikbaar (BFS), het Latijn staat in het glossarium, de gevechtsmoeilijkheid is nagerekend (een Princeps niv. 16 wint nipt van de kampioen, niv. 20 verliest ervan; Triarius niv. 20 wint ruim; Larva is verslaanbaar met een niv. 20-soldaat) en de winstbeloning, dagelijkse verberging en jachtopdracht zijn getest. Nog niet gedaan: de overige regio's op dezelfde manier uitbouwen (volgende: Gallia).

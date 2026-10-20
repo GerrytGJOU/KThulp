@@ -54,16 +54,17 @@ const CASTRA_QUIZ_WORDS = [
   ["canis","hond"],["avis","vogel"],["pater","vader"],["mater","moeder"],["frater","broer"],["soror","zus"],["magnus","groot"],["parvus","klein"],["bonus","goed"],["malus","slecht"],
 ];
 let CASTRA_QUIZ = null;
+let CASTRA_QUIZ_KIND = { key:"quiz_senator", rid:"latium", words:null, title:"Woordenquiz" };
 function castraQuizOpen(){
   if(CASTRA_DLG) return;
   const e = CASTRA_WENT.find(x=>x.id==="senator");
   castraLatSay("Senator", e.look, [ { la:"Salve, dux {naam}! Verba Latina scisne?", nl:"Gegroet, leider {naam}! Ken jij Latijnse woorden?" },
     { la:"Quinque quaestiones tibi do.", nl:"Ik geef je vijf vragen.", opts:[ { la:"Incipe", nl:"beginnen" }, { la:"Nunc non", nl:"nu niet" } ] } ],
-    k=>{ if(k===0) castraQuizStart(); });
+    k=>{ if(k===0){ CASTRA_QUIZ_KIND = { key:"quiz_senator", rid:"latium", words:null, title:"Woordenquiz" }; castraQuizStart(); } });
 }
 function castraQuizStart(){
   const rng = castraRng((castraNow() ^ CASTRA.seed ^ 0x51a3)>>>0); CASTRA.seed = (CASTRA.seed+7)>>>0;
-  const pool = CASTRA_QUIZ_WORDS.slice().sort(()=>rng()-0.5), qs = [];
+  const pool = (CASTRA_QUIZ_KIND.words || CASTRA_QUIZ_WORDS).slice().sort(()=>rng()-0.5), qs = [];
   for(let i=0;i<5;i++){
     const w = pool[i], wrong = pool.slice(5).filter(x=>x[1]!==w[1]).sort(()=>rng()-0.5).slice(0,2).map(x=>x[1]);
     const opts = [w[1]].concat(wrong).sort(()=>rng()-0.5);
@@ -74,8 +75,8 @@ function castraQuizStart(){
 }
 function castraQuizRender(){
   const Z = CASTRA_QUIZ, panel = el("cwPanel"); if(!Z || !panel) return;
-  const w = CASTRA.wday || (CASTRA.wday = {}), first = w.quiz_senator!==castraWDay();
-  const head = `<h3 style="margin:0 0 6px">📜 Woordenquiz <small>${first?"eerste keer vandaag: beloning!":"geen beloning meer vandaag, oefenen mag"}</small></h3>`;
+  const w = CASTRA.wday || (CASTRA.wday = {}), first = w[CASTRA_QUIZ_KIND.key]!==castraWDay();
+  const head = `<h3 style="margin:0 0 6px">📜 ${CASTRA_QUIZ_KIND.title} <small>${first?"eerste keer vandaag: beloning!":"geen beloning meer vandaag, oefenen mag"}</small></h3>`;
   if(Z.done){
     const reward = castraQuizReward();
     panel.innerHTML = `<div class="panel">${head}<div style="font-size:20px">Score: <b>${Z.score} / 5</b></div>${reward?`<div class="note">${reward}</div>`:""}
@@ -96,28 +97,31 @@ function castraQuizClose(){ CASTRA_QUIZ = null; const p = el("cwPanel"); if(p) p
 function castraQuizReward(){
   const Z = CASTRA_QUIZ, w = CASTRA.wday || (CASTRA.wday = {});
   if(Z.paid) return Z.paid;
-  if(w.quiz_senator===castraWDay()) return "";
-  w.quiz_senator = castraWDay();
+  if(w[CASTRA_QUIZ_KIND.key]===castraWDay()) return "";
+  w[CASTRA_QUIZ_KIND.key] = castraWDay();
   let t = "";
   if(Z.score>=3){
-    t = castraWGive(castraWScaled({ aes:15*Z.score, frumentum:8*Z.score }, castraWScale("latium")));
+    t = castraWGive(castraWScaled({ aes:15*Z.score, frumentum:8*Z.score }, castraWScale(CASTRA_QUIZ_KIND.rid)));
     if(Z.score===5 && typeof castraCardToken==="function") castraCardToken(1, "perfecte quiz", true), t += "  🎟️ +1 kaarttrekking";
     if(typeof castraPxpAdd==="function") castraPxpAdd(2*Z.score);
   } else t = "Nog niet genoeg goed (minimaal 3) voor een beloning. Probeer morgen opnieuw!";
   castraSave(); Z.paid = t; return t;
 }
 
-/* ---------- Venator: dagelijkse jachtopdracht ---------- */
-function castraBountyToday(){
-  const day = castraWDay(), b = CASTRA.bounty;
+/* ---------- Venator: dagelijkse jachtopdracht (per regio: CASTRA.bounties[regio]) ---------- */
+function castraBountyToday(rid){
+  rid = rid || "latium";
+  const bs = CASTRA.bounties || (CASTRA.bounties = {});
+  if(rid==="latium" && CASTRA.bounty && !bs.latium){ bs.latium = CASTRA.bounty; delete CASTRA.bounty; }   // oude saves
+  const day = castraWDay(), b = bs[rid];
   if(b && b.day===day) return b;
-  const terrs = CASTRA_VENATIO.latium.terrains, idx = Math.floor(castraNow()/86400000) % terrs.length;
-  return (CASTRA.bounty = { day, region:"latium", terrain:terrs[idx].id, need:3, n:0, acc:false, done:false });
+  const terrs = CASTRA_VENATIO[rid].terrains.filter(t=>!t.hidden), idx = Math.floor(castraNow()/86400000) % terrs.length;
+  return (bs[rid] = { day, region:rid, terrain:terrs[idx].id, need:3, n:0, acc:false, done:false });
 }
 function castraBountyTerr(b){ return CASTRA_VENATIO[b.region].terrains.find(t=>t.id===b.terrain); }
-function castraBountyTalk(){
+function castraBountyTalk(npcId){
   if(CASTRA_DLG) return;
-  const e = CASTRA_WENT.find(x=>x.id==="venator_latium"), b = castraBountyToday(), tr = castraBountyTerr(b);
+  const e = CASTRA_WENT.find(x=>x.id===npcId) || CASTRA_WENT.find(x=>x.id==="venator_latium"), rid = e.region, b = castraBountyToday(rid), tr = castraBountyTerr(b);
   const low = s=>s.charAt(0).toLowerCase()+s.slice(1);
   const say = (lines, done)=>castraLatSay("Venator", e.look, lines, done);
   if(b.done) return say([ { la:"Hodie satis fecisti. Cras redi, dux {naam}!", nl:"Vandaag heb je genoeg gedaan. Kom morgen terug, leider {naam}!" } ], null);
@@ -128,21 +132,21 @@ function castraBountyTalk(){
   }
   if(b.n < b.need) return say([ { la:`Quot hostes vicisti? ${b.n} / ${b.need}.`, nl:`Hoeveel vijanden heb je verslagen? ${b.n} van ${b.need} (${low(tr.nl)}).` } ], null);
   say([ { la:"Optime, dux {naam}! Praemium tibi do.", nl:"Uitstekend, leider {naam}! Hier is je beloning." } ], ()=>{
-    b.done = true; const t = castraWGive(Object.assign(castraWScaled({ aes:50, frumentum:25 }, castraWScale("latium")), { gloria:1 })); castraSave();
+    b.done = true; const t = castraWGive(Object.assign(castraWScaled({ aes:50, frumentum:25 }, castraWScale(rid)), { gloria:1 })); castraSave();
     toast("🏹 "+castraLaText("recte"), t); if(typeof castraPxpAdd==="function") castraPxpAdd(15, "Dagelijkse opdracht");
     if(typeof castraWRefreshHud==="function") castraWRefreshHud();
   });
 }
 const _castraQuestOnWinLat0 = castraQuestOnWin;
 castraQuestOnWin = function(V){
-  const msgs = _castraQuestOnWinLat0(V), b = CASTRA.bounty;
-  if(b && b.acc && !b.done && b.day===castraWDay() && V.region===b.region && V.terrain && V.terrain.id===b.terrain && b.n<b.need){
+  const msgs = _castraQuestOnWinLat0(V), b = (CASTRA.bounties||{})[V.region];
+  if(b && b.acc && !b.done && b.day===castraWDay() && V.terrain && V.terrain.id===b.terrain && b.n<b.need){
     b.n++; castraSave(); if(typeof toast==="function") setTimeout(()=>toast("🏹 Dagelijkse opdracht", b.n+" / "+b.need+" verslagen"), 500);
   }
   return msgs;
 };
 function castraBountyHud(){
-  const b = CASTRA.bounty; if(!b || !b.acc || b.done || b.day!==castraWDay()) return null;
+  const b = (CASTRA.bounties||{})[CASTRA_WORLDS[CASTRA_W_REGION].parent || CASTRA_W_REGION]; if(!b || !b.acc || b.done || b.day!==castraWDay()) return null;
   const tr = castraBountyTerr(b), low = s=>s.charAt(0).toLowerCase()+s.slice(1);
   return { la:`Hodie hostes ${low(tr.la)} vince! (${b.n}/${b.need})`, nl:`Dagelijkse opdracht: versla ${b.need} vijanden ${low(tr.nl)} (${b.n}/${b.need}).` };
 }

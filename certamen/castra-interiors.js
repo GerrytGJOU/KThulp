@@ -69,20 +69,22 @@ const CASTRA_PROVERBIA = [
 ];
 
 /* ---------- registratie als werelden en wereldobjecten ---------- */
-(function(){
-  Object.keys(CASTRA_INTERIORS).forEach(id=>{
+// Registreert een binnenruimte uit CASTRA_INTERIORS als wereld en maakt zijn objecten aan (ook te gebruiken door latere bestanden).
+function castraInteriorRegister(id){
+  {
     const I = CASTRA_INTERIORS[id];
     CASTRA_WORLDS[id] = { ...CASTRA_WORLD_BASE, id, nm:I.nm, icon:I.icon, interior:true, parent:I.parent, cols:I.cols, rows:I.rows, view:{ cols:16, rows:11 },
-      start:I.start, exit:[], roads:[], water:[], zones:[], seed:7000+id.length, base: I.kind==="cave"?"stoneb":"plank", doors:I.doors, encounterChance:0.2, trees:["tree_a","tree_b"], big:"tree_big", sparse:0, dense:0, denseZone:"" };
+      start:I.start, exit:[], roads:[], water:[], zones:[], seed:7000+id.length, base: I.floor || (I.kind==="cave"?"stoneb":"plank"), doors:I.doors, encounterChance:0.2, trees:["tree_a","tree_b"], big:"tree_big", sparse:0, dense:0, denseZone:"" };
     (I.chests||[]).forEach(c=>CASTRA_WENT.push({ id:c[2], region:id, kind:"chest", x:c[0], y:c[1] }));
     if(I.host) CASTRA_WENT.push({ id:I.host.id, region:id, kind:"npc", role:"host", nm:"Matrona", x:I.host.x, y:I.host.y, dir:"down", look:CASTRA_MATRONA_LOOK });
     if(I.book) CASTRA_WENT.push({ id:I.book.id, region:id, kind:"book", x:I.book.x, y:I.book.y, off:0 });
     (I.books||[]).forEach(b=>CASTRA_WENT.push({ id:b.id, region:id, kind:"book", x:b.x, y:b.y, off:b.off||0 }));
     (I.npcs||[]).forEach(n=>CASTRA_WENT.push({ id:n.id, region:id, kind:"npc", role:n.role, nm:n.nm, x:n.x, y:n.y, dir:n.dir||"down", look:n.look }));
     (I.pickups||[]).forEach(p=>CASTRA_WENT.push({ id:p.id, region:id, kind:"pickup", item:p.item, x:p.x, y:p.y, needs:p.needs }));
-  });
-  // deuren van Latium aan de moederregio's
-})();
+    (I.bosses||[]).forEach(b=>CASTRA_WENT.push(Object.assign({ icon:"👹" }, b, { region:id, kind:"boss" })));
+  }
+}
+Object.keys(CASTRA_INTERIORS).forEach(castraInteriorRegister);
 
 /* ---------- kaartopbouw van een binnenruimte ---------- */
 function castraInteriorDef(W){
@@ -92,7 +94,7 @@ function castraInteriorDef(W){
     const open = {};
     I.carve.forEach(([x,y,w,h])=>{ for(let yy=y; yy<y+h; yy++) for(let xx=x; xx<x+w; xx++) open[xx+","+yy] = 1; });
     for(let y=0;y<rows;y++) for(let x=0;x<cols;x++){ if(!open[x+","+y]) pieces.push({ o:((x*3+y*5)%4<2)?"rock_grey":"rock_brown", x, y }); }
-    const z = I.zone; for(let y=z.y;y<z.y+z.h;y++) for(let x=z.x;x<z.x+z.w;x++){ if(open[x+","+y]){ g[y][x] = "stone"; tall[x+","+y] = z.t; } }
+    const z = I.zone; for(let y=z.y;y<z.y+z.h;y++) for(let x=z.x;x<z.x+z.w;x++){ if(open[x+","+y]){ g[y][x] = z.floor || "stone"; tall[x+","+y] = z.t; } }
   } else {
     for(let y=0;y<rows;y++) for(let x=0;x<cols;x++){
       const edge = x===0||y===0||x===cols-1||y===rows-1; if(!edge) continue;
@@ -100,6 +102,7 @@ function castraInteriorDef(W){
       g[y][x] = "wall"; walls.push([x,y]);
     }
     (I.furniture||[]).forEach(([o,x,y])=>pieces.push({ o, x, y }));
+    if(I.pool){ const [px,py,pw,ph] = I.pool; for(let y=py;y<py+ph;y++) for(let x=px;x<px+pw;x++){ g[y][x] = "water"; walls.push([x,y]); } }   // zwembad: niet begaanbaar
   }
   // vrijhouden van objecten in de wereldlogica
   return { cols, rows, ground:g, pieces, walls, tall };
@@ -146,6 +149,10 @@ castraWobjDraw = function(){
   (W.doors||[]).forEach(d=>{
     const to = CASTRA_WORLDS[d.to], enter = to && to.interior, ok = unl && (!d.feat || castraUnlocked(d.feat));
     html += `<div style="position:absolute;left:${d.x*48}px;top:${d.y*48}px;width:48px;height:48px;z-index:3;display:flex;align-items:center;justify-content:center;font-size:30px;pointer-events:none;${ok||!enter?"":"opacity:.35;filter:grayscale(1)"}">${d.icon || (enter ? to.icon : "🚪")}</div>`;
+    if(d.label) html += `<div style="position:absolute;left:${d.x*48-60}px;top:${d.y*48-24}px;width:168px;text-align:center;z-index:7;font-size:12px;font-weight:bold;color:#fff;text-shadow:0 1px 3px #000,0 0 6px #000;pointer-events:none">${esc(d.label)}</div>`;
+  });
+  castraWEnts().filter(e=>e.kind==="boss" && castraWEntVisible(e)).forEach(e=>{
+    html += `<div style="position:absolute;left:${e.x*48}px;top:${e.y*48}px;width:48px;height:48px;z-index:4;display:flex;align-items:center;justify-content:center;font-size:36px;pointer-events:none;animation:castraBlink 1.4s infinite">${e.icon}</div>`;
   });
   castraWEnts().filter(e=>e.kind==="book").forEach(e=>{
     html += `<div style="position:absolute;left:${e.x*48}px;top:${e.y*48}px;width:48px;height:48px;z-index:3;display:flex;align-items:center;justify-content:center;font-size:32px;pointer-events:none">📚</div>`;
@@ -161,7 +168,7 @@ castraNpcTalk = function(id){
   if(id.indexOf("w:boek_")===0){ castraBoekLees(id); return; }
   if(id==="w:eremita"){ castraEremitaTalk(); return; }
   if(id==="w:senator"){ castraQuizOpen(); return; }
-  if(id==="w:venator_latium"){ castraBountyTalk(); return; }
+  if(id==="w:venator_latium"){ castraBountyTalk("venator_latium"); return; }
   return _castraNpcTalkInt0(id);
 };
 function castraMatronaTalk(){
