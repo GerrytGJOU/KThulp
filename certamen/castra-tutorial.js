@@ -157,7 +157,7 @@ function castraTutOnHome(){
     const cap = castraWalletCap();
     Object.keys(CASTRA_TUT_REWARD).forEach(r=>{ CASTRA.res[r] = Math.min(r==="gloria"?1e9:cap, (CASTRA.res[r]||0)+CASTRA_TUT_REWARD[r]); });
     castraSave(); castraRenderRes();
-    if(typeof castraPxpAdd==="function") castraPxpAdd(40, "Tutorial afgerond");
+    if(typeof castraPxpAdd==="function") castraPxpAdd(10, "Tutorial afgerond");
     if(typeof castraCardToken==="function") castraCardToken(1, "tutorial afgerond", true);
     castraDlgOpen(CASTRA_TUT_GUIDE, CASTRA_TUT_TEXT.done, ()=>{ castraTutBar(); castraToastLa("recte", "🎁 "+Object.keys(CASTRA_TUT_REWARD).map(r=>castraRes(r).icon+" "+CASTRA_TUT_REWARD[r]).join(" ")); });
   } else if(typeof castraUnlockShow==="function") castraUnlockShow();

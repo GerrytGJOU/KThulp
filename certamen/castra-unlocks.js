@@ -6,8 +6,8 @@
    vangen, missies winnen, opdrachten doen, de codex vullen) en elke paar
    niveaus ontgrendelt er iets nieuws; Aeneas legt dat telkens kort uit.
 
-   Castra-niveau L vraagt in totaal 20·(L−1) + 6·(L−1)·(L−2) XP:
-   2 → 20, 3 → 52, 5 → 152, 8 → 392, 10 → 596, 13 → 972, 16 → 1560.
+   Castra-niveau L vraagt in totaal 50·(L−1) + 14·(L−1)·(L−2) XP (afgestemd met een tempo-model):
+   2 → 50, 3 → 128, 5 → 368, 8 → 938, 10 → 1458, 13 → 2448, 16 → 3690, 20 → 5738.
    Opslag: CASTRA.pxp (XP), CASTRA.unl { id: true } (al aangekondigd).
    Oude saves (met voortgang) krijgen een inschatting van hun XP en alles wat dan al
    open is wordt stil als aangekondigd gemarkeerd.
@@ -40,8 +40,10 @@ const CASTRA_UNLOCKS = [
     lines:[ { la:"Milites inter se comparare potes.", nl:"Je kunt soldaten met elkaar vergelijken." },
             { la:"Sic optimum eligis.", nl:"Zo kies je de beste." } ] },
 ];
+// XP voor een missie die je voor het eerst wint: oplopend met de volgorde van de missies.
+function castraMissionXp(index, waves){ return 20 + 5*waves + 2*index; }
 function castraUnlockDef(id){ return CASTRA_UNLOCKS.find(u=>u.id===id); }
-function castraPxpFor(L){ return 20*(L-1) + 6*(L-1)*(L-2); }
+function castraPxpFor(L){ return 50*(L-1) + 14*(L-1)*(L-2); }
 function castraPLevel(){ const x = CASTRA.pxp||0; let L = 1; while(x >= castraPxpFor(L+1)) L++; return L; }
 function castraUnlocked(id){ const u = castraUnlockDef(id); return !u || castraPLevel() >= u.lvl; }
 function castraUnlockNext(){ const L = castraPLevel(); return CASTRA_UNLOCKS.find(u=>u.lvl>L) || null; }
@@ -67,7 +69,7 @@ function castraUnlockCheck(){
     CASTRA.unl = {};
     const old = CASTRA.tut && CASTRA.tut.step===99 && !CASTRA.pxp;             // bestaande save zonder niveau: inschatten
     if(old){
-      let x = 0; CASTRA_P_MISSIONS.forEach(m=>{ if(castraPMissionDone(m.id)) x += 55; });
+      let x = 0; CASTRA_P_MISSIONS.forEach((m,i)=>{ if(castraPMissionDone(m.id)) x += castraMissionXp(i, m.waves.length); });
       x += (CASTRA.heroes||[]).length*60 + Object.keys(CASTRA.codex||{}).length*4 + (CASTRA.soldiers||[]).length*10;
       CASTRA.pxp = x;
       CASTRA_UNLOCKS.forEach(u=>{ if(castraPLevel()>=u.lvl) CASTRA.unl[u.id] = true; });
@@ -87,6 +89,7 @@ function castraUnlockCheck(){
 // Toon de wachtrij met Aeneas (alleen als er geen ander dialoogvenster open is).
 function castraUnlockShow(){
   if(CASTRA_DLG || !CASTRA || !CASTRA.unlQ || !CASTRA.unlQ.length) return;
+  if(!CASTRA.tut || CASTRA.tut.step<99) return;          // tijdens het tutorial niets aankondigen
   const id = CASTRA.unlQ.shift(), u = castraUnlockDef(id); castraSave(); if(!u) return castraUnlockShow();
   const head = { la:`Gradus ${u.lvl}! ${u.la} aperitur.`, nl:`Niveau ${u.lvl}! Nieuw: ${u.nl}.` };
   castraDlgOpen("aeneas", [head].concat(u.lines), ()=>{ if(typeof castraRenderRes==="function") castraRenderRes(); castraUnlockShow(); });
