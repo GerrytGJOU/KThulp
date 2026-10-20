@@ -37,7 +37,7 @@ const CASTRA_P_MAPS = {
    troepenbomen (tier en level groeien mee met de regio); hpMult stemt de zwaarte af (gesimuleerd, zie CASTRA_HEROUM.md). */
 const _fid = (v,n)=>castraFormByName(v,n).id;
 const CASTRA_P_MISSIONS = [
-  { id:"m1", nm:"Defensio castrorum", nl:"De verdediging van het kamp", map:"a", seed:1101, hpMult:0.6,
+  { id:"m1", nm:"Defensio castrorum", nl:"De verdediging van het kamp", map:"a", seed:1101, hpMult:0.45,
     waves:[ [ {line:_fid("rom","Hastatus"),n:4,gap:26,lvl:3} ],
             [ {line:_fid("rom","Eques"),n:3,gap:22,lvl:3} ],
             [ {line:_fid("rom","Veles"),n:4,gap:24,lvl:3}, {line:_fid("rom","Hastatus"),n:2,gap:26,lvl:3} ] ],

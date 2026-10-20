@@ -234,7 +234,7 @@ function castraBFinish(){
     const lines = [];
     s.towers.forEach(t=>{
       if(String(t.sid).indexOf("hero_")===0){
-        const hh = castraHero(String(t.sid).slice(5)); if(hh){ hh.xp += 8 + 4*m.waves.length; if(castraHeroLevelUp(hh)) lines.push(CASTRA_HERO_DATA[hh.id].nm); }
+        const hh = castraHero(String(t.sid).slice(5)); if(hh){ hh.xp += 12 + 6*m.waves.length; if(castraHeroLevelUp(hh)) lines.push(CASTRA_HERO_DATA[hh.id].nm); }
         return;
       }
       const sol = CASTRA.soldiers.find(x=>x.id===t.sid); if(!sol) return;

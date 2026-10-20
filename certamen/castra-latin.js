@@ -14,7 +14,7 @@
 /* ---- Vaste zinnen: id -> {la, nl} ---- */
 const CASTRA_LA = {
   venatio_titel:   { la:"Venatio", nl:"De jacht" },
-  venatio_intro:   { la:"Quo venaris, dux?", nl:"Waar ga je jagen, leider?" },
+  venatio_intro:   { la:"Quo venaris, dux {naam}?", nl:"Waar ga je jagen, leider {naam}?" },
   venare:          { la:"Venare!", nl:"Ga jagen!" },
   clausum:         { la:"Clausum", nl:"Gesloten" },
   explorator:      { la:"Explorator nuntiat:", nl:"De verkenner meldt:" },
@@ -32,7 +32,7 @@ const CASTRA_LA = {
   hostis_fugit:    { la:"Hostis fugit.", nl:"De vijand vlucht." },
   praeda:          { la:"Praedam capis.", nl:"Je neemt de buit." },
   vulneratus:      { la:"Miles tuus vulneratus est.", nl:"Je soldaat is gewond." },
-  hostis_dicit:    { la:"Hostis victus dicit: Te sequar, dux.", nl:"De verslagen vijand zegt: Ik zal je volgen, leider." },
+  hostis_dicit:    { la:"Hostis victus dicit: \"Te sequar, dux {naam}.\"", nl:"De verslagen vijand zegt: \"Ik zal je volgen, leider {naam}.\"" },
   visne_recipere:  { la:"Visne eum in castra recipere?", nl:"Wil je hem in het kamp opnemen?" },
   recipio:         { la:"Recipio.", nl:"Ik neem hem op." },
   dimitto:         { la:"Dimitto.", nl:"Ik laat hem gaan." },
@@ -71,7 +71,7 @@ const CASTRA_LA = {
   visne_dimittere: { la:"Visne hunc militem honeste dimittere?", nl:"Wil je deze soldaat eervol ontslaan?" },
   adiungit:        { la:"se tibi adiungit.", nl:"sluit zich bij je aan." },
   intellego:       { la:"Intellego.", nl:"Ik begrijp het." },
-  intro:           { la:"Salve, dux! Haec sunt castra tua. Collige ligna et aes, meliora praetorium, et venare in Latio.", nl:"Gegroet, leider! Dit is jouw kamp. Verzamel hout en brons, verbeter het praetorium en ga jagen in Latium." },
+  intro:           { la:"Salve, dux {naam}! Haec sunt castra tua. Collige ligna et aes, meliora praetorium, et venare in Latio.", nl:"Gegroet, leider {naam}! Dit is jouw kamp. Verzamel hout en brons, verbeter het praetorium en ga jagen in Latium." },
   accipio:         { la:"Accipio.", nl:"Ik accepteer het." },
   non_nunc:        { la:"Non nunc.", nl:"Nu niet." },
   gratias:         { la:"Gratias!", nl:"Dank je!" },
@@ -80,7 +80,7 @@ const CASTRA_LA = {
   aen_hi:          { la:"Salve, hospes! Aeneas sum. Hostes in silva vexant. Tres hostes in silva vince, et auxilium meum habebis.", nl:"Gegroet, gast! Ik ben Aeneas. Vijanden in het bos zijn lastig. Versla drie vijanden in het bos, en je krijgt mijn hulp." },
   aen_accepted:    { la:"Bene! Tres hostes in silva vince.", nl:"Goed! Versla drie vijanden in het bos." },
   aen_done:        { la:"Optime! Tres hostes vicisti. Gratias tibi ago. Tecum venio.", nl:"Uitstekend! Je hebt drie vijanden verslagen. Ik dank je. Ik kom met je mee." },
-  aen_bye:         { la:"Vale, dux! Iter bonum!", nl:"Vaarwel, leider! Goede reis!" },
+  aen_bye:         { la:"Vale, dux {naam}! Iter bonum!", nl:"Vaarwel, leider {naam}! Goede reis!" },
   aen_joined:      { la:"Aeneas se tibi adiungit.", nl:"Aeneas sluit zich bij je aan." },
   proelium_titel:  { la:"Proelium", nl:"Het gevecht" },
   proelium_ini:    { la:"In proelium!", nl:"Het gevecht in!" },
@@ -300,7 +300,7 @@ const CASTRA_GLOSS = {
   "dicit":"zegt", "te":"jou", "sequar":"ik zal volgen", "visne":"wil je?", "eum":"hem",
   "castra":"kamp", "recipere":"opnemen", "recipio":"ik neem op", "dimitto":"ik laat gaan",
   "plena":"vol", "redi":"keer terug!", "iterum":"opnieuw", "vestigia":"sporen",
-  "aeacus":"Aeacus (koning, maakte mieren tot mensen)", "formicas":"mieren", "homines":"mensen", "mutavit":"veranderde", "myrmidones":"Myrmidonen", "achillem":"Achilles (4e naamval)", "sequuntur":"volgen", "cadmus":"Cadmus (stichter van Thebe)", "dentes":"tanden", "serit":"zaait", "armati":"gewapende", "terra":"aarde / grond", "surgunt":"rijzen op", "lupa":"wolvin", "romulum":"Romulus (4e naamval)", "remum":"Remus (4e naamval)", "nutrit":"voedt", "lupus":"wolf", "martis":"van Mars", "sacer":"heilig", "viri":"van een man", "gallica":"Gallisch", "themiscyra":"Themiscyra (rijk van de Amazones)", "hippolyte":"Hippolyte (koningin van de Amazones)", "paludibus":"in de moerassen", "vico":"in het dorp", "saltus":"bergbos / woudpas", "teutoburgiensis":"van Teutoburg", "arena":"arena (zandvlak van de gladiatoren)", "foro":"op het Forum", "castris":"in het legerkamp", "appia":"van Appius (de Via Appia)", "eurotam":"de Eurotas (4e naamval)", "sparta":"Sparta", "forum":"Forum (marktplein van Rome)", "romanum":"Romeins", "thermopylae":"Thermopylae (bergpas)", "carthago":"Carthago (stad in Africa)", "zamam":"Zama (4e naamval)", "montibus":"in de bergen", "regia":"koninklijk(e)", "persepolis":"Persepolis (Perzische hoofdstad)", "nilum":"de Nijl (4e naamval)", "templo":"in de tempel", "deserto":"in de woestijn", "pyramides":"piramiden", "alesia":"Alesia (Gallische vesting)", "oppido":"in de burcht (nederzetting)", "rhenum":"de Rijn (4e naamval)", "peregrinus":"vreemdeling / uit den vreemde", "aedifica":"bouw!", "aedificatum":"gebouwd", "nondum":"nog niet", "aperit":"opent", "equi":"paarden", "currus":"strijdwagens", "parantur":"worden klaargemaakt", "aedificantur":"worden gebouwd", "tiro":"rekruut", "tirones":"rekruten", "bonus":"goed", "fiet":"zal worden", "pedes":"voetsoldaat", "eques":"ruiter", "pugnes":"(opdat) je vecht", "legio":"legioen", "commercium":"handel", "ut":"om te / zodat", "cum":"met", "legione":"legioen (met het legioen)", "intra":"ga naar binnen / log in!", "nulla":"geen", "convenit":"komt samen",
+  "aeacus":"Aeacus (koning, maakte mieren tot mensen)", "formicas":"mieren", "homines":"mensen", "mutavit":"veranderde", "myrmidones":"Myrmidonen", "achillem":"Achilles (4e naamval)", "sequuntur":"volgen", "cadmus":"Cadmus (stichter van Thebe)", "dentes":"tanden", "serit":"zaait", "armati":"gewapende", "terra":"aarde / grond", "surgunt":"rijzen op", "lupa":"wolvin", "romulum":"Romulus (4e naamval)", "remum":"Remus (4e naamval)", "nutrit":"voedt", "lupus":"wolf", "martis":"van Mars", "sacer":"heilig", "viri":"van een man", "nova":"nieuw (vrouwelijk/meervoud)", "opus":"nodig (opus sunt = zijn nodig)", "do":"ik geef", "elegisti":"je hebt gekozen", "alium":"een ander (4e naamval)", "cape":"vang! / pak!", "portam":"poort (4e naamval)", "decumanam":"decumana (4e naamval)", "i":"ga!", "praetoriam":"praetoria (4e naamval)", "tuos":"jouw (meervoud, 4e naamval)", "colloca":"plaats!", "scis":"je weet", "venari":"jagen", "conscribere":"werven", "regiones":"regio's", "novas":"nieuwe (4e naamval)", "explora":"verken!", "gallica":"Gallisch", "themiscyra":"Themiscyra (rijk van de Amazones)", "hippolyte":"Hippolyte (koningin van de Amazones)", "paludibus":"in de moerassen", "vico":"in het dorp", "saltus":"bergbos / woudpas", "teutoburgiensis":"van Teutoburg", "arena":"arena (zandvlak van de gladiatoren)", "foro":"op het Forum", "castris":"in het legerkamp", "appia":"van Appius (de Via Appia)", "eurotam":"de Eurotas (4e naamval)", "sparta":"Sparta", "forum":"Forum (marktplein van Rome)", "romanum":"Romeins", "thermopylae":"Thermopylae (bergpas)", "carthago":"Carthago (stad in Africa)", "zamam":"Zama (4e naamval)", "montibus":"in de bergen", "regia":"koninklijk(e)", "persepolis":"Persepolis (Perzische hoofdstad)", "nilum":"de Nijl (4e naamval)", "templo":"in de tempel", "deserto":"in de woestijn", "pyramides":"piramiden", "alesia":"Alesia (Gallische vesting)", "oppido":"in de burcht (nederzetting)", "rhenum":"de Rijn (4e naamval)", "peregrinus":"vreemdeling / uit den vreemde", "aedifica":"bouw!", "aedificatum":"gebouwd", "nondum":"nog niet", "aperit":"opent", "equi":"paarden", "currus":"strijdwagens", "parantur":"worden klaargemaakt", "aedificantur":"worden gebouwd", "tiro":"rekruut", "tirones":"rekruten", "bonus":"goed", "fiet":"zal worden", "pedes":"voetsoldaat", "eques":"ruiter", "pugnes":"(opdat) je vecht", "legio":"legioen", "commercium":"handel", "ut":"om te / zodat", "cum":"met", "legione":"legioen (met het legioen)", "intra":"ga naar binnen / log in!", "nulla":"geen", "convenit":"komt samen",
   "omnes":"allen", "post":"na / over", "incipit":"begint", "pugnat":"vecht", "finita":"afgelopen", "haec":"deze", "pugna":"vecht!", "victoria":"overwinning", "defendistis":"jullie hebben verdedigd", "capta":"ingenomen",
   "oblata":"aanbod", "mea":"mijn", "aliorum":"van anderen", "offer":"bied aan!", "revoca":"trek in!", "commuta":"ruil!", "quem":"wie / welke", "das":"je geeft", "commutatio":"ruil", "facta":"gedaan", "iam":"al", "captum":"genomen",
   "nihil":"niets", "offers":"je biedt aan", "idoneus":"geschikt", "legionarii":"legioensoldaten", "nullus":"geen", "adsum":"ik ben er", "hodie":"vandaag",
@@ -328,7 +328,12 @@ function castraNorm(w){ return w.toLowerCase().replace(/[^a-zāēīōū]/g,"").r
 
 // HTML van een Latijnse zin: elk woord tikbaar, plus ⓘ voor de hele vertaling.
 // la/nl mogen vrij samengesteld zijn (dynamische zinnen); sid = log-sleutel.
+// Naam van de speler (uit het profiel) voor aanspreking in het Latijn: "dux {naam}". De naam blijft onverbogen
+// (een Nederlandse naam heeft geen betrouwbare vocativus); zonder profiel valt "{naam}" weg.
+function castraPlayerName(){ try{ return (typeof BM_IDENT!=="undefined" && BM_IDENT && BM_IDENT.name) ? String(BM_IDENT.name).trim() : ""; }catch(e){ return ""; } }
+function castraSub(t){ const n = castraPlayerName(); return String(t).replace(/ ?\{naam\}/g, m=>n ? (m.charAt(0)===" "?" ":"")+n : ""); }
 function castraLaHTML(la, nl, sid){
+  la = castraSub(la); nl = castraSub(nl);
   const words = la.split(/(\s+)/).map(p=>{
     if(!p.trim()) return p;
     return `<span class="cl-w" data-w="${esc(castraNorm(p))}" onclick="castraTapWord(event,this)" style="cursor:pointer;border-bottom:1px dotted #b8975a">${esc(p)}</span>`;
@@ -337,7 +342,7 @@ function castraLaHTML(la, nl, sid){
   return `<span class="cl-s">${words} <button class="cl-i" data-la="${esc(la)}" onclick="castraTapSentence('${id}','${esc(sid||la).replace(/'/g,"")}',this)" title="Vertaling" style="background:none;border:1px solid #8a6d2f;color:#d4af37;border-radius:50%;width:20px;height:20px;font-size:12px;line-height:1;padding:0;cursor:pointer">ⓘ</button><span id="${id}" class="cl-nl" style="display:none;font-size:13px;opacity:.85;font-style:italic"><br>${esc(nl)}</span></span>`;
 }
 function castraLa(id){ const t = CASTRA_LA[id]; return t ? castraLaHTML(t.la, t.nl, id) : esc(id); }
-function castraLaText(id){ return CASTRA_LA[id] ? CASTRA_LA[id].la : id; }
+function castraLaText(id){ return CASTRA_LA[id] ? castraSub(CASTRA_LA[id].la) : id; }
 
 function castraLogHelp(kind, key, text){
   if(typeof CASTRA==="undefined" || !CASTRA) return;
@@ -364,6 +369,7 @@ function castraHelpSync(kind, key, text){
   }catch(e){}
 }
 let _castraFormWords = null;
+function castraNameGloss(w){ const n = castraPlayerName(); if(!n) return null; return n.split(/\s+/).some(p=>castraNorm(p)===w) ? "jouw naam" : null; }
 function castraFormGloss(w){
   if(typeof CASTRA_FORM_LIST==="undefined") return null;
   if(!_castraFormWords){ _castraFormWords = {}; CASTRA_FORM_LIST.forEach(f=>{ f.nm.split(" ").forEach(p=>{ const k = castraNorm(p); if(k && !_castraFormWords[k]) _castraFormWords[k] = f.nm; }); }); }
@@ -372,7 +378,7 @@ function castraFormGloss(w){
 function castraTapWord(ev, node){
   ev.stopPropagation();
   const w = node.getAttribute("data-w");
-  const meaning = CASTRA_GLOSS[w] || castraFormGloss(w) || "(geen vertaling beschikbaar)";
+  const meaning = CASTRA_GLOSS[w] || castraNameGloss(w) || castraFormGloss(w) || "(geen vertaling beschikbaar)";
   castraLogHelp("words", w, node.textContent);
   let box = document.getElementById("castraGloss");
   if(!box){
