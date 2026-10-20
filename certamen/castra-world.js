@@ -29,11 +29,16 @@ const CASTRA_WORLDS = {
     water:[ { x0:10, x1:11, bridgeY:[14,15] }, { x0:28, x1:29, bridgeY:null } ],   // Scamander (met brug) en de zee
     zones:[ { t:"scamander", x:3, y:2, w:6, h:20 }, { t:"muros", x:17, y:2, w:9, h:9 }, { t:"campus", x:17, y:16, w:9, h:6 }, { t:"litus", x:26, y:2, w:2, h:20 } ],
     trees:["palm","tree_b"], big:"tree_big", sparse:0.05, dense:0.10, denseZone:"scamander" },
+  gallia: { ...CASTRA_WORLD_BASE, id:"gallia", nm:"Gallia", icon:"🌲", seed:20261301, base:"grass", road:"sand", bank:"sand2",
+    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:16,x1:27,y1:17} ],
+    water:[ { x0:28, x1:29, bridgeY:[16,17] } ],                 // de Rijn; alleen de brug is begaanbaar
+    zones:[ { t:"silva", x:2, y:2, w:12, h:12 }, { t:"oppidum", x:18, y:2, w:8, h:8 }, { t:"campus", x:18, y:11, w:9, h:4 }, { t:"flumen", x:26, y:2, w:2, h:20 } ],
+    trees:["tree_a","tree_b"], big:"tree_big", sparse:0.09, dense:0.28, denseZone:"silva" },
 };
 let CASTRA_W_REGION = "latium";
 function castraWorldCfg(){ return CASTRA_WORLDS[CASTRA_W_REGION]; }
 // Regio's ontgrendelen via proelium-missies (zie CASTRA_P_MISSIONS)
-const CASTRA_REGION_NEEDS = { latium:null, graecia:"m2", troia:"g1" };
+const CASTRA_REGION_NEEDS = { latium:null, graecia:"m2", troia:"g1", gallia:"t2" };
 function castraRegionOpen(id){ const n = CASTRA_REGION_NEEDS[id]; return !n || castraPMissionDone(n); }
 let CASTRA_WORLD_BUILT = {};   // per regio gecachet
 let CASTRA_W_UI = { px:0, py:0, dir:"up", frame:1, moving:false, scale:1, keyFn:null, resizeFn:null };
@@ -271,7 +276,7 @@ SCREENS.castraRegions = function(){
     const need = CASTRA_REGION_NEEDS[id], nm = need ? CASTRA_P_MISSIONS.find(m=>m.id===need) : null;
     return `<button class="tile" ${open?"":"disabled style=\"opacity:.5\""} onclick="castraGoRegion('${id}')">
       <span class="ic" style="font-size:36px">${open?r.icon:"🔒"}</span>
-      <h3>${esc(r.nm)} <small>⭐ ${got} / ${heroes.length}</small></h3>
+      <h3>${esc(r.nm)}${heroes.length?` <small>⭐ ${got} / ${heroes.length}</small>`:""}</h3>
       <p>${open ? castraLaText("venare_in")+" "+esc(r.nm)+"." : castraLaText("clausum")+": "+esc(nm?nm.nm:"")}</p></button>`;
   }).join("");
   H(brand(true)+`
