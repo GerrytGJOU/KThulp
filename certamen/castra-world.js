@@ -73,7 +73,7 @@ const CASTRA_WORLDS = {
 let CASTRA_W_REGION = "latium";
 function castraWorldCfg(){ return CASTRA_WORLDS[CASTRA_W_REGION]; }
 // Regio's ontgrendelen via proelium-missies (zie CASTRA_P_MISSIONS)
-const CASTRA_REGION_NEEDS = { latium:null, graecia:"m2", troia:"g1", gallia:"t2", aegyptus:"ga2", persis:"ae2", africa:"pe2", roma:"af2", laconia:"ro2", germania:"la2", themiscyra:"gm2" };
+const CASTRA_REGION_NEEDS = { latium:null, roma:"m3", gallia:"ro2", germania:"ga2", graecia:"gm2", laconia:"g2", troia:"la2", themiscyra:"t2", persis:"th2", aegyptus:"pe2", africa:"ae2" };
 function castraRegionOpen(id){ const n = CASTRA_REGION_NEEDS[id]; return !n || castraPMissionDone(n); }
 let CASTRA_WORLD_BUILT = {};   // per regio gecachet
 let CASTRA_W_UI = { px:0, py:0, dir:"up", frame:1, moving:false, scale:1, keyFn:null, resizeFn:null };
