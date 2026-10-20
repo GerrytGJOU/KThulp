@@ -147,7 +147,7 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 
 **M7 — regio 4: Africa (2026-11-07).** Opent na missie pe2. Wereld met woestijn, stad, veld en kust (Middellandse Zee), terreinen *In deserto / In urbe / In campo / Ad litus*, wild: 72% Carthagers, rest Egyptenaren/Romeinen/Galliërs/Grieken/Perzen/Germanen, rekruten level 38–48, tierplafond 4; mythisch: Draken, Feniks, Schimmen, Adelaars, Harpijen, Sirenen, Zeepaarden. Dilectus werft er Carthagers (geen stallen-vormen in het aanbod: ruiters en olifanten kun je dus alleen vangen of evolueren). Missies **af1 Carthago** (level 50, hpMult 11,1) en **af2 Ad Zamam** (level 50, hpMult 4,4 — met olifanten en tier-4 vijanden veel zwaarder), zelfde proef als de andere regio's. Geen helden of sporen.
 
-**Nog te bouwen regio's (M7, elk apart goed te keuren):** Themiscyra. Per regio: wereld + terreinen + wildmengsel + 2 missies + eventueel Dilectus-volk.
+**Nog te bouwen regio's (M7, elk apart goed te keuren):** Roma/Laconia, Germania, Themiscyra. Per regio: wereld + terreinen + wildmengsel + 2 missies + eventueel Dilectus-volk.
 
 **Nog niet (volgende mijlpalen):** de overige M7-regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
 
