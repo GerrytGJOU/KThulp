@@ -34,11 +34,16 @@ const CASTRA_WORLDS = {
     water:[ { x0:28, x1:29, bridgeY:[16,17] } ],                 // de Rijn; alleen de brug is begaanbaar
     zones:[ { t:"silva", x:2, y:2, w:12, h:12 }, { t:"oppidum", x:18, y:2, w:8, h:8 }, { t:"campus", x:18, y:11, w:9, h:4 }, { t:"flumen", x:26, y:2, w:2, h:20 } ],
     trees:["tree_a","tree_b"], big:"tree_big", sparse:0.09, dense:0.28, denseZone:"silva" },
+  aegyptus: { ...CASTRA_WORLD_BASE, id:"aegyptus", nm:"Aegyptus", icon:"🏜️", seed:20261401, base:"sand2", road:"sand", bank:"sand",
+    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:14,x1:27,y1:15} ],
+    water:[ { x0:3, x1:4, bridgeY:[14,15] } ],                   // de Nijl, met een brug op de weg
+    zones:[ { t:"nilus", x:5, y:2, w:6, h:20 }, { t:"templum", x:11, y:2, w:4, h:11 }, { t:"urbs", x:17, y:2, w:9, h:10 }, { t:"desertum", x:17, y:16, w:10, h:6 } ],
+    trees:["palm","palm"], big:"tree_big2", sparse:0.04, dense:0.12, denseZone:"nilus" },
 };
 let CASTRA_W_REGION = "latium";
 function castraWorldCfg(){ return CASTRA_WORLDS[CASTRA_W_REGION]; }
 // Regio's ontgrendelen via proelium-missies (zie CASTRA_P_MISSIONS)
-const CASTRA_REGION_NEEDS = { latium:null, graecia:"m2", troia:"g1", gallia:"t2" };
+const CASTRA_REGION_NEEDS = { latium:null, graecia:"m2", troia:"g1", gallia:"t2", aegyptus:"ga2" };
 function castraRegionOpen(id){ const n = CASTRA_REGION_NEEDS[id]; return !n || castraPMissionDone(n); }
 let CASTRA_WORLD_BUILT = {};   // per regio gecachet
 let CASTRA_W_UI = { px:0, py:0, dir:"up", frame:1, moving:false, scale:1, keyFn:null, resizeFn:null };

@@ -206,6 +206,16 @@ const CASTRA_VENATIO = {
     ],
     traces:[], traceChance:0,
   },
+  aegyptus: {
+    nm:"Aegyptus", min:31, max:41, tierMax:4, folk:{ aeg:70, per:9, car:7, gra:5, ama:3, rom:3, tro:3 },
+    terrains:[
+      { id:"nilus",    la:"Ad Nilum",      nl:"Aan de Nijl",       prefs:{ rng:3, inf:2, cav:1 }, myth:{ p:0.10, taks:["Nimfen"] } },
+      { id:"templum",  la:"In templo",     nl:"In de tempel",      prefs:{ sup:3, inf:2, rng:1 }, myth:{ p:0.15, taks:["Schimmen"] } },
+      { id:"urbs",     la:"In urbe",       nl:"In de stad",        prefs:{ inf:3, sup:2, cav:2 }, myth:{ p:0.06, taks:["Feniks"] } },
+      { id:"desertum", la:"In deserto",    nl:"In de woestijn",    prefs:{ cav:3, rng:3, inf:1 }, myth:{ p:0.12, taks:["Draken","Feniks"] } },
+    ],
+    traces:[], traceChance:0,
+  },
 };
 
 /* ---- Glossarium: woord (kleine letters, zonder leestekens) -> betekenis ---- */
@@ -230,7 +240,7 @@ const CASTRA_GLOSS = {
   "dicit":"zegt", "te":"jou", "sequar":"ik zal volgen", "visne":"wil je?", "eum":"hem",
   "castra":"kamp", "recipere":"opnemen", "recipio":"ik neem op", "dimitto":"ik laat gaan",
   "plena":"vol", "redi":"keer terug!", "iterum":"opnieuw", "vestigia":"sporen",
-  "aeacus":"Aeacus (koning, maakte mieren tot mensen)", "formicas":"mieren", "homines":"mensen", "mutavit":"veranderde", "myrmidones":"Myrmidonen", "achillem":"Achilles (4e naamval)", "sequuntur":"volgen", "cadmus":"Cadmus (stichter van Thebe)", "dentes":"tanden", "serit":"zaait", "armati":"gewapende", "terra":"aarde / grond", "surgunt":"rijzen op", "lupa":"wolvin", "romulum":"Romulus (4e naamval)", "remum":"Remus (4e naamval)", "nutrit":"voedt", "lupus":"wolf", "martis":"van Mars", "sacer":"heilig", "viri":"van een man", "gallica":"Gallisch", "alesia":"Alesia (Gallische vesting)", "oppido":"in de burcht (nederzetting)", "rhenum":"de Rijn (4e naamval)", "peregrinus":"vreemdeling / uit den vreemde", "aedifica":"bouw!", "aedificatum":"gebouwd", "nondum":"nog niet", "aperit":"opent", "equi":"paarden", "currus":"strijdwagens", "parantur":"worden klaargemaakt", "aedificantur":"worden gebouwd", "tiro":"rekruut", "tirones":"rekruten", "bonus":"goed", "fiet":"zal worden", "pedes":"voetsoldaat", "eques":"ruiter", "pugnes":"(opdat) je vecht", "legio":"legioen", "commercium":"handel", "ut":"om te / zodat", "cum":"met", "legione":"legioen (met het legioen)", "intra":"ga naar binnen / log in!", "nulla":"geen", "convenit":"komt samen",
+  "aeacus":"Aeacus (koning, maakte mieren tot mensen)", "formicas":"mieren", "homines":"mensen", "mutavit":"veranderde", "myrmidones":"Myrmidonen", "achillem":"Achilles (4e naamval)", "sequuntur":"volgen", "cadmus":"Cadmus (stichter van Thebe)", "dentes":"tanden", "serit":"zaait", "armati":"gewapende", "terra":"aarde / grond", "surgunt":"rijzen op", "lupa":"wolvin", "romulum":"Romulus (4e naamval)", "remum":"Remus (4e naamval)", "nutrit":"voedt", "lupus":"wolf", "martis":"van Mars", "sacer":"heilig", "viri":"van een man", "gallica":"Gallisch", "nilum":"de Nijl (4e naamval)", "templo":"in de tempel", "deserto":"in de woestijn", "pyramides":"piramiden", "alesia":"Alesia (Gallische vesting)", "oppido":"in de burcht (nederzetting)", "rhenum":"de Rijn (4e naamval)", "peregrinus":"vreemdeling / uit den vreemde", "aedifica":"bouw!", "aedificatum":"gebouwd", "nondum":"nog niet", "aperit":"opent", "equi":"paarden", "currus":"strijdwagens", "parantur":"worden klaargemaakt", "aedificantur":"worden gebouwd", "tiro":"rekruut", "tirones":"rekruten", "bonus":"goed", "fiet":"zal worden", "pedes":"voetsoldaat", "eques":"ruiter", "pugnes":"(opdat) je vecht", "legio":"legioen", "commercium":"handel", "ut":"om te / zodat", "cum":"met", "legione":"legioen (met het legioen)", "intra":"ga naar binnen / log in!", "nulla":"geen", "convenit":"komt samen",
   "omnes":"allen", "post":"na / over", "incipit":"begint", "pugnat":"vecht", "finita":"afgelopen", "haec":"deze", "pugna":"vecht!", "victoria":"overwinning", "defendistis":"jullie hebben verdedigd", "capta":"ingenomen",
   "oblata":"aanbod", "mea":"mijn", "aliorum":"van anderen", "offer":"bied aan!", "revoca":"trek in!", "commuta":"ruil!", "quem":"wie / welke", "das":"je geeft", "commutatio":"ruil", "facta":"gedaan", "iam":"al", "captum":"genomen",
   "nihil":"niets", "offers":"je biedt aan", "idoneus":"geschikt", "legionarii":"legioensoldaten", "nullus":"geen", "adsum":"ik ben er", "hodie":"vandaag",

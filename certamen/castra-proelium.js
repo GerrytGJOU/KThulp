@@ -93,6 +93,19 @@ const CASTRA_P_MISSIONS = [
             [ {line:_fid("ger","Centenus"),n:7,gap:14,lvl:46} ],
             [ {line:_fid("gal","Soldurius"),n:3,gap:20,lvl:48}, {line:_fid("ger","Batavus"),n:5,gap:14,lvl:46}, {line:_fid("gal","Bellator Gallus"),n:6,gap:14,lvl:46} ] ],
     reward:{ aes:420, frumentum:290, gloria:24 } },
+  /* Aegyptus (opent na ga2) */
+  { id:"ae1", region:"aegyptus", nm:"Ad Nilum", nl:"Aan de Nijl", map:"a", seed:5101, hpMult:13.3, needs:"ga2",
+    waves:[ [ {line:_fid("aeg","Machimus"),n:6,gap:18,lvl:46} ],
+            [ {line:_fid("aeg","Sagittarius Aegyptius"),n:6,gap:16,lvl:46} ],
+            [ {line:_fid("aeg","Auriga Aegyptius"),n:5,gap:16,lvl:46}, {line:_fid("aeg","Scriba"),n:3,gap:20,lvl:46} ],
+            [ {line:_fid("aeg","Satelles"),n:5,gap:16,lvl:46}, {line:_fid("aeg","Sagittarius Nubius"),n:4,gap:16,lvl:46} ] ],
+    reward:{ aes:480, frumentum:330, gloria:26 } },
+  { id:"ae2", region:"aegyptus", nm:"Pyramides", nl:"De piramiden", map:"b", seed:5202, hpMult:5.9, needs:"ae1",
+    waves:[ [ {line:_fid("aeg","Satelles"),n:7,gap:14,lvl:50} ],
+            [ {line:_fid("aeg","Bellator curru Aegyptius"),n:6,gap:14,lvl:50}, {line:_fid("aeg","Sacerdos Isidis"),n:3,gap:20,lvl:50} ],
+            [ {line:_fid("aeg","Sagittarius Nubius"),n:7,gap:12,lvl:50} ],
+            [ {line:_fid("aeg","Custos Pharaonis"),n:3,gap:20,lvl:50}, {line:_fid("aeg","Bellator curru Aegyptius"),n:6,gap:12,lvl:50}, {line:_fid("aeg","Satelles"),n:6,gap:12,lvl:50} ] ],
+    reward:{ aes:560, frumentum:390, gloria:30 } },
 ];
 for(const m of CASTRA_P_MISSIONS){ if(!m.region) m.region = "latium"; }
 
