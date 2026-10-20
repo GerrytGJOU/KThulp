@@ -1,6 +1,6 @@
 # Castra Heroum — troepenbomen per volk (151 vormen)
 
-Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M6 gebouwd; M7 deels: Gallia (2026-11-04), Aegyptus (2026-11-05) en Persis (2026-11-06), Africa (2026-11-07), Roma en Laconia (2026-11-08) gebouwd, Germania en Themiscyra wachten per regio op goedkeuring** · hoort bij `CASTRA_HEROUM.md`.
+Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M6 gebouwd; M7 deels: Gallia (2026-11-04), Aegyptus (2026-11-05) en Persis (2026-11-06), Africa (2026-11-07), Roma en Laconia (2026-11-08) en Germania (2026-11-09) gebouwd, Themiscyra wachten per regio op goedkeuring** · hoort bij `CASTRA_HEROUM.md`.
 Dit document is de bron van waarheid voor de troepenbomen; het vervangt de huidige losse evolutielijnen (`CASTRA_LINES` in `certamen/castra-data.js`). De 15 helden (`CASTRA_HERO_DATA`) blijven ongewijzigd.
 
 ## 1. Idee en regels
@@ -149,7 +149,9 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 
 **M7 — regio 5 en 6: Roma en Laconia (2026-11-08).** Twee aparte werelden. **Roma** opent na af2: terreinen *In arena / In foro / In castris / In via Appia*, rekruten level 40–50; nieuw is dat een terrein een eigen volkenmengsel kan hebben (`terrain.folk`: de arena is ±80% gladiatoren, het legerkamp ±92% Romeinen); missies **ro1 Forum Romanum** (hpMult 4,3, tier-4 Romeinen) en **ro2 Arena** (hpMult 8,4, alle gladiatorenvormen); Dilectus werft er gladiatoren. **Laconia** opent na ro2: terreinen *In montibus / In urbe / Ad Eurotam / In campo*, 78% Spartanen, rekruten level 42–50; missies **la1 Thermopylae** (hpMult 6,2) en **la2 Sparta** (hpMult 5,3, met Wolven van Mars). Zelfde proef als de andere regio's (12 torens level 50, 5% marge). Geen helden of sporen.
 
-**Nog te bouwen regio's (M7, elk apart goed te keuren):** Germania, Themiscyra. Per regio: wereld + terreinen + wildmengsel + 2 missies + eventueel Dilectus-volk.
+**M7 — regio 7: Germania (2026-11-09).** Opent na missie la2. Oerwoud (dichtbegroeid), moeras, dorp en Rijn (brug op de weg), terreinen *In silva / In paludibus / In vico / Ad Rhenum*, 74% Germanen, rekruten level 44–50; mythisch: Wolven van Mars, Saters, Draken, Schimmen, Nimfen, Adelaars. Dilectus werft er Germanen (al sinds Gallia). Missies **gm1 Saltus Teutoburgiensis** (hpMult 6,2) en **gm2 Ad Rhenum** (hpMult 4, met Draco en Comes-leiders), zelfde proef als de andere regio's. Geen helden of sporen.
+
+**Nog te bouwen regio's (M7, elk apart goed te keuren):** Themiscyra. Per regio: wereld + terreinen + wildmengsel + 2 missies + eventueel Dilectus-volk.
 
 **Nog niet (volgende mijlpalen):** de overige M7-regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
 
