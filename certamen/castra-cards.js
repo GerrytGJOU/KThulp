@@ -68,7 +68,12 @@ function castraCardSummary(b){
 }
 
 /* ---------- trekken ---------- */
-function castraCardState(){ return CASTRA.cardState || (CASTRA.cardState = { freeDay:-1, pity:0, last:null }); }
+function castraCardState(){ const s = CASTRA.cardState || (CASTRA.cardState = { freeDay:-1, pity:0, last:null, tokens:0 }); if(s.tokens===undefined) s.tokens = 0; return s; }
+// Trekkingen verdienen met opdrachten ("tokens"); worden vóór roem gebruikt.
+function castraCardToken(n, why, quiet){
+  const st = castraCardState(); st.tokens += n; castraSave();
+  if(!quiet && typeof toast==="function") toast("🎟️ +"+n+" kaartentrekking"+(n===1?"":"en"), why||"");
+}
 function castraCardFreeLeft(){ return castraCardState().freeDay !== castraDay(); }
 function castraCardPick(rng, guaranteeRare){
   let r = rng()*100, rar = 1;
@@ -79,7 +84,10 @@ function castraCardPick(rng, guaranteeRare){
 // Retourneert { card, before, after, free } of null (te weinig roem).
 function castraCardDraw(){
   const st = castraCardState(), free = castraCardFreeLeft();
-  if(!free){ if((CASTRA.res.gloria||0) < CASTRA_CARD_COST) return null; CASTRA.res.gloria -= CASTRA_CARD_COST; } else st.freeDay = castraDay();
+  let how = "free";
+  if(free) st.freeDay = castraDay();
+  else if(st.tokens>0){ st.tokens--; how = "token"; }
+  else { if((CASTRA.res.gloria||0) < CASTRA_CARD_COST) return null; CASTRA.res.gloria -= CASTRA_CARD_COST; how = "gloria"; }
   const rng = castraRng((castraNow() ^ CASTRA.seed ^ 0x7ab1c3)>>>0); CASTRA.seed = (CASTRA.seed+13)>>>0;
   const card = castraCardPick(rng, st.pity >= CASTRA_CARD_PITY-1);
   st.pity = card.rar===3 ? 0 : st.pity+1;
@@ -88,7 +96,7 @@ function castraCardDraw(){
   const after = castraCardStars(card.id);
   st.last = { id:card.id, isNew:castraCardCopies(card.id)===1, up:after>before };
   castraSave(); if(typeof castraRenderRes==="function") castraRenderRes();
-  return { card, before, after, free, isNew:st.last.isNew };
+  return { card, before, after, free, how, isNew:st.last.isNew };
 }
 function castraMenuDraw(){
   const r = castraCardDraw();
@@ -114,7 +122,7 @@ function castraCardsView(){
     <div style="font-size:13px;opacity:.85;margin-bottom:6px">Kaarten geven blijvende bonussen aan al je torens en je kamp. Trek je een kaart dubbel, dan wordt hij sterker (★ bij 1, 2, 4, 7 en 12 exemplaren). Werkt in de gewone tower defence en de economie, niet in de Legio.</div>
     <div style="padding:6px 8px;border:2px solid #8a6d2f;border-radius:8px;background:rgba(212,175,55,.18);font-size:14px;margin-bottom:8px"><b>Je bonussen:</b> ${sum?esc(sum):"<span style='opacity:.6'>nog geen — trek je eerste kaart!</span>"}</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-      <button class="btn btn-gold" style="min-height:44px" onclick="castraMenuDraw()">${free?"🎁 Gratis trekking van vandaag":"🃏 Trek een kaart ("+CASTRA_CARD_COST+" 🏆)"}</button>
+      <button class="btn btn-gold" style="min-height:44px" onclick="castraMenuDraw()">${free?"🎁 Gratis trekking van vandaag":st.tokens>0?"🎟️ Trek een kaart (1 trekking)":"🃏 Trek een kaart ("+CASTRA_CARD_COST+" 🏆)"}</button>
     </div>
-    <div style="font-size:12px;opacity:.7;margin-bottom:4px">${owned} / ${CASTRA_CARDS.length} kaarten · zekere zeldzame kaart over ${CASTRA_CARD_PITY-1-st.pity<=0?"0":CASTRA_CARD_PITY-1-st.pity} trekkingen · roem: ${CASTRA.res.gloria||0} 🏆</div>${cards}`;
+    <div style="font-size:12px;opacity:.7;margin-bottom:4px">🎟️ ${st.tokens} trekking${st.tokens===1?"":"en"} (verdien ze met opdrachten, missies en nieuwe helden) · ${owned} / ${CASTRA_CARDS.length} kaarten · zekere zeldzame kaart over ${CASTRA_CARD_PITY-1-st.pity<=0?"0":CASTRA_CARD_PITY-1-st.pity} trekkingen · roem: ${CASTRA.res.gloria||0} 🏆</div>${cards}`;
 }

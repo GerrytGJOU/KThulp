@@ -312,8 +312,10 @@ function castraHeroLevelUp(h){
 }
 function castraHeroRecruit(id){
   const list = CASTRA.heroes || (CASTRA.heroes = []);
-  if(!list.some(h=>h.id===id)) list.push({ id, lvl:1, xp:0, fides:10, assigned:null });
+  const isNew = !list.some(h=>h.id===id);
+  if(isNew) list.push({ id, lvl:1, xp:0, fides:10, assigned:null });
   castraSave();
+  if(isNew){ if(typeof castraPxpAdd==="function") castraPxpAdd(60, "Nieuwe held"); if(typeof castraCardToken==="function") castraCardToken(2, "nieuwe held"); }
 }
 // Bonus (in procenten) die een gebouw krijgt van de held die het leidt.
 function castraHeroBonus(buildingId){

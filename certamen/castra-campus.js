@@ -18,6 +18,7 @@ function castraLevelUp(s){
   const maxL = castraSoldierCap(); let up = false; const lvl0 = s.lvl;
   while(s.lvl<maxL && s.xp >= castraXpToNext(s.lvl)){ s.xp -= castraXpToNext(s.lvl); s.lvl++; up = true; }
   if(up && typeof castraSkillLearned==="function") castraSkillLearned(s, lvl0, s.lvl);
+  if(up && typeof castraPxpAdd==="function") castraPxpAdd(3*(s.lvl-lvl0));
   return up;
 }
 function castraTrainingNow(){ return CASTRA.soldiers.filter(s=>s.trainUntil); }

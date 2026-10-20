@@ -287,7 +287,7 @@ function castraFit(){
 function castraRenderRes(){
   const box = el("castraRes"); if(!box) return;
   const cap = castraWalletCap();
-  box.innerHTML = CASTRA_RES.map(r=>`<span class="pill" title="${esc(r.nl)}" style="font-size:14px">${r.icon} ${esc(r.nm)} <b>${CASTRA.res[r.id]||0}</b>${r.id!=="gloria"?`<small>/${cap}</small>`:""}</span>`).join("") + `<button class="btn" style="padding:2px 10px;min-height:32px" onclick="castraCodexOpen()">📖 Codex</button>`;
+  box.innerHTML = CASTRA_RES.map(r=>`<span class="pill" title="${esc(r.nl)}" style="font-size:14px">${r.icon} ${esc(r.nm)} <b>${CASTRA.res[r.id]||0}</b>${r.id!=="gloria"?`<small>/${cap}</small>`:""}</span>`).join("") + `${typeof castraPLevel==="function"?`<span class="pill" title="Castra-niveau" style="font-size:14px">🎖️ Niveau <b>${castraPLevel()}</b></span>`:""}${(typeof castraUnlocked!=="function"||castraUnlocked("codex"))?'<button class="btn" style="padding:2px 10px;min-height:32px" onclick="castraCodexOpen()">📖 Codex</button>':""}`;
 }
 function castraRenderMap(){
   const map = el("castraMap"); if(!map) return;

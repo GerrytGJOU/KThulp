@@ -145,6 +145,7 @@ function castraSkillById(id){ for(const c in CASTRA_SKILLS){ const k = CASTRA_SK
 // Aan/uit zetten (menu). Retourneert null bij succes, anders een foutcode.
 function castraSkillToggle(s, skillId){
   if(typeof CASTRA_B!=="undefined" && CASTRA_B && !CASTRA_B.finished && document.getElementById("cbMap")) return "gevecht";
+  if(typeof castraUnlocked==="function" && !castraUnlocked("artes")) return "vergrendeld";
   const H = castraSkillHolder(s), k = castraSkillById(skillId);
   if(!k || !castraSkillKnown(s).some(x=>x.id===skillId)) return "onbekend";
   let eq = castraSkillIds(s).slice();

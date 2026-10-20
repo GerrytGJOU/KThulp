@@ -198,7 +198,7 @@ function castraVFinish(){
     const aes = r(CASTRA_V_BAL.lootAes), fru = r(CASTRA_V_BAL.lootFrumentum), cap = castraWalletCap();
     CASTRA.res.aes = Math.min(cap, CASTRA.res.aes+aes);
     CASTRA.res.frumentum = Math.min(cap, CASTRA.res.frumentum+fru);
-    CASTRA.res.gloria += 1;
+    CASTRA.res.gloria += 1; if(typeof castraPxpAdd==="function") castraPxpAdd(6);
     V.loot = { aes, fru };
     if(soldier){
       soldier.xp += castraCardXp(CASTRA_V_BAL.xpWin + Math.floor(CASTRA_V_BAL.xpPerEnemyLvl*V.enemy.lvl));
@@ -250,6 +250,6 @@ function castraVRecruit(){
   const V = CASTRA_V; if(!V || V.recruited) return;
   if(CASTRA.soldiers.length >= castraBarracksCap()) return;
   CASTRA.soldiers.push(V.enemy);   // de wilde soldaat behoudt zijn eigen aanleg/karakter/insignis
-  V.recruited = true; castraSave();
+  V.recruited = true; castraSave(); if(typeof castraPxpAdd==="function") castraPxpAdd(10);
   castraVRender("result");
 }

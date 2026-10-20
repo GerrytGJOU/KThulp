@@ -157,7 +157,7 @@ const CASTRA_DONA = [
 ];
 function castraBOfer(){
   const B = CASTRA_B, s = B.sim;
-  if(B.legio || s.over || s.waveActive || s.wave<0 || s.wave>=B.mission.waves.length-1 || B.offeredFor===s.wave) return;
+  if(B.legio || (typeof castraUnlocked==="function" && !castraUnlocked("dona")) || s.over || s.waveActive || s.wave<0 || s.wave>=B.mission.waves.length-1 || B.offeredFor===s.wave) return;
   B.offeredFor = s.wave;
   const pool = CASTRA_DONA.slice(); const a = pool.splice(Math.floor(Math.random()*pool.length),1)[0], b = pool.splice(Math.floor(Math.random()*pool.length),1)[0];
   B.pick = [a,b]; B.autoT = 0; castraBRenderCtl();
@@ -284,7 +284,10 @@ function castraBFinish(){
       sol.xp += castraCardXp(12 + 6*m.waves.length); if(castraLevelUp(sol)) lines.push(castraSoldierName(sol));
     });
     (CASTRA.proelium || (CASTRA.proelium = { done:{} })).done = CASTRA.proelium.done || {};
+    const first = !CASTRA.proelium.done[m.id];
     CASTRA.proelium.done[m.id] = true; castraSave();
+    if(typeof castraPxpAdd==="function") castraPxpAdd(first ? 40+5*m.waves.length : 10, first ? "Missie voor het eerst gewonnen" : "");
+    if(first && typeof castraCardToken==="function") castraCardToken(1, "missie voor het eerst gewonnen");
     h += `<div style="font-size:22px;margin-bottom:6px">${castraLa("castra_defensa")}</div>
       <div>${castraLaText("praemium")}: ${Object.keys(rw).map(r=>castraRes(r).icon+" +"+rw[r]).join(" · ")}${B.rewardMult>1?" ("+castraLaText("praemium")+" ×"+B.rewardMult.toFixed(2)+")":""}</div>
       ${lines.length?`<div class="note">⭐ ${esc(lines.join(", "))} → ${castraLaText("gradus")}</div>`:""}`;
