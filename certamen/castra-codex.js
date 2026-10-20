@@ -16,12 +16,44 @@ const CASTRA_CODEX_LORE = {
   myt_lupusmartius:{ la:"Lupa Romulum et Remum nutrit. Lupus Martis sacer est.", nl:"Een wolvin voedt Romulus en Remus. De wolf van Mars is heilig." },
 };
 
+/* ---- Tweede verzamelas: prestaties (titels en beloningen voor codex-voortgang) ----
+   Per volk waarvan je alle vormen kent: een ster + beloning. Totaal-mijlpalen geven een titel.
+   Opslag: CASTRA.coll = { <sleutel>: 1 } voor reeds uitgekeerde beloningen. */
+const CASTRA_COLL_TOTAL = [
+  { n:10,  title:"Tiro",     nl:"rekruut",             reward:{ aes:60,  frumentum:40 } },
+  { n:25,  title:"Venator",  nl:"jager",               reward:{ aes:120, frumentum:80, gloria:2 } },
+  { n:50,  title:"Peritus",  nl:"kenner",              reward:{ aes:200, frumentum:140, gloria:4 } },
+  { n:80,  title:"Magister", nl:"meester",             reward:{ aes:320, frumentum:220, gloria:6 } },
+  { n:120, title:"Doctus",   nl:"geleerde",            reward:{ aes:500, frumentum:350, gloria:10 } },
+  { n:151, title:"Imperator",nl:"keizer van de codex", reward:{ aes:800, frumentum:500, gloria:20 } },
+];
+const CASTRA_COLL_FOLK = { aes:100, frumentum:60, gloria:3 };
+function castraCollSeen(){ return Object.keys(CASTRA.codex||{}).length; }
+function castraCollFolk(v){ const all = CASTRA_FORM_LIST.filter(f=>f.volk===v); return { seen:all.filter(f=>CASTRA.codex&&CASTRA.codex[f.id]).length, total:all.length }; }
+function castraTitle(){ let t = null; CASTRA_COLL_TOTAL.forEach(m=>{ if(castraCollSeen()>=m.n) t = m; }); return t; }
+function castraCollPay(res){
+  const cap = castraWalletCap();
+  Object.keys(res).forEach(r=>{ CASTRA.res[r] = Math.min(r==="gloria"?1e9:cap, (CASTRA.res[r]||0)+res[r]); });
+  return Object.keys(res).map(r=>castraRes(r).icon+" +"+res[r]).join(" ");
+}
+let _castraCollBusy = false;
+function castraCollCheck(){
+  if(_castraCollBusy || !CASTRA) return; _castraCollBusy = true;
+  try{
+    const c = CASTRA.coll || (CASTRA.coll = {}), msgs = [];
+    CASTRA_COLL_TOTAL.forEach(m=>{ const k = "t"+m.n; if(!c[k] && castraCollSeen()>=m.n){ c[k] = 1; msgs.push(["🏅 "+m.title, m.nl+" · "+castraCollPay(m.reward)]); } });
+    Object.keys(CASTRA_FOLKS).forEach(v=>{ if(v==="myt") return; const k = "v"+v, s = castraCollFolk(v);
+      if(!c[k] && s.total>0 && s.seen>=s.total){ c[k] = 1; msgs.push(["⭐ "+CASTRA_FOLKS[v].nm, "alle vormen ontmoet · "+castraCollPay(CASTRA_COLL_FOLK)]); } });
+    if(msgs.length){ castraSave(); if(typeof castraRenderRes==="function") castraRenderRes(); msgs.forEach((m,i)=>setTimeout(()=>toast(m[0], m[1]), i*1800)); }
+  } finally { _castraCollBusy = false; }
+}
 function castraCodexSee(id){
   if(typeof CASTRA==="undefined" || !CASTRA || !CASTRA_FORMS[id]) return;
   CASTRA.codex = CASTRA.codex || {};
   // een vorm ontmoeten = ook zijn voorouders kennen
   const todo = [id];
   while(todo.length){ const k = todo.pop(); if(CASTRA.codex[k]) continue; CASTRA.codex[k] = 1; CASTRA_FORMS[k].from.forEach(p=>todo.push(p)); }
+  castraCollCheck();
 }
 function castraCodexSync(){ (CASTRA.soldiers||[]).forEach(s=>castraCodexSee(s.line)); }
 
@@ -82,15 +114,30 @@ function castraCodexOpen(tab){
   CASTRA_UI.panel = "codex";
   castraCodexSync();
   const folks = Object.keys(CASTRA_FOLKS);
-  const tabs = folks.concat(["helden"]).map(k=>{
-    const nm = k==="helden" ? "Helden" : CASTRA_FOLKS[k].nm, on = CASTRA_CX.tab===k;
+  const tabs = folks.concat(["helden","prest"]).map(k=>{
+    const st = (k==="helden"||k==="prest") ? null : castraCollFolk(k), star = st && st.seen>=st.total && k!=="myt" ? " ⭐" : "";
+    const nm = k==="helden" ? "Helden" : k==="prest" ? "🏅 Prestaties" : CASTRA_FOLKS[k].nm+star, on = CASTRA_CX.tab===k;
     return `<button class="btn ${on?"btn-gold":""}" style="margin:2px;min-height:44px" onclick="castraCodexOpen('${k}')">${esc(nm)}</button>`;
   }).join("");
   const total = CASTRA_FORM_LIST.length, seen = Object.keys(CASTRA.codex||{}).length;
-  if(CASTRA_CX.tab!=="helden"){ const pend = CASTRA_FORM_LIST.filter(f=>f.volk===CASTRA_CX.tab && castraFsprHas(f.id,"td")===undefined).map(f=>[f.id,"td"]); if(pend.length) castraFsprProbe(pend, ()=>{ if(CASTRA_UI.panel==="codex") castraCodexOpen(); }); }
-  const body = CASTRA_CX.tab==="helden" ? castraCodexHeroes() : castraCodexTree(CASTRA_CX.tab);
+  if(CASTRA_CX.tab!=="helden" && CASTRA_CX.tab!=="prest"){ const pend = CASTRA_FORM_LIST.filter(f=>f.volk===CASTRA_CX.tab && castraFsprHas(f.id,"td")===undefined).map(f=>[f.id,"td"]); if(pend.length) castraFsprProbe(pend, ()=>{ if(CASTRA_UI.panel==="codex") castraCodexOpen(); }); }
+  const body = CASTRA_CX.tab==="helden" ? castraCodexHeroes() : CASTRA_CX.tab==="prest" ? castraCodexPrest() : castraCodexTree(CASTRA_CX.tab);
   castraOpenPanel(`<div class="panel"><h3>📖 Codex <small>· ${seen} / ${total} vormen ontmoet</small></h3>
     <div style="margin:6px 0">${tabs}</div>${body}
     <div style="margin-top:10px"><button class="btn" onclick="castraClosePanel()">${castraLaText("claude")}</button></div></div>`);
   castraSave();
+}
+
+function castraCodexPrest(){
+  const seen = castraCollSeen(), c = CASTRA.coll || {}, t = castraTitle();
+  const bar = (a,b)=>`<div style="height:8px;background:#3a2f20;border:1px solid #6b5630;border-radius:5px;overflow:hidden;margin-top:3px"><div style="width:${Math.min(100,Math.round(100*a/b))}%;height:100%;background:#d4af37"></div></div>`;
+  const tot = CASTRA_COLL_TOTAL.map(m=>{ const ok = !!c["t"+m.n];
+    return `<div style="padding:6px 0;border-top:1px solid #4a3d2c;${ok?"":"opacity:.75"}"><div style="display:flex;justify-content:space-between;gap:8px"><b>${ok?"🏅":"🔒"} ${esc(m.title)}</b><span>${Math.min(seen,m.n)} / ${m.n}</span></div>
+      <small>${esc(m.nl)} · ${Object.keys(m.reward).map(r=>castraRes(r).icon+" "+m.reward[r]).join(" ")}</small>${bar(seen,m.n)}</div>`; }).join("");
+  const fol = Object.keys(CASTRA_FOLKS).filter(v=>v!=="myt").map(v=>{ const s = castraCollFolk(v), ok = !!c["v"+v];
+    return `<div style="padding:6px 0;border-top:1px solid #4a3d2c;${ok?"":"opacity:.75"}"><div style="display:flex;justify-content:space-between;gap:8px"><b>${ok?"⭐":"☆"} ${esc(CASTRA_FOLKS[v].nm)}</b><span>${s.seen} / ${s.total}</span></div>${bar(s.seen,s.total)}</div>`; }).join("");
+  return `<h4 style="margin:6px 0 2px;color:#d4af37">Titel: ${t?esc(t.title)+" <small>("+esc(t.nl)+")</small>":"nog geen"}</h4>
+    <div style="font-size:13px;opacity:.8;margin-bottom:6px">Ontmoet nieuwe soldaten (vang ze, evolueer of zie ze als vijand) om titels en beloningen te verdienen. Een ster krijg je als je alle vormen van een volk kent (${Object.keys(CASTRA_COLL_FOLK).map(r=>castraRes(r).icon+" "+CASTRA_COLL_FOLK[r]).join(" ")}).</div>
+    <h4 style="margin:8px 0 2px;color:#d4af37">Totaal (${seen} / ${CASTRA_FORM_LIST.length} vormen)</h4>${tot}
+    <h4 style="margin:12px 0 2px;color:#d4af37">Volken</h4>${fol}`;
 }

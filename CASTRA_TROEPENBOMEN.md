@@ -195,3 +195,19 @@ Open punten (voor jou, vóór M1):
 Knop ☰ rechtsboven op de kampkaart opent (`certamen/castra-menu.js`) een menuvak in perkamentkleur met donkerbruine rand en ▶-cursor, naast een detailvak: **Codex** (de boomkaart), **Milites** (je team: sprite, naam, level, gezondheidsbalk, XP-balk, klasse, tik voor stats/aanleg/karakter), **Heroes** (level, fides, XP, gebouw), **Sacculus** (grondstoffen met opslagmaximum en gebouwniveaus), **Opus** (lopende opdracht), **[spelersnaam]** (kaart met roem, soldaten, helden, open regio's, gewonnen missies, codex-voortgang), **Servare** (handmatig opslaan) en **Exeo** (terug naar het portaal). Tikvlakken ≥ 44 px, werkt met aanraking en muis.
 
 **Restart (2026-11-16).** Menu-onderdeel *Restart* (bewust Nederlands/Engels, geen Latijn) wist je Castra-save en start het tutorial opnieuw, met een dubbele bevestiging: eerst "Wil je helemaal opnieuw beginnen?" (met opsomming van wat verloren gaat), daarna "Weet je het zeker? Dit kan niet ongedaan worden gemaakt." (`castraRestartNow` in castra-menu.js). De nieuwe save wordt meteen ook naar de cloud geschreven, zodat een herlaad de oude niet terughaalt. Battle Mode-profiel, avatar en munten blijven; lopende Legio-acties en ruilaanbiedingen in de cloud worden niet aangeraakt.
+
+## 12. Meer te doen in de wereld, tower defence-tempo en verzamelen (2026-11-17/19)
+
+**Wereldobjecten en opdrachttypes** (`certamen/castra-wobj.js`, demo in Latium; andere regio's volgen door entiteiten toe te voegen aan `CASTRA_WENT`):
+- *Kisten* (🧰): eenmaal per dag te openen (komt de volgende dag terug); buit = grondstoffen, soms roem. Vier in Latium.
+- *Voorwerpen* (✨ op de grond): erop lopen = oppakken; ze komen in de Sacculus (menu) onder "Res". Eerste voorwerp: de *Amphora*.
+- *Zoekopdracht*: de **Agricola** is zijn amfoor kwijt (Latijns dialoog met portret); zoek hem in het bos en breng hem terug voor 60 aes + 30 frumentum.
+- *Inleveropdracht / bouwen*: de **Faber** bouwt een put als je 30 lignum + 15 aes inlevert; de put verschijnt op de kaart (`castraWobjPieces`) en geneest **eenmaal per dag al je gewonde soldaten**.
+- *Latijnse puzzels* van de **Magistra**: *Ordo verborum* (zet de woorden van een Latijnse zin in de goede volgorde, 6 zinnen) en *Verba iungere* (koppel 4 Latijnse woorden aan hun betekenis, 10 woorden). Eerste succes per dag geeft beloning (25 aes, 15 frumentum, 1 roem), daarna mag je oefenen.
+- De dialogen gebruiken het RPG-dialoogvenster uit het tutorial (nu ook met keuzeknoppen per regel en met willekeurige sprekers). Menu-onderdeel *Opus* toont ook deze opdrachten.
+
+**Tower defence** (`castra-battle.js`, `castra-proelium.js`): snelheid 1× / 2× / 3× (onthouden), **Auto** (volgende golf start 3 s na de vorige; eerste golf altijd handmatig; onthouden), en na elke golf (behalve de laatste) een keuze uit **2 gunsten** (*dona*): Vires (+15% schade), Celeritas (+15% tempo), Acies (+10% bereik), Gelu (vijanden 10% langzamer), Murus (+2 levens), Praeda (+25% beloning). Gunsten stapelen voor de rest van de missie, werken alleen in solo (niet in de Legio, die deterministisch lockstep is) en laten de balanssimulatie ongemoeid (`sim.mods` is standaard 1). Het knoppenpaneel wordt alleen nog opnieuw getekend als de toestand verandert, zodat knoppen niet midden in een klik verdwijnen.
+
+**Tweede verzamelas: prestaties** (`castra-codex.js`, tabblad *🏅 Prestaties*): per volk waarvan je alle vormen kent een ⭐ (100 aes + 60 frumentum + 3 roem); totaal-mijlpalen met een titel en beloning: 10 *Tiro*, 25 *Venator*, 50 *Peritus*, 80 *Magister*, 120 *Doctus*, 151 *Imperator*. Beloningen worden automatisch en eenmalig uitgekeerd (`CASTRA.coll`); de titel staat op je spelerskaart in het menu.
+
+**Quests nu:** 15 heldenketens (45 stappen) + 45 gesprekken, 23 missies, tutorial (3 stappen), Legio, plus de wereldopdrachten hierboven (Agricola, Faber, Magistra, 4 kisten).
