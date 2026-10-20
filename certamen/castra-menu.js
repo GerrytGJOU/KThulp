@@ -77,6 +77,7 @@ function castraMenuRender(){
 function castraMenuPick(id){
   { const it = CASTRA_MENU_ITEMS.find(x=>x.id===id); if(it && it.unl && typeof castraUnlocked==="function" && !castraUnlocked(it.unl)){ castraLockedToast(it.unl); return; } }
   if(id==="codex"){ castraMenuClose(); castraCodexOpen(); return; }
+  if(id==="mundus"){ castraMenuClose(); castraGeoMapOpen(); return; }
   if(id==="servare"){ castraSave(); castraToastLa("recte", "💾 Servatum"); castraMenuClose(); return; }
   if(id==="exeo"){ castraMenuClose(); castraLeave(); return; }
   CASTRA_MENU.view = id; CASTRA_MENU.rs = 0; castraMenuRender();

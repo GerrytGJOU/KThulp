@@ -177,7 +177,7 @@ const CASTRA_VENATIO = {
     traces:[ "aeneas","romulus","horatius","cloelia","mucius","camilla" ], traceChance:0.15,
   },
   graecia: {
-    nm:"Graecia", min:10, max:19, tierMax:3, folk:{ gra:66, spa:14, tro:5, per:5, aeg:3, gla:3, rom:2, ama:2 },
+    nm:"Graecia", min:28, max:36, tierMax:3, folk:{ gra:66, spa:14, tro:5, per:5, aeg:3, gla:3, rom:2, ama:2 },
     terrains:[
       { id:"mons",  la:"In monte", nl:"Op de berg",         prefs:{ inf:3, rng:3 }, myth:{ p:0.15, taks:["Grijpvogels","Saters","Centauren"] } },
       { id:"olea",  la:"In oleis", nl:"In de olijfgaarden", prefs:{ rng:3, inf:2, cav:1 }, myth:{ p:0.15, taks:["Nimfen","Saters"] } },
@@ -187,7 +187,7 @@ const CASTRA_VENATIO = {
     traces:[ "hercules","perseus","theseus","atalanta","iason" ], traceChance:0.15,
   },
   troia: {
-    nm:"Troia", min:19, max:29, tierMax:4, folk:{ tro:72, gra:12, ama:6, per:4, aeg:3, spa:2, car:1 },
+    nm:"Troia", min:36, max:44, tierMax:4, folk:{ tro:72, gra:12, ama:6, per:4, aeg:3, spa:2, car:1 },
     terrains:[
       { id:"muros",     la:"Ante muros",    nl:"Voor de muren",    prefs:{ inf:3, rng:2, cav:1 }, myth:{ p:0.05, taks:["Cyclopen"] } },
       { id:"campus",    la:"In campo",      nl:"Op het veld",      prefs:{ cav:3, inf:2, rng:1 }, myth:{ p:0.05, taks:["Centauren"] } },
@@ -197,7 +197,7 @@ const CASTRA_VENATIO = {
     traces:[ "achilles","hector","ulixes","penthesilea" ], traceChance:0.15,
   },
   gallia: {
-    nm:"Gallia", min:27, max:37, tierMax:4, folk:{ gal:70, ger:14, rom:8, gla:4, car:2, gra:2 },
+    nm:"Gallia", min:16, max:24, tierMax:3, folk:{ gal:70, ger:14, rom:8, gla:4, car:2, gra:2 },
     terrains:[
       { id:"silva",   la:"In silva Gallica", nl:"In het Gallische woud", prefs:{ inf:3, sup:2, cav:1 }, myth:{ p:0.12, taks:["Saters","Nimfen","Wolven van Mars"] } },
       { id:"oppidum", la:"In oppido",        nl:"In de burcht",          prefs:{ inf:3, sup:3, cav:1 }, myth:{ p:0.05, taks:["Wolven van Mars"] } },
@@ -207,7 +207,7 @@ const CASTRA_VENATIO = {
     traces:[], traceChance:0,
   },
   aegyptus: {
-    nm:"Aegyptus", min:31, max:41, tierMax:4, folk:{ aeg:70, per:9, car:7, gra:5, ama:3, rom:3, tro:3 },
+    nm:"Aegyptus", min:42, max:50, tierMax:4, folk:{ aeg:70, per:9, car:7, gra:5, ama:3, rom:3, tro:3 },
     terrains:[
       { id:"nilus",    la:"Ad Nilum",      nl:"Aan de Nijl",       prefs:{ rng:3, inf:2, cav:1 }, myth:{ p:0.10, taks:["Nimfen"] } },
       { id:"templum",  la:"In templo",     nl:"In de tempel",      prefs:{ sup:3, inf:2, rng:1 }, myth:{ p:0.15, taks:["Schimmen"] } },
@@ -217,7 +217,7 @@ const CASTRA_VENATIO = {
     traces:[], traceChance:0,
   },
   persis: {
-    nm:"Persis", min:35, max:45, tierMax:4, folk:{ per:72, aeg:6, gra:6, tro:4, ama:4, car:3, gal:3, rom:2 },
+    nm:"Persis", min:40, max:48, tierMax:4, folk:{ per:72, aeg:6, gra:6, tro:4, ama:4, car:3, gal:3, rom:2 },
     terrains:[
       { id:"mons",   la:"In montibus", nl:"In de bergen",  prefs:{ rng:3, inf:2, sup:1 }, myth:{ p:0.15, taks:["Grijpvogels","Draken"] } },
       { id:"via",    la:"In via regia", nl:"Op de koningsweg", prefs:{ cav:3, inf:2, rng:2 }, myth:{ p:0.05, taks:["Adelaars van Jupiter"] } },
@@ -227,7 +227,7 @@ const CASTRA_VENATIO = {
     traces:[], traceChance:0,
   },
   africa: {
-    nm:"Africa", min:38, max:48, tierMax:4, folk:{ car:72, aeg:8, rom:6, gal:4, gra:4, per:3, ger:3 },
+    nm:"Africa", min:43, max:50, tierMax:4, folk:{ car:72, aeg:8, rom:6, gal:4, gra:4, per:3, ger:3 },
     terrains:[
       { id:"deserto", la:"In deserto", nl:"In de woestijn",  prefs:{ cav:3, rng:2, inf:1 }, myth:{ p:0.12, taks:["Draken","Feniks"] } },
       { id:"urbs",    la:"In urbe",    nl:"In de stad",      prefs:{ inf:3, cav:2, rng:1 }, myth:{ p:0.08, taks:["Schimmen"] } },
@@ -237,7 +237,7 @@ const CASTRA_VENATIO = {
     traces:[], traceChance:0,
   },
   roma: {
-    nm:"Roma", min:40, max:50, tierMax:4, folk:{ rom:60, gla:20, gal:5, ger:4, gra:4, aeg:3, per:2, car:2 },
+    nm:"Roma", min:10, max:18, tierMax:3, folk:{ rom:60, gla:20, gal:5, ger:4, gra:4, aeg:3, per:2, car:2 },
     terrains:[
       { id:"arena",  la:"In arena",     nl:"In de arena",        folk:{ gla:80, rom:12, gal:4, ger:4 }, prefs:{ inf:3, rng:1, sup:1 }, myth:{ p:0.04, taks:["Wolven van Mars"] } },
       { id:"forum",  la:"In foro",      nl:"Op het Forum",       folk:{ rom:84, gla:8, gra:4, aeg:4 }, prefs:{ inf:3, sup:2, cav:1 }, myth:{ p:0.04, taks:["Adelaars van Jupiter"] } },
@@ -247,7 +247,7 @@ const CASTRA_VENATIO = {
     traces:[], traceChance:0,
   },
   laconia: {
-    nm:"Laconia", min:42, max:50, tierMax:4, folk:{ spa:78, gra:8, per:4, rom:4, tro:3, aeg:3 },
+    nm:"Laconia", min:32, max:40, tierMax:4, folk:{ spa:78, gra:8, per:4, rom:4, tro:3, aeg:3 },
     terrains:[
       { id:"mons",   la:"In montibus", nl:"In het Taygetosgebergte", prefs:{ inf:3, rng:3 }, myth:{ p:0.10, taks:["Grijpvogels","Centauren"] } },
       { id:"urbs",   la:"In urbe",     nl:"In Sparta",                prefs:{ inf:4, rng:1, sup:1 }, myth:{ p:0.03, taks:["Gezaaide mannen"] } },
@@ -257,7 +257,7 @@ const CASTRA_VENATIO = {
     traces:[], traceChance:0,
   },
   germania: {
-    nm:"Germania", min:44, max:50, tierMax:4, folk:{ ger:74, gal:8, rom:6, gla:3, car:3, gra:2, aeg:2, per:2 },
+    nm:"Germania", min:22, max:30, tierMax:3, folk:{ ger:74, gal:8, rom:6, gla:3, car:3, gra:2, aeg:2, per:2 },
     terrains:[
       { id:"silva",  la:"In silva",      nl:"In het oerwoud",       prefs:{ inf:3, sup:2, cav:1 }, myth:{ p:0.14, taks:["Wolven van Mars","Saters","Draken"] } },
       { id:"palus",  la:"In paludibus",  nl:"In de moerassen",      prefs:{ inf:3, sup:3 },        myth:{ p:0.15, taks:["Schimmen","Nimfen"] } },
@@ -267,7 +267,7 @@ const CASTRA_VENATIO = {
     traces:[], traceChance:0,
   },
   themiscyra: {
-    nm:"Themiscyra", min:46, max:50, tierMax:3, folk:{ ama:80, gra:5, tro:4, per:3, spa:3, ger:3, gal:2 },
+    nm:"Themiscyra", min:38, max:46, tierMax:4, folk:{ ama:80, gra:5, tro:4, per:3, spa:3, ger:3, gal:2 },
     terrains:[
       { id:"silva",  la:"In silva",    nl:"In het woud",    prefs:{ rng:3, inf:2 },        myth:{ p:0.12, taks:["Nimfen","Centauren"] } },
       { id:"mons",   la:"In montibus", nl:"In de bergen",   prefs:{ rng:3, inf:3 },        myth:{ p:0.15, taks:["Grijpvogels","Harpijen"] } },
