@@ -47,12 +47,17 @@ function castraMenuToggle(){ if(CASTRA_MENU.open) castraMenuClose(); else castra
 function castraMenuClose(){
   CASTRA_MENU.open = false; CASTRA_MENU.view = null;
   const m = document.getElementById("castraMenu"); if(m) m.remove();
+  if(CASTRA_MENU.esc){ document.removeEventListener("keydown", CASTRA_MENU.esc); CASTRA_MENU.esc = null; }
 }
+// Esc of "‹ terug": eerst het detailvak sluiten, daarna het hele menu.
+function castraMenuBack(){ if(CASTRA_MENU.view){ CASTRA_MENU.view = null; castraMenuRender(); } else castraMenuClose(); }
 function castraMenuOpen(){
   castraMenuClose(); CASTRA_MENU.open = true;
   const m = document.createElement("div"); m.id = "castraMenu";
   m.style.cssText = "position:fixed;inset:0;z-index:9980;background:rgba(0,0,0,.45);display:flex;justify-content:flex-end;align-items:flex-start;padding:8px;box-sizing:border-box";
   m.onclick = ev=>{ if(ev.target===m) castraMenuClose(); };
+  CASTRA_MENU.esc = ev=>{ if(ev.key==="Escape"){ ev.preventDefault(); castraMenuBack(); } };
+  document.addEventListener("keydown", CASTRA_MENU.esc);
   document.body.appendChild(m);
   castraMenuRender();
 }
@@ -67,9 +72,15 @@ function castraMenuRender(){
       <span style="position:absolute;left:6px;top:50%;transform:translateY(-50%);visibility:${on?"visible":"hidden"}" class="castra-cur">▶</span>
       <b>${lock?"🔒 ":""}${esc(la)}</b><small style="opacity:.6;font-size:11px">${lock?"vanaf niveau "+lu.lvl:esc(it.nl)}</small></div>`;
   }).join("");
-  const detail = CASTRA_MENU.view ? `<div id="castraMenuView" style="${box};flex:1;min-width:0;max-width:560px;max-height:calc(100vh - 16px);overflow:auto;padding:10px 12px;margin-right:8px">${castraMenuView(CASTRA_MENU.view)}</div>` : "";
-  m.innerHTML = `<div style="display:flex;align-items:flex-start;width:100%;justify-content:flex-end">${detail}
-    <div style="${box};flex:0 0 190px;width:190px;padding:4px 0">${items}</div></div>`;
+  const xbtn = "min-width:40px;min-height:40px;font-size:20px;line-height:1;background:#e9d9ac;color:#2b1d0e;border:2px solid #4a3416;border-radius:8px;cursor:pointer;font-family:inherit";
+  const detail = CASTRA_MENU.view ? `<div id="castraMenuView" style="${box};flex:1;min-width:0;max-width:560px;max-height:calc(100vh - 16px);overflow:auto;padding:0 12px 10px;margin-right:8px;pointer-events:auto">
+      <div style="position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;background:#ecdcb0;border-bottom:1px solid #c2a96f;margin-bottom:6px">
+        <button onclick="castraMenuBack()" style="${xbtn};padding:0 12px;font-size:15px" aria-label="Terug naar het menu">‹ Menu</button>
+        <button onclick="castraMenuClose()" style="${xbtn}" aria-label="Sluiten" title="Sluiten (Esc)">✕</button></div>
+      ${castraMenuView(CASTRA_MENU.view)}</div>` : "";
+  m.innerHTML = `<div style="display:flex;align-items:flex-start;width:100%;justify-content:flex-end;pointer-events:none">${detail}
+    <div style="${box};flex:0 0 190px;width:190px;padding:4px 0;pointer-events:auto;max-height:calc(100vh - 16px);overflow:auto">
+      <div style="display:flex;justify-content:flex-end;padding:2px 6px 0"><button onclick="castraMenuClose()" style="${xbtn};min-width:36px;min-height:36px;font-size:18px" aria-label="Menu sluiten" title="Sluiten (Esc)">✕</button></div>${items}</div></div>`;
   m.querySelectorAll("[role=button]").forEach((n,i)=>{
     n.onmouseenter = ()=>m.querySelectorAll(".castra-cur").forEach((c,j)=>c.style.visibility = (j===i || CASTRA_MENU_ITEMS[j].id===CASTRA_MENU.view) ? "visible" : "hidden");
   });
@@ -273,3 +284,16 @@ function castraMenuCmpPick(id){
   const i = sel.indexOf(id); if(i>=0) sel.splice(i,1); else { if(sel.length>=2) sel.shift(); sel.push(id); }
   castraMenuRender();
 }
+
+/* ---------- sluitknop (✕) op alle losse vakken ----------
+   Kamppanelen (#castraPanel) en wereldpanelen (#cwPanel) krijgen rechtsboven een ✕, ook als er al een
+   eigen "Sluiten"-knop onderaan staat (die kan buiten beeld liggen bij lange vakken, zoals de codex). */
+function castraXBtnHTML(fn){
+  return `<button class="castra-xbtn" onclick="${fn}()" aria-label="Sluiten" title="Sluiten" style="position:absolute;top:6px;right:6px;z-index:5;min-width:40px;min-height:40px;font-size:20px;line-height:1;background:rgba(0,0,0,.35);color:var(--cream,#f3e9d2);border:1px solid var(--hi-dim,#9c7c1f);border-radius:8px;cursor:pointer">✕</button>`;
+}
+function castraXBtnAttach(box, fn){
+  if(!box) return; const first = box.querySelector(".panel"); if(!first || first.querySelector(".castra-xbtn")) return;
+  first.style.position = "relative"; first.insertAdjacentHTML("afterbegin", castraXBtnHTML(fn));
+}
+const _castraOpenPanelX0 = castraOpenPanel;
+castraOpenPanel = function(html){ _castraOpenPanelX0(html); castraXBtnAttach(el("castraPanel"), "castraClosePanel"); };

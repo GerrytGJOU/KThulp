@@ -302,10 +302,20 @@ function castraRenderMap(){
       ${pend>0?`<div style="position:absolute;top:-6px;right:-6px;font-size:11px;background:#d4af37;color:#2a2118;border-radius:10px;padding:1px 6px;font-weight:700;animation:pulse 1.4s infinite">+${pend}</div>`:""}
     </div>`;
   });
+  // poortborden: een houten bord met letters op de kampmuur naast de poort (valt zo in de scène)
   CASTRA_MAP.gates.forEach(g=>{
-    const f=g.tiles[0], horiz = g.tiles[0].y===g.tiles[1].y;
-    const lx = f.x*t + (horiz? 0 : -(t*1.2)), ly = f.y*t + (horiz? t : 0);
-    h += `<div style="position:absolute;left:${lx}px;top:${ly}px;font-size:var(--lbl,10px);color:#e8d9a8;white-space:nowrap;text-shadow:0 1px 2px #000;pointer-events:none;z-index:3">${esc(g.nm)}</div>`;
+    const f=g.tiles[0], horiz = g.tiles[0].y===g.tiles[1].y, w = 2.9*t, hgt = 0.98*t;
+    const sub = ({ venatio:"→ de jacht", proelium:"→ campagne" })[g.to] || "";
+    const e = g.tiles[1];
+    const lx = horiz ? (e.x+1)*t + 0.12*t : CASTRA_MAP.cols*t - w - 0.5*t;       // naast de poort op de muur, zonder gebouwlabels te bedekken
+    const ly = horiz ? 0.04*t : (e.y+1)*t + 0.14*t;
+    h += `<div style="position:absolute;left:${lx}px;top:${ly}px;width:${w}px;height:${hgt}px;z-index:3;pointer-events:none;box-sizing:border-box;border:2px solid #3a2410;border-radius:4px;
+      background:repeating-linear-gradient(180deg,rgba(0,0,0,.18) 0 1px,transparent 1px 11px),linear-gradient(#b07a40,#8a5a2a 60%,#7a4e24);box-shadow:0 2px 3px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,220,160,.35);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;text-align:center">
+      <span style="position:absolute;left:4px;top:3px;width:4px;height:4px;border-radius:50%;background:#2c1a0a;box-shadow:inset 0 0 1px #c9a46a"></span><span style="position:absolute;right:4px;top:3px;width:4px;height:4px;border-radius:50%;background:#2c1a0a;box-shadow:inset 0 0 1px #c9a46a"></span>
+      <span style="position:absolute;left:4px;bottom:3px;width:4px;height:4px;border-radius:50%;background:#2c1a0a;box-shadow:inset 0 0 1px #c9a46a"></span><span style="position:absolute;right:4px;bottom:3px;width:4px;height:4px;border-radius:50%;background:#2c1a0a;box-shadow:inset 0 0 1px #c9a46a"></span>
+      <b style="font-size:15px;letter-spacing:.05em;color:#f6e6bd;text-shadow:0 1px 0 #3a2410,0 0 2px #3a2410;font-variant:small-caps">${esc(g.nm)}</b>
+      <span style="font-size:11px;color:#ead2a0;text-shadow:0 1px 0 #3a2410">${sub}</span></div>`;
   });
   h += `<div id="castraAv" style="position:absolute;width:${t}px;height:${t}px;transition:left .16s linear,top .16s linear;pointer-events:none;z-index:5"></div>`;
   h += `<canvas id="cmAbove" style="position:absolute;left:0;top:0;pointer-events:none;image-rendering:pixelated;z-index:6"></canvas>`;

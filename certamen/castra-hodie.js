@@ -65,3 +65,4 @@ SCREENS.castraHome = function(){
   const r = el("castraRes"); if(r) r.insertAdjacentHTML("afterend", castraHodieHTML());
 };
 Object.assign(CASTRA_GLOSS, { "hodie":"vandaag", "haec":"dit", "facere":"doen", "potes":"je kunt" });
+
