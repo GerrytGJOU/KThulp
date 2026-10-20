@@ -91,6 +91,7 @@ function castraDilectusFolks(){
   const folks = ["rom"];
   if(castraRegionOpen("graecia")) folks.push("gra","spa");
   if(castraRegionOpen("troia")) folks.push("tro");
+  if(castraRegionOpen("gallia")) folks.push("gal","ger");
   return folks;
 }
 function castraHireCost(s){ const t = castraLine(s.line).tier; return CASTRA_MED.hireCostTier[Math.min(CASTRA_MED.hireCostTier.length, Math.max(1,t))-1]; }

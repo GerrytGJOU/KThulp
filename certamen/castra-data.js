@@ -172,6 +172,7 @@ const CASTRA_REGIONS = [
   { id:"latium",  nm:"Latium",  nl:"Midden-Italië" },
   { id:"graecia", nm:"Graecia", nl:"Griekenland" },
   { id:"troia",   nm:"Troia",   nl:"Troje" },
+  { id:"gallia",  nm:"Gallia",  nl:"Gallië" },
   { id:"inferi",  nm:"Inferi",  nl:"De Onderwereld" },
 ];
 

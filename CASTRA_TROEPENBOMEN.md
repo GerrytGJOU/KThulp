@@ -1,6 +1,6 @@
 # Castra Heroum — troepenbomen per volk (151 vormen)
 
-Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M6 gebouwd (M6: 2026-11-03), wacht op goedkeuring voor M7** · hoort bij `CASTRA_HEROUM.md`.
+Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M6 gebouwd; M7 deels: eerste regio Gallia gebouwd (2026-11-04), Roma/Laconia, Germania, Aegyptus, Persis, Africa en Themiscyra wachten per regio op goedkeuring** · hoort bij `CASTRA_HEROUM.md`.
 Dit document is de bron van waarheid voor de troepenbomen; het vervangt de huidige losse evolutielijnen (`CASTRA_LINES` in `certamen/castra-data.js`). De 15 helden (`CASTRA_HERO_DATA`) blijven ongewijzigd.
 
 ## 1. Idee en regels
@@ -139,7 +139,11 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 
 **M6 (2026-11-03): sprites-pijplijn** (`certamen/castra-sprites.js`, map `certamen/assets/sprites-forms/` met README.txt). Bestandsnamen `[vorm-id]_battle_front.png` / `_battle_back.png` (96×96) en `_td.png` (48×48); vorm-id = volk_naam (zie MANIFEST.md). Elk bestand wordt één keer geprobeerd (`castraFsprProbe`) en onthouden; ontbreekt het, dan blijft de avatar-laagcombinatie de placeholder, dus per vorm uploaden kan. Gebruik: beurtgevecht (venatio) toont jouw soldaat van achter en de vijand van voren; tower defence toont `_td` voor torens en vijanden (spiegeling bij links, lichte huppel in de looptakt); de codex toont `_td` als miniatuur bij ontmoete vormen. Helden en het dux-personage blijven avatar-gebaseerd. Voortgang: `node certamen/tools/castra-sprites-manifest.js` schrijft `assets/sprites-forms/MANIFEST.md` (nu 0 / 453). Na het vervangen van een PNG: `CASTRA_FSPR.ver` ophogen. Getest met tijdelijke testbestanden (daarna verwijderd): sprites verschijnen, fallback werkt. De 15 helden hebben hier nog geen eigen spritebestanden (die zouden 45 extra bestanden zijn).
 
-**Nog niet (volgende mijlpalen):** M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
+**M7 — regio 1: Gallia (2026-11-04).** Opent na missie t2. Wereld (`CASTRA_WORLDS.gallia`, bosrijk met burcht en Rijn), terreinen *In silva Gallica / In oppido / In campo / Ad Rhenum*, wild: 70% Galliërs, 14% Germanen, rest Romeinen/gladiatoren/Carthagers/Grieken, rekruten level 27–37, tierplafond 4. Dilectus werft er Galliërs en Germanen. Twee missies: **ga1 Silva Gallica** (vijanden level 40, hpMult 11,5) en **ga2 Alesia** (level 46, hpMult 7,4), afgesteld met de gesimuleerde proef voor 12 torens (tier 3, level = missielevel): winnen met 5 levens, bij 70% van het level verliezen, bij 130% ruim winnen. Geen helden of sporen in Gallia (de 15 helden blijven ongewijzigd). Wat Germania nu al kan: Germanen komen in Gallia voor als tweede volk; een eigen Germania-wereld is er nog niet.
+
+**Nog te bouwen regio's (M7, elk apart goed te keuren):** Roma/Laconia, Germania, Aegyptus, Persis, Africa, Themiscyra. Per regio: wereld + terreinen + wildmengsel + 2 missies + eventueel Dilectus-volk.
+
+**Nog niet (volgende mijlpalen):** de overige M7-regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
 
 ## 7. Voorstel mijlpalen en open punten (oorspronkelijk)
 

@@ -80,6 +80,19 @@ const CASTRA_P_MISSIONS = [
             [ {line:_fid("myt","Harpyia"),n:4,gap:20,lvl:38}, {line:_fid("tro","Propugnator"),n:6,gap:16,lvl:38} ],
             [ {line:_fid("myt","Gryps"),n:3,gap:22,lvl:38}, {line:_fid("tro","Bellator curru"),n:6,gap:14,lvl:38}, {line:_fid("tro","Custos Pergami"),n:6,gap:16,lvl:38} ] ],
     reward:{ aes:300, frumentum:200, gloria:18 } },
+  /* Gallia (opent na t2) */
+  { id:"ga1", region:"gallia", nm:"Silva Gallica", nl:"Het Gallische woud", map:"b", seed:4101, hpMult:11.5, needs:"t2",
+    waves:[ [ {line:_fid("gal","Gaesatus"),n:6,gap:20,lvl:40} ],
+            [ {line:_fid("gal","Eques Gallus"),n:5,gap:18,lvl:40} ],
+            [ {line:_fid("gal","Bardus"),n:5,gap:18,lvl:40}, {line:_fid("gal","Bellator Gallus"),n:4,gap:20,lvl:40} ],
+            [ {line:_fid("ger","Frameatus"),n:6,gap:16,lvl:40}, {line:_fid("ger","Eques Germanus"),n:4,gap:16,lvl:40} ] ],
+    reward:{ aes:340, frumentum:230, gloria:20 } },
+  { id:"ga2", region:"gallia", nm:"Alesia", nl:"Het beleg van Alesia", map:"a", seed:4202, hpMult:7.4, needs:"ga1",
+    waves:[ [ {line:_fid("gal","Bellator Gallus"),n:7,gap:16,lvl:46} ],
+            [ {line:_fid("gal","Eques nobilis"),n:6,gap:16,lvl:46}, {line:_fid("gal","Druida"),n:3,gap:20,lvl:46} ],
+            [ {line:_fid("ger","Centenus"),n:7,gap:14,lvl:46} ],
+            [ {line:_fid("gal","Soldurius"),n:3,gap:20,lvl:48}, {line:_fid("ger","Batavus"),n:5,gap:14,lvl:46}, {line:_fid("gal","Bellator Gallus"),n:6,gap:14,lvl:46} ] ],
+    reward:{ aes:420, frumentum:290, gloria:24 } },
 ];
 for(const m of CASTRA_P_MISSIONS){ if(!m.region) m.region = "latium"; }
 
