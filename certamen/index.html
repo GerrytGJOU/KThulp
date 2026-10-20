@@ -672,6 +672,9 @@ body.greek .qcard .word{color:#143a5e}
 .pixel-hero-mini{position:relative;display:inline-block;overflow:hidden;vertical-align:middle;flex-shrink:0}
 .pixel-hero-mini>span{display:block;transform-origin:top left}
 .pixel-hero-mini .pixel-hero{width:96px!important;height:96px!important}
+/* ook de lagen op de 96px-basis houden: anders toont de mini vanaf 900px breedte alleen de linkerbovenhoek (halve avatar) van de 144px-cel */
+.pixel-hero-mini .sprite-layer{background-size:864px 576px!important}
+.pixel-hero-mini .mv-motion-layer{--cell:96px!important}
 
 /* ── Chronica Classica wereldkaart (SCREENS.spWorldMap, singleplayer.js) ──
    Pins zijn absoluut gepositioneerd in PIXELS (spPositionMapPins()), niet in
@@ -1180,19 +1183,20 @@ body.greek .qcard .word{color:#143a5e}
 <script src="castra-avatar.js?v=20261028a"></script>
 <script src="castra-data.js?v=20261110a"></script>
 <script src="castra-troops.js?v=20261108a"></script>
-<script src="castra-latin.js?v=20261110a"></script>
+<script src="castra-latin.js?v=20261112a"></script>
 <script src="castra-map.js?v=20261030a"></script>
 <script src="castra-stick.js?v=20261021a"></script>
-<script src="castra.js?v=20261101a"></script>
+<script src="castra.js?v=20261111c"></script>
 <script src="castra-venatio.js?v=20261108a"></script>
 <script src="castra-campus.js?v=20261102a"></script>
-<script src="castra-heroes.js?v=20261024a"></script>
+<script src="castra-heroes.js?v=20261111a"></script>
 <script src="castra-quests.js?v=20261024a"></script>
 <script src="castra-medical.js?v=20261110a"></script>
 <script src="castra-codex.js?v=20261103a"></script>
 <script src="castra-sprites.js?v=20261103a"></script>
-<script src="castra-proelium.js?v=20261110b"></script>
-<script src="castra-battle.js?v=20261103a"></script>
+<script src="castra-tutorial.js?v=20261112c"></script>
+<script src="castra-proelium.js?v=20261112a"></script>
+<script src="castra-battle.js?v=20261111a"></script>
 <script src="castra-legio.js?v=20261029c"></script>
 <script src="castra-commercium.js?v=20261029a"></script>
 <script src="castra-world.js?v=20261110a"></script>

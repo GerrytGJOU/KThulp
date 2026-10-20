@@ -17,10 +17,10 @@
    ============================================================================ */
 
 const CASTRA_H = {
-  capBase:5, capPerStep:3, fidesStep:25, maxLvl:20, xpPerLvl:30,
+  capBase:10, capPerStep:10, fidesStep:25, maxLvl:50, xpPerLvl:3,   // zelfde levelschaal als soldaten; cap groeit met fides (10 → 50)
   fidesPerTalk:10, talkBase:2,            // gesprekken per dag = talkBase + heroum-level
   bonusBase:20, bonusPerFides:0.2, affinityMult:1.5,
-  statGrowthPct:10,                        // +10% per level boven 1
+  statGrowthPct:2.5, heroMult:1.5,         // +2,5% per level (zoals soldaten); heroMult: een held is een unieke topeenheid (op level 50 ≈ tier 4)
   assignable:["praetorium","lignatio","metallum","campus"],
 };
 
@@ -301,8 +301,8 @@ function castraOptOrder(n, seedStr){
 function castraHero(id){ return (CASTRA.heroes||[]).find(h=>h.id===id) || null; }
 function castraHeroCap(h){ return Math.min(CASTRA_H.maxLvl, CASTRA_H.capBase + CASTRA_H.capPerStep*Math.floor((h.fides||0)/CASTRA_H.fidesStep)); }
 function castraHeroStats(h){
-  const b = CASTRA_HERO_DATA[h.id].base, m = 100 + CASTRA_H.statGrowthPct*((h.lvl||1)-1), o = {};
-  Object.keys(b).forEach(k=>{ o[k] = Math.round(b[k]*m/100); }); return o;
+  const b = CASTRA_HERO_DATA[h.id].base, m = (100 + CASTRA_H.statGrowthPct*((h.lvl||1)-1))/100*CASTRA_H.heroMult, o = {};
+  Object.keys(b).forEach(k=>{ o[k] = Math.round(b[k]*m); }); return o;
 }
 function castraHeroLevelUp(h){
   let up = false;
@@ -351,7 +351,7 @@ function castraHeroumAnswer(k){
   T.answered = k;
   const t = CASTRA.talk; t.n++; h.talkIdx = (h.talkIdx||0)+1;
   if(opt.ok){
-    h.fides = Math.min(100, (h.fides||0)+CASTRA_H.fidesPerTalk); h.xp += 6; castraHeroLevelUp(h);
+    h.fides = Math.min(100, (h.fides||0)+CASTRA_H.fidesPerTalk); h.xp += 10; castraHeroLevelUp(h);
     castraToastLa("recte", d.nm+" · "+CASTRA_LA.fides.la+" +"+CASTRA_H.fidesPerTalk);
   } else castraToastLa("non_recte");
   castraSave(); castraHeroumOpen();

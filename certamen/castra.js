@@ -67,6 +67,8 @@ function castraAdoptIdentity(){
 }
 // Oude soldaten (lijn + stadium + tak) naar de troepenbomen; eenmalig per save (s.troopsV).
 function castraMigrateState(s){
+  // helden naar de soldatenschaal (level ×3,2, max 50), eenmalig
+  if(s.heroV!==1){ (s.heroes||[]).forEach(h=>{ h.lvl = Math.min(50, Math.max(1, Math.round((h.lvl||1)*3.2))); h.xp = 0; }); s.heroV = 1; }
   if(s.troopsV===1) return s;
   s.soldiers = (s.soldiers||[]).map(castraMigrateSoldier);
   if(s.dilectus && s.dilectus.cands) s.dilectus.cands = s.dilectus.cands.map(castraMigrateSoldier);
@@ -229,6 +231,7 @@ SCREENS.castraHome = function(){
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="castraLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>🏕️ Castra Heroum</h2></div>
   <div id="castraRes" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:4px 0 8px"></div>
+  <div id="castraTutBar"></div>
   <div id="castraWrap" style="position:relative;width:100%;margin:0 auto;overflow:hidden;border:2px solid var(--hi,#d4af37);border-radius:10px;background:#2a2118">
     <div id="castraMap" style="position:absolute;top:0;left:0;width:${T.cols*T.tile}px;height:${T.rows*T.tile}px;transform-origin:top left;background:
       repeating-conic-gradient(#3b2f20 0% 25%,#35291b 0% 50%) 0 0/${T.tile*2}px ${T.tile*2}px;image-rendering:pixelated"></div>
@@ -243,7 +246,8 @@ SCREENS.castraHome = function(){
   castraRenderMap();
   castraRenderRes();
   castraFit();
-  if(!CASTRA.introSeen){
+  if(typeof castraTutOnHome==="function") castraTutOnHome();
+  if(!CASTRA.introSeen && !(CASTRA.tut && CASTRA.tut.step<99)){   // het tutorial vervangt de oude introtekst
     castraOpenPanel(`<div class="panel"><div style="font-size:18px;margin-bottom:8px">${castraLa("intro")}</div>
       <button class="btn btn-gold" onclick="CASTRA.introSeen=true;castraSave();castraClosePanel()">${castraLaText("intellego")}</button></div>`);
   }
