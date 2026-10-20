@@ -37,15 +37,15 @@ Terugdraaien als het misgaat: de modus zit achter één tegel (`certamen/games.j
 ## 2. Bekende gaten
 
 ### 2a. Sprites ontbreken (top-down)
-Van de 64 avatar-bestanden zijn 24 nog niet als top-down sprite aangeleverd. De avatar valt daarvoor automatisch terug, zodat niemand onzichtbaar of kaal rondloopt (`castra-avatar.js`):
+Niet elk avatar-onderdeel bestaat al als top-down sprite. **Regel (sinds 2026-10-28):** zijn *alle* door de leerling gekozen onderdelen (huid, ogen, haar, baard, harnas, helm, cape, schild, extra, legendarisch) als top-down sprite aanwezig, dan ziet hij zijn avatar in top-down; ontbreekt er één, dan toont Castra de Battle Mode-avatar (zijaanzicht) in zijn geheel (`castra-avatar.js`, `castraTdComplete`). Wapens tellen niet mee. Zodra je sprites toevoegt, wordt dit vanzelf beter; de lijst hieronder kan dus verouderd zijn (controle: README in `assets/sprites-topdown/`). Voorheen ontbrekende onderdelen kregen een terugval per laag; dat is vervangen door dit alles-of-niets-principe:
 
 | Ontbreekt | Gevolg voor de leerling |
 | --- | --- |
-| `armor_licht`, `armor_zwaar`, `armor_hopliet` (en dus ook *Kampioen*) | toont het harnas *middel* (anders *vodden*) |
-| `helm_hopliet`, `helm_kroon` | geen helm zichtbaar |
-| 4 schilden (`rond`, `ovaal`, `vierkant`, `tower`) | geen schild zichtbaar |
-| 4 legendarische helden (Achilles, Aeneas, Ajax, Odysseus) | normale avatar i.p.v. de held |
-| `extra_blush`, `extra_warstripes`, `borstband` | die extra's/borstband zie je niet |
+| `armor_licht`, `armor_zwaar`, `armor_hopliet` (en dus ook *Kampioen*) | Battle Mode-avatar (zijaanzicht) |
+| `helm_hopliet`, `helm_kroon` (kroon inmiddels aangeleverd) | Battle Mode-avatar |
+| 4 schilden (`rond`, `ovaal`, `vierkant`, `tower`) | Battle Mode-avatar als een schild is gekozen |
+| 4 legendarische helden (Achilles, Aeneas, Ajax, Odysseus) | Battle Mode-avatar |
+| `extra_blush`, `extra_warstripes`, `borstband` | Battle Mode-avatar als die gekozen is |
 | wapens (bewust, niet nodig) | geen wapen in de top-down weergave |
 
 In de profieleditor (Battle Mode) blijft alles gewoon zichtbaar; het gaat alleen om Castra Heroum. Je ziet het verschil pas als een leerling zo'n onderdeel gekozen heeft.

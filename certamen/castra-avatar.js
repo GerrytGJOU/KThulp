@@ -12,7 +12,7 @@
    ============================================================================ */
 
 const CASTRA_SPRITE_DIR = "assets/sprites-topdown/";
-const CASTRA_SPRITE_VER = "v=8";   // ophogen na het vervangen van een PNG
+const CASTRA_SPRITE_VER = "v=9";   // ophogen na het vervangen van een PNG
 const CASTRA_FRAME = 48;           // MV-loopsheet: frame 48×48, 3 kolommen × 4 rijen
 const CASTRA_DIR_ROW = { down:0, left:1, right:2, up:3 };
 
@@ -57,13 +57,39 @@ function castraTdAvailable(av){
   return CASTRA_TD_READY[key] === true;
 }
 
+// Zijn alle gekozen onderdelen van deze avatar als top-down sprite aanwezig? (Wapens tellen niet mee: die
+// zijn bewust niet getekend. "geen"-opties hebben geen laag nodig.) Zo nee: de Battle Mode-avatar.
+function castraTdComplete(cosm){
+  if(!CASTRA_TD_EXISTS) return false;                       // scan nog niet klaar: veilig de battler tonen
+  const A = PIXEL_ASSETS, need = [];
+  const add = (cat, key, skip)=>{ if(!key || (skip && skip.includes(key))) return; const p = A[cat] && A[cat][key]; if(p) need.push(p); };
+  const legId = cosm.legendary && cosm.legendary!=="geen" ? cosm.legendary : null;
+  add("bases", _bmBaseKey(cosm));
+  if(legId && A.legendary[legId]){ need.push(A.legendary[legId]); }
+  else {
+    add("ogen", cosm.oogkleur||"blauw"); add("haar", bmZichtbaarHaar(cosm)); add("armor", cosm.armor||"licht");
+    add("helm", cosm.helm||"standard", ["geen"]); add("cape", cosm.cape||"geen", ["geen"]);
+    const baardId = cosm.baard||"geen";
+    if(baardId==="baardsnor"){ add("baard","baard"); add("baard","snor"); } else add("baard", baardId, ["geen"]);
+    add("extra", cosm.extra||"geen", ["geen"]); add("borstband", cosm.borstband||"geen", ["geen"]);
+  }
+  add("schild", cosm.schild||"rond", ["geen"]);
+  return need.every(p=>CASTRA_TD_EXISTS[p]!==false);
+}
+// Battle Mode-avatar (zijaanzicht) als terugval; bij "links" gespiegeld.
+function castraBattlerFallback(av, dir, sizePx){
+  const h = renderPixelHeroIcon(av, sizePx);
+  return dir==="left" ? `<span style="display:inline-block;transform:scaleX(-1)">${h}</span>` : h;
+}
+
 // Top-down avatar als HTML. dir: down|left|right|up, frame: 0|1|2 (1 = staand),
 // sizePx: weergavegrootte (vierkant). Valt terug op de battler-avatar zolang de
 // top-down base-sprite er (nog) niet is.
 function castraAvatarHTML(av, dir="down", frame=1, sizePx=48){
   if(typeof BM_PIXEL_ART==="undefined" || !BM_PIXEL_ART) return "";
-  if(!castraTdAvailable(av)) return renderPixelHeroIcon(av, sizePx);
+  if(!castraTdAvailable(av)) return castraBattlerFallback(av, dir, sizePx);
   const cosm = bmAvatarMerge(av), A = PIXEL_ASSETS;
+  if(!castraTdComplete(cosm)) return castraBattlerFallback(av, dir, sizePx);
   const row = CASTRA_DIR_ROW[dir]!=null ? CASTRA_DIR_ROW[dir] : 0;
   const pos = `-${frame*CASTRA_FRAME}px -${row*CASTRA_FRAME}px`;
   function L(src, filter){
@@ -83,11 +109,9 @@ function castraAvatarHTML(av, dir="down", frame=1, sizePx=48){
   // wegloopt (dir "up") draagt ze óver lichaam en harnas heen.
   const capeL = L(A.cape[cosm.cape||"geen"], capeF);
   const capeBehind = dir==="up" ? "" : capeL, capeOver = dir==="up" ? capeL : "";
-  // Ontbreekt het gekozen harnas als top-down sprite, dan tonen we "middel" (of "vodden") i.p.v. een kale avatar.
-  const armorWant = A.armor[cosm.armor||"licht"];
-  const armorSrc = castraTdHas(armorWant) ? armorWant : (castraTdHas(A.armor.middel) ? A.armor.middel : A.armor.vodden);
+  const armorSrc = A.armor[cosm.armor||"licht"];
   let layers;
-  if(legId && A.legendary[legId] && castraTdHas(A.legendary[legId])){
+  if(legId && A.legendary[legId]){
     // Legendarische held vervangt de paper doll (net als in battle.js); het schild blijft de keuze van de speler.
     layers = L(A.legendary[legId]) + L(A.schild[cosm.schild||"rond"]);
   } else {
