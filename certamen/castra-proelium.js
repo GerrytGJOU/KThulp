@@ -119,6 +119,19 @@ const CASTRA_P_MISSIONS = [
             [ {line:_fid("per","Sagittarius Scytha"),n:8,gap:10,lvl:50} ],
             [ {line:_fid("per","Melophorus"),n:4,gap:16,lvl:50}, {line:_fid("per","Clibanarius"),n:5,gap:14,lvl:50}, {line:_fid("per","Immortalis"),n:6,gap:12,lvl:50} ] ],
     reward:{ aes:740, frumentum:510, gloria:38 } },
+  /* Africa (opent na pe2) */
+  { id:"af1", region:"africa", nm:"Carthago", nl:"Het beleg van Carthago", map:"a", seed:7101, hpMult:11.1, needs:"pe2",
+    waves:[ [ {line:_fid("car","Libyus"),n:7,gap:16,lvl:50} ],
+            [ {line:_fid("car","Funditor Balearicus"),n:7,gap:14,lvl:50} ],
+            [ {line:_fid("car","Eques Numida"),n:6,gap:14,lvl:50}, {line:_fid("car","Veteranus Libyus"),n:4,gap:18,lvl:50} ],
+            [ {line:_fid("car","Elephantus bellicus"),n:3,gap:24,lvl:50}, {line:_fid("car","Veteranus Libyus"),n:6,gap:14,lvl:50} ] ],
+    reward:{ aes:820, frumentum:570, gloria:42 } },
+  { id:"af2", region:"africa", nm:"Ad Zamam", nl:"Bij Zama", map:"b", seed:7202, hpMult:4.4, needs:"af1",
+    waves:[ [ {line:_fid("car","Veteranus Libyus"),n:8,gap:12,lvl:50} ],
+            [ {line:_fid("car","Numida nobilis"),n:7,gap:12,lvl:50}, {line:_fid("car","Funditor Balearicus"),n:5,gap:14,lvl:50} ],
+            [ {line:_fid("car","Elephantus bellicus"),n:5,gap:18,lvl:50} ],
+            [ {line:_fid("car","Elephantus turritus"),n:3,gap:24,lvl:50}, {line:_fid("car","Miles sacer"),n:6,gap:12,lvl:50}, {line:_fid("car","Numida nobilis"),n:5,gap:12,lvl:50} ] ],
+    reward:{ aes:920, frumentum:640, gloria:46 } },
 ];
 for(const m of CASTRA_P_MISSIONS){ if(!m.region) m.region = "latium"; }
 
