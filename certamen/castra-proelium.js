@@ -157,6 +157,19 @@ const CASTRA_P_MISSIONS = [
             [ {line:_fid("spa","Trecentus"),n:7,gap:10,lvl:50}, {line:_fid("myt","Lupus Martius"),n:3,gap:20,lvl:50} ],
             [ {line:_fid("spa","Polemarchus"),n:5,gap:14,lvl:50}, {line:_fid("spa","Trecentus"),n:8,gap:10,lvl:50}, {line:_fid("spa","Sciritas"),n:6,gap:10,lvl:50} ] ],
     reward:{ aes:1300, frumentum:910, gloria:62 } },
+  /* Germania (opent na la2) */
+  { id:"gm1", region:"germania", nm:"Saltus Teutoburgiensis", nl:"Het Teutoburgerwoud", map:"b", seed:10101, hpMult:6.2, needs:"la2",
+    waves:[ [ {line:_fid("ger","Centenus"),n:7,gap:14,lvl:50} ],
+            [ {line:_fid("ger","Batavus"),n:6,gap:14,lvl:50}, {line:_fid("ger","Saga"),n:3,gap:20,lvl:50} ],
+            [ {line:_fid("ger","Centenus"),n:7,gap:12,lvl:50}, {line:_fid("myt","Lupus Martius"),n:3,gap:20,lvl:50} ],
+            [ {line:_fid("ger","Comes"),n:3,gap:20,lvl:50}, {line:_fid("ger","Batavus"),n:6,gap:12,lvl:50}, {line:_fid("ger","Vates Germana"),n:3,gap:18,lvl:50} ] ],
+    reward:{ aes:1400, frumentum:980, gloria:66 } },
+  { id:"gm2", region:"germania", nm:"Ad Rhenum", nl:"Aan de Rijn", map:"a", seed:10202, hpMult:4, needs:"gm1",
+    waves:[ [ {line:_fid("ger","Comes"),n:6,gap:12,lvl:50} ],
+            [ {line:_fid("ger","Batavus"),n:8,gap:10,lvl:50}, {line:_fid("ger","Vates Germana"),n:3,gap:18,lvl:50} ],
+            [ {line:_fid("ger","Centenus"),n:9,gap:10,lvl:50} ],
+            [ {line:_fid("ger","Comes"),n:5,gap:14,lvl:50}, {line:_fid("ger","Batavus"),n:8,gap:10,lvl:50}, {line:_fid("myt","Draco"),n:2,gap:26,lvl:50} ] ],
+    reward:{ aes:1500, frumentum:1050, gloria:70 } },
 ];
 for(const m of CASTRA_P_MISSIONS){ if(!m.region) m.region = "latium"; }
 
