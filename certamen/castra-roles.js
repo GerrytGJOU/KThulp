@@ -27,8 +27,8 @@ const CASTRA_P_ROLES = {
   scutarius: { icon:"🔰", la:"Scutarius", nl:"Schilddrager",     hp:1.3,  spd:0.95, red:0,  leak:0, prio:1, frac:0.25, maxk:2, radius:1700, prot:35,
                ex:{ la:"Scutarius socios tegit.", nl:"Een schilddrager: vijanden in zijn buurt krijgen 35% minder schade.",
                     tip:"Tip: boogschutters schieten eerst op schilddragers en genezers. Ruim hem snel op." } },
-  medicus:   { icon:"⚕️", la:"Medicus",   nl:"Genezer",          hp:0.8,  spd:0.95, red:0,  leak:0, prio:2, frac:0.2,  maxk:2, radius:1800, heal:6, every:40,
-               ex:{ la:"Medicus socios sanat.", nl:"Een genezer: elke 2 seconden herstelt hij 6% van de levenspunten van vijanden in zijn buurt.",
+  medicus:   { icon:"⚕️", la:"Medicus",   nl:"Genezer",          hp:0.8,  spd:0.95, red:0,  leak:0, prio:2, frac:0.2,  maxk:2, radius:1800, heal:6, every:40, cap:60,
+               ex:{ la:"Medicus socios sanat.", nl:"Een genezer: elke 2 seconden herstelt hij 6% van de levenspunten van vijanden in zijn buurt (een vijand kan zo in totaal maximaal 60% van zijn levenspunten terugkrijgen).",
                     tip:"Tip: boogschutters mikken eerst op genezers. Breng de genezer snel uit het spel, anders duurt het gevecht eindeloos." } },
 };
 
@@ -94,9 +94,9 @@ function castraBIntroRole(role){
 }
 function castraBIntroNext(){
   const B = CASTRA_B; if(!B) return;
-  const q = (B.introQ||[]).shift();
-  if(!q){ B.paused = false; const o = document.getElementById("cbIntro"); if(o) o.remove(); return; }
-  castraBIntroShow([q], true, q);
+  const items = (B.introQ||[]).splice(0);          // alles wat nog wacht in één venster
+  if(!items.length){ B.paused = false; const o = document.getElementById("cbIntro"); if(o) o.remove(); return; }
+  castraBIntroShow(items, true, items);
 }
 function castraBIntroShow(items, mark, cur){
   let o = document.getElementById("cbIntro"); if(o) o.remove();
@@ -110,7 +110,8 @@ function castraBIntroShow(items, mark, cur){
       <div style="font-size:15px;margin-top:6px">${esc(D.ex.nl)}</div>
       ${D.ex.tip?`<div style="font-size:14px;margin-top:6px;opacity:.9">${esc(D.ex.tip)}</div>`:""}</div>`;
   };
-  const title = mark ? ({ role:"Nieuwe vijand!", edict:"Nieuwe regel voor deze missie!", syn:"Nieuwe synergie!", cmd:"Bevelen!" })[cur.k] : "Vijanden, regels en synergieën";
+  const kinds = {}; items.forEach(i=>{ kinds[i.k] = 1; }); const one = Object.keys(kinds).length===1 ? items[0].k : null;
+  const title = mark ? (one ? ({ role:"Nieuwe vijand!", edict:"Nieuwe regel voor deze missie!", syn:"Nieuwe synergie!", cmd:"Bevelen!" })[one] : "Nieuw in dit gevecht") : "Vijanden, regels en synergieën";
   o.innerHTML = `<div style="max-width:520px;width:100%;max-height:90vh;overflow:auto;background:#f1e6c4;color:#2b1d0e;border:3px solid #8a6d2f;border-radius:14px;padding:16px 18px;box-shadow:0 8px 30px rgba(0,0,0,.6)">
     <div style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;opacity:.7">${title}</div>${items.map(card).join("")}
     <button class="btn btn-gold" style="min-height:48px;margin-top:8px;width:100%;font-size:18px" onclick="castraBIntroClose(${mark?"true":"false"})">Intellexi <small>(begrepen)</small></button></div>`;
@@ -120,7 +121,7 @@ function castraBIntroShow(items, mark, cur){
 function castraBIntroClose(mark){
   const o = document.getElementById("cbIntro"), cur = o && o._cur;
   if(o) o.remove();
-  if(mark && cur){ castraTDSeen()[({ role:"r:", edict:"e:", syn:"s:", cmd:"c:" })[cur.k]+cur.id] = 1; castraSave(); }
+  if(mark && cur){ (Array.isArray(cur)?cur:[cur]).forEach(it=>{ castraTDSeen()[({ role:"r:", edict:"e:", syn:"s:", cmd:"c:" })[it.k]+it.id] = 1; }); castraSave(); }
   if(mark) castraBIntroNext();
 }
 // Overzicht van alle rollen en regels in de lopende missie (knop ⓘ).
@@ -175,6 +176,8 @@ const CASTRA_P_CMDINFO = {
 function castraBCmd(id){
   const B = CASTRA_B; if(!B || B.sim.over || !B.sim.cmdOn || B.paused) return;
   if(B.sim.energy<1 || !B.sim.waveActive) return;
+  { const s = B.sim, front = s.enemies.reduce((m,e)=>Math.max(m, e.prog), 0), path = s.paths[0], dist = Math.max(0, Math.round((path.len-front)/1000));
+    (B.cmdMeta = B.cmdMeta || []).push({ id, hp:s.baseHp, dist: s.enemies.length ? dist : 99, wave:s.wave+1 }); }
   B.sim.cmdQ.push({ at:B.sim.tick+1, id });
   B.cmdUsed = (B.cmdUsed||0)+1; B.cmdIds = B.cmdIds || {}; B.cmdIds[id] = (B.cmdIds[id]||0)+1;
 }

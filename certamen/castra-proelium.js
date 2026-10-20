@@ -259,6 +259,7 @@ function castraPSim(mission, towerSoldiers){
   const sim = {
     mission, path, paths, spawnN:0, tick:0, rng: castraRng(mission.seed), baseHp: CASTRA_P.baseHp, wave:-1, waveActive:false,
     queue:[], enemies:[], towers:[], nextId:1, kills:0, leaked:0, over:null, events:[],
+    stat:{ dmg:{}, prev:0, heal:0, pers:0, imp:0, muri:0, leaks:[] },      // gevechtsstatistiek voor het rapport (geen invloed op de uitkomst)
     cmdOn:false, energy:0, cmd:{ impete:0, state:0 }, cmdQ:[], cmdLog:[],      // bevelen (alleen aan in solo-gevechten, zie castraBStart)
   };
   towerSoldiers.forEach(t=>sim.towers.push(castraPMakeTower(sim, t.s, t.x, t.y)));
@@ -308,9 +309,17 @@ function castraPTypeMul(att, def){
 /* ---------- vijandrollen (data: castra-roles.js) ---------- */
 // Schade na verdediging van de vijand (zware krijger: eigen pantser; schilddrager: aura voor naburige vijanden).
 function castraPDmgTaken(e, dmg){
+  const d0 = dmg;
   if(e.red) dmg = Math.max(1, Math.floor(dmg*(100-e.red)/100));
   if(e.prot) dmg = Math.max(1, Math.floor(dmg*(100-e.prot)/100));
   return dmg;
+}
+// Schade toebrengen aan een vijand (met pantser/schild) en bijhouden voor het rapport.
+function castraPApply(sim, t, e, d){
+  const f = (e.red||e.prot) ? castraPDmgTaken(e, d) : d;
+  if(f<d) sim.stat.prev += d-f;
+  sim.stat.dmg[t.id] = (sim.stat.dmg[t.id]||0) + Math.max(0, Math.min(f, e.hp));
+  e.hp -= f; return f;
 }
 // Per tik: schilddragers beschermen naburige vijanden, genezers herstellen ze (deterministisch, vaste volgorde).
 function castraPRoles(sim){
@@ -325,7 +334,10 @@ function castraPRoles(sim){
     if(m.hc>0){ m.hc--; return; }
     const r2 = R.radius*R.radius; let did = false;
     en.forEach(o=>{ if(o!==m && o.hp>0 && o.hp<o.maxHp){ const dx=o.x-m.x, dy=o.y-m.y;
-      if(dx*dx+dy*dy <= r2){ o.hp = Math.min(o.maxHp, o.hp + Math.max(1, Math.floor(o.maxHp*R.heal/100))); sim.events.push({ k:"heal", m:m.id, e:o.id }); did = true; } } });
+      if(dx*dx+dy*dy <= r2){
+        const room = Math.floor(o.maxHp*R.cap/100) - (o.healed||0);       // één vijand kan in totaal maar een deel van zijn levenspunten terugkrijgen
+        const amt = Math.min(room, Math.max(1, Math.floor(o.maxHp*R.heal/100)), o.maxHp-o.hp);
+        if(amt>0){ o.hp += amt; o.healed = (o.healed||0)+amt; sim.stat.heal += amt; sim.events.push({ k:"heal", m:m.id, e:o.id }); did = true; } } } });
     if(did) m.hc = R.every;
   });
 }
@@ -380,8 +392,8 @@ function castraPStep(sim){
     if(t.buffed) dmg = Math.max(1, Math.floor(dmg*(100+CASTRA_P.buffPct)/100));
     const pct = sk.dmg + t.aura + gsum + (mods && mods.type ? (mods.type[t.type]||0) : 0); if(pct) dmg = Math.max(1, Math.floor(dmg*(100+pct)/100));
     if(mods && mods.dmg) dmg = Math.max(1, Math.floor(dmg*mods.dmg));
-    if(t.type==="cav" && e.hp*CASTRA_P_SYN.persD < e.maxHp) dmg = Math.max(1, Math.floor(dmg*CASTRA_P_SYN.persN/CASTRA_P_SYN.persD));   // Persecutio
-    if(sim.cmd.impete>sim.tick) dmg = Math.max(1, Math.floor(dmg*CASTRA_P_CMD.impeteDmg/100));                                          // Impete!
+    if(t.type==="cav" && e.hp*CASTRA_P_SYN.persD < e.maxHp){ const b0 = dmg; dmg = Math.max(1, Math.floor(dmg*CASTRA_P_SYN.persN/CASTRA_P_SYN.persD)); sim.stat.pers += dmg-b0; }   // Persecutio
+    if(sim.cmd.impete>sim.tick){ const b1 = dmg; dmg = Math.max(1, Math.floor(dmg*CASTRA_P_CMD.impeteDmg/100)); sim.stat.imp += dmg-b1; }                                          // Impete!
     return Math.max(1, Math.floor(dmg*(mult||1)));
   };
   sim.towers.forEach(t=>{
@@ -402,22 +414,22 @@ function castraPStep(sim){
     if(sk.nth && t.hits % sk.nth.n === 0) mult *= sk.nth.mult;
     if(t.charge > 0){ mult *= sk.charge.mult; t.charge--; }
     const dmg = hitOne(t, best, mult);
-    best.hp -= (best.red||best.prot) ? castraPDmgTaken(best, dmg) : dmg; t.cd = mods && mods.cd ? Math.max(CASTRA_P.cdMin, Math.round(t.cooldown*mods.cd)) : t.cooldown;
+    castraPApply(sim, t, best, dmg); t.cd = mods && mods.cd ? Math.max(CASTRA_P.cdMin, Math.round(t.cooldown*mods.cd)) : t.cooldown;
     if(sim.cmd.impete>sim.tick) t.cd = Math.max(CASTRA_P.cdMin, Math.round(t.cd*CASTRA_P_CMD.impeteCd/100));
-    if(t.synMuri){ best.slowPct = Math.max(best.slowPct||0, CASTRA_P_SYN.muriSlow); best.slowUntil = Math.max(best.slowUntil||0, sim.tick + CASTRA_P_SYN.muriTicks); }   // Murus et sagittae
+    if(t.synMuri){ sim.stat.muri++; best.slowPct = Math.max(best.slowPct||0, CASTRA_P_SYN.muriSlow); best.slowUntil = Math.max(best.slowUntil||0, sim.tick + CASTRA_P_SYN.muriTicks); }   // Murus et sagittae
     sim.events.push({ k:"hit", t:t.id, e:best.id, dmg });
     if(sk.slow && t.hits % sk.slow.every === 0){ best.slowPct = Math.max(best.slowPct||0, sk.slow.pct); best.slowUntil = sim.tick + sk.slow.ticks; }
-    if(sk.doubleEvery && second && t.hits % sk.doubleEvery === 0){ const d2 = hitOne(t, second, mult); second.hp -= (second.red||second.prot) ? castraPDmgTaken(second, d2) : d2; sim.events.push({ k:"hit", t:t.id, e:second.id, dmg:d2 }); }
+    if(sk.doubleEvery && second && t.hits % sk.doubleEvery === 0){ const d2 = hitOne(t, second, mult); castraPApply(sim, t, second, d2); sim.events.push({ k:"hit", t:t.id, e:second.id, dmg:d2 }); }
     if(sk.splash){
       const r2 = sk.splash.radius*sk.splash.radius;
-      sim.enemies.forEach(o=>{ if(o!==best && o.hp>0){ const dx=o.x-best.x, dy=o.y-best.y; if(dx*dx+dy*dy <= r2){ const sd = Math.max(1, Math.floor(dmg*sk.splash.pct/100)); o.hp -= (o.red||o.prot) ? castraPDmgTaken(o, sd) : sd; } } });
+      sim.enemies.forEach(o=>{ if(o!==best && o.hp>0){ const dx=o.x-best.x, dy=o.y-best.y; if(dx*dx+dy*dy <= r2){ const sd = Math.max(1, Math.floor(dmg*sk.splash.pct/100)); castraPApply(sim, t, o, sd); } } });
     }
   });
   // doden en doorbraken
   const alive = [];
   sim.enemies.forEach(e=>{
     if(e.hp<=0){ sim.kills++; sim.events.push({ k:"kill", e:e.id }); if(sim.cmdOn && sim.kills % CASTRA_P_CMD.perKills === 0) sim.energy = Math.min(CASTRA_P_CMD.energyMax, sim.energy+1); }
-    else if(e.prog >= sim.paths[e.lane||0].len-1){ sim.baseHp -= (e.type==="myth"?2:1) + (e.role ? CASTRA_P_ROLES[e.role].leak : 0); sim.leaked++; sim.events.push({ k:"leak", e:e.id }); }
+    else if(e.prog >= sim.paths[e.lane||0].len-1){ sim.baseHp -= (e.type==="myth"?2:1) + (e.role ? CASTRA_P_ROLES[e.role].leak : 0); sim.leaked++; sim.stat.leaks.push({ role:e.role||null, type:e.type, wave:sim.wave }); sim.events.push({ k:"leak", e:e.id }); }
     else alive.push(e);
   });
   sim.enemies = alive;
