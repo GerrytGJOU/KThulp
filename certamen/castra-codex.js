@@ -36,6 +36,29 @@ function castraCollPay(res){
   Object.keys(res).forEach(r=>{ CASTRA.res[r] = Math.min(r==="gloria"?1e9:cap, (CASTRA.res[r]||0)+res[r]); });
   return Object.keys(res).map(r=>castraRes(r).icon+" +"+res[r]).join(" ");
 }
+/* Prestaties als achievements in het Certamen-profiel (categorie "Castra Heroum", zichtbaar in Mijn profiel). */
+const CASTRA_ICONS_TOTAL = { 10:"helmet", 25:"torch", 50:"owl", 80:"column", 120:"crown", 151:"eagle" };
+const CASTRA_ICONS_FOLK = { rom:"eagle", gra:"owl", spa:"shield", tro:"column", gla:"trident", gal:"torch", ger:"helmet", aeg:"amphora", per:"crown", car:"horse", ama:"laurel" };
+if(typeof ACH_CATEGORIES!=="undefined" && !ACH_CATEGORIES.castra) ACH_CATEGORIES.castra = "Castra Heroum";
+(function(){
+  if(typeof ACHIEVEMENTS_DEF==="undefined" || ACHIEVEMENTS_DEF.some(a=>a.id==="castra_t10")) return;
+  CASTRA_COLL_TOTAL.forEach(m=>ACHIEVEMENTS_DEF.push({ id:"castra_t"+m.n, nm:"Castra: "+m.title, ds:m.n+" soldaten ontmoet in de Castra Heroum-codex ("+m.nl+")", icon:CASTRA_ICONS_TOTAL[m.n]||"star", cat:"castra", mode:"battle" }));
+  Object.keys(CASTRA_FOLKS).filter(v=>v!=="myt").forEach(v=>ACHIEVEMENTS_DEF.push({ id:"castra_v"+v, nm:"Castra: "+CASTRA_FOLKS[v].nm, ds:"Alle soldaten van de "+CASTRA_FOLKS[v].nm+" ontmoet", icon:CASTRA_ICONS_FOLK[v]||"star", cat:"castra", mode:"battle" }));
+  ACHIEVEMENTS_DEF.push({ id:"castra_alle", nm:"Castra: Alle volken", ds:"Van elk volk alle soldaten ontmoet", icon:"crown", cat:"castra", mode:"battle" });
+})();
+// Zet een achievement in het profiel: ingelogd = identities/{klas}/{lid}/achievements (zoals Battle Mode), anders het lokale profiel.
+function castraGrantAch(id){
+  const def = (typeof ACHIEVEMENTS_DEF!=="undefined") && ACHIEVEMENTS_DEF.find(a=>a.id===id); if(!def) return;
+  const i = (typeof BM_IDENT!=="undefined") ? BM_IDENT : null;
+  const have = new Set([...(i&&i.achievements||[]), ...((typeof P!=="undefined"&&P.achievements)||[])]);
+  if(have.has(id)) return;
+  if(i && i.klascode && i.leerlingcode){
+    i.achievements = [...(i.achievements||[]), id];
+    try{ if(typeof bmIdentSave==="function") bmIdentSave({...bmIdentLoad(), ...i, achievements:i.achievements}); }catch(e){}
+    try{ if(typeof fbDB!=="undefined" && fbDB) fbDB.ref("identities/"+i.klascode+"/"+i.leerlingcode+"/achievements").transaction(cur=>{ const l = cur||[]; return l.includes(id) ? undefined : [...l, id]; }); }catch(e){}
+  } else if(typeof P!=="undefined"){ P.achievements = [...(P.achievements||[]), id]; if(typeof saveProfile==="function") saveProfile(); }
+  if(typeof toastAch==="function") toastAch(def);
+}
 let _castraCollBusy = false;
 function castraCollCheck(){
   if(_castraCollBusy || !CASTRA) return; _castraCollBusy = true;
@@ -44,6 +67,9 @@ function castraCollCheck(){
     CASTRA_COLL_TOTAL.forEach(m=>{ const k = "t"+m.n; if(!c[k] && castraCollSeen()>=m.n){ c[k] = 1; msgs.push(["🏅 "+m.title, m.nl+" · "+castraCollPay(m.reward)]); } });
     Object.keys(CASTRA_FOLKS).forEach(v=>{ if(v==="myt") return; const k = "v"+v, s = castraCollFolk(v);
       if(!c[k] && s.total>0 && s.seen>=s.total){ c[k] = 1; msgs.push(["⭐ "+CASTRA_FOLKS[v].nm, "alle vormen ontmoet · "+castraCollPay(CASTRA_COLL_FOLK)]); } });
+    Object.keys(c).forEach(k=>{ if(c[k]) castraGrantAch(k[0]==="t" ? "castra_"+k : "castra_"+k); });
+    const stars = Object.keys(CASTRA_FOLKS).filter(v=>v!=="myt");
+    if(stars.every(v=>c["v"+v])) castraGrantAch("castra_alle");
     if(msgs.length){ castraSave(); if(typeof castraRenderRes==="function") castraRenderRes(); msgs.forEach((m,i)=>setTimeout(()=>toast(m[0], m[1]), i*1800)); }
   } finally { _castraCollBusy = false; }
 }
@@ -67,6 +93,8 @@ function castraCodexForm(f, seen){
   if(seen){
     const base = CASTRA_BASE_STATS[f.type] || CASTRA_BASE_STATS.rec, mult = CASTRA_TIER_MULT[Math.max(0,Math.min(CASTRA_TIER_MULT.length-1,f.tier-1))];
     body += `<div style="font-size:13px;opacity:.85">` + CASTRA_STATS.map(st=>`${esc(st.nm)} ${Math.round((base[st.id]||0)*mult)}`).join(" · ") + `</div>`;
+    { const cls = f.type==="myth" ? "myth" : castraFormClassId(f), sl = cls ? castraSkillList(cls) : [];
+      if(sl.length) body += `<div style="font-size:13px;opacity:.85">🎓 ${sl.map(k=>esc(k.la)+" <small>(Lv "+k.lvl+")</small>").join(" · ")}</div>`; }
     if(f.next.length) body += `<div style="font-size:13px;opacity:.85">→ ${f.next.map(id=>esc(CASTRA_FORMS[id].nm)).join(" / ")} <small>(${castraLaText("gradus")} ${castraEvoLevel(f)})</small></div>`;
     const lore = CASTRA_CODEX_LORE[f.id];
     if(lore) body += `<div style="margin-top:4px;font-size:15px">${castraLaHTML(lore.la, lore.nl, "codex_"+f.id)}</div>`;

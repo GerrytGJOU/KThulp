@@ -23,7 +23,7 @@
 
 const CASTRA_LEGIO = { prepTicks:1200, gapTicks:200, lead:12, perPlayer:2, joinTicks:0 };
 const CASTRA_LEGIO_MISSIONS = {
-  legio1: { nm:"Obsidio Troiae", nl:"Het beleg van Troje", map:"a", hpMult:4.5,
+  legio1: { nm:"Obsidio Troiae", nl:"Het beleg van Troje", map:"a", hpMult:6.8,
     waves:[ [ {line:_fid("gra","Epilectus"),n:4,gap:14,lvl:26} ],
             [ {line:_fid("gra","Prodromus"),n:3,gap:14,lvl:26}, {line:_fid("gra","Peltasta"),n:3,gap:14,lvl:26} ],
             [ {line:_fid("gra","Toxota"),n:4,gap:12,lvl:26}, {line:_fid("gra","Epilectus"),n:3,gap:14,lvl:26} ],
@@ -69,7 +69,7 @@ function castraLegioApply(sim, a){
   if(sim.towers.filter(t=>t.owner===a.lid).length >= CASTRA_LEGIO.perPlayer) return;
   const type = CASTRA_TYPES[a.type] ? a.type : "inf";
   const look = (a.hid && CASTRA_HERO_DATA[a.hid]) ? CASTRA_HERO_DATA[a.hid].look : castraPLook(a.line||"rom_hastatus");
-  const t = castraPMakeTower(sim, { id:String(a.sid||a.key), line:a.line||"rom_hastatus", owner:a.lid, nm:a.nm, snap:{ st:castraLegioParseStats(a.st), type, look } }, x, y);
+  const t = castraPMakeTower(sim, { id:String(a.sid||a.key), line:a.line||"rom_hastatus", owner:a.lid, nm:a.nm, snap:{ st:castraLegioParseStats(a.st), type, look, sk:String(a.sk||"").split(",").filter(Boolean) } }, x, y);
   sim.towers.push(t);
 }
 // Rekent de simulatie tot en met `toTick` (herberekent van nul als er een te late actie binnenkwam).
@@ -227,7 +227,8 @@ function castraLegioTap(x, y){
   const st = unit.hero ? castraHeroStats(unit.h) : (unit.dux ? CASTRA_V_BAL.dux : castraStats(unit));
   const type = unit.hero ? CASTRA_HERO_DATA[unit.h.id].type : castraLine(unit.line).type;
   const act = { t: tick+CASTRA_LEGIO.lead, k:"place", x, y, lid:BM_IDENT.leerlingcode, sid:String(unit.id).slice(0,30), line:unit.line||"rom_hastatus", hid: unit.hero?unit.h.id:"", type,
-    st:[st.vita,st.impetus,st.tutela,st.celeritas,st.ambitus].join(","), nm:String(unit.hero?CASTRA_HERO_DATA[unit.h.id].nm:(unit.dux?"Dux":castraSoldierName(unit))).slice(0,30) };
+    st:[st.vita,st.impetus,st.tutela,st.celeritas,st.ambitus].join(","), nm:String(unit.hero?CASTRA_HERO_DATA[unit.h.id].nm:(unit.dux?"Dux":castraSoldierName(unit))).slice(0,30),
+    sk:(unit.dux?[]:castraSkillIds(unit.hero?{hero:true,h:unit.h}:unit)).join(",").slice(0,60) };
   B.placed[unit.id] = true; B.sel = null;
   castraLegioPush(act);
   castraBRenderCards();
