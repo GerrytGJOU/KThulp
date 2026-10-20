@@ -58,10 +58,10 @@ const CASTRA_WBT = {
 // Vaste plekken per regio (x,y); site = linkerhelft van de bouwplaats (de rechterhelft staat op x+1).
 const CASTRA_WPOS = {
   latium:     { chests:[[4,11],[34,3],[34,9],[10,11],[25,10],[9,43],[18,16],[5,37]], pickup:[14,9], quest:[45,12], faber:[20,40], magistra:[47,42], site:[22,40] },
-  graecia:    { chests:[[6,4],[19,16],[25,2]],  pickup:[11,5], quest:[9,17],  faber:[3,3],   magistra:[21,13], site:[9,12] },
+  graecia:    { chests:[[5,4],[19,4],[39,12],[53,16],[12,26],[29,27],[40,38],[52,41]], pickup:[27,6], quest:[39,22], faber:[19,35], magistra:[26,12], site:[57,27] },
   troia:      { chests:[[24,5],[24,10],[24,19]],pickup:[18,10],quest:[23,2],  faber:[5,2],   magistra:[6,5],   site:[5,17] },
-  gallia:     { chests:[[23,13],[25,9],[2,7]],  pickup:[8,7],  quest:[24,3],  faber:[19,2],  magistra:[2,3],   site:[19,7] },
-  aegyptus:   { chests:[[8,6],[21,19],[21,8]],  pickup:[13,12],quest:[12,3],  faber:[7,17],  magistra:[18,5],  site:[8,9] },
+  gallia:     { chests:[[9,15],[27,4],[39,7],[57,23],[5,32],[23,29],[34,38],[60,41]], pickup:[10,26], quest:[48,26], faber:[27,36], magistra:[20,14], site:[53,28] },
+  aegyptus:   { chests:[[7,20],[20,9],[46,8],[60,6],[15,35],[20,41],[36,30],[55,37]], pickup:[56,14], quest:[52,26], faber:[21,29], magistra:[11,12], site:[44,26] },
   persis:     { chests:[[21,5],[9,9],[24,19]],  pickup:[3,2],  quest:[25,9],  faber:[22,16], magistra:[6,10],  site:[6,5] },
   africa:     { chests:[[23,8],[21,18],[8,18]], pickup:[8,6],  quest:[3,8],   faber:[3,13],  magistra:[19,3],  site:[19,15] },
   roma:       { chests:[[5,6],[66,6],[20,20],[58,19],[6,46],[26,40],[62,46],[40,36]], pickup:[14,22], quest:[57,21], faber:[38,47], magistra:[24,30], site:[42,42] },

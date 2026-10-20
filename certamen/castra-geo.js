@@ -26,14 +26,14 @@
 const CASTRA_GEO = {
   latium:     { links:{ S:"camp", N:"roma", W:"gallia" },        row:24, pos:[42,44], hub:[28,42], hubType:"port" },
   roma:       { links:{ S:"latium" },                            row:12, pos:[46,22], hub:[31,48], hubType:"caravan" },
-  gallia:     { links:{ E:"latium", N:"germania" },              row:16, pos:[16,34], hub:[13,19], hubType:"caravan" },
+  gallia:     { links:{ E:"latium", N:"germania" },              row:24, pos:[16,34], hub:[28,44], hubType:"caravan" },
   germania:   { links:{ S:"gallia" },                            row:13, pos:[28,10], hub:[13,19], hubType:"caravan" },
-  graecia:    { links:{ S:"laconia", E:"troia" },                row:8,  pos:[64,50], hub:[13,19], hubType:"port" },
+  graecia:    { links:{ S:"laconia", E:"troia" },                row:20, pos:[64,50], hub:[28,44], hubType:"port" },
   laconia:    { links:{ N:"graecia" },                           row:14, pos:[60,74], hub:[13,19], hubType:"port" },
   troia:      { links:{ W:"graecia", N:"themiscyra", E:"persis", S:"aegyptus" }, row:14, pos:[80,40], hub:[13,19], hubType:"port" },
   themiscyra: { links:{ S:"troia" },                             row:11, pos:[88,16], hub:[13,19], hubType:"port" },
   persis:     { links:{ W:"troia" },                             row:12, pos:[92,56], hub:[13,19], hubType:"caravan" },
-  aegyptus:   { links:{ N:"troia", W:"africa" },                 row:14, pos:[78,72], hub:[13,19], hubType:"caravan" },
+  aegyptus:   { links:{ N:"troia", W:"africa" },                 row:24, pos:[78,72], hub:[28,44], hubType:"caravan" },
   africa:     { links:{ E:"aegyptus" },                          row:10, pos:[38,80], hub:[13,19], hubType:"port" },
 };
 const CASTRA_GEO_CAMP = { pos:[42,60], nm:"Castra", icon:"🏕️" };
@@ -53,7 +53,7 @@ function castraGeoGateTiles(rid, dir){
 function castraGeoStart(rid){ const W = CASTRA_WORLDS[rid]; return { x:(W.cols>>1)-1, y:W.rows-2, dir:"up" }; }
 // Brug waar een gate over water moet (de zee/rivier aan de oostkant): Graecia, Troia, Africa.
 (function(){
-  CASTRA_WORLDS.graecia.water.forEach(w=>{ if(w.x0===28) w.bridgeY = [8,9]; });
+  
   CASTRA_WORLDS.troia.water.forEach(w=>{ if(w.x0===28) w.bridgeY = [14,15]; });
   CASTRA_WORLDS.africa.water.forEach(w=>{ if(w.x0===28) w.bridgeY = [10,11]; });
   Object.keys(CASTRA_GEO).forEach(rid=>{
