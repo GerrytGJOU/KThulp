@@ -106,6 +106,19 @@ const CASTRA_P_MISSIONS = [
             [ {line:_fid("aeg","Sagittarius Nubius"),n:7,gap:12,lvl:50} ],
             [ {line:_fid("aeg","Custos Pharaonis"),n:3,gap:20,lvl:50}, {line:_fid("aeg","Bellator curru Aegyptius"),n:6,gap:12,lvl:50}, {line:_fid("aeg","Satelles"),n:6,gap:12,lvl:50} ] ],
     reward:{ aes:560, frumentum:390, gloria:30 } },
+  /* Persis (opent na ae2) */
+  { id:"pe1", region:"persis", nm:"Via regia", nl:"De koningsweg", map:"b", seed:6101, hpMult:7, needs:"ae2",
+    waves:[ [ {line:_fid("per","Sparabara"),n:7,gap:16,lvl:50} ],
+            [ {line:_fid("per","Eques Persa"),n:6,gap:14,lvl:50}, {line:_fid("per","Magus"),n:3,gap:20,lvl:50} ],
+            [ {line:_fid("per","Sagittarius Scytha"),n:7,gap:14,lvl:50} ],
+            [ {line:_fid("per","Immortalis"),n:6,gap:14,lvl:50}, {line:_fid("per","Cataphractus"),n:4,gap:16,lvl:50} ] ],
+    reward:{ aes:640, frumentum:440, gloria:34 } },
+  { id:"pe2", region:"persis", nm:"Persepolis", nl:"Persepolis", map:"a", seed:6202, hpMult:5.3, needs:"pe1",
+    waves:[ [ {line:_fid("per","Immortalis"),n:8,gap:12,lvl:50} ],
+            [ {line:_fid("per","Cataphractus"),n:6,gap:12,lvl:50}, {line:_fid("per","Archimagus"),n:3,gap:18,lvl:50} ],
+            [ {line:_fid("per","Sagittarius Scytha"),n:8,gap:10,lvl:50} ],
+            [ {line:_fid("per","Melophorus"),n:4,gap:16,lvl:50}, {line:_fid("per","Clibanarius"),n:5,gap:14,lvl:50}, {line:_fid("per","Immortalis"),n:6,gap:12,lvl:50} ] ],
+    reward:{ aes:740, frumentum:510, gloria:38 } },
 ];
 for(const m of CASTRA_P_MISSIONS){ if(!m.region) m.region = "latium"; }
 
