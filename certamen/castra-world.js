@@ -20,8 +20,8 @@ const CASTRA_WORLDS = {
     water:[ { x0:54, x1:56, bridgeY:[24,25] } ],                   // de Tiber; alleen de brug is begaanbaar
     zones:[ { t:"silva", x:4, y:6, w:22, h:20 }, { t:"via", x:28, y:2, w:8, h:18 }, { t:"campus", x:36, y:22, w:18, h:22 }, { t:"tiberis", x:42, y:4, w:12, h:16 } ],
     trees:["tree_a","tree_b"], big:"tree_big", sparse:0.07, dense:0.22, denseZone:"silva",
-    doors:[ { x:9,  y:22, to:"specus_latium", spawn:{ x:12, y:17, dir:"up" } },       // grot in het bos
-            { x:38, y:35, to:"villa_latium",  spawn:{ x:10, y:11, dir:"up" } } ] },  // herberg bij de weg
+    doors:[ { x:9,  y:22, to:"specus_latium", label:"🕳️ Specus Lupae", spawn:{ x:12, y:17, dir:"up" } },       // grot in het bos
+            { x:38, y:35, to:"villa_latium",  label:"🏠 Hospitium", spawn:{ x:10, y:11, dir:"up" } } ] },  // herberg bij de weg
   graecia: { ...CASTRA_WORLD_BASE, id:"graecia", nm:"Graecia", icon:"🏛️", seed:20261101, base:"sand2", road:"stone", bank:"sand",
     roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:8,x1:26,y1:9} ],
     water:[ { x0:28, x1:29, bridgeY:null } ],                    // de Egeïsche Zee
@@ -53,10 +53,11 @@ const CASTRA_WORLDS = {
     zones:[ { t:"deserto", x:2, y:2, w:11, h:20 }, { t:"urbs", x:17, y:2, w:7, h:7 }, { t:"campus", x:17, y:13, w:7, h:8 }, { t:"litus", x:25, y:2, w:3, h:20 } ],
     trees:["palm","palm"], big:"tree_big2", sparse:0.04, dense:0.08, denseZone:"litus" },
   roma: { ...CASTRA_WORLD_BASE, id:"roma", nm:"Roma", icon:"🏟️", seed:20261701, base:"grass", road:"stone", bank:"sand2",
-    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:12,x1:26,y1:13} ],
-    water:[ { x0:28, x1:29, bridgeY:null } ],                    // de Tiber
-    zones:[ { t:"arena", x:2, y:2, w:10, h:9 }, { t:"forum", x:17, y:2, w:8, h:8 }, { t:"castra", x:2, y:15, w:10, h:6 }, { t:"via", x:17, y:15, w:9, h:6 } ],
-    trees:["tree_a","tree_b"], big:"tree_big", sparse:0.06, dense:0.10, denseZone:"castra" },
+    cols:72, rows:54, start:{ x:35, y:52 },                       // grote stad (72×54) met vijf binnenruimtes
+    roads:[ {x0:35,y0:1,x1:36,y1:53}, {x0:2,y0:26,x1:69,y1:27}, {x0:2,y0:14,x1:69,y1:14} ],
+    water:[ { x0:70, x1:71, bridgeY:null } ],                    // de Tiber
+    zones:[ { t:"arena", x:2, y:17, w:28, h:8 }, { t:"forum", x:41, y:17, w:26, h:8 }, { t:"castra", x:2, y:34, w:28, h:17 }, { t:"via", x:56, y:32, w:12, h:19 } ],
+    trees:["tree_a","tree_b"], big:"tree_big", sparse:0.05, dense:0.12, denseZone:"castra" },
   laconia: { ...CASTRA_WORLD_BASE, id:"laconia", nm:"Laconia", icon:"🛡️", seed:20261801, base:"sand2", road:"stone", bank:"sand",
     roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:5,y0:14,x1:27,y1:15} ],
     water:[ { x0:3, x1:4, bridgeY:[14,15] } ],                   // de Eurotas, met een brug op de weg

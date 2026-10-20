@@ -38,6 +38,14 @@ function castraTypeMult(att, def){
 
 // Maak een wilde vijand voor deze regio/terrein: tier 60/28/10/2% (begrensd door het praetorium-level),
 // volk uit de regio, vorm gewogen op het terrein, level passend bij de tier (castraWildPick, castra-troops.js).
+// Gedwongen ontmoeting met een vaste vijand (baas of kampioen); force = { form, lvl, boss }.
+function castraForcedEncounter(regionId, terrainId, force){
+  const V = castraMakeEncounter(regionId, terrainId);
+  const e = castraRollSoldier(force.form); e.lvl = force.lvl;
+  const st = castraStats(e); Object.keys(st).forEach(k=>{ st[k] = Math.max(1, Math.round(st[k]*CASTRA_V_BAL.wildMult)); });
+  V.enemy = e; V.stats = st; V.stranger = false; V.boss = force.boss || null;
+  return V;
+}
 function castraMakeEncounter(regionId, terrainId){
   const reg = CASTRA_VENATIO[regionId];
   const rng = castraRng((CASTRA.seed ^ 0x51ed270b)>>>0); CASTRA.seed = (CASTRA.seed + 7)>>>0;
@@ -200,6 +208,7 @@ function castraVFinish(){
     CASTRA.res.frumentum = Math.min(cap, CASTRA.res.frumentum+fru);
     CASTRA.res.gloria += 1; if(typeof castraPxpAdd==="function") castraPxpAdd(6);
     V.loot = { aes, fru };
+    if(V.boss && typeof castraBossWon==="function") castraBossWon(V);
     if(soldier){
       soldier.xp += castraCardXp(CASTRA_V_BAL.xpWin + Math.floor(CASTRA_V_BAL.xpPerEnemyLvl*V.enemy.lvl));
       const before = soldier.lvl; castraLevelUp(soldier); V.leveled = soldier.lvl > before;

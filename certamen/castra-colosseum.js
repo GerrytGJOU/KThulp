@@ -135,12 +135,12 @@ function castraColoCard(){
 }
 
 /* ---------- Roma: gesloten deur met bordje ---------- */
-const CASTRA_COLO_DOOR = { fx:[["tent_white",9,16]], sign:{ x:10, y:19 } };
+const CASTRA_COLO_DOOR = { fx:[["tent_white",12,29],["tent_white",15,29],["tent_white",18,29]], sign:{ x:16, y:32 } };
 CASTRA_WENT.push({ id:"bord_colosseum", region:"roma", kind:"sign", x:CASTRA_COLO_DOOR.sign.x, y:CASTRA_COLO_DOOR.sign.y });
 const _castraWobjPiecesColo0 = castraWobjPieces;
 castraWobjPieces = function(rid){ const out = _castraWobjPiecesColo0(rid); if(rid==="roma") CASTRA_COLO_DOOR.fx.forEach(([o,x,y])=>out.push({ o, x, y })); return out; };
 const _castraWobjSpotsColo0 = castraWobjSpots;
-castraWobjSpots = function(rid){ const out = _castraWobjSpotsColo0(rid); if(rid==="roma"){ [[9,16],[10,16],[11,16],[9,17],[10,17],[11,17],[9,18],[10,18],[11,18],[9,19],[11,19]].forEach(c=>out.push(c)); } return out; };
+castraWobjSpots = function(rid){ const out = _castraWobjSpotsColo0(rid); if(rid==="roma"){ for(let y=29;y<=33;y++) for(let x=11;x<=21;x++) out.push([x,y]); } return out; };
 const _castraNpcTalkColo0 = castraNpcTalk;
 castraNpcTalk = function(id){
   if(String(id)==="w:bord_colosseum"){
@@ -160,5 +160,5 @@ castraWobjDraw = function(){
   castraWEnts().filter(e=>e.kind==="sign").forEach(e=>{
     box.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:${e.x*48}px;top:${e.y*48}px;width:48px;height:48px;z-index:3;display:flex;align-items:center;justify-content:center;font-size:32px;pointer-events:none">🚧</div>`);
   });
-  if(CASTRA_W_REGION==="roma") box.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:${9*48-30}px;top:${16*48-22}px;width:${3*48+60}px;text-align:center;z-index:7;font-size:13px;font-weight:bold;color:#fff;text-shadow:0 1px 3px #000,0 0 6px #000;pointer-events:none">🏛️ Colosseum (nog in aanbouw)</div>`);
+  if(CASTRA_W_REGION==="roma") box.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:${12*48-30}px;top:${29*48-22}px;width:${9*48+60}px;text-align:center;z-index:7;font-size:13px;font-weight:bold;color:#fff;text-shadow:0 1px 3px #000,0 0 6px #000;pointer-events:none">🏛️ Colosseum (nog in aanbouw)</div>`);
 };

@@ -25,7 +25,7 @@
 // hub = tegel van de reisplek; hubType = port (schip) of caravan.
 const CASTRA_GEO = {
   latium:     { links:{ S:"camp", N:"roma", W:"gallia" },        row:24, pos:[42,44], hub:[28,42], hubType:"port" },
-  roma:       { links:{ S:"latium" },                            row:12, pos:[46,22], hub:[13,19], hubType:"caravan" },
+  roma:       { links:{ S:"latium" },                            row:12, pos:[46,22], hub:[31,48], hubType:"caravan" },
   gallia:     { links:{ E:"latium", N:"germania" },              row:16, pos:[16,34], hub:[13,19], hubType:"caravan" },
   germania:   { links:{ S:"gallia" },                            row:13, pos:[28,10], hub:[13,19], hubType:"caravan" },
   graecia:    { links:{ S:"laconia", E:"troia" },                row:8,  pos:[64,50], hub:[13,19], hubType:"port" },

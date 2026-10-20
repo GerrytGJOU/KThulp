@@ -64,7 +64,7 @@ const CASTRA_WPOS = {
   aegyptus:   { chests:[[8,6],[21,19],[21,8]],  pickup:[13,12],quest:[12,3],  faber:[7,17],  magistra:[18,5],  site:[8,9] },
   persis:     { chests:[[21,5],[9,9],[24,19]],  pickup:[3,2],  quest:[25,9],  faber:[22,16], magistra:[6,10],  site:[6,5] },
   africa:     { chests:[[23,8],[21,18],[8,18]], pickup:[8,6],  quest:[3,8],   faber:[3,13],  magistra:[19,3],  site:[19,15] },
-  roma:       { chests:[[7,6],[5,17],[24,3]],   pickup:[11,5], quest:[21,19], faber:[2,3],   magistra:[25,15], site:[18,15] },
+  roma:       { chests:[[5,6],[66,6],[20,20],[58,19],[6,46],[26,40],[62,46],[40,36]], pickup:[14,22], quest:[57,21], faber:[38,47], magistra:[24,30], site:[42,42] },
   laconia:    { chests:[[18,7],[22,18],[9,3]],  pickup:[12,10],quest:[25,5],  faber:[7,18],  magistra:[22,6],  site:[7,10] },
   germania:   { chests:[[25,3],[11,8],[7,17]],  pickup:[3,17], quest:[25,19], faber:[7,2],   magistra:[18,6],  site:[2,6] },
   themiscyra: { chests:[[8,17],[22,8],[4,4]],   pickup:[12,3], quest:[21,4],  faber:[5,16],  magistra:[19,9],  site:[22,15] },
