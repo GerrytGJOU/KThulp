@@ -67,25 +67,25 @@ function castraDlgClose(silent){
   if(!silent && D && D.done) D.done(D.chosen);
 }
 function castraDlgPortrait(d){
-  return `<div style="flex:0 0 112px;width:112px;height:112px;overflow:hidden;border-radius:8px;background:#1b150e;border:2px solid #8a6d2f;position:relative">
+  return `<div style="flex:0 0 112px;width:112px;height:112px;overflow:hidden;border-radius:8px;background:#d9c590;border:2px solid #4a3416;position:relative">
     <div style="position:absolute;left:0;top:0;width:112px;height:112px">${castraAvatarHTML(d.look,"down",1,112)}</div></div>`;
 }
 function castraDlgLine(){
   const D = CASTRA_DLG, box = document.getElementById("castraDlg"); if(!D || !box) return;
   const ln = D.lines[D.i], d = CASTRA_HERO_DATA[D.who];
   D.shown = false; const laTxt = castraSub(ln.la);
-  box.innerHTML = `<div style="width:min(100%,860px);box-sizing:border-box;display:flex;gap:12px;align-items:stretch;background:rgba(14,12,16,.95);border:3px solid #fff;border-radius:14px;padding:12px;box-shadow:0 0 0 2px #000,0 6px 24px rgba(0,0,0,.6)">
+  box.innerHTML = `<div style="width:min(100%,860px);box-sizing:border-box;display:flex;gap:12px;align-items:stretch;background:linear-gradient(#efe1b9,#e4d2a1);border:4px solid #4a3416;border-radius:14px;padding:12px;box-shadow:0 0 0 2px #c9a24a,0 6px 24px rgba(0,0,0,.55)">
     ${castraDlgPortrait(d)}
     <div style="flex:1;min-width:0;display:flex;flex-direction:column">
-      <div style="color:#d4af37;font-weight:bold;font-size:15px;margin-bottom:2px">${esc(d.nm)}</div>
-      <div id="castraDlgLa" style="font-size:19px;line-height:1.35;min-height:52px;color:#fff"></div>
-      <div id="castraDlgNl" style="font-size:12px;opacity:.8;margin-top:4px;min-height:16px;color:#d8cfbf"></div>
+      <div style="color:#7a2a14;font-weight:bold;font-size:15px;margin-bottom:2px">${esc(d.nm)}</div>
+      <div id="castraDlgLa" style="font-size:19px;line-height:1.35;min-height:52px;color:#2b1d0e"></div>
+      <div id="castraDlgNl" style="font-size:12px;opacity:.85;margin-top:4px;min-height:16px;color:#4a3a22"></div>
       <div id="castraDlgChoices" style="margin-top:6px"></div>
     </div>
-    <div id="castraDlgArrow" style="align-self:flex-end;color:#fff;font-size:18px;visibility:hidden;animation:castraBlink 1s infinite">▼</div>
+    <div id="castraDlgArrow" style="align-self:flex-end;color:#4a3416;font-size:18px;visibility:hidden;animation:castraBlink 1s infinite">▼</div>
   </div>`;
   if(!document.getElementById("castraBlinkCss")){
-    const st = document.createElement("style"); st.id = "castraBlinkCss"; st.textContent = "@keyframes castraBlink{0%,100%{opacity:1}50%{opacity:.2}}"; document.head.appendChild(st);
+    const st = document.createElement("style"); st.id = "castraBlinkCss"; st.textContent = "@keyframes castraBlink{0%,100%{opacity:1}50%{opacity:.2}} #castraDlg .cl-i{color:#7a2a14!important;border-color:#7a2a14!important} #castraDlg .cl-w{border-bottom-color:#7a2a14!important}"; document.head.appendChild(st);
   }
   const laEl = document.getElementById("castraDlgLa"); let n = 0;
   if(D.typing) clearInterval(D.typing);
