@@ -29,10 +29,11 @@ const CASTRA_WORLDS = {
     zones:[ { t:"mons", x:2, y:2, w:24, h:12 }, { t:"olea", x:2, y:24, w:26, h:22 }, { t:"urbs", x:36, y:24, w:20, h:20 }, { t:"litus", x:56, y:2, w:5, h:16 }, { t:"litus", x:58, y:24, w:3, h:20 } ],
     trees:["tree_a","palm"], big:"tree_big2", sparse:0.06, dense:0.18, denseZone:"olea" },
   troia: { ...CASTRA_WORLD_BASE, id:"troia", nm:"Troia", icon:"🏰", seed:20261201, base:"sand2", road:"sand", bank:"sand",
-    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:14,x1:27,y1:15} ],
-    water:[ { x0:10, x1:11, bridgeY:[14,15] }, { x0:28, x1:29, bridgeY:null } ],   // Scamander (met brug) en de zee
-    zones:[ { t:"scamander", x:3, y:2, w:6, h:20 }, { t:"muros", x:17, y:2, w:9, h:9 }, { t:"campus", x:17, y:16, w:9, h:6 }, { t:"litus", x:26, y:2, w:2, h:20 } ],
-    trees:["palm","tree_b"], big:"tree_big", sparse:0.05, dense:0.10, denseZone:"scamander" },
+    cols:64, rows:48, start:{ x:31, y:46 },                       // grote regio (64×48), Pokémon-formaat
+    roads:[ {x0:31,y0:1,x1:32,y1:47}, {x0:2,y0:24,x1:61,y1:25} ],
+    water:[ { x0:4, x1:5, bridgeY:[24,25] }, { x0:62, x1:63, bridgeY:[24,25] } ],
+    zones:[ { t:"scamander", x:6, y:2, w:8, h:17 }, { t:"scamander", x:6, y:29, w:8, h:16 }, { t:"muros", x:36, y:2, w:22, h:17 }, { t:"campus", x:36, y:29, w:22, h:14 }, { t:"litus", x:58, y:2, w:3, h:40 } ],
+    trees:["palm","tree_b"], big:"tree_big", sparse:0.05, dense:0.1, denseZone:"scamander" },
   gallia: { ...CASTRA_WORLD_BASE, id:"gallia", nm:"Gallia", icon:"🌲", seed:20261301, base:"grass", road:"sand", bank:"sand2",
     cols:64, rows:48, start:{ x:31, y:46 },                       // grote regio (64×48), Pokémon-formaat
     roads:[ {x0:31,y0:1,x1:32,y1:47}, {x0:2,y0:24,x1:61,y1:25} ],
@@ -46,14 +47,16 @@ const CASTRA_WORLDS = {
     zones:[ { t:"nilus", x:6, y:2, w:10, h:18 }, { t:"nilus", x:6, y:28, w:10, h:16 }, { t:"templum", x:18, y:2, w:10, h:14 }, { t:"urbs", x:36, y:2, w:22, h:16 }, { t:"desertum", x:36, y:29, w:22, h:14 } ],
     trees:["palm","palm"], big:"tree_big2", sparse:0.04, dense:0.12, denseZone:"nilus" },
   persis: { ...CASTRA_WORLD_BASE, id:"persis", nm:"Persis", icon:"🦁", seed:20261501, base:"sand2", road:"stone", bank:"sand",
-    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:12,x1:27,y1:13} ],
-    water:[ { x0:28, x1:29, bridgeY:null } ],                    // de Perzische Golf
-    zones:[ { t:"mons", x:2, y:2, w:10, h:9 }, { t:"via", x:13, y:1, w:5, h:9 }, { t:"urbs", x:19, y:2, w:7, h:9 }, { t:"campus", x:18, y:15, w:9, h:6 } ],
-    trees:["palm","tree_a"], big:"tree_big2", sparse:0.05, dense:0.10, denseZone:"mons" },
+    cols:64, rows:48, start:{ x:31, y:46 },                       // grote regio (64×48), Pokémon-formaat
+    roads:[ {x0:31,y0:1,x1:32,y1:47}, {x0:2,y0:24,x1:61,y1:25} ],
+    water:[ { x0:62, x1:63, bridgeY:null } ],
+    zones:[ { t:"mons", x:2, y:2, w:22, h:17 }, { t:"via", x:26, y:2, w:4, h:17 }, { t:"urbs", x:36, y:2, w:22, h:17 }, { t:"campus", x:36, y:29, w:22, h:14 } ],
+    trees:["palm","tree_a"], big:"tree_big2", sparse:0.05, dense:0.1, denseZone:"mons" },
   africa: { ...CASTRA_WORLD_BASE, id:"africa", nm:"Africa", icon:"🐘", seed:20261601, base:"sand2", road:"sand", bank:"sand",
-    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:10,x1:27,y1:11} ],
-    water:[ { x0:28, x1:29, bridgeY:null } ],                    // de Middellandse Zee
-    zones:[ { t:"deserto", x:2, y:2, w:11, h:20 }, { t:"urbs", x:17, y:2, w:7, h:7 }, { t:"campus", x:17, y:13, w:7, h:8 }, { t:"litus", x:25, y:2, w:3, h:20 } ],
+    cols:64, rows:48, start:{ x:31, y:46 },                       // grote regio (64×48), Pokémon-formaat
+    roads:[ {x0:31,y0:1,x1:32,y1:47}, {x0:2,y0:24,x1:61,y1:25} ],
+    water:[ { x0:62, x1:63, bridgeY:[24,25] } ],
+    zones:[ { t:"deserto", x:2, y:2, w:26, h:17 }, { t:"deserto", x:2, y:29, w:24, h:16 }, { t:"urbs", x:36, y:2, w:20, h:17 }, { t:"campus", x:36, y:29, w:18, h:14 }, { t:"litus", x:56, y:2, w:5, h:40 } ],
     trees:["palm","palm"], big:"tree_big2", sparse:0.04, dense:0.08, denseZone:"litus" },
   roma: { ...CASTRA_WORLD_BASE, id:"roma", nm:"Roma", icon:"🏟️", seed:20261701, base:"grass", road:"stone", bank:"sand2",
     cols:72, rows:54, start:{ x:35, y:52 },                       // grote stad (72×54) met vijf binnenruimtes
@@ -62,20 +65,23 @@ const CASTRA_WORLDS = {
     zones:[ { t:"arena", x:2, y:17, w:28, h:8 }, { t:"forum", x:41, y:17, w:26, h:8 }, { t:"castra", x:2, y:34, w:28, h:17 }, { t:"via", x:56, y:32, w:12, h:19 } ],
     trees:["tree_a","tree_b"], big:"tree_big", sparse:0.05, dense:0.12, denseZone:"castra" },
   laconia: { ...CASTRA_WORLD_BASE, id:"laconia", nm:"Laconia", icon:"🛡️", seed:20261801, base:"sand2", road:"stone", bank:"sand",
-    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:5,y0:14,x1:27,y1:15} ],
-    water:[ { x0:3, x1:4, bridgeY:[14,15] } ],                   // de Eurotas, met een brug op de weg
-    zones:[ { t:"mons", x:5, y:2, w:8, h:10 }, { t:"urbs", x:18, y:2, w:8, h:9 }, { t:"flumen", x:5, y:16, w:8, h:5 }, { t:"campus", x:18, y:16, w:9, h:5 } ],
+    cols:64, rows:48, start:{ x:31, y:46 },                       // grote regio (64×48), Pokémon-formaat
+    roads:[ {x0:31,y0:1,x1:32,y1:47}, {x0:2,y0:24,x1:61,y1:25} ],
+    water:[ { x0:3, x1:4, bridgeY:[24,25] } ],
+    zones:[ { t:"mons", x:6, y:2, w:22, h:17 }, { t:"urbs", x:36, y:2, w:22, h:17 }, { t:"flumen", x:6, y:29, w:20, h:17 }, { t:"campus", x:36, y:29, w:22, h:14 } ],
     trees:["tree_a","palm"], big:"tree_big2", sparse:0.05, dense:0.14, denseZone:"mons" },
   germania: { ...CASTRA_WORLD_BASE, id:"germania", nm:"Germania", icon:"🐺", seed:20261901, base:"grass", road:"sand", bank:"sand2",
-    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:13,x1:27,y1:14} ],
-    water:[ { x0:28, x1:29, bridgeY:[13,14] } ],                 // de Rijn, met een brug op de weg
-    zones:[ { t:"silva", x:2, y:2, w:12, h:10 }, { t:"palus", x:2, y:16, w:12, h:5 }, { t:"vicus", x:18, y:2, w:8, h:9 }, { t:"flumen", x:25, y:15, w:3, h:6 } ],
-    trees:["tree_a","tree_b"], big:"tree_big", sparse:0.10, dense:0.30, denseZone:"silva" },
+    cols:64, rows:48, start:{ x:31, y:46 },                       // grote regio (64×48), Pokémon-formaat
+    roads:[ {x0:31,y0:1,x1:32,y1:47}, {x0:2,y0:24,x1:61,y1:25} ],
+    water:[ { x0:62, x1:63, bridgeY:[24,25] } ],
+    zones:[ { t:"silva", x:2, y:2, w:26, h:17 }, { t:"palus", x:2, y:29, w:24, h:16 }, { t:"vicus", x:36, y:2, w:22, h:17 }, { t:"flumen", x:55, y:29, w:5, h:16 }, { t:"flumen", x:55, y:2, w:5, h:17 } ],
+    trees:["tree_a","tree_b"], big:"tree_big", sparse:0.1, dense:0.3, denseZone:"silva" },
   themiscyra: { ...CASTRA_WORLD_BASE, id:"themiscyra", nm:"Themiscyra", icon:"🏹", seed:20262001, base:"grass", road:"sand", bank:"sand2",
-    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:11,x1:27,y1:12} ],
-    water:[ { x0:28, x1:29, bridgeY:null } ],                    // de Zwarte Zee
-    zones:[ { t:"silva", x:2, y:2, w:11, h:8 }, { t:"mons", x:18, y:2, w:8, h:8 }, { t:"campus", x:2, y:14, w:11, h:7 }, { t:"litus", x:18, y:14, w:10, h:7 } ],
-    trees:["tree_a","palm"], big:"tree_big", sparse:0.07, dense:0.20, denseZone:"silva" },
+    cols:64, rows:48, start:{ x:31, y:46 },                       // grote regio (64×48), Pokémon-formaat
+    roads:[ {x0:31,y0:1,x1:32,y1:47}, {x0:2,y0:24,x1:61,y1:25} ],
+    water:[ { x0:62, x1:63, bridgeY:null } ],
+    zones:[ { t:"silva", x:2, y:2, w:26, h:17 }, { t:"mons", x:36, y:2, w:22, h:17 }, { t:"campus", x:2, y:29, w:24, h:16 }, { t:"litus", x:36, y:29, w:24, h:14 } ],
+    trees:["tree_a","palm"], big:"tree_big", sparse:0.07, dense:0.2, denseZone:"silva" },
 };
 let CASTRA_W_REGION = "latium";
 function castraWorldCfg(){ return CASTRA_WORLDS[CASTRA_W_REGION]; }

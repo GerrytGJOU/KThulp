@@ -315,3 +315,11 @@ Controles: alle objecten, deuren en aankomsttegels zijn bereikbaar (BFS), het La
 - **Venator** per regio: dagelijkse jachtopdracht.
 
 Generieke rollen: `gquiz`, `grest`, `gchamp`, `gfetch`, bazen via `kind:"boss"`; gevechten via `castraRegionFight(regio, terrein, vorm, niveau, boss)`. Controles: alle objecten, deuren, poorten (ook bij geopende doorgangen) en aankomsttegels zijn bereikbaar, het Latijn staat in het glossarium, de gevechten zijn nagerekend en de beloningsflow is getest. Nog niet gedaan: Laconia, Troia, Germania, Themiscyra, Persis en Africa op dezelfde manier uitbouwen.
+
+## 23. Alle regio's op Pokémon-formaat (2026-12-04)
+
+Ook **Laconia, Troia, Germania, Themiscyra, Persis en Africa** zijn nu 64 × 48 en hebben dezelfde opzet als Gallia/Graecia/Aegyptus (§22): hoofdwegen op x 31–32, dwarsweg op rij 24 (alle `row` in `CASTRA_GEO` zijn nu 24, hubs op (28,44)), rivier/zee op x 62–63 (Troia en Africa met brug voor hun oostpoort, Troia ook de Scamander op x 4–5), twee huizen, een grot, Venator, 8 kisten. Alle 11 hoofdregio's zijn nu 64 × 48 of groter; alleen het kamp is kleiner. Data in `CASTRA_REGSPEC` (`certamen/castra-regions.js`), posities in `CASTRA_WPOS`.
+
+Per regio: quizmaster (Geron, Vates, Vates, Hippolyta, Magus, Suffes) met 6 eigen zinnen; rustplek; kampioen (Spartiata niv. 42, Custos portae 44, Pugnator Germanus 32, Amazon 48, Immortalis 50, Veteranus Libyus 52); grot met zoekopdracht (lam 🐑, pijl 🏹, drinkhoorn 🐂, gordel van Hippolyta 🎗️, heilig vuur 🔥, olifantstand 🦷) en een dagelijkse baas (Gryps, Cyclops, Lupus Martius, Equus alatus, Draco, Serpens). Voorwerp-id's zijn uniek (`cornu_bibendi`, `dens_elephanti`, `scarabaeus_sacer` naast de bestaande opdrachtvoorwerpen).
+
+**Balans** (Princeps niv. max−4 als maatstaf): kampioenen zijn bewust lastig (soms verlies), bazen met tier-2-mythen zijn voor sterke teams vrij makkelijk (nipte winst met een zwakker team). Dit blijft een schatting tot er klastest-data is. Controles: alle objecten, deuren, poorten (bij geopende doorgangen) en aankomsttegels bereikbaar, geen dubbele id's of voorwerpen, glossarium compleet, alle dialogen en winstflows doorlopen.
