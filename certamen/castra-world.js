@@ -103,6 +103,8 @@ function castraWorldDef(){
   });
   // plekken van personen vrijhouden (ze worden dynamisch geblokkeerd, zie castraWBlocked)
   Object.keys(CASTRA_NPCS).forEach(id=>{ const n = CASTRA_NPCS[id]; if(n.region===W.id) used[n.world.x+","+n.world.y]=1; });
+  if(typeof castraWobjSpots==="function") castraWobjSpots(W.id).forEach(c=>used[c[0]+","+c[1]]=1);
+  if(typeof castraWobjPieces==="function") castraWobjPieces(W.id).forEach(p=>{ pieces.push(p); used[p.x+","+p.y]=1; });
   // hoog gras per zone (niet op wegen), met vaste willekeur
   W.zones.forEach(z=>{
     for(let y=z.y;y<z.y+z.h;y++) for(let x=z.x;x<z.x+z.w;x++){
