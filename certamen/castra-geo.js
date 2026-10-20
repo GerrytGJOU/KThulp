@@ -24,7 +24,7 @@
 // links: richting -> buurregio of "camp"; row = rij van de horizontale weg (W/E-poorten); pos = plek op de kaart (%);
 // hub = tegel van de reisplek; hubType = port (schip) of caravan.
 const CASTRA_GEO = {
-  latium:     { links:{ S:"camp", N:"roma", W:"gallia" },        row:12, pos:[42,44], hub:[13,19], hubType:"port" },
+  latium:     { links:{ S:"camp", N:"roma", W:"gallia" },        row:24, pos:[42,44], hub:[28,42], hubType:"port" },
   roma:       { links:{ S:"latium" },                            row:12, pos:[46,22], hub:[13,19], hubType:"caravan" },
   gallia:     { links:{ E:"latium", N:"germania" },              row:16, pos:[16,34], hub:[13,19], hubType:"caravan" },
   germania:   { links:{ S:"gallia" },                            row:13, pos:[28,10], hub:[13,19], hubType:"caravan" },
@@ -43,12 +43,14 @@ const CASTRA_GEO_COST = 15;
 let CASTRA_GEO_SPAWN = null;
 
 function castraGeoGateTiles(rid, dir){
-  const G = CASTRA_GEO[rid]; const r = G.row;
-  if(dir==="N") return [ {x:15,y:0}, {x:16,y:0} ];
-  if(dir==="S") return [ {x:15,y:23}, {x:16,y:23} ];
+  const G = CASTRA_GEO[rid], W = CASTRA_WORLDS[rid], r = G.row, cx = (W.cols>>1)-1;   // poorten volgen de afmetingen van de regio
+  if(dir==="N") return [ {x:cx,y:0}, {x:cx+1,y:0} ];
+  if(dir==="S") return [ {x:cx,y:W.rows-1}, {x:cx+1,y:W.rows-1} ];
   if(dir==="W") return [ {x:0,y:r}, {x:0,y:r+1} ];
-  return [ {x:31,y:r}, {x:31,y:r+1} ];
+  return [ {x:W.cols-1,y:r}, {x:W.cols-1,y:r+1} ];
 }
+// Startplek van een regio (zuidpoort binnen) en aankomst via een poort.
+function castraGeoStart(rid){ const W = CASTRA_WORLDS[rid]; return { x:(W.cols>>1)-1, y:W.rows-2, dir:"up" }; }
 // Brug waar een gate over water moet (de zee/rivier aan de oostkant): Graecia, Troia, Africa.
 (function(){
   CASTRA_WORLDS.graecia.water.forEach(w=>{ if(w.x0===28) w.bridgeY = [8,9]; });
@@ -80,17 +82,17 @@ function castraGeoHops(a, b){
   return 9;
 }
 function castraGeoSpawnFor(rid, moved){
-  const G = CASTRA_GEO[rid];
-  if(moved==="N") return { x:15, y:22, dir:"up" };
-  if(moved==="S") return { x:15, y:1,  dir:"down" };
-  if(moved==="W") return { x:30, y:G.row, dir:"left" };
+  const G = CASTRA_GEO[rid], W = CASTRA_WORLDS[rid], cx = (W.cols>>1)-1;
+  if(moved==="N") return { x:cx, y:W.rows-2, dir:"up" };
+  if(moved==="S") return { x:cx, y:1,  dir:"down" };
+  if(moved==="W") return { x:W.cols-2, y:G.row, dir:"left" };
   return { x:1, y:G.row, dir:"right" };
 }
 // Mis-stap bij een gesloten poort: één tegel terug.
 function castraGeoInner(rid, dir){
-  const G = CASTRA_GEO[rid]; const t = castraGeoGateTiles(rid, dir)[0];
-  if(dir==="N") return { x:t.x, y:1 }; if(dir==="S") return { x:t.x, y:22 };
-  if(dir==="W") return { x:1, y:t.y }; return { x:30, y:t.y };
+  const W = CASTRA_WORLDS[rid]; const t = castraGeoGateTiles(rid, dir)[0];
+  if(dir==="N") return { x:t.x, y:1 }; if(dir==="S") return { x:t.x, y:W.rows-2 };
+  if(dir==="W") return { x:1, y:t.y }; return { x:W.cols-2, y:t.y };
 }
 
 /* ---------- lopen over de rand ---------- */
@@ -119,7 +121,7 @@ function castraGeoToCamp(){
   castraWorldDetach(); CASTRA.pos = { x:7, y:1 }; castraSave(); go("castraHome");
 }
 // Vanuit het kamp de wereld in (porta decumana): Latium, zuidpoort.
-function castraGeoEnterWorld(){ CASTRA_W_REGION = "latium"; CASTRA_GEO_SPAWN = { x:15, y:22, dir:"up" }; go("castraWorld"); }
+function castraGeoEnterWorld(){ CASTRA_W_REGION = "latium"; CASTRA_GEO_SPAWN = castraGeoStart("latium"); go("castraWorld"); }
 
 /* ---------- reisplekken (schip / caravan) ---------- */
 const _castraNpcTalkGeo0 = castraNpcTalk;
@@ -135,7 +137,7 @@ castraWobjDraw = function(){
   const gl = Object.keys(G.links).map(d=>{ const to = G.links[d], t = castraGeoGateTiles(rid,d)[0];
     const open = to==="camp" || castraRegionOpen(to);
     const lab = `${open?"":"🔒 "}${esc(castraGeoName(to))}`;
-    const ix = Math.min(29, Math.max(2, t.x)), iy = Math.min(21, Math.max(2, t.y));
+    const WW = CASTRA_WORLDS[rid], ix = Math.min(WW.cols-3, Math.max(2, t.x)), iy = Math.min(WW.rows-3, Math.max(2, t.y));
     return `<div style="position:absolute;left:${ix*48-60}px;top:${iy*48-6}px;width:168px;text-align:center;pointer-events:none;z-index:7;font-size:13px;font-weight:bold;color:#fff;text-shadow:0 1px 3px #000,0 0 6px #000;opacity:.95">${CASTRA_GEO_ARROW[d]} ${lab}</div>`; }).join("");
   const hubEmoji = G.hubType==="port" ? "⚓" : "🐪";
   box.insertAdjacentHTML("beforeend", gl + `<div style="position:absolute;left:${G.hub[0]*48}px;top:${G.hub[1]*48}px;width:48px;height:48px;z-index:3;display:flex;align-items:center;justify-content:center;font-size:34px;pointer-events:none">${hubEmoji}</div>`);
@@ -169,7 +171,7 @@ function castraGeoCanTravel(){
   }
   return false;
 }
-function castraGeoHere(){ return document.getElementById("castraMap") ? "camp" : (document.getElementById("cwMap") ? CASTRA_W_REGION : null); }
+function castraGeoHere(){ return document.getElementById("castraMap") ? "camp" : (document.getElementById("cwMap") ? ((CASTRA_WORLDS[CASTRA_W_REGION]||{}).parent || CASTRA_W_REGION) : null); }
 function castraGeoTravel(to){
   const here = castraGeoHere(); if(!here || here===to) return;
   const cost = to==="camp" ? 0 : CASTRA_GEO_COST*Math.max(1, castraGeoHops(here, to));
@@ -181,8 +183,8 @@ function castraGeoTravel(to){
     if(here==="camp") return;
     castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraWorldDetach(); CASTRA.pos = { x:7, y:1 }; castraSave(); go("castraHome"); return;
   }
-  if(here==="camp"){ CASTRA.pos = { x:7, y:1 }; castraSave(); CASTRA_W_REGION = to; CASTRA_GEO_SPAWN = { x:15, y:22, dir:"up" }; go("castraWorld"); return; }
-  castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraWorldDetach(); CASTRA_W_REGION = to; CASTRA_GEO_SPAWN = { x:15, y:22, dir:"up" };
+  if(here==="camp"){ CASTRA.pos = { x:7, y:1 }; castraSave(); CASTRA_W_REGION = to; CASTRA_GEO_SPAWN = castraGeoStart(to); go("castraWorld"); return; }
+  castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraWorldDetach(); CASTRA_W_REGION = to; CASTRA_GEO_SPAWN = castraGeoStart(to);
   toast(CASTRA_GEO[here].hubType==="port" && CASTRA_GEO[to].hubType==="port" ? "⚓ Je vaart naar "+castraGeoName(to) : "🐪 Je reist naar "+castraGeoName(to), "");
   go("castraWorld");
 }
