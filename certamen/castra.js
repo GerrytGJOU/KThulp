@@ -49,7 +49,25 @@ function castraSaveKey(){
   const i = (typeof BM_IDENT!=="undefined") ? BM_IDENT : null;
   return "castra_save_v1_" + (i && i.klascode ? i.klascode+"_"+i.leerlingcode : "gast");
 }
+// Na een verse paginalading is BM_IDENT leeg tot een Battle Mode-scherm de opgeslagen identiteit laadt.
+// Castra pakt die zelf op (zelfde bron als Battle Mode: localStorage), zodat je je eigen avatar en je
+// eigen klas/leerlingcode meekrijgt; de cloudversie (nieuwere avatar) wordt daarna op de achtergrond gehaald.
+function castraAdoptIdentity(){
+  try{
+    if(typeof BM_IDENT==="undefined" || BM_IDENT || typeof bmIdentLoad!=="function") return;
+    const saved = bmIdentLoad();
+    if(!saved || !saved.klascode || !saved.leerlingcode) return;
+    BM_IDENT = saved;
+    if(typeof bmIdentGet==="function") bmIdentGet(saved.klascode, saved.leerlingcode).then(d=>{
+      if(d && BM_IDENT && BM_IDENT.leerlingcode===saved.leerlingcode){
+        BM_IDENT = { ...saved, ...d }; if(typeof bmIdentSave==="function") bmIdentSave(BM_IDENT);
+        if(typeof castraDrawAvatar==="function" && document.getElementById("castraAv")) castraDrawAvatar();
+      }
+    }).catch(()=>{});
+  }catch(e){}
+}
 function castraLoad(){
+  castraAdoptIdentity();
   CASTRA_KEY = castraSaveKey();
   let s = null;
   try{ s = JSON.parse(localStorage.getItem(CASTRA_KEY)||"null"); }catch(e){}
