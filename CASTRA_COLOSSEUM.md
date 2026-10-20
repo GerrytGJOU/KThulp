@@ -1,6 +1,6 @@
 # Castra Heroum — Colosseum (PvP) · ontwerpvoorstel
 
-Status: **ontwerp, nog niet gebouwd** (2026-11-29). Hoort bij `CASTRA_HEROUM.md` en `CASTRA_TROEPENBOMEN.md`.
+Status (2026-11-29): **grondwerk gelegd (C1-motor, gesloten voor spelers)**, de rest volgt in een apart gesprek (zie §8 voor de overdracht). Het Colosseum is in Roma nog GESLOTEN: een deur met een bordje "nog in aanbouw". Hoort bij `CASTRA_HEROUM.md` en `CASTRA_TROEPENBOMEN.md`.
 
 ## 1. Wat Gerben wil
 
@@ -51,3 +51,22 @@ Op de screenshot kun je ook eenheden naar de tegenstander sturen (rechts de knop
 2. **C2 Duel via Firebase:** lobby, startaftelling, run-opslag, naspelen en uitbetalen (2 spelers), met nieuwe rules.
 3. **C3 Vierkamp en live-balken:** 4 spelers, uitbetaling 250 / 100 / 50, voortgang van de ander zichtbaar.
 4. **C4 Colosseum-binnenruimte in Roma** met lobbybord, prestatie en ranglijst per klas.
+
+## 8. Stand van het grondwerk (2026-11-29) en overdracht
+
+**Al gebouwd (hidden: alleen testtoegang met `?dev` in de URL, of `localStorage.castra_dev = "1"`):**
+- `certamen/castra-colosseum.js`: eindeloze modus (C1). Golfgenerator uit een zaad (`castraColoWaves`: 150 golven, vijanden-hp +8% per golf, groeiend aantal en tier, elke 5e golf een baas), divisies met levelplafond 20 / 35 / 50 en een vast aantal torens (8 / 10 / 12) via `castraColoUnits` en `CASTRA_COLO.cap`, geen kaartbonussen, geen gunsten, wel artes; uitslag = bereikte golf, daarna kills; records per divisie in `CASTRA.colo.best`; kleine beloning (roem bij een nieuw record, ervaring voor de deelnemers, Castra-XP). Testkaart bovenaan de campagnelijst (Proelium) als `?dev` aan staat.
+- Simulatie (`castra-proelium.js`): `mission.autoWaves = {first, interval}` laat golf k op een vaste tick starten (ook als de vorige nog loopt, deterministisch) en `group.hp` schaalt de vijanden-hp per golf; `castraColoSimulate(mission, towers)` speelt een run headless na (voor kalibratie en later de verificatie). Plaatsen en terugnemen worden in `CASTRA_B.actions` bijgehouden ({t, k:"place"|"take", sid, x, y}), de basis voor het naspelen.
+- Roma: een gesloten *Colosseum* met een bordje 🚧 ("Colosseum nondum aedificatum est."), dat later de ingang van de binnenruimte wordt.
+
+**Nog te doen (zie §7):** kalibratie per divisie (`CASTRA_COLO.hpA`: een referentieteam moet in divisie 20 rond golf 18, in 35 rond golf 25 en in 50 rond golf 30 sneuvelen; met 4 torens van level 35 haalt de huidige instelling golf 25), duel via Firebase (C2), vierkamp met live-balken (C3) en de binnenruimte met lobbybord in Roma (C4).
+
+**Aanvullende wensen van Gerben (2026-11-29):**
+- **AI-tegenstander:** bij een lobby met 3 spelers vult een AI de vierde plek. Aanpak: een ghost-run: een eerder opgeslagen run (zo'n actielijst + resultaat uit `castraColosseum/.../runs`) of een gegenereerde run met de bestaande eenheden op een vaste, verstandige plaatsing, afgestemd op de divisie; de AI krijgt geen inzet en geen uitbetaling, maar neemt wel een plek in de rangorde (1e/2e/3e/4e) in, zodat de uitbetaling voor de echte spelers klopt.
+- **Aanvalsmodus:** eenheden die jij verslaat worden naar de tegenstander gestuurd (zoals de screenshot). Dat vraagt een gedeelde, gesynchroniseerde simulatie (lockstep zoals de Legio, twee banen); dus een later speltype ná de race-variant.
+
+## 9. Prompt om dit in een ander gesprek af te maken
+
+> Je werkt in de repo KThulp (map `certamen/`, mode Castra Heroum). Lees eerst `CLAUDE.md`, `CASTRA_COLOSSEUM.md` (dit hele document, vooral §2–§9) en de relevante delen van `CASTRA_TROEPENBOMEN.md` (§12–§18). Doel: het Colosseum afmaken volgens het ontwerp. Het grondwerk staat er al: `certamen/castra-colosseum.js` (eindeloze modus C1, alleen met `?dev` bereikbaar), de uitbreidingen in `castra-proelium.js` (`autoWaves`, `group.hp`, `castraPAutoWave`) en `castra-battle.js` (`endless`-takken, `CASTRA_B.actions`), en in Roma een gesloten Colosseum met een bordje.
+> Doe het in mijlpalen en stop na elke mijlpaal voor mijn akkoord: (1) kalibreer C1 per divisie (20/35/50) met een referentieteam en `castraColoSimulate`, zodat de uitslag spreidt (divisie 20 rond golf 18, 35 rond golf 25, 50 rond golf 30) en test de eindeloze modus in de browser; (2) C2: duel (2 spelers) via Firebase: lobby, gelijke start (aftelling met `.info/serverTimeOffset` zoals de Legio), eigen run lokaal, run + resultaat naar `castraColosseum/{klas}/{match}`, naspelen/verifiëren (met begrensde stats volgens het levelplafond), inzet 100 per speler bij inschrijven en uitbetaling door elke client bij zichzelf (winnaar 200, `paid`-vlag tegen dubbel uitkeren); (3) C3: vierkamp (250/100/50/0), live-balken en een AI-tegenstander (ghost-run) om een lobby van 3 spelers aan te vullen; (4) C4: de binnenruimte *Colosseum* in Roma (deur, lobbybord, ranglijst per klas), een prestatie in het Certamen-profiel en ontgrendeling op Castra-niveau 20.
+> Houd je aan de afspraken in `CLAUDE.md`: Nederlands, `node --check` na elke JS-wijziging, cache-busters (`?v=`) in `certamen/index.html` ophogen, direct op main committen en pushen als ik dat vraag, het ontwerpdocument bijwerken, en **Firebase-rules**: geef altijd het volledige nieuwe regelsbestand (`certamen/database.rules.json`) en publiceer pas na mijn akkoord (`firebase deploy --only database --project kthulp-certamen`). Spelers loggen niet in via Firebase Auth (alleen docenten), dus de nieuwe rules moeten zo streng zijn als dat toelaat (alleen eigen `players/{lid}`, `live/{lid}`, `runs/{lid}` en `paid/{lid}` schrijven; `runs` na de eerste schrijfactie vergrendeld). De aanvalsmodus (verslagen vijanden naar de tegenstander sturen) is een latere fase en hoort er niet in. Test alles in de browser (preview) en meld eerlijk wat je niet kon testen (twee clients tegelijk, iPad).
