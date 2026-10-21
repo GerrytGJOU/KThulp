@@ -31,8 +31,8 @@ function client(store, offset){
       update(o){ Object.keys(o).forEach(k=>store.put(path+"/"+k, o[k])); store.notify(); return Promise.resolve(); },
       remove(){ store.put(path, null); store.notify(); return Promise.resolve(); },
       push(){ return ref(path+"/-K"+String(++store.n).padStart(6,"0")); },
-      transaction(fn, cb){ const cur = store.get(path), nv = fn(cur); if(nv===undefined){ setImmediate(()=>cb(null, false, snap(cur))); return; } store.put(path, nv); store.notify(); setImmediate(()=>cb(null, true, snap(nv))); },
-      orderByChild(c){ return { equalTo(v){ const q = { on(evt, fn){ const l = { path, fn, fire:()=>{ const all = store.get(path)||{}, out = {}; Object.keys(all).forEach(k=>{ if(all[k] && all[k][c]===v) out[k] = all[k]; }); fn(snap(Object.keys(out).length?out:null)); } }; l.owner = fn; store.ls.push(l); setImmediate(()=>l.fire()); }, off(evt, fn){ store.ls = store.ls.filter(l=>l.owner!==fn); } }; return q; } }; },
+      transaction(fn, cb){ const cur = store.get(path), nv = fn(cur); if(nv===undefined){ if(cb) setImmediate(()=>cb(null, false, snap(cur))); return; } store.put(path, nv); store.notify(); if(cb) setImmediate(()=>cb(null, true, snap(nv))); },
+      orderByChild(c){ return { limitToLast(n){ return { once(){ const all = store.get(path)||{}, ks = Object.keys(all).sort((a,b)=>(all[a][c]||0)-(all[b][c]||0)).slice(-n), out = {}; ks.forEach(k=>out[k]=all[k]); return Promise.resolve(snap(ks.length?out:null)); } }; }, equalTo(v){ const q = { on(evt, fn){ const l = { path, fn, fire:()=>{ const all = store.get(path)||{}, out = {}; Object.keys(all).forEach(k=>{ if(all[k] && all[k][c]===v) out[k] = all[k]; }); fn(snap(Object.keys(out).length?out:null)); } }; l.owner = fn; store.ls.push(l); setImmediate(()=>l.fire()); }, off(evt, fn){ store.ls = store.ls.filter(l=>l.owner!==fn); } }; return q; } }; },
     };
     return r;
   }
@@ -45,7 +45,7 @@ let fails = 0; const ok = (c, m) => { console.log((c ? "  ok   " : "  FOUT ") + 
 function player(store, lid, name, skew, aes){
   const real = Date, offset = -skew;               // de klok van deze speler loopt `skew` ms mis; de serveroffset corrigeert dat
   const SkewDate = class extends real { static now(){ return real.now() + skew; } };
-  const w = load({ fbDB:client(store, offset), initFirebase(){}, setInterval, clearInterval, setTimeout, clearTimeout, Date:SkewDate });
+  const w = load({ ACHIEVEMENTS_DEF:[], ACH_CATEGORIES:{}, fbDB:client(store, offset), initFirebase(){}, setInterval, clearInterval, setTimeout, clearTimeout, Date:SkewDate });
   if(w.errs.length) throw new Error(w.errs.join("; "));
   const run = s => vm.runInContext(s, w.ctx);
   run(`var BM_IDENT = ${JSON.stringify({ klascode:"k1", leerlingcode:lid, name })}; CASTRA = castraNewState(); CASTRA.res.aes = ${aes}; CASTRA.res.gloria = 0;
@@ -94,6 +94,9 @@ async function until(cond, ms, what){ const t0 = Date.now(); while(!cond()){ if(
     ok(a.aes() + b.aes() === 600, "de pot is in evenwicht (totaal brons ongewijzigd)");
     ok(store.get("castraColosseum/k1/"+mid+"/paid/anna") === true, "paid-vlag van de winnaar staat");
     ok(a.run("CASTRA.res.gloria") === 5, "winnaar krijgt 5 roem");
+    const ach = p => JSON.parse(JSON.stringify(p.run("(BM_IDENT.achievements||[])")));
+    ok(ach(a).includes("castra_colo_play") && ach(a).includes("castra_colo_win") && !ach(a).includes("castra_colo_champ"), "winnaar: prestaties deelnemer + winnaar (nog geen kampioen): " + ach(a).join(", "));
+    ok(ach(b).join() === "castra_colo_play", "verliezer: alleen deelnemer: " + ach(b).join(", "));
   }
 
   console.log("B. dubbele uitbetaling wordt tegengehouden (paid-vlag)");
@@ -162,6 +165,14 @@ async function until(cond, ms, what){ const t0 = Date.now(); while(!cond()){ if(
     console.log("     " + ps.map((p, i) => p.lid + ": plaats " + h[i].rank + " +" + h[i].pay + " saldo " + p.aes()).join(" | "));
     ok(h.map(x => x.rank).join() === "1,2,3,4" && h.map(x => x.pay).join() === "250,100,50,0", "meer torens = hogere plaats; uitbetaling 250/100/50/0");
     ok(ps.reduce((a, p) => a + p.aes(), 0) === 1200, "de pot is in evenwicht (totaal 4 x 300)");
+    // ranglijst van de klas: berekend uit de wedstrijden in de (nagemaakte) database
+    ps[2].run("CASTRA_C.rank = null; castraCRankLoad(true);");
+    await until(()=>ps[2].run("CASTRA_C.rank && CASTRA_C.rank.state") === "ready", 8000, "ranglijst klaar");
+    const rk = JSON.parse(JSON.stringify(ps[2].run("CASTRA_C.rank.rows")));
+    console.log("     " + rk.map(r => r.nm + " " + r.wins + "/" + r.played + " netto " + r.net + " beste " + JSON.stringify(r.best)).join(" | "));
+    ok(rk.length === 4 && rk[0].lid === "pa" && rk[0].wins === 1 && rk[0].net === 150 && rk[3].lid === "pd" && rk[3].net === -100, "ranglijst: PA eerst (1 winst, netto +150), PD laatst (netto -100)");
+    ok(rk.every(r => r.played === 1 && r.best[20] > 0), "iedereen 1 gespeeld, beste golf in divisie 20 bekend");
+    ok(ps[2].run("Object.keys(localStorage.getItem('castra_colo_std_v1_"+mid+"')?{x:1}:{}).length") === 1, "de nagerekende uitslag is lokaal onthouden (tweede keer sneller)");
   }
 
   console.log("H. vierkamp met 3 spelers + AI op de vierde plek");

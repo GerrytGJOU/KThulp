@@ -8,10 +8,9 @@
    soldaten en helden tellen mee op maximaal dat level), vast aantal torens,
    geen kaartbonussen, geen gunsten; artes mogen wel.
 
-   STATUS: het Colosseum is nog GESLOTEN voor spelers (in Roma staat een bordje
-   "nog in aanbouw"). Testtoegang: open de app met ?dev in de URL (of zet
-   localStorage castra_dev = 1); dan staat bovenaan de campagnelijst (Proelium)
-   een testkaart.
+   STATUS: spelers komen binnen via de deur van het Colosseum in Roma (Castra-niveau 20).
+   Testtoegang vóór niveau 20: open de app met ?dev in de URL (of zet localStorage
+   castra_dev = 1); dan staat bovenaan de campagnelijst (Proelium) ook een testkaart.
    Laadt NA castra-battle.js en castra-interiors.js.
    ============================================================================ */
 
@@ -32,7 +31,9 @@ const CASTRA_COLO = {
   lobbyTtl:600000,                          // een lobby die na 10 min niet vol is, wordt geannuleerd (inzetten terug)
 };
 if(typeof location!=="undefined" && /[?&]dev(=|&|$)/.test(location.search)){ try{ localStorage.setItem("castra_dev","1"); }catch(e){} }
-function castraColoAllowed(){ try{ return !!(localStorage.getItem("castra_dev")==="1" || (CASTRA && CASTRA.dev)); }catch(e){ return false; } }
+function castraColoDev(){ try{ return !!(localStorage.getItem("castra_dev")==="1" || (CASTRA && CASTRA.dev)); }catch(e){ return false; } }
+// Toegang: Castra-niveau 20 (ontgrendeling "colosseum", zie onderaan) of de testvlag ?dev.
+function castraColoAllowed(){ try{ return castraColoDev() || !!(CASTRA && castraUnlocked("colosseum")); }catch(e){ return false; } }
 
 /* ---------- golfgenerator (deterministisch uit zaad) ---------- */
 function castraColoWaves(seed, div){
@@ -327,45 +328,98 @@ castraBExit = function(){
     if(!B.finished){ if(!confirm("Opgeven? Je inzet is al betaald; je run telt tot nu toe.")) return; castraColoPvpEnd(true); return; }
     clearInterval(B.timer); window.removeEventListener("resize", B.resizeFn); CASTRA_B = null; go("castraColoLobby"); return;
   }
+  if(B && B.endless){ clearInterval(B.timer); window.removeEventListener("resize", B.resizeFn); CASTRA_B = null; CASTRA_C_TAB = "oef"; go("castraColoLobby"); return; }   // oefenrun: terug naar het oefenen
   return _castraBExitColo0();
 };
 
 /* ---------- ingang (alleen testtoegang) ---------- */
 function castraColoCard(){
-  if(!castraColoAllowed()) return "";
+  if(!castraColoDev()) return "";            // spelers komen via de deur in Roma binnen; deze testkaart is alleen met ?dev
   if(typeof castraCReconcile==="function") castraCReconcile();
   const best = (CASTRA.colo||{}).best||{};
-  return `<div class="panel" style="border:2px dashed #8a6d2f"><h3>🏛️ Colosseum <small>(testversie, nog gesloten voor spelers)</small></h3>
+  return `<div class="panel" style="border:2px dashed #8a6d2f"><h3>🏛️ Colosseum <small>(testkaart: spelers gaan via de deur in Roma)</small></h3>
     <div class="note">Eindeloze modus: kies een divisie (levelplafond). Je records: ${[20,35,50].map(d=>"div "+d+": "+(best[d]?"golf "+best[d].wave:"—")).join(" · ")}</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">${[20,35,50].map(d=>`<button class="btn btn-gold" style="min-height:44px" onclick="castraColoStart(${d})">Divisie ${d} (max ${CASTRA_COLO.cap[d]} torens)</button>`).join("")}</div>
     <div style="margin-top:10px"><button class="btn" style="min-height:44px" onclick="go('castraColoLobby')">⚔️ Duel of vierkamp tegen klasgenoten (inzet ${CASTRA_COLO.fee} 🪙)</button></div></div>`;
 }
 
-/* ---------- Roma: gesloten deur met bordje ---------- */
-const CASTRA_COLO_DOOR = { fx:[["tent_white",12,29],["tent_white",15,29],["tent_white",18,29]], sign:{ x:16, y:32 } };
-CASTRA_WENT.push({ id:"bord_colosseum", region:"roma", kind:"sign", x:CASTRA_COLO_DOOR.sign.x, y:CASTRA_COLO_DOOR.sign.y });
+/* ---------- Roma: de deur van het Colosseum en de binnenruimte (C4) ----------
+   Ontgrendeling: Castra-niveau 20 (castra-unlocks.js), of altijd met ?dev. De drie witte tenten blijven, de middelste krijgt een deur;
+   binnen staat de Praeco (omroeper) en hangen twee borden: de lobby (duel of vierkamp starten of meedoen) en de ranglijst van je klas. */
+const CASTRA_COLO_DOOR = { fx:[["tent_white",12,29],["tent_white",15,29],["tent_white",18,29]], door:{ x:16, y:32 } };
+const CASTRA_COLO_LOOKS = { praeco:{ huid:"olijf", haar:"kort", haarkleur:"zwart", baard:"geen", cape:"lang", capekleur:"paars", helm:"geen", schild:"geen", wapen:"geen", armor:"ceremonieel" } };
+CASTRA_UNLOCKS.push({ id:"colosseum", lvl:20, la:"Colosseum", nl:"het Colosseum in Roma: duel en vierkamp tegen je klasgenoten om een inzet",
+  lines:[ { la:"Colosseum tibi patet, dux {naam}!", nl:"Het Colosseum staat voor je open, leider {naam}!" },
+          { la:"Cum sociis certa et praemium cape.", nl:"Strijd tegen je klasgenoten en win de inzet. Je vindt het in Roma, bij de arena." } ] });
+Object.assign(CASTRA_GLOSS, { "colosseo":"Colosseum", "certamus":"wij strijden", "certamen":"wedstrijd", "certa":"strijd!", "ordo":"rangorde", "exercitatio":"oefening", "praeco":"omroeper", "tabula":"bord", "praemium":"prijs", "sociis":"met je kameraden (3e naamval)", "cape":"neem!", "patet":"staat open", "arena":"zandvloer" });
+Object.assign(CASTRA_INTERIORS, {
+  colosseum_roma: {
+    parent:"roma", kind:"house", nm:"Colosseum", nl:"De arena van Roma", icon:"🏛️", cols:26, rows:16, start:{ x:12, y:13 }, floor:"sand",
+    doors:[ { x:12, y:15, to:"roma", spawn:{ x:16, y:33, dir:"down" } }, { x:13, y:15, to:"roma", spawn:{ x:16, y:33, dir:"down" } } ],
+    furniture:[ ["barrel",2,2],["barrel",3,2],["barrel",22,2],["barrel",23,2],["crate_a",2,13],["crate_b",23,13],["stump",8,8],["stump",17,8],["stump",8,11],["stump",17,11],["pot",1,7],["pot",24,7] ],
+    npcs:[ { id:"praeco", role:"praeco", nm:"Praeco", x:12, y:5, dir:"down", look:CASTRA_COLO_LOOKS.praeco } ],
+  },
+});
+castraInteriorRegister("colosseum_roma");
+CASTRA_WENT.push({ id:"tabula_certamina", region:"colosseum_roma", kind:"sign", x:6,  y:3, icon:"📜", nm:"Certamina" },
+                 { id:"tabula_ordo",      region:"colosseum_roma", kind:"sign", x:19, y:3, icon:"🏆", nm:"Ordo" });
+CASTRA_WORLDS.roma.doors.push({ x:CASTRA_COLO_DOOR.door.x, y:CASTRA_COLO_DOOR.door.y, to:"colosseum_roma", label:"🏛️ Colosseum", spawn:{ x:12, y:13, dir:"up" } });
 const _castraWobjPiecesColo0 = castraWobjPieces;
 castraWobjPieces = function(rid){ const out = _castraWobjPiecesColo0(rid); if(rid==="roma") CASTRA_COLO_DOOR.fx.forEach(([o,x,y])=>out.push({ o, x, y })); return out; };
 const _castraWobjSpotsColo0 = castraWobjSpots;
 castraWobjSpots = function(rid){ const out = _castraWobjSpotsColo0(rid); if(rid==="roma"){ for(let y=29;y<=33;y++) for(let x=11;x<=21;x++) out.push([x,y]); } return out; };
+// Onder niveau 20 gaat de deur niet open (met ?dev wel).
+const _castraGeoDoorColo0 = castraGeoDoor;
+castraGeoDoor = function(x, y){
+  const W = castraWorldCfg(), d = (W.doors||[]).find(q=>q.x===x && q.y===y);
+  if(d && d.to==="colosseum_roma"){
+    if(!castraColoAllowed()){ toast("🏛️ Colosseum", "De deur is nog dicht: het Colosseum gaat open vanaf Castra-niveau "+castraUnlockDef("colosseum").lvl+" (jij bent niveau "+castraPLevel()+")."); return true; }
+    if(typeof castraCReconcile==="function") castraCReconcile();     // lopende inzetten afhandelen
+  }
+  return _castraGeoDoorColo0(x, y);
+};
+// Navigatie tussen de wereld en het lobbyscherm (tabs: wed = wedstrijden, rang = ranglijst, oef = oefenen).
+let CASTRA_C_FROM = "", CASTRA_C_TAB = "wed";
+function castraColoGoLobby(tab){
+  castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraSave(); castraWorldDetach();
+  CASTRA_C_FROM = "world"; CASTRA_C_TAB = tab || "wed"; go("castraColoLobby");
+}
+function castraColoBack(){
+  if(CASTRA_C_FROM==="world"){ CASTRA_C_FROM = ""; CASTRA_W_REGION = "colosseum_roma"; CASTRA_GEO_SPAWN = { x:12, y:7, dir:"down" }; go("castraWorld"); }
+  else go("castraProelium");
+}
+/* Praeco en borden */
 const _castraNpcTalkColo0 = castraNpcTalk;
 castraNpcTalk = function(id){
-  if(String(id)==="w:bord_colosseum"){
-    const panel = el("cwPanel"); if(!panel) return;
-    panel.innerHTML = `<div class="panel"><h3 style="margin:0 0 6px">🚧 Colosseum</h3>
-      <div style="font-size:20px;margin:6px 0">${castraLaHTML("Colosseum nondum aedificatum est.", "Het Colosseum is nog niet gebouwd.", "bord_colosseum")}</div>
-      <div class="note">Hier wordt nog aan gebouwd: later kun je hier tegen andere spelers strijden om de inzet. Kom later terug!</div>
-      <button class="btn" style="margin-top:6px;min-height:44px" onclick="castraNpcClose()">Sluiten</button></div>`;
-    panel.scrollIntoView({ behavior:"smooth", block:"nearest" }); return;
-  }
+  id = String(id);
+  if(id==="w:praeco"){ castraPraecoTalk(); return; }
+  if(id==="w:tabula_certamina"){ castraColoGoLobby("wed"); return; }
+  if(id==="w:tabula_ordo"){ castraColoGoLobby("rang"); return; }
   return _castraNpcTalkColo0(id);
 };
+const _castraWFeatColo0 = castraWFeat;
+castraWFeat = function(e){ if(e.region==="colosseum_roma") return "colosseum"; return _castraWFeatColo0(e); };
+function castraPraecoTalk(){
+  if(CASTRA_DLG) return;
+  castraLatSay("Praeco", CASTRA_COLO_LOOKS.praeco, [ { la:"Salve, dux {naam}! In Colosseo certamus.", nl:"Gegroet, leider {naam}! In het Colosseum strijden we." },
+    { la:"Quid vis?", nl:"Wat wil je? Duel en vierkamp kosten "+CASTRA_COLO.fee+" brons inzet; wie wint, krijgt de pot.", opts:[ { la:"Certamen", nl:"wedstrijden (lobby)" }, { la:"Ordo", nl:"ranglijst van je klas" }, { la:"Exercitatio", nl:"oefenen (alleen)" } ] } ],
+    k=>{ if(k===0) castraColoGoLobby("wed"); else if(k===1) castraColoGoLobby("rang"); else if(k===2) castraColoGoLobby("oef"); });
+}
 const _castraWobjDrawColo0 = castraWobjDraw;
 castraWobjDraw = function(){
   _castraWobjDrawColo0();
   const box = el("cwWobj"); if(!box) return;
-  castraWEnts().filter(e=>e.kind==="sign").forEach(e=>{
-    box.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:${e.x*48}px;top:${e.y*48}px;width:48px;height:48px;z-index:3;display:flex;align-items:center;justify-content:center;font-size:32px;pointer-events:none">🚧</div>`);
+  castraWEnts().filter(e=>e.kind==="sign" && e.region==="colosseum_roma").forEach(e=>{
+    box.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:${e.x*48}px;top:${e.y*48}px;width:48px;height:48px;z-index:3;display:flex;align-items:center;justify-content:center;font-size:34px;pointer-events:none">${e.icon||"📜"}</div>
+      <div style="position:absolute;left:${e.x*48-30}px;top:${e.y*48+46}px;width:108px;text-align:center;z-index:5;font-size:11px;font-weight:bold;color:#fff;text-shadow:0 1px 3px #000;pointer-events:none">${esc(e.nm||"")}</div>`);
   });
-  if(CASTRA_W_REGION==="roma") box.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:${12*48-30}px;top:${29*48-22}px;width:${9*48+60}px;text-align:center;z-index:7;font-size:13px;font-weight:bold;color:#fff;text-shadow:0 1px 3px #000,0 0 6px #000;pointer-events:none">🏛️ Colosseum (nog in aanbouw)</div>`);
 };
+
+/* ---------- prestaties in het Certamen-profiel (categorie Castra Heroum) ---------- */
+(function(){
+  if(typeof ACHIEVEMENTS_DEF==="undefined" || ACHIEVEMENTS_DEF.some(a=>a.id==="castra_colo_play")) return;
+  if(typeof ACH_CATEGORIES!=="undefined" && !ACH_CATEGORIES.castra) ACH_CATEGORIES.castra = "Castra Heroum";
+  ACHIEVEMENTS_DEF.push({ id:"castra_colo_play",  nm:"Colosseum: deelnemer", ds:"Een wedstrijd in het Colosseum van Castra Heroum gespeeld",       icon:"shield",  cat:"castra", mode:"battle" },
+                        { id:"castra_colo_win",   nm:"Colosseum: winnaar",   ds:"Een duel of vierkamp in het Colosseum gewonnen",                  icon:"trident", cat:"castra", mode:"battle" },
+                        { id:"castra_colo_champ", nm:"Colosseum: kampioen",  ds:"Vijf wedstrijden in het Colosseum gewonnen",                      icon:"laurel",  cat:"castra", mode:"battle" });
+})();
