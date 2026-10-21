@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — VAARDIGHEDEN (ARTES) PER KLASSE EN LEVEL, MET KEUZE (MAX 4)
+   CASTRA HEROUM — VAARDIGHEDEN (ARTES) PER KLASSE EN LEVEL, MET KEUZE (MAX 4)
    ----------------------------------------------------------------------------
    Net als bij Pokémon leert een soldaat of held nieuwe vaardigheden als hij in
    level stijgt, maar hij kan er maar 4 tegelijk gebruiken. Elke klasse heeft er

@@ -10,7 +10,7 @@ Het gedeelde profiel `P` (XP, niveau, munten, eerbewijzen) en de identiteit `ide
 | Battle Mode, Boss Battle, Total War-beleg | ja | ja | ja | ja |
 | Training, Vrij oefenen | ja | ja | – | ja |
 | Chronica Classica | – | ja (eretitels) | ja | – |
-| Castra Heronum | **alleen Latijn-acties** (zie §3) | ja | cosmetisch (§4) | ja (§6) |
+| Castra Heroum | **alleen Latijn-acties** (zie §3) | ja | cosmetisch (§4) | ja (§6) |
 
 ## 1. Chronica → Battle/Boss/Total War: bonus-eretitels
 Eén bescheiden bonus per voltooid Boek (`CX_BOOKS`, plan in `Chronica.md` §6.1). Een Boek telt als voltooid zodra de hoogste voortgang in je opgeslagen slots het eerste hoofdstuk van het volgende Boek heeft bereikt (Boek VI: de Finale). Titels worden automatisch en met terugwerkende kracht toegekend (`cxSyncBookTitles`, bij het openen van de hoofdmenu's, het profiel, Castra en na elke Chronica-save).

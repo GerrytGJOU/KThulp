@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — COMMERCIUM (soldaten ruilen binnen de klas)
+   CASTRA HEROUM — COMMERCIUM (soldaten ruilen binnen de klas)
    ----------------------------------------------------------------------------
    Tabblad in de principia. Een leerling zet een soldaat in de etalage (*Offero*);
    hij verdwijnt uit zijn barakken en staat als aanbod in castraTrades/{klas}/{tid}.

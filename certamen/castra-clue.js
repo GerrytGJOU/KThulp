@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — LATIJNSE AANWIJZINGEN BIJ NIEUWE VIJANDEN
+   CASTRA HEROUM — LATIJNSE AANWIJZINGEN BIJ NIEUWE VIJANDEN
    ----------------------------------------------------------------------------
    Bij de eerste ontmoeting van een vijandrol (uitlegvenster, het spel pauzeert) staat
    eerst alleen de Latijnse zin met tikbare woorden. De leerling beantwoordt een korte

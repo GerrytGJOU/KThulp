@@ -1,14 +1,14 @@
-# Castra Heronum — klastest: checklist, bekende gaten, testkit
+# Castra Heroum — klastest: checklist, bekende gaten, testkit
 
-Voor Gerben · opgesteld 2026-10-25 · hoort bij `CASTRA_HERONUM.md` (ontwerp en bouwstand) en `CASTRA_LEERLINGTEST.md` (script voor de leerlingen).
+Voor Gerben · opgesteld 2026-10-25 · hoort bij `CASTRA_HEROUM.md` (ontwerp en bouwstand) en `CASTRA_LEERLINGTEST.md` (script voor de leerlingen).
 
-**Stand in één alinea:** Castra Heronum is speelbaar van kamp tot Troje (kamp, jacht in drie regio's, campus, tower defence met 7 missies, heldenzaal met 15 helden, troepenbomen met 151 vormen, stabula en navalia). De Legio (klassenevenementen) en het valetudinarium bestaan nog niet. Alles is lokaal getest (browser, gesimuleerde aanraking, gesimuleerde gevechten); **niets is nog op een echte iPad of telefoon of met een echte klas gespeeld.**
+**Stand in één alinea:** Castra Heroum is speelbaar van kamp tot Troje (kamp, jacht in drie regio's, campus, tower defence met 7 missies, heroum met 15 helden, troepenbomen met 151 vormen, stabula en navalia). De Legio (klassenevenementen) en het valetudinarium bestaan nog niet. Alles is lokaal getest (browser, gesimuleerde aanraking, gesimuleerde gevechten); **niets is nog op een echte iPad of telefoon of met een echte klas gespeeld.**
 
 ---
 
 ## 1. Push-checklist
 
-Er staan **20 commits lokaal op `main` die nog niet gepusht zijn** (alles van Castra Heronum, incl. de aangepaste hoofdmenu-tegel). GitHub Pages serveert `main`, dus pas na de push zien leerlingen iets.
+Er staan **20 commits lokaal op `main` die nog niet gepusht zijn** (alles van Castra Heroum, incl. de aangepaste hoofdmenu-tegel). GitHub Pages serveert `main`, dus pas na de push zien leerlingen iets.
 
 Vóór je pusht:
 
@@ -28,7 +28,7 @@ Na het pushen:
 - [ ] Wacht 1–3 minuten op de Pages-build (Repository → Actions → "pages build and deployment" groen).
 - [ ] Open `https://GerrytGJOU.github.io/KThulp/certamen/` op **een iPad** en doe een harde verversing (Safari: pagina sluiten en opnieuw openen). De cachebusters (`?v=`) in `certamen/index.html` zijn bij elke wijziging opgehoogd, dus een gewone herlaad hoort ook te werken.
 - [ ] Rooktest (10 minuten, zie §4): kamp → jacht → winnen → soldaat opnemen → campus → proelium m1.
-- [ ] Controleer op de docentpagina van een klas dat het blok *Castra Heronum — vertaalhulp deze maand* verschijnt zodra een ingelogde leerling een woord heeft aangetikt.
+- [ ] Controleer op de docentpagina van een klas dat het blok *Castra Heroum — vertaalhulp deze maand* verschijnt zodra een ingelogde leerling een woord heeft aangetikt.
 
 Terugdraaien als het misgaat: de modus zit achter één tegel (`certamen/games.js`, `go('castraHome')`). Snelste noodrem: die tegel verwijderen en pushen, of `git revert` van de Castra-commits (de eerste is `8d83c21`). Er is **geen** aan/uit-schakelaar in Firebase zoals bij de skill-trees.
 
@@ -48,7 +48,7 @@ Niet elk avatar-onderdeel bestaat al als top-down sprite. **Regel (sinds 2026-10
 | `extra_blush`, `extra_warstripes`, `borstband` | Battle Mode-avatar als die gekozen is |
 | wapens (bewust, niet nodig) | geen wapen in de top-down weergave |
 
-In de profieleditor (Battle Mode) blijft alles gewoon zichtbaar; het gaat alleen om Castra Heronum. Je ziet het verschil pas als een leerling zo'n onderdeel gekozen heeft.
+In de profieleditor (Battle Mode) blijft alles gewoon zichtbaar; het gaat alleen om Castra Heroum. Je ziet het verschil pas als een leerling zo'n onderdeel gekozen heeft.
 
 ### 2b. Inhoud
 - **Alle Latijnse teksten zijn een concept van mij** (kamp, gesprekken, 15 heldenketens, 45 gesprekjes, missieberichten) en nog niet door jou nagelopen. Let op naamvallen en bijzonderheden (bv. *ex castris* = "uit het kamp", *Hoc non convenit*).
@@ -72,8 +72,8 @@ In de profieleditor (Battle Mode) blijft alles gewoon zichtbaar; het gaat alleen
 - **iPad/telefoon niet echt getest.** De duimbesturing (`castra-stick.js`) is getest met gesimuleerde pointer-events. Let in de klas op: joystickgevoeligheid, scrollen buiten de kaart, tikken op gebouwen, tikken op de kleine tegels in het proelium.
 - **Telefoon:** het kamp en de wereld zijn leesbaar (wereld toont op smalle schermen een staande uitsnede van 10×13 tegels, labels schalen mee). In het **proelium zijn de tegels op een telefoon ±21 px**: te klein om comfortabel te plaatsen. Advies: laat het proelium op iPad of laptop doen.
 - **Prestaties:** 32×24-tegelkaarten en tot ±30 eenheden in een gevecht zijn getest op een desktopbrowser, niet op een oudere iPad.
-- Bij het openen van Castra Heronum worden eenmalig 58 sprite-bestanden "gescand"; de 18 ontbrekende (de 6 wapens worden niet gescand) geven **404-meldingen in de browserconsole**. Dat is verwacht en onschadelijk.
-- Het hoofdmenu heeft nu de tegel *Castra Heronum* (BETA) op de plek van Boss Battle; Boss Battle zit alleen nog in Battle Mode (via de speltype-keuze). De Battle Mode-FAQ is hierop **niet** aangepast.
+- Bij het openen van Castra Heroum worden eenmalig 58 sprite-bestanden "gescand"; de 18 ontbrekende (de 6 wapens worden niet gescand) geven **404-meldingen in de browserconsole**. Dat is verwacht en onschadelijk.
+- Het hoofdmenu heeft nu de tegel *Castra Heroum* (BETA) op de plek van Boss Battle; Boss Battle zit alleen nog in Battle Mode (via de speltype-keuze). De Battle Mode-FAQ is hierop **niet** aangepast.
 
 ### 2e. Bewust nog niet gebouwd
 forum/templum/ludus/fabrica/navalia/stabula/bibliotheca/murus, oppugnatio en baasgevechten, kaartweergave van het proelium, een Griekse modus, geluid/muziek, Latijnse knoppen in de **bestaande Certamen-schermen** (alleen Castra zelf is Latijn).
@@ -82,7 +82,7 @@ forum/templum/ludus/fabrica/navalia/stabula/bibliotheca/murus, oppugnatio en baa
 
 ## 3. Docent-testkit (voor demo en eigen test)
 
-Open eerst Castra Heronum (zodat het spel geladen is), open daarna de browserconsole en plak één van onderstaande blokken. Het werkt alleen op jouw apparaat/save.
+Open eerst Castra Heroum (zodat het spel geladen is), open daarna de browserconsole en plak één van onderstaande blokken. Het werkt alleen op jouw apparaat/save.
 
 **Kit A — halverwege (alles level 3, 6 rekruten op level 20 — klaar om te evolueren zodra de campus op niveau 2 staat —, veel grondstoffen):**
 
@@ -99,7 +99,7 @@ Open eerst Castra Heronum (zodat het spel geladen is), open daarna de browsercon
 (()=>{ CASTRA.proelium={done:{m1:true,m2:true,m3:true,g1:true}}; castraSave(); go("castraRegions"); })()
 ```
 
-**Kit C — alle helden in de heldenzaal (loyaliteit 50):**
+**Kit C — alle helden in het heroum (loyaliteit 50):**
 
 ```js
 (()=>{ Object.keys(CASTRA_HERO_DATA).forEach(id=>{ castraHeroRecruit(id); castraHero(id).fides=50; }); castraSave(); go("castraHome"); })()
@@ -117,14 +117,14 @@ localStorage.removeItem("castra_save_v1_gast"); location.reload();
 
 ## 4. Rooktest (10 minuten, jij of een collega)
 
-1. Hoofdmenu → *Castra Heronum*: de Latijnse inleiding verschijnt, tik "Intellego."
+1. Hoofdmenu → *Castra Heroum*: de Latijnse inleiding verschijnt, tik "Intellego."
 2. Loop met je duim door het kamp; tik een gebouw: paneel opent in het Latijn, ⓘ en woord-tikken geven vertalingen.
 3. Verzamel bij het *metallum* na even wachten (of gebruik Kit A); verbeter het praetorium.
 4. Poort bovenaan → regiokeuze → Latium → loop in het donkere gras tot een ontmoeting begint → lees het bericht → kies een soldaat (of de dux) → win.
 5. Neem de verslagen soldaat op ("Recipio."); open de *campus*: laat hem trainen, kijk naar de evolutie-eis. Open ook de *Dilectus* (kantoor rechtsboven, naast de houthakker): kies een rekruut op basis van de Latijnse beoordeling.
 6. Praat met Aeneas (in Latium, links boven het kruispunt van de twee wegen), accepteer de opdracht.
 7. Poort rechts in het kamp → *Proelium* → missie 1 → plaats torens → "Incipe!" → win.
-8. Open de *heldenzaal* en kijk of Aeneas na zijn keten (jagen → m1 → overtuigen) is aangekomen.
+8. Open het *heroum* en kijk of Aeneas na zijn keten (jagen → m1 → overtuigen) is aangekomen.
 9. Herlaad de pagina: voortgang moet er nog zijn.
 10. Kijk in de browserconsole: geen rode foutmeldingen anders dan 404's voor ontbrekende sprites.
 
@@ -165,7 +165,7 @@ Hoort bij `CASTRA_TROEPENBOMEN.md` §25–§27. Doel van deze test is niet bewij
 
 Duurt inloggen te lang (meer dan 10 minuten), laat dan de eerste missie en de reflectie voorgaan.
 
-### 5c. Wat zit er in de meetpunten (docentpagina, blok *Castra Heronum — tower defence deze maand*)
+### 5c. Wat zit er in de meetpunten (docentpagina, blok *Castra Heroum — tower defence deze maand*)
 
 | Meting | Wat je ermee ziet | Let op |
 |---|---|---|

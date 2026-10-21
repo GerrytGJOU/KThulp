@@ -1,4 +1,4 @@
-# Castra Heronum — proefspelen (leerlingenversie)
+# Castra Heroum — proefspelen (leerlingenversie)
 
 **Wat is dit?** Een nieuw spel waarin je een Romeins legerkamp bouwt, soldaten en helden verzamelt en op jacht gaat in Latium. **Alles in het spel is Latijn.** Je hoeft niet alles te kunnen vertalen: tik op een woord voor de betekenis, of tik op het ⓘ-knopje achter een zin voor de hele vertaling. Hulp gebruiken is **niet erg** (en kost niets).
 
@@ -15,7 +15,7 @@
 Vink af wat gelukt is. Lukt iets niet? Noteer wat je probeerde, ga door met de volgende opdracht.
 
 ### A. Het kamp (5 min)
-- [ ] 1. Open het hoofdmenu en kies **Castra Heronum**. Lees de Latijnse welkomsttekst. Wat staat er volgens jou? (Tik zo nodig op ⓘ.)
+- [ ] 1. Open het hoofdmenu en kies **Castra Heroum**. Lees de Latijnse welkomsttekst. Wat staat er volgens jou? (Tik zo nodig op ⓘ.)
       Mijn eigen vertaling: ______________________________________
 - [ ] 2. Sleep met je duim over het kamp: er komt een ronde knop onder je vinger. Loop naar een tent of gebouw. Je kunt ook ergens **tikken** om daarheen te lopen.
 - [ ] 3. Tik op het **Metallum** (de stenen rechtsonder). Wat levert het op? ____________

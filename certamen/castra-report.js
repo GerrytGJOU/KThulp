@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — GEVECHTSRAPPORT EN VERLIESVRAAG
+   CASTRA HEROUM — GEVECHTSRAPPORT EN VERLIESVRAAG
    ----------------------------------------------------------------------------
    Na elk solo-gevecht (niet Legio, niet Colosseum) een compact rapport dat de
    deterministische simulatie uitlegbaar maakt, ook voor wie thuis speelt zonder

@@ -1,4 +1,4 @@
-/* Headless proef voor Legio (Castra Heronum): balans per evenement en determinisme van de lockstep.
+/* Headless proef voor Legio (Castra Heroum): balans per evenement en determinisme van de lockstep.
    Gebruik in de browser met certamen/index.html geladen (dev-server), na het laden van tools/castra-balance-td.js:
      eval(await (await fetch("tools/castra-balance-td.js")).text());
      eval(await (await fetch("tools/castra-legio-test.js")).text());

@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — UI-AANVULLINGEN (laadt als laatste, na alle wereldmodules)
+   CASTRA HEROUM — UI-AANVULLINGEN (laadt als laatste, na alle wereldmodules)
    ----------------------------------------------------------------------------
    ✕-knop rechtsboven op alle wereldpanelen (#cwPanel): NPC-gesprekken, kisten, puzzels, borden.
    (De helpers castraXBtnHTML/castraXBtnAttach staan in castra-menu.js; kamppanelen krijgen hun ✕

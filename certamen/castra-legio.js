@@ -1,12 +1,12 @@
 /* ============================================================================
-   CASTRA HERONUM — LEGIO (klassenevenement: coöperatieve tower defence)
+   CASTRA HEROUM — LEGIO (klassenevenement: coöperatieve tower defence)
    ----------------------------------------------------------------------------
    De docent start een evenement voor de klas (castraLegio/{klas}/event); de
    leerlingen melden zich in de principia ("Adsum!") en verdedigen samen één
    kaart. GEEN eigen server: alleen de AANGEZETTE ACTIES gaan via Firebase
    (castraLegio/{klas}/actions), de wereld wordt door elke browser zelf berekend.
 
-   Hoe het synchroon blijft (deterministic lockstep, zie CASTRA_HERONUM.md):
+   Hoe het synchroon blijft (deterministic lockstep, zie CASTRA_HEROUM.md):
    - Elke client draait dezelfde simulatie (castra-proelium.js: vaste tick van
      50 ms, gehele getallen, seeded RNG) uit event.mission + event.seed.
    - Klok: tick = (servertijd − event.startAt) / 50 ms (servertijd via

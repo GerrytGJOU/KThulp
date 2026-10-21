@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — CODEX (M4 van CASTRA_TROEPENBOMEN.md)
+   CASTRA HEROUM — CODEX (M4 van CASTRA_TROEPENBOMEN.md)
    ----------------------------------------------------------------------------
    Naslagscherm met de bomen per volk (151 vormen) plus de 15 helden apart.
    Een vorm is "ontmoet" zodra je hem (of een nakomeling) in je leger hebt gehad
@@ -36,13 +36,13 @@ function castraCollPay(res){
   Object.keys(res).forEach(r=>{ CASTRA.res[r] = Math.min(r==="gloria"?1e9:cap, (CASTRA.res[r]||0)+res[r]); });
   return Object.keys(res).map(r=>castraRes(r).icon+" +"+res[r]).join(" ");
 }
-/* Prestaties als achievements in het Certamen-profiel (categorie "Castra Heronum", zichtbaar in Mijn profiel). */
+/* Prestaties als achievements in het Certamen-profiel (categorie "Castra Heroum", zichtbaar in Mijn profiel). */
 const CASTRA_ICONS_TOTAL = { 10:"helmet", 25:"torch", 50:"owl", 80:"column", 120:"crown", 151:"eagle" };
 const CASTRA_ICONS_FOLK = { rom:"eagle", gra:"owl", spa:"shield", tro:"column", gla:"trident", gal:"torch", ger:"helmet", aeg:"amphora", per:"crown", car:"horse", ama:"laurel" };
-if(typeof ACH_CATEGORIES!=="undefined" && !ACH_CATEGORIES.castra) ACH_CATEGORIES.castra = "Castra Heronum";
+if(typeof ACH_CATEGORIES!=="undefined" && !ACH_CATEGORIES.castra) ACH_CATEGORIES.castra = "Castra Heroum";
 (function(){
   if(typeof ACHIEVEMENTS_DEF==="undefined" || ACHIEVEMENTS_DEF.some(a=>a.id==="castra_t10")) return;
-  CASTRA_COLL_TOTAL.forEach(m=>ACHIEVEMENTS_DEF.push({ id:"castra_t"+m.n, nm:"Castra: "+m.title, ds:m.n+" soldaten ontmoet in de Castra Heronum-codex ("+m.nl+")", icon:CASTRA_ICONS_TOTAL[m.n]||"star", cat:"castra", mode:"battle" }));
+  CASTRA_COLL_TOTAL.forEach(m=>ACHIEVEMENTS_DEF.push({ id:"castra_t"+m.n, nm:"Castra: "+m.title, ds:m.n+" soldaten ontmoet in de Castra Heroum-codex ("+m.nl+")", icon:CASTRA_ICONS_TOTAL[m.n]||"star", cat:"castra", mode:"battle" }));
   Object.keys(CASTRA_FOLKS).filter(v=>v!=="myt").forEach(v=>ACHIEVEMENTS_DEF.push({ id:"castra_v"+v, nm:"Castra: "+CASTRA_FOLKS[v].nm, ds:"Alle soldaten van de "+CASTRA_FOLKS[v].nm+" ontmoet", icon:CASTRA_ICONS_FOLK[v]||"star", cat:"castra", mode:"battle" }));
   ACHIEVEMENTS_DEF.push({ id:"castra_alle", nm:"Castra: Alle volken", ds:"Van elk volk alle soldaten ontmoet", icon:"crown", cat:"castra", mode:"battle" });
 })();
@@ -135,7 +135,7 @@ function castraCodexHeroes(){
     return `<div style="display:flex;gap:10px;padding:6px 0;border-top:1px solid #4a3d2c;${have?"":"opacity:.6"}">
       <div style="flex-shrink:0">${have?castraAvatarHTML(d.look,"down",1,48):"<div style='width:48px;height:48px;text-align:center;font-size:28px'>❔</div>"}</div>
       <div><b>${esc(have?d.nm:"???")}</b> <small>(${esc(t.sg)} · ${esc((CASTRA_VENATIO[d.region]||{nm:d.region}).nm)})</small>
-        <div style="font-size:13px;opacity:.85">${have?`Leidt graag: ${esc(castraBuilding(d.affinity)?castraBuilding(d.affinity).nm:d.affinity)}`:"Nog niet in je heldenzaal."}</div></div></div>`;
+        <div style="font-size:13px;opacity:.85">${have?`Leidt graag: ${esc(castraBuilding(d.affinity)?castraBuilding(d.affinity).nm:d.affinity)}`:"Nog niet in je heroum."}</div></div></div>`;
   }).join("");
 }
 
