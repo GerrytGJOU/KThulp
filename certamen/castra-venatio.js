@@ -210,7 +210,7 @@ function castraVFinish(){
     V.loot = { aes, fru };
     if(V.boss && typeof castraBossWon==="function") castraBossWon(V);
     if(soldier){
-      soldier.xp += Math.round(castraCardXp(CASTRA_V_BAL.xpWin + Math.floor(CASTRA_V_BAL.xpPerEnemyLvl*V.enemy.lvl)) * (100 + (typeof castraAffinityPct==="function" ? castraAffinityPct(soldier) : 0)) / 100);   // klasse-affiniteit (crossmode.js)
+      soldier.xp += Math.round(castraCardXp(typeof castraXpWild==="function" ? castraXpWild(V, soldier) : CASTRA_V_BAL.xpWin + Math.floor(CASTRA_V_BAL.xpPerEnemyLvl*V.enemy.lvl)) * (100 + (typeof castraAffinityPct==="function" ? castraAffinityPct(soldier) : 0)) / 100);   // klasse-affiniteit (crossmode.js)
       const before = soldier.lvl; castraLevelUp(soldier); V.leveled = soldier.lvl > before;
     }
     V.quests = (typeof castraQuestOnWin==="function") ? castraQuestOnWin(V) : [];

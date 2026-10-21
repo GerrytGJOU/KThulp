@@ -316,11 +316,11 @@ function castraBFinish(){
     const lines = [];
     s.towers.forEach(t=>{
       if(String(t.sid).indexOf("hero_")===0){
-        const hh = castraHero(String(t.sid).slice(5)); if(hh){ hh.xp += castraCardXp(12 + 6*m.waves.length); if(castraHeroLevelUp(hh)) lines.push(CASTRA_HERO_DATA[hh.id].nm); }
+        const hh = castraHero(String(t.sid).slice(5)); if(hh){ hh.xp += castraCardXp(castraXpTd(m, hh.lvl)); if(castraHeroLevelUp(hh)) lines.push(CASTRA_HERO_DATA[hh.id].nm); }
         return;
       }
       const sol = CASTRA.soldiers.find(x=>x.id===t.sid); if(!sol) return;
-      sol.xp += castraCardXp(12 + 6*m.waves.length); if(castraLevelUp(sol)) lines.push(castraSoldierName(sol));
+      sol.xp += castraCardXp(castraXpTd(m, sol.lvl)); if(castraLevelUp(sol)) lines.push(castraSoldierName(sol));
     });
     (CASTRA.proelium || (CASTRA.proelium = { done:{} })).done = CASTRA.proelium.done || {};
     const first = !CASTRA.proelium.done[m.id];

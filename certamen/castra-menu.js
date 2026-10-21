@@ -135,7 +135,7 @@ function castraMenuTeam(){
 function castraMenuHeroes(){
   const have = CASTRA.heroes || [];
   const rows = have.map(h=>{
-    const d = CASTRA_HERO_DATA[h.id], st = castraHeroStats(h), cap = castraHeroCap(h), need = CASTRA_H.xpPerLvl*h.lvl;
+    const d = CASTRA_HERO_DATA[h.id], st = castraHeroStats(h), cap = castraHeroCap(h), need = castraXpToNext(h.lvl);
     const hsel = CASTRA_MENU.hsel===h.id;
     return `<div style="${CASTRA_MV_ROW};cursor:pointer" onclick="CASTRA_MENU.hsel=${hsel?'null':JSON.stringify(h.id)};castraMenuRender()">
       <div style="flex:0 0 52px;width:52px;height:52px;position:relative">${castraAvatarHTML(d.look,"down",1,52)}</div>

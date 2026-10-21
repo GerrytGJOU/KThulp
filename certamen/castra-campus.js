@@ -36,7 +36,7 @@ function castraTrainStart(sid){
 function castraTrainCollect(sid){
   const s = CASTRA.soldiers.find(x=>x.id===sid);
   if(!s || !s.trainUntil || s.trainUntil > castraNow()) return false;
-  s.trainUntil = 0; s.xp += castraTrainXp(); castraLevelUp(s); castraSave(); return true;
+  s.trainUntil = 0; s.xp += (typeof castraXpTrain==="function" ? castraXpTrain(s.lvl, castraLvl("campus")) : castraTrainXp()); castraLevelUp(s); castraSave(); return true;
 }
 
 // Evolutie (troepenbomen): level- en campus-eis, kosten, en per optie een eventueel ontbrekend gebouw.

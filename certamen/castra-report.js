@@ -110,7 +110,7 @@ function castraBFeedback(k){
 // ervaring: stand vóór en ná het gevecht (de eigenlijke uitkering gebeurt in castraBFinish / castraWeeklyResult)
 function castraRepUnit(t){
   const sid = String(t.sid||"");
-  if(sid.indexOf("hero_")===0){ const h = castraHero(sid.slice(5)); return h ? { u:h, hero:true, need:l=>CASTRA_H.xpPerLvl*l, cap:()=>castraHeroCap(h) } : null; }
+  if(sid.indexOf("hero_")===0){ const h = castraHero(sid.slice(5)); return h ? { u:h, hero:true, need:l=>castraXpToNext(l), cap:()=>castraHeroCap(h) } : null; }
   const so = (CASTRA.soldiers||[]).find(x=>x.id===t.sid); return so ? { u:so, hero:false, need:l=>castraXpToNext(l), cap:()=>castraSoldierCap() } : null;
 }
 function castraRepSnap(B){
