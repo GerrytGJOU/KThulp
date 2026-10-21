@@ -11,3 +11,7 @@ Eigenschappen Filmpje Opening.docx
 # Gemini-icoonvellen voor de skill-trees (bron; de uitgesneden iconen in
 # certamen/assets/skills/ worden wel gecommit).
 certamen/assets/skills/sheets/
+
+# Ruwe AI-spritebladen (1-2 MB per stuk) voor het snijscript; horen niet in de repo (.git is al ~1 GB).
+# Alleen de gesneden, spelklare PNG-bestanden in certamen/assets/sprites-forms/ worden gecommit.
+_sprites-bron/
