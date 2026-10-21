@@ -21,7 +21,7 @@
    Laadt NA castra-battle.js, castra-proelium.js en castra-heroes.js.
    ============================================================================ */
 
-const CASTRA_LEGIO = { prepTicks:1200, gapTicks:200, lead:12, perPlayer:2, joinTicks:0 };
+const CASTRA_LEGIO = { prepTicks:1200, gapTicks:200, lead:12, perPlayer:2, joinTicks:0, hpExp:1.2 };   // hpExp: hoe sterk de vijanden meegroeien met het aantal deelnemers (1 = lineair vanaf 12)
 const CASTRA_LEGIO_MISSIONS = {
   legio1: { nm:"Obsidio Troiae", nl:"Het beleg van Troje", map:"a", hpMult:7.6,
     waves:[ [ {line:_fid("gra","Epilectus"),n:4,gap:14,lvl:26} ],
@@ -30,7 +30,15 @@ const CASTRA_LEGIO_MISSIONS = {
             [ {line:_fid("gra","Prodromus"),n:4,gap:12,lvl:28}, {line:_fid("myt","Silenus"),n:2,gap:16,lvl:28} ],
             [ {line:_fid("gra","Epilectus"),n:5,gap:12,lvl:28}, {line:_fid("gra","Peltasta"),n:3,gap:12,lvl:28} ],
             [ {line:_fid("myt","Gryps"),n:2,gap:20,lvl:28}, {line:_fid("gra","Prodromus"),n:5,gap:10,lvl:28}, {line:_fid("gra","Lochagus"),n:4,gap:12,lvl:28} ] ],
-    reward:{ aes:200, frumentum:120, gloria:15 } },
+    reward:{ aes:200, frumentum:120, gloria:15 },
+    vLa:"Victoria! Troiam defendistis!", vNl:"Overwinning! Jullie hebben Troje verdedigd!", cLa:"Troia capta est.", cNl:"Troje is ingenomen." },
+  // Evenementen op basis van een bestaande missie (golven, vijandrollen, missieregels en kaart worden overgenomen)
+  legio2: { nm:"Obsidio Alesiae", nl:"Het beleg van Alesia (nacht, snelle en zware vijanden)", from:"ga2", hpMult:9.83,
+    reward:{ aes:260, frumentum:150, gloria:20 }, vLa:"Victoria! Alesiam defendistis!", vNl:"Overwinning! Jullie hebben Alesia verdedigd!", cLa:"Alesia capta est.", cNl:"Alesia is ingenomen." },
+  legio3: { nm:"Ad Rhenum", nl:"Aan de Rijn (regen, schilddragers)", from:"gm2", hpMult:4.39,
+    reward:{ aes:300, frumentum:170, gloria:22 }, vLa:"Victoria! Rhenum defendistis!", vNl:"Overwinning! Jullie hebben de Rijn verdedigd!", cLa:"Rhenus captus est.", cNl:"De Rijn is gevallen." },
+  legio4: { nm:"Persepolis", nl:"Het beleg van Persepolis (genezers, kou en wind)", from:"pe2", hpMult:2.95,
+    reward:{ aes:340, frumentum:190, gloria:25 }, vLa:"Victoria! Persepolim defendistis!", vNl:"Overwinning! Jullie hebben Persepolis verdedigd!", cLa:"Persepolis capta est.", cNl:"Persepolis is ingenomen." },
 };
 
 let CASTRA_L = null;   // { klas, ev, players, actions, sorted, dirty, sim, offset, refs }
@@ -38,8 +46,10 @@ let CASTRA_L = null;   // { klas, ev, players, actions, sorted, dirty, sim, offs
 /* ---------- missie en acties ---------- */
 function castraLegioMissionFor(ev){
   const base = CASTRA_LEGIO_MISSIONS[ev.mission] || CASTRA_LEGIO_MISSIONS.legio1, pl = Math.max(2, ev.players||4), k = Math.max(1, Math.round(pl/3));
-  return { id:"legio", region:"troia", nm:base.nm, nl:base.nl, map:base.map, seed:ev.seed|0, hpMult:base.hpMult*(1+0.04*pl),
-    waves: base.waves.map(w=>w.map(g=>({ ...g, n:g.n*k }))), reward:base.reward };
+  const src = base.from ? CASTRA_P_MISSIONS.find(x=>x.id===base.from) : null;
+  const waves = (src ? src.waves : base.waves).map(w=>w.map(g=>({ ...g, n:g.n*k })));
+  return { id:"legio", region:src ? src.region : "troia", nm:base.nm, nl:base.nl, map:src ? src.map : base.map, seed:ev.seed|0, hpMult:base.hpMult*1.48*Math.pow(pl/12, CASTRA_LEGIO.hpExp),
+    waves, edicta:src ? (src.edicta||[]).slice() : [], reward:base.reward };
 }
 function castraLegioSorted(L){
   if(!L.sorted){
@@ -55,6 +65,8 @@ function castraLegioParseStats(str){
 }
 function castraLegioBuild(L){
   const m = castraLegioMissionFor(L.ev), sim = castraPSim(m, []);
+  sim.mods = { dmg:1, cd:1, rng:1, spd:1, type:{} };
+  if(typeof castraEdictApply==="function") castraEdictApply({ mission:m, sim });        // missieregels (nacht, regen, ...), overal gelijk
   sim.baseHp = CASTRA_P.baseHp + Math.floor((L.ev.players||4)/2);
   sim.nextWaveAt = CASTRA_LEGIO.prepTicks; sim.legioPtr = 0;
   sim.cells = castraPPathCells(m.map); sim.trees = {}; CASTRA_P_MAPS[m.map].trees.forEach(t=>{ sim.trees[t[0]+","+t[1]] = 1; });
@@ -142,6 +154,7 @@ function castraLegioPush(act){
 }
 
 /* ---------- docent ---------- */
+function castraLegioMissionIds(){ return Object.keys(CASTRA_LEGIO_MISSIONS); }
 function castraLegioTeacherCreate(klas, missionId){
   const db = castraLegioDb(); if(!db) return Promise.reject("geen firebase");
   const m = CASTRA_LEGIO_MISSIONS[missionId||"legio1"];
@@ -210,7 +223,7 @@ function castraLegioEnter(){
   if(!(L.players||{})[BM_IDENT.leerlingcode]) castraLegioJoin();   // laatkomers doen automatisch mee
   const m = castraLegioMissionFor(L.ev);
   if(typeof CASTRA_B!=="undefined" && CASTRA_B){ clearInterval(CASTRA_B.timer); try{ window.removeEventListener("resize", CASTRA_B.resizeFn); }catch(e){} }
-  CASTRA_B = { mission:m, sim:castraPSim(m, []), sel:null, timer:null, speed:1, units:{}, fx:[], placed:{}, lastDir:{}, finished:false, legio:true };
+  CASTRA_B = { mission:m, sim:castraPSim(m, []), sel:null, timer:null, speed:1, units:{}, fx:[], placed:{}, lastDir:{}, finished:false, legio:true, ed:(typeof castraEdictSimSetup==="function" ? castraEdictSimSetup(m) : null) };
   go("castraBattle");
 }
 function castraLegioMine(){ const id = BM_IDENT.leerlingcode; return castraLegioSorted(CASTRA_L).filter(a=>a.lid===id && a.k==="place"); }
@@ -267,14 +280,21 @@ function castraLegioHud(){
   const next = (!s.waveActive && !s.over && s.wave+1 < m.waves.length) ? Math.max(0, Math.ceil((s.nextWaveAt - s.tick)*CASTRA_P.tickMs/1000)) : 0;
   el("cbHud").innerHTML = `<span>❤️ ${castraLaText("vita_castrorum")}: <b>${s.baseHp}</b></span>
     <span>${castraLaText("ala")}: <b>${Math.max(0,s.wave+(s.waveActive?1:0))}</b> / ${m.waves.length}${next?` · ⏱ ${next}s`:""}</span>
-    <span>${castraLaText("milites")}: <b>${mine}</b> / ${CASTRA_LEGIO.perPlayer} · ${castraLaText("legionarii")}: ${Object.keys(CASTRA_L.players||{}).length}</span>`;
+    <span>${castraLaText("milites")}: <b>${mine}</b> / ${CASTRA_LEGIO.perPlayer} · ${castraLaText("legionarii")}: ${Object.keys(CASTRA_L.players||{}).length}</span>
+    ${(typeof castraEdictChips==="function") ? "<span style='flex-basis:100%'>"+castraEdictChips(m)+"</span>" : ""}`;
+}
+function castraLegioBoard(s){
+  const by = {}; let tot = 0;
+  s.towers.forEach(t=>{ const d = (s.stat.dmg[t.id]||0); if(!d) return; by[t.owner] = (by[t.owner]||0)+d; tot += d; });
+  return Object.keys(by).map(k=>({ lid:k, nm:(CASTRA_L.players[k]||{}).nm||k, d:by[k], pct:tot ? Math.round(100*by[k]/tot) : 0 })).sort((a,b)=>b.d-a.d);
 }
 function castraLegioFinish(){
   const B = CASTRA_B, s = B.sim, m = B.mission, L = CASTRA_L, box = el("cbResult"); if(!box) return;
+  const base = CASTRA_LEGIO_MISSIONS[L.ev.mission] || CASTRA_LEGIO_MISSIONS.legio1;
   const claimed = CASTRA.legio && CASTRA.legio.claimed && CASTRA.legio.claimed[L.ev.id];
   let h = `<div class="panel">`;
   if(s.over==="win"){
-    h += `<div style="font-size:22px;margin-bottom:6px">${castraLa("legio_victoria")}</div>`;
+    h += `<div style="font-size:22px;margin-bottom:6px">${castraLaHTML(base.vLa||"Victoria!", base.vNl||"Overwinning!", "legio_v_"+L.ev.mission)}</div>`;
     if(!claimed){
       const cap = castraWalletCap();
       Object.keys(m.reward).forEach(r=>{ CASTRA.res[r] = r==="gloria" ? (CASTRA.res[r]||0)+m.reward[r] : Math.min(cap, (CASTRA.res[r]||0)+m.reward[r]); });
@@ -282,11 +302,16 @@ function castraLegioFinish(){
         const sol = CASTRA.soldiers.find(x=>x.id===t.sid); if(sol){ sol.xp += 30; castraLevelUp(sol); }
         if(String(t.sid).indexOf("hero_")===0){ const hh = castraHero(String(t.sid).slice(5)); if(hh){ hh.xp += 20; castraHeroLevelUp(hh); } }
       });
+      if(typeof castraPxpAdd==="function") castraPxpAdd(40, "Legio gewonnen");
       (CASTRA.legio || (CASTRA.legio = { claimed:{} })).claimed = CASTRA.legio.claimed || {};
       CASTRA.legio.claimed[L.ev.id] = true; castraSave();
       h += `<div>${castraLaText("praemium")}: ${Object.keys(m.reward).map(r=>castraRes(r).icon+" +"+m.reward[r]).join(" · ")}</div>`;
     }
-  } else h += `<div style="font-size:22px;margin-bottom:6px">${castraLa("legio_clades")}</div>`;
+  } else h += `<div style="font-size:22px;margin-bottom:6px">${castraLaHTML(base.cLa||"Clades.", base.cNl||"Verslagen.", "legio_c_"+L.ev.mission)}</div>`;
+  const board = castraLegioBoard(s);
+  if(board.length) h += `<div style="margin-top:10px"><b>🏛️ ${castraLaHTML("Quis optime pugnavit?", "Wie vocht het best? (aandeel in de geleverde schade)", "legio_board")}</b>
+    ${board.slice(0,5).map((b,i)=>`<div style="display:flex;align-items:center;gap:8px;margin:3px 0;${b.lid===BM_IDENT.leerlingcode?"font-weight:bold":""}"><span style="width:20px">${i+1}.</span><span style="flex:0 0 110px;overflow:hidden;text-overflow:ellipsis">${esc(b.nm)}</span><div style="flex:1;height:8px;background:#2a1a10;border-radius:4px;overflow:hidden"><div style="height:100%;width:${b.pct}%;background:linear-gradient(90deg,var(--hi-dim,#8a6d2f),var(--hi,#d4af37))"></div></div><span style="width:40px;text-align:right">${b.pct}%</span></div>`).join("")}
+    <div class="note">Samen gewonnen of verloren: het gaat om de legio, niet om de ranglijst.</div></div>`;
   h += `<div style="margin-top:12px"><button class="btn btn-gold" onclick="castraBExit()">${castraLaText("perge")}</button></div></div>`;
   box.innerHTML = h; box.scrollIntoView({ behavior:"smooth", block:"nearest" });
 }
