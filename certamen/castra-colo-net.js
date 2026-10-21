@@ -79,10 +79,12 @@ function castraCSettle(mid){
     if(st.refund){ CASTRA.res[CASTRA_COLO.res] = (CASTRA.res[CASTRA_COLO.res]||0) + P.fee; castraCLog(mid, { refund:true, pay:P.fee, why:"niemand leverde een geldige run in" }); toast("🪙 Inzet terug", "Niemand leverde een geldige run in (+"+P.fee+" brons)."); }
     else {
       if(credited) CASTRA.res[CASTRA_COLO.res] = (CASTRA.res[CASTRA_COLO.res]||0) + pay;
-      if(rank===1){ CASTRA.res.gloria = (CASTRA.res.gloria||0) + 5; if(typeof castraCardToken==="function") castraCardToken(1, "Colosseum gewonnen", true); }
+      const colo = castraCColo(), day = (typeof castraDay==="function") ? castraDay() : "", bonus = (colo.bonusDay===day ? colo.bonusN||0 : 0) < CASTRA_COLO.bonusPerDay;   // dagquotum voor roem, kaart en XP
+      if(colo.bonusDay!==day){ colo.bonusDay = day; colo.bonusN = 0; }
+      if(bonus){ colo.bonusN++; if(rank===1){ CASTRA.res.gloria = (CASTRA.res.gloria||0) + 5; if(typeof castraCardToken==="function") castraCardToken(1, "Colosseum gewonnen", true); } }
       castraCLog(mid, { rank, pay, ok:me?me.ok:false });
-      if(typeof castraPxpAdd==="function") castraPxpAdd(rank===1 ? 25 : 10);
-      toast(rank===1 ? "🏆 Gewonnen!" : "🏛️ Colosseum afgelopen", rank===1 ? "Je wint "+pay+" brons en 5 roem." : (pay ? "Plaats "+rank+": +"+pay+" brons." : "Plaats "+rank+"."));
+      if(bonus && typeof castraPxpAdd==="function") castraPxpAdd(rank===1 ? 25 : 10);
+      toast(rank===1 ? "🏆 Gewonnen!" : "🏛️ Colosseum afgelopen", rank===1 ? "Je wint "+pay+" brons"+(bonus?" en 5 roem":"")+"." : (pay ? "Plaats "+rank+": +"+pay+" brons." : "Plaats "+rank+"."));
     }
     castraSave(); castraCRefresh();
   };
@@ -137,7 +139,7 @@ function castraCCreate(mode, div){
   if(!castraCAttach() || castraCBusy()) return;
   if(!castraCanPay({ [CASTRA_COLO.res]:CASTRA_COLO.fee })){ toast("🪙", "Je hebt niet genoeg brons (inzet "+CASTRA_COLO.fee+")."); return; }
   const C = CASTRA_C, ref = C.db.ref(castraCBase()).push(), mid = ref.key;
-  const d = { mode, fee:CASTRA_COLO.fee, divisie:div, seed:(Math.random()*4294967295)>>>0, need:CASTRA_COLO.need[mode], ghosts:0, status:"lobby", createdBy:C.lid, createdAt:castraCNow(),
+  const d = { mode, fee:CASTRA_COLO.fee, divisie:div, seed:(Math.random()*4294967295)>>>0, need:CASTRA_COLO.need[mode], status:"lobby", createdBy:C.lid, createdAt:castraCNow(),
               slots:{ s0:C.lid }, players:{ [C.lid]:{ nm:C.nm, ts:castraCNow() } } };
   castraCStake(mid, d);
   ref.set(d).catch(()=>{ castraCRefund(mid, "Aanmaken mislukt"); });
@@ -149,7 +151,7 @@ function castraCJoin(mid){
   if(!castraCanPay({ [CASTRA_COLO.res]:d.fee })){ toast("🪙", "Je hebt niet genoeg brons (inzet "+d.fee+")."); return; }
   castraCStake(mid, d);
   // een vrij plek (s0, s1, ...) en je naam in één onderdeel: zo kan een match nooit meer spelers krijgen dan er plekken zijn
-  let slot = -1; for(let i=0;i<d.need;i++) if(!(d.slots||{})["s"+i]){ slot = i; break; }
+  let slot = -1; for(let i=0;i<d.need-(d.ghosts||0);i++) if(!(d.slots||{})["s"+i]){ slot = i; break; }
   if(slot<0){ castraCRefund(mid, "De match zit al vol"); return; }
   C.db.ref(castraCBase(mid)).update({ ["players/"+C.lid]:{ nm:C.nm, ts:castraCNow() }, ["slots/s"+slot]:C.lid }).catch(()=>{ castraCRefund(mid, "Meedoen mislukt (misschien is de plek net bezet)"); });
   castraCRefresh();
@@ -159,6 +161,11 @@ function castraCLeaveWrite(mid){
   const C = CASTRA_C, d = C.matches[mid] || {}, up = { ["players/"+C.lid]:null };
   Object.keys(d.slots||{}).forEach(k=>{ if(d.slots[k]===C.lid) up["slots/"+k] = null; });
   return C.db.ref(castraCBase(mid)).update(up);
+}
+// Vierkamp met 3 spelers: een AI vult de vierde plek aan (ghosts staat na het aanmaken niet meer open voor wijziging).
+function castraCAddAI(mid){
+  const C = CASTRA_C, d = C && C.matches[mid]; if(!d || d.status!=="lobby" || d.mode!=="quad" || d.ghosts || Object.keys(d.slots||{}).length!==d.need-1) return;
+  C.db.ref(castraCBase(mid)).update({ ghosts:1 }).catch(()=>{ toast("⚠️", "De AI kon niet worden toegevoegd (er is misschien net iemand bij gekomen)."); });
 }
 function castraCLeave(mid){
   const C = CASTRA_C, P = castraCPend()[mid], d = C && C.matches[mid]; if(!P || !d || d.status!=="lobby" || P.busy) return;
@@ -198,16 +205,26 @@ function castraCSendRun(mid){
     .catch(()=>{ P.sending = false; setTimeout(()=>{ if(CASTRA_C) castraCCheck(mid); }, 5000); });
 }
 
-/* ---------- gevecht: HUD-regel met de tegenstander ---------- */
+/* ---------- gevecht: live-balken van alle deelnemers ---------- */
+function castraColoPvpBar(nm, wave, lives, scale, state, mine){
+  const col = state==="dead" ? "#6b5a4a" : mine ? "#d4af37" : "#c8392a", w = Math.max(2, Math.min(100, Math.round(100*wave/scale)));
+  const tail = state==="dead" ? "✝ golf "+wave : state==="done" ? "klaar · golf "+wave : "golf <b>"+wave+"</b> · ❤️ "+lives;
+  return `<div style="display:flex;align-items:center;gap:6px;font-size:13px;margin:2px 0"><span style="width:104px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;${mine?"color:#d4af37;font-weight:bold":""}">${esc(nm)}</span>
+    <div style="flex:1;height:9px;background:#2a1a10;border-radius:5px;overflow:hidden"><div style="width:${w}%;height:100%;background:${col}"></div></div><span style="min-width:104px;text-align:right">${tail}</span></div>`;
+}
 function castraColoPvpHud(){
   const B = CASTRA_B, C = CASTRA_C, d = C && C.matches[B.pvp.mid]; if(!d) return "";
   const s = B.sim, k = s.wave+"|"+s.baseHp;
   if(B.liveK!==k){ B.liveK = k; castraCLive(B.pvp.mid, s.wave+1, s.baseHp); }
-  const others = Object.keys(d.players||{}).filter(l=>l!==C.lid).map(l=>{
-    const lv = (d.live||{})[l], run = (d.runs||{})[l], nm = esc((d.players[l]||{}).nm||l);
-    return `<span>⚔️ ${nm}: ${run ? "klaar" : lv ? "golf <b>"+lv.wave+"</b> · ❤️ "+lv.lives : "…"}</span>`;
+  const tick = s.tick, rows = [];   // de AI wordt getoond op jouw speltijd (de rangorde gaat om overleefde ticks, niet om de muurklok)
+  rows.push({ nm:C.nm, wave:Math.max(0,s.wave+1), lives:s.baseHp, state:s.over?(s.over==="win"?"done":"dead"):"", mine:true });
+  Object.keys(d.players||{}).filter(l=>l!==C.lid).forEach(l=>{
+    const lv = (d.live||{})[l], run = (d.runs||{})[l], nm = (d.players[l]||{}).nm||l;
+    rows.push({ nm, wave:lv?lv.wave:0, lives:lv?lv.lives:CASTRA_P.baseHp, state:run ? (run.res&&run.res.win ? "done" : "dead") : (lv && lv.lives<=0 ? "dead" : "") });
   });
-  return others.join("");
+  for(let g=0; g<(d.mode==="quad" ? (d.ghosts|0) : 0); g++){ const a = castraColoGhostAt(d, g, tick); rows.push({ nm:CASTRA_COLO_GHOST.names[g], wave:a.done?a.final.wave:a.wave, lives:a.done?a.final.lives:a.lives, state:a.done ? (a.final.win?"done":"dead") : "" }); }
+  const scale = Math.max(20, ...rows.map(r=>r.wave+4));
+  return `<div style="flex-basis:100%;margin-top:4px">${rows.map(r=>castraColoPvpBar(r.nm, r.wave, r.lives, scale, r.state, r.mine)).join("")}</div>`;
 }
 
 /* ---------- scherm ---------- */
@@ -221,42 +238,46 @@ function castraCCountdownText(){
 }
 function castraCStandingsHTML(r){
   const st = r.st, d = r.d, fmt = x=>x.res ? (x.res.win ? "alle "+CASTRA_COLO.pvpWaves+" golven overleefd (❤️ "+x.res.lives+")" : "golf "+x.res.wave+" · ☠️ "+x.res.kills+(x.res.quit?" · opgegeven":"")) : esc(x.why||"—");
-  return `<div class="panel"><h3>🏛️ Uitslag — divisie ${d.divisie}</h3>
-    ${st.refund?`<div class="note">Niemand leverde een geldige run in: iedereen krijgt de inzet terug.</div>`:""}
+  return `<div class="panel"><h3>🏛️ Uitslag — ${d.mode==="quad"?"vierkamp":"duel"}, divisie ${d.divisie}</h3>
+    ${st.refund?`<div class="note">Niemand leverde een geldige run in: iedereen krijgt de inzet terug.</div>`:""}${st.ghosts?`<div class="note">🤖 De AI deed mee zonder inzet en zonder uitbetaling; ze telt wel mee voor de plaatsen.</div>`:""}
     <table style="width:100%;border-collapse:collapse;font-size:15px">${st.rows.map(x=>`<tr style="${x.lid===CASTRA_C.lid?"font-weight:bold;color:#d4af37":""}">
-      <td style="padding:3px 6px">${x.rank}.</td><td style="padding:3px 6px">${esc(x.nm)}</td><td style="padding:3px 6px">${fmt(x)}</td><td style="padding:3px 6px;text-align:right">${x.pay?"+"+x.pay+" 🪙":""}</td></tr>`).join("")}</table>
+      <td style="padding:3px 6px">${x.rank}.</td><td style="padding:3px 6px">${x.ghost?"🤖 ":""}${esc(x.nm)}</td><td style="padding:3px 6px">${fmt(x)}</td><td style="padding:3px 6px;text-align:right">${x.pay?"+"+x.pay+" 🪙":""}</td></tr>`).join("")}</table>
     <div class="note" style="margin-top:6px">De uitslag is nagerekend uit de ingestuurde runs (naspelen), niet uit wat spelers beweren.</div></div>`;
 }
+const CASTRA_C_MODE = { duel:"Duel", quad:"Vierkamp" };
 function castraCRenderBody(){
   const C = CASTRA_C, box = el("ccBody"); if(!box) return;
-  const aes = (CASTRA.res[CASTRA_COLO.res]||0), pend = castraCPend(), mids = Object.keys(pend);
-  let h = `<div class="note">🪙 Je hebt ${aes} brons · inzet per duel: ${CASTRA_COLO.fee} · de winnaar krijgt ${CASTRA_COLO.pay.duel[0]}.</div>`;
+  const aes = (CASTRA.res[CASTRA_COLO.res]||0), pend = castraCPend(), mids = Object.keys(pend), fee = CASTRA_COLO.fee, pay = CASTRA_COLO.pay;
+  let h = `<div class="note">🪙 Je hebt ${aes} brons · inzet ${fee} · duel: winnaar ${pay.duel[0]} · vierkamp: ${pay.quad.join(" / ")} (met een AI: ${castraColoPayTable("quad",1).join(" / ")}).</div>`;
   mids.forEach(mid=>{
     const P = pend[mid], d = C.matches[mid];
-    if(!d){ h += `<div class="panel"><h3>⚔️ Duel</h3><div class="note">Match laden…</div></div>`; return; }
-    const names = Object.keys(d.players||{}).map(l=>esc((d.players[l]||{}).nm||l)).join(", "), n = Object.keys(d.players||{}).length;
-    h += `<div class="panel" style="border:2px solid #d4af37"><h3>⚔️ Jouw duel — divisie ${d.divisie}</h3><div class="note">Deelnemers (${n}/${d.need}): ${names}</div>`;
-    if(d.status==="lobby") h += `<div style="margin:8px 0">Wachten op een tegenstander…</div><button class="btn" style="min-height:44px" onclick="castraCLeave('${mid}')">Lobby verlaten (inzet terug)</button>`;
-    else {
-      const started = castraCNow() >= d.startAt;
+    if(!d){ h += `<div class="panel"><h3>⚔️ Wedstrijd</h3><div class="note">Match laden…</div></div>`; return; }
+    const names = Object.keys(d.players||{}).map(l=>esc((d.players[l]||{}).nm||l)).join(", "), n = Object.keys(d.slots||{}).length, gh = d.mode==="quad" ? (d.ghosts|0) : 0, tot = d.need-gh;
+    h += `<div class="panel" style="border:2px solid #d4af37"><h3>⚔️ Jouw ${CASTRA_C_MODE[d.mode].toLowerCase()} — divisie ${d.divisie}</h3><div class="note">Deelnemers (${n}/${tot}${gh?" + "+gh+" AI":""}): ${names}</div>`;
+    if(d.status==="lobby"){
+      h += `<div style="margin:8px 0">Wachten op ${tot-n} ${tot-n===1?"tegenstander":"tegenstanders"}…</div>`;
+      if(d.mode==="quad" && !gh && n===d.need-1) h += `<button class="btn btn-gold" style="min-height:44px;margin:0 6px 6px 0" onclick="castraCAddAI('${mid}')">🤖 Vul aan met een AI-tegenstander</button><div class="note" style="margin:0 0 8px">De AI betaalt niet mee: de prijzen worden dan ${castraColoPayTable("quad",1).slice(0,3).join(" / ")} (alleen de echte inzetten worden uitbetaald).</div>`;
+      h += `<button class="btn" style="min-height:44px" onclick="castraCLeave('${mid}')">Lobby verlaten (inzet terug)</button>`;
+    } else {
+      const started = castraCNow() >= d.startAt, np = Object.keys(d.players||{}).length;
       if(!started) h += `<div style="font-size:22px;margin:8px 0"><b id="ccCd"></b></div><div class="note">Het gevecht start vanzelf. Blijf op dit scherm.</div>`;
       else if(P.started && !P.run) h += `<div class="note">Je run loopt of is onderbroken.</div>`;
-      else if(P.run) h += `<div style="margin:8px 0">Je run is ${P.sent?"ingeleverd":"klaar, wordt ingestuurd…"}. Wachten op de anderen (${Object.keys(d.runs||{}).length}/${d.need}).</div><div class="note"><span id="ccCd"></span></div>`;
+      else if(P.run) h += `<div style="margin:8px 0">Je run is ${P.sent?"ingeleverd":"klaar, wordt ingestuurd…"}. Wachten op de anderen (${Object.keys(d.runs||{}).length}/${np}).</div><div class="note"><span id="ccCd"></span></div>`;
       else h += `<div class="note">Je bent te laat voor de start; je inzet vervalt als je niet meedoet.</div><div class="note"><span id="ccCd"></span></div>`;
     }
     h += `</div>`;
   });
   Object.keys(C.results).forEach(mid=>{ if(!pend[mid]) h += castraCStandingsHTML(C.results[mid]); });
   if(!mids.length){
-    const open = Object.keys(C.lobby).filter(k=>{ const d = C.lobby[k]; return d && d.mode==="duel" && castraCNow()-d.createdAt < CASTRA_COLO.lobbyTtl && Object.keys(d.players||{}).length < d.need; });
-    h += `<div class="panel"><h3>Open duels in jouw klas</h3>${open.length ? open.map(k=>{ const d = C.lobby[k], nm = Object.keys(d.players||{}).map(l=>esc((d.players[l]||{}).nm||l)).join(", ");
-        return `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0;flex-wrap:wrap"><span>${nm} · divisie ${d.divisie}</span><button class="btn btn-gold" style="min-height:44px" onclick="castraCJoin('${k}')">Meedoen (${d.fee} 🪙)</button></div>`; }).join("")
-      : `<div class="note">Er zijn nu geen open duels.</div>`}</div>
-      <div class="panel"><h3>Nieuw duel starten</h3><div class="note">Kies een divisie: alle soldaten en helden spelen op maximaal dat level, met een vast aantal torens.</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">${[20,35,50].map(dv=>`<button class="btn btn-gold" style="min-height:44px" ${aes<CASTRA_COLO.fee?"disabled":""} onclick="castraCCreate('duel',${dv})">Divisie ${dv} (${CASTRA_COLO.cap[dv]} torens)</button>`).join("")}</div></div>`;
+    const open = Object.keys(C.lobby).filter(k=>{ const d = C.lobby[k]; return d && castraCNow()-d.createdAt < CASTRA_COLO.lobbyTtl && Object.keys(d.slots||{}).length > 0 && Object.keys(d.slots||{}).length < d.need-(d.ghosts||0); });
+    h += `<div class="panel"><h3>Open wedstrijden in jouw klas</h3>${open.length ? open.map(k=>{ const d = C.lobby[k], nm = Object.keys(d.players||{}).map(l=>esc((d.players[l]||{}).nm||l)).join(", ");
+        return `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0;flex-wrap:wrap"><span>${CASTRA_C_MODE[d.mode]||d.mode} · divisie ${d.divisie} · ${Object.keys(d.slots||{}).length}/${d.need-(d.ghosts||0)} · ${nm}</span><button class="btn btn-gold" style="min-height:44px" onclick="castraCJoin('${k}')">Meedoen (${d.fee} 🪙)</button></div>`; }).join("")
+      : `<div class="note">Er zijn nu geen open wedstrijden.</div>`}</div>
+      <div class="panel"><h3>Nieuwe wedstrijd starten</h3><div class="note">Kies een divisie: alle soldaten en helden spelen op maximaal dat level, met een vast aantal torens. Een vierkamp heeft 4 spelers; zijn er 3, dan mag een AI de vierde plek innemen.</div>
+      ${["duel","quad"].map(mo=>`<div style="margin-top:8px"><b>${CASTRA_C_MODE[mo]}</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">${[20,35,50].map(dv=>`<button class="btn btn-gold" style="min-height:44px" ${aes<fee?"disabled":""} onclick="castraCCreate('${mo}',${dv})">Divisie ${dv} (${CASTRA_COLO.cap[dv]} torens)</button>`).join("")}</div></div>`).join("")}</div>`;
   }
   const hist = castraCHist();
-  if(hist.length) h += `<div class="panel"><h3>Eerdere duels</h3>${hist.slice(0,6).map(x=>`<div class="note">${new Date(x.t).toLocaleString("nl-NL")} · divisie ${x.div||"?"} · ${x.refund?"inzet terug ("+esc(x.why||"")+")":"plaats "+x.rank+" · "+(x.pay?"+"+x.pay+" 🪙":"geen prijs")}</div>`).join("")}</div>`;
+  if(hist.length) h += `<div class="panel"><h3>Eerdere wedstrijden</h3>${hist.slice(0,6).map(x=>`<div class="note">${new Date(x.t).toLocaleString("nl-NL")} · ${CASTRA_C_MODE[x.mode]||"duel"} · divisie ${x.div||"?"} · ${x.refund?"inzet terug ("+esc(x.why||"")+")":"plaats "+x.rank+" · "+(x.pay?"+"+x.pay+" 🪙":"geen prijs")}</div>`).join("")}</div>`;
   const sig = h; if(box.dataset.sig!==sig){ box.dataset.sig = sig; box.innerHTML = h; }
   const cd = el("ccCd"); if(cd) cd.textContent = castraCCountdownText();
 }
@@ -264,11 +285,11 @@ SCREENS.castraColoLobby = function(){
   document.body.classList.remove("greek");
   if(!CASTRA) castraLoad();
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="go('castraProelium')">${iconSVG("shield",20,"currentColor")}</button><h2>🏛️ Colosseum — duel</h2></div>
+  <div class="scrhead"><button class="back" onclick="go('castraProelium')">${iconSVG("shield",20,"currentColor")}</button><h2>🏛️ Colosseum</h2></div>
   ${castraColoAllowed()?"":`<div class="note">Het Colosseum is nog gesloten.</div>`}
   <div id="ccBody"></div>${foot()}`);
   if(!castraColoAllowed()) return;
-  if(!castraCAttach()){ el("ccBody").innerHTML = `<div class="note">Meld je eerst aan met je klascode en leerlingcode (via Battle Mode of Meedoen) om te kunnen duelleren.</div>`; return; }
+  if(!castraCAttach()){ el("ccBody").innerHTML = `<div class="note">Meld je eerst aan met je klascode en leerlingcode (via Battle Mode of Meedoen) om te kunnen meedoen.</div>`; return; }
   castraCRenderBody();
 };
 // Bij het openen van de app of lijst: lopende inzetten afhandelen (uitbetalen of terugbetalen).

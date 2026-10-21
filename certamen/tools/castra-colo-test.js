@@ -85,5 +85,44 @@ console.log("3. rangschikking en uitbetaling");
   ok(st.rows[0].lid === "bbb", "gelijke uitslag: eerder ingeleverd wint");
 }
 
+
+console.log("4. AI-tegenstander (ghost) en vierkamp");
+{
+  [[20,5150],[35,777],[50,31337]].forEach(([div, seed]) => {
+    const m = { divisie:div, seed, mode:"quad", ghosts:2 };
+    const g = R(`(function(){ const a = castraColoGhost(${J(m)}, 0), b = castraColoGhost(${J(m)}, 1); return [a.res, b.res, a.acts.length, b.acts.length]; })()`);
+    ok(g[0].wave >= 8 && g[0].wave <= 40 && g[1].wave <= g[0].wave + 6, `div ${div}: AI 1 golf ${g[0].wave} (${g[2]} torens), AI 2 golf ${g[1].wave} (${g[3]} torens)`);
+  });
+  // deterministisch: een tweede, losse wereld rekent hetzelfde uit
+  const { load } = require("./castra-colo-node.js"), w2 = load(); vm.runInContext("CASTRA = castraNewState();", w2.ctx);
+  const m = { divisie:35, seed:777, mode:"quad", ghosts:1 };
+  const a = R(`castraColoGhost(${J(m)}, 0).res`), b = JSON.parse(J(vm.runInContext(`castraColoGhost(${J(m)}, 0).res`, w2.ctx)));
+  ok(J(a) === J(b), "dezelfde AI-run in twee losse werelden: " + J(a));
+  // AI-run voldoet aan dezelfde controle als een spelersrun
+  const gr = R(`(function(){ const g = castraColoGhost(${J(m)}, 0); return { actions:JSON.stringify(g.acts), res:{ tick:g.res.tick, wave:g.res.wave, lives:g.res.lives, kills:g.res.kills, win:g.res.win?1:0, quit:g.res.quit?1:0 } }; })()`);
+  ok(R(`castraColoReplay(${J(m)}, ${J(gr)})`).ok, "de AI-run komt door het naspelen (zelfde regels als spelers)");
+
+  // vierkamp: 3 spelers + AI, verschillende sterkte
+  const quad = { divisie:35, seed:999, mode:"quad", fee:100, ghosts:1, players:{ p1:{ nm:"P1" }, p2:{ nm:"P2" }, p3:{ nm:"P3" } } };
+  const run = n => R(`T.live(35, 999, { n:${n} })`);
+  const r10 = run(10), r6 = run(6), r2 = run(2); r10.ts = 300; r6.ts = 200; r2.ts = 100;
+  const st = R(`castraColoStandings(${J(quad)}, { p1:${J(r2)}, p2:${J(r10)}, p3:${J(r6)} })`);
+  const real = st.rows.filter(r => !r.ghost);
+  console.log("     " + st.rows.map(r => r.rank + ". " + r.nm + " (golf " + r.res.wave + ") " + r.pay).join(" | "));
+  ok(st.rows.length === 4 && st.rows.filter(r => r.ghost).length === 1 && st.rows.every((r, i) => r.rank === i + 1), "4 rijen, de AI telt mee voor de plaatsen");
+  ok(st.rows.filter(r => r.ghost).every(r => r.pay === 0), "de AI krijgt nooit uitbetaling");
+  ok(R("castraColoPayTable('quad', 1)").join() === "185,75,35,0" && R("castraColoPayTable('quad', 0)").join() === "250,100,50,0" && R("castraColoPayTable('quad', 2)").join() === "125,50,25,0", "prijzentabel: 250/100/50/0 zonder AI, 185/75/35/0 met 1 AI, 125/50/25/0 met 2");
+  ok(real.every(r => r.pay === ({ 1:185, 2:75, 3:35, 4:0 })[r.rank]), "echte spelers krijgen 185 / 75 / 35 / 0 naar eindplaats (de AI neemt haar plek in en betaalt niet mee)");
+  ok(real.reduce((x, r) => x + r.pay, 0) <= 300, "totaal uitbetaald <= echte inzet (300): geen brons erbij door tegen een AI te spelen");
+  // geen enkele combinatie van echte spelers + AI betaalt meer uit dan er is ingezet
+  [[1,3],[2,2]].forEach(([g, nReal]) => { const t = R(`castraColoPayTable('quad', ${g})`); ok(t.reduce((a, v) => a + v, 0) <= nReal*100, `${nReal} spelers + ${g} AI: tabel ${t.join("/")} (som ${t.reduce((a, v) => a + v, 0)} <= ${nReal*100})`); });
+  ok(R(`castraColoCmp({ ok:true, ghost:true, res:{ win:false, tick:100, kills:5 }, ts:9e15, lid:"ai1" }, { ok:true, res:{ win:false, tick:100, kills:5 }, ts:5000, lid:"zzz" })`) > 0, "bij gelijke uitslag verliest de AI van een echte speler");
+  const none = R(`castraColoStandings(${J(quad)}, {})`);
+  ok(none.refund && none.rows.filter(r => !r.ghost).every(r => r.pay === 100) && none.rows.filter(r => r.ghost).every(r => r.pay === 0), "niemand levert in -> inzet terug (de AI profiteert niet)");
+  const q4 = { divisie:35, seed:999, mode:"quad", fee:100, players:{ a:{ nm:"A" }, b:{ nm:"B" }, c:{ nm:"C" }, d:{ nm:"D" } } };
+  const s4 = R(`castraColoStandings(${J(q4)}, { a:${J(r10)}, b:${J(r6)} })`);
+  ok(s4.rows[0].pay === 250 && s4.rows[1].pay === 100 && s4.rows[2].pay === 0 && s4.rows[3].pay === 0, "vierkamp: twee ingeleverd -> 250 en 100, wie niet inlevert krijgt niets");
+}
+
 console.log(fails ? "\n" + fails + " FOUT(EN)" : "\nalles goed");
 process.exit(fails ? 1 : 0);
