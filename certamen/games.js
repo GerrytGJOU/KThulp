@@ -1977,7 +1977,7 @@ function tpRenderCastraLegio(){
   const draw=(ev,players)=>{
     const n=Object.keys(players||{}).length;
     let body;
-    if(!ev) body=`<div class="note">Geen evenement actief.</div><button class="btn btn-gold" onclick="tpLegioDo('create')">Start Legio: ${esc(CASTRA_LEGIO_MISSIONS.legio1.nm)}</button>`;
+    if(!ev) body=`<div class="note">Geen evenement actief. Kies een evenement:</div><select id="tpLegioMis" style="min-height:40px;font-size:15px;margin:4px 0 8px;max-width:100%">${castraLegioMissionIds().map(id=>`<option value="${id}">${esc(CASTRA_LEGIO_MISSIONS[id].nm)} — ${esc(CASTRA_LEGIO_MISSIONS[id].nl)}</option>`).join("")}</select><br><button class="btn btn-gold" onclick="tpLegioDo('create')">Maak het evenement (lobby)</button>`;
     else if(ev.status==="lobby") body=`<div class="note"><b>${esc(ev.name||"Legio")}</b> — lobby. Aangemeld: <b>${n}</b>${n?" ("+Object.values(players).map(p=>esc(p.nm)).join(", ")+")":""}</div>
       <button class="btn btn-gold" ${n<1?"disabled":""} onclick="tpLegioDo('launch')">Start het gevecht (10 s aftelling)</button> <button class="btn" onclick="tpLegioDo('end')">Annuleer</button>`;
     else body=`<div class="note"><b>${esc(ev.name||"Legio")}</b> — loopt (${ev.players||n} deelnemers). Het gevecht verloopt automatisch; leerlingen kunnen tot het eind meedoen.</div><button class="btn" onclick="tpLegioDo('end')">Beëindig en wis het evenement</button>`;
@@ -1992,7 +1992,7 @@ function tpRenderCastraLegio(){
 }
 function tpLegioDo(what){
   const klas=_tpCurrentClass; if(!klas) return;
-  const p = what==="create" ? castraLegioTeacherCreate(klas,"legio1") : what==="launch" ? castraLegioTeacherLaunch(klas) : castraLegioTeacherEnd(klas);
+  const p = what==="create" ? castraLegioTeacherCreate(klas,(el("tpLegioMis")||{}).value||"legio1") : what==="launch" ? castraLegioTeacherLaunch(klas) : castraLegioTeacherEnd(klas);
   p.then(()=>tpRenderCastraLegio()).catch(e=>toast("Mislukt", String(e&&e.message||e)));
 }
 

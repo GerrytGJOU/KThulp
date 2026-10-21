@@ -67,5 +67,5 @@ window.CBAL = (function(){
   }
   // kritiek teamlevel: laagste level waarop het referentieteam met minstens 5 levens wint
   function crit(id){ const m = CASTRA_P_MISSIONS.find(x=>x.id===id); for(let lv=1; lv<=70; lv++){ const r = run(m, lv); if(r.win && r.left>=5) return lv; } return null; }
-  return { run, report, tune, crit, teamSoldiers, missionLevel };
+  return { run, report, tune, crit, teamSoldiers, missionLevel, place };
 })();
