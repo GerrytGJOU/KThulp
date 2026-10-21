@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — TEGELKAART-ENGINE (RPG Maker MV-tilesets, 48×48)
+   CASTRA HERONUM — TEGELKAART-ENGINE (RPG Maker MV-tilesets, 48×48)
    ----------------------------------------------------------------------------
    Gedeeld door het kamp (castra.js) en de jachtwereld (castra-world.js).
    - Bronnen: assets/tilesets/Outside_A5 (vloertegels), Outside_B (objecten:

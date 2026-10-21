@@ -1,4 +1,4 @@
-CASTRA HEROUM - TILESETS (RPG Maker MV)
+CASTRA HERONUM - TILESETS (RPG Maker MV)
 ======================================
 Outside_A5.png  vloertegels (gras, zand, steen, palissade)       8 x 16 tegels van 48 px
 Outside_B.png   objecten (tenten, bomen, kratten, planten, ...) 16 x 16 tegels van 48 px

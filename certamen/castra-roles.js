@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — PROELIUM: VIJANDROLLEN, MISSIEREGELS (EDICTA) EN EXTRA KAARTEN
+   CASTRA HERONUM — PROELIUM: VIJANDROLLEN, MISSIEREGELS (EDICTA) EN EXTRA KAARTEN
    ----------------------------------------------------------------------------
    Vier vijandrollen (naast de gewone soldaatvormen) die de speler dwingen zijn
    opstelling aan te passen; ze komen pas in latere missies:

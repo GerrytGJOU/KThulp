@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — MEETPUNTEN VOOR DE TOWER DEFENCE (klastest)
+   CASTRA HERONUM — MEETPUNTEN VOOR DE TOWER DEFENCE (klastest)
    ----------------------------------------------------------------------------
    Anoniem en geaggregeerd per klas en maand, nooit per leerling (zelfde patroon als
    de vertaalhulp: classAnalyticsCastra). Alleen voor ingelogde leerlingen (BM_IDENT).

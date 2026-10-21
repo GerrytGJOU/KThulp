@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — HOOFDMENU IN POKÉMON-STIJL
+   CASTRA HERONUM — HOOFDMENU IN POKÉMON-STIJL
    ----------------------------------------------------------------------------
    Knop ☰ rechtsboven op de kampkaart opent een wit menuvak met zwarte rand en
    ▶-cursor (zoals het startmenu van de Pokémon-spellen). Onderdelen:
@@ -192,13 +192,13 @@ function castraMenuRestart(){
   const step = CASTRA_MENU.rs || 0;
   const list = "soldaten, helden, gebouwen, grondstoffen, behaalde missies, codex en je tutorial-voortgang";
   if(step===0) return `<h3 style="margin:0 0 6px">Restart</h3>
-    <p style="font-size:15px">Wil je Castra Heroum <b>helemaal opnieuw beginnen</b>? Dan begin je weer met het tutorial en een leeg kamp.</p>
+    <p style="font-size:15px">Wil je Castra Heronum <b>helemaal opnieuw beginnen</b>? Dan begin je weer met het tutorial en een leeg kamp.</p>
     <p style="font-size:14px;opacity:.8">Je verliest: ${list}.</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
       <button class="btn btn-gold" style="min-height:44px" onclick="castraMenuPick('profiel')">Nee, terug</button>
       <button class="btn" style="min-height:44px" onclick="CASTRA_MENU.rs=1;castraMenuRender()">Ja, opnieuw beginnen…</button></div>`;
   return `<h3 style="margin:0 0 6px;color:#8a1c10">Weet je het zeker?</h3>
-    <p style="font-size:15px"><b>Dit kan niet ongedaan worden gemaakt.</b> Alles wat je met ${esc(castraPlayerName()||"je profiel")} in Castra Heroum hebt opgebouwd wordt gewist, ook in de cloud-opslag van je profiel.</p>
+    <p style="font-size:15px"><b>Dit kan niet ongedaan worden gemaakt.</b> Alles wat je met ${esc(castraPlayerName()||"je profiel")} in Castra Heronum hebt opgebouwd wordt gewist, ook in de cloud-opslag van je profiel.</p>
     <p style="font-size:13px;opacity:.8">Je Battle Mode-profiel, avatar en munten blijven gewoon bestaan.</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
       <button class="btn btn-gold" style="min-height:44px" onclick="castraMenuPick('profiel')">Annuleren</button>

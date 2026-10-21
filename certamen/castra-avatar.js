@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — AVATAR ALS TOP-DOWN LOOPSPRITE
+   CASTRA HERONUM — AVATAR ALS TOP-DOWN LOOPSPRITE
    ----------------------------------------------------------------------------
    Dezelfde avatar als in Battle Mode (BM_IDENT.avatar, gebouwd in de Certamen-
    profieleditor), maar met de top-down sprites uit assets/sprites-topdown/.
@@ -8,7 +8,7 @@
    battle.js / battle-data.js, dus elke nieuwe avatar-optie werkt hier vanzelf
    mee zodra het bijbehorende bestand in sprites-topdown/ staat (zelfde naam).
    Laadt NA battle.js. Formaat en bestandslijst: assets/sprites-topdown/README.txt
-   Zie CASTRA_HEROUM.md.
+   Zie CASTRA_HERONUM.md.
    ============================================================================ */
 
 const CASTRA_SPRITE_DIR = "assets/sprites-topdown/";
@@ -103,7 +103,7 @@ function castraAvatarHTML(av, dir="down", frame=1, sizePx=48){
   const wrapF = prestigeOn ? `filter:${BM_PRESTIGE_FILTER};` : "";
   const scale = (sizePx/CASTRA_FRAME).toFixed(4);
   const legId = cosm.legendary && cosm.legendary!=="geen" ? cosm.legendary : null;
-  // Wapens bestaan niet als top-down sprite (bewust: in Castra Heroum draagt de dux
+  // Wapens bestaan niet als top-down sprite (bewust: in Castra Heronum draagt de dux
   // geen zichtbaar wapen). Capes en vleugels bestaan alleen als achterkant (rij
   // "omhoog"; zie README): van voren hangen ze achter het lichaam, maar wie van je
   // wegloopt (dir "up") draagt ze óver lichaam en harnas heen.

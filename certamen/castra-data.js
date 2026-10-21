@@ -1,9 +1,9 @@
 /* ============================================================================
-   CASTRA HEROUM — DATA (pure data, geen logica)
+   CASTRA HERONUM — DATA (pure data, geen logica)
    ----------------------------------------------------------------------------
    Gebouwen, grondstoffen, soldatenlijnen, helden, aanleg/karakters en de
    kaartindeling van de castra. Bron van waarheid voor het ontwerp is
-   CASTRA_HEROUM.md in de repo-root; pas getallen en teksten hier aan zonder
+   CASTRA_HERONUM.md in de repo-root; pas getallen en teksten hier aan zonder
    castra.js te wijzigen. Latijnse teksten (lat) zijn voorlopig en door Gerben
    te controleren; nl = vertaalhulp (tik op een tekst in het spel).
    Wordt vóór castra.js geladen.
@@ -18,7 +18,7 @@ const CASTRA_RES = [
 ];
 const CASTRA_START_RES = { frumentum:100, lignum:150, aes:150, gloria:0 };
 
-/* ---- Stats (Latijnse namen, gekoppeld aan Battle Mode — zie CASTRA_HEROUM.md) ----
+/* ---- Stats (Latijnse namen, gekoppeld aan Battle Mode — zie CASTRA_HERONUM.md) ----
    vita = HP, impetus = schade, tutela = schild/verdediging;
    celeritas (snelheid) en ambitus (bereik) alleen voor tower defence. */
 const CASTRA_STATS = [
@@ -57,10 +57,10 @@ const CASTRA_BUILDINGS = [
     lat:"Hic frumentum servatur.", desc:"Verhoogt het opslagmaximum van je grondstoffen." },
   { id:"principia",   nm:"Principia",   nl:"Klassenevenementen", icon:"🚩", phase:1, slot:{x:7,y:5}, maxLvl:1, fixed:true,
     lat:"Hic legio convenit.", desc:"Midden in het kamp: hier start straks de Legio (klassenevenement)." },
-  // Nog niet geplaatst (zie CASTRA_HEROUM.md, tabel Gebouwen):
+  // Nog niet geplaatst (zie CASTRA_HERONUM.md, tabel Gebouwen):
   { id:"ludus",        nm:"Ludus",        nl:"Nieuwe aanvallen leren", phase:9, slot:null, maxLvl:5, cost:{ lignum:80, aes:60 } },
   { id:"fabrica",      nm:"Fabrica",      nl:"Smederij",       phase:9, slot:null, maxLvl:5, cost:{ lignum:80, aes:80 } },
-  { id:"heroum",       nm:"Heroum",       nl:"Heldenzaal",     icon:"⭐", phase:1, slot:{x:9,y:7}, maxLvl:5, cost:{ lignum:100, aes:100 },
+  { id:"heroum",       nm:"Aula Heronum", nl:"Heldenzaal",     icon:"⭐", phase:1, slot:{x:9,y:7}, maxLvl:5, cost:{ lignum:100, aes:100 },
     lat:"Hic heroes habitant.", desc:"Hier wonen je helden: praat met ze, wijs ze toe aan een gebouw en neem ze mee het gevecht in." },
   { id:"valetudinarium",nm:"Valetudinarium",nl:"Herstel",      icon:"🩹", phase:1, slot:{x:2,y:8}, maxLvl:5, cost:{ lignum:60, aes:40 },
     lat:"Hic vulnerati curantur.", desc:"Gewonde soldaten herstellen hier sneller; tegen betaling genezen ze meteen." },
@@ -88,7 +88,7 @@ const CASTRA_MAP = {
   ],
 };
 
-/* ---- Soldatenlijnen (18 lijnen, ~45 vormen; zie CASTRA_HEROUM.md) ----
+/* ---- Soldatenlijnen (18 lijnen, ~45 vormen; zie CASTRA_HERONUM.md) ----
    type: inf (infanterie) > cav (ruiterij) > rng (afstand) > inf; sup/myth vallen
    buiten de driehoek. stages: naam per stadium; een array = vertakking. */
 const CASTRA_TYPES = {

@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — ÉÉN AANEENGESLOTEN WERELD, WERELDKAART EN SNELREIZEN
+   CASTRA HERONUM — ÉÉN AANEENGESLOTEN WERELD, WERELDKAART EN SNELREIZEN
    ----------------------------------------------------------------------------
    De regio's zijn niet langer losse keuzes in een menu, maar liggen aan elkaar zoals
    in een Pokémon-wereld: loop je over de rand van een regio (een opening in de

@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — VERSPERDE DOORGANGEN (POORTWACHTERS, OMGEVALLEN BOMEN, ...)
+   CASTRA HERONUM — VERSPERDE DOORGANGEN (POORTWACHTERS, OMGEVALLEN BOMEN, ...)
    ----------------------------------------------------------------------------
    Is de weg naar een volgende regio nog dicht, dan staat er iets in de weg dat in het
    verhaal uitlegt waarom (poortwachters, een omgevallen boom, een steenlawine, een
