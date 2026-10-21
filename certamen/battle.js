@@ -1263,6 +1263,17 @@ SCREENS.battleFAQ = function(){
     leerlingcode opnieuw te typen: "Inloggen met Google" op het aanmeldscherm vindt je profiel dan zelf.
     Koppelen is nooit verplicht; zonder koppeling blijft de klascode+leerlingcode gewoon werken.</div>`)}
 
+  ${sec("📜 Bonussen uit Chronica Classica",false,`
+    <div class="note">Speel je <b>Chronica Classica</b> uit, dan verdien je eretitels met een kleine bonus in Battle Mode, Boss Battle en Total War. Ze werken vanzelf, je hoeft niets te kiezen. Een bonus van een soort telt nooit dubbel.</div>
+    <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;line-height:1.6">
+      <li><b>Proloog:</b> +1 AP bij een snel goed antwoord.</li>
+      <li><b>Boek I:</b> één fout antwoord per wedstrijd breekt je reeks niet.</li>
+      <li><b>Boek II:</b> je begint elke wedstrijd met +5 AP.</li>
+      <li><b>Boek III en V:</b> +5% munten per boek (samen maximaal +10%).</li>
+      <li><b>Boek IV:</b> je eerste antwoord telt voor AP altijd als goed.</li>
+      <li><b>Finale:</b> +1 AP op elk goed antwoord.</li></ul>
+    <div class="note" style="margin-top:6px">In <b>Castra Heroum</b> kun je een metgezel kiezen die naast je avatar verschijnt, en in de Schola oefen je je lastige woorden. Dat geeft geen voordeel in een gevecht.</div>`)}
+
   ${(typeof bmSkillTreesVisible==="function"&&bmSkillTreesVisible())?sec("🌳 Skill-trees",false,`
     <div class="note">Elke klasse heeft een eigen <b>skill-tree</b>. Je opent hem via <b>Mijn profiel</b> (tik op
     een klasse bij Class Mastery) of via het knopje <b>🌳 Skill-tree</b> bij de klassekeuze in de lobby.</div>

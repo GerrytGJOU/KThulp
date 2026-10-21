@@ -1,6 +1,6 @@
 # Certamen — synergie tussen de modi (cross-mode)
 
-Status 2026-12-11 · alle code staat in `certamen/crossmode.js` (laadt als laatste, na `singleplayer.js`), met haken in `battle.js`, `battle-data.js`, `games.js` en een paar Castra-bestanden. Dit document is de bron van waarheid voor wat modi met elkaar delen; werk het bij bij elke wijziging.
+Status 2026-12-12 · alle code staat in `certamen/crossmode.js` (laadt na `singleplayer.js`) en `certamen/crossmode2.js` (laadt als laatste, §8-§12), met haken in `battle.js`, `battle-data.js`, `games.js` en een paar Castra-bestanden. Dit document is de bron van waarheid voor wat modi met elkaar delen; werk het bij bij elke wijziging.
 
 ## Wat de modi delen (het fundament)
 Het gedeelde profiel `P` (XP, niveau, munten, eerbewijzen) en de identiteit `identities/{klas}/{leerling}` (zie CLAUDE.md), de avatar, de eretitels, de lijst met moeilijke woorden (`hwMap`/`hwNote` in `core.js`) en de klaskeuze. Welke modus voedt wat:
@@ -49,5 +49,21 @@ Castra-sectie in "Mijn profiel" (niveau, titel, soldaten, helden, codex, missies
 ## Stijl
 Perkamentkleuren van Castra staan als variabelen (`--parch`, `--parch2`, `--parch-ink`, `--parch-edge`, `--parch-gold`, `--parch-line`; `index.html`, met een blauwe variant voor `body.greek`). Castra-schermen gebruiken `var(--hi)`, `var(--hi-dim)` en `var(--cream)` voor goud en crème. Wereldschermen in Griekse regio's (Graecia, Laconia, Troia, Themiscyra) schakelen het Griekse thema in (`castra-ui.js`). Het resultaatrapport gebruikt de Battle Mode-klassen (`bm-gain`, `bm-xpbar`).
 
+## 8. Verder spelen
+Het hoofdmenu toont bovenaan een knop naar de laatst geopende modus (Castra, Chronica, Battle Mode, Total War, Vrij oefenen), onthouden in `cx_last_mode_v1` (alleen op dit apparaat). Geen reeks, geen verplichting.
+
+## 9. Metgezel
+In het Castra-menu (Milites/Heroes, tik een eenheid open) kies je 🐾 een soldaat of held als metgezel. Opgeslagen in `CASTRA.companion` (meegaand met de save) en `cx_companion_v1` (voor schermen buiten Castra). Zichtbaar in de Castra-sectie van het profiel en naast de avatar op de Battle Mode-tegel "Mijn profiel". Puur cosmetisch. Verdwijnt als de soldaat niet meer bestaat.
+
+## 10. Schola (Castra-menu)
+Menu-onderdeel *Schola*: 8 vragen (tot 6 eigen lastige woorden, aangevuld met nieuwe woorden uit de quizlijst). Goed = `hwNote(…, true)` (woord wordt minder lastig, in alle modi), fout = `hwNote(…, false)`. Vanaf 5 goed: profiel-XP volgens het dagplafond van §3 (`castraMasterXp`) plus Castra-XP.
+
+## 11. Quaestio (wekelijkse uitdaging)
+Tussen de golven (niet na de laatste) verschijnt een optionele woordvraag (eigen lastig woord, anders uit de quizlijst). Goed: +1 leven voor het kamp en 1 profiel-XP (dagplafond). Fout: geen straf, het woord komt terug. Overslaan mag. Alleen in de wekelijkse uitdaging.
+
+## 12. Eerbewijzen en docentoverzicht
+Eerbewijzen (categorie algemeen): *Weer gewoon* (10 lastige woorden weer gewoon, in welke modus ook; teller `P.stats.hwCleared`, via een wrapper om `hwNote`), *Geheugenmeester* (50), *Vlijtige leerling* (10 Schola-rondes), *Quaestor* (10 Quaestio goed), *Trouwe metgezel*, *Alleskunner* (Grote Reis + 10 woorden + een foutloze Schola-ronde).
+Docent: op het klasscherm een tabel *Lastige woorden van de klas* (top 15, aantal leerlingen en gemiddelde moeilijkheid, geen namen), berekend uit de al geladen leerlingprofielen (`identities/{klas}/{lid}/hardWords`). Knop *Maak een woordenlijst*: gedeelde docentlijst van de lastigste 20 Latijnse woorden (zichtbaar in Castra-woordenquiz en Ludus). Geen nieuwe Firebase-gegevens of regels.
+
 ## Nog niet gebouwd (ideeën)
-Total War ↔ Castra (volkbonus per klasbeschaving, trainingspunten uit weekuitdagingen), een hoofdmenu-brede "Hodie" en een wekelijks thema over alle modi, Chronica-helden in Castra, een eerbewijs per modus-combinatie.
+Chronica-helden in Castra, een hoofdmenu-brede "Hodie" en een wekelijks thema over alle modi, Woord van de dag over alle modi, gedeeld resultaatblok. (Total War ↔ Castra bewust niet: leerlingen kiezen daar zelf geen volk.)

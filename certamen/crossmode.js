@@ -195,7 +195,7 @@ function cxCastraSectionHTML(){
     return `<div class="eyebrow l" style="margin-top:20px">🏕️ Castra Heroum</div>
     <div class="panel">
       <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px">
-        ${av?`<div style="flex:0 0 auto">${av}</div>`:""}
+        ${av?`<div style="flex:0 0 auto">${av}</div>`:""}${(typeof cxCompanionHTML==="function"&&cxCompanionHTML(48))?`<div title="Je metgezel" style="flex:0 0 48px;width:48px;height:48px;position:relative;margin-left:-6px">${cxCompanionHTML(48)}</div>`:""}
         <div style="flex:1;min-width:0"><div style="font-size:18px;font-weight:700">Castra-niveau ${lv.L}</div>
           ${t?`<div class="pill" style="margin:4px 0 0">${esc(t.title)}</div>`:`<div class="note">Ontmoet soldaten in de codex om een titel te verdienen.</div>`}</div></div>
       <div style="height:8px;background:var(--stone3);border-radius:4px;overflow:hidden"><div style="height:100%;width:${lv.pct}%;background:linear-gradient(90deg,var(--hi-dim),var(--hi-bright));border-radius:4px"></div></div>
