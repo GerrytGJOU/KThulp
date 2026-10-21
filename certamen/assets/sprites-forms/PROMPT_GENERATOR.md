@@ -62,16 +62,16 @@ Regels voor die regel:
 - Model: ChatGPT voor alle ankers (prompt 0), alle helden-portretten (prompt P) en voor zoveel bladen als mijn dagelijkse limiet toelaat, te beginnen bij de eerste regio's (Romeinen, Grieken, Trojanen). Gemini voor de rest. Vraag aan het begin van elke batch welk model ik voor die batch gebruik (en hoeveel ChatGPT-afbeeldingen ik nog heb) en schrijf de GEBRUIK-regels daarop. Geef bij elke Gemini-prompt ook aan: later eventueel vervangen door een ChatGPT-versie.
 - Prompt 0 (anker): UPLOAD niets (behalve bij de Romeinen: het bestaande anker, rom_anker.png). OPSLAAN ALS [volkscode]_anker.png.
 - Blad A: UPLOAD verplicht het anker van het volk ([volkscode]_anker.png). Is de vorm een evolutie van een vorm waarvan blad A al klaar is (zie "ontwikkelt uit"), upload dan ook dat blad A van de ouder, zodat de lijn herkenbaar blijft. Voor een held: upload het portret van die held ([id]_P.png) in plaats van het volksanker. OPSLAAN ALS [vorm-id]_A.png.
-- Blad B: UPLOAD het blad A van dezelfde vorm (zodat het dezelfde figuur is) en het volksanker. Voor een held: het portret [id]_P.png en blad A. OPSLAAN ALS [vorm-id]_B.png.
+- Blad B: UPLOAD het blad A van dezelfde vorm (zodat het dezelfde figuur is) en een al klaar blad B van dezelfde soort, bij voorkeur het B van de rekruut van het volk ([volkscode-rekruut]_B.png), NIET het anker (Gemini maakt anders zes cellen in plaats van drie). Het prompt zegt dat het eerste beeld alleen voor het uiterlijk is en het tweede voor het formaat (één rij van drie cellen). Het allereerste B van een volk (de rekruut) gebruikt wel het anker en het blad A van de rekruut, met ChatGPT. Voor een held: het portret [id]_P.png en blad A. OPSLAAN ALS [vorm-id]_B.png.
 - Prompt P (held): UPLOAD niets. Maak het portret altijd eerst; de helden-bladen A en B komen daarna, met het portret als referentie. OPSLAAN ALS [held-id]_P.png (bijvoorbeeld hero_aeneas_P.png).
 - Open voor elke prompt een nieuw gesprek in het beeldmodel (zo glijdt de stijl niet weg in een lang gesprek) en upload de genoemde bestanden in dat nieuwe gesprek voordat ik het prompt plak. Als het model een ander formaat teruggeeft (bijvoorbeeld 1264 x 848) is dat prima zolang de verhouding klopt (3:2 voor blad A, 3:1 voor blad B).
 
 NA HET GENEREREN (zet dit onderaan elke batch)
-Geef de snijcommando's, met de bestanden in een map "bron" naast de repo. Voor elke afbeelding:
-  python certamen/tools/castra-sprites-slice.py bron/[vorm-id]_A.png [vorm-id] a certamen/assets/sprites-forms
-  python certamen/tools/castra-sprites-slice.py bron/[vorm-id]_B.png [vorm-id] b certamen/assets/sprites-forms
-  python certamen/tools/castra-sprites-slice.py bron/[held-id]_P.png [held-id] portrait certamen/assets/sprites-forms
-Voeg "--boost" toe aan het commando voor afbeeldingen die met Gemini zijn gemaakt (meer kleur en contrast). Het resultaat controleer ik in de bijgeleverde voorbeeldplaatjes (_preview_a, _preview_b) voordat de sprites in het spel komen.
+Geef de snijcommando's, met de bestanden in de map "_sprites-bron" in de repo-root. Voor elke afbeelding:
+  python certamen/tools/castra-sprites-slice.py _sprites-bron/[vorm-id]_A.png [vorm-id] a certamen/assets/sprites-forms
+  python certamen/tools/castra-sprites-slice.py _sprites-bron/[vorm-id]_B.png [vorm-id] b certamen/assets/sprites-forms
+  python certamen/tools/castra-sprites-slice.py _sprites-bron/[held-id]_P.png [held-id] portrait certamen/assets/sprites-forms
+Snij standaard ZONDER "--boost": de Gemini-bladen zijn al fel genoeg (boost = kleur x1,35, contrast x1,18, helderheid x1,12 en maakt ze te fel, bevonden 2026-10-21). Gebruik "--boost" alleen voor een blad dat echt flauw is. Het resultaat controleer ik in de bijgeleverde voorbeeldplaatjes (_preview_a, _preview_b) voordat de sprites in het spel komen.
 
 HOE JE MET MIJ WERKT
 1. Vraag eerst welke batch ik wil (een volk, een tak of de helden) en of ik het anker al heb. Werk in batches van hooguit 8 vormen per antwoord om fouten te voorkomen; ik zeg "volgende" voor de rest.
