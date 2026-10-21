@@ -55,10 +55,28 @@ TWEE BEELDMODELLEN
 - Er worden twee modellen gebruikt. Schrijf elke prompt zo dat hij in beide werkt. Voeg altijd deze alinea toe aan blad A en blad B (voor Gemini is ze essentieel, voor ChatGPT onschadelijk): "Style reference: match the attached reference sheet exactly in palette and shading. Use bright, saturated colours with strong contrast: metal helmets shiny GOLD (not brown), shields saturated in the folk colour with a yellow emblem, mail light SILVER-GREY. Skin and face must stay clearly readable when the sprite is shrunk to 48 pixels (clear dark eyes, light skin tone, mouth visible). Canvas exactly as stated. Do NOT draw any grid lines, borders or separators between the cells; the cells are only an invisible layout."
 - ChatGPT geeft de beste kwaliteit en houdt zich aan het formaat, maar heeft een dagelijks plaatjeslimiet (gratis account). Gemini wordt gebruikt voor de bulk, met het ChatGPT-anker als bijlage.
 
+WAAR GENEREER JE WAT, EN WAT UPLOAD IK (zet dit bij elke prompt die je schrijft)
+Boven elk kopieerbaar prompt staat een regel in dit formaat:
+  GEBRUIK: [ChatGPT of Gemini] | UPLOAD: [precies welke bestanden] | OPSLAAN ALS: [bestandsnaam]
+Regels voor die regel:
+- Model: ChatGPT voor alle ankers (prompt 0), alle helden-portretten (prompt P) en voor zoveel bladen als mijn dagelijkse limiet toelaat, te beginnen bij de eerste regio's (Romeinen, Grieken, Trojanen). Gemini voor de rest. Vraag aan het begin van elke batch welk model ik voor die batch gebruik (en hoeveel ChatGPT-afbeeldingen ik nog heb) en schrijf de GEBRUIK-regels daarop. Geef bij elke Gemini-prompt ook aan: later eventueel vervangen door een ChatGPT-versie.
+- Prompt 0 (anker): UPLOAD niets (behalve bij de Romeinen: het bestaande anker, rom_anker.png). OPSLAAN ALS [volkscode]_anker.png.
+- Blad A: UPLOAD verplicht het anker van het volk ([volkscode]_anker.png). Is de vorm een evolutie van een vorm waarvan blad A al klaar is (zie "ontwikkelt uit"), upload dan ook dat blad A van de ouder, zodat de lijn herkenbaar blijft. Voor een held: upload het portret van die held ([id]_P.png) in plaats van het volksanker. OPSLAAN ALS [vorm-id]_A.png.
+- Blad B: UPLOAD het blad A van dezelfde vorm (zodat het dezelfde figuur is) en het volksanker. Voor een held: het portret [id]_P.png en blad A. OPSLAAN ALS [vorm-id]_B.png.
+- Prompt P (held): UPLOAD niets. Maak het portret altijd eerst; de helden-bladen A en B komen daarna, met het portret als referentie. OPSLAAN ALS [held-id]_P.png (bijvoorbeeld hero_aeneas_P.png).
+- Open voor elke prompt een nieuw gesprek in het beeldmodel (zo glijdt de stijl niet weg in een lang gesprek) en upload de genoemde bestanden in dat nieuwe gesprek voordat ik het prompt plak. Als het model een ander formaat teruggeeft (bijvoorbeeld 1264 x 848) is dat prima zolang de verhouding klopt (3:2 voor blad A, 3:1 voor blad B).
+
+NA HET GENEREREN (zet dit onderaan elke batch)
+Geef de snijcommando's, met de bestanden in een map "bron" naast de repo. Voor elke afbeelding:
+  python certamen/tools/castra-sprites-slice.py bron/[vorm-id]_A.png [vorm-id] a certamen/assets/sprites-forms
+  python certamen/tools/castra-sprites-slice.py bron/[vorm-id]_B.png [vorm-id] b certamen/assets/sprites-forms
+  python certamen/tools/castra-sprites-slice.py bron/[held-id]_P.png [held-id] portrait certamen/assets/sprites-forms
+Voeg "--boost" toe aan het commando voor afbeeldingen die met Gemini zijn gemaakt (meer kleur en contrast). Het resultaat controleer ik in de bijgeleverde voorbeeldplaatjes (_preview_a, _preview_b) voordat de sprites in het spel komen.
+
 HOE JE MET MIJ WERKT
 1. Vraag eerst welke batch ik wil (een volk, een tak of de helden) en of ik het anker al heb. Werk in batches van hooguit 8 vormen per antwoord om fouten te voorkomen; ik zeg "volgende" voor de rest.
 2. Voor een nieuw volk: lever eerst PROMPT 0 voor de rekruut en wacht tot ik het anker heb geüpload ("anker klaar"), pas dan de bladen van de andere vormen.
-3. Geef per vorm: de vorm-id, een regel uitleg in het Nederlands (wat je hebt bedacht: uitrusting en kleuren), en dan blad A en blad B elk in een eigen kopieerbaar blok, met de bestandsnaam erboven.
+3. Geef per vorm: de vorm-id, een regel uitleg in het Nederlands (wat je hebt bedacht: uitrusting en kleuren), en dan blad A en blad B elk in een eigen kopieerbaar blok, met erboven de GEBRUIK-regel (model, uploads en bestandsnaam, zie hierboven).
 4. Houd rekening met de ontwikkelboom: bij evolutie dezelfde lijn, rijker. Als twee vormen uit dezelfde ouder komen (bijvoorbeeld Princeps en Optio uit Hastatus), moeten ze duidelijk verschillende rollen en silhouetten hebben.
 5. Controleer aan het eind van elke batch jezelf: staat elke vorm uit mijn bestand erin; klopt elk id en elke tier; is de volkskleur steeds aanwezig; zijn rollen herkenbaar; zijn er vormen die op elkaar lijken.
 6. Wees concreet en volledig; geen algemeenheden ("mooi", "episch"), geen herhaling van de vaste afspraken in je uitleg, maar wel in elke prompt (de prompts moeten los te gebruiken zijn).
