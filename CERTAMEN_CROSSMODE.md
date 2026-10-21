@@ -55,6 +55,8 @@ Het hoofdmenu toont bovenaan een knop naar de laatst geopende modus (Castra, Chr
 ## 9. Metgezel
 In het Castra-menu (Milites/Heroes, tik een eenheid open) kies je 🐾 een soldaat of held als metgezel. Opgeslagen in `CASTRA.companion` (meegaand met de save) en `cx_companion_v1` (voor schermen buiten Castra). Zichtbaar in de Castra-sectie van het profiel en naast de avatar op de Battle Mode-tegel "Mijn profiel". Puur cosmetisch. Verdwijnt als de soldaat niet meer bestaat.
 
+De metgezel stelt in het kamp hooguit 3 keer per dag (minimaal 20 minuten tussen twee vragen) een vraag over een lastig woord, met een Later-knop; goed geeft `hwNote` goed en 1 profiel-XP (dagplafond), fout laat het woord lastig. Geen melding buiten het kamp.
+
 ## 10. Schola (Castra-menu)
 Menu-onderdeel *Schola*: 8 vragen (tot 6 eigen lastige woorden, aangevuld met nieuwe woorden uit de quizlijst). Goed = `hwNote(…, true)` (woord wordt minder lastig, in alle modi), fout = `hwNote(…, false)`. Vanaf 5 goed: profiel-XP volgens het dagplafond van §3 (`castraMasterXp`) plus Castra-XP.
 
