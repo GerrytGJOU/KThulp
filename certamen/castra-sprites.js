@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — SPRITES PER VORM (M6 van CASTRA_TROEPENBOMEN.md)
+   CASTRA HEROUM — SPRITES PER VORM (M6 van CASTRA_TROEPENBOMEN.md)
    ----------------------------------------------------------------------------
    Per vorm drie optionele afbeeldingen in assets/sprites-forms/:
      [vorm-id]_battle_front.png  96x96  (vijand in het beurtgevecht)

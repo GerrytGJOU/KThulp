@@ -1,12 +1,12 @@
 /* ============================================================================
-   CASTRA HERONUM — DE WERELD VAN LATIUM (jagen zoals in Pokémon)
+   CASTRA HEROUM — DE WERELD VAN LATIUM (jagen zoals in Pokémon)
    ----------------------------------------------------------------------------
    Poort: porta decumana. Je loopt met je avatar door Latium; in hoog gras
    (donkergroen) kan elke stap een ontmoeting starten — dan volgt het bestaande
    Latijnse verkenningsbericht + gevecht uit castra-venatio.js. Het terrein van
    de ontmoeting hangt af van de zone waarin het gras ligt (silva, campus, via,
    Tiber-oever): zo komen sommige soldaten alleen in bepaald terrein voor.
-   Kaart: vast gegenereerd (seed), tegels uit castra-map.js. Ontwerp: CASTRA_HERONUM.md.
+   Kaart: vast gegenereerd (seed), tegels uit castra-map.js. Ontwerp: CASTRA_HEROUM.md.
    Laadt NA castra-map.js, castra.js en castra-venatio.js.
    ============================================================================ */
 

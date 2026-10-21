@@ -18,7 +18,7 @@ SCREENS.home = function(){
     <button class="tile" onclick="go('castraHome')">
       <span class="corner">${iconSVG("tent",88,"currentColor")}</span>
       <span class="ic">${iconSVG("tent",44,"currentColor")}</span>
-      <h3>🏕️ Castra Heronum <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
+      <h3>🏕️ Castra Heroum <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
       <p>Bouw je kamp, verzamel soldaten en helden en trek erop uit in Latium, Graecia, Troia, Gallia, Aegyptus, Persis, Africa, Roma, Laconia, Germania en Themiscyra — alles in het Latijn.</p>
     </button>
     <button class="tile" onclick="go('totalWar')">
@@ -59,7 +59,7 @@ SCREENS.home = function(){
   ${foot()}`);
 };
 
-/* Castra Heronum: SCREENS.castraHome staat in castra.js. */
+/* Castra Heroum: SCREENS.castraHome staat in castra.js. */
 
 /* ---- HOST: spel kiezen ---- */
 function startHost(){ ROLE="host"; go("hostGamePick"); }
@@ -1908,7 +1908,7 @@ function tpRenderChronicaAnalytics(){
   }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon Chronica-taalstatistieken niet laden.</div></div>`; });
 }
 
-// Castra Heronum — vertaalhulp (Latijn lezen), geaggregeerd per klas/maand. Geschreven door
+// Castra Heroum — vertaalhulp (Latijn lezen), geaggregeerd per klas/maand. Geschreven door
 // castraHelpSync() (castra-latin.js); nooit gekoppeld aan een leerling. Woorden die veel
 // worden opgezocht zijn de woorden die de klas nog niet kent; zinnen die vaak worden
 // vertaald zijn te moeilijk of te nieuw.
@@ -1922,18 +1922,18 @@ function tpRenderCastraAnalytics(){
     const words=rows.filter(r=>r.k==="w").sort((a,b)=>b.c-a.c).slice(0,12);
     const sents=rows.filter(r=>r.k==="s").sort((a,b)=>b.c-a.c).slice(0,8);
     if(!words.length && !sents.length){
-      cont.innerHTML=`<div class="panel"><h3>Castra Heronum — vertaalhulp deze maand</h3><div class="note">Nog geen gegevens — speel Castra Heronum ingelogd met deze klascode.</div></div>`;
+      cont.innerHTML=`<div class="panel"><h3>Castra Heroum — vertaalhulp deze maand</h3><div class="note">Nog geen gegevens — speel Castra Heroum ingelogd met deze klascode.</div></div>`;
       return;
     }
     const tbl=(title,list,col)=>list.length?`<h4 style="margin:12px 0 4px">${title}</h4>
       <table class="bm-tbl"><thead><tr><th>${col}</th><th>Keer opgezocht</th></tr></thead><tbody>
       ${list.map(r=>`<tr><td>${esc(r.p)}</td><td>${r.c}×</td></tr>`).join("")}</tbody></table>`:"";
-    cont.innerHTML=`<div class="panel"><h3>Castra Heronum — vertaalhulp deze maand</h3>
+    cont.innerHTML=`<div class="panel"><h3>Castra Heroum — vertaalhulp deze maand</h3>
       ${tbl("Woorden — meest opgezocht",words,"Woord")}${tbl("Zinnen — meest vertaald",sents,"Zin")}</div>`;
   }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon Castra-statistieken niet laden.</div></div>`; });
 }
 
-// Castra Heronum — tower defence-meetpunten voor de klastest, geaggregeerd per klas/maand (castra-metrics.js).
+// Castra Heroum — tower defence-meetpunten voor de klastest, geaggregeerd per klas/maand (castra-metrics.js).
 function tpRenderCastraTD(){
   const cont=el("tpCastraTD"); if(!cont) return;
   const klas=_tpCurrentClass;
@@ -1942,7 +1942,7 @@ function tpRenderCastraTD(){
   fbDB.ref("classAnalyticsCastraTD/"+klas+"/"+month).once("value").then(snap=>{
     const D=snap.val()||{}, g=(k,f)=>((D[k]||{})[f]||0);
     const mids=Object.keys(D).filter(k=>k.indexOf("m_")===0).map(k=>k.slice(2));
-    if(!mids.length){ cont.innerHTML=`<div class="panel"><h3>Castra Heronum — tower defence deze maand</h3><div class="note">Nog geen gegevens — speel een missie ingelogd met deze klascode.</div></div>`; return; }
+    if(!mids.length){ cont.innerHTML=`<div class="panel"><h3>Castra Heroum — tower defence deze maand</h3><div class="note">Nog geen gegevens — speel een missie ingelogd met deze klascode.</div></div>`; return; }
     const pct=(a,b)=>b>0?Math.round(100*a/b)+"%":"–";
     const nm=id=>{ if(id==="weekly") return "Wekelijkse uitdaging"; const m=(typeof CASTRA_P_MISSIONS!=="undefined")?CASTRA_P_MISSIONS.find(x=>x.id===id):null; return m?m.nm:id; };
     const order=(typeof CASTRA_P_MISSIONS!=="undefined")?CASTRA_P_MISSIONS.map(m=>m.id):mids;
@@ -1955,7 +1955,7 @@ function tpRenderCastraTD(){
     const types=["inf","rng","cav","sup","myth"].filter(t=>g("ty_"+t,"n")), totT=types.reduce((a,t)=>a+g("ty_"+t,"n"),0);
     const syn=Object.keys(D).filter(k=>k.indexOf("y_")===0), cmd=Object.keys(D).filter(k=>k.indexOf("cmd_")===0);
     const days=Object.keys(D).filter(k=>k.indexOf("d_")===0).sort(), ret=["new","d1","d2_6","d7"].map(k=>[k,g("ret_"+k,"n")]);
-    cont.innerHTML=`<div class="panel"><h3>Castra Heronum — tower defence deze maand</h3>
+    cont.innerHTML=`<div class="panel"><h3>Castra Heroum — tower defence deze maand</h3>
       <table class="bm-tbl"><thead><tr><th>Missie</th><th>Gestart</th><th>Gewonnen</th><th>Duur (gem.)</th><th>Afgebroken</th><th>Ander team dan vorige poging</th><th>Bevelen per gevecht</th></tr></thead><tbody>${rows}</tbody></table>
       ${grp("e_","Missieregels",edNames)}${grp("r_","Vijandrollen",roNames)}
       ${(()=>{ const fbk=[["hard","te moeilijk"],["unclear","onduidelijk"],["setup","opstelling"],["long","te lang"],["other","anders"]], rowsFb=mids.filter(id=>fbk.some(f=>g("m_"+id,"fb_"+f[0]))); return rowsFb.length?`<h4 style="margin:12px 0 4px">Waarom een missie moeilijk was (optionele vraag na verlies)</h4><div class="note">${rowsFb.map(id=>esc(nm(id))+": "+fbk.filter(f=>g("m_"+id,"fb_"+f[0])).map(f=>f[1]+" "+g("m_"+id,"fb_"+f[0])).join(", ")).join("<br>")}</div>`:""; })()}
@@ -1968,7 +1968,7 @@ function tpRenderCastraTD(){
   }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon de tower defence-gegevens niet laden.</div></div>`; });
 }
 
-// Castra Heronum — Legio-evenement starten voor deze klas (castra-legio.js: castraLegioTeacher*).
+// Castra Heroum — Legio-evenement starten voor deze klas (castra-legio.js: castraLegioTeacher*).
 // Lobby -> de leerlingen melden zich ("Adsum!") in de principia -> "Start het gevecht" (10 s aftelling).
 let _tpLegioTimer = null;
 function tpRenderCastraLegio(){
@@ -1982,7 +1982,7 @@ function tpRenderCastraLegio(){
     else if(ev.status==="lobby") body=`<div class="note"><b>${esc(ev.name||"Legio")}</b> — lobby. Aangemeld: <b>${n}</b>${n?" ("+Object.values(players).map(p=>esc(p.nm)).join(", ")+")":""}</div>
       <button class="btn btn-gold" ${n<1?"disabled":""} onclick="tpLegioDo('launch')">Start het gevecht (10 s aftelling)</button> <button class="btn" onclick="tpLegioDo('end')">Annuleer</button>`;
     else body=`<div class="note"><b>${esc(ev.name||"Legio")}</b> — loopt (${ev.players||n} deelnemers). Het gevecht verloopt automatisch; leerlingen kunnen tot het eind meedoen.</div><button class="btn" onclick="tpLegioDo('end')">Beëindig en wis het evenement</button>`;
-    cont.innerHTML=`<div class="panel"><h3>Castra Heronum — Legio (klassenevenement)</h3>${body}</div>`;
+    cont.innerHTML=`<div class="panel"><h3>Castra Heroum — Legio (klassenevenement)</h3>${body}</div>`;
   };
   const poll=()=>{
     if(!el("tpCastraLegio")){ clearInterval(_tpLegioTimer); return; }

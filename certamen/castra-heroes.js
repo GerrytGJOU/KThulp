@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — HELDEN (data, loyaliteit, toewijzing, gesprekken)
+   CASTRA HEROUM — HELDEN (data, loyaliteit, toewijzing, gesprekken)
    ----------------------------------------------------------------------------
    Een held is uniek en evolueert niet: vaste basiswaarden die per level groeien.
    Je vindt hem via een spoor (venatio) of in de wereld, doorloopt zijn

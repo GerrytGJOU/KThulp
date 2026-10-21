@@ -1,12 +1,12 @@
-CASTRA HERONUM — TOP-DOWN-SPRITES (loopsprites van de avatar)
+CASTRA HEROUM — TOP-DOWN-SPRITES (loopsprites van de avatar)
 =========================================================
 
 Hier komen dezelfde avatar-onderdelen als in ../sprites/ (de battler-sprites van
-Battle Mode), maar dan als top-down loopsprite voor Castra Heronum.
+Battle Mode), maar dan als top-down loopsprite voor Castra Heroum.
 
 BESTANDSNAMEN
   Exact dezelfde naam als in ../sprites/ (zie de lijst hieronder). Zo werkt elke
-  keuze uit de Certamen-avatareditor vanzelf ook in Castra Heronum: huid, ogen,
+  keuze uit de Certamen-avatareditor vanzelf ook in Castra Heroum: huid, ogen,
   haar, baard, armor, helm, cape, schild, wapen, extra, legendarische helden.
 
 FORMAAT (RPG Maker MV character sheet, één personage per bestand)
@@ -36,7 +36,7 @@ HAAR
   Levert de generator een nieuwe stijl: beide bestanden aanleveren, dan samenvoegen.
 
 WAPENS
-  Er zijn bewust geen top-down wapensprites; Castra Heronum toont geen wapen.
+  Er zijn bewust geen top-down wapensprites; Castra Heroum toont geen wapen.
 
 CAPES EN VLEUGELS
   Capes (kort/lang) bestaan alleen als rij 'omhoog'; vleugels hebben ook voor- en
@@ -55,7 +55,7 @@ GEKLEURDE HARNASSEN
   nieuw herkleurd harnas bij: lever ook de ongekleurde side view in _bron/ aan.
 
 ZOLANG BESTANDEN ONTBREKEN
-  Heeft Castra Heronum nog geen base_<huidtint>.png voor een avatar, dan toont het
+  Heeft Castra Heroum nog geen base_<huidtint>.png voor een avatar, dan toont het
   spel de battler-avatar als vervanging. Je kunt dus stap voor stap uploaden.
   Na het vervangen van een PNG: SPRITE_VER in castra-avatar.js ophogen.
 

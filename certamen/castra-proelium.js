@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — PROELIUM (tower defence met je eigen soldaten)
+   CASTRA HEROUM — PROELIUM (tower defence met je eigen soldaten)
    ----------------------------------------------------------------------------
    Poort: porta praetoria -> campagnelijst -> gevecht. Vijanden lopen een pad af
    naar je kamp; jij plaatst je soldaten als verdedigers (alle soldaten zijn
@@ -9,7 +9,7 @@
    infanterie). Zonder soldaat verdedigt de dux zelf.
 
    DE SIMULATIE IS DETERMINISTISCH (voorbereiding op de coöperatieve
-   lockstep-modus in de Legio, zie CASTRA_HERONUM.md): vaste tick (50 ms),
+   lockstep-modus in de Legio, zie CASTRA_HEROUM.md): vaste tick (50 ms),
    gehele getallen in duizendste tegels, geen Math.random — alleen de seeded
    RNG van de missie. castraPSim()/castraPStep() raken de DOM niet aan.
    Laadt NA castra-map.js, castra-venatio.js en castra-campus.js.
@@ -45,7 +45,7 @@ const CASTRA_P_MAPS = {
 };
 
 /* Missies. waves: [ [ {line: vorm-id, n, gap, lvl} ] ] — gap = ticks tussen twee vijanden. De vijanden zijn vormen uit de
-   troepenbomen (tier en level groeien mee met de regio); hpMult stemt de zwaarte af (gesimuleerd, zie CASTRA_HERONUM.md). */
+   troepenbomen (tier en level groeien mee met de regio); hpMult stemt de zwaarte af (gesimuleerd, zie CASTRA_HEROUM.md). */
 const _fid = (v,n)=>castraFormByName(v,n).id;
 const CASTRA_P_MISSIONS = [
   { id:"m1", nm:"Defensio castrorum", nl:"De verdediging van het kamp", map:"a", seed:1101, hpMult:0.45,

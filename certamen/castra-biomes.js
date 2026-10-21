@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — BIOMEN PER REGIO
+   CASTRA HEROUM — BIOMEN PER REGIO
    ----------------------------------------------------------------------------
    Elke regio krijgt een eigen landschap, zonder nieuwe kaartlogica: ondergrond-
    vlekken, boomsoort en -dichtheid, decor (cactussen, paddenstoelen, rotsen,

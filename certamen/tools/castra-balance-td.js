@@ -1,4 +1,4 @@
-/* Headless balansproef voor de tower defence (Castra Heronum).
+/* Headless balansproef voor de tower defence (Castra Heroum).
    Gebruik in de browser met certamen/index.html geladen (dev-server):
      eval(await (await fetch("tools/castra-balance-td.js")).text());
      CBAL.report();            // levens over per missie met het referentieteam

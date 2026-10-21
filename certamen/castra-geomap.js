@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — WERELDKAART OP BASIS VAN DE TOTAL WAR-KAART
+   CASTRA HEROUM — WERELDKAART OP BASIS VAN DE TOTAL WAR-KAART
    ----------------------------------------------------------------------------
    Dezelfde Romeinse provinciekaart als in Total War (map/provinces.svg + provinces.json),
    aangepast: de provincies waar Castra-regio's liggen kleuren mee met je voortgang

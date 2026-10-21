@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — PROELIUM: SCHERMEN (campagnelijst + gevecht)
+   CASTRA HEROUM — PROELIUM: SCHERMEN (campagnelijst + gevecht)
    ----------------------------------------------------------------------------
    Simulatie: castra-proelium.js (deterministisch). Hier alleen weergave en
    bediening: soldaat kiezen -> tegel tikken om te plaatsen, tik op een eigen

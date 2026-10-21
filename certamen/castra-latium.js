@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — LATIUM UITGEBOUWD: KLUIZENAAR, WOORDENQUIZ, DAGELIJKSE JACHTOPDRACHT
+   CASTRA HEROUM — LATIUM UITGEBOUWD: KLUIZENAAR, WOORDENQUIZ, DAGELIJKSE JACHTOPDRACHT
    ----------------------------------------------------------------------------
    Opdrachten die bij de grotere Latium-kaart en zijn binnenruimtes horen (kunnen
    later naar andere regio's worden uitgerold):

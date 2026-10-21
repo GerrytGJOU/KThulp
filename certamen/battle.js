@@ -1272,7 +1272,7 @@ SCREENS.battleFAQ = function(){
       <li><b>Boek III en V:</b> +5% munten per boek (samen maximaal +10%).</li>
       <li><b>Boek IV:</b> je eerste antwoord telt voor AP altijd als goed.</li>
       <li><b>Finale:</b> +1 AP op elk goed antwoord.</li></ul>
-    <div class="note" style="margin-top:6px">In <b>Castra Heronum</b> kun je een metgezel kiezen die naast je avatar verschijnt, en in de Schola oefen je je lastige woorden. Dat geeft geen voordeel in een gevecht.</div>`)}
+    <div class="note" style="margin-top:6px">In <b>Castra Heroum</b> kun je een metgezel kiezen die naast je avatar verschijnt, en in de Schola oefen je je lastige woorden. Dat geeft geen voordeel in een gevecht.</div>`)}
 
   ${(typeof bmSkillTreesVisible==="function"&&bmSkillTreesVisible())?sec("🌳 Skill-trees",false,`
     <div class="note">Elke klasse heeft een eigen <b>skill-tree</b>. Je opent hem via <b>Mijn profiel</b> (tik op

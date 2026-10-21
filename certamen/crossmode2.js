@@ -12,7 +12,7 @@
 /* ---------- 8. Verder spelen ---------- */
 const CX2_LAST_KEY = "cx_last_mode_v1";
 const CX2_MODES = {
-  castraHome:   { nm:"Castra Heronum",     icon:"🏕️", sub:"Terug naar je kamp." },
+  castraHome:   { nm:"Castra Heroum",     icon:"🏕️", sub:"Terug naar je kamp." },
   singlePlayer: { nm:"Chronica Classica", icon:"📜", sub:"Ga verder met je reis." },
   battleHome:   { nm:"Battle Mode",       icon:"⚔️", sub:"Terug naar de arena." },
   totalWar:     { nm:"Total War",         icon:"🗺️", sub:"Terug naar de veldtocht." },
@@ -51,7 +51,7 @@ if(typeof SCREENS!=="undefined" && SCREENS.home){
   [
     { id:"weer_gewoon",   nm:"Weer gewoon",       ds:"10 lastige woorden weer gewoon gemaakt (in welke modus dan ook)", icon:"owl",    cat:"algemeen" },
     { id:"geheugenmeester",nm:"Geheugenmeester",  ds:"50 lastige woorden weer gewoon gemaakt",                         icon:"crown",  cat:"algemeen" },
-    { id:"schola_vlijt",  nm:"Vlijtige leerling", ds:"10 rondes in de Schola van Castra Heronum afgerond",              icon:"column", cat:"algemeen" },
+    { id:"schola_vlijt",  nm:"Vlijtige leerling", ds:"10 rondes in de Schola van Castra Heroum afgerond",              icon:"column", cat:"algemeen" },
     { id:"quaestor",      nm:"Quaestor",          ds:"10 Quaestio-vragen goed in de wekelijkse uitdaging",             icon:"torch",  cat:"algemeen" },
     { id:"trouwe_metgezel",nm:"Trouwe metgezel",  ds:"Een metgezel gekozen uit je soldaten of helden",                 icon:"horse",  cat:"algemeen" },
     { id:"alleskunner",   nm:"Alleskunner",       ds:"Grote Reis, 10 lastige woorden verslagen en een foutloze Schola-ronde", icon:"laurel", cat:"algemeen" }
@@ -326,14 +326,14 @@ function cxClassHardAgg(){
 function cxRenderClassHard(){
   const cont = el("tpHardWords"); if(!cont) return;
   const A = cxClassHardAgg();
-  if(!A.withHw){ cont.innerHTML = `<div class="panel"><h3>Lastige woorden van de klas</h3><div class="note">Nog geen gegevens: lastige woorden verschijnen zodra ingelogde leerlingen woorden fout beantwoorden (in Battle Mode, Training, Vrij oefenen of Castra Heronum).</div></div>`; return; }
+  if(!A.withHw){ cont.innerHTML = `<div class="panel"><h3>Lastige woorden van de klas</h3><div class="note">Nog geen gegevens: lastige woorden verschijnen zodra ingelogde leerlingen woorden fout beantwoorden (in Battle Mode, Training, Vrij oefenen of Castra Heroum).</div></div>`; return; }
   const top = A.rows.slice(0,15);
   cont.innerHTML = `<div class="panel"><h3>Lastige woorden van de klas</h3>
     <div class="note">${A.withHw} van ${A.students} leerlingen hebben lastige woorden. Alleen aantallen per woord, geen namen. Bron: alle modi samen.</div>
     <table class="bm-tbl"><thead><tr><th>Woord</th><th>Betekenis</th><th>Leerlingen</th><th>Gem. moeilijkheid</th></tr></thead><tbody>
     ${top.map(r=>`<tr><td>${esc(r.la)}</td><td>${esc(r.nl)}</td><td>${r.n}</td><td>${r.avg.toFixed(1)} / ${HW_MAX_SCORE}</td></tr>`).join("")}</tbody></table>
     <button class="btn btn-gold" style="margin-top:10px" onclick="cxMakeClassList()">Maak een woordenlijst van de lastigste woorden</button>
-    <div class="note" style="margin-top:4px">De lijst (max. 20 Latijnse woorden) wordt gedeeld met je klassen: leerlingen zien hem in Castra Heronum (woordenquiz) en in Ludus.</div></div>`;
+    <div class="note" style="margin-top:4px">De lijst (max. 20 Latijnse woorden) wordt gedeeld met je klassen: leerlingen zien hem in Castra Heroum (woordenquiz) en in Ludus.</div></div>`;
 }
 function cxMakeClassList(){
   const words = cxClassHardAgg().rows.filter(r=>r.known && r.nl).slice(0,20).map(r=>({ la:r.la, nl:r.nl }));

@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — WEKELIJKSE UITDAGING (Hebdomada)
+   CASTRA HEROUM — WEKELIJKSE UITDAGING (Hebdomada)
    ----------------------------------------------------------------------------
    Elke ISO-week (in UTC, dus overal dezelfde week) een nieuwe tactische puzzel, volledig
    lokaal gegenereerd zonder server of handwerk, en dezelfde voor iedereen met dezelfde

@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — BINNENRUIMTES (GROTTEN EN GEBOUWEN) ALS EXTRA LAAG
+   CASTRA HEROUM — BINNENRUIMTES (GROTTEN EN GEBOUWEN) ALS EXTRA LAAG
    ----------------------------------------------------------------------------
    Een regio kan deuren hebben (CASTRA_WORLDS[regio].doors): loop je op een deurtegel
    dan kom je in een binnenruimte — een kleine eigen kaart met eigen objecten en,

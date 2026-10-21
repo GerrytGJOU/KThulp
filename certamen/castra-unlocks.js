@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — CASTRA-NIVEAU EN GELEIDELIJKE ONTGRENDELINGEN
+   CASTRA HEROUM — CASTRA-NIVEAU EN GELEIDELIJKE ONTGRENDELINGEN
    ----------------------------------------------------------------------------
    Om het tutorial overzichtelijk te houden komen de systemen één voor één in
    het spel. Je spelersniveau ("Castra-niveau") stijgt door te spelen (jagen,

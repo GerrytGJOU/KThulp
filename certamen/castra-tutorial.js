@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — DIALOOGVENSTER EN TUTORIAL
+   CASTRA HEROUM — DIALOOGVENSTER EN TUTORIAL
    ----------------------------------------------------------------------------
    Dialoogvenster zoals in RPG Maker: onderaan het scherm een donker tekstvak met
    witte rand, portret van de spreker links, Latijnse tekst (typmachine-effect,

@@ -1,11 +1,11 @@
 /* ============================================================================
-   CASTRA HERONUM — VENATIO (jagen)
+   CASTRA HEROUM — VENATIO (jagen)
    ----------------------------------------------------------------------------
    Poort: porta decumana. Regio Latium (andere regio's staan op slot).
    Loop: Venare -> Latijns verkenningsbericht -> kies welke soldaat je stuurt
    (het bericht noemt het type vijand in het Latijn: wie niet leest, kiest blind)
    -> kort beurtgevecht (Oppugna / Defende) -> buit -> vijand opnemen in het kamp.
-   Zonder soldaat vecht de dux zelf. Ontwerp: CASTRA_HERONUM.md (Venatio).
+   Zonder soldaat vecht de dux zelf. Ontwerp: CASTRA_HEROUM.md (Venatio).
    Data/teksten: castra-data.js, castra-latin.js. Laadt NA castra.js.
    ============================================================================ */
 

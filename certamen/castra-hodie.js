@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HERONUM — "HODIE": WAT KAN VANDAAG? (voor wie thuis speelt)
+   CASTRA HEROUM — "HODIE": WAT KAN VANDAAG? (voor wie thuis speelt)
    ----------------------------------------------------------------------------
    Een klein overzicht boven de kampkaart met een paar suggesties die vandaag kunnen:
    de wekelijkse uitdaging, een soldaat die bijna evolueert, de volgende missie, een
