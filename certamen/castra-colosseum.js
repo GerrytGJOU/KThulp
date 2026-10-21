@@ -19,7 +19,16 @@ const CASTRA_COLO = {
   cap:{ 20:8, 35:10, 50:12 },              // aantal torens per divisie
   first:200, interval:600,                  // eerste golf na 10 s, daarna elke 30 s (ticks van 50 ms)
   nWaves:150, growth:1.08,                  // vijanden-hp groeit 8% per golf
-  hpA:{ 20:0.5, 35:0.5, 50:0.5 },           // basis-hp per divisie (gekalibreerd)
+  hpA:{ 20:2.755, 35:3.241, 50:2.442 },    // basis-hp per divisie (gekalibreerd met tools/castra-colo-calibrate.js)
+  // PvP (duel/vierkamp): alle spelers spelen dezelfde golven (zaad + divisie), elk op een eigen baan; uitslag door naspelen.
+  pvpWaves:60,                              // een run duurt hoogstens 60 golven (35.600 ticks); daarna "gewonnen"
+  maxTick:40000,                            // bovengrens voor een ingestuurde run (ticks)
+  fee:100, res:"aes",                       // inzet per speler (brons)
+  need:{ duel:2, quad:4 },
+  pay:{ duel:[200,0], quad:[250,100,50,0] }, // uitbetaling per eindplaats (som = aantal spelers x inzet)
+  countdownMs:10000, lateMs:60000,          // aftelling vanaf de start; zolang mag je nog instappen
+  windowMs:2200000,                         // uiterste inleverdatum: startAt + dit (maxTick x 50 ms + instaptijd + speling)
+  lobbyTtl:600000,                          // een lobby die na 10 min niet vol is, wordt geannuleerd (inzetten terug)
 };
 if(typeof location!=="undefined" && /[?&]dev(=|&|$)/.test(location.search)){ try{ localStorage.setItem("castra_dev","1"); }catch(e){} }
 function castraColoAllowed(){ try{ return !!(localStorage.getItem("castra_dev")==="1" || (CASTRA && CASTRA.dev)); }catch(e){ return false; } }
@@ -53,6 +62,11 @@ function castraColoMission(div, seed){
   return { id:"colo_"+div, region:"roma", nm:"Colosseum", nl:"Eindeloze modus (divisie "+div+")", map:(seed&1)?"a":"b", seed, hpMult:1,
     waves:castraColoWaves(seed, div), autoWaves:{ first:CASTRA_COLO.first, interval:CASTRA_COLO.interval }, endless:true };
 }
+// PvP: dezelfde golven voor iedereen, afgekapt op pvpWaves (wie ze allemaal overleeft, wint de run).
+function castraColoPvpMission(div, seed){
+  const m = castraColoMission(div, seed); m.waves = m.waves.slice(0, CASTRA_COLO.pvpWaves); m.id = "colo_pvp"; m.nl = "Colosseum (divisie "+div+")"; m.pvp = true;
+  return m;
+}
 // Eigen eenheden met levelplafond (de originelen blijven onaangeroerd; gewonde soldaten tellen hier gewoon mee).
 function castraColoUnits(div){
   const list = [];
@@ -67,14 +81,125 @@ function castraColoSimulate(mission, towers, maxTicks){
   return { wave:sim.wave+1, kills:sim.kills, tick:sim.tick, over:sim.over };
 }
 
+/* ---------- eenheid-momentopname: wat er in een ingestuurde run staat en hoe de toren daaruit gebouwd wordt ----------
+   Een geplaatste soldaat of held wordt vastgelegd als {l:vorm, v:level, i:[aanleg x5], g:karakter, s:[artes]} (held: {h,v,s}; dux: {d:1}).
+   De stats worden bij het plaatsen (live) en bij het naspelen uit DEZELFDE formules berekend, met de limieten van de
+   divisie: een valsspeler kan dus geen hogere waarden insturen dan de formule bij dat level toestaat. */
+function castraColoSnapUnit(unit){
+  if(unit.dux) return { d:1 };
+  const clamp = (v,lo,hi)=>Math.max(lo, Math.min(hi, v|0));
+  if(unit.hero) return { h:unit.h.id, v:Math.max(1, unit.h.lvl|0), s:castraSkillIds(unit).slice() };
+  return { l:unit.line, v:Math.max(1, unit.lvl|0), i:CASTRA_STATS.map(st=>clamp((unit.indoles||{})[st.id], 0, CASTRA_INDOLES_MAX)), g:unit.ingenium||"", s:castraSkillIds(unit).slice() };
+}
+function castraColoSkillsOk(holder, ids){
+  if(!Array.isArray(ids) || ids.length>CASTRA_SKILL_MAX) return false;
+  const known = castraSkillKnown(holder).map(k=>k.id);
+  return ids.every((id,k)=>typeof id==="string" && known.includes(id) && ids.indexOf(id)===k);
+}
+// Bouwt de toren uit een momentopname; null als de waarden niet kloppen (level boven het plafond, onbekende vorm, niet-geleerde arte, ...).
+function castraColoMakeTower(sim, sid, u, x, y, div){
+  if(!u || typeof u!=="object") return null;
+  let st, type, look = null, sk = [], line = null;
+  if(u.d){ line = "rom_hastatus"; st = { ...CASTRA_V_BAL.dux }; type = castraLine(line).type; }
+  else if(u.h){
+    const hd = (typeof u.h==="string") ? CASTRA_HERO_DATA[u.h] : null;
+    if(!hd || !Number.isInteger(u.v) || u.v<1 || u.v>Math.min(div, CASTRA_H.maxLvl)) return null;
+    const hh = { id:u.h, lvl:u.v };
+    if(!castraColoSkillsOk({ hero:true, h:hh }, u.s||[])) return null;
+    st = castraHeroStats(hh); type = hd.type; look = hd.look; sk = u.s||[];
+  } else {
+    if(typeof u.l!=="string" || !CASTRA_FORMS[u.l] || !Number.isInteger(u.v) || u.v<1 || u.v>div) return null;
+    if(!Array.isArray(u.i) || u.i.length!==CASTRA_STATS.length || !u.i.every(v=>Number.isInteger(v) && v>=0 && v<=CASTRA_INDOLES_MAX)) return null;
+    if(typeof u.g!=="string" || (u.g && !CASTRA_INGENIA.some(g=>g.id===u.g))) return null;
+    if(!castraColoSkillsOk({ line:u.l, lvl:u.v }, u.s||[])) return null;
+    const indoles = {}; CASTRA_STATS.forEach((s,k)=>{ indoles[s.id] = u.i[k]; });
+    st = castraStats({ line:u.l, lvl:u.v, indoles, ingenium:u.g }); type = castraLine(u.l).type; sk = u.s||[]; line = u.l;
+  }
+  return castraPMakeTower(sim, { id:sid, line, snap:{ st, type, look, sk } }, x, y);
+}
+// Plaatst een eigen eenheid in een live run en legt de actie vast (zelfde code als bij het naspelen).
+function castraColoPlace(B, unit, x, y){
+  const sid = String(unit.id).slice(0,30), u = castraColoSnapUnit(unit);
+  const tw = castraColoMakeTower(B.sim, sid, u, x, y, B.div) || castraPMakeTower(B.sim, unit, x, y);
+  if(B.actions) B.actions.push({ t:B.sim.tick, k:"place", sid, x, y, u });
+  return tw;
+}
+
+/* ---------- naspelen en controleren ---------- */
+// Past één actie toe op een naspeel-simulatie; geeft null bij succes, anders de reden waarom de run ongeldig is.
+function castraColoApply(sim, a, div, cells, trees){
+  if(!a || typeof a!=="object") return "actie";
+  if(a.k==="take"){
+    const tw = sim.towers.find(t=>t.sid===a.sid); if(!tw) return "terugnemen";
+    sim.towers = sim.towers.filter(t=>t!==tw); return null;
+  }
+  if(a.k!=="place") return "soort";
+  const x = a.x, y = a.y, key = x+","+y;
+  if(!Number.isInteger(x) || !Number.isInteger(y) || x<0 || y<0 || x>=CASTRA_P.cols || y>=CASTRA_P.rows) return "tegel";
+  if(cells[key] || trees[key] || sim.towers.some(t=>t.x===x && t.y===y)) return "bezet";
+  if(sim.towers.length >= CASTRA_COLO.cap[div]) return "teveel torens";
+  if(typeof a.sid!=="string" || !a.sid || a.sid.length>30 || sim.towers.some(t=>t.sid===a.sid)) return "sid";
+  const tw = castraColoMakeTower(sim, a.sid, a.u, x, y, div); if(!tw) return "eenheid boven het plafond";
+  sim.towers.push(tw); return null;
+}
+// Speelt een ingestuurde run opnieuw af. match = {divisie, seed}; run = {actions:<json>, res:{tick,wave,lives,kills,win,quit}}.
+// Geeft {ok:true, res} met de UITKOMST VAN HET NASPELEN (die telt, niet de bewering van de speler), of {ok:false, why}.
+function castraColoReplay(match, run){
+  const div = match && match.divisie|0; if(!CASTRA_COLO.cap[div]) return { ok:false, why:"divisie" };
+  if(!run || typeof run.actions!=="string" || run.actions.length>30000 || !run.res) return { ok:false, why:"geen run" };
+  let acts; try{ acts = JSON.parse(run.actions); }catch(e){ return { ok:false, why:"onleesbaar" }; }
+  if(!Array.isArray(acts) || acts.length>500) return { ok:false, why:"acties" };
+  let last = 0; for(const a of acts){ if(!a || !Number.isInteger(a.t) || a.t<last) return { ok:false, why:"volgorde" }; last = a.t; }
+  const claim = run.res, end = claim.tick;
+  if(!Number.isInteger(end) || end<0 || end>CASTRA_COLO.maxTick) return { ok:false, why:"tick" };
+  const m = castraColoPvpMission(div, match.seed), sim = castraPSim(m, []); sim.mods = { dmg:1, cd:1, rng:1, spd:1 };
+  const cells = castraPPathCells(m.map), trees = {}; CASTRA_P_MAPS[m.map].trees.forEach(t=>{ trees[t[0]+","+t[1]] = 1; });
+  let ai = 0;
+  while(sim.tick < end && !sim.over){
+    while(ai < acts.length && acts[ai].t <= sim.tick){ const why = castraColoApply(sim, acts[ai], div, cells, trees); if(why) return { ok:false, why }; ai++; }
+    castraPStep(sim);
+  }
+  const res = { tick:sim.tick, wave:sim.wave+1, lives:sim.baseHp, kills:sim.kills, win:sim.over==="win", quit:!sim.over };
+  if(res.tick!==end || res.quit!==!!claim.quit || res.win!==!!claim.win || res.wave!==claim.wave || res.lives!==claim.lives || res.kills!==claim.kills) return { ok:false, why:"uitkomst klopt niet", res };
+  return { ok:true, res };
+}
+// Volgorde: gewonnen > anders de overleefde tick > meeste kills > eerder ingeleverd. Ongeldige of ontbrekende runs staan onderaan.
+function castraColoCmp(a, b){
+  if(a.ok!==b.ok) return a.ok ? -1 : 1;
+  if(a.ok){
+    if(a.res.win!==b.res.win) return a.res.win ? -1 : 1;
+    if(a.res.win && a.res.lives!==b.res.lives) return b.res.lives-a.res.lives;
+    if(!a.res.win && a.res.tick!==b.res.tick) return b.res.tick-a.res.tick;
+    if(a.res.kills!==b.res.kills) return b.res.kills-a.res.kills;
+    if((a.ts||0)!==(b.ts||0)) return (a.ts||0)-(b.ts||0);
+  }
+  return a.lid<b.lid ? -1 : a.lid>b.lid ? 1 : 0;
+}
+// Rangschikt alle deelnemers van een match uit hun runs. Geeft rijen {lid, nm, ok, why, res, ts, rank, pay}.
+// pay = uitbetaling aan echte spelers; zonder één geldige run is er geen winnaar en krijgt iedereen zijn inzet terug (refund:true).
+function castraColoStandings(match, runs){
+  const fee = match.fee||CASTRA_COLO.fee, need = CASTRA_COLO.need[match.mode]||2;
+  const rows = Object.keys(match.players||{}).map(lid=>{
+    const run = runs && runs[lid], v = run ? castraColoReplay(match, run) : { ok:false, why:"niet ingeleverd" };
+    return { lid, nm:(match.players[lid]||{}).nm||lid, ok:!!v.ok, why:v.ok?"":v.why, res:v.res||null, ts:run?run.ts:0 };
+  }).sort(castraColoCmp);
+  const anyOk = rows.some(r=>r.ok), table = CASTRA_COLO.pay[match.mode] || CASTRA_COLO.pay.duel;
+  rows.forEach((r,k)=>{ r.rank = k+1; r.pay = !anyOk ? fee : (r.ok ? (table[k]||0) : 0); });
+  return { rows, refund:!anyOk, fee, need };
+}
+
 /* ---------- start, hud, bediening ---------- */
 function castraColoStart(div){
   if(!castraColoAllowed()) return;
-  const seed = (Math.random()*4294967295)>>>0, m = castraColoMission(div, seed);
+  const seed = (Math.random()*4294967295)>>>0;
+  castraColoBegin(div, seed, castraColoMission(div, seed), null);
+}
+// Start een eindeloze run (solo) of een PvP-run (pvp = { mid }): zelfde bediening, alleen de golven en het einde verschillen.
+function castraColoBegin(div, seed, m, pvp){
   if(CASTRA_B){ clearInterval(CASTRA_B.timer); window.removeEventListener("resize", CASTRA_B.resizeFn); }
   const opts = (CASTRA.opts || (CASTRA.opts = {}));
   CASTRA_B = { mission:m, sim:castraPSim(m, []), sel:null, timer:null, speed:opts.speed||1, auto:false, units:{}, fx:[], placed:{}, lastDir:{}, finished:false,
-               boons:[], pick:null, offeredFor:-2, rewardMult:1, autoT:0, ctlSig:"", endless:true, div, seed, actions:[] };
+               boons:[], pick:null, offeredFor:-2, rewardMult:1, autoT:0, ctlSig:"", endless:true, div, seed, actions:[], pvp };
   CASTRA_B.sim.mods = { dmg:1, cd:1, rng:1, spd:1 };
   const ids = {}; m.waves.slice(0,40).forEach(w=>w.forEach(g=>ids[g.line]=1)); (CASTRA.soldiers||[]).forEach(s=>ids[s.line]=1);
   castraFsprProbe(Object.keys(ids).map(i=>[i,"td"]), null);
@@ -90,18 +215,30 @@ castraBRenderHud = function(){
     <span>🌊 ${castraLaText("ala")}: <b>${Math.max(0,s.wave+1)}</b> <small>(volgende over ${nextIn} s)</small></span>
     <span>☠️ <b>${s.kills}</b></span>
     <span>${castraLaText("milites")}: <b>${s.towers.length}</b> / ${castraBCap()}</span>
-    <span>🏆 divisie ${B.div}${best?" · record golf "+best.wave:""}</span>`;
+    <span>🏆 divisie ${B.div}${best&&!B.pvp?" · record golf "+best.wave:""}</span>${B.pvp&&typeof castraColoPvpHud==="function"?castraColoPvpHud():""}`;
 };
 const _castraBRenderCtlColo0 = castraBRenderCtl;
 castraBRenderCtl = function(){
   const B = CASTRA_B; if(!B || !B.endless) return _castraBRenderCtlColo0();
   const c = el("cbCtl"); if(!c) return; const sig = "E"+B.speed+(B.sim.over?"x":""); if(sig===B.ctlSig) return; B.ctlSig = sig;
   c.innerHTML = `<button class="btn" style="min-height:44px" onclick="castraBSpeed()">⏩ ${B.speed}× ${castraLaText("celerius")}</button>
-    <div class="note" style="flex:1;min-width:200px">🏛️ Colosseum (divisie ${B.div}): de golven komen vanzelf en worden steeds sterker. Verplaats je soldaten gerust tijdens het gevecht. Houd je kamp zo lang mogelijk overeind.</div>`;
+    <div class="note" style="flex:1;min-width:200px">🏛️ Colosseum (divisie ${B.div}): de golven komen vanzelf en worden steeds sterker. Verplaats je soldaten gerust tijdens het gevecht. Houd je kamp zo lang mogelijk overeind.${B.pvp?" Dit is een duel: wie het langst overleeft, wint de pot. Met de schildknop linksboven geef je op.":""}</div>`;
+};
+
+// Duel: de simulatie volgt de klok. Een achtergrondtab (of een trage iPad) haalt achterstand per aanroep in (hoogstens 10 s),
+// zodat niemand tijd wint of verliest door de timer; uitleg-pauzes tellen niet mee.
+const _castraBTickColo0 = castraBTick;
+castraBTick = function(){
+  const B = CASTRA_B; if(!B || !B.pvp || B.finished) return _castraBTickColo0();
+  const now = Date.now(), last = B.wall || now; B.wall = now;
+  if(B.paused) return _castraBTickColo0();
+  const sp = B.speed, n = Math.max(1, Math.min(200, Math.round((now-last)/CASTRA_P.tickMs)));
+  B.speed = n*sp; try{ _castraBTickColo0(); } finally{ B.speed = sp; }
 };
 
 /* ---------- einde van een run ---------- */
 function castraColoFinish(){
+  if(CASTRA_B.pvp){ castraColoPvpEnd(false); return; }
   const B = CASTRA_B, s = B.sim, box = el("cbResult"); clearInterval(B.timer);
   const colo = CASTRA.colo || (CASTRA.colo = { best:{}, runs:0 }), div = B.div, wave = s.wave+1, kills = s.kills;
   const prev = colo.best[div] || { wave:0, kills:0 }, rec = wave>prev.wave || (wave===prev.wave && kills>prev.kills);
@@ -125,13 +262,26 @@ function castraColoFinish(){
   el("cbCtl").innerHTML = "";
 }
 
+// Opgeven en verlaten: in een duel telt je run tot nu toe (de inzet is al betaald); daarna terug naar de lobby.
+const _castraBExitColo0 = castraBExit;
+castraBExit = function(){
+  const B = CASTRA_B;
+  if(B && B.pvp){
+    if(!B.finished){ if(!confirm("Opgeven? Je inzet is al betaald; je run telt tot nu toe.")) return; castraColoPvpEnd(true); return; }
+    clearInterval(B.timer); window.removeEventListener("resize", B.resizeFn); CASTRA_B = null; go("castraColoLobby"); return;
+  }
+  return _castraBExitColo0();
+};
+
 /* ---------- ingang (alleen testtoegang) ---------- */
 function castraColoCard(){
   if(!castraColoAllowed()) return "";
+  if(typeof castraCReconcile==="function") castraCReconcile();
   const best = (CASTRA.colo||{}).best||{};
   return `<div class="panel" style="border:2px dashed #8a6d2f"><h3>🏛️ Colosseum <small>(testversie, nog gesloten voor spelers)</small></h3>
     <div class="note">Eindeloze modus: kies een divisie (levelplafond). Je records: ${[20,35,50].map(d=>"div "+d+": "+(best[d]?"golf "+best[d].wave:"—")).join(" · ")}</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">${[20,35,50].map(d=>`<button class="btn btn-gold" style="min-height:44px" onclick="castraColoStart(${d})">Divisie ${d} (max ${CASTRA_COLO.cap[d]} torens)</button>`).join("")}</div></div>`;
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">${[20,35,50].map(d=>`<button class="btn btn-gold" style="min-height:44px" onclick="castraColoStart(${d})">Divisie ${d} (max ${CASTRA_COLO.cap[d]} torens)</button>`).join("")}</div>
+    <div style="margin-top:10px"><button class="btn" style="min-height:44px" onclick="go('castraColoLobby')">⚔️ Duel tegen een klasgenoot (inzet ${CASTRA_COLO.fee} 🪙)</button></div></div>`;
 }
 
 /* ---------- Roma: gesloten deur met bordje ---------- */

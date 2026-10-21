@@ -242,6 +242,81 @@
         }
       }
     },
+    "castraColosseum": {
+      "$klas": {
+        ".read": true,
+        ".indexOn": ["status", "createdAt"],
+        "$match": {
+          ".write": "!data.exists()",
+          ".validate": "newData.hasChildren(['mode','fee','divisie','seed','need','status','createdBy','createdAt']) && (data.exists() || (!newData.hasChild('runs') && !newData.hasChild('paid') && !newData.hasChild('live') && !newData.hasChild('startAt')))",
+          "mode": { ".validate": "newData.val() === 'duel' || newData.val() === 'quad'" },
+          "fee": { ".validate": "newData.val() === 100" },
+          "divisie": { ".validate": "newData.val() === 20 || newData.val() === 35 || newData.val() === 50" },
+          "seed": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4294967295" },
+          "need": { ".validate": "(newData.parent().child('mode').val() === 'duel' && newData.val() === 2) || (newData.parent().child('mode').val() === 'quad' && newData.val() === 4)" },
+          "ghosts": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2" },
+          "createdBy": { ".validate": "newData.isString() && newData.val().length <= 40" },
+          "createdAt": { ".validate": "newData.isNumber() && newData.val() <= now + 60000 && newData.val() >= now - 60000" },
+          "status": {
+            ".write": "data.val() === 'lobby'",
+            ".validate": "newData.val() === 'lobby' || (data.val() === 'lobby' && newData.val() === 'running' && newData.parent().child('startAt').exists() && (newData.parent().child('mode').val() === 'duel' ? newData.parent().child('slots').hasChildren(['s0','s1']) : (newData.parent().child('ghosts').val() === 1 ? newData.parent().child('slots').hasChildren(['s0','s1','s2']) : (newData.parent().child('ghosts').val() === 2 ? newData.parent().child('slots').hasChildren(['s0','s1']) : newData.parent().child('slots').hasChildren(['s0','s1','s2','s3'])))))"
+          },
+          "startAt": {
+            ".write": "!data.exists()",
+            ".validate": "newData.isNumber() && newData.parent().child('status').val() === 'running' && newData.val() >= now - 5000 && newData.val() <= now + 120000"
+          },
+          "slots": {
+            "$s": {
+              ".write": "root.child('castraColosseum/'+$klas+'/'+$match+'/status').val() === 'lobby' && (!data.exists() || !newData.exists())",
+              ".validate": "($s === 's0' || $s === 's1' || (newData.parent().parent().child('mode').val() === 'quad' && ($s === 's2' || $s === 's3'))) && newData.isString() && newData.val().length <= 40"
+            }
+          },
+          "players": {
+            "$lid": {
+              ".write": "root.child('castraColosseum/'+$klas+'/'+$match+'/status').val() === 'lobby'",
+              ".validate": "newData.hasChildren(['nm','ts']) && $lid.length <= 40 && (newData.parent().parent().child('slots').child('s0').val() === $lid || newData.parent().parent().child('slots').child('s1').val() === $lid || newData.parent().parent().child('slots').child('s2').val() === $lid || newData.parent().parent().child('slots').child('s3').val() === $lid)",
+              "nm": { ".validate": "newData.isString() && newData.val().length <= 40" },
+              "ts": { ".validate": "newData.isNumber()" }
+            }
+          },
+          "live": {
+            "$lid": {
+              ".write": "root.child('castraColosseum/'+$klas+'/'+$match+'/status').val() === 'running' && root.child('castraColosseum/'+$klas+'/'+$match+'/players/'+$lid).exists()",
+              ".validate": "newData.hasChildren(['wave','lives','ts'])",
+              "wave": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 300" },
+              "lives": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100" },
+              "ts": { ".validate": "newData.isNumber()" }
+            }
+          },
+          "runs": {
+            "$lid": {
+              ".write": "!data.exists() && root.child('castraColosseum/'+$klas+'/'+$match+'/status').val() === 'running' && root.child('castraColosseum/'+$klas+'/'+$match+'/players/'+$lid).exists() && now <= root.child('castraColosseum/'+$klas+'/'+$match+'/startAt').val() + 2200000",
+              ".validate": "newData.hasChildren(['actions','res','ts'])",
+              "actions": { ".validate": "newData.isString() && newData.val().length <= 30000" },
+              "res": {
+                ".validate": "newData.hasChildren(['tick','wave','lives','kills'])",
+                "tick": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 40000" },
+                "wave": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200" },
+                "lives": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100" },
+                "kills": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 5000" },
+                "win": { ".validate": "newData.val() === 0 || newData.val() === 1" },
+                "quit": { ".validate": "newData.val() === 0 || newData.val() === 1" },
+                "$other": { ".validate": false }
+              },
+              "ts": { ".validate": "newData.isNumber() && newData.val() >= root.child('castraColosseum/'+$klas+'/'+$match+'/startAt').val() && newData.val() <= now + 10000" },
+              "$other": { ".validate": false }
+            }
+          },
+          "paid": {
+            "$lid": {
+              ".write": "!data.exists() && root.child('castraColosseum/'+$klas+'/'+$match+'/players/'+$lid).exists()",
+              ".validate": "newData.val() === true"
+            }
+          },
+          "$other": { ".validate": false }
+        }
+      }
+    },
     "castraTrades": {
       "$klas": {
         ".read": true,
