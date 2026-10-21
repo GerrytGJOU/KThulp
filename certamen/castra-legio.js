@@ -299,8 +299,8 @@ function castraLegioFinish(){
       const cap = castraWalletCap();
       Object.keys(m.reward).forEach(r=>{ CASTRA.res[r] = r==="gloria" ? (CASTRA.res[r]||0)+m.reward[r] : Math.min(cap, (CASTRA.res[r]||0)+m.reward[r]); });
       s.towers.filter(t=>t.owner===BM_IDENT.leerlingcode).forEach(t=>{
-        const sol = CASTRA.soldiers.find(x=>x.id===t.sid); if(sol){ sol.xp += 30; castraLevelUp(sol); }
-        if(String(t.sid).indexOf("hero_")===0){ const hh = castraHero(String(t.sid).slice(5)); if(hh){ hh.xp += 20; castraHeroLevelUp(hh); } }
+        const sol = CASTRA.soldiers.find(x=>x.id===t.sid); if(sol){ sol.xp += castraXpTd(m, sol.lvl); castraLevelUp(sol); }
+        if(String(t.sid).indexOf("hero_")===0){ const hh = castraHero(String(t.sid).slice(5)); if(hh){ hh.xp += castraXpTd(m, hh.lvl); castraHeroLevelUp(hh); } }
       });
       if(typeof castraPxpAdd==="function") castraPxpAdd(40, "Legio gewonnen");
       (CASTRA.legio || (CASTRA.legio = { claimed:{} })).claimed = CASTRA.legio.claimed || {};

@@ -186,7 +186,7 @@ function castraWeeklyResult(B){
       extra.push(`Beloning: ${Object.keys(m.reward).map(r=>castraRes(r).icon+" +"+m.reward[r]).join(" · ")} · 🎟️ +1 kaarttrekking`);
     } else if(typeof castraPxpAdd==="function") castraPxpAdd(6);
     if(bonus && !W.bonusPaid){ W.bonusPaid = true; CASTRA.res.gloria = (CASTRA.res.gloria||0)+3; if(typeof castraCardToken==="function") castraCardToken(1, "bonusdoel"); extra.push("★ Bonusdoel gehaald: 🏛️ +3 gloria · 🎟️ +1 kaarttrekking"); }
-    s.towers.forEach(t=>{ const sol = (CASTRA.soldiers||[]).find(x=>x.id===t.sid); if(sol){ sol.xp += castraCardXp(12 + 6*m.waves.length); castraLevelUp(sol); } });
+    s.towers.forEach(t=>{ const sol = (CASTRA.soldiers||[]).find(x=>x.id===t.sid); if(sol){ sol.xp += castraCardXp(castraXpTd(m, sol.lvl)); castraLevelUp(sol); } });
     castraSave();
     h += `<div style="font-size:22px;margin-bottom:6px">${castraLa("castra_defensa")}</div><div>Punten: <b>${score}</b> · record deze week: <b>${W.best}</b>${bonus?" · ★ bonusdoel":""}</div>${extra.map(e=>`<div class="note">${esc(e)}</div>`).join("")}`;
     if(!bonus) h += `<div class="note">★ Bonusdoel: ${esc(m.bonus ? CASTRA_WK_TYPES.find(t=>t.id===m.tid).bonusNl : "")}</div>`;

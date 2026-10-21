@@ -306,7 +306,7 @@ function castraHeroStats(h){
 }
 function castraHeroLevelUp(h){
   let up = false; const lvl0 = h.lvl;
-  while(h.lvl < castraHeroCap(h) && h.xp >= CASTRA_H.xpPerLvl*h.lvl){ h.xp -= CASTRA_H.xpPerLvl*h.lvl; h.lvl++; up = true; }
+  while(h.lvl < castraHeroCap(h) && h.xp >= castraXpToNext(h.lvl)){ h.xp -= castraXpToNext(h.lvl); h.lvl++; up = true; }
   if(up && typeof castraSkillLearned==="function") castraSkillLearned({ hero:true, h }, lvl0, h.lvl);
   return up;
 }
@@ -387,7 +387,7 @@ function castraHeroumOpen(){
     }
     return `<div style="padding:8px 0;border-top:1px solid #4a3d2c"><div style="display:flex;gap:10px">
       <div style="flex-shrink:0;text-align:center">${portrait}</div>
-      <div style="flex:1"><b>${esc(d.nm)}</b> · ${castraLaText("gradus")} ${h.lvl} / ${cap} <small>(XP ${h.xp}/${CASTRA_H.xpPerLvl*h.lvl})</small>
+      <div style="flex:1"><b>${esc(d.nm)}</b> · ${castraLaText("gradus")} ${h.lvl} / ${cap} <small>(XP ${h.xp}/${castraXpToNext(h.lvl)})</small>
         <div style="margin:4px 0">${castraLaText("fides")}: ${bar}</div>
         <small>${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</small>
         <div style="margin-top:6px"><small>${castraLaText("assigna")}:</small> ${assign} ${h.assigned?`<small>+${castraHeroBonus(h.assigned)}%</small>`:""}</div>
