@@ -185,6 +185,6 @@ function castraSkillsHTML(s, kind, id){
   const eqN = list.filter(k=>k.equipped).length;
   return `<div style="margin-top:6px;font-size:13px"><div style="font-weight:bold;margin-bottom:2px">🎓 Artes <span style="opacity:.7">${eqN} / ${CASTRA_SKILL_MAX} in gebruik — tik om te kiezen</span></div>`
     + list.map(k=>k.known
-      ? `<div role="button" onclick="event.stopPropagation();castraMenuSkill('${kind}','${id}','${k.id}')" style="padding:4px 6px;margin:2px 0;border:1px solid ${k.equipped?"#8a6d2f":"#c2a96f"};border-radius:6px;background:${k.equipped?"rgba(212,175,55,.28)":"transparent"};cursor:pointer;min-height:32px">${k.equipped?"✅":"⬜"} <b>${esc(k.la)}</b> <small>${esc(k.nl)}</small></div>`
+      ? `<div role="button" onclick="event.stopPropagation();castraMenuSkill('${kind}','${id}','${k.id}')" style="padding:4px 6px;margin:2px 0;border:1px solid ${k.equipped?"var(--hi-dim,#8a6d2f)":"var(--parch-line,#c2a96f)"};border-radius:6px;background:${k.equipped?"rgba(212,175,55,.28)":"transparent"};cursor:pointer;min-height:32px">${k.equipped?"✅":"⬜"} <b>${esc(k.la)}</b> <small>${esc(k.nl)}</small></div>`
       : `<div style="padding:2px 6px;opacity:.5">🔒 Lv ${k.lvl} <b>${esc(k.la)}</b> <small>${esc(k.nl)}</small></div>`).join("") + `</div>`;
 }

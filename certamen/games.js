@@ -962,6 +962,8 @@ SCREENS.collection = function(){
   </div></details>
   ${bmSection}
   ${spSection}
+  ${typeof cxCastraSectionHTML==="function"?cxCastraSectionHTML():""}
+  ${typeof cxHardWordsCardHTML==="function"?cxHardWordsCardHTML():""}
   <div class="eyebrow l" style="margin-top:20px">Avatars (klassieke spellen)</div>
   <div class="collgrid">${AVATARS.map(a=>{
     const owned=P.owned.includes(a.id), on=P.avatar===a.id;

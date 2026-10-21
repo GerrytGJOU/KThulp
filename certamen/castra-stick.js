@@ -25,7 +25,7 @@ function castraStickAttach(wrap, opts){
       background:radial-gradient(circle,rgba(212,175,55,.10) 0,rgba(212,175,55,.18) 70%,rgba(212,175,55,.30) 100%);border:2px solid rgba(212,175,55,.55);box-shadow:0 0 12px rgba(0,0,0,.45)`;
     knob = document.createElement("div");
     knob.style.cssText = `position:fixed;z-index:9998;width:52px;height:52px;border-radius:50%;left:${x-26}px;top:${y-26}px;pointer-events:none;
-      background:radial-gradient(circle at 35% 30%,#f6dd8e,#d4af37 60%,#9c7c1f);border:2px solid #7a5410;box-shadow:0 2px 8px rgba(0,0,0,.5)`;
+      background:radial-gradient(circle at 35% 30%,#f6dd8e,var(--hi,#d4af37) 60%,#9c7c1f);border:2px solid #7a5410;box-shadow:0 2px 8px rgba(0,0,0,.5)`;
     document.body.appendChild(base); document.body.appendChild(knob);
   }
   function cleanup(){

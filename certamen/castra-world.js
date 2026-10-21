@@ -186,7 +186,7 @@ SCREENS.castraWorld = function(){
   CASTRA_W_UI.px = st.x; CASTRA_W_UI.py = st.y; CASTRA_W_UI.dir = (sp && sp.dir) || "up"; CASTRA_W_UI.frame = 1; CASTRA_W_UI.moving = false;
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="castraWorldLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>${W.icon} ${W.nm}</h2></div>
-  <div id="cwWrap" style="position:relative;width:100%;margin:0 auto;overflow:hidden;border:2px solid var(--hi,#d4af37);border-radius:10px;background:#2c3a1f">
+  <div id="cwWrap" style="position:relative;width:100%;margin:0 auto;overflow:hidden;border:2px solid var(--hi,var(--hi,#d4af37));border-radius:10px;background:#2c3a1f">
     <div id="cwMap" style="position:absolute;top:0;left:0;width:${W.cols*48}px;height:${W.rows*48}px;transform-origin:top left;transition:transform .16s linear"></div>
   </div>
   <div id="cwHud"></div>

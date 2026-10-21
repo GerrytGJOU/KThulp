@@ -112,7 +112,7 @@ function castraCardsView(){
   const owned = CASTRA_CARDS.filter(c=>castraCardCopies(c.id)>0).length;
   const cards = CASTRA_CARDS.map(c=>{
     const n = castraCardCopies(c.id), s = castraCardStars(c.id), nx = castraCardNext(c.id), R = CASTRA_CARD_RARITY[c.rar], last = st.last && st.last.id===c.id;
-    return `<div style="padding:6px 8px;margin:4px 0;border:2px solid ${n?R.col:"#c2a96f"};border-radius:8px;${n?"background:rgba(255,248,225,.5)":"opacity:.55"};${last?"box-shadow:0 0 0 3px #d4af37":""}">
+    return `<div style="padding:6px 8px;margin:4px 0;border:2px solid ${n?R.col:"var(--parch-line,#c2a96f)"};border-radius:8px;${n?"background:rgba(255,248,225,.5)":"opacity:.55"};${last?"box-shadow:0 0 0 3px var(--hi,#d4af37)":""}">
       <div style="display:flex;justify-content:space-between;gap:8px"><b>${n?"":"❔ "}${esc(c.la)} ${last?(st.last.isNew?"<small style='color:#7a2a14'>nieuw!</small>":st.last.up?"<small style='color:#7a2a14'>sterker!</small>":""):""}</b>
         <span style="color:${R.col}">${"★".repeat(s)}${"☆".repeat(5-s)}</span></div>
       <div style="font-size:13px">${n?esc(c.txt(castraCardVal(c))):esc(c.txt(c.per))+" <small>(per ster)</small>"}</div>
@@ -120,7 +120,7 @@ function castraCardsView(){
   }).join("");
   return `<h3 style="margin:0 0 4px">Tabulae <small>kaarten</small></h3>
     <div style="font-size:13px;opacity:.85;margin-bottom:6px">Kaarten geven blijvende bonussen aan al je torens en je kamp. Trek je een kaart dubbel, dan wordt hij sterker (★ bij 1, 2, 4, 7 en 12 exemplaren). Werkt in de gewone tower defence en de economie, niet in de Legio.</div>
-    <div style="padding:6px 8px;border:2px solid #8a6d2f;border-radius:8px;background:rgba(212,175,55,.18);font-size:14px;margin-bottom:8px"><b>Je bonussen:</b> ${sum?esc(sum):"<span style='opacity:.6'>nog geen — trek je eerste kaart!</span>"}</div>
+    <div style="padding:6px 8px;border:2px solid var(--hi-dim,#8a6d2f);border-radius:8px;background:rgba(212,175,55,.18);font-size:14px;margin-bottom:8px"><b>Je bonussen:</b> ${sum?esc(sum):"<span style='opacity:.6'>nog geen — trek je eerste kaart!</span>"}</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
       <button class="btn btn-gold" style="min-height:44px" onclick="castraMenuDraw()">${free?"🎁 Gratis trekking van vandaag":st.tokens>0?"🎟️ Trek een kaart (1 trekking)":"🃏 Trek een kaart ("+CASTRA_CARD_COST+" 🏆)"}</button>
     </div>

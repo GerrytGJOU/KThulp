@@ -44,9 +44,9 @@ async function castraGeoMapOpen(){
   const o = document.createElement("div"); o.id = "castraGeoMap";
   o.style.cssText = "position:fixed;inset:0;z-index:9985;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box";
   o.onclick = ev=>{ if(ev.target===o) castraGeoMapClose(); };
-  o.innerHTML = `<div style="background:linear-gradient(#efe1b9,#e4d2a1);color:#2b1d0e;border:4px solid #4a3416;border-radius:12px;box-shadow:0 0 0 2px #c9a24a,0 8px 28px rgba(0,0,0,.6);width:min(100%,1100px);max-height:100%;overflow:auto;padding:10px 12px;box-sizing:border-box">
+  o.innerHTML = `<div style="background:linear-gradient(var(--parch,#efe1b9),var(--parch2,#e4d2a1));color:var(--parch-ink,#2b1d0e);border:4px solid var(--parch-edge,#4a3416);border-radius:12px;box-shadow:0 0 0 2px var(--parch-gold,#c9a24a),0 8px 28px rgba(0,0,0,.6);width:min(100%,1100px);max-height:100%;overflow:auto;padding:10px 12px;box-sizing:border-box">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="margin:0">🗺️ Tabula <small>wereldkaart</small></h3><button class="btn" style="min-height:44px;min-width:44px" onclick="castraGeoMapClose()">✕</button></div>
-    <div id="castraGeoHost" style="margin-top:6px;border:3px solid #4a3416;border-radius:10px;overflow:hidden;background:#a9c4cf;min-height:200px"><div style="padding:30px;text-align:center">Kaart laden…</div></div>
+    <div id="castraGeoHost" style="margin-top:6px;border:3px solid var(--parch-edge,#4a3416);border-radius:10px;overflow:hidden;background:#a9c4cf;min-height:200px"><div style="padding:30px;text-align:center">Kaart laden…</div></div>
     <div id="castraGeoInfo" style="margin-top:6px"></div></div>`;
   document.body.appendChild(o);
   const host = document.getElementById("castraGeoHost");
@@ -56,7 +56,7 @@ async function castraGeoMapOpen(){
     const svg = host.querySelector("svg"); svg.removeAttribute("width"); svg.removeAttribute("height"); svg.setAttribute("style","width:100%;height:auto;display:block;background:#a9c4cf");
     castraGeoMapPaint();
   }catch(e){
-    host.innerHTML = `<div style="padding:12px;background:#efe1b9">De kaartafbeelding kon niet geladen worden (${esc(e.message)}). Schematische kaart:</div><div style="padding:8px;background:#efe1b9">${castraGeoMapView()}</div>`;
+    host.innerHTML = `<div style="padding:12px;background:var(--parch,#efe1b9)">De kaartafbeelding kon niet geladen worden (${esc(e.message)}). Schematische kaart:</div><div style="padding:8px;background:var(--parch,#efe1b9)">${castraGeoMapView()}</div>`;
   }
   castraGeoInfoRender();
 }
@@ -125,7 +125,7 @@ function castraGeoInfoRender(){
     : !ok ? `<div class="note">${sel!=="camp" && !castraRegionOpen(sel)?"Deze regio is nog gesloten.":"Bezoek deze regio eerst te voet."}</div>`
     : canTravel ? `<button class="btn btn-gold" style="min-height:44px;margin-top:4px" onclick="castraGeoTravel('${sel}')">${sel==="camp"?"🏕️ Terug naar het kamp (gratis)":"🧭 Reis naar "+esc(castraGeoName(sel))+" (🪙 "+cost+")"}</button>`
     : `<div class="note">Reizen kan vanuit het kamp of bij een reisplek (⚓ / 🐪) in een regio. Loop erheen en tik erop.</div>`;
-  box.innerHTML = `<div style="padding:6px 8px;border:2px solid #8a6d2f;border-radius:8px;background:rgba(255,248,225,.5);font-size:14px">${info}${btn}</div>
+  box.innerHTML = `<div style="padding:6px 8px;border:2px solid var(--hi-dim,#8a6d2f);border-radius:8px;background:rgba(255,248,225,.5);font-size:14px">${info}${btn}</div>
     <div style="font-size:12px;opacity:.75;margin-top:4px">Doorgetrokken lijn = te voet · blauw gestippeld = zeeroute · 🧭 hier · 🔒 gesloten · ❔ nog niet bezocht. Het vervaagde land is nog onontdekt: hier kunnen later extra provincies bijkomen.</div>`;
 }
 // Reizen sluit de kaart (de oorspronkelijke castraGeoTravel sluit het menu al).

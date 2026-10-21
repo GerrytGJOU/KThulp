@@ -393,6 +393,7 @@ async function bmAwardBattle(){
   const legBonus=bmLegendaryOf(BM_IDENT);
   let coinsEarned=Math.max(1,Math.round((3+(won?10:0))*share0));
   if(legBonus?.incomeMult) coinsEarned=Math.round(coinsEarned*(1+legBonus.incomeMult));
+  { const cp=(typeof spBonusVal==="function")?spBonusVal("coin_bonus_pct",bmBonusScope()):0; if(cp) coinsEarned=Math.max(coinsEarned,Math.round(coinsEarned*(1+cp/100))); }   // Chronica-eretitels
 
   // Batch 2 — lokale (device-only) toeval-tracking voor trait_drieling en
   // trait_marathonzitting. Beide horen bij "wat er toevallig op dit toestel
@@ -4731,7 +4732,7 @@ async function bmDoJoin(){
     lockedAction:null,online:true,
     // Chronica Classica-eretitel (indien gekozen): puur presentatie in de
     // lobby, zie SP_TITLES/spEquippedTitleDisplayName (singleplayer.js).
-    title:spEquippedTitleDisplayName(),
+    title:spEquippedTitleDisplayName()||((typeof cxCastraTitleLabel==="function")?cxCastraTitleLabel():"")||null,
     identityKey:BM_IDENT.klascode+":"+BM_IDENT.leerlingcode,
     // Moeilijke woorden van deze leerling (over sessies heen, core.js: hwMap),
     // zodat de host er in bmDistributeQs() voorrang aan kan geven.
@@ -4833,6 +4834,15 @@ SCREENS.battlePlayerLobby = function(){
   const fSt=rSt.on("value",s=>{if(s.val()==="playing"){rSt.off("value",fSt);go("battlePlayerGame");}});
   BM_UNSUBS=[()=>rSt.off("value",fSt)];
 };
+// Chronica-eretitel "be_head_start": eenmalig per wedstrijd extra AP bij het kiezen van je klasse (crossmode.js).
+function bmApplyHeadStart(){
+  try{
+    const hs=(typeof spBonusVal==="function")?spBonusVal("be_head_start",bmBonusScope()):0, me=BM_PLAYERS[BM_PID]||{};
+    if(!hs||me.headApplied||!BM_CODE||!BM_PID) return;
+    fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({ be:bmClampBE((me.be||0)+hs), headApplied:true });
+    toast("📜 Chronica-bonus","+"+hs+" AP om mee te beginnen");
+  }catch(e){}
+}
 function bmPickClass(cid){
   // In de lobby mag je zo vaak wisselen als je wilt. Zodra het gevecht loópt
   // ligt de keuze vast: class mastery telt rondes, schade en heling per klásse
@@ -4849,6 +4859,7 @@ function bmPickClass(cid){
   }
   BM_MY_CLASS=cid;
   BM_MY_CLASS_PICKS++;
+  bmApplyHeadStart();
   // mastery-bonus: ★★★+ geeft +1 AP per ronde (minimale spelbonus)
   const ms=bmCalcMastery(BM_IDENT?.classHistory?.[cid]);
   // Verborgen traits: alleen als vlag op het player-node te lezen voor de
@@ -5228,6 +5239,8 @@ function bmFinishAnswer(ok){
   if(!ok){ const pen0=(typeof BM_WRONG_BE_PENALTY==="number"?BM_WRONG_BE_PENALTY:2);
     beGain=-((typeof bmStWrongPenalty==="function")?bmStWrongPenalty(myP,pen0):pen0); }
   if(fast){ beGain+=cls?.passive?.type==="be_on_fast"?bmPassiveVal(cls,bmMyMaster()):1; }
+  // Chronica-eretitels (crossmode.js, bonus-engine): +AP bij snel juist, +AP bij elk juist antwoord
+  if(typeof spBonusVal==="function"){ const sc=bmBonusScope(); if(fast) beGain+=spBonusVal("be_on_fast",sc); if(ok) beGain+=spBonusVal("be_on_correct",sc); }
   // Ciceronianus: opeenvolgende correcte antwoorden in de laatste 5 sec van de timer
   const clutch=ok&&timeLeft<=5;
   if(clutch){ BM_MY_CLUTCH_STREAK++; BM_MY_CLUTCH_BEST=Math.max(BM_MY_CLUTCH_BEST,BM_MY_CLUTCH_STREAK); }
@@ -5237,9 +5250,12 @@ function bmFinishAnswer(ok){
   const elapsedMs=Math.max(200,at*1000-Math.max(0,round.deadline?round.deadline-Date.now():0));
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).once("value").then(s=>{
     const p=s.val()||{};
+    // Chronica-eretitel "first_answer_free": je eerste antwoord van de wedstrijd telt voor AP als goed (analytics blijven eerlijk).
+    let beFinal=beGain, freeUsed=false;
+    if(!ok&&!(p.respondCount>0)&&typeof spBonusVal==="function"&&spBonusVal("first_answer_free",bmBonusScope())>0){ beFinal=3; freeUsed=true; }
     const upd={
       answeredRound:round.n||0,
-      be:bmClampBE((p.be||0)+beGain),
+      be:bmClampBE((p.be||0)+beFinal),
       // Uitslag van deze ronde — bmDistributeQs() geeft de passieve
       // rondebonus alleen ná een goed antwoord (zie daar).
       lastAnswerOk:ok, lastAnswerRound:round.n||0,
@@ -5263,7 +5279,10 @@ function bmFinishAnswer(ok){
     // Langste foutloze reeks: "De Onsterfelijke" (Boss-Battle-scorebord,
     // BOSS_BATTLE.md §8) én de 🔥 Reeks-kolom in het Klassenoverzicht (alle modi).
     const prevCorrectStreak=p.correctStreak||0;
-    upd.correctStreak=ok?prevCorrectStreak+1:0;
+    // Chronica-eretitel "streak_shield": één fout antwoord per wedstrijd breekt de reeks niet.
+    if(!ok&&prevCorrectStreak>0&&!p.shieldUsed&&typeof spBonusVal==="function"&&spBonusVal("streak_shield",bmBonusScope())>0){ upd.correctStreak=prevCorrectStreak; upd.shieldUsed=true; }
+    else upd.correctStreak=ok?prevCorrectStreak+1:0;
+    if(freeUsed) upd.freeUsed=true;
     // Skill-trees (skilltree-engine.js): snel antwoord, reeksen en "moeilijk woord".
     if(typeof bmStActive==="function"&&bmStActive(p)){
       upd.lastFast=fast;

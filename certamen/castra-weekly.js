@@ -147,9 +147,9 @@ function castraWeeklyCardHTML(){
   const info = castraWkInfoAt(castraNow()), T = info.type;
   if(!castraWeeklyAvailable()) return `<div class="panel" style="opacity:.6"><h3>📅 Hebdomada <small>wekelijkse uitdaging</small></h3><div class="note">Win eerst de eerste drie missies om de wekelijkse uitdaging te ontgrendelen.</div></div>`;
   const ed = T.edicta[castraWkHash(info.id+"|ed") % T.edicta.length].map(id=>CASTRA_EDICTA[id]).filter(Boolean);
-  return `<div class="panel" style="border:2px solid #d4af37"><h3>📅 Hebdomada: ${T.icon} ${castraLaHTML(T.la, T.nl, "wk_"+T.id)} <small>week ${info.iso.w} · ${esc(T.kind)}</small></h3>
+  return `<div class="panel" style="border:2px solid var(--hi,#d4af37)"><h3>📅 Hebdomada: ${T.icon} ${castraLaHTML(T.la, T.nl, "wk_"+T.id)} <small>week ${info.iso.w} · ${esc(T.kind)}</small></h3>
     <div style="font-size:15px;margin:4px 0">${esc(T.task)}</div>
-    <div style="font-size:13px;margin:2px 0">${ed.map(E=>`<span title="${esc(E.ex.nl)}" style="display:inline-block;margin:2px 6px 2px 0;padding:1px 8px;border:1px solid #8a6d2f;border-radius:10px;background:rgba(212,175,55,.12)">${E.icon} ${esc(E.la)}</span>`).join("")}${T.cmdMax!=null?`<span style="display:inline-block;margin:2px 6px 2px 0;padding:1px 8px;border:1px solid #8a6d2f;border-radius:10px;background:rgba(212,175,55,.12)">⚡ max. ${T.cmdMax} bevel</span>`:""}</div>
+    <div style="font-size:13px;margin:2px 0">${ed.map(E=>`<span title="${esc(E.ex.nl)}" style="display:inline-block;margin:2px 6px 2px 0;padding:1px 8px;border:1px solid var(--hi-dim,#8a6d2f);border-radius:10px;background:rgba(212,175,55,.12)">${E.icon} ${esc(E.la)}</span>`).join("")}${T.cmdMax!=null?`<span style="display:inline-block;margin:2px 6px 2px 0;padding:1px 8px;border:1px solid var(--hi-dim,#8a6d2f);border-radius:10px;background:rgba(212,175,55,.12)">⚡ max. ${T.cmdMax} bevel</span>`:""}</div>
     <div style="font-size:13px;opacity:.9">★ Bonusdoel: ${esc(T.bonusNl)}</div>
     <div class="note" style="margin:6px 0">${esc(castraWkStatusText())}</div>
     <button class="btn btn-gold" onclick="castraWeeklyStart()">${castraLaText("proelium_ini")}</button>
@@ -212,6 +212,7 @@ function castraWkAnswer(btn, ok, expl){
   if(ok){
     const first = !btn.dataset.tried && !(W.latinTried); W.latin = "ok"; castraSave();
     if(typeof castraPxpAdd==="function") castraPxpAdd(first ? 10 : 5, "Woordvraag");
+    if(typeof castraMasterXp==="function") castraMasterXp(first ? 6 : 3, first ? 2 : 1, "Woordvraag van de week");
     castraTDSync({ [first ? "wk_latin_ok1/n" : "wk_latin_ok2/n"]:1 });
     box.innerHTML = `<div style="font-size:15px">✔ Goed! ${esc(expl)} <small>(${first?"+10":"+5"} ervaring)</small></div>`;
   } else {

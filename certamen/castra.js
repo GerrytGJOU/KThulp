@@ -232,7 +232,7 @@ SCREENS.castraHome = function(){
   <div class="scrhead"><button class="back" onclick="castraLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>🏕️ Castra Heroum</h2></div>
   <div id="castraRes" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:4px 0 8px"></div>
   <div id="castraTutBar"></div>
-  <div id="castraWrap" style="position:relative;width:100%;margin:0 auto;overflow:hidden;border:2px solid var(--hi,#d4af37);border-radius:10px;background:#2a2118">
+  <div id="castraWrap" style="position:relative;width:100%;margin:0 auto;overflow:hidden;border:2px solid var(--hi,var(--hi,#d4af37));border-radius:10px;background:#2a2118">
     <div id="castraMap" style="position:absolute;top:0;left:0;width:${T.cols*T.tile}px;height:${T.rows*T.tile}px;transform-origin:top left;background:
       repeating-conic-gradient(#3b2f20 0% 25%,#35291b 0% 50%) 0 0/${T.tile*2}px ${T.tile*2}px;image-rendering:pixelated"></div>
   </div>
@@ -298,8 +298,8 @@ function castraRenderMap(){
   CASTRA_BUILDINGS.filter(b=>b.phase===1&&b.slot).forEach(b=>{
     const f = castraBuildingFoot(b), lvl = castraLvl(b.id), pend = b.prod ? castraPending(b.id) : 0;
     h += `<div onclick="castraOpen('${b.id}')" style="position:absolute;left:${b.slot.x*t}px;top:${b.slot.y*t}px;width:${f.fw*t}px;height:${f.fh*t}px;cursor:pointer;z-index:3">
-      <div style="position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-size:var(--lbl,11px);font-weight:700;color:#f1e6c4;background:rgba(27,21,14,.85);border:1px solid #8a6d2f;border-radius:6px;padding:0 6px;white-space:nowrap">${b.icon} ${esc(b.nm)}${b.fixed?"":` · ${lvl||"🔨"}`}</div>
-      ${pend>0?`<div style="position:absolute;top:-6px;right:-6px;font-size:11px;background:#d4af37;color:#2a2118;border-radius:10px;padding:1px 6px;font-weight:700;animation:pulse 1.4s infinite">+${pend}</div>`:""}
+      <div style="position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-size:var(--lbl,11px);font-weight:700;color:var(--cream,#f1e6c4);background:rgba(27,21,14,.85);border:1px solid var(--hi-dim,#8a6d2f);border-radius:6px;padding:0 6px;white-space:nowrap">${b.icon} ${esc(b.nm)}${b.fixed?"":` · ${lvl||"🔨"}`}</div>
+      ${pend>0?`<div style="position:absolute;top:-6px;right:-6px;font-size:11px;background:var(--hi,#d4af37);color:#2a2118;border-radius:10px;padding:1px 6px;font-weight:700;animation:pulse 1.4s infinite">+${pend}</div>`:""}
     </div>`;
   });
   // poortborden: een houten bord met letters op de kampmuur naast de poort (valt zo in de scène).

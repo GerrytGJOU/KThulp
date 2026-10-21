@@ -72,7 +72,7 @@ function castraBBanned(s){
 function castraEdictChips(m){
   const l = (m.edicta||[]).map(id=>CASTRA_EDICTA[id]).filter(Boolean);
   if(!l.length) return "";
-  return `<div style="font-size:13px;margin:2px 0 6px">${l.map(E=>`<span title="${esc(E.ex.nl)}" style="display:inline-block;margin:2px 6px 2px 0;padding:1px 8px;border:1px solid #8a6d2f;border-radius:10px;background:rgba(212,175,55,.12)">${E.icon} ${esc(E.la)}</span>`).join("")}</div>`;
+  return `<div style="font-size:13px;margin:2px 0 6px">${l.map(E=>`<span title="${esc(E.ex.nl)}" style="display:inline-block;margin:2px 6px 2px 0;padding:1px 8px;border:1px solid var(--hi-dim,#8a6d2f);border-radius:10px;background:rgba(212,175,55,.12)">${E.icon} ${esc(E.la)}</span>`).join("")}</div>`;
 }
 
 /* ---------- uitleg bij eerste verschijning (pauzeert het gevecht) ---------- */
@@ -112,7 +112,7 @@ function castraBIntroShow(items, mark, cur){
   };
   const kinds = {}; items.forEach(i=>{ kinds[i.k] = 1; }); const one = Object.keys(kinds).length===1 ? items[0].k : null;
   const title = mark ? (one ? ({ role:"Nieuwe vijand!", edict:"Nieuwe regel voor deze missie!", syn:"Nieuwe synergie!", cmd:"Bevelen!" })[one] : "Nieuw in dit gevecht") : "Vijanden, regels en synergieën";
-  o.innerHTML = `<div style="max-width:520px;width:100%;max-height:90vh;overflow:auto;background:#f1e6c4;color:#2b1d0e;border:3px solid #8a6d2f;border-radius:14px;padding:16px 18px;box-shadow:0 8px 30px rgba(0,0,0,.6)">
+  o.innerHTML = `<div style="max-width:520px;width:100%;max-height:90vh;overflow:auto;background:var(--parch,#f1e6c4);color:var(--parch-ink,#2b1d0e);border:3px solid var(--hi-dim,#8a6d2f);border-radius:14px;padding:16px 18px;box-shadow:0 8px 30px rgba(0,0,0,.6)">
     <div style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;opacity:.7">${title}</div>${items.map(card).join("")}
     <button class="btn btn-gold" style="min-height:48px;margin-top:8px;width:100%;font-size:18px" onclick="castraBIntroClose(${mark?"true":"false"})">Intellexi <small>(begrepen)</small></button></div>`;
   document.body.appendChild(o);
@@ -163,8 +163,8 @@ function castraBRenderSyn(notify){
     + L.pers.map(([a])=>`<circle cx="${a.x*48+24}" cy="${a.y*48+24}" r="22" fill="none" stroke="#e76f51" stroke-width="3" stroke-dasharray="3 4" opacity=".7"/>`).join("");
   const on = Object.keys(L).filter(k=>L[k].length), chips = el("cbSynChips");
   B.synOn = on;
-  if(chips) chips.innerHTML = on.map(k=>`<span title="${esc(CASTRA_P_SYNINFO[k].ex.nl)}" style="display:inline-block;margin:2px 6px 2px 0;padding:1px 8px;border:1px solid #8a6d2f;border-radius:10px;background:rgba(212,175,55,.12)">✨ ${esc(CASTRA_P_SYNINFO[k].la)}</span>`).join("");
-  if(notify) on.forEach(k=>{ if(!castraTDSeen()["s:"+k] && !(B.introQ||[]).some(x=>x.k==="syn" && x.id===k)){ (B.introQ = B.introQ || []).push({ k:"syn", id:k }); B.paused = true; if(!document.getElementById("cbIntro")) castraBIntroNext(); } });
+  if(chips) chips.innerHTML = on.map(k=>`<span title="${esc(CASTRA_P_SYNINFO[k].ex.nl)}" style="display:inline-block;margin:2px 6px 2px 0;padding:1px 8px;border:1px solid var(--hi-dim,#8a6d2f);border-radius:10px;background:rgba(212,175,55,.12)">✨ ${esc(CASTRA_P_SYNINFO[k].la)}</span>`).join("");
+  if(notify && !B.pvp) on.forEach(k=>{ if(!castraTDSeen()["s:"+k] && !(B.introQ||[]).some(x=>x.k==="syn" && x.id===k)){ (B.introQ = B.introQ || []).push({ k:"syn", id:k }); B.paused = true; if(!document.getElementById("cbIntro")) castraBIntroNext(); } });
 }
 
 /* ---------- bevelen (energia) ---------- */

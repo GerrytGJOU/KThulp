@@ -190,7 +190,7 @@ function castraFormClass(f){ const id = castraFormClassId(f); return id && typeo
 // Kleine badge met icoon en naam van de Certamen-klasse (leeg voor rekruten en monsters).
 function castraClassBadge(f, onLight){
   const c = castraFormClass(f); if(!c) return "";
-  return `<span title="Certamen-klasse: ${esc(c.nm)}" style="display:inline-flex;align-items:center;gap:3px;padding:0 6px;border:1px solid ${c.color};border-radius:10px;font-size:12px;color:${onLight?"#2b1d0e":"#eee"};background:${onLight?"rgba(255,248,225,.7)":"rgba(0,0,0,.25)"}">${typeof iconSVG==="function"?iconSVG(c.icon,13,c.color):""}${esc(c.nm)}</span>`;
+  return `<span title="Certamen-klasse: ${esc(c.nm)}" style="display:inline-flex;align-items:center;gap:3px;padding:0 6px;border:1px solid ${c.color};border-radius:10px;font-size:12px;color:${onLight?"var(--parch-ink,#2b1d0e)":"#eee"};background:${onLight?"rgba(255,248,225,.7)":"rgba(0,0,0,.25)"}">${typeof iconSVG==="function"?iconSVG(c.icon,13,c.color):""}${esc(c.nm)}</span>`;
 }
 function castraFormByName(volk, nm){ return CASTRA_FORM_LIST.find(f=>f.volk===volk && f.nm===nm); }
 function castraFormRec(volk){ return CASTRA_FORM_LIST.find(f=>f.volk===volk && f.tier===1 && f.type==="rec") || null; }

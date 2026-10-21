@@ -371,7 +371,7 @@ function castraHeroumOpen(){
   const cards = heroes.map(h=>{
     const d = CASTRA_HERO_DATA[h.id], st = castraHeroStats(h), cap = castraHeroCap(h);
     const portrait = castraAvatarHTML(d.look, "down", 1, 64);
-    const bar = `<div style="height:8px;background:#1b150e;border:1px solid #4a3d2c;border-radius:4px;overflow:hidden;width:120px"><div style="width:${h.fides||0}%;height:100%;background:#d4af37"></div></div>`;
+    const bar = `<div style="height:8px;background:#1b150e;border:1px solid #4a3d2c;border-radius:4px;overflow:hidden;width:120px"><div style="width:${h.fides||0}%;height:100%;background:var(--hi,#d4af37)"></div></div>`;
     const assign = CASTRA_H.assignable.map(bid=>{
       const on = h.assigned===bid, aff = d.affinity===bid;
       return `<button class="btn ${on?"btn-gold":""}" style="padding:2px 8px;font-size:12px" onclick="castraDoAssign('${h.id}','${on?"":bid}')">${esc(castraBuilding(bid).nm)}${aff?" ★":""}</button>`;
@@ -379,7 +379,7 @@ function castraHeroumOpen(){
     let talk = "";
     if(T && T.hid===h.id){
       const tk = d.talks[T.i];
-      talk = `<div style="margin-top:8px;padding:8px;border:1px solid #8a6d2f;border-radius:8px;background:rgba(0,0,0,.2)">
+      talk = `<div style="margin-top:8px;padding:8px;border:1px solid var(--hi-dim,#8a6d2f);border-radius:8px;background:rgba(0,0,0,.2)">
         <div style="font-size:16px">${castraLaHTML(castraSay(tk.la), castraSay(tk.nl), "talk_"+h.id+T.i)}</div>
         <div style="margin:8px 0 4px;font-size:16px">${castraLaHTML(tk.q.la, tk.q.nl, "tq_"+h.id+T.i)}</div>
         ${castraOptOrder(tk.q.opts.length, h.id+T.i).map(k=>{ const o = tk.q.opts[k]; return `<button class="btn ${T.answered===k?(o.ok?"btn-gold":""):""}" ${T.answered!==null?"disabled":""} style="margin:2px 4px 2px 0" onclick="castraHeroumAnswer(${k})">${esc(o.la)}</button>`; }).join("")}

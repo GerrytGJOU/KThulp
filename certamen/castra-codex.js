@@ -101,7 +101,7 @@ function castraCodexForm(f, seen){
     const lore = CASTRA_CODEX_LORE[f.id];
     if(lore) body += `<div style="margin-top:4px;font-size:15px">${castraLaHTML(lore.la, lore.nl, "codex_"+f.id)}</div>`;
   } else body += `<div style="font-size:13px;opacity:.6">Nog niet ontmoet.</div>`;
-  return `<div style="padding:5px 8px;margin:3px 0;border:1px solid ${seen?"#8a6d2f":"#4a3d2c"};border-radius:8px;background:rgba(0,0,0,.18)">
+  return `<div style="padding:5px 8px;margin:3px 0;border:1px solid ${seen?"var(--hi-dim,#8a6d2f)":"#4a3d2c"};border-radius:8px;background:rgba(0,0,0,.18)">
     ${seen&&castraFsprHas(f.id,"td")===true?`<span style="float:right">${castraFsprHTML(f.id,"td",48,"")}</span>`:""}${seen?"":"❔ "}${nm} ${castraClassBadge(f)} <small>(${esc(t.sg)} · tier ${f.tier})</small>${need}${body}</div>`;
 }
 
@@ -123,7 +123,7 @@ function castraCodexTree(volk){
     // vormen met ouder in een andere tak (kruiskoppeling) tonen we onder hun eigen tak
     const orphans = forms.filter(f=>f.tak===tak && f.from.length && !shown[f.id] && CASTRA_FORMS[f.from[0]].tak!==tak);
     const html = roots.concat(orphans).map(f=>node(f,0)).join("");
-    return html ? `<h4 style="margin:12px 0 2px;color:#d4af37">${esc(tak)}</h4>${html}` : "";
+    return html ? `<h4 style="margin:12px 0 2px;color:var(--hi,#d4af37)">${esc(tak)}</h4>${html}` : "";
   }).join("") || "";
 }
 
@@ -160,14 +160,14 @@ function castraCodexOpen(tab){
 
 function castraCodexPrest(){
   const seen = castraCollSeen(), c = CASTRA.coll || {}, t = castraTitle();
-  const bar = (a,b)=>`<div style="height:8px;background:#3a2f20;border:1px solid #6b5630;border-radius:5px;overflow:hidden;margin-top:3px"><div style="width:${Math.min(100,Math.round(100*a/b))}%;height:100%;background:#d4af37"></div></div>`;
+  const bar = (a,b)=>`<div style="height:8px;background:#3a2f20;border:1px solid #6b5630;border-radius:5px;overflow:hidden;margin-top:3px"><div style="width:${Math.min(100,Math.round(100*a/b))}%;height:100%;background:var(--hi,#d4af37)"></div></div>`;
   const tot = CASTRA_COLL_TOTAL.map(m=>{ const ok = !!c["t"+m.n];
     return `<div style="padding:6px 0;border-top:1px solid #4a3d2c;${ok?"":"opacity:.75"}"><div style="display:flex;justify-content:space-between;gap:8px"><b>${ok?"🏅":"🔒"} ${esc(m.title)}</b><span>${Math.min(seen,m.n)} / ${m.n}</span></div>
       <small>${esc(m.nl)} · ${Object.keys(m.reward).map(r=>castraRes(r).icon+" "+m.reward[r]).join(" ")}</small>${bar(seen,m.n)}</div>`; }).join("");
   const fol = Object.keys(CASTRA_FOLKS).filter(v=>v!=="myt").map(v=>{ const s = castraCollFolk(v), ok = !!c["v"+v];
     return `<div style="padding:6px 0;border-top:1px solid #4a3d2c;${ok?"":"opacity:.75"}"><div style="display:flex;justify-content:space-between;gap:8px"><b>${ok?"⭐":"☆"} ${esc(CASTRA_FOLKS[v].nm)}</b><span>${s.seen} / ${s.total}</span></div>${bar(s.seen,s.total)}</div>`; }).join("");
-  return `<h4 style="margin:6px 0 2px;color:#d4af37">Titel: ${t?esc(t.title)+" <small>("+esc(t.nl)+")</small>":"nog geen"}</h4>
+  return `<h4 style="margin:6px 0 2px;color:var(--hi,#d4af37)">Titel: ${t?esc(t.title)+" <small>("+esc(t.nl)+")</small>":"nog geen"}</h4>
     <div style="font-size:13px;opacity:.8;margin-bottom:6px">Ontmoet nieuwe soldaten (vang ze, evolueer of zie ze als vijand) om titels en beloningen te verdienen. Een ster krijg je als je alle vormen van een volk kent (${Object.keys(CASTRA_COLL_FOLK).map(r=>castraRes(r).icon+" "+CASTRA_COLL_FOLK[r]).join(" ")}).</div>
-    <h4 style="margin:8px 0 2px;color:#d4af37">Totaal (${seen} / ${CASTRA_FORM_LIST.length} vormen)</h4>${tot}
-    <h4 style="margin:12px 0 2px;color:#d4af37">Volken</h4>${fol}`;
+    <h4 style="margin:8px 0 2px;color:var(--hi,#d4af37)">Totaal (${seen} / ${CASTRA_FORM_LIST.length} vormen)</h4>${tot}
+    <h4 style="margin:12px 0 2px;color:var(--hi,#d4af37)">Volken</h4>${fol}`;
 }
