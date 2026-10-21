@@ -1,7 +1,7 @@
 /* ============================================================================
-   CASTRA HEROUM — CAMPUS (trainen en evolueren) + missio honesta
+   CASTRA HERONUM — CAMPUS (trainen en evolueren) + missio honesta
    ----------------------------------------------------------------------------
-   Ontwerp: CASTRA_HEROUM.md (Campus). Bijtrainen is bewust zwakker dan vechten:
+   Ontwerp: CASTRA_HERONUM.md (Campus). Bijtrainen is bewust zwakker dan vechten:
    de echte XP komt uit de venatio. Evolueren vraagt een soldaat-level én een
    campus-level (CASTRA_BAL.evo). Vertakkingen (Arena, Nimfen) kiest de speler.
    Laadt NA castra.js en castra-venatio.js.

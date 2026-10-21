@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — COLOSSEUM, STAP C2: DUEL VIA FIREBASE
+   CASTRA HERONUM — COLOSSEUM, STAP C2: DUEL VIA FIREBASE
    ----------------------------------------------------------------------------
    Ontwerp: CASTRA_COLOSSEUM.md. Elke speler verdedigt zijn EIGEN baan (lokaal, geen netwerkvertraging); alleen
    het startmoment is gedeeld. Er is geen server: iedereen rekent de uitslag zelf na.

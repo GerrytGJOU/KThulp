@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — VALETUDINARIUM (herstel) EN DILECTUS (werving)
+   CASTRA HERONUM — VALETUDINARIUM (herstel) EN DILECTUS (werving)
    ----------------------------------------------------------------------------
    Valetudinarium: soldaten die in een gevecht gewond raken kunnen een tijd niet
    vechten. Een hoger level herstelt sneller (CASTRA_MED.healPerLvl % korter),

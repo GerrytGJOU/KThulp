@@ -1,4 +1,4 @@
-CASTRA HEROUM — SPRITES PER VORM
+CASTRA HERONUM — SPRITES PER VORM
 ================================
 Per vorm (151 stuks, zie MANIFEST.md voor de ID's) drie optionele afbeeldingen:
 

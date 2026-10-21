@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — DRIJVENDE JOYSTICK (duimbesturing, zoals in Kingshot)
+   CASTRA HERONUM — DRIJVENDE JOYSTICK (duimbesturing, zoals in Kingshot)
    ----------------------------------------------------------------------------
    Raak je het kaartscherm aan en sleep je, dan verschijnt de joystick op de
    plek waar je duim neerkomt; de knop volgt je duim en het personage loopt

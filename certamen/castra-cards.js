@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — TABULAE (KAARTEN): ACCOUNTBREDE BONUSSEN
+   CASTRA HERONUM — TABULAE (KAARTEN): ACCOUNTBREDE BONUSSEN
    ----------------------------------------------------------------------------
    Kaarten geven kleine, blijvende bonussen aan je hele account (alle torens +x%
    schade, meer productie, enz.). Je trekt ze met roem (🏆) en elke dag mag je

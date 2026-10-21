@@ -1,6 +1,6 @@
-# Castra Heroum — troepenbomen per volk (151 vormen)
+# Castra Heronum — troepenbomen per volk (151 vormen)
 
-Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M7 gebouwd (alle regio's klaar); M7 in delen: Gallia (2026-11-04), Aegyptus (2026-11-05) en Persis (2026-11-06), Africa (2026-11-07), Roma en Laconia (2026-11-08) Germania (2026-11-09) en Themiscyra (2026-11-10) gebouwd** · hoort bij `CASTRA_HEROUM.md`.
+Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M7 gebouwd (alle regio's klaar); M7 in delen: Gallia (2026-11-04), Aegyptus (2026-11-05) en Persis (2026-11-06), Africa (2026-11-07), Roma en Laconia (2026-11-08) Germania (2026-11-09) en Themiscyra (2026-11-10) gebouwd** · hoort bij `CASTRA_HERONUM.md`.
 Dit document is de bron van waarheid voor de troepenbomen; het vervangt de huidige losse evolutielijnen (`CASTRA_LINES` in `certamen/castra-data.js`). De 15 helden (`CASTRA_HERO_DATA`) blijven ongewijzigd.
 
 ## 1. Idee en regels
@@ -188,7 +188,7 @@ Open punten (voor jou, vóór M1):
 
 **Avatar full body:** de battler-terugval (`renderPixelHeroIcon`) toonde vanaf 900 px breedte alleen de linkerbovenhoek van de sprite (halve avatar, kop en schouders), doordat de lagen op 144 px-cellen bleven terwijl de wrapper op 96 px staat. Opgelost met twee CSS-regels in `.pixel-hero-mini` (index.html); de hele avatar past nu in de gevraagde grootte (ook één kaarttegel). Dit werkt ook door in profiel- en spelerslijsten.
 
-**Aanhalingstekens en naam (2026-11-13).** Gesproken Latijn staat tussen aanhalingstekens: de heldenopdrachten (vraag, afronding, aansluiting), de gesprekken in het heroum, de kampintro en de losse Aeneas-regels (`castraSay()`), plus de verslagen vijand (*Hostis victus dicit: "Te sequar, dux Gerben."*). Elke held begroet met *Salve, dux {naam}!* en sluit aan met *Tecum venio, dux {naam}!*; ook in de tutorial en bij het afscheid wordt de speler aangesproken. De naam komt uit het profiel (`BM_IDENT.name`), blijft onverbogen en valt weg als er geen profiel is. Tikken op de naam geeft "jouw naam".
+**Aanhalingstekens en naam (2026-11-13).** Gesproken Latijn staat tussen aanhalingstekens: de heldenopdrachten (vraag, afronding, aansluiting), de gesprekken in de heldenzaal, de kampintro en de losse Aeneas-regels (`castraSay()`), plus de verslagen vijand (*Hostis victus dicit: "Te sequar, dux Gerben."*). Elke held begroet met *Salve, dux {naam}!* en sluit aan met *Tecum venio, dux {naam}!*; ook in de tutorial en bij het afscheid wordt de speler aangesproken. De naam komt uit het profiel (`BM_IDENT.name`), blijft onverbogen en valt weg als er geen profiel is. Tikken op de naam geeft "jouw naam".
 
 ## 11. Hoofdmenu in Pokémon-stijl (2026-11-13)
 
@@ -221,7 +221,7 @@ Effecten: *Percussio* en *Insidiae* (elke n-de treffer vertraagt), *Testudo*, *B
 
 **Balans.** Vaardigheden maken een goed uitgeruste opstelling ±1,6–1,9× zo sterk (op level 50), op level 10 maar ±1,1×. Daarom zijn alle missies (behalve de tutorialmissie m1) en de Legio opnieuw afgesteld met dezelfde bisect-proef, nu mét vaardigheden: hpMult m2 4,4 · m3 5,5 · g1 5,1 · g2 9,8 · t1 5,4 · t2 10,1 · ga1 20,2 · ga2 13,0 · ae1 21,9 · ae2 9,9 · pe1 12,6 · pe2 9,6 · af1 18,9 · af2 7,8 · ro1 8,1 · ro2 15,8 · la1 11,3 · la2 9,2 · gm1 10,2 · gm2 7,2 · th1 13,8 · th2 7,1 · Legio 6,8.
 
-**Prestaties als achievements** (`castra-codex.js`): de codex-prestaties (6 titels, 11 sterren per volk, "Alle volken") staan als categorie *Castra Heroum* in `ACHIEVEMENTS_DEF` en verschijnen in Mijn profiel van Certamen (ingelogd in `identities/{klas}/{lid}/achievements`, anders in het lokale profiel). Eerder behaalde prestaties worden bij de volgende controle alsnog toegekend (`castraGrantAch`).
+**Prestaties als achievements** (`castra-codex.js`): de codex-prestaties (6 titels, 11 sterren per volk, "Alle volken") staan als categorie *Castra Heronum* in `ACHIEVEMENTS_DEF` en verschijnen in Mijn profiel van Certamen (ingelogd in `identities/{klas}/{lid}/achievements`, anders in het lokale profiel). Eerder behaalde prestaties worden bij de volgende controle alsnog toegekend (`castraGrantAch`).
 
 **Wereldopdrachten in alle 11 regio's** (`castra-wobj.js`, nu data-gedreven: `CASTRA_WREG`, `CASTRA_WPOS`, `CASTRA_WBT`): per regio 3–4 kisten, een zoekopdracht met een eigen opdrachtgever en voorwerp (Agricola/amfoor, Poeta/lier, Custos/schild, Mercator/halsband, Scriba/scarabee, Magus/kroon, Nauta/ivoor, Gladiator/zwaard, Spartiates/helm, Venator/hoorn, Amazon/boog), een Faber die iets bouwt (put = al je gewonde soldaten genezen; graanschuur, houtzagerij en mijn = dagelijks grondstoffen) en een Magistra met puzzels (beloning eenmaal per dag per regio). Kosten en beloningen schalen ×(1 + 0,4 per regio) mee. Plekken zijn vastgelegd en gecontroleerd op bereikbaarheid.
 

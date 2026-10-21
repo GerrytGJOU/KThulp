@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — WERELDOBJECTEN EN OPDRACHTTYPES (zoeken, inleveren, puzzelen)
+   CASTRA HERONUM — WERELDOBJECTEN EN OPDRACHTTYPES (zoeken, inleveren, puzzelen)
    ----------------------------------------------------------------------------
    In elke regio staan nu dingen om te doen, naast het gras en de helden:
      chest   kist met buit; per dag eenmaal te openen (komt de volgende dag terug)

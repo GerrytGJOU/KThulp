@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — COLOSSEUM, STAP C1: EINDELOZE MODUS (SOLO)
+   CASTRA HERONUM — COLOSSEUM, STAP C1: EINDELOZE MODUS (SOLO)
    ----------------------------------------------------------------------------
    Ontwerp: CASTRA_COLOSSEUM.md. Eigen baan, golven die vanzelf komen en steeds
    sterker worden (tijdschema vast, dus deterministisch en later naspeelbaar), tot

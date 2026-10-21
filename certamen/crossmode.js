@@ -9,7 +9,7 @@
       aangeroepen vanuit battle.js): bescheiden, scope battle/boss/totalwar.
       Titels worden vanzelf (ook met terugwerkende kracht) toegekend op basis van de
       voortgang in de opgeslagen Chronica-slots (cxSyncBookTitles).
-   2. Chronica → Castra Heroum: elk voltooid Boek (en de Finale) geeft eenmalig een
+   2. Chronica → Castra Heronum: elk voltooid Boek (en de Finale) geeft eenmalig een
       kaarttrekking in Castra (cxCastraBookTokens).
    3. Castra → gedeeld profiel: Latijn-acties (woordenquiz, wekelijkse woordvraag,
       opgezochte woorden) geven profiel-XP en munten met een dagplafond
@@ -192,7 +192,7 @@ function cxCastraSectionHTML(){
     const W = (typeof castraWkState==="function") ? castraWkState() : null;
     const stat = (k,v)=>`<div style="display:flex;justify-content:space-between;font-size:14px;margin-top:3px"><span class="note" style="margin:0">${k}</span><b>${v}</b></div>`;
     const av = (typeof BM_IDENT!=="undefined" && BM_IDENT && BM_IDENT.avatar && typeof renderPixelHeroIcon==="function") ? renderPixelHeroIcon(BM_IDENT.avatar,64) : "";
-    return `<div class="eyebrow l" style="margin-top:20px">🏕️ Castra Heroum</div>
+    return `<div class="eyebrow l" style="margin-top:20px">🏕️ Castra Heronum</div>
     <div class="panel">
       <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px">
         ${av?`<div style="flex:0 0 auto">${av}</div>`:""}${(typeof cxCompanionHTML==="function"&&cxCompanionHTML(48))?`<div title="Je metgezel" style="flex:0 0 48px;width:48px;height:48px;position:relative;margin-left:-6px">${cxCompanionHTML(48)}</div>`:""}
@@ -204,7 +204,7 @@ function cxCastraSectionHTML(){
       ${stat("Codex", seen+" / "+total)}${stat("Missies gewonnen", done+" / "+CASTRA_P_MISSIONS.length)}
       ${W&&W.id?stat("Wekelijkse uitdaging", W.win?"record "+W.best:"nog niet gewonnen"):""}
       ${aff.length?`<div class="note" style="font-weight:700;margin:10px 0 2px">Klasse-affiniteit uit Battle Mode</div><div class="note">${aff.map(esc).join(" · ")}</div>`:`<div class="note" style="margin-top:8px">Klasse-affiniteit: verdien sterren in Battle Mode en je soldaten van die klasse krijgen tot +10% extra XP.</div>`}
-      <button class="btn btn-ghost btn-block" style="margin-top:10px;font-size:13px" onclick="go('castraHome')">Open Castra Heroum</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:10px;font-size:13px" onclick="go('castraHome')">Open Castra Heronum</button>
     </div>`;
   }catch(e){ return ""; }
 }
@@ -220,7 +220,7 @@ SCREENS.myHardWords = function(){
   const rows = list.length ? list.map(p=>`<div style="display:flex;align-items:center;gap:10px;margin:6px 0">
       <div style="flex:1;min-width:0"><b style="font-size:17px">${esc(p.la)}</b> <span class="note" style="margin:0">${esc(p.nl)}</span></div>
       <div style="width:86px;height:8px;background:var(--stone3);border-radius:4px;overflow:hidden" title="hoe lastig: ${p.score} van ${HW_MAX_SCORE}"><div style="height:100%;width:${Math.round(100*p.score/HW_MAX_SCORE)}%;background:var(--ox)"></div></div></div>`).join("")
-    : `<div class="note">Nog geen lastige woorden die in de woordenlijst staan. Speel een paar rondes of zoek woorden op in Castra Heroum.</div>`;
+    : `<div class="note">Nog geen lastige woorden die in de woordenlijst staan. Speel een paar rondes of zoek woorden op in Castra Heronum.</div>`;
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('collection')">${iconSVG("shield",20,"currentColor")}</button><h2>🧠 Mijn lastige woorden</h2></div>
   <div class="panel"><div class="note" style="margin:0 0 8px">De woorden die je het vaakst fout had of opzocht. Hoe voller de balk, hoe lastiger. Goed beantwoorden maakt een woord weer gewoon.</div>${rows}
@@ -240,7 +240,7 @@ function cxPracticeHard(){
 // Grote Reis: Battle Mode, Chronica, Castra en Training geprobeerd.
 (function(){
   if(typeof ACHIEVEMENTS_DEF==="undefined" || ACHIEVEMENTS_DEF.some(a=>a.id==="grote_reis")) return;
-  ACHIEVEMENTS_DEF.push({ id:"grote_reis", nm:"Grote Reis", ds:"Battle Mode, Chronica Classica, Castra Heroum en Training Mode allemaal geprobeerd", icon:"eagle", cat:"algemeen" });
+  ACHIEVEMENTS_DEF.push({ id:"grote_reis", nm:"Grote Reis", ds:"Battle Mode, Chronica Classica, Castra Heronum en Training Mode allemaal geprobeerd", icon:"eagle", cat:"algemeen" });
 })();
 function cxModesTried(){
   const out = {};

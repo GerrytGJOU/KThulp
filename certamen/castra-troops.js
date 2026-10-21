@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — TROEPENBOMEN PER VOLK (151 vormen) — M1
+   CASTRA HERONUM — TROEPENBOMEN PER VOLK (151 vormen) — M1
    ----------------------------------------------------------------------------
    Vervangt de losse evolutielijnen (CASTRA_LINES, nu CASTRA_LINES_LEGACY, alleen
    nog voor de migratie). Ontwerp: CASTRA_TROEPENBOMEN.md (bron van waarheid).

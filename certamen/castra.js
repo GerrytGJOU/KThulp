@@ -1,7 +1,7 @@
 /* ============================================================================
-   CASTRA HEROUM — SPELFRAMEWORK (fase 1: de begaanbare castra)
+   CASTRA HERONUM — SPELFRAMEWORK (fase 1: de begaanbare castra)
    ----------------------------------------------------------------------------
-   Ontwerp: CASTRA_HEROUM.md. Data: castra-data.js. Avatar: castra-avatar.js.
+   Ontwerp: CASTRA_HERONUM.md. Data: castra-data.js. Avatar: castra-avatar.js.
    Dit bestand bevat: staat + opslag (lokaal, met best-effort Firebase-sync),
    grondstoffen via tijdstempels, gebouwen upgraden, soldaten werven (seeded RNG,
    aanleg/karakter/insignis) en het scherm SCREENS.castraHome (top-down kamp).
@@ -229,7 +229,7 @@ SCREENS.castraHome = function(){
   CASTRA_UI.px = CASTRA.pos.x; CASTRA_UI.py = CASTRA.pos.y; CASTRA_UI.dir = "up"; CASTRA_UI.frame = 1;
   const T = CASTRA_MAP;
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="castraLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>🏕️ Castra Heroum</h2></div>
+  <div class="scrhead"><button class="back" onclick="castraLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>🏕️ Castra Heronum</h2></div>
   <div id="castraRes" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:4px 0 8px"></div>
   <div id="castraTutBar"></div>
   <div id="castraWrap" style="position:relative;width:100%;margin:0 auto;overflow:hidden;border:2px solid var(--hi,var(--hi,#d4af37));border-radius:10px;background:#2a2118">

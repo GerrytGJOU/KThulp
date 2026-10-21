@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — MISSIEKETENS EN PERSONEN IN DE WERELD
+   CASTRA HERONUM — MISSIEKETENS EN PERSONEN IN DE WERELD
    ----------------------------------------------------------------------------
    Elke held heeft een keten (CASTRA_HERO_DATA[id].chain, zie castra-heroes.js):
      kill     = versla n vijanden in een bepaald terrein (venatio),

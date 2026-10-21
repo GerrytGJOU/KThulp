@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — GROTE REGIO'S: GALLIA, GRAECIA, AEGYPTUS (64 × 48, Pokémon-formaat)
+   CASTRA HERONUM — GROTE REGIO'S: GALLIA, GRAECIA, AEGYPTUS (64 × 48, Pokémon-formaat)
    ----------------------------------------------------------------------------
    Elke regio heeft dezelfde opzet als Roma, data-gedreven uit CASTRA_REGSPEC:
      huis A       quizmaster: dagelijkse vertaalquiz met hele Latijnse zinnen (vanaf niveau 13), boekenkast, 2 kisten

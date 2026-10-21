@@ -1,5 +1,5 @@
 /* ============================================================================
-   CASTRA HEROUM — ROMA UITGEBOUWD (stad met vijf binnenruimtes)
+   CASTRA HERONUM — ROMA UITGEBOUWD (stad met vijf binnenruimtes)
    ----------------------------------------------------------------------------
    Roma is 72×54 tegels. Langs de Via Sacra (de dwarsstraat) staan vier tenten met een
    deur, en ten oosten van het midden een trap naar de catacomben:

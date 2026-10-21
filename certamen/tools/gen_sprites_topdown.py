@@ -1,4 +1,4 @@
-"""gen_sprites_topdown.py — afgeleide TOP-DOWN avatar-sprites (Castra Heroum).
+"""gen_sprites_topdown.py — afgeleide TOP-DOWN avatar-sprites (Castra Heronum).
 
 Tegenhanger van tools/gen_sprites.js (battler). Bron: assets/sprites-topdown/
 TV_Body_p01.png (RPG Maker MV-lichaam, zelfde 6 huidkleuren en irispixels als
