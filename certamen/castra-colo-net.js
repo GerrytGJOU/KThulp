@@ -83,6 +83,8 @@ function castraCSettle(mid){
       if(colo.bonusDay!==day){ colo.bonusDay = day; colo.bonusN = 0; }
       if(bonus){ colo.bonusN++; if(rank===1){ CASTRA.res.gloria = (CASTRA.res.gloria||0) + 5; if(typeof castraCardToken==="function") castraCardToken(1, "Colosseum gewonnen", true); } }
       castraCLog(mid, { rank, pay, ok:me?me.ok:false });
+      colo.played = (colo.played||0)+1; if(rank===1 && me && me.ok) colo.wins = (colo.wins||0)+1;       // prestaties in het Certamen-profiel
+      if(typeof castraGrantAch==="function"){ castraGrantAch("castra_colo_play"); if(colo.wins>=1) castraGrantAch("castra_colo_win"); if(colo.wins>=5) castraGrantAch("castra_colo_champ"); }
       if(bonus && typeof castraPxpAdd==="function") castraPxpAdd(rank===1 ? 25 : 10);
       toast(rank===1 ? "🏆 Gewonnen!" : "🏛️ Colosseum afgelopen", rank===1 ? "Je wint "+pay+" brons"+(bonus?" en 5 roem":"")+"." : (pay ? "Plaats "+rank+": +"+pay+" brons." : "Plaats "+rank+"."));
     }
@@ -245,8 +247,8 @@ function castraCStandingsHTML(r){
     <div class="note" style="margin-top:6px">De uitslag is nagerekend uit de ingestuurde runs (naspelen), niet uit wat spelers beweren.</div></div>`;
 }
 const CASTRA_C_MODE = { duel:"Duel", quad:"Vierkamp" };
-function castraCRenderBody(){
-  const C = CASTRA_C, box = el("ccBody"); if(!box) return;
+function castraCWedHTML(){
+  const C = CASTRA_C;
   const aes = (CASTRA.res[CASTRA_COLO.res]||0), pend = castraCPend(), mids = Object.keys(pend), fee = CASTRA_COLO.fee, pay = CASTRA_COLO.pay;
   let h = `<div class="note">🪙 Je hebt ${aes} brons · inzet ${fee} · duel: winnaar ${pay.duel[0]} · vierkamp: ${pay.quad.join(" / ")} (met een AI: ${castraColoPayTable("quad",1).join(" / ")}).</div>`;
   mids.forEach(mid=>{
@@ -278,18 +280,94 @@ function castraCRenderBody(){
   }
   const hist = castraCHist();
   if(hist.length) h += `<div class="panel"><h3>Eerdere wedstrijden</h3>${hist.slice(0,6).map(x=>`<div class="note">${new Date(x.t).toLocaleString("nl-NL")} · ${CASTRA_C_MODE[x.mode]||"duel"} · divisie ${x.div||"?"} · ${x.refund?"inzet terug ("+esc(x.why||"")+")":"plaats "+x.rank+" · "+(x.pay?"+"+x.pay+" 🪙":"geen prijs")}</div>`).join("")}</div>`;
+  return h;
+}
+function castraCRenderBody(){
+  const C = CASTRA_C, box = el("ccBody"); if(!box) return;
+  const tab = CASTRA_C_TAB || "wed";
+  let h = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px">${CASTRA_C_TABS.map(t=>`<button class="btn ${t[0]===tab?"btn-gold":""}" style="min-height:44px" onclick="castraCTab('${t[0]}')">${t[1]}</button>`).join("")}</div>`;
+  h += tab==="oef" ? castraCPracticeHTML() : !C ? `<div class="note">Meld je eerst aan met je klascode en leerlingcode (via Battle Mode of Meedoen) om te kunnen meedoen aan wedstrijden en de ranglijst te zien. Oefenen kan ook zonder.</div>` : tab==="rang" ? castraCRankHTML() : castraCWedHTML();
   const sig = h; if(box.dataset.sig!==sig){ box.dataset.sig = sig; box.innerHTML = h; }
   const cd = el("ccCd"); if(cd) cd.textContent = castraCCountdownText();
 }
+/* ---------- ranglijst van je klas ----------
+   Geen aparte opslag (die zou te vervalsen zijn): de lijst wordt berekend uit de laatste 25 wedstrijden van de klas
+   (castraColosseum/{klas}, op createdAt). Elke afgeronde wedstrijd wordt NAGESPEELD (castraColoStandings), zodat de lijst niet
+   afhangt van wat spelers beweren; de uitslag per wedstrijd wordt lokaal onthouden, dus alleen de eerste keer duurt het even.
+   Teruggestorte wedstrijden (niemand leverde in) tellen niet mee; de AI telt niet als speler. */
+function castraCRankSummary(mid, d){
+  const key = "castra_colo_std_v1_"+mid;
+  try{ const c = localStorage.getItem(key); if(c) return JSON.parse(c); }catch(e){}
+  const st = castraColoStandings(d, d.runs||{});
+  const sum = { div:d.divisie, mode:d.mode, refund:st.refund, rows:st.rows.filter(r=>!r.ghost).map(r=>({ lid:r.lid, nm:r.nm, rank:r.rank, pay:r.pay, ok:r.ok, wave:r.res?r.res.wave:0 })) };
+  try{ localStorage.setItem(key, JSON.stringify(sum)); }catch(e){}
+  return sum;
+}
+function castraCRankLoad(force){
+  const C = CASTRA_C; if(!C) return;
+  const R = C.rank || (C.rank = { state:"idle", rows:null, done:0, total:0, at:0 });
+  if(R.state==="busy" || (R.state==="ready" && !force && Date.now()-R.at<60000)) return;
+  R.state = "busy"; R.done = 0; R.total = 0; castraCRefresh();
+  C.db.ref(castraCBase()).orderByChild("createdAt").limitToLast(25).once("value").then(snap=>{
+    const all = snap.val()||{}, ids = Object.keys(all).sort((a,b)=>all[a].createdAt-all[b].createdAt), tally = {}, now = castraCNow();
+    R.total = ids.length; let i = 0, counted = 0;
+    const step = ()=>{
+      if(CASTRA_C!==C) return;
+      if(i>=ids.length){
+        const rows = Object.keys(tally).map(k=>tally[k]).sort((a,b)=>(b.wins-a.wins) || (b.net-a.net) || (a.played-b.played) || (a.nm<b.nm?-1:1));
+        R.rows = rows; R.counted = counted; R.state = "ready"; R.at = Date.now(); castraCRefresh(); return;
+      }
+      const mid = ids[i++], d = all[mid]; R.done = i;
+      try{
+        const players = Object.keys(d.players||{}), finished = d.status==="running" && d.startAt && (players.every(l=>d.runs&&d.runs[l]) || now > castraCDeadline(d));
+        if(finished){
+          const sum = castraCRankSummary(mid, d);
+          if(!sum.refund){
+            counted++;
+            sum.rows.forEach(r=>{
+              const t = tally[r.lid] || (tally[r.lid] = { lid:r.lid, nm:r.nm, played:0, wins:0, net:0, best:{} });
+              t.nm = r.nm; t.played++; if(r.rank===1 && r.ok) t.wins++; t.net += r.pay - (d.fee||CASTRA_COLO.fee);
+              if(r.ok) t.best[sum.div] = Math.max(t.best[sum.div]||0, r.wave);
+            });
+          }
+        }
+      }catch(e){}
+      castraCRefresh(); setTimeout(step, 0);
+    };
+    step();
+  }).catch(()=>{ R.state = "error"; castraCRefresh(); });
+}
+function castraCRankHTML(){
+  const C = CASTRA_C, R = C.rank;
+  if(!R || R.state==="idle"){ castraCRankLoad(); return `<div class="panel"><div class="note">Ranglijst laden…</div></div>`; }
+  if(R.state==="busy") return `<div class="panel"><div class="note">⏳ Wedstrijden van je klas worden nagerekend… ${R.done}/${R.total||"?"}</div></div>`;
+  if(R.state==="error") return `<div class="panel"><div class="note">De ranglijst kon niet geladen worden. <button class="btn" onclick="castraCRankLoad(true)">Opnieuw</button></div></div>`;
+  const me = C.lid, rows = R.rows||[], mine = rows.findIndex(r=>r.lid===me);
+  const best = r=>[20,35,50].map(d=>r.best[d]||"—").join(" / ");
+  return `<div class="panel"><h3>🏆 Ranglijst — klas ${esc(C.klas)}</h3>
+    <div class="note">${R.counted ? "Op basis van de laatste "+R.total+" wedstrijden van je klas ("+R.counted+" afgerond, allemaal nagerekend)." : "Er zijn nog geen afgeronde wedstrijden in je klas."}${mine>=0?` Jij staat op plaats <b>${mine+1}</b> van ${rows.length}.`:""}</div>
+    ${rows.length?`<table style="width:100%;border-collapse:collapse;font-size:15px;margin-top:6px"><tr style="opacity:.7;font-size:12px"><td></td><td>Speler</td><td style="text-align:right">Gespeeld</td><td style="text-align:right">Gewonnen</td><td style="text-align:right">Netto 🪙</td><td style="text-align:right">Beste golf (20/35/50)</td></tr>
+    ${rows.map((r,k)=>`<tr style="${r.lid===me?"font-weight:bold;color:#d4af37":""}"><td style="padding:3px 6px">${k+1}.</td><td style="padding:3px 6px">${esc(r.nm)}</td><td style="padding:3px 6px;text-align:right">${r.played}</td><td style="padding:3px 6px;text-align:right">${r.wins}</td><td style="padding:3px 6px;text-align:right">${r.net>0?"+":""}${r.net}</td><td style="padding:3px 6px;text-align:right">${best(r)}</td></tr>`).join("")}</table>`:""}
+    <button class="btn" style="min-height:44px;margin-top:8px" onclick="castraCRankLoad(true)">↻ Vernieuwen</button></div>`;
+}
+/* ---------- oefenen (eindeloze modus, alleen jij) ---------- */
+function castraCPracticeHTML(){
+  const best = (CASTRA.colo||{}).best||{};
+  return `<div class="panel"><h3>🛡️ Oefenen — eindeloze modus</h3>
+    <div class="note">Dezelfde regels als in een wedstrijd (divisie met levelplafond, vast aantal torens, geen kaarten of gunsten), maar alleen jij, zonder inzet. De golven worden steeds sterker; je hebt <b>roem en ervaring</b> te winnen met een nieuw record.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${[20,35,50].map(d=>`<button class="btn btn-gold" style="min-height:44px" onclick="castraColoStart(${d})">Divisie ${d} (${CASTRA_COLO.cap[d]} torens)${best[d]?" · record golf "+best[d].wave:""}</button>`).join("")}</div></div>`;
+}
+const CASTRA_C_TABS = [["wed","⚔️ Wedstrijden"],["rang","🏆 Ranglijst"],["oef","🛡️ Oefenen"]];
+function castraCTab(t){ CASTRA_C_TAB = t; const b = el("ccBody"); if(b) b.dataset.sig = ""; castraCRenderBody(); }
 SCREENS.castraColoLobby = function(){
   document.body.classList.remove("greek");
   if(!CASTRA) castraLoad();
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="go('castraProelium')">${iconSVG("shield",20,"currentColor")}</button><h2>🏛️ Colosseum</h2></div>
+  <div class="scrhead"><button class="back" onclick="castraColoBack()">${iconSVG("shield",20,"currentColor")}</button><h2>🏛️ Colosseum</h2></div>
   ${castraColoAllowed()?"":`<div class="note">Het Colosseum is nog gesloten.</div>`}
   <div id="ccBody"></div>${foot()}`);
   if(!castraColoAllowed()) return;
-  if(!castraCAttach()){ el("ccBody").innerHTML = `<div class="note">Meld je eerst aan met je klascode en leerlingcode (via Battle Mode of Meedoen) om te kunnen meedoen.</div>`; return; }
+  castraCAttach();      // zonder aanmelding blijft alleen "Oefenen" over
   castraCRenderBody();
 };
 // Bij het openen van de app of lijst: lopende inzetten afhandelen (uitbetalen of terugbetalen).

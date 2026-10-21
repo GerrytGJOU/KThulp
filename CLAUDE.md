@@ -33,9 +33,10 @@ spelregels, features of het datamodel raakt:
 - `CASTRA_TROEPENBOMEN.md` — troepenbomen per volk met 151 vormen (Mount & Blade-stijl) die de
   soldatenlijnen van Castra Heroum vervangen. Status (2026-10-30): M1–M5 gebouwd (catalogus, stabula/navalia, wild en werving per volk, codex, Certamen-klassen, sprites-pijplijn, en alle M7-regio's: Gallia, Aegyptus, Persis, Africa, Roma, Laconia, Germania, Themiscyra).
 - `CASTRA_COLOSSEUM.md` — PvP in Castra Heroum: eigen baan per speler met steeds sterkere
-  vijanden, inzet en uitbetaling (duel / vierkamp). Status (2026-12-09): C1 (eindeloze modus,
-  gekalibreerd) en C2 (duel via Firebase, tak `castraColosseum/{klas}/{match}`) gebouwd maar
-  verborgen (`?dev`); C3/C4 volgen. Tests: `certamen/tools/castra-colo-*.js`.
+  vijanden, inzet en uitbetaling (duel / vierkamp). Status (2026-12-13): alle vier de mijlpalen gebouwd en
+  open voor spelers vanaf Castra-niveau 20 (deur in Roma, binnenruimte met Praeco, lobby voor duel en vierkamp met AI,
+  ranglijst per klas, oefenmodus, prestaties); tak `castraColosseum/{klas}/{match}` in de rules. Tests:
+  `certamen/tools/castra-colo-*.js`.
 - `Chronica.md` — Single Player Mode "Chronica Classica": narratieve,
   offline-first RPG (proloog t/m Hoofdstuk 16 speelbaar, Hoofdstuk 17
   gebouwd maar nog niet gekoppeld; campagne-metadata loopt door tot
