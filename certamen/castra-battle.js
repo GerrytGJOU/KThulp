@@ -54,7 +54,7 @@ function castraBStart(missionId){
   if(typeof castraEdictApply==="function") castraEdictApply(CASTRA_B);   // missieregels (castra-roles.js)
   // vormsprites (indien aanwezig) vooraf controleren: alle vijanden van de missie en je eigen soldaten
   const ids = {}; m.waves.forEach(w=>w.forEach(g=>ids[g.line]=1)); (CASTRA.soldiers||[]).forEach(s=>ids[s.line]=1);
-  castraFsprProbe(Object.keys(ids).map(i=>[i,"td"]), null);
+  castraFsprProbeTD(Object.keys(ids), null);
   go("castraBattle");
 }
 SCREENS.castraBattle = function(){
@@ -151,7 +151,7 @@ function castraBDrawTower(t){
   const box = el("cbUnits"); if(!box) return;
   const d = document.createElement("div"); d.id = "cbT"+t.id;
   d.style.cssText = `position:absolute;left:${t.x*48}px;top:${t.y*48}px;width:48px;height:48px`;
-  d.innerHTML = (t.look ? castraAvatarHTML(t.look, "down", 1, 48) : castraFsprHTML(t.line, "td", 48, castraAvatarHTML(castraPLook(t.line), "down", 1, 48))) + (t.type==="sup"?`<div style="position:absolute;top:-4px;right:0;font-size:12px">✨</div>`:"");
+  d.innerHTML = `<div class="cbs">${t.look ? castraAvatarHTML(t.look, "down", 1, 48) : castraTdFrameHTML(t.line, "idle", 48, castraAvatarHTML(castraPLook(t.line), "down", 1, 48))}</div>` + (t.type==="sup"?`<div style="position:absolute;top:-4px;right:0;font-size:12px">✨</div>`:"");
   box.appendChild(d);
 }
 
@@ -231,7 +231,7 @@ function castraBTick(){
     castraPStep(B.sim);
     let stop = false;
     B.sim.events.forEach(ev=>{
-      if(ev.k==="hit"){ const t = B.sim.towers.find(x=>x.id===ev.t), e = B.sim.enemies.find(x=>x.id===ev.e); if(t&&e) B.fx.push({ x1:t.cx, y1:t.cy, x2:e.x, y2:e.y, ttl:3, type:t.type }); }
+      if(ev.k==="hit"){ const t = B.sim.towers.find(x=>x.id===ev.t), e = B.sim.enemies.find(x=>x.id===ev.e); if(t&&e){ B.fx.push({ x1:t.cx, y1:t.cy, x2:e.x, y2:e.y, ttl:3, type:t.type }); castraBTowerFlash(t, e); } }
       else if(ev.k==="heal"){ const m = B.sim.enemies.find(x=>x.id===ev.m), e = B.sim.enemies.find(x=>x.id===ev.e); if(m&&e) B.fx.push({ x1:m.x, y1:m.y, x2:e.x, y2:e.y, ttl:4, col:"#6f6" }); }
       else if(ev.k==="newrole" && typeof castraBIntroRole==="function"){ if(castraBIntroRole(ev.role)) stop = true; }
       else if(ev.k==="cmd" && typeof castraBCmdFlash==="function") castraBCmdFlash(ev.id);
@@ -245,6 +245,13 @@ function castraBTick(){
     // automatisch de volgende golf starten (3 s na de vorige; niet zolang je nog een gunst moet kiezen; eerste golf altijd handmatig)
     if(B.auto && !B.pick && B.sim.wave>=0 && B.sim.wave < B.mission.waves.length-1 && ++B.autoT >= 60) castraBStartWave();
   }
+}
+// Aanvalsframe van een toren kort tonen (alleen als de vorm zes frames heeft); kijkrichting naar het doelwit.
+function castraBTowerFlash(t, e){
+  if(t.look || !castraHasTdFrames(t.line)) return;
+  const d = document.getElementById("cbT"+t.id), c = d && d.firstChild; if(!c || c._flash) return;
+  c._flash = true; c.innerHTML = castraTdFrameHTML(t.line, "attack", 48, "", e.x < t.cx);
+  setTimeout(()=>{ c._flash = false; c.innerHTML = castraTdFrameHTML(t.line, "idle", 48, ""); }, 220);
 }
 function castraBDrawUnits(){
   const B = CASTRA_B, box = el("cbUnits"); if(!box) return; const tick = B.sim.tick;
@@ -265,7 +272,11 @@ function castraBDrawUnits(){
     const frame = [0,1,2,1][(tick>>2)&3];
     if(dir!==u.dir || frame!==u.frame){
       u.dir = dir; u.frame = frame;
-      if(castraFsprHas(e.line,"td")===true){
+      if(castraHasTdFrames(e.line)){
+        // zes frames per vorm: omlaag, opzij (kijkt naar rechts, spiegelen bij links) en omhoog, met een lichte huppel in de looptakt
+        const fr = dir==="up" ? "up" : dir==="down" ? "down" : "side";
+        u.d.firstChild.innerHTML = `<div style="transform:translateY(${frame===1?0:-2}px)">${castraTdFrameHTML(e.line, fr, 48, "", dir==="left")}</div>`;
+      } else if(castraFsprHas(e.line,"td")===true){
         // één stilstaand plaatje: spiegelen bij links, lichte huppel in de looptakt
         u.d.firstChild.innerHTML = `<div style="transform:translateY(${frame===1?0:-2}px)">${castraFsprHTML(e.line,"td",48,"",dir==="left")}</div>`;
       } else u.d.firstChild.innerHTML = castraAvatarHTML(castraPLook(e.line), dir, frame, 48);
