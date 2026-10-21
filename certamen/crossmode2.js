@@ -272,6 +272,43 @@ function cxQuaestioPick(k){
 }
 function cxQuaestioSkip(){ const B = CASTRA_B; if(!B) return; B.qst = null; cxQuaestioRefresh(); }
 
+/* ---------- 9b. De metgezel vraagt af en toe naar een lastig woord (geen melding, geen straf) ---------- */
+const CX2_ASK_KEY = "cx_comp_ask_v1", CX2_ASK_GAP = 20*60000, CX2_ASK_DAY = 3;
+let CX_ASK = null;
+function cxAskMeta(){ try{ return JSON.parse(localStorage.getItem(CX2_ASK_KEY)||"{}")||{}; }catch(e){ return {}; } }
+function cxAskClose(){ const n = document.getElementById("cxAsk"); if(n) n.remove(); CX_ASK = null; }
+function cxCompanionAsk(){
+  try{
+    if(!el("castraMap") || document.getElementById("cxAsk") || (typeof CASTRA_B!=="undefined" && CASTRA_B && el("cbMap"))) return;
+    const c = cxCompanionGet(); if(!c) return;
+    const hard = cxHardItems(1)[0], pad = cxPadPairs(); if(!hard || pad.length<4) return;
+    const m = cxAskMeta(), day = new Date().toISOString().slice(0,10), n = m.day===day ? (m.n||0) : 0;
+    if(n>=CX2_ASK_DAY || Date.now()-(m.t||0) < CX2_ASK_GAP) return;
+    try{ localStorage.setItem(CX2_ASK_KEY, JSON.stringify({ t:Date.now(), day, n:n+1 })); }catch(e){}
+    CX_ASK = cxQItem(hard, pad); CX_ASK.nm = c.nm;
+    const box = document.createElement("div"); box.id = "cxAsk";
+    box.style.cssText = "position:fixed;left:12px;bottom:12px;z-index:9985;max-width:min(360px,calc(100vw - 24px));background:linear-gradient(var(--parch,#efe1b9),var(--parch2,#e4d2a1));color:var(--parch-ink,#2b1d0e);border:3px solid var(--parch-edge,#4a3416);border-radius:12px;box-shadow:0 0 0 2px var(--parch-gold,#c9a24a),0 6px 20px rgba(0,0,0,.5);padding:10px 12px;font-family:inherit";
+    document.body.appendChild(box); cxAskRender();
+  }catch(e){}
+}
+function cxAskRender(){
+  const box = document.getElementById("cxAsk"), it = CX_ASK; if(!box || !it) return;
+  const btn = "display:block;width:100%;margin:4px 0;min-height:42px;font-size:15px;text-align:left;font-family:inherit;cursor:pointer;background:var(--parch2,#e9d9ac);color:var(--parch-ink,#2b1d0e);border:2px solid var(--parch-edge,#4a3416);border-radius:8px;padding:4px 10px";
+  const done = it.picked!==null, ok = done && it.picked===it.ans;
+  box.innerHTML = `<div style="display:flex;gap:10px;align-items:flex-start"><div style="flex:0 0 44px;width:44px;height:44px;position:relative">${cxCompanionHTML(44)}</div>
+    <div style="flex:1;min-width:0"><div style="font-size:14px"><b>${esc(it.nm)}</b> vraagt: wat betekent <b>${esc(it.la)}</b>?</div>
+    ${done ? `<div style="font-size:14px;margin-top:6px">${ok ? "Recte! 🐾" : "Dat woord betekent <b>"+esc(it.nl)+"</b>. We oefenen het straks nog eens."}</div>`
+           : `${it.opts.map((o,k)=>`<button style="${btn}" onclick="cxAskPick(${k})">${esc(o)}</button>`).join("")}<button style="${btn};min-height:34px;font-size:13px;opacity:.75" onclick="cxAskClose()">Later</button>`}</div>
+    <button onclick="cxAskClose()" aria-label="Sluiten" style="flex:0 0 auto;min-width:34px;min-height:34px;font-size:16px;font-family:inherit;cursor:pointer;background:var(--parch2,#e9d9ac);color:var(--parch-ink,#2b1d0e);border:2px solid var(--parch-edge,#4a3416);border-radius:8px">✕</button></div>`;
+}
+function cxAskPick(k){
+  const it = CX_ASK; if(!it || it.picked!==null) return;
+  it.picked = k; const ok = k===it.ans;
+  cxQNote(it, ok);
+  if(ok) castraMasterXp(1, 0, "Woord van je metgezel");
+  cxAskRender(); setTimeout(cxAskClose, ok ? 2200 : 4200);
+}
+
 /* ---------- 12b. Docent: klas-woordenoverzicht (anoniem, uit de bestaande leerlingprofielen) ---------- */
 function cxClassHardAgg(){
   const byKey = {};
@@ -326,6 +363,6 @@ if(typeof tpLoadRoster==="function"){
 /* ---------- opstarten ---------- */
 if(typeof SCREENS!=="undefined" && SCREENS.castraHome){
   const _chCX2 = SCREENS.castraHome;
-  SCREENS.castraHome = function(){ const r = _chCX2.apply(this, arguments); cxCompanionSync(); return r; };
+  SCREENS.castraHome = function(){ const r = _chCX2.apply(this, arguments); cxCompanionSync(); setTimeout(cxCompanionAsk, 2500); return r; };
 }
 setTimeout(()=>{ try{ cxCheckHonors(); }catch(e){} }, 1500);

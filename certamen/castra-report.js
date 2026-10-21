@@ -30,12 +30,23 @@ function castraBReportData(B){
     if(CASTRA_P_ROLES[top]){ const R = CASTRA_P_ROLES[top]; obs.push(`De meeste doorbraken (${cnt[top]} van ${st.leaks.length}) kwamen van ${R.nl.toLowerCase()} ${R.icon}. ${R.ex.tip.replace(/^Tip: /,"")}`); }
     else { const w = st.leaks[0].wave+1; obs.push(`Er braken ${st.leaks.length} vijanden door (eerste in golf ${w}). Misschien bestrijkt je opstelling een deel van het pad niet of staan je soldaten te ver uit elkaar.`); }
   }
+  // welke vijanden braken door, en ontbrak er iets tegen een rol die wel in de missie zat?
+  let leak = "";
+  if(st.leaks.length){
+    const c2 = {}; st.leaks.forEach(l=>{ const k = l.role || "gewoon"; c2[k] = (c2[k]||0)+1; });
+    leak = "Doorbraken: "+Object.keys(c2).sort((a,b)=>c2[b]-c2[a]).map(k=>(CASTRA_P_ROLES[k] ? CASTRA_P_ROLES[k].icon+" "+CASTRA_P_ROLES[k].nl.toLowerCase() : "gewone vijanden")+" "+c2[k]).join(" · ")+" · eerste in golf "+(Math.min.apply(null, st.leaks.map(l=>l.wave))+1);
+  }
+  const mroles = {}; B.mission.waves.forEach(w=>w.forEach(g=>{ if(g.role) mroles[g.role] = 1; }));
+  const has = ty=>towers.some(t=>t.type===ty);
+  if(!win && mroles.medicus && !has("rng")) obs.push("Er kwamen genezers en je had geen boogschutters: zij mikken eerst op genezers. Probeer er een of twee mee te nemen.");
+  if(!win && mroles.velox && !has("rng") && !has("cav")) obs.push("Er kwamen snelle verkenners en je had geen boogschutters of cavalerie om ze snel uit te schakelen.");
+  if(!win && mroles.gravis && towers.length && rows[0].d/total > 0.6) obs.push("Eén soldaat deed het meeste werk tegen de zware krijgers. Meer sterke soldaten dicht bij elkaar helpen hier meer.");
   if(rows.length>=4){ const low = rows[rows.length-1]; if(low.d/total < 0.05) obs.push(`${low.nm} deed bijna geen schade (${Math.round(100*low.d/total)}%). Mogelijk staat hij te ver van het pad.`); }
   if(st.heal > total*0.15) obs.push(`Genezers herstelden ${st.heal} levenspunten, een flink deel van je schade. Boogschutters mikken eerst op genezers: zorg dat die binnen bereik van de genezer staan.`);
   const L = castraSynLinks(towers), synNone = !L.muri.length && towers.some(t=>t.type==="inf") && towers.some(t=>t.type==="rng");
   if(synNone) obs.push("Je infanterie en boogschutters stonden niet binnen 3 tegels van elkaar, dus Murus et sagittae was niet actief.");
   if(B.sim.cmdOn && !B.cmdUsed && !win) obs.push(`Je gebruikte geen bevelen (${s.energy} ⚡ over). Impete! of State! kan een dreigende golf nog keren.`);
-  return { rows, total, obs:obs.slice(0,3), st };
+  return { rows, total, obs:obs.slice(0,3), st, leak };
 }
 // Zelfde stijl als het resultaatscherm van Battle Mode (bm-gain, bm-xpbar): getallen die oplopen en balkjes die vollopen.
 function castraBReportHTML(B){
@@ -67,7 +78,7 @@ function castraBReportHTML(B){
     <div class="note" style="margin:12px 0 0;text-align:center">Schade per soldaat</div>${soldiers}
     ${eff.length?`<div class="note" style="margin:14px 0 0;text-align:center">Wat gebeurde er nog meer</div>${eff.join("")}`:""}
     ${xpRows?`<div class="note" style="margin:14px 0 0;text-align:center">Ervaring</div>${xpRows}`:""}</div>
-    ${D.obs.length?`<div style="margin-top:12px;font-size:14px;opacity:.95">${D.obs.map(o=>"💡 "+esc(o)).join("<br>")}</div>`:""}${why}</div>`;
+    ${D.leak?`<div class="note" style="margin-top:12px;text-align:center">${esc(D.leak)}</div>`:""}${D.obs.length?`<div style="margin-top:12px;font-size:14px;opacity:.95">${D.obs.map(o=>"💡 "+esc(o)).join("<br>")}</div>`:""}${why}</div>`;
 }
 // Balken laten vollopen en getallen laten oplopen (zoals bmRenderXpGain in battle.js); bij uitgeschakelde animaties direct.
 function castraBReportAnimate(B){

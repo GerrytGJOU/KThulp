@@ -104,6 +104,7 @@ function castraBIntroShow(items, mark, cur){
   o.style.cssText = "position:fixed;left:0;top:0;right:0;bottom:0;z-index:100000;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:16px";
   const card = it=>{
     const D = castraIntroData(it);
+    if(it.k==="role" && mark && typeof castraClueCard==="function"){ const c = castraClueCard(it, D, items.length===1); if(c) return c; }   // Latijn eerst, dan vraag, dan uitleg (castra-clue.js)
     return `<div style="margin:8px 0;padding-bottom:6px;${items.length>1?"border-bottom:1px solid rgba(138,109,47,.4)":""}">
       <div style="font-size:20px;font-weight:bold;margin-bottom:4px">${D.icon} ${esc(D.la)} <small style="font-weight:normal;opacity:.75">— ${esc(D.nl)}</small></div>
       <div style="font-size:18px">${castraLaHTML(D.ex.la, D.ex.nl, "intro_"+it.k+"_"+it.id)}</div>
