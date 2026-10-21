@@ -8,7 +8,7 @@
 
    Tutorial (Aeneas als gids), stap voor stap — zoals een starter-Pokémon:
      0  Welkom + kies een gratis soldaat (tier 2: Hastatus, Veles of Murmillo).
-     1  Opdracht: vang een tweede soldaat (jacht in Latium, "werf" de verslagen vijand).
+     1  Opdracht: vang een tweede soldaat (jacht in Latium, verzwak de vijand en gebruik Capere).
      2  Opdracht: win het eerste gevecht (tower defence, Defensio castrorum).
      3  Afsluiting + beloning; daarna vrij spel (99 = klaar).
    Opslag: CASTRA.tut = { step }. Oude saves (met soldaten/helden/missies) tellen als klaar.
@@ -32,7 +32,7 @@ const CASTRA_TUT_TEXT = {
   ],
   chosen:[
     { la:"Bene elegisti! Hic miles tuus est.", nl:"Goed gekozen! Deze soldaat is van jou." },
-    { la:"Nunc alium militem cape. Per portam decumanam in Latium i. Hostem vince et eum conscribe.", nl:"Vang nu nog een soldaat. Ga door de porta decumana naar Latium. Versla een vijand en werf hem." },
+    { la:"Nunc alium militem cape. Per portam decumanam in Latium i. Hostem debilita et eum cape.", nl:"Vang nu nog een soldaat. Ga door de porta decumana naar Latium. Verzwak een vijand en gebruik Capere om hem te vangen." },
   ],
   caught:[
     { la:"Optime! Duos milites habes.", nl:"Uitstekend! Je hebt twee soldaten." },
@@ -44,7 +44,7 @@ const CASTRA_TUT_TEXT = {
     { la:"Iam scis venari, conscribere et pugnare.", nl:"Nu weet je hoe je jaagt, werft en vecht." },
     { la:"Nunc heroes quaere et regiones novas explora. Vale!", nl:"Zoek nu helden en verken nieuwe regio's. Tot ziens!" },
   ],
-  bar1:{ la:"Alium militem cape!", nl:"Opdracht 1: vang een tweede soldaat. Ga door de porta decumana (bovenaan), win een gevecht en tik op \"Recipio\"." },
+  bar1:{ la:"Alium militem cape!", nl:"Opdracht 1: vang een tweede soldaat. Ga door de porta decumana (bovenaan), verzwak de vijand met je moves en tik op \"Capere\" (verslaan laat hem vluchten)." },
   bar2:{ la:"Castra defende!", nl:"Opdracht 2: win het eerste gevecht. Ga door de porta praetoria (rechts), kies \"Defensio castrorum\" en plaats je soldaten." },
 };
 
