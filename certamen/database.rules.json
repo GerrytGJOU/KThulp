@@ -254,7 +254,10 @@
           "divisie": { ".validate": "newData.val() === 20 || newData.val() === 35 || newData.val() === 50" },
           "seed": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4294967295" },
           "need": { ".validate": "(newData.parent().child('mode').val() === 'duel' && newData.val() === 2) || (newData.parent().child('mode').val() === 'quad' && newData.val() === 4)" },
-          "ghosts": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2" },
+          "ghosts": {
+            ".write": "root.child('castraColosseum/'+$klas+'/'+$match+'/status').val() === 'lobby' && !data.exists()",
+            ".validate": "newData.parent().child('mode').val() === 'quad' && ((newData.val() === 1 && !newData.parent().child('slots').hasChild('s3')) || (newData.val() === 2 && !newData.parent().child('slots').hasChild('s2') && !newData.parent().child('slots').hasChild('s3')))"
+          },
           "createdBy": { ".validate": "newData.isString() && newData.val().length <= 40" },
           "createdAt": { ".validate": "newData.isNumber() && newData.val() <= now + 60000 && newData.val() >= now - 60000" },
           "status": {
@@ -268,7 +271,7 @@
           "slots": {
             "$s": {
               ".write": "root.child('castraColosseum/'+$klas+'/'+$match+'/status').val() === 'lobby' && (!data.exists() || !newData.exists())",
-              ".validate": "($s === 's0' || $s === 's1' || (newData.parent().parent().child('mode').val() === 'quad' && ($s === 's2' || $s === 's3'))) && newData.isString() && newData.val().length <= 40"
+              ".validate": "($s === 's0' || $s === 's1' || (newData.parent().parent().child('mode').val() === 'quad' && ($s === 's2' || $s === 's3'))) && (!newData.parent().parent().child('ghosts').exists() || (newData.parent().parent().child('ghosts').val() === 1 && $s !== 's3') || (newData.parent().parent().child('ghosts').val() === 2 && ($s === 's0' || $s === 's1'))) && newData.isString() && newData.val().length <= 40"
             }
           },
           "players": {

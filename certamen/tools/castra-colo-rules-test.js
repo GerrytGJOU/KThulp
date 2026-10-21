@@ -69,7 +69,7 @@ function attempt(db, writes, now, strict){
 let fails = 0;
 const NOW = 1_800_000_000_000, M = "castraColosseum/k1/m1";
 const check = (name, res, want) => { const good = res.ok===want; console.log((good ? "  ok   " : "  FOUT ") + name + (res.ok ? "" : "  [" + res.why + "]")); if(!good) fails++; };
-const match = () => ({ mode:"duel", fee:100, divisie:35, seed:123456, need:2, ghosts:0, status:"lobby", createdBy:"anna", createdAt:NOW, slots:{ s0:"anna" }, players:{ anna:{ nm:"Anna", ts:NOW } } });
+const match = () => ({ mode:"duel", fee:100, divisie:35, seed:123456, need:2, status:"lobby", createdBy:"anna", createdAt:NOW, slots:{ s0:"anna" }, players:{ anna:{ nm:"Anna", ts:NOW } } });
 const dbOf = m => ({ castraColosseum:{ k1:{ m1:m } } });
 const running = () => { const m = match(); m.players.bram = { nm:"Bram", ts:NOW }; m.slots.s1 = "bram"; m.status = "running"; m.startAt = NOW + 10000; return m; };
 const run = () => ({ actions:"[]", res:{ tick:100, wave:1, lives:0, kills:3, win:0, quit:0 }, ts:NOW + 20000 });
@@ -124,8 +124,26 @@ for(const strict of [false, true]){
   const q3 = match(); q3.mode = "quad"; q3.need = 4; q3.slots = { s0:"a", s1:"b", s2:"c" }; q3.players = { a:{ nm:"a", ts:1 }, b:{ nm:"b", ts:1 }, c:{ nm:"c", ts:1 } };
   check("vierkamp met 3 spelers zonder AI starten", A(dbOf(q3), [{ path:M+"/status", value:"running" }, { path:M+"/startAt", value:NOW + 10000 }]), false);
   q3.ghosts = 1;
-  check("vierkamp met 3 spelers + 1 AI starten", A(dbOf(q3), [{ path:M+"/status", value:"running" }, { path:M+"/startAt", value:NOW + 10000 }]), true);
+  check("vierkamp met 3 spelers + 1 AI starten (ghosts bij het aanmaken)", A(dbOf(q3), [{ path:M+"/status", value:"running" }, { path:M+"/startAt", value:NOW + 10000 }]), true);
   check("startAt als update op de match zelf", A(dbOf(full), [{ path:M+"/status", value:"running" }, { path:M+"/startAt", value:NOW + 9000 }]), true);
+
+  console.log("AI-tegenstander (ghosts)");
+  const lob3 = () => { const q = match(); q.mode = "quad"; q.need = 4; q.slots = { s0:"a", s1:"b", s2:"c" }; q.players = { a:{ nm:"a", ts:1 }, b:{ nm:"b", ts:1 }, c:{ nm:"c", ts:1 } }; return q; };
+  check("AI toevoegen aan een vierkamp met 3 spelers", A(dbOf(lob3()), [{ path:M+"/ghosts", value:1 }]), true);
+  check("twee AI's bij 3 spelers (plek s2 is bezet)", A(dbOf(lob3()), [{ path:M+"/ghosts", value:2 }]), false);
+  const lob2 = lob3(); delete lob2.slots.s2; delete lob2.players.c;
+  check("twee AI's bij 2 spelers", A(dbOf(lob2), [{ path:M+"/ghosts", value:2 }]), true);
+  check("AI toevoegen aan een duel", A(dbOf(match()), [{ path:M+"/ghosts", value:1 }]), false);
+  check("AI-aantal 3", A(dbOf(lob2), [{ path:M+"/ghosts", value:3 }]), false);
+  check("AI toevoegen terwijl de vierde speler net binnenkwam", A(Object.assign(dbOf(Object.assign(lob3(), { slots:{ s0:"a", s1:"b", s2:"c", s3:"d" }, players:{ a:{ nm:"a", ts:1 }, b:{ nm:"b", ts:1 }, c:{ nm:"c", ts:1 }, d:{ nm:"d", ts:1 } } }))), [{ path:M+"/ghosts", value:1 }]), false);
+  const g1 = lob3(); g1.ghosts = 1;
+  check("AI twee keer toevoegen / aanpassen", A(dbOf(g1), [{ path:M+"/ghosts", value:2 }]), false);
+  check("AI wissen", A(dbOf(g1), [{ path:M+"/ghosts", value:null }]), false);
+  check("vierde speler claimt s3 terwijl er een AI is", A(dbOf(g1), [{ path:M+"/players/d", value:{ nm:"d", ts:NOW } }, { path:M+"/slots/s3", value:"d" }]), false);
+  const g2 = JSON.parse(JSON.stringify(lob2)); g2.ghosts = 2;
+  check("derde speler claimt s2 terwijl er 2 AI's zijn", A(dbOf(g2), [{ path:M+"/players/c", value:{ nm:"c", ts:NOW } }, { path:M+"/slots/s2", value:"c" }]), false);
+  check("AI toevoegen in een lopende match", A(dbOf(Object.assign(running(), { mode:"quad", need:4, slots:{ s0:"anna", s1:"bram", s2:"c" } })), [{ path:M+"/ghosts", value:1 }]), false);
+  check("starten met 3 spelers + AI (ghosts al gezet)", A(dbOf(g1), [{ path:M+"/status", value:"running" }, { path:M+"/startAt", value:NOW + 10000 }]), true);
 
   console.log("onveranderlijke velden");
   check("inzet achteraf aanpassen", A(dbOf(match()), [{ path:M+"/fee", value:1 }]), false);

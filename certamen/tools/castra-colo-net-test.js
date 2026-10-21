@@ -147,6 +147,45 @@ async function until(cond, ms, what){ const t0 = Date.now(); while(!cond()){ if(
     ok(b.aes() === 300 && b.hist()[0].refund, "lobby die niet vol komt: na de time-out krijgt Bram zijn inzet terug");
   }
 
+
+  console.log("G. vierkamp met vier spelers: 250 / 100 / 50 / 0");
+  {
+    const store = new FakeStore(), ps = ["pa","pb","pc","pd"].map((l, i) => player(store, l, l.toUpperCase(), i*700, 300)), towers = [8, 5, 3, 2];
+    ps[0].run(`castraCAttach(); castraCCreate("quad", 20);`); ps.slice(1).forEach(p => p.run("castraCAttach();")); await sleep(150);
+    const mid = ps[0].pend()[0];
+    for(const p of ps.slice(1)){ p.run(`castraCJoin("${mid}")`); await sleep(120); }
+    ok(Object.keys(store.get("castraColosseum/k1/"+mid+"/slots")||{}).length === 4 && ps.every(p => p.aes() === 200), "vier spelers op vier plekken, ieder betaalde 100");
+    await until(()=>ps.every(p => p.run("!!CASTRA_B")), 8000, "alle vier gestart");
+    ps.forEach((p, i) => playOut(p, towers[i]));
+    await until(()=>ps.every(p => p.hist().length === 1), 12000, "uitbetaling alle vier");
+    const h = ps.map(p => p.hist()[0]);
+    console.log("     " + ps.map((p, i) => p.lid + ": plaats " + h[i].rank + " +" + h[i].pay + " saldo " + p.aes()).join(" | "));
+    ok(h.map(x => x.rank).join() === "1,2,3,4" && h.map(x => x.pay).join() === "250,100,50,0", "meer torens = hogere plaats; uitbetaling 250/100/50/0");
+    ok(ps.reduce((a, p) => a + p.aes(), 0) === 1200, "de pot is in evenwicht (totaal 4 x 300)");
+  }
+
+  console.log("H. vierkamp met 3 spelers + AI op de vierde plek");
+  {
+    const store = new FakeStore(), ps = ["pa","pb","pc"].map((l, i) => player(store, l, l.toUpperCase(), 0, 300)), towers = [8, 4, 2];
+    ps[0].run(`castraCAttach(); castraCCreate("quad", 20);`); ps.slice(1).forEach(p => p.run("castraCAttach();")); await sleep(150);
+    const mid = ps[0].pend()[0];
+    for(const p of ps.slice(1)){ p.run(`castraCJoin("${mid}")`); await sleep(120); }
+    await sleep(500);
+    ok(store.get("castraColosseum/k1/"+mid+"/status") === "lobby", "met 3 van 4 spelers start de match niet vanzelf");
+    ps[1].run(`castraCAddAI("${mid}")`);
+    await until(()=>store.get("castraColosseum/k1/"+mid+"/status") === "running", 4000, "start na het toevoegen van de AI");
+    ok(store.get("castraColosseum/k1/"+mid+"/ghosts") === 1, "ghosts = 1 staat in de match");
+    await until(()=>ps.every(p => p.run("!!CASTRA_B")), 8000, "alle drie gestart");
+    ok(ps[0].run("castraColoPvpHud().indexOf('Legatus Brutus')>=0"), "de HUD toont de AI als balk");
+    ps.forEach((p, i) => playOut(p, towers[i]));
+    await until(()=>ps.every(p => p.hist().length === 1), 12000, "uitbetaling alle drie");
+    const h = ps.map(p => p.hist()[0]), total = ps.reduce((a, p) => a + p.aes(), 0);
+    console.log("     " + ps.map((p, i) => p.lid + ": plaats " + h[i].rank + " +" + h[i].pay + " saldo " + p.aes()).join(" | "));
+    ok(h.every(x => [185,75,35,0].includes(x.pay)) && h.every(x => x.rank >= 1 && x.rank <= 4), "uitbetaling volgens eindplaats (1-4) met de geschaalde tabel 185/75/35/0");
+    ok(h.reduce((a, x) => a + x.pay, 0) <= 300 && total <= 900, `totaal uitbetaald (${h.reduce((a, x) => a + x.pay, 0)}) is hooguit de echte inzet (300): saldo's samen ${total} <= 900`);
+    ok(ps[0].run("CASTRA_C.results['"+mid+"'].st.ghosts") === 1, "de uitslag bevat de AI-rij");
+  }
+
   console.log("F. niet genoeg brons / al in een match");
   {
     const store = new FakeStore(), a = player(store, "anna", "Anna", 0, 50);
