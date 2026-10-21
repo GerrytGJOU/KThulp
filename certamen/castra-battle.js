@@ -128,15 +128,15 @@ function castraBMapTap(e){
   const r = el("cbMap").getBoundingClientRect(), s = B.scale||1;
   const x = Math.floor((e.clientX-r.left)/s/48), y = Math.floor((e.clientY-r.top)/s/48);
   if(B.legio){ castraLegioTap(x, y); return; }
+  if(B.endless && B.actions && B.actions.length>=440){ toast("🏛️", "Genoeg verplaatsingen gedaan in deze run."); return; }   // de actielijst blijft zo klein genoeg om in te sturen
   const tw = B.sim.towers.find(t=>t.x===x && t.y===y);
   if(tw){ if(!B.sim.waveActive || B.endless){ castraBRemoveTower(tw); } return; }   // eigen soldaat terugnemen (alleen tussen golven)
   if(!B.sel || !castraBTileFree(x,y)) return;
   if(B.sim.towers.length >= castraBCap()){ castraToastLa("acies_plena"); return; }
   const s0 = castraBHealthy().find(q=>q.id===B.sel); if(!s0) return;
   if(typeof castraBBanned==="function" && castraBBanned(s0)){ toast("🚫", "Dit soort soldaat mag in deze missie niet meedoen."); return; }
-  const tower = castraPMakeTower(B.sim, s0, x, y);
+  const tower = B.endless ? castraColoPlace(B, s0, x, y) : castraPMakeTower(B.sim, s0, x, y);   // Colosseum: eenheid-momentopname + actie voor het naspelen
   B.sim.towers.push(tower); B.placed[s0.id] = true; B.sel = null;
-  if(B.actions) B.actions.push({ t:B.sim.tick, k:"place", sid:s0.id, x, y });
   castraBDrawTower(tower); castraBRenderCards(); castraBRenderHud();
   if(typeof castraBRenderSyn==="function") castraBRenderSyn(true);
 }
