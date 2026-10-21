@@ -115,7 +115,13 @@ castraBFinish = function(){
   const B0 = CASTRA_B, snap = (B0 && !B0.legio && !B0.endless && B0.sim.over==="win") ? castraRepSnap(B0) : null;
   _castraBFinishRep0();
   const B = CASTRA_B; if(!B || B.legio || B.endless) return;
-  if(snap) B._xp = castraRepXp(snap);
+  // klasse-affiniteit (crossmode.js): extra XP voor soldaten waarvan de klasse sterren heeft in Battle Mode
+  if(snap && typeof castraAffinityPct==="function") snap.forEach(x=>{
+    if(x.r.hero) return; const pct = castraAffinityPct(x.r.u); if(!pct) return;
+    let base = (x.r.u.xp||0) - x.xp; for(let l=x.lvl; l<x.r.u.lvl; l++) base += x.r.need(l);
+    const extra = Math.round(base*pct/100); if(extra>0){ x.r.u.xp += extra; try{ castraLevelUp(x.r.u); }catch(e){} }
+  });
+  if(snap){ castraSave(); B._xp = castraRepXp(snap); }
   const box = el("cbResult"); if(!box) return;
   try{ box.insertAdjacentHTML("beforeend", castraBReportHTML(B)); castraBReportAnimate(B); }catch(e){}
 };

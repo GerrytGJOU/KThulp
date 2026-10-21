@@ -256,7 +256,7 @@ function castraLegioSyncTowers(){
     const d = document.createElement("div"); d.id = "cbT"+t.id;
     const mine = t.owner===BM_IDENT.leerlingcode;
     d.style.cssText = `position:absolute;left:${t.x*48}px;top:${t.y*48}px;width:48px;height:48px;${mine?"filter:drop-shadow(0 0 3px rgba(212,175,55,.95))":""}`;
-    d.innerHTML = castraAvatarHTML(t.look || castraPLook(t.line), "down", 1, 48) + `<div style="position:absolute;left:0;right:0;bottom:-2px;text-align:center;font-size:9px;color:#f1e6c4;text-shadow:0 1px 2px #000">${esc((CASTRA_L.players[t.owner]||{}).nm||"")}</div>`;
+    d.innerHTML = castraAvatarHTML(t.look || castraPLook(t.line), "down", 1, 48) + `<div style="position:absolute;left:0;right:0;bottom:-2px;text-align:center;font-size:9px;color:var(--cream,#f1e6c4);text-shadow:0 1px 2px #000">${esc((CASTRA_L.players[t.owner]||{}).nm||"")}</div>`;
     box.appendChild(d);
   });
   const mineN = B.sim.towers.filter(t=>t.owner===BM_IDENT.leerlingcode).length;

@@ -175,7 +175,7 @@ function castraWobjDraw(){
   const box = el("cwWobj"); if(!box) return;
   box.innerHTML = castraWEnts().filter(castraWEntVisible).map(e=>{
     const pos = `position:absolute;left:${e.x*48}px;top:${e.y*48}px;width:48px;height:48px;pointer-events:none;`;
-    if(e.kind==="npc") return `<div style="${pos}z-index:4">${castraAvatarHTML(castraWLook(e), e.dir||"down", 1, 48)}<div style="position:absolute;left:50%;top:-10px;transform:translateX(-50%);font-size:13px;background:#d4af37;color:#2b1d0e;border-radius:8px;padding:0 4px;font-weight:bold">!</div></div>`;
+    if(e.kind==="npc") return `<div style="${pos}z-index:4">${castraAvatarHTML(castraWLook(e), e.dir||"down", 1, 48)}<div style="position:absolute;left:50%;top:-10px;transform:translateX(-50%);font-size:13px;background:var(--hi,#d4af37);color:var(--parch-ink,#2b1d0e);border-radius:8px;padding:0 4px;font-weight:bold">!</div></div>`;
     if(e.kind==="chest"){ const open = castraWChestOpen(e.id); return `<div style="${pos}z-index:3;display:flex;align-items:center;justify-content:center;font-size:34px;${open?"opacity:.45;filter:grayscale(.6)":""}">${open?"📦":"🧰"}</div>`; }
     if(e.kind==="pickup") return `<div style="${pos}z-index:3;display:flex;align-items:center;justify-content:center;font-size:30px;animation:castraBlink 1.2s infinite">✨</div>`;
     return "";
@@ -334,7 +334,7 @@ function castraPuzzleRender(){
     const chips = Z.pool.filter(i=>!Z.got.includes(i)).map(i=>`<button class="btn" style="margin:3px;min-height:44px;font-size:17px" onclick="castraPuzzleTap(${i})">${esc(Z.words[i])}</button>`).join("");
     panel.innerHTML = `<div class="panel">${head}
       <div style="font-size:15px;margin-bottom:6px">Zet de woorden in de goede volgorde. Betekenis: <i>${esc(Z.p.nl)}</i></div>
-      <div style="min-height:44px;padding:8px;border:2px dashed #8a6d2f;border-radius:8px;font-size:19px">${built?esc(built):"<span style='opacity:.5'>tik op de woorden hieronder…</span>"}</div>
+      <div style="min-height:44px;padding:8px;border:2px dashed var(--hi-dim,#8a6d2f);border-radius:8px;font-size:19px">${built?esc(built):"<span style='opacity:.5'>tik op de woorden hieronder…</span>"}</div>
       <div style="margin-top:6px">${chips}</div>
       ${Z.got.length?`<button class="btn" style="margin-top:4px" onclick="CASTRA_PUZ.got.pop();castraPuzzleRender()">↶ Terug</button>`:""}
       ${Z.done?`<div class="note" style="margin-top:8px;font-size:17px">✔ ${castraLaHTML(Z.p.la, Z.p.nl, "puz_"+Z.p.la)}</div>`:""}

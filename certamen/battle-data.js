@@ -425,6 +425,7 @@ const BM_AVATAR_PARTS = {
     { id:"mastery",   nm:"Meester Goud",      requires:{achCategory:"mastery"} },
     { id:"boss",      nm:"Bedwinger Goud",    requires:{achCategory:"boss"} },
     { id:"totalwar",  nm:"Bouwmeester Goud",  requires:{achCategory:"totalwar"} },
+    { id:"castra",    nm:"Castra Goud",       requires:{achCategory:"castra"} },
     { id:"geheim",    nm:"Legendarisch Goud", requires:{achCategory:"geheim"} },
   ]},
 };

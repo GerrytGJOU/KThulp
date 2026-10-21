@@ -64,7 +64,9 @@ function castraQuizOpen(){
 }
 function castraQuizStart(){
   const rng = castraRng((castraNow() ^ CASTRA.seed ^ 0x51a3)>>>0); CASTRA.seed = (CASTRA.seed+7)>>>0;
-  const pool = (CASTRA_QUIZ_KIND.words || CASTRA_QUIZ_WORDS).slice().sort(()=>rng()-0.5), qs = [];
+  let pool = (CASTRA_QUIZ_KIND.words || CASTRA_QUIZ_WORDS).slice().sort(()=>rng()-0.5); const qs = [];
+  // woordenbrug (crossmode.js): eerst je eigen moeilijke woorden en woorden uit de docentlijsten (alleen bij de woordenquiz)
+  if(!CASTRA_QUIZ_KIND.words && typeof cxQuizExtras==="function"){ const ex = cxQuizExtras(); pool = ex.concat(pool.filter(w=>!ex.some(e=>e[0]===w[0]))); }
   for(let i=0;i<5;i++){
     const w = pool[i], wrong = pool.slice(5).filter(x=>x[1]!==w[1]).sort(()=>rng()-0.5).slice(0,2).map(x=>x[1]);
     const opts = [w[1]].concat(wrong).sort(()=>rng()-0.5);

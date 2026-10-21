@@ -41,6 +41,8 @@ spelregels, features of het datamodel raakt:
   actuele stand, dit getal wijzigt regelmatig). Gebruikt Battle Mode's
   klasse-, avatar- en profielsysteem; klassekeuze en eretitels werken door
   in de andere modi.
+- `CERTAMEN_CROSSMODE.md` — wat de modi met elkaar delen (profiel, eretitel-bonussen uit Chronica, Castra-XP voor
+  Latijn-acties, klasse-affiniteit, woordenbrug, stijlvariabelen). Werk dit bij als een modus iets deelt met een andere.
 
 ## Conventies
 - Naamval-volgorde altijd: nominativus, genitivus, dativus, accusativus,

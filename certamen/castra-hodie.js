@@ -52,7 +52,7 @@ function castraHodieHTML(){
   if(opts.hodieOff) return `<div style="text-align:center;margin:4px 0"><button class="btn" style="min-height:36px;font-size:13px" onclick="castraHodieToggle()">🌅 Hodie tonen</button></div>`;
   return `<div id="castraHodie" class="panel" style="margin:4px 0 8px;padding:8px 12px">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>🌅 ${castraLaHTML("Hodie haec facere potes.", "Vandaag kun je dit doen. Niets hoeft.", "hodie_h")}</b><button class="btn" style="min-height:32px;font-size:12px;padding:2px 10px" onclick="castraHodieToggle()">verberg</button></div>
-    <ul style="margin:6px 0 0;padding-left:0;list-style:none">${items.map(i=>`<li style="margin:3px 0;font-size:14px">${i.icon} ${esc(i.t)}${i.go==="proelium"?` <a href="#" onclick="go('castraProelium');return false" style="color:#d4af37">→ missies</a>`:""}</li>`).join("")}</ul></div>`;
+    <ul style="margin:6px 0 0;padding-left:0;list-style:none">${items.map(i=>`<li style="margin:3px 0;font-size:14px">${i.icon} ${esc(i.t)}${i.go==="proelium"?` <a href="#" onclick="go('castraProelium');return false" style="color:var(--hi,#d4af37)">→ missies</a>`:""}</li>`).join("")}</ul></div>`;
 }
 function castraHodieToggle(){
   const o = CASTRA.opts || (CASTRA.opts = {}); o.hodieOff = !o.hodieOff; castraSave();

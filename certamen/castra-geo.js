@@ -205,8 +205,8 @@ function castraGeoMapView(){
     const [x,y] = P(id), open = id==="camp" || castraRegionOpen(id), vis = castraGeoVisited(id), cur = here===id, isSel = sel===id;
     const label = (!open) ? "🔒" : vis ? castraGeoIcon(id) : "❔";
     return `<div role="button" onclick="CASTRA_MENU.geoSel='${id}';castraMenuRender()" style="position:absolute;left:${x}%;top:${y}%;transform:translate(-50%,-50%);text-align:center;cursor:pointer;min-width:44px">
-      <div style="font-size:24px;line-height:1;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto;background:${cur?"#d4af37":isSel?"#f3e2a8":open?"#efe1b9":"#cbbd96"};border:3px solid ${isSel?"#7a2a14":"#4a3416"};${vis||id==="camp"?"":"opacity:.75"}">${label}</div>
-      <div style="font-size:11px;font-weight:bold;white-space:nowrap;text-shadow:0 0 3px #efe1b9">${cur?"🧭 ":""}${vis||id==="camp"||open?esc(castraGeoName(id)):"???"}</div></div>`;
+      <div style="font-size:24px;line-height:1;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto;background:${cur?"var(--hi,#d4af37)":isSel?"#f3e2a8":open?"var(--parch,#efe1b9)":"#cbbd96"};border:3px solid ${isSel?"#7a2a14":"var(--parch-edge,#4a3416)"};${vis||id==="camp"?"":"opacity:.75"}">${label}</div>
+      <div style="font-size:11px;font-weight:bold;white-space:nowrap;text-shadow:0 0 3px var(--parch,#efe1b9)">${cur?"🧭 ":""}${vis||id==="camp"||open?esc(castraGeoName(id)):"???"}</div></div>`;
   }).join("");
   // informatie en reis-knop voor de gekozen plek
   let info = "";
@@ -226,9 +226,9 @@ function castraGeoMapView(){
     : canTravel ? `<button class="btn btn-gold" style="min-height:44px;margin-top:4px" onclick="castraGeoTravel('${sel}')">${sel==="camp"?"🏕️ Terug naar het kamp (gratis)":"🧭 Reis naar "+esc(castraGeoName(sel))+" (🪙 "+cost+")"}</button>`
     : `<div class="note">Reizen kan vanuit het kamp of bij een reisplek (⚓ / 🐪) in een regio. Loop erheen en tik erop.</div>`;
   return `<h3 style="margin:0 0 4px">Tabula <small>wereldkaart</small></h3>
-    <div style="position:relative;width:100%;aspect-ratio:5/4;border:3px solid #4a3416;border-radius:10px;background:radial-gradient(circle at 50% 40%,#f1e6bf,#d9c690);overflow:hidden">
+    <div style="position:relative;width:100%;aspect-ratio:5/4;border:3px solid var(--parch-edge,#4a3416);border-radius:10px;background:radial-gradient(circle at 50% 40%,#f1e6bf,#d9c690);overflow:hidden">
       <div style="position:absolute;left:0;top:0;right:0;bottom:0;background:linear-gradient(120deg,rgba(80,130,170,.18),rgba(80,130,170,0) 40%,rgba(80,130,170,.12))"></div>
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">${lines.join("")}</svg>${nodes}</div>
     <div style="font-size:12px;opacity:.75;margin:4px 0">Doorgetrokken lijn = te voet (grens) · blauw gestippeld = zeeroute · 🧭 = hier · 🔒 = gesloten · ❔ = nog niet bezocht</div>
-    <div style="padding:6px 8px;border:2px solid #8a6d2f;border-radius:8px;background:rgba(255,248,225,.5);font-size:14px">${info}${btn}</div>`;
+    <div style="padding:6px 8px;border:2px solid var(--hi-dim,#8a6d2f);border-radius:8px;background:rgba(255,248,225,.5);font-size:14px">${info}${btn}</div>`;
 }
