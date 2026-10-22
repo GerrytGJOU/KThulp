@@ -322,6 +322,7 @@ function castraBFinish(){
       const sol = CASTRA.soldiers.find(x=>x.id===t.sid); if(!sol) return;
       sol.xp += castraCardXp(castraXpTd(m, sol.lvl)); if(castraLevelUp(sol)) lines.push(castraSoldierName(sol));
     });
+    if(typeof castraContubernium==="function") B._cont = castraContubernium({ m, ids:s.towers.map(t=>t.sid) });   // rustende soldaten leren mee (castra-xp.js)
     (CASTRA.proelium || (CASTRA.proelium = { done:{} })).done = CASTRA.proelium.done || {};
     const first = !CASTRA.proelium.done[m.id];
     CASTRA.proelium.done[m.id] = true; castraSave();
@@ -330,7 +331,7 @@ function castraBFinish(){
     if(first && typeof castraCardToken==="function") castraCardToken(1, "missie voor het eerst gewonnen");
     h += `<div style="font-size:22px;margin-bottom:6px">${castraLa("castra_defensa")}</div>
       <div>${castraLaText("praemium")}: ${Object.keys(rw).map(r=>castraRes(r).icon+" +"+rw[r]).join(" · ")}${B.rewardMult>1?" ("+castraLaText("praemium")+" ×"+B.rewardMult.toFixed(2)+")":""}</div>
-      ${lines.length?`<div class="note">⭐ ${esc(lines.join(", "))} → ${castraLaText("gradus")}</div>`:""}`;
+      ${lines.length?`<div class="note">⭐ ${esc(lines.join(", "))} → ${castraLaText("gradus")}</div>`:""}${typeof castraContHTML==="function" ? castraContHTML(B._cont) : ""}`;
   } else {
     h += `<div style="font-size:22px;margin-bottom:6px">${castraLa("castra_capta")}</div>`;
   }
