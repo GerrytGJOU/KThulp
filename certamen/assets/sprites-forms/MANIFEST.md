@@ -1,6 +1,6 @@
 # Vormsprites — stand van zaken
 
-**108 / 453** bestanden aanwezig.
+**126 / 453** bestanden aanwezig.
 
 Gegenereerd door `certamen/tools/castra-sprites-manifest.js`. Per vorm: voor / achter / tower defence.
 
@@ -54,12 +54,12 @@ Gegenereerd door `certamen/tools/castra-sprites-manifest.js`. Per vorm: voor / a
 
 | Vorm | bestandsnaam | voor | achter | td |
 |---|---|---|---|---|
-| Puer Laco (tier 1) | `spa_puerlaco` | ⬜ | ⬜ | ⬜ |
-| Spartiates (tier 2) | `spa_spartiates` | ⬜ | ⬜ | ⬜ |
-| Trecentus (tier 3) | `spa_trecentus` | ⬜ | ⬜ | ⬜ |
-| Polemarchus (tier 4) | `spa_polemarchus` | ⬜ | ⬜ | ⬜ |
-| Perioecus (tier 2) | `spa_perioecus` | ⬜ | ⬜ | ⬜ |
-| Sciritas (tier 3) | `spa_sciritas` | ⬜ | ⬜ | ⬜ |
+| Puer Laco (tier 1) | `spa_puerlaco` | ✅ | ✅ | ✅ |
+| Spartiates (tier 2) | `spa_spartiates` | ✅ | ✅ | ✅ |
+| Trecentus (tier 3) | `spa_trecentus` | ✅ | ✅ | ✅ |
+| Polemarchus (tier 4) | `spa_polemarchus` | ✅ | ✅ | ✅ |
+| Perioecus (tier 2) | `spa_perioecus` | ✅ | ✅ | ✅ |
+| Sciritas (tier 3) | `spa_sciritas` | ✅ | ✅ | ✅ |
 
 ## Trojanen
 
