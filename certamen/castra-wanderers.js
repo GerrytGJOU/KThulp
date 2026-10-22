@@ -48,6 +48,19 @@ const CASTRA_AMB_REGION = {
   laconia:[ "Spartiatae fortes sunt.", "De Spartanen zijn dapper." ], germania:[ "Silva densa est. Cave!", "Het bos is dicht. Pas op!" ],
   themiscyra:[ "Amazones equitant per campos.", "De Amazones rijden over de velden." ],
 };
+/* ---------- dieren, een kar met paard en boten (Nature.png en Vehicle.png, RPG Maker MV) ---------- */
+// Dieren lopen rond (hond, kat, kip, paard); een paar staan er alleen voor de sfeer. Aanspreken geeft een Latijnse zin.
+const CASTRA_AMB_ANIMALS = [
+  { id:"canis",   nm:"Canis",   w:3, sheet:["Nature.png",0], radius:4, mv:35, lines:[ [ "Vau, vau!", "Woef, woef!" ], [ "Canis fidelis est.", "De hond is trouw." ] ] },
+  { id:"felis",   nm:"Felis",   w:2, sheet:["Nature.png",1], radius:3, mv:25, lines:[ [ "Felis dormit.", "De kat slaapt." ], [ "Mia-u!", "Miauw!" ] ] },
+  { id:"gallina", nm:"Gallina", w:3, sheet:["Nature.png",2], radius:2, mv:45, lines:[ [ "Gallina ova parit.", "De kip legt eieren." ], [ "Cotcot!", "Tok tok!" ] ] },
+  { id:"equus",   nm:"Equus",   w:2, sheet:["Nature.png",3], radius:2, mv:18, lines:[ [ "Equus hinnit.", "Het paard hinnikt." ], [ "Equus herbam edit.", "Het paard eet gras." ] ] },
+];
+const CASTRA_AMB_VEH = {
+  horse:  { id:"equus_carri", nm:"Equus", sheet:["Vehicle.png",4], lines:[ [ "Equus carrum trahit.", "Het paard trekt de kar." ] ] },
+  wagon:  { id:"carrus",      nm:"Carrus", sheet:["Vehicle.png",5], lines:[ [ "Carrus mercatoris est.", "Dit is de kar van de koopman." ], [ "Carrus multas merces portat.", "De kar vervoert veel waren." ] ] },
+  boats:  [ { id:"linter", nm:"Linter", sheet:["Vehicle.png",0] }, { id:"ratis", nm:"Ratis", sheet:["Vehicle.png",7] }, { id:"navis", nm:"Navis", sheet:["Vehicle.png",1] } ],
+};
 const CASTRA_AMB = { list:[], region:null, timer:null, id:0, sheetOk:false };
 const CASTRA_AMB_HAIR = ["kort","lang","middel","knot","vlecht","wild"], CASTRA_AMB_COL = ["zwart","bruin","blond","rood","grijs"];
 
@@ -87,6 +100,7 @@ function castraAmbSpawn(){
     i++;
   }
   castraAmbQuestNpcs(rid, W, rng, folk);
+  castraAmbExtras(rid, W, rng);
 }
 // Een frame uit een RPG Maker MV-sheet: 8 personages per sheet (4 x 2 blokken van 3 x 4 frames van 48 px).
 function castraSheetHTML(sh, dir, frame, size){
@@ -111,6 +125,55 @@ function castraAmbQuestNpcs(rid, W, rng, folk){
     }
     if(a) a.gid = q.giver;
   });
+}
+// Dieren, kar en boten van de regio opbouwen (alleen als de sheets bestaan).
+function castraAmbFree(x, y, W){
+  if(x<1 || y<1 || x>=W.cols-1 || y>=W.rows-1) return false;
+  if(CASTRA_AMB.list.some(o=>o.x===x && o.y===y)) return false;
+  if(CASTRA_W_UI && CASTRA_W_UI.px===x && CASTRA_W_UI.py===y) return false;
+  return true;
+}
+function castraAmbAddAnimal(T, x, y, rng, still){
+  const a = { id:"a"+(CASTRA_AMB.id++), type:{ id:T.id, nm:T.nm }, sheet:{ f:T.sheet[0], i:T.sheet[1] }, x, y, hx:x, hy:y, dir:["down","left","right","up"][Math.floor(rng()*4)], frame:1, animal:true, lines:T.lines, radius:still?0:T.radius, mv:T.mv, talking:false, seed:Math.floor(rng()*1e6) };
+  CASTRA_AMB.list.push(a); return a;
+}
+function castraAmbExtras(rid, W, rng){
+  if(!CASTRA_AMB.sheetOk) return;
+  const start = W.start || { x:Math.floor(W.cols/2), y:Math.floor(W.rows/2) };
+  // dieren
+  const tot = CASTRA_AMB_ANIMALS.reduce((a,t)=>a+t.w,0), n = 3 + (W.cols*W.rows > 3000 ? 1 : 0);
+  for(let i=0, tries=0; i<n && tries<400; tries++){
+    const x = 2+Math.floor(rng()*(W.cols-4)), y = 2+Math.floor(rng()*(W.rows-4));
+    if(!castraAmbWalkable(x,y,W) || Math.abs(x-start.x)+Math.abs(y-start.y) < 5 || CASTRA_AMB.list.some(o=>Math.abs(o.x-x)+Math.abs(o.y-y)<4)) continue;
+    let r = rng()*tot, T = CASTRA_AMB_ANIMALS[0]; for(const t of CASTRA_AMB_ANIMALS){ r -= t.w; if(r<=0){ T = t; break; } }
+    castraAmbAddAnimal(T, x, y, rng, false); i++;
+  }
+  // een paard naast elke wachter en koning
+  CASTRA_AMB.list.filter(a=>a.type.id==="miles" || a.type.id==="rex").forEach(g=>{
+    const spots = [[1,0],[-1,0],[0,1],[0,-1]].map(d=>[g.x+d[0], g.y+d[1]]).filter(c=>castraAmbWalkable(c[0],c[1],W) && castraAmbFree(c[0],c[1],W));
+    if(spots.length){ const c = spots[0], h = castraAmbAddAnimal(CASTRA_AMB_ANIMALS.find(t=>t.id==="equus"), c[0], c[1], rng, true); h.dir = c[0]>g.x ? "left" : c[0]<g.x ? "right" : "down"; }
+  });
+  // een kar met paard op de hoofdweg: het paard trekt, de kar volgt (zijaanzicht)
+  const rd = (W.roads||[]).find(r=>r.x1-r.x0>20 && r.y1-r.y0<=2);
+  if(rd){
+    const y = rd.y0, x0 = rd.x0+3, x1 = rd.x1-3, dir = rng()<0.5 ? 1 : -1, hx = x0 + 3 + Math.floor(rng()*(x1-x0-6));
+    const mk = (T, x)=>({ id:"a"+(CASTRA_AMB.id++), type:{ id:T.id, nm:T.nm }, sheet:{ f:T.sheet[0], i:T.sheet[1] }, x, y, hx:x, hy:y, dir:dir>0?"right":"left", frame:1, vehicle:true, lines:T.lines, talking:false, seed:Math.floor(rng()*1e6) });
+    const horse = mk(CASTRA_AMB_VEH.horse, hx), wagon = mk(CASTRA_AMB_VEH.wagon, hx-dir);
+    horse.cara = { dir, x0, x1, partner:wagon, lead:true }; wagon.cara = { partner:horse, lead:false };
+    CASTRA_AMB.list.push(horse, wagon);
+  }
+  // boten op het water langs de rand (varen tussen de bruggen)
+  const wt = (W.water||[])[0];
+  if(wt){
+    const bridges = wt.bridgeY || [], rows = []; for(let y=3; y<W.rows-3; y++) rows.push(y);
+    let segs = [], cur = []; rows.forEach(y=>{ if(bridges.some(b=>Math.abs(b-y)<=1)){ if(cur.length) segs.push(cur); cur = []; } else cur.push(y); }); if(cur.length) segs.push(cur);
+    segs = segs.filter(sg=>sg.length>=6).sort((a,b)=>b.length-a.length);
+    const boats = CASTRA_AMB_VEH.boats.filter(b=>b.id!=="navis" || /^(graecia|troia|roma|laconia|themiscyra)$/.test(rid));
+    segs.slice(0,2).forEach((sg,k)=>{
+      const T = boats[Math.floor(rng()*boats.length)], y = sg[Math.floor(rng()*sg.length)], x = wt.x0 + Math.floor(rng()*(wt.x1-wt.x0+1));
+      CASTRA_AMB.list.push({ id:"a"+(CASTRA_AMB.id++), type:{ id:T.id, nm:T.nm }, sheet:{ f:T.sheet[0], i:T.sheet[1] }, x, y, hx:x, hy:y, dir:"down", frame:1, vehicle:true, boat:{ y0:sg[0], y1:sg[sg.length-1], d:1 }, talking:false, seed:Math.floor(rng()*1e6) });
+    });
+  }
 }
 function castraAmbHTML(a){ return a.sheet ? castraSheetHTML(a.sheet, a.dir, a.frame, 48) : castraAvatarHTML(a.look, a.dir, a.frame, 48); }
 // Bestaan de sheets? Zo niet, dan blijft alles uit de avatar-lagen gebouwd.
@@ -137,17 +200,38 @@ function castraAmbTick(){
   const W = castraWorldCfg(), DIRS = { up:[0,-1], down:[0,1], left:[-1,0], right:[1,0] };
   CASTRA_AMB.list.forEach(a=>{
     if(a.talking && !CASTRA_DLG) a.talking = false;
-    if(a.talking || a.type.still){ a.frame = 1; return; }
+    if(a.talking || a.type.still || (a.animal && a.radius===0)){ a.frame = 1; return; }
+    if(a.boat){ castraAmbBoat(a); return; }
+    if(a.cara){ if(a.cara.lead) castraAmbCaravan(a, W); return; }
     a.seed = (Math.imul(a.seed, 1103515245) + 12345) >>> 0; const r = (a.seed>>>8) % 100;
-    if(r < 38){
+    if(r < (a.mv || 38)){
       const names = Object.keys(DIRS), dir = names[(a.seed>>>3) % 4], dx = DIRS[dir][0], dy = DIRS[dir][1], nx = a.x+dx, ny = a.y+dy;
       a.dir = dir;
-      if(Math.abs(nx-a.hx)+Math.abs(ny-a.hy) <= 4 && castraAmbWalkable(nx, ny, W) && !CASTRA_AMB.list.some(o=>o!==a && o.x===nx && o.y===ny)){ a.x = nx; a.y = ny; a.frame = a.frame===1 ? 0 : (a.frame===0 ? 2 : 0); }
+      if(Math.abs(nx-a.hx)+Math.abs(ny-a.hy) <= (a.radius || 4) && castraAmbWalkable(nx, ny, W) && !CASTRA_AMB.list.some(o=>o!==a && o.x===nx && o.y===ny)){ a.x = nx; a.y = ny; a.frame = a.frame===1 ? 0 : (a.frame===0 ? 2 : 0); }
       else a.frame = 1;
     } else a.frame = 1;
   });
   if(!el("cwAmb")) document.querySelectorAll("[id^=cwAmb_]").forEach(n=>n.remove());
   castraAmbDraw();
+}
+// Boot: vaart langzaam op en neer tussen de bruggen.
+function castraAmbBoat(a){
+  a.seed = (Math.imul(a.seed, 1103515245) + 12345) >>> 0; a.frame = a.frame===1 ? 0 : (a.frame===0 ? 2 : 0);
+  if((a.seed>>>8)%100 < 45) return;
+  const B = a.boat, ny = a.y + B.d;
+  if(ny < B.y0 || ny > B.y1){ B.d = -B.d; a.dir = B.d>0 ? "down" : "up"; return; }
+  a.y = ny; a.dir = B.d>0 ? "down" : "up";
+}
+// Kar met paard: rijdt heen en weer over de weg; het paard loopt voorop, de kar volgt (bij de uiteinden draaien ze om).
+function castraAmbCaravan(h, W){
+  const C = h.cara, w = C.partner, free = (x,y)=>castraAmbFree(x,y,W) && !(CASTRA_W_UI.px===x && CASTRA_W_UI.py===y);
+  h.seed = (Math.imul(h.seed, 1103515245) + 12345) >>> 0;
+  if((h.seed>>>8)%100 < 40){ h.frame = 1; w.frame = 1; return; }
+  const nx = h.x + C.dir;
+  if(nx < C.x0 || nx > C.x1){ C.dir = -C.dir; const hx = h.x, wx = w.x; h.x = wx; w.x = hx; h.dir = w.dir = C.dir>0 ? "right" : "left"; return; }
+  const occupied = CASTRA_AMB.list.some(o=>o!==h && o!==w && o.x===nx && o.y===h.y);
+  if(occupied || (CASTRA_W_UI.px===nx && CASTRA_W_UI.py===h.y)) return;
+  w.x = h.x; h.x = nx; h.frame = w.frame = (h.frame===1 ? 0 : (h.frame===0 ? 2 : 0));
 }
 function castraAmbStart(){
   if(!el("cwMap")) return;
@@ -166,7 +250,7 @@ castraNpcAt = function(x, y){
   const a = CASTRA_AMB.list.find(n=>n.x===x && n.y===y); return a ? "amb:"+a.id : null;
 };
 function castraAmbTalk(aid){
-  const a = CASTRA_AMB.list.find(n=>n.id===aid); if(!a || CASTRA_DLG) return;
+  const a = CASTRA_AMB.list.find(n=>n.id===aid); if(!a || CASTRA_DLG || a.boat) return;
   const px0 = CASTRA_W_UI.px, py0 = CASTRA_W_UI.py;
   if(a.gid){
     a.dir = Math.abs(px0-a.x) > Math.abs(py0-a.y) ? (px0>a.x?"right":"left") : (py0>a.y?"down":"up"); a.frame = 1; a.talking = true; castraAmbDraw();
@@ -174,12 +258,12 @@ function castraAmbTalk(aid){
     if(handled) return;
     a.talking = false;
   }
-  const pool = CASTRA_AMB_LINES[a.type.id].slice(); if(CASTRA_AMB_REGION[CASTRA_W_REGION]) pool.push(CASTRA_AMB_REGION[CASTRA_W_REGION]);
+  const pool = (a.lines || CASTRA_AMB_LINES[a.type.id]).slice(); if(!a.lines && CASTRA_AMB_REGION[CASTRA_W_REGION]) pool.push(CASTRA_AMB_REGION[CASTRA_W_REGION]);
   const pick = pool[Math.floor(Math.random()*pool.length)];
   const px = CASTRA_W_UI.px, py = CASTRA_W_UI.py;      // kijk naar de speler
   a.dir = Math.abs(px-a.x) > Math.abs(py-a.y) ? (px>a.x?"right":"left") : (py>a.y?"down":"up"); a.frame = 1; a.talking = true; castraAmbDraw();
   const lines = [ { la:pick[0], nl:pick[1] } ];
-  if(Math.random() < 0.5) lines.unshift({ la:"Salve, hospes!", nl:"Gegroet, gast!" });
+  if(!a.lines && Math.random() < 0.5) lines.unshift({ la:"Salve, hospes!", nl:"Gegroet, gast!" });
   castraDlgOpen({ nm:a.type.nm, look:a.look, sheet:a.sheet }, lines, ()=>{ a.talking = false; });
 }
 const _castraNpcTalkAmb0 = castraNpcTalk;
@@ -194,5 +278,6 @@ castraNpcTalk = function(id){
   "melior":"beter", "res":"spullen, dingen", "vinum":"wijn", "longa":"lang", "oves":"schapen", "curo":"ik zorg voor", "cave":"pas op", "sol":"zon", "calet":"is heet", "mare":"zee", "pulchrum":"mooi",
   "alti":"hoog", "silvae":"bossen", "galliae":"van Gallië", "magnae":"groot", "nilus":"de Nijl", "alit":"voedt", "noster":"onze", "calidus":"heet", "hominum":"van mensen", "spartiatae":"Spartanen", "densa":"dicht",
   "equitant":"rijden", "campos":"velden (4e naamval)",
-  "meos":"mijn (4e naamval)", "pacem":"vrede (4e naamval)", "puella":"meisje", "anus":"oude vrouw", "sacerdos":"priester(es)", "coquit":"bakt", "flores":"bloemen", "pulchri":"mooi", "laboro":"ik werk", "cum":"met", "matre":"moeder (6e naamval)", "nepotes":"kleinkinderen",
+  "meos":"mijn (4e naamval)", "pacem":"vrede (4e naamval)", "canis":"hond", "felis":"kat", "gallina":"kip", "equus":"paard", "equum":"paard (4e naamval)", "fidelis":"trouw", "dormit":"slaapt", "ova":"eieren", "parit":"legt", "herbam":"gras (4e naamval)", "edit":"eet", "hinnit":"hinnikt",
+  "carrus":"kar", "mercatoris":"van de koopman", "portat":"vervoert", "trahit":"trekt", "carrum":"kar (4e naamval)", "vau":"woef", "mia":"mauw", "cotcot":"tok tok", "linter":"roeiboot", "ratis":"vlot", "navis":"schip", "puella":"meisje", "anus":"oude vrouw", "sacerdos":"priester(es)", "coquit":"bakt", "flores":"bloemen", "pulchri":"mooi", "laboro":"ik werk", "cum":"met", "matre":"moeder (6e naamval)", "nepotes":"kleinkinderen",
   "amo":"ik hou van", "vita":"leven", "sed":"maar", "via":"weg", "deos":"goden (4e naamval)", "colo":"ik vereer", "peto":"ik vraag", "dei":"goden", "iuvant":"helpen", "templo":"tempel (6e naamval)", "orare":"bidden", "debes":"je moet" });
