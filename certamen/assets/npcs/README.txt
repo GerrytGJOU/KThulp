@@ -21,3 +21,6 @@ BESTANDSNAMEN
 GEBRUIK
   Zodra er bestanden staan, koppel ik ze in castra-wanderers.js aan de typen bewoners (sheet:"boer_1.png"); zonder bestand
   blijft de bewoner uit de avatar-lagen gebouwd. Uploaden mag dus per stuk.
+
+STAND (2026-12-17): People1.png t/m People4.png (RPG Maker MV, 8 personages per sheet) staan hier en worden gebruikt door de rondlopende
+bewoners (castra-wanderers.js, CASTRA_AMB_TYPES[].sheets = [bestand, personage 0-7]). Personage-nummering: 0-3 bovenste rij, 4-7 onderste rij.
