@@ -456,3 +456,9 @@ Uit `Nature.png` en `Vehicle.png` (RPG Maker MV, in `certamen/assets/npcs/`) kom
 - **Niet gebruikt:** fee en bloemenfee, de blauwharige figuur en de groene wezens (Nature #4 t/m #7), luchtballon, luchtschip en de ijzeren mijnkar (Vehicle #2, #3, #6): te sprookjesachtig of modern voor een klassieke wereld.
 - **Mogelijk later:** het paard als rijdier voor de speler (sneller lopen in de wereld, bijvoorbeeld via de Stabula of na een opdracht), een verloren paard als `find`-opdracht, en schepen bij de havens voor een zeereis.
 
+## Het paard: rijden in de wereld (2026-12-20)
+- **Verdienen:** de opdracht *Equus perditus* (`castra-sidequests.js`, giver: de koopman van Latium; vanaf **Castra-niveau 10** en na missie 3). Drie stappen die bewust anders zijn dan de gewone: het verdwaalde paard **zoeken** (🐎 knippert ergens buiten in Latium), de **bouwer** spreken (hij repareert het tuig), vijf vijanden op de weg verslaan. Beloning: het paard (plus 150 aes, gloria, XP en een kaarttrekking).
+- **Rijden** (`castra-mount.js`): daarna staat linksboven in de wereld een knop 🐎/🚶 (`CASTRA.mount = { owned:1, on:0|1 }`). Te paard ga je **twee keer zo snel** (85 ms per stap in plaats van 170; ook bij tikken-om-te-lopen) en staat het paard onder je avatar (zelfde richting en looptakt; de ruiter iets kleiner en hoger). **Binnen** (huizen, grotten) loop je altijd te voet en verdwijnt de knop. Gevechten en ontmoetingen werken hetzelfde.
+- **Techniek:** `CASTRA_W_UI.speedMs` (castra-world.js) bepaalt de staptijd; `castraMountSync` zet ook de overgangstijden van avatar en kaart. De beloning `mount:1` staat in `castraDqReward` (castra-diarium.js), zodat andere opdrachten het paard ook kunnen geven.
+- **Nog niet:** een eigen paard-uiterlijk per held of volk, een Stabula-gebouw dat het paard voert of verzorgt, en gevechten te paard.
+

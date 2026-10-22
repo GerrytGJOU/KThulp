@@ -290,7 +290,7 @@ function castraWStep(dir){
     if(W.exit.some(e=>e.x===nx&&e.y===ny)){ if(typeof castraGeoExit==="function") castraGeoExit(nx,ny); else castraWorldLeave(); return; }
     const terrain = castraWorldBuilt().tall[nx+","+ny];
     if(terrain && Math.random() < W.encounterChance) castraWorldEncounter(terrain);
-  }, 170);
+  }, CASTRA_W_UI.speedMs || 170);
   return true;
 }
 function castraWorldEncounter(terrainId){
@@ -333,7 +333,7 @@ function castraWorldPath(sx,sy,tx,ty){
   return out;
 }
 function castraWorldWalk(path, done){
-  const next = ()=>{ if(!path.length){ if(done) setTimeout(done, 220); return; } if(!el("cwMap")) return; if(castraWStep(path.shift())) setTimeout(next,190); else setTimeout(next,60); };
+  const next = ()=>{ if(!path.length){ if(done) setTimeout(done, 220); return; } if(!el("cwMap")) return; if(castraWStep(path.shift())) setTimeout(next,(CASTRA_W_UI.speedMs||170)+20); else setTimeout(next,60); };
   next();
 }
 
