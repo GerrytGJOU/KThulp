@@ -1,7 +1,7 @@
 # Helden-evolutie: wat er aan afbeeldingen bij komt (voor het beeldgesprek)
 
-Stand 2026-12-20. Bron voor de gamedesign: `CASTRA_HEROUM.md` (sectie "Evolutie van helden") en `certamen/castra-heroevo.js`.
-**Alleen Ulixes is volledig uitgewerkt en gebouwd (pilot).** De keuzes voor de andere 14 helden hieronder zijn door Gerben bevestigd; de afbeeldingen mogen zo ontworpen worden. De code volgt nog.
+Stand 2026-10-22. Bron voor de gamedesign: `CASTRA_HEROUM.md` (sectie "Evolutie van helden") en `certamen/castra-heroevo.js`.
+**Alle 15 helden zijn nu uitgewerkt en gebouwd (Ulixes was de pilot).** De keuzes voor de andere 14 helden hieronder zijn door Gerben bevestigd; de afbeeldingen mogen zo ontworpen worden. De evoluties staan in de code (`certamen/castra-heroevo-all.js`).
 
 ## Hoe de evolutie werkt (kort)
 - Een held is een soort legendarische soldaat: zelfde stats en moves als een soldaat, maar uniek.
@@ -38,7 +38,7 @@ Basis: olijf huid, kort bruin haar, baard, robe met korte groene cape en standaa
 - **Sagittarius** (boogschutter): middelzwaar harnas, lange groene cape, open helm, boog. Prestige **Arcitenens**: ceremonieel harnas, gouden cape; legendarische arte *Sagitta Apollinis*.
 - **Insidiator** (verkenner, sluiper): middelzwaar harnas, lange paarse cape, bandana in plaats van helm, dolk of korte boog. Prestige **Callidus**: ceremonieel harnas, paarse cape; legendarische arte *Insidiae Ulixis*.
 
-## Overige 14 helden: door Gerben gekozen (2026-10-22), nog niet in de code
+## Overige 14 helden: door Gerben gekozen en gebouwd (2026-10-22)
 Klasse tussen haakjes: hopliet (zware infanterie), spartaan (voorvechter), boogschutter, cavalerie, centurio (bevelvoerder), verkenner (sluiper), priester (genezer).
 
 | Held | Specialisatie A | Prestige A | Specialisatie B | Prestige B |

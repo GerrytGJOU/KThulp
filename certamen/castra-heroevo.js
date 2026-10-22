@@ -18,6 +18,8 @@
    ============================================================================ */
 
 const CASTRA_HEVO_LVL = [25, 40];
+// Verhaal-arte van elke held (castra-heroevo-all.js): zit vanaf level 1 in de basisklasse en blijft na elke evolutie.
+const CASTRA_HERO_SIG = {};
 const CASTRA_HERO_EVO = {
   ulixes: {
     items:[ { id:"evo_ulixes_1", icon:"🏹", nm:"Arcus Ulixis", nl:"De boog van Odysseus" }, { id:"evo_ulixes_2", icon:"🍯", nm:"Ambrosia", nl:"Voedsel van de goden" } ],
@@ -70,7 +72,7 @@ function castraHeroSpec(h){ const E = castraHeroEvoOf(h.id); return E && h.spec 
 function castraHeroEvoApply(h){
   const d = CASTRA_HERO_DATA[h.id]; if(!d) return;
   if(!d._b) d._b = { type:d.type, look:{ ...d.look }, base:{ ...d.base }, nm:d.nm };
-  let type = d._b.type, look = { ...d._b.look }, mult = null, cls = null;
+  let type = d._b.type, look = { ...d._b.look }, mult = null, cls = CASTRA_SKILLS[h.id+"_base"] ? h.id+"_base" : null;
   const sp = (h.evo||0) >= 1 ? castraHeroSpec(h) : null;
   if(sp){
     type = sp.type || type; Object.assign(look, sp.look||{}); mult = sp.mult; cls = sp.cls;
@@ -82,26 +84,28 @@ function castraHeroEvoApply(h){
 function castraHeroEvoApplyAll(){ (CASTRA && CASTRA.heroes || []).forEach(castraHeroEvoApply); }
 function castraHeroForm(h){ const sp = castraHeroSpec(h); return !sp ? null : (h.evo>=2 ? sp.prestige.nm : sp.nm); }
 // Klassen met een legendarische arte erbij (de zes gewone artes blijven; maximaal vier tegelijk).
-(function(){
-  Object.keys(CASTRA_HERO_EVO).forEach(id=>CASTRA_HERO_EVO[id].specs.forEach(sp=>{
-    const base = sp.cls==="ulixes_sag" ? "boogschutter" : sp.cls==="ulixes_ins" ? "verkenner" : null; if(!base) return;
-    CASTRA_SKILLS[sp.cls] = CASTRA_SKILLS[base].concat([ { ...sp.prestige.legendary, legendary:true, prestige:true } ]);
-  }));
-  Object.keys(CASTRA_HERO_EVO).forEach(id=>CASTRA_HERO_EVO[id].items.forEach(it=>{ CASTRA_ITEMS[it.id] = { nm:it.nm, icon:it.icon, nl:it.nl }; }));
-})();
+function castraHeroEvoRegisterClasses(id){
+  const E = CASTRA_HERO_EVO[id]; if(!E) return;
+  E.specs.forEach(sp=>{
+    const base = sp.skillBase || (sp.cls==="ulixes_sag" ? "boogschutter" : sp.cls==="ulixes_ins" ? "verkenner" : null); if(!base) return;
+    const sig = CASTRA_HERO_SIG[id] ? [ { ...CASTRA_HERO_SIG[id], signature:true } ] : [];
+    CASTRA_SKILLS[sp.cls] = sig.concat(CASTRA_SKILLS[base], [ { ...sp.prestige.legendary, legendary:true, prestige:true } ]);
+  });
+  E.items.forEach(it=>{ CASTRA_ITEMS[it.id] = { nm:it.nm, icon:it.icon, nl:it.nl }; });
+}
+Object.keys(CASTRA_HERO_EVO).forEach(castraHeroEvoRegisterClasses);
 const _castraLoadHevo0 = castraLoad;
 castraLoad = function(){ const r = _castraLoadHevo0.apply(this, arguments); try{ castraHeroEvoApplyAll(); }catch(e){} return r; };
 
 /* ---------- persoonlijke quests in de questmotor ---------- */
-(function(){
-  Object.keys(CASTRA_HERO_EVO).forEach(id=>{
-    const E = CASTRA_HERO_EVO[id], hh = ()=>castraHero(id);
-    CASTRA_QDEFS.push({ id:"evo_"+id+"_1", giver:"hero_"+id, region:null, hero:id, ...E.q1,
-      can:()=>{ const h = hh(); return !!h && (h.evo||0)===0 && (h.lvl||1) >= CASTRA_HEVO_LVL[0]; } });
-    E.specs.forEach(sp=>CASTRA_QDEFS.push({ id:"evo_"+id+"_2_"+sp.id, giver:"hero_"+id, region:null, hero:id, ...sp.q2,
-      can:()=>{ const h = hh(); return !!h && h.evo===1 && h.spec===sp.id && (h.lvl||1) >= CASTRA_HEVO_LVL[1]; } }));
-  });
-})();
+function castraHeroEvoRegisterQuests(id){
+  const E = CASTRA_HERO_EVO[id], hh = ()=>castraHero(id); if(!E) return;
+  CASTRA_QDEFS.push({ id:"evo_"+id+"_1", giver:"hero_"+id, region:null, hero:id, ...E.q1,
+    can:()=>{ const h = hh(); return !!h && (h.evo||0)===0 && (h.lvl||1) >= CASTRA_HEVO_LVL[0]; } });
+  E.specs.forEach(sp=>CASTRA_QDEFS.push({ id:"evo_"+id+"_2_"+sp.id, giver:"hero_"+id, region:null, hero:id, ...sp.q2,
+    can:()=>{ const h = hh(); return !!h && h.evo===1 && h.spec===sp.id && (h.lvl||1) >= CASTRA_HEVO_LVL[1]; } }));
+}
+Object.keys(CASTRA_HERO_EVO).forEach(castraHeroEvoRegisterQuests);
 
 /* ---------- evolueren (menu) ---------- */
 function castraHeroEvoState(h){
