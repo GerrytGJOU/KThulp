@@ -70,7 +70,7 @@ function castraDlgClose(silent){
 }
 function castraDlgPortrait(d){
   return `<div style="flex:0 0 112px;width:112px;height:112px;overflow:hidden;border-radius:8px;background:#d9c590;border:2px solid var(--parch-edge,#4a3416);position:relative">
-    <div style="position:absolute;left:0;top:0;width:112px;height:112px">${castraAvatarHTML(d.look,"down",1,112)}</div></div>`;
+    <div style="position:absolute;left:0;top:0;width:112px;height:112px">${d.sheet && typeof castraSheetHTML==="function" ? castraSheetHTML(d.sheet,"down",1,112) : castraAvatarHTML(d.look,"down",1,112)}</div></div>`;
 }
 function castraDlgLine(){
   const D = CASTRA_DLG, box = document.getElementById("castraDlg"); if(!D || !box) return;
