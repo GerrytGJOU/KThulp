@@ -49,3 +49,36 @@ function castraXpTd(m, lvl){
 // Training in de campus: een deel van het XP voor het volgende level.
 function castraXpTrain(lvl, campusLvl){ return Math.max(2, Math.round(castraXpToNext(lvl||1) * (CASTRA_XP.trainBase + CASTRA_XP.trainPerCampus*(campusLvl||1)))); }
 function castraHeroXpNeed(l){ return castraXpToNext(l); }
+
+/* ---------- Contubernium (Exp. Share): rustende soldaten leren mee ---------- */
+// Een contubernium was de tentgroep van acht legionairs; wie in de tent rust, deelt mee in wat de anderen leren.
+// Vanaf Castra-niveau 7. Na een gewonnen of gevangen jachtgevecht, een gewonnen missie en de wekelijkse uitdaging
+// krijgen soldaten die NIET meededen een deel van de winst, berekend met hun EIGEN level (wie al ver is krijgt dus
+// bijna niets, wie achterloopt veel). Het deel (25% + 5% per campusniveau, max. 50%) en het aantal ontvangers
+// (2 + campusniveau, de laagste levels eerst) groeien met de campus. Soldaten in training of op hun levelplafond
+// krijgen niets; gewond zijn blokkeert niet, want rusten telt juist mee.
+const CASTRA_CONT = { unlockLvl:7, slotsBase:2, slotsPerCampus:1, shareBase:25, sharePerCampus:5, shareMax:50 };
+function castraContActive(){ return typeof castraUnlocked==="function" ? castraUnlocked("contubernium") : true; }
+function castraContShare(){ return Math.min(CASTRA_CONT.shareMax, CASTRA_CONT.shareBase + CASTRA_CONT.sharePerCampus*Math.max(0, castraLvl("campus"))); }
+function castraContSlots(){ return CASTRA_CONT.slotsBase + CASTRA_CONT.slotsPerCampus*Math.max(0, castraLvl("campus")); }
+// ctx = { V (jachtgevecht) } of { m (missie) }, ids = soldaten die meededen.
+function castraContubernium(ctx){
+  const out = { lines:[], share:castraContShare() };
+  if(!castraContActive()) return out;
+  const cap = castraSoldierCap(), fought = new Set(ctx.ids || []);
+  const rest = (CASTRA.soldiers||[]).filter(s=>!fought.has(s.id) && !s.trainUntil && (s.lvl||1) < cap).sort((a,b)=>(a.lvl||1)-(b.lvl||1)).slice(0, castraContSlots());
+  rest.forEach(s=>{
+    const full = ctx.V ? castraXpWild(ctx.V, s) : castraXpTd(ctx.m, s.lvl);
+    const g = Math.max(1, Math.round(castraCardXp(full) * out.share / 100)), l0 = s.lvl;
+    s.xp += g; const up = castraLevelUp(s);
+    out.lines.push({ nm:castraSoldierName(s), gain:g, up, lvl:s.lvl, from:l0 });
+  });
+  if(out.lines.length) castraSave();
+  return out;
+}
+function castraContHTML(c){
+  if(!c || !c.lines.length) return "";
+  return `<div class="note" style="margin-top:8px">🏕️ ${castraLaHTML("Contubernium quiescit, sed discit.", "Contubernium: rustende soldaten leren mee ("+c.share+"% van de ervaring).", "cont_h")}<br>${c.lines.map(l=>esc(l.nm)+" +"+l.gain+" XP"+(l.up?" ⭐ gradus "+l.lvl:"")).join(" · ")}</div>`;
+}
+if(typeof CASTRA_LA!=="undefined") Object.assign(CASTRA_GLOSS, { "contubernium":"tentgroep (rustende soldaten leren mee)", "tabernaculo":"tent", "quiescunt":"rusten", "quiescit":"rust", "discunt":"leren", "discit":"leert", "dedit":"gaf", "datur":"wordt gegeven" });
+

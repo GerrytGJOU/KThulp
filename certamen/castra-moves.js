@@ -79,20 +79,57 @@ function castraMvSync(V){   // oude velden (castraVFinish en anderen lezen die)
   V.myHp = V.s.me.hp; V.myMax = V.s.me.max; V.enHp = V.s.en.hp; V.enMax = V.s.en.max;
 }
 const _castraVFightMv0 = castraVFight;
-castraVFight = function(sid){
-  const V = CASTRA_V; if(!V) return;
-  _castraVFightMv0.apply(this, arguments);        // zet V.mine, V.myStats, V.myType, V.stats, V.enType en start de sprite-controle
-  if(!V.mine) return;
-  const myName = V.mine.dux ? "Dux" : castraSoldierName(V.mine), enName = castraSoldierName(V.enemy);
+function castraMvName(u){ return u.dux ? "Dux" : u.hero ? CASTRA_HERO_DATA[u.h.id].nm : castraSoldierName(u); }
+function castraMvInit(V){
+  const myName = castraMvName(V.mine), enName = castraSoldierName(V.enemy);
   V.s = { me:castraMvSide(V.mine, V.myStats, V.myType, myName), en:castraMvSide(V.enemy, V.stats, V.enType, enName) };
   V.rng = castraRng((CASTRA.seed ^ 0x6d2b79f5)>>>0); CASTRA.seed = (CASTRA.seed+5)>>>0;
   V.catchLeft = CASTRA_MV_BAL.catchTries; V.ask = null; V.caught = false; V.lastMe = null;
   castraMvSync(V);
-  V.log = []; V.round = 0; V.over = null; V.dmgTaken = 0;
-  const lines = [ castraLaHTML(`${enName} adest!`, `${enName} verschijnt!`, "mv_adest") ];
-  V.log = lines;
-  castraFsprProbe([[V.mine.line,"portrait"],[V.enemy.line,"portrait"],[V.mine.line,"battle_back"],[V.enemy.line,"battle_front"]], ()=>{ if(CASTRA_V===V && !V.over) castraVRender("battle"); });
+  V.round = 0; V.over = null; V.dmgTaken = 0;
+  V.log = [ castraLaHTML(`${enName} adest!`, `${enName} verschijnt!`, "mv_adest") ];
+  const probe = [[V.enemy.line,"portrait"],[V.enemy.line,"battle_front"]];
+  if(V.mine.line) probe.push([V.mine.line,"portrait"],[V.mine.line,"battle_back"]);
+  castraFsprProbe(probe, ()=>{ if(CASTRA_V===V && !V.over) castraVRender("battle"); });
+}
+castraVFight = function(sid){
+  const V = CASTRA_V; if(!V) return;
+  if(String(sid).indexOf("hero_")===0){            // een held vecht mee (alleen heldenartes en -stats, geen blessure)
+    const h = castraHero(String(sid).slice(5)); if(!h) return;
+    V.mine = castraHeroAsUnit(h); V.myStats = castraHeroStats(h); V.myType = CASTRA_HERO_DATA[h.id].type;
+    V.stats = V.stats || castraStats(V.enemy); V.enType = castraLine(V.enemy.line).type;
+    castraMvInit(V); return;
+  }
+  _castraVFightMv0.apply(this, arguments);        // zet V.mine, V.myStats, V.myType, V.stats, V.enType voor soldaat of dux
+  if(!V.mine) return;
+  castraMvInit(V);
 };
+// Held als vechter: ervaring en level voor de held (soldaten en dux regelt castraVFinish zelf), plus het contubernium.
+const _castraVFinishMv0 = castraVFinish;
+castraVFinish = function(){
+  const V = CASTRA_V; _castraVFinishMv0.apply(this, arguments);
+  if(!V || V.over!=="win" || !V.mine) return;
+  if(V.mine.hero){
+    const hh = V.mine.h, xp = castraCardXp(castraXpWild(V, { lvl:hh.lvl }));
+    hh.xp += xp; V.leveled = castraHeroLevelUp(hh); V.heroXp = xp;
+  }
+  if(typeof castraContubernium==="function") V.cont = castraContubernium({ V, ids:[V.mine.id] });
+  castraSave();
+};
+// Scoutscherm: ook je helden kunnen op jacht.
+const _castraVRenderMv0 = castraVRender;
+castraVRender = function(stage){
+  _castraVRenderMv0.apply(this, arguments);
+  if(stage==="scout") try{ castraMvScoutHeroes(); }catch(e){}
+};
+function castraMvScoutHeroes(){
+  const heroes = CASTRA.heroes || []; if(!heroes.length) return;
+  const btn = [...document.querySelectorAll("#castraVBody button")].find(b=>/castraVFight\('dux'\)/.test(b.getAttribute("onclick")||"")); if(!btn) return;
+  const html = heroes.map(h=>{ const d = CASTRA_HERO_DATA[h.id], st = castraHeroStats(h), t = CASTRA_TYPE_LA[d.type];
+    return `<button class="tile" onclick="castraVFight('hero_${h.id}')"><span class="ic">⭐</span><h3>${esc(d.nm)} <small>${castraLaText("gradus")} ${h.lvl}</small></h3>
+      <p><b>${esc(t.sg)}</b> · ${CASTRA_STATS.slice(0,3).map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</p></button>`; }).join("");
+  btn.insertAdjacentHTML("beforebegin", html);
+}
 
 /* ---------- schade en effecten ---------- */
 function castraMvCalc(A, D, move){
@@ -255,8 +292,8 @@ function castraMvBtn(V, m){
 }
 function castraVBattleHTML(){
   const V = CASTRA_V; if(!V.s) return "";
-  const me = V.s.me, en = V.s.en, line = castraLine(V.enemy.line), mf = castraLine(V.mine.line||"rom_hastatus");
-  const mySpr = castraFsprHTML(V.mine.line, "battle_back", 96, castraAvatarHTML(castraPLook(V.mine.line), "up", 1, 96), false);
+  const me = V.s.me, en = V.s.en, line = castraLine(V.enemy.line);
+  const mySpr = V.mine.hero ? castraAvatarHTML(CASTRA_HERO_DATA[V.mine.h.id].look, "up", 1, 96) : castraFsprHTML(V.mine.line, "battle_back", 96, castraAvatarHTML(castraPLook(V.mine.line), "up", 1, 96), false);
   const enSpr = castraFsprHTML(V.enemy.line, "battle_front", 96, castraAvatarHTML(castraPLook(V.enemy.line), "down", 1, 96), false);
   const log = V.log.slice(-5).map(l=>`<div style="padding:2px 0">${l}</div>`).join("");
   const unit = (S, e, right)=>`<div style="flex:1;min-width:0;${right?"text-align:right":""}"><b>${S.unit.insignis?"✨ ":""}${esc(S.name)}</b> <small>${castraLaText("gradus")} ${e.lvl||1} ${CASTRA_MV_ICON[S.type]||""}</small>${castraMvStatus(S)}${castraVBar(S.hp,S.max,right?"#c8392a":"#3f9d52")}</div>`;
@@ -305,11 +342,13 @@ function castraVResultHTML(){
     } else h += `<div style="font-size:15px">${castraLa("hostis_fugit_victus")}</div>`;
     if(V.loot) h += `<div style="margin-top:6px">${castraLa("praeda")} 🪙 +${V.loot.aes} · 🌾 +${V.loot.fru} · 🏆 +1</div>`;
     (V.quests||[]).forEach(m=>{ h += `<div class="note">📜 ${esc(m.nm)}: ${m.n} / ${m.need}</div>`; });
-    if(V.leveled) h += `<div class="note">⭐ ${esc(castraSoldierName(V.mine))} → ${castraLaText("gradus")} ${castraSoldierLvl(V.mine)}</div>`;
+    if(V.heroXp) h += `<div class="note">⭐ ${esc(castraMvName(V.mine))} +${V.heroXp} XP</div>`;
+    if(V.leveled) h += `<div class="note">⭐ ${esc(castraMvName(V.mine))} → ${castraLaText("gradus")} ${V.mine.hero ? V.mine.h.lvl : castraSoldierLvl(V.mine)}</div>`;
+    if(V.cont) h += castraContHTML(V.cont);
     if(V.trace){ const hero = CASTRA_HEROES.find(x=>x.id===V.trace); h += `<div class="note" style="font-size:15px">${castraLa("vestigia")} <b>${esc(hero?hero.nm:"")}</b></div>`; }
   } else {
     h += `<div style="font-size:22px;margin-bottom:6px">${castraLa(V.over==="lose"?"victus_es":"hostis_fugit")}</div>`;
-    if(V.over==="lose" && !V.mine.dux) h += `<div class="note">${castraLa("vulneratus")}</div>`;
+    if(V.over==="lose" && !V.mine.dux && !V.mine.hero) h += `<div class="note">${castraLa("vulneratus")}</div>`;
     if(V.over==="flee") h += `<div class="note">${castraLaHTML("Fuga inutilis fuit.", "De vijand is ontsnapt. Probeer hem de volgende keer te vangen voor hij vlucht.", "mv_flee")}</div>`;
   }
   h += V.fromWorld
@@ -334,3 +373,32 @@ Object.assign(CASTRA_GLOSS, {
   "hunc":"deze", "hostem":"vijand (4e naamval)", "non":"niet", "defendit":"verdedigt zich", "se":"zich", "gravis":"zwaar", "cura":"zorg, genezing",
   "incursus":"uitval", "sagitta":"pijl", "terror":"schrik", "impetus":"aanval", "oppugna":"val aan",
 });
+
+/* ---------- menu: moves in het gevecht en in de tower defence ---------- */
+function castraMvMenuHTML(unit){
+  try{
+    const isHero = !!unit.hero, type = isHero ? CASTRA_HERO_DATA[unit.h.id].type : castraLine(unit.line).type;
+    const lvl = isHero ? unit.h.lvl : (unit.lvl||1);
+    const moves = castraMvSet({ ...unit, lvl }, type);
+    const row = m=>`<div style="padding:3px 0;border-top:1px dotted var(--parch-line,#c2a96f)"><b>${esc(m.la)}</b> <span style="opacity:.8">${m.kind==="dmg"?`${CASTRA_MV_ICON[type]||""} kracht ${m.power}${m.hits>1?"×"+m.hits:""} · ${m.acc}%`:""}${m.pp?` · ${m.pp}×`:" · onbeperkt"}</span><br><small style="opacity:.75">${esc(m.nl.replace(/ \(kracht.*$/,""))}</small></div>`;
+    const sigNote = lvl < CASTRA_MV_BAL.sigLvl ? `<div style="padding:3px 0;opacity:.55">🔒 Gradus ${CASTRA_MV_BAL.sigLvl}: eigen move van je soort</div>` : "";
+    const ids = castraSkillIds(isHero ? { hero:true, h:unit.h } : unit);
+    const eq = ids.map(id=>castraSkillById(id)).filter(Boolean);
+    const td = eq.length ? eq.map(k=>`<div style="padding:2px 0"><b>${esc(k.la)}</b> <small style="opacity:.75">${esc(k.nl)}</small></div>`).join("") : `<div style="opacity:.6;padding:2px 0">Nog geen artes (de eerste vanaf gradus 8). Als toren schiet hij met zijn basiswaarden.</div>`;
+    const fights = isHero ? "Een held kan ook op jacht (je kiest hem bij het verkenningsbericht) en vecht dan met deze moves." : "";
+    return `<div style="margin-top:8px;font-size:13px"><div style="font-weight:bold">⚔ Moves in het gevecht (jacht)</div>${moves.map(row).join("")}${sigNote}
+      <div style="padding:3px 0;border-top:1px dotted var(--parch-line,#c2a96f)"><b>Defende</b> <small style="opacity:.75">halve schade deze beurt (niet twee beurten achter elkaar)</small></div>
+      <div style="font-size:11px;opacity:.7;margin-top:2px">${fights}</div>
+      <div style="font-weight:bold;margin-top:8px">🏰 In de tower defence</div>${td}</div>`;
+  }catch(e){ return ""; }
+}
+function castraMvXpLine(u, cap){
+  const need = castraXpToNext(u.lvl||1), left = Math.max(0, need - (u.xp||0));
+  return (u.lvl||1) >= cap ? "maximaal level (bouw het praetorium uit)" : `nog <b>${left}</b> XP tot ${castraLaText("gradus")} ${(u.lvl||1)+1}`;
+}
+function castraContMenuHTML(){
+  const lv = (typeof castraUnlockDef==="function") ? castraUnlockDef("contubernium") : null;
+  if(!castraContActive()) return `<div class="note" style="font-size:12px;margin:0 0 6px">🔒 Contubernium vanaf Castra-niveau ${lv?lv.lvl:7}: rustende soldaten leren mee.</div>`;
+  return `<div class="note" style="font-size:12px;margin:0 0 6px">🏕️ <b>Contubernium</b>: soldaten die niet meevechten krijgen ${castraContShare()}% van de ervaring (maximaal ${castraContSlots()} soldaten, de laagste levels eerst). Campus uitbouwen geeft meer.</div>`;
+}
+

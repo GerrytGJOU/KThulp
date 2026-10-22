@@ -128,9 +128,10 @@ function castraMenuTeam(){
         <div style="font-size:12px;opacity:.7">${castraClassBadge(f,true)} ${esc(castraFolkNm(s.line))} · tier ${f.tier}${hurt?` · 🩹 ${castraHurtMin(s)} min`:""}${s.trainUntil?" · 🏋️":""}</div>
         <div style="display:flex;align-items:center;gap:6px;margin-top:3px"><small style="width:24px">${esc(CASTRA_STATS[0].nm.slice(0,3))}</small><div style="flex:1">${castraMenuBar(hurt?0:st.vita, st.vita, hurt?"#c33":"#3a3")}</div><b style="font-size:12px;width:64px;text-align:right">${hurt?0:st.vita}/${st.vita}</b></div>
         <div style="display:flex;align-items:center;gap:6px"><small style="width:24px">XP</small><div style="flex:1">${castraMenuBar(s.xp, need, "#38c")}</div><b style="font-size:12px;width:64px;text-align:right">${s.xp}/${need}</b></div>
-        ${det}${sel?castraSkillsHTML(s,"s",s.id):""}</div></div>`;
+        <div style="font-size:12px;opacity:.8">${typeof castraMvXpLine==="function"?castraMvXpLine(s, cap):""}</div>
+        ${det}${sel?castraSkillsHTML(s,"s",s.id)+(typeof castraMvMenuHTML==="function"?castraMvMenuHTML(s):""):""}</div></div>`;
   }).join("") || `<div class="note">Nullus miles. <small>Nog geen soldaten.</small></div>`;
-  return `<h3 style="margin:0 0 6px">Milites <small>${list.length} / ${castraBarracksCap()}</small></h3>${rows}`;
+  return `<h3 style="margin:0 0 6px">Milites <small>${list.length} / ${castraBarracksCap()}</small></h3>${typeof castraContMenuHTML==="function"?castraContMenuHTML():""}${rows}`;
 }
 function castraMenuHeroes(){
   const have = CASTRA.heroes || [];
@@ -142,8 +143,9 @@ function castraMenuHeroes(){
       <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><b>${esc(d.nm)}</b><span>Lv ${h.lvl} / ${cap}</span></div>
         <div style="font-size:12px;opacity:.7">${esc(CASTRA_TYPE_LA[d.type].sg)} · ${esc((CASTRA_VENATIO[d.region]||{nm:d.region}).nm)}${h.assigned?` · leidt ${esc(castraBuilding(h.assigned).nm)}`:""}</div>
         <div style="display:flex;align-items:center;gap:6px;margin-top:3px"><small style="width:30px">Fides</small><div style="flex:1">${castraMenuBar(h.fides||0,100,"#d4a017")}</div><b style="font-size:12px;width:40px;text-align:right">${h.fides||0}</b></div>
-        <div style="display:flex;align-items:center;gap:6px"><small style="width:30px">XP</small><div style="flex:1">${castraMenuBar(h.xp,need,"#38c")}</div><b style="font-size:12px;width:40px;text-align:right">${h.xp}</b></div>
-        <div style="font-size:12px;margin-top:2px">${CASTRA_STATS.map(x=>`${esc(x.nm.slice(0,3))} ${st[x.id]}`).join(" · ")}</div>${hsel?castraSkillsHTML({ hero:true, h },"h",h.id)+(typeof cxCompBtn==="function"?cxCompBtn("h",h.id):""):"<div style=\"font-size:12px;opacity:.6;margin-top:2px\">🎓 "+castraSkillIds({ hero:true, h }).length+" / 4 artes — tik voor details</div>"}</div></div>`;
+        <div style="display:flex;align-items:center;gap:6px"><small style="width:30px">XP</small><div style="flex:1">${castraMenuBar(h.xp,need,"#38c")}</div><b style="font-size:12px;width:40px;text-align:right">${h.xp}/${need}</b></div>
+        <div style="font-size:12px;opacity:.8">${typeof castraMvXpLine==="function"?castraMvXpLine({ lvl:h.lvl, xp:h.xp }, cap):""}</div>
+        <div style="font-size:12px;margin-top:2px">${CASTRA_STATS.map(x=>`${esc(x.nm.slice(0,3))} ${st[x.id]}`).join(" · ")}</div>${hsel?castraSkillsHTML({ hero:true, h },"h",h.id)+(typeof castraMvMenuHTML==="function"?castraMvMenuHTML(castraHeroAsUnit(h)):"")+(typeof cxCompBtn==="function"?cxCompBtn("h",h.id):""):"<div style=\"font-size:12px;opacity:.6;margin-top:2px\">🎓 "+castraSkillIds({ hero:true, h }).length+" / 4 artes — tik voor details</div>"}</div></div>`;
   }).join("") || `<div class="note">Nullus heros. <small>Nog geen helden: zoek sporen tijdens de jacht en praat met hen.</small></div>`;
   return `<h3 style="margin:0 0 6px">Heroes <small>${have.length} / ${Object.keys(CASTRA_HERO_DATA).length}</small></h3>${rows}`;
 }
