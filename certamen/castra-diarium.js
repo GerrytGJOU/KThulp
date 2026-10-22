@@ -142,9 +142,10 @@ function castraDqReward(q){
   const r = q.reward || {}, res = {}; ["aes","frumentum","lignum","gloria"].forEach(k=>{ if(r[k]) res[k] = r[k]; });
   const txt = Object.keys(res).length ? castraWGive(res) : "";
   if(r.item){ const it = castraWItems(); it[r.item] = (it[r.item]||0)+1; }
+  if(r.mount){ CASTRA.mount = { owned:1, on:1 }; try{ if(typeof el==="function" && el("cwAv")) castraWorldAvatar(); }catch(e){} }
   if(r.pxp && typeof castraPxpAdd==="function") castraPxpAdd(r.pxp, q.nm.nl);
   if(r.token && typeof castraCardToken==="function") castraCardToken(r.token, q.nm.nl);
-  return txt + (r.item && typeof CASTRA_ITEMS!=="undefined" && CASTRA_ITEMS[r.item] ? "  "+CASTRA_ITEMS[r.item].icon+" "+CASTRA_ITEMS[r.item].nm : "") + (r.token ? "  🎟️ +"+r.token+" kaarttrekking" : "");
+  return txt + (r.item && typeof CASTRA_ITEMS!=="undefined" && CASTRA_ITEMS[r.item] ? "  "+CASTRA_ITEMS[r.item].icon+" "+CASTRA_ITEMS[r.item].nm : "") + (r.token ? "  🎟️ +"+r.token+" kaarttrekking" : "") + (r.mount ? "  🐎 Equus (knop linksboven in de wereld)" : "");
 }
 function castraDqTalk(gid){
   const hero = gid.indexOf("hero_")===0 ? castraHero(gid.slice(5)) : null;
