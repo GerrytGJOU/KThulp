@@ -1,7 +1,7 @@
 # Helden-evolutie: wat er aan afbeeldingen bij komt (voor het beeldgesprek)
 
 Stand 2026-12-20. Bron voor de gamedesign: `CASTRA_HEROUM.md` (sectie "Evolutie van helden") en `certamen/castra-heroevo.js`.
-**Alleen Ulixes is volledig uitgewerkt en gebouwd (pilot).** De andere 14 helden hieronder zijn een VOORSTEL voor klassen en prestigevormen; de afbeeldingen mogen alvast zo ontworpen worden, namen en klassen kunnen nog wijzigen.
+**Alleen Ulixes is volledig uitgewerkt en gebouwd (pilot).** De keuzes voor de andere 14 helden hieronder zijn door Gerben bevestigd; de afbeeldingen mogen zo ontworpen worden. De code volgt nog.
 
 ## Hoe de evolutie werkt (kort)
 - Een held is een soort legendarische soldaat: zelfde stats en moves als een soldaat, maar uniek.
@@ -38,7 +38,7 @@ Basis: olijf huid, kort bruin haar, baard, robe met korte groene cape en standaa
 - **Sagittarius** (boogschutter): middelzwaar harnas, lange groene cape, open helm, boog. Prestige **Arcitenens**: ceremonieel harnas, gouden cape; legendarische arte *Sagitta Apollinis*.
 - **Insidiator** (verkenner, sluiper): middelzwaar harnas, lange paarse cape, bandana in plaats van helm, dolk of korte boog. Prestige **Callidus**: ceremonieel harnas, paarse cape; legendarische arte *Insidiae Ulixis*.
 
-## Voorstel voor de overige 14 helden (nog niet in de code)
+## Overige 14 helden: door Gerben gekozen (2026-10-22), nog niet in de code
 Klasse tussen haakjes: hopliet (zware infanterie), spartaan (voorvechter), boogschutter, cavalerie, centurio (bevelvoerder), verkenner (sluiper), priester (genezer).
 
 | Held | Specialisatie A | Prestige A | Specialisatie B | Prestige B |
@@ -49,12 +49,12 @@ Klasse tussen haakjes: hopliet (zware infanterie), spartaan (voorvechter), boogs
 | Cloelia | Equitissa (cavalerie, ruiter) | Domina Equitum (meesteres der ruiters) | Explorata (verkenner, zwemster en verkenster) | Virgo Fortissima (de dapperste maagd) |
 | Mucius Scaevola | Insidiator (verkenner, sluipmoordenaar) | Sicarius (meester-sluiper, donker) | Fortis (spartaan, de brandende hand) | Dextra Ignea (de vurige hand, vlammen) |
 | Camilla | Sagittaria (boogschutter) | Virgo Volsca (Volscische maagd, boog en pijlkoker) | Equestris (cavalerie, boog te paard) | Regina Camillarum (koningin der strijdsters) |
-| Hercules | Athleta (spartaan, knots en leeuwenhuid) | Alcides (halfgod, gouden leeuwenhuid) | Heros (hopliet, onverwoestbaar) | Deus (apotheose, stralend) |
+| Hercules | Athleta (spartaan, knots en leeuwenhuid) | Alcides (halfgod, gouden leeuwenhuid) | Sagittarius Herculis (boogschutter, Hydra-pijlen) | Deus (apotheose, stralend) |
 | Perseus | Eques Alatus (cavalerie, gevleugelde sandalen) | Gorgonicida (Medusa-overwinnaar, schild met Medusa) | Venator Monstrorum (verkenner, spiegelschild) | Medusae Victor (Perseus de glorieuze) |
 | Theseus | Victor Labyrinthi (hopliet) | Minotauri Victor (met hoornhelm als trofee) | Rex Atheniensis (centurio, koning van Athene) | Rex Athenarum (kroon en purperen mantel) |
 | Atalanta | Sagittaria (boogschutter) | Venatrix Dianae (jageres van Diana) | Cursor (verkenner, de snelle loopster) | Velocissima (lichte gouden sandalen) |
-| Iason | Argonauta (centurio, bevelvoerder van de Argo) | Dux Argonautarum (leider der Argonauten) | Venator Velleris (verkenner, jager van het vlies) | Aurei Velleris Dominus (heer van het gouden vlies) |
+| Iason | Draconis Victor (hopliet, drakendoder) | Aurei Velleris Dominus (heer van het gouden vlies) | Argonauta (centurio, bevelvoerder van de Argo) | Dux Argonautarum (leider der Argonauten) |
 | Achilles | Heros Myrmidonum (spartaan) | Pelides (zoon van Peleus, gouden pantser) | Auriga Heros (cavalerie, strijdwagen) | Invictus (onoverwinnelijk, enige zwakke hiel) |
 | Hector | Defensor Troiae (hopliet, verdediger) | Murus Troiae (de muur van Troje) | Dux Troianus (centurio, bevelvoerder) | Princeps Troianorum (prins van Troje, purper) |
-| Penthesilea | Sagittaria (boogschutter) | Regina Amazonum (koningin der Amazones) | Amazon Equestris (cavalerie, paard en boog) | Martis Filia (dochter van Mars) |
+| Penthesilea | Bipennifera (spartaan, dubbele bijl) | Regina Amazonum (koningin der Amazones) | Amazon Equestris (cavalerie, paard en boog) | Martis Filia (dochter van Mars) |
 | *Ulixes (gebouwd)* | Sagittarius → Arcitenens | | Insidiator → Callidus | |
