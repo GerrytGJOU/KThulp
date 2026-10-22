@@ -81,6 +81,7 @@ function castraDqAvailable(q){
   const st = (CASTRA.dq||{})[q.id]; if(st && (st.a || st.d)) return false;
   if(q.after && !((CASTRA.dq||{})[q.after]||{}).d) return false;
   if(q.region && !castraDqRegionOpen(q.region)) return false;
+  if(q.can && !q.can()) return false;
   return true;
 }
 function castraDqActive(){ return CASTRA_QDEFS.filter(q=>{ const st = (CASTRA.dq||{})[q.id]; return st && st.a && !st.d; }); }
@@ -147,7 +148,8 @@ function castraDqReward(q){
   return txt + (r.item && typeof CASTRA_ITEMS!=="undefined" && CASTRA_ITEMS[r.item] ? "  "+CASTRA_ITEMS[r.item].icon+" "+CASTRA_ITEMS[r.item].nm : "") + (r.token ? "  🎟️ +"+r.token+" kaarttrekking" : "");
 }
 function castraDqTalk(gid){
-  const e = CASTRA_WENT.find(x=>x.id===gid && x.kind==="npc"); if(!e) return false;
+  const hero = gid.indexOf("hero_")===0 ? castraHero(gid.slice(5)) : null;
+  const e = hero ? { nm:CASTRA_HERO_DATA[hero.id].nm, look:CASTRA_HERO_DATA[hero.id].look } : CASTRA_WENT.find(x=>x.id===gid && x.kind==="npc"); if(!e) return false;
   castraDqSync(true);
   const look = e.look || (typeof castraWLook==="function" ? castraWLook(e) : null), say = (lines, done)=>castraLatSay(e.nm || "?", look, lines, done);
   // 1. afgeronde quest bij de gever: beloning
@@ -183,6 +185,7 @@ castraNpcTalk = function(id){
 
 /* ---------- Diarium (menu) ---------- */
 function castraDqWhere(q){
+  if(String(q.giver).indexOf("hero_")===0){ const d = CASTRA_HERO_DATA[String(q.giver).slice(5)]; return (d ? d.nm : "held")+" (menu: Heroes)"; }
   const e = CASTRA_WENT.find(x=>x.id===q.giver), w = e && CASTRA_WORLDS[e.region], par = w && w.interior && w.parent ? CASTRA_WORLDS[w.parent] : null;
   return (e ? (e.nm||"?") : "?") + " · " + (par ? par.nm+", "+w.nm : w ? w.nm : "?");
 }

@@ -109,7 +109,7 @@ const CASTRA_SKILLS = {
 const CASTRA_HERO_CLASS = { inf:"hopliet", rng:"boogschutter", cav:"cavalerie", sup:"centurio", myth:"myth" };
 
 function castraSkillClassOf(s){
-  if(s.hero) return CASTRA_HERO_CLASS[CASTRA_HERO_DATA[s.h.id].type] || null;
+  if(s.hero){ const d = CASTRA_HERO_DATA[s.h.id]; return d.cls || CASTRA_HERO_CLASS[d.type] || null; }
   if(s.dux || !s.line) return null;
   const f = castraLine(s.line);
   if(f.type==="myth") return "myth";
