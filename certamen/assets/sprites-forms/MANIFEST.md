@@ -1,6 +1,6 @@
 # Vormsprites — stand van zaken
 
-**0 / 453** bestanden aanwezig.
+**72 / 453** bestanden aanwezig.
 
 Gegenereerd door `certamen/tools/castra-sprites-manifest.js`. Per vorm: voor / achter / tower defence.
 
@@ -8,30 +8,30 @@ Gegenereerd door `certamen/tools/castra-sprites-manifest.js`. Per vorm: voor / a
 
 | Vorm | bestandsnaam | voor | achter | td |
 |---|---|---|---|---|
-| Tiro (tier 1) | `rom_tiro` | ⬜ | ⬜ | ⬜ |
-| Hastatus (tier 2) | `rom_hastatus` | ⬜ | ⬜ | ⬜ |
-| Princeps (tier 3) | `rom_princeps` | ⬜ | ⬜ | ⬜ |
-| Triarius (tier 4) | `rom_triarius` | ⬜ | ⬜ | ⬜ |
-| Optio (tier 3) | `rom_optio` | ⬜ | ⬜ | ⬜ |
-| Centurio (tier 4) | `rom_centurio` | ⬜ | ⬜ | ⬜ |
-| Signifer (tier 3) | `rom_signifer` | ⬜ | ⬜ | ⬜ |
-| Aquilifer (tier 4) | `rom_aquilifer` | ⬜ | ⬜ | ⬜ |
-| Veles (tier 2) | `rom_veles` | ⬜ | ⬜ | ⬜ |
-| Funditor (tier 3) | `rom_funditor` | ⬜ | ⬜ | ⬜ |
-| Sagittarius (tier 4) | `rom_sagittarius` | ⬜ | ⬜ | ⬜ |
-| Explorator (tier 3) | `rom_explorator` | ⬜ | ⬜ | ⬜ |
-| Speculator (tier 4) | `rom_speculator` | ⬜ | ⬜ | ⬜ |
-| Eques (tier 2) | `rom_eques` | ⬜ | ⬜ | ⬜ |
-| Decurio (tier 3) | `rom_decurio` | ⬜ | ⬜ | ⬜ |
-| Praefectus alae (tier 4) | `rom_praefectusalae` | ⬜ | ⬜ | ⬜ |
-| Faber (tier 2) | `rom_faber` | ⬜ | ⬜ | ⬜ |
-| Ballistarius (tier 3) | `rom_ballistarius` | ⬜ | ⬜ | ⬜ |
-| Architectus (tier 4) | `rom_architectus` | ⬜ | ⬜ | ⬜ |
-| Capsarius (tier 3) | `rom_capsarius` | ⬜ | ⬜ | ⬜ |
-| Medicus (tier 4) | `rom_medicus` | ⬜ | ⬜ | ⬜ |
-| Remex (tier 2) | `rom_remex` | ⬜ | ⬜ | ⬜ |
-| Classiarius (tier 3) | `rom_classiarius` | ⬜ | ⬜ | ⬜ |
-| Navarchus (tier 4) | `rom_navarchus` | ⬜ | ⬜ | ⬜ |
+| Tiro (tier 1) | `rom_tiro` | ✅ | ✅ | ✅ |
+| Hastatus (tier 2) | `rom_hastatus` | ✅ | ✅ | ✅ |
+| Princeps (tier 3) | `rom_princeps` | ✅ | ✅ | ✅ |
+| Triarius (tier 4) | `rom_triarius` | ✅ | ✅ | ✅ |
+| Optio (tier 3) | `rom_optio` | ✅ | ✅ | ✅ |
+| Centurio (tier 4) | `rom_centurio` | ✅ | ✅ | ✅ |
+| Signifer (tier 3) | `rom_signifer` | ✅ | ✅ | ✅ |
+| Aquilifer (tier 4) | `rom_aquilifer` | ✅ | ✅ | ✅ |
+| Veles (tier 2) | `rom_veles` | ✅ | ✅ | ✅ |
+| Funditor (tier 3) | `rom_funditor` | ✅ | ✅ | ✅ |
+| Sagittarius (tier 4) | `rom_sagittarius` | ✅ | ✅ | ✅ |
+| Explorator (tier 3) | `rom_explorator` | ✅ | ✅ | ✅ |
+| Speculator (tier 4) | `rom_speculator` | ✅ | ✅ | ✅ |
+| Eques (tier 2) | `rom_eques` | ✅ | ✅ | ✅ |
+| Decurio (tier 3) | `rom_decurio` | ✅ | ✅ | ✅ |
+| Praefectus alae (tier 4) | `rom_praefectusalae` | ✅ | ✅ | ✅ |
+| Faber (tier 2) | `rom_faber` | ✅ | ✅ | ✅ |
+| Ballistarius (tier 3) | `rom_ballistarius` | ✅ | ✅ | ✅ |
+| Architectus (tier 4) | `rom_architectus` | ✅ | ✅ | ✅ |
+| Capsarius (tier 3) | `rom_capsarius` | ✅ | ✅ | ✅ |
+| Medicus (tier 4) | `rom_medicus` | ✅ | ✅ | ✅ |
+| Remex (tier 2) | `rom_remex` | ✅ | ✅ | ✅ |
+| Classiarius (tier 3) | `rom_classiarius` | ✅ | ✅ | ✅ |
+| Navarchus (tier 4) | `rom_navarchus` | ✅ | ✅ | ✅ |
 
 ## Grieken
 

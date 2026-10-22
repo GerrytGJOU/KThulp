@@ -12,7 +12,7 @@
    mist: node certamen/tools/castra-sprites-manifest.js (schrijft MANIFEST.md).
    Laadt NA castra-troops.js.
    ============================================================================ */
-const CASTRA_FSPR = { dir:"assets/sprites-forms/", ver:"v=1", have:{}, pending:{} };
+const CASTRA_FSPR = { dir:"assets/sprites-forms/", ver:"v=2", have:{}, pending:{} };
 const CASTRA_FSPR_KINDS = { battle_front:96, battle_back:96, td:48, portrait:128, td_idle:48, td_attack:48, td_hurt:48, td_down:48, td_side:48, td_up:48 };
 
 function castraFsprUrl(id, kind){ return CASTRA_FSPR.dir + id + "_" + kind + ".png?" + CASTRA_FSPR.ver; }
