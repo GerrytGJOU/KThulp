@@ -134,6 +134,7 @@ function castraBMapTap(e){
   if(!B.sel || !castraBTileFree(x,y)) return;
   if(B.sim.towers.length >= castraBCap()){ castraToastLa("acies_plena"); return; }
   const s0 = castraBHealthy().find(q=>q.id===B.sel); if(!s0) return;
+  if(s0.hero && !B.endless && B.sim.towers.filter(t=>String(t.sid).indexOf("hero_")===0).length >= castraHeroFieldCap()){ toast("⭐", "Je mag "+castraHeroFieldCap()+" held"+(castraHeroFieldCap()>1?"en":"")+" tegelijk inzetten (meer met een hoger heroum). Zet soldaten in de rest van de slagorde."); return; }
   if(typeof castraBBanned==="function" && castraBBanned(s0)){ toast("🚫", "Dit soort soldaat mag in deze missie niet meedoen."); return; }
   const tower = B.endless ? castraColoPlace(B, s0, x, y) : castraPMakeTower(B.sim, s0, x, y);   // Colosseum: eenheid-momentopname + actie voor het naspelen
   B.sim.towers.push(tower); B.placed[s0.id] = true; B.sel = null;

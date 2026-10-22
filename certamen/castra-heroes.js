@@ -332,6 +332,15 @@ function castraHeroAssign(id, buildingId){
   castraSave();
 }
 // Held als "soldaat" voor het proelium
+/* ---------- helden zijn schaars: Castra-niveau om ze te ontmoeten, en een maximum per gevecht ----------
+   Een held is zo sterk als een tier 4-soldaat; zonder rem zou een speler met zes helden geen soldaten meer nodig hebben.
+   Daarom (1) verschijnt een held pas in de wereld vanaf een bepaald Castra-niveau (de volgorde per regio staat hier,
+   Aeneas is er vanaf het begin), en (2) mogen er per gevecht maar weinig helden tegelijk meedoen, afhankelijk van het
+   heroum-niveau: 1 held (heroum 1-2), 2 (3-4), 3 (5). De rest van de slagorde bestaat uit soldaten. */
+const CASTRA_HERO_MINLVL = { aeneas:1, romulus:6, horatius:9, cloelia:12, mucius:15, camilla:18,
+  hercules:20, perseus:23, theseus:26, atalanta:29, iason:32, achilles:30, hector:34, ulixes:38, penthesilea:42 };
+function castraHeroMinLvl(id){ return CASTRA_HERO_MINLVL[id] || 1; }
+function castraHeroFieldCap(){ return 1 + Math.floor(Math.max(0, castraLvl("heroum")-1)/2); }
 function castraHeroAsUnit(h){ return { id:"hero_"+h.id, hero:true, h, lvl:h.lvl, line:null, stage:0 }; }
 
 /* ---------- gesprekken (loyaliteit) ---------- */

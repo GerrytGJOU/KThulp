@@ -26,6 +26,7 @@ function castraQState(id){
 // Zichtbaar in de wereld: nog niet in je heroum, en het spoor is gevonden (of altijd bij Aeneas).
 function castraNpcVisible(id){
   const n = CASTRA_NPCS[id]; if(!n || castraHero(id)) return false;
+  if(typeof castraPLevel==="function" && castraPLevel() < castraHeroMinLvl(id)) return false;   // helden zijn schaars (castra-heroes.js)
   return n.always || !!(CASTRA.traces && CASTRA.traces[id]);
 }
 function castraVisibleNpcs(){ const rg = (typeof CASTRA_W_REGION!=="undefined") ? CASTRA_W_REGION : "latium"; return Object.keys(CASTRA_NPCS).filter(id=>CASTRA_NPCS[id].region===rg && castraNpcVisible(id)); }
