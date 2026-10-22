@@ -110,10 +110,12 @@ function castraWorldDef(){
   const exitCell = (x,y)=>W.exit.some(e=>e.x===x&&e.y===y);
   // rand: bomen langs de rand (solide muur van bomen), met de uitgang open
   const ring = (x,y)=>x===0||y===0||x===cols-1||y===rows-1;
+  // Eén soort boom in de rand: tree_b is een dichte bostegel (sluit aan op zichzelf) en mag niet met doorzichtige bomen (palm, dode boom) door elkaar.
+  const ringO = W.trees.find(t=>!/^tree_[ab]$/.test(t)) || "tree_b";
   for(let y=0;y<rows;y++) for(let x=0;x<cols;x++){
     if(!ring(x,y) || exitCell(x,y)) continue;
     walls.push([x,y]); used[x+","+y]=1;
-    { const o = W.trees[(x+y)%2]; pieces.push({ o:(o==="tree_a"||o==="tree_b") ? "tree_b" : o, x, y:y-1, noSolid:true }); }   // bosrand: de bovenkant voor in een bos
+    pieces.push({ o:ringO, x, y:y-1, noSolid:true });   // bosrand: alleen tree_b als de regio geen palmen of dode bomen heeft
   }
   // water (geblokkeerd), met een brug waar de weg doorheen loopt
   W.water.forEach(wt=>{
@@ -145,7 +147,7 @@ function castraWorldDef(){
     if(r < p && free(x,y+1)){
       const big = (rng()<0.25 && !BIO.noBig) && free(x+1,y) && free(x+1,y+1);
       if(big){ pieces.push({ o:W.big, x, y }); [[x,y],[x+1,y],[x,y+1],[x+1,y+1]].forEach(c=>used[c[0]+","+c[1]]=1); }
-      else { let o = W.trees[rng()<0.5?0:1]; if(o==="tree_b" || o==="tree_a") o = (z && z.t===W.denseZone) ? "tree_b" : "tree_a"; pieces.push({ o, x, y }); used[x+","+y]=1; used[x+","+(y+1)]=1; }   // één boom: eigen bovenkant; in een bos: de bovenkant voor in een bos
+      else { let o = W.trees[rng()<0.5?0:1]; if(o==="tree_b" || o==="tree_a") o = "tree_a"; pieces.push({ o, x, y }); used[x+","+y]=1; used[x+","+(y+1)]=1; }   // losse boom: altijd de eigen bovenkant (tree_b is een dichte bostegel en hoort alleen in de rand, waar de tegels aaneensluiten): de bovenkant voor in een bos
     } else if(r < p+(BIO.decorP||0.06)){
       const dl = BIO.decor || ["flower_w","flower_p","flower_b","flower_o","plant_a","plant_b","fern","rock_brown","stones"];
       let o = dl[Math.floor(rng()*dl.length)]; if(z && z.g && o==="cactus") o = "plant_a";   // geen cactus in een groene strook
