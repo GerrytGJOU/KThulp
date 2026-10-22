@@ -23,6 +23,8 @@ const CASTRA_AMB_TYPES = [
   { id:"anus",     nm:"Anus",      w:1, sheets:[["People1.png",7]], look:{ armor:"robe",   baard:"geen",  haar:"knot", haarkleur:"grijs", cape:"geen" } },
   { id:"mercator", nm:"Mercator",  w:2, sheets:[["People1.png",4],["People4.png",6]], look:{ armor:"middel", baard:"snor",  cape:"kort",   capekleur:"oranje" } },
   { id:"pastor",   nm:"Pastor",    w:2, sheets:[["People4.png",0]], look:{ armor:"vodden", baard:"geen",  cape:"kort",   capekleur:"groen" } },
+  { id:"miles",    nm:"Custos",    w:0, still:true, sheets:[["People3.png",6]], look:{ armor:"middel", baard:"baard", helm:"standard", cape:"kort", capekleur:"rood", wapen:"zwaard" } },
+  { id:"rex",      nm:"Rex",       w:0, still:true, sheets:[["People3.png",0]], look:{ armor:"ceremonieel", baard:"baard", haarkleur:"grijs", cape:"lang", capekleur:"goud", wapen:"geen" } },
   { id:"sacerdos", nm:"Sacerdos",  w:1, sheets:[["People2.png",2],["People4.png",7]], look:{ armor:"robe",   baard:"geen",  haar:"kort", cape:"lang", capekleur:"paars" } },
 ];
 const CASTRA_AMB_LINES = {
@@ -34,6 +36,8 @@ const CASTRA_AMB_LINES = {
   puella:[ [ "Mater mea panem coquit.", "Mijn moeder bakt brood." ], [ "Flores pulchri sunt!", "De bloemen zijn mooi!" ], [ "Cum matre in agro laboro.", "Ik werk met mijn moeder op het veld." ] ],
   anus:[ [ "Nepotes meos amo.", "Ik hou van mijn kleinkinderen." ], [ "Vita longa est, sed bona.", "Het leven is lang, maar goed." ], [ "Cave, hospes: via longa est.", "Pas op, gast: de weg is lang." ] ],
   sacerdos:[ [ "Deos colo et pacem peto.", "Ik vereer de goden en vraag om vrede." ], [ "Dei te iuvant, hospes.", "De goden helpen je, gast." ], [ "In templo orare debes.", "Je moet in de tempel bidden." ] ],
+  miles:[ [ "Custos sum. Pacem servo.", "Ik ben een wachter. Ik bewaar de vrede." ], [ "Hostes prope sunt. Cave!", "Vijanden zijn dichtbij. Pas op!" ], [ "Milites fortes quaero.", "Ik zoek dappere soldaten." ] ],
+  rex:[ [ "Rex sum. Regnum meum magnum est.", "Ik ben de koning. Mijn rijk is groot." ], [ "Milites fortes quaero.", "Ik zoek dappere soldaten." ], [ "Pax regni mei cara est.", "De vrede van mijn rijk is mij dierbaar." ] ],
   pastor:[ [ "Oves meas curo.", "Ik zorg voor mijn schapen." ], [ "Lupus in silva est! Cave, hospes!", "Er is een wolf in het bos! Pas op, gast!" ], [ "Sol calet. Aquam quaero.", "De zon is heet. Ik zoek water." ] ],
 };
 const CASTRA_AMB_REGION = {
@@ -82,11 +86,31 @@ function castraAmbSpawn(){
     CASTRA_AMB.list.push({ id:"a"+(CASTRA_AMB.id++), type, sheet:sh ? { f:sh[0], i:sh[1] } : null, x, y, hx:x, hy:y, dir:["down","left","right","up"][Math.floor(rng()*4)], frame:1, look:castraAmbLook(type, folk, rng), talking:false, seed:Math.floor(rng()*1e6) });
     i++;
   }
+  castraAmbQuestNpcs(rid, W, rng, folk);
 }
 // Een frame uit een RPG Maker MV-sheet: 8 personages per sheet (4 x 2 blokken van 3 x 4 frames van 48 px).
 function castraSheetHTML(sh, dir, frame, size){
   const k = size/48, x0 = (sh.i%4)*144, y0 = Math.floor(sh.i/4)*192, row = ({ down:0, left:1, right:2, up:3 })[dir] || 0;
   return `<div style="width:${size}px;height:${size}px;background-image:url(assets/npcs/${sh.f}?v=1);background-repeat:no-repeat;background-size:${576*k}px ${384*k}px;background-position:${-(x0+frame*48)*k}px ${-(y0+row*48)*k}px;image-rendering:pixelated"></div>`;
+}
+// Quest-bewoners: voor elke opdracht met giver "amb:type@regio" loopt (of staat) in die regio een bewoner van dat type.
+function castraAmbQuestNpcs(rid, W, rng, folk){
+  const start = W.start || { x:Math.floor(W.cols/2), y:Math.floor(W.rows/2) };
+  CASTRA_QDEFS.filter(q=>String(q.giver).indexOf("amb:")===0 && q.giver.slice(4).split("@")[1]===rid).forEach(q=>{
+    if(CASTRA_AMB.list.some(n=>n.gid===q.giver)) return;
+    const tid = q.giver.slice(4).split("@")[0], type = CASTRA_AMB_TYPES.find(t=>t.id===tid); if(!type) return;
+    let a = type.still ? null : CASTRA_AMB.list.find(n=>n.type===type && !n.gid);
+    if(!a){
+      for(let tries=0; tries<600; tries++){
+        const x = 3+Math.floor(rng()*(W.cols-6)), y = 3+Math.floor(rng()*(W.rows-6)), d = Math.abs(x-start.x)+Math.abs(y-start.y);
+        if(!castraAmbWalkable(x,y,W) || d < (type.still ? 7 : 5) || d > 30 || CASTRA_AMB.list.some(o=>Math.abs(o.x-x)+Math.abs(o.y-y)<4)) continue;
+        const sh = (CASTRA_AMB.sheetOk && type.sheets) ? type.sheets[Math.floor(rng()*type.sheets.length)] : null;
+        a = { id:"a"+(CASTRA_AMB.id++), type, sheet:sh ? { f:sh[0], i:sh[1] } : null, x, y, hx:x, hy:y, dir:"down", frame:1, look:castraAmbLook(type, folk, rng), talking:false, seed:Math.floor(rng()*1e6) };
+        CASTRA_AMB.list.push(a); break;
+      }
+    }
+    if(a) a.gid = q.giver;
+  });
 }
 function castraAmbHTML(a){ return a.sheet ? castraSheetHTML(a.sheet, a.dir, a.frame, 48) : castraAvatarHTML(a.look, a.dir, a.frame, 48); }
 // Bestaan de sheets? Zo niet, dan blijft alles uit de avatar-lagen gebouwd.
@@ -103,7 +127,8 @@ function castraAmbDraw(){
     let d = document.getElementById("cwAmb_"+a.id);
     if(!d){ d = document.createElement("div"); d.id = "cwAmb_"+a.id; d.style.cssText = "position:absolute;width:48px;height:48px;pointer-events:none;transition:left .6s linear,top .6s linear"; L.appendChild(d); d.dataset.s = ""; }
     d.style.left = a.x*48+"px"; d.style.top = a.y*48+"px";
-    const key = a.dir+a.frame; if(d.dataset.s!==key){ d.dataset.s = key; d.innerHTML = castraAmbHTML(a); }
+    const mk = (a.gid && typeof castraDqMark==="function") ? castraDqMark(a.gid) : "", key = a.dir+a.frame+mk;
+    if(d.dataset.s!==key){ d.dataset.s = key; d.innerHTML = castraAmbHTML(a) + (mk && typeof castraDqMarkDiv==="function" ? castraDqMarkDiv(0,0,mk) : ""); }
   });
 }
 function castraAmbTick(){
@@ -111,7 +136,8 @@ function castraAmbTick(){
   if(CASTRA_AMB.region!==CASTRA_W_REGION) castraAmbSpawn();
   const W = castraWorldCfg(), DIRS = { up:[0,-1], down:[0,1], left:[-1,0], right:[1,0] };
   CASTRA_AMB.list.forEach(a=>{
-    if(a.talking){ a.frame = 1; return; }
+    if(a.talking && !CASTRA_DLG) a.talking = false;
+    if(a.talking || a.type.still){ a.frame = 1; return; }
     a.seed = (Math.imul(a.seed, 1103515245) + 12345) >>> 0; const r = (a.seed>>>8) % 100;
     if(r < 38){
       const names = Object.keys(DIRS), dir = names[(a.seed>>>3) % 4], dx = DIRS[dir][0], dy = DIRS[dir][1], nx = a.x+dx, ny = a.y+dy;
@@ -141,6 +167,13 @@ castraNpcAt = function(x, y){
 };
 function castraAmbTalk(aid){
   const a = CASTRA_AMB.list.find(n=>n.id===aid); if(!a || CASTRA_DLG) return;
+  const px0 = CASTRA_W_UI.px, py0 = CASTRA_W_UI.py;
+  if(a.gid){
+    a.dir = Math.abs(px0-a.x) > Math.abs(py0-a.y) ? (px0>a.x?"right":"left") : (py0>a.y?"down":"up"); a.frame = 1; a.talking = true; castraAmbDraw();
+    let handled = false; try{ handled = castraDqTalk(a.gid); }catch(e){ console.error(e); }
+    if(handled) return;
+    a.talking = false;
+  }
   const pool = CASTRA_AMB_LINES[a.type.id].slice(); if(CASTRA_AMB_REGION[CASTRA_W_REGION]) pool.push(CASTRA_AMB_REGION[CASTRA_W_REGION]);
   const pick = pool[Math.floor(Math.random()*pool.length)];
   const px = CASTRA_W_UI.px, py = CASTRA_W_UI.py;      // kijk naar de speler
