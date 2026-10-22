@@ -1,9 +1,9 @@
 # Beeldprompts Romeinen (volkscode rom)
 
 Accentkleur cape: rood. Anker: `rom_anker.png` (bestaat al, een Hastatus).
-Let op blad B: upload bij elke B (behalve rom_tiro_B zelf) het blad A van dezelfde vorm plus `rom_tiro_B.png` als formaatvoorbeeld, niet het anker (anders maakt Gemini zes cellen i.p.v. drie). Maak dus eerst `rom_tiro_B.png`.
+Let op blad B: upload bij elke B (behalve rom_tiro_B zelf) het blad A van dezelfde vorm plus `rom_tiro_B.png` als formaatvoorbeeld, niet het anker (anders maakt het model zes cellen i.p.v. drie). Maak dus eerst `rom_tiro_B.png`.
 Werkwijze: open per prompt een nieuw gesprek in het beeldmodel, upload de genoemde bestanden, plak het prompt.
-Status: alle 24 Romeinse vormen geschreven (Tiro ChatGPT, rest Gemini). Herkansingen Optio A, Centurio A, Signifer A en B, Aquilifer A. Snijd zonder --boost.
+Status: alle 24 Romeinse vormen geschreven (sinds 2026-10-22 alles ChatGPT Plus; de eerste 10 vormen zijn met Gemini gemaakt). Herkansingen Optio A, Centurio A, Signifer A en B, Aquilifer A. Snijd zonder --boost.
 
 ---
 
@@ -68,7 +68,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: de maatstaf: precies het ChatGPT-anker (gouden helm met rode kam, lichtzilvergrijs malienhemd, groot rood scutum met bliksemflits, gladius).
 
-GEBRUIK: Gemini | UPLOAD: alleen rom_anker.png (niet rom_tiro_A.png, die heeft een ovaal schild) | OPSLAAN ALS: rom_hastatus_A.png
+GEBRUIK: ChatGPT | UPLOAD: alleen rom_anker.png (niet rom_tiro_A.png, die heeft een ovaal schild) | OPSLAAN ALS: rom_hastatus_A.png
 
 ```
 Use the attached image as the exact reference for style, palette, outline, proportions and level of detail. It shows the Roman Hastatus; draw the SAME unit as a six-pose sprite sheet, as described below.
@@ -98,7 +98,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_hastatus_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_hastatus_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_hastatus_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_hastatus_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Hastatus) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -127,7 +127,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: zelfde lijn als Hastatus, maar rijker en met een zware werpspeer (pilum): twee rode veren aan de helm, gouden schouderversieringen, gouden scheenplaten, langere cape. Silhouet: breed schild plus lange, schuin gehouden speer.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_hastatus_A.png (in die volgorde) | OPSLAAN ALS: rom_princeps_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_hastatus_A.png (in die volgorde) | OPSLAAN ALS: rom_princeps_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Hastatus): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -155,7 +155,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_princeps_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_princeps_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_princeps_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_princeps_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Princeps) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -184,7 +184,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: rijkste vorm van de lijn: veteraan met lange hasta, gouden medailles (phalerae) op de borst, twee gouden scheenplaten, zeer lange pluim en cape. Silhouet: hoogste figuur, rechtopstaande speer.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_princeps_A.png (in die volgorde) | OPSLAAN ALS: rom_triarius_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_princeps_A.png (in die volgorde) | OPSLAAN ALS: rom_triarius_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Princeps): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -212,7 +212,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_triarius_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_triarius_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_triarius_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_triarius_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Triarius) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -241,7 +241,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: zelfde lijn als Hastatus, maar een onderofficier: geen groot scutum, wel een klein rond schild, een lange staf (baculum) met gouden knop en een rode sjerp. Duidelijk ander silhouet dan Princeps (geen speer, geen groot schild); dwars geplaatste rode helmkam.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_hastatus_A.png (in die volgorde) | OPSLAAN ALS: rom_optio_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_hastatus_A.png (in die volgorde) | OPSLAAN ALS: rom_optio_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Hastatus): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -271,7 +271,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_optio_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_optio_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_optio_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_optio_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Optio) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -300,7 +300,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: rijkste vorm van de Optio-lijn: grote dwars geplaatste rode kam, zilveren schubbenpantser met gouden medailles, zilveren scheenplaten, wijnstok-staf (vitis), lange rode cape. Zelfde ronde schild en sjerp als de Optio, maar rijker.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_optio_A.png (in die volgorde) | OPSLAAN ALS: rom_centurio_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_optio_A.png (in die volgorde) | OPSLAAN ALS: rom_centurio_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Optio): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -330,7 +330,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_centurio_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_centurio_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_centurio_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_centurio_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Centurio) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -359,7 +359,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: standaarddrager: grijze wolfshuid over helm en schouders, hoge signum-staf met gouden schijven, rode vaan met gele bliksemflits en een zilveren hand bovenop, klein rond schild op de rug, geen groot wapen.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_hastatus_A.png (in die volgorde) | OPSLAAN ALS: rom_signifer_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_hastatus_A.png (in die volgorde) | OPSLAAN ALS: rom_signifer_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Hastatus): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -389,7 +389,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_signifer_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_signifer_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_signifer_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_signifer_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Signifer) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -420,7 +420,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: rijkste vorm van de Signifer-lijn: gouden leeuwenhuid in plaats van wolf, hoge staf met grote gouden adelaar met gespreide vleugels, gouden medailles en scheenplaten, langere cape.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_signifer_A.png (in die volgorde) | OPSLAAN ALS: rom_aquilifer_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_signifer_A.png (in die volgorde) | OPSLAAN ALS: rom_aquilifer_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Signifer): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -450,7 +450,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_aquilifer_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_aquilifer_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_aquilifer_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_aquilifer_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Aquilifer) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -479,7 +479,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: lichte werper uit Tiro: wolfsmuts, geen pantser, geen groot schild, bundel werpspiezen. Aanval = werpen.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_tiro_A.png (in die volgorde) | OPSLAAN ALS: rom_veles_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_tiro_A.png (in die volgorde) | OPSLAAN ALS: rom_veles_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Tiro): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -507,7 +507,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_veles_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_veles_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_veles_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_veles_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Veles) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -536,7 +536,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: slingeraar uit Veles: zelfde wolfsmuts en rode tuniek, nu met bruin leren vest, leren armbeschermer, slinger en stenenzak. Aanval = slinger boven het hoofd.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_veles_A.png (in die volgorde) | OPSLAAN ALS: rom_funditor_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_veles_A.png (in die volgorde) | OPSLAAN ALS: rom_funditor_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Veles): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -564,7 +564,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_funditor_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_funditor_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_funditor_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_funditor_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Funditor) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -593,7 +593,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: boogschutter, rijkste vorm van de Veles-lijn: gouden spitse helm, grijze wolfshuid over de schouders, zilveren maliën, grote boog en pijlenkoker.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_funditor_A.png (in die volgorde) | OPSLAAN ALS: rom_sagittarius_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_funditor_A.png (in die volgorde) | OPSLAAN ALS: rom_sagittarius_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Funditor): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -621,7 +621,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_sagittarius_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_sagittarius_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_sagittarius_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_sagittarius_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Sagittarius) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -650,7 +650,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: verkenner uit Veles: rode capuchon-cape (capuchon naar achteren, gezicht vrij), bruin leren wambuis, speren op de rug, signaalhoorn aan de riem.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_veles_A.png (in die volgorde) | OPSLAAN ALS: rom_explorator_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_veles_A.png (in die volgorde) | OPSLAAN ALS: rom_explorator_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Veles): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -678,7 +678,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_explorator_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_explorator_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_explorator_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_explorator_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Explorator) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -707,7 +707,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: elite-verkenner: gouden helm met korte rode pluim, zilveren maliën, rode capuchon-cape met gouden rand, dolk, werpspiezen en een rolkoker met berichten.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_explorator_A.png (in die volgorde) | OPSLAAN ALS: rom_speculator_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_explorator_A.png (in die volgorde) | OPSLAAN ALS: rom_speculator_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Explorator): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -735,7 +735,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_speculator_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_speculator_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_speculator_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_speculator_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Speculator) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -764,7 +764,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: ruiter te paard uit Tiro: kastanjebruin paard met rode zadeldeken, ruiter met gouden helm met kleine rode kam, zilvergrijs maliën, ovaal rood schild en lang zwaard (spatha).
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_tiro_A.png (in die volgorde) | OPSLAAN ALS: rom_eques_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_tiro_A.png (in die volgorde) | OPSLAAN ALS: rom_eques_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Tiro): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -792,7 +792,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_eques_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_eques_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_eques_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_eques_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Eques) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -821,7 +821,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: ruiter-aanvoerder uit Eques: hogere kam met twee rode veren, gouden schouderversieringen, lans met rode wimpel, rijker paardentuig met gouden studs.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_eques_A.png (in die volgorde) | OPSLAAN ALS: rom_decurio_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_eques_A.png (in die volgorde) | OPSLAAN ALS: rom_decurio_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Eques): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -849,7 +849,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_decurio_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_decurio_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_decurio_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_decurio_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Decurio) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -878,7 +878,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: commandant van de ruiterij, rijkste vorm van de lijn: gouden borstharnas, lange pluim, lans met rode vaan, paard met witte bles en gouden tuig.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_decurio_A.png (in die volgorde) | OPSLAAN ALS: rom_praefectusalae_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_decurio_A.png (in die volgorde) | OPSLAAN ALS: rom_praefectusalae_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Decurio): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -906,7 +906,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_praefectusalae_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_praefectusalae_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_praefectusalae_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_praefectusalae_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Praefectus alae) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -935,7 +935,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: ingenieur uit Tiro: rode hoofdband, bruin leren schort over rode tuniek, hamer, zaag in de gereedschapstas. Geen wapen, geen schild.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_tiro_A.png (in die volgorde) | OPSLAAN ALS: rom_faber_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_tiro_A.png (in die volgorde) | OPSLAAN ALS: rom_faber_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Tiro): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -963,7 +963,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_faber_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_faber_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_faber_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_faber_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Faber) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -992,7 +992,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: artillerist uit Faber: gouden kaphelm zonder kam met rode band, leren borstlap, handballista (manuballista) in beide handen, pijlenkoker met korte bouten op de rug, gereedschapstas blijft.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_faber_A.png (in die volgorde) | OPSLAAN ALS: rom_ballistarius_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_faber_A.png (in die volgorde) | OPSLAAN ALS: rom_ballistarius_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Faber): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -1022,7 +1022,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_ballistarius_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_ballistarius_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_ballistarius_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_ballistarius_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Ballistarius) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -1053,7 +1053,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: rijkste vorm van de artillerie-lijn: gouden helm met rode kam, zilveren maliën, lange cape, grote met goud beslagen handballista, plannenrol op de rug en winkelhaak aan de riem.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_ballistarius_A.png (in die volgorde) | OPSLAAN ALS: rom_architectus_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_ballistarius_A.png (in die volgorde) | OPSLAAN ALS: rom_architectus_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Ballistarius): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -1083,7 +1083,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_architectus_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_architectus_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_architectus_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_architectus_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Architectus) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -1114,7 +1114,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: verbandsoldaat uit Faber: rode hoofdband, leren verbandtas met een gele bladsymbool (geen kruis), wit linnen verband over de schouder, kleine kruikjes, staf met kruidenbundel. Geen wapen.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_faber_A.png (in die volgorde) | OPSLAAN ALS: rom_capsarius_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_faber_A.png (in die volgorde) | OPSLAAN ALS: rom_capsarius_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Faber): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -1144,7 +1144,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_capsarius_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_capsarius_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_capsarius_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_capsarius_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Capsarius) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -1175,7 +1175,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: rijkste vorm van de heler-lijn: rode hoofdband met gouden rand, korte baard, wit linnen gewaad onder een lange rode cape met gouden rand, gouden gesp, staf met een gouden slang (Asclepius), gouden beslag op de tas.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_capsarius_A.png (in die volgorde) | OPSLAAN ALS: rom_medicus_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_capsarius_A.png (in die volgorde) | OPSLAAN ALS: rom_medicus_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Capsarius): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -1205,7 +1205,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_medicus_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_medicus_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_medicus_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_medicus_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Medicus) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -1236,7 +1236,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: roeier-matroos uit Tiro: simpele gouden ronde helm, rode mouwloze tuniek, touwrol over de schouder, kleine roeiriem op de rug, klein rond rood schild, gladius.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_tiro_A.png (in die volgorde) | OPSLAAN ALS: rom_remex_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_tiro_A.png (in die volgorde) | OPSLAAN ALS: rom_remex_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Tiro): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -1266,7 +1266,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_remex_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_remex_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_remex_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_remex_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Remex) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -1297,7 +1297,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: marinier uit Remex: gouden helm met korte rode kam, zilveren maliën, rond schild met gouden rand, enterbijl in plaats van roeiriem.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_remex_A.png (in die volgorde) | OPSLAAN ALS: rom_classiarius_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_remex_A.png (in die volgorde) | OPSLAAN ALS: rom_classiarius_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Remex): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -1327,7 +1327,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_classiarius_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_classiarius_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_classiarius_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_classiarius_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Classiarius) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
@@ -1358,7 +1358,7 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 
 Ontwerp: rijkste vorm van de vloot-lijn: gouden helm met een gouden scheepssteven als sieraad en rode kam, zilveren maliën met gouden medailles, lange rode cape met gouden rand, rond schild met gouden scheepssteven, gouden zwaard.
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_anker.png en rom_classiarius_A.png (in die volgorde) | OPSLAAN ALS: rom_navarchus_A.png
+GEBRUIK: ChatGPT | UPLOAD: rom_anker.png en rom_classiarius_A.png (in die volgorde) | OPSLAAN ALS: rom_navarchus_A.png
 
 ```
 Use the attached images as the exact reference. The FIRST image is the Roman anchor (style, palette, outline, proportions and level of detail). The SECOND image is the sheet of the previous unit in the same line (Classiarius): the new unit is a DIFFERENT unit of the same folk and the same line, with the same colours and base design but richer or different as described below.
@@ -1388,7 +1388,7 @@ Style reference: match the attached reference sheet exactly in palette and shadi
 AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or letters above, below or next to the figures); no logos or watermark; no frame, border, grid lines or separator lines drawn between the cells; no second figure; no change of clothing or colours between poses; no difference in scale between cells; no realistic or painterly shading; no blurry or anti-aliased edges; no gradients; no shadow on the ground; no floor; no magenta inside the figure.
 ```
 
-GEBRUIK: Gemini (later eventueel vervangen door een ChatGPT-versie) | UPLOAD: rom_navarchus_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_navarchus_B.png
+GEBRUIK: ChatGPT | UPLOAD: rom_navarchus_A.png en rom_tiro_B.png (in die volgorde) | OPSLAAN ALS: rom_navarchus_B.png
 
 ```
 Use the attached images as reference. The FIRST image (the six-cell sprite sheet of Navarchus) shows THE SAME character to be redrawn: use it ONLY for the character's appearance and do NOT copy its six-cell layout. The SECOND image (the finished 3-cell sheet of the Roman recruit Tiro: portrait, battle front, battle back) shows the exact FORMAT, style, palette, outline, proportions and level of detail to follow. Your output must have the same layout as the second image: ONE row of exactly three cells, never two rows and never six cells.
