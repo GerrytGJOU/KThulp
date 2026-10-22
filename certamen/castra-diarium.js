@@ -104,6 +104,7 @@ function castraDqStepInfo(q, st){
   return { done:false, txt:"" };
 }
 // Stappen die voldaan zijn schuiven door (meerdere achter elkaar mogelijk).
+function castraDqRedraw(){ try{ if(typeof el==="function" && el("cwWobj") && typeof castraWobjDraw==="function") castraWobjDraw(); if(typeof castraWRefreshHud==="function" && el("cwHud")) castraWRefreshHud(); }catch(e){} }
 function castraDqSync(quiet){
   let changed = false;
   castraDqActive().forEach(q=>{
@@ -113,7 +114,7 @@ function castraDqSync(quiet){
       if(!quiet && typeof toast==="function") toast("📜 Diarium", st.s>=q.steps.length ? q.nm.nl+": klaar, meld je bij de gever!" : q.nm.nl+": volgende stap!");
     }
   });
-  if(changed) castraSave();
+  if(changed){ castraSave(); castraDqRedraw(); }
   return changed;
 }
 // Gebeurtenissen: kill (V), catch (V), boss (key).
@@ -155,20 +156,20 @@ function castraDqTalk(gid){
   // 1. afgeronde quest bij de gever: beloning
   const ready = castraDqActive().find(q=>q.giver===gid && castraDqState(q.id).s >= q.steps.length);
   if(ready){
-    say(ready.done, ()=>{ const st = castraDqState(ready.id); st.d = 1; st.a = 0; const txt = castraDqReward(ready); castraSave(); toast("📜 "+castraLaText("recte"), ready.nm.nl+(txt?": "+txt:"")); });
+    say(ready.done, ()=>{ const st = castraDqState(ready.id); st.d = 1; st.a = 0; const txt = castraDqReward(ready); castraSave(); castraDqRedraw(); toast("📜 "+castraLaText("recte"), ready.nm.nl+(txt?": "+txt:"")); });
     return true;
   }
   // 2. praatstap met deze NPC
   const talkq = castraDqActive().find(q=>{ const s = q.steps[castraDqState(q.id).s]; return s && s.kind==="talk" && s.npc===gid; });
   if(talkq){
     const st = castraDqState(talkq.id), s = talkq.steps[st.s];
-    say(s.lines, ()=>{ st.t = 1; castraDqSync(); castraSave(); });
+    say(s.lines, ()=>{ st.t = 1; castraDqSync(); castraSave(); castraDqRedraw(); });
     return true;
   }
   // 3. nieuwe quest aanbieden
   const offer = CASTRA_QDEFS.find(q=>q.giver===gid && castraDqAvailable(q));
   if(offer){
-    say(offer.ask, k=>{ if(k===0){ const st = castraDqState(offer.id); st.a = 1; st.s = 0; st.n = 0; castraSave(); toast("📜 Diarium", "Nieuwe opdracht: "+offer.nm.nl); castraDqSync(true); } });
+    say(offer.ask, k=>{ if(k===0){ const st = castraDqState(offer.id); st.a = 1; st.s = 0; st.n = 0; castraSave(); toast("📜 Diarium", "Nieuwe opdracht: "+offer.nm.nl); castraDqSync(true); castraDqRedraw(); } });
     return true;
   }
   // 4. lopende quest van deze gever: korte herinnering, daarna de gewone rol van de NPC
@@ -221,3 +222,56 @@ Object.assign(CASTRA_GLOSS, { "diarium":"dagboek", "ostende":"toon", "habe":"heb
   "tutus":"veilig", "matrona":"vrouw des huizes", "misit":"stuurde", "novum":"nieuwe", "celeres":"snelle", "celerem":"snelle", "oraculum":"orakel", "loquitur":"spreekt",
   "poetam":"dichter (4e naamval)", "verum":"waar", "pythia":"Pythia (orakelpriesteres)", "carmen":"lied", "cano":"ik zing", "visio":"visioen", "cassandrae":"aan Cassandra",
   "periculum":"gevaar", "videt":"ziet", "sex":"zes", "video":"ik zie", "firmum":"stevige" });
+
+/* ---------- markeringen op de kaart en opdrachten in het HUD ---------- */
+// Per NPC: ❓ een afgeronde opdracht wacht op je, 💬 hier moet je praten (stap van een opdracht), ❗ er is een nieuwe opdracht.
+function castraDqMark(gid){
+  let best = "";
+  CASTRA_QDEFS.forEach(q=>{
+    const st = (CASTRA.dq||{})[q.id];
+    if(st && st.a && !st.d){
+      if(q.giver===gid && st.s >= q.steps.length) best = "ready";
+      else { const s = q.steps[st.s]; if(s && s.kind==="talk" && s.npc===gid && best!=="ready") best = "talk"; }
+    } else if(q.giver===gid && !best && castraDqAvailable(q)) best = "offer";
+  });
+  return best;
+}
+const CASTRA_DQ_MARK = {
+  ready:{ ch:"?", bg:"#3f9d52", fg:"#fff", ti:"Opdracht klaar: meld je hier" },
+  talk: { ch:"💬", bg:"#4a86c5", fg:"#fff", ti:"Praat hier voor je opdracht" },
+  offer:{ ch:"!", bg:"#d4af37", fg:"#2b1d0e", ti:"Hier is een nieuwe opdracht" },
+};
+function castraDqMarkDiv(x, y, m){
+  const M = CASTRA_DQ_MARK[m]; if(!M) return "";
+  return `<div title="${esc(M.ti)}" style="position:absolute;left:${x*48+10}px;top:${y*48-34}px;width:28px;height:28px;border-radius:50%;background:${M.bg};color:${M.fg};border:2px solid #fff;box-shadow:0 0 8px rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;font-size:${M.ch.length>1?15:19}px;font-weight:bold;z-index:9;pointer-events:none;animation:castraBlink 1.2s infinite">${M.ch}</div>`;
+}
+// Een deur naar een binnenruimte krijgt de markering van wat erachter zit (tot drie deuren diep).
+function castraDqDoorMark(rid, seen){
+  seen = seen || {}; if(seen[rid]) return ""; seen[rid] = 1;
+  const rank = { ready:3, talk:2, offer:1, "":0 }; let best = "";
+  CASTRA_WENT.filter(e=>e.region===rid && e.kind==="npc").forEach(e=>{ const m = castraDqMark(e.id); if(rank[m] > rank[best]) best = m; });
+  const W = CASTRA_WORLDS[rid];
+  if(W && W.interior && Object.keys(seen).length < 4) (W.doors||[]).forEach(d=>{ const t = CASTRA_WORLDS[d.to]; if(t && t.interior){ const m = castraDqDoorMark(d.to, seen); if(rank[m] > rank[best]) best = m; } });
+  return best;
+}
+const _castraWobjDrawDq0 = castraWobjDraw;
+castraWobjDraw = function(){
+  _castraWobjDrawDq0();
+  const box = el("cwWobj"); if(!box) return;
+  let html = "";
+  castraWEnts().filter(e=>e.kind==="npc").forEach(e=>{ const m = castraDqMark(e.id); if(m) html += castraDqMarkDiv(e.x, e.y, m); });
+  const W = castraWorldCfg();
+  (W.doors||[]).forEach(d=>{ const t = CASTRA_WORLDS[d.to]; if(t && t.interior){ const m = castraDqDoorMark(d.to); if(m) html += castraDqMarkDiv(d.x, d.y, m); } });
+  if(html) box.insertAdjacentHTML("beforeend", html);
+};
+// HUD: lopende opdrachten (maximaal drie), afgeronde eerst.
+function castraDqHud(){
+  const rows = castraDqActive().map(q=>{
+    const st = castraDqState(q.id), ready = st.s >= q.steps.length, s = q.steps[st.s], info = s ? castraDqStepInfo(q, st) : null;
+    return { ready, html:`<div class="note" style="text-align:center">${ready?"❓":"📜"} ${esc(q.nm.nl)}: ${ready ? "meld je bij "+esc(castraDqWhere(q)) : castraLaHTML(s.hud.la, s.hud.nl, "dqh_"+q.id+st.s)+(info&&info.txt?" <b>"+esc(info.txt)+"</b>":"")}</div>` };
+  }).sort((a,b)=>(b.ready?1:0)-(a.ready?1:0));
+  return rows.slice(0,3).map(r=>r.html).join("");
+}
+const _castraQuestHudDq0 = castraQuestHud;
+castraQuestHud = function(){ return _castraQuestHudDq0() + castraDqHud(); };
+

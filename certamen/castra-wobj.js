@@ -175,7 +175,7 @@ function castraWobjDraw(){
   const box = el("cwWobj"); if(!box) return;
   box.innerHTML = castraWEnts().filter(castraWEntVisible).map(e=>{
     const pos = `position:absolute;left:${e.x*48}px;top:${e.y*48}px;width:48px;height:48px;pointer-events:none;`;
-    if(e.kind==="npc") return `<div style="${pos}z-index:4">${castraAvatarHTML(castraWLook(e), e.dir||"down", 1, 48)}<div style="position:absolute;left:50%;top:-10px;transform:translateX(-50%);font-size:13px;background:var(--hi,#d4af37);color:var(--parch-ink,#2b1d0e);border-radius:8px;padding:0 4px;font-weight:bold">!</div></div>`;
+    if(e.kind==="npc") return `<div style="${pos}z-index:4">${castraAvatarHTML(castraWLook(e), e.dir||"down", 1, 48)}<div style="position:absolute;left:50%;top:-10px;transform:translateX(-50%);font-size:13px;background:var(--hi,#d4af37);color:var(--parch-ink,#2b1d0e);border-radius:8px;padding:0 4px;font-weight:bold">…</div></div>`;
     if(e.kind==="chest"){ const open = castraWChestOpen(e.id); return `<div style="${pos}z-index:3;display:flex;align-items:center;justify-content:center;font-size:34px;${open?"opacity:.45;filter:grayscale(.6)":""}">${open?"📦":"🧰"}</div>`; }
     if(e.kind==="pickup") return `<div style="${pos}z-index:3;display:flex;align-items:center;justify-content:center;font-size:30px;animation:castraBlink 1.2s infinite">✨</div>`;
     return "";
