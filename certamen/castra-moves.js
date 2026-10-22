@@ -42,6 +42,7 @@ const CASTRA_MV_ICON = { rec:"⚔️", inf:"🛡️", rng:"🏹", cav:"🐎", su
 
 // Een arte (castra-skills.js) wordt een move; het soort volgt uit het effect.
 function castraMvFromSkill(k){
+  if(k.mv) return { id:k.id, la:k.la, src:"arte", ...k.mv };
   const f = k.fx, m = { id:k.id, la:k.la, src:"arte", kind:"dmg", power:55, acc:95, pp:6, nl:"" };
   if(f.nth){ m.power = 40 + 30*f.nth.mult; m.acc = 85; m.pp = 4; m.nl = "Zware slag"; }
   else if(f.charge){ m.power = 60 + 25*f.charge.mult; m.acc = 90; m.pp = 3; m.nl = "Openingsaanval"; }
