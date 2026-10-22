@@ -1,6 +1,6 @@
 # Vormsprites — stand van zaken
 
-**72 / 453** bestanden aanwezig.
+**108 / 453** bestanden aanwezig.
 
 Gegenereerd door `certamen/tools/castra-sprites-manifest.js`. Per vorm: voor / achter / tower defence.
 
@@ -37,18 +37,18 @@ Gegenereerd door `certamen/tools/castra-sprites-manifest.js`. Per vorm: voor / a
 
 | Vorm | bestandsnaam | voor | achter | td |
 |---|---|---|---|---|
-| Ephebus (tier 1) | `gra_ephebus` | ⬜ | ⬜ | ⬜ |
-| Hoplites (tier 2) | `gra_hoplites` | ⬜ | ⬜ | ⬜ |
-| Epilectus (tier 3) | `gra_epilectus` | ⬜ | ⬜ | ⬜ |
-| Lochagus (tier 4) | `gra_lochagus` | ⬜ | ⬜ | ⬜ |
-| Psilus (tier 2) | `gra_psilus` | ⬜ | ⬜ | ⬜ |
-| Peltasta (tier 3) | `gra_peltasta` | ⬜ | ⬜ | ⬜ |
-| Toxota (tier 3) | `gra_toxota` | ⬜ | ⬜ | ⬜ |
-| Toxota Cretensis (tier 4) | `gra_toxotacretensis` | ⬜ | ⬜ | ⬜ |
-| Hippeus (tier 2) | `gra_hippeus` | ⬜ | ⬜ | ⬜ |
-| Prodromus (tier 3) | `gra_prodromus` | ⬜ | ⬜ | ⬜ |
-| Hetairus (tier 4) | `gra_hetairus` | ⬜ | ⬜ | ⬜ |
-| Hippotoxota (tier 3) | `gra_hippotoxota` | ⬜ | ⬜ | ⬜ |
+| Ephebus (tier 1) | `gra_ephebus` | ✅ | ✅ | ✅ |
+| Hoplites (tier 2) | `gra_hoplites` | ✅ | ✅ | ✅ |
+| Epilectus (tier 3) | `gra_epilectus` | ✅ | ✅ | ✅ |
+| Lochagus (tier 4) | `gra_lochagus` | ✅ | ✅ | ✅ |
+| Psilus (tier 2) | `gra_psilus` | ✅ | ✅ | ✅ |
+| Peltasta (tier 3) | `gra_peltasta` | ✅ | ✅ | ✅ |
+| Toxota (tier 3) | `gra_toxota` | ✅ | ✅ | ✅ |
+| Toxota Cretensis (tier 4) | `gra_toxotacretensis` | ✅ | ✅ | ✅ |
+| Hippeus (tier 2) | `gra_hippeus` | ✅ | ✅ | ✅ |
+| Prodromus (tier 3) | `gra_prodromus` | ✅ | ✅ | ✅ |
+| Hetairus (tier 4) | `gra_hetairus` | ✅ | ✅ | ✅ |
+| Hippotoxota (tier 3) | `gra_hippotoxota` | ✅ | ✅ | ✅ |
 
 ## Spartanen
 
