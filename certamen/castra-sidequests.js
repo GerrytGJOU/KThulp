@@ -1,0 +1,90 @@
+/* ============================================================================
+   CASTRA HEROUM — ZIJQUESTS VAN RONDLOPENDE BEWONERS (passend bij hun rol)
+   ----------------------------------------------------------------------------
+   Een boer zoekt een verdwaald schaap, een herder een zoekgeraakte geit, een moeder haar zoon, een koopman zijn
+   gestolen waren, een priester een heilig vat; een wachter, koning of ridder vraagt om gevechten. De gever is een
+   bewoner van een type in een regio (giver "amb:<type>@<regio>", zie castra-wanderers.js: hij loopt of staat daar
+   en krijgt een markering). Stap "find": het gezochte ligt (knipperend) ergens buiten in de regio.
+   Laadt NA castra-diarium.js, VÓÓR castra-wanderers.js hoeft niet (de bewoners lezen CASTRA_QDEFS bij het opbouwen).
+   ============================================================================ */
+(function(){
+  const YES = CASTRA_DQ_YES, NO = CASTRA_DQ_NO;
+  CASTRA_QDEFS.push(
+    { id:"a_agricola", giver:"amb:agricola@latium", region:"latium", nm:{ la:"Ovis perdita", nl:"Het verloren schaap" },
+      ask:[ { la:"Salve, hospes {naam}! Ovis mea perdita est.", nl:"Gegroet, gast {naam}! Mijn schaap is verdwenen." },
+            { la:"Quaere ovem in agris et vince tres hostes in campo.", nl:"Zoek het schaap op de velden en versla drie vijanden op het veld.", opts:[YES, NO] } ],
+      steps:[ { kind:"find", region:"latium", icon:"🐑", nm:"verdwaald schaap", hud:{ la:"Quaere ovem!", nl:"Zoek het schaap buiten in Latium." } },
+              { kind:"kill", n:3, region:"latium", terrain:"campus", hud:{ la:"Vince hostes in campo!", nl:"Versla vijanden op het veld." } } ],
+      done:[ { la:"Ovis mea! Gratias tibi ago, hospes.", nl:"Mijn schaap! Dank je wel, gast." } ],
+      reward:{ aes:70, frumentum:50, gloria:1, pxp:25 } },
+    { id:"a_miles_lat", giver:"amb:miles@latium", region:"latium", nm:{ la:"Custos viae", nl:"De wachter van de weg" },
+      ask:[ { la:"Salve, dux {naam}! Hostes viam oppugnant.", nl:"Gegroet, leider {naam}! Vijanden vallen de weg aan." },
+            { la:"Vince sex hostes in via et cape unum.", nl:"Versla zes vijanden op de weg en vang er één.", opts:[YES, NO] } ],
+      steps:[ { kind:"kill", n:6, region:"latium", terrain:"via", hud:{ la:"Vince hostes in via!", nl:"Versla vijanden op de weg." } },
+              { kind:"catch", n:1, hud:{ la:"Cape unum hostem!", nl:"Vang één vijand." } } ],
+      done:[ { la:"Optime, dux {naam}! Via tuta est.", nl:"Uitstekend, leider {naam}! De weg is veilig." } ],
+      reward:{ aes:110, frumentum:60, gloria:2, pxp:30, token:1 } },
+    { id:"a_pastor_gra", giver:"amb:pastor@graecia", region:"graecia", nm:{ la:"Capra perdita", nl:"De zoekgeraakte geit" },
+      ask:[ { la:"Salve, hospes {naam}! Capra mea perdita est.", nl:"Gegroet, gast {naam}! Mijn geit is zoekgeraakt." },
+            { la:"Quaere capram et vince quattuor hostes in olea.", nl:"Zoek de geit en versla vier vijanden in de olijfgaarden.", opts:[YES, NO] } ],
+      steps:[ { kind:"find", region:"graecia", icon:"🐐", nm:"zoekgeraakte geit", hud:{ la:"Quaere capram!", nl:"Zoek de geit buiten in Graecia." } },
+              { kind:"kill", n:4, region:"graecia", terrain:"olea", hud:{ la:"Vince hostes in olea!", nl:"Versla vijanden in de olijfgaarden." } } ],
+      done:[ { la:"Capra mea! Gratias tibi ago.", nl:"Mijn geit! Dank je wel." } ],
+      reward:{ aes:120, frumentum:70, gloria:2, pxp:30 } },
+    { id:"a_mater_tro", giver:"amb:mater@troia", region:"troia", nm:{ la:"Filius perditus", nl:"De verloren zoon" },
+      ask:[ { la:"Heu, hospes {naam}! Filius meus perditus est.", nl:"Ach, gast {naam}! Mijn zoon is verdwenen." },
+            { la:"Quaere filium meum, quaeso.", nl:"Zoek mijn zoon, alsjeblieft (hij is ergens buiten in Troje).", opts:[YES, NO] } ],
+      steps:[ { kind:"find", region:"troia", icon:"🧒", nm:"verdwaalde jongen", hud:{ la:"Quaere filium!", nl:"Zoek de jongen buiten in Troje." } } ],
+      done:[ { la:"Filius meus! Gratias tibi ago, dux {naam}!", nl:"Mijn zoon! Dank je wel, leider {naam}!" } ],
+      reward:{ aes:130, frumentum:80, gloria:2, pxp:30, token:1 } },
+    { id:"a_miles_tro", giver:"amb:miles@troia", region:"troia", nm:{ la:"Custos murorum", nl:"De wachter van de muren" },
+      ask:[ { la:"Salve, dux {naam}! Hostes muros oppugnant.", nl:"Gegroet, leider {naam}! Vijanden vallen de muren aan." },
+            { la:"Vince sex hostes ante muros et vince in Troia.", nl:"Versla zes vijanden voor de muren en win de eerste missie in Troje.", opts:[YES, NO] } ],
+      steps:[ { kind:"kill", n:6, region:"troia", terrain:"muros", hud:{ la:"Vince hostes ante muros!", nl:"Versla vijanden voor de muren." } },
+              { kind:"win", mission:"t1", hud:{ la:"Vince in Troia!", nl:"Win de eerste missie in Troje." } } ],
+      done:[ { la:"Optime! Muri tuti sunt.", nl:"Uitstekend! De muren zijn veilig." } ],
+      reward:{ aes:170, frumentum:90, gloria:3, pxp:40, token:1 } },
+    { id:"a_mercator_gal", giver:"amb:mercator@gallia", region:"gallia", nm:{ la:"Carrus captus", nl:"De geroofde kar" },
+      ask:[ { la:"Heu, dux {naam}! Latrones carrum meum ceperunt.", nl:"Ach, leider {naam}! Rovers hebben mijn kar gestolen." },
+            { la:"Vince sex hostes in silva et quaere merces meas.", nl:"Versla zes vijanden in het bos en zoek mijn waren.", opts:[YES, NO] } ],
+      steps:[ { kind:"kill", n:6, region:"gallia", terrain:"silva", hud:{ la:"Vince hostes in silva!", nl:"Versla vijanden in het bos." } },
+              { kind:"find", region:"gallia", icon:"📦", nm:"gestolen waren", hud:{ la:"Quaere merces!", nl:"Zoek de gestolen waren buiten in Gallia." } } ],
+      done:[ { la:"Merces meae! Gratias tibi ago.", nl:"Mijn waren! Dank je wel." } ],
+      reward:{ aes:160, frumentum:90, gloria:2, pxp:35 } },
+    { id:"a_sacerdos_aeg", giver:"amb:sacerdos@aegyptus", region:"aegyptus", nm:{ la:"Vas sacrum", nl:"Het heilige vat" },
+      ask:[ { la:"Salve, hospes {naam}! Vas sacrum perditum est.", nl:"Gegroet, gast {naam}! Het heilige vat is zoekgeraakt." },
+            { la:"Quaere vas sacrum et vince quinque hostes ad Nilum.", nl:"Zoek het heilige vat en versla vijf vijanden bij de Nijl.", opts:[YES, NO] } ],
+      steps:[ { kind:"find", region:"aegyptus", icon:"🏺", nm:"heilig vat", hud:{ la:"Quaere vas sacrum!", nl:"Zoek het heilige vat buiten in Aegyptus." } },
+              { kind:"kill", n:5, region:"aegyptus", terrain:"nilus", hud:{ la:"Vince hostes ad Nilum!", nl:"Versla vijanden bij de Nijl." } } ],
+      done:[ { la:"Vas sacrum! Dei tibi gratias agunt.", nl:"Het heilige vat! De goden danken je." } ],
+      reward:{ aes:190, frumentum:100, gloria:3, pxp:40, token:1 } },
+    { id:"a_rex_per", giver:"amb:rex@persis", region:"persis", nm:{ la:"Defende regnum", nl:"Verdedig het rijk" },
+      ask:[ { la:"Salve, dux {naam}! Rex Persarum te vocat.", nl:"Gegroet, leider {naam}! De koning van de Perzen roept je." },
+            { la:"Hostes regnum meum oppugnant. Vince octo hostes et vince in Persis.", nl:"Vijanden vallen mijn rijk aan. Versla acht vijanden en win de eerste missie in Perzië.", opts:[YES, NO] } ],
+      steps:[ { kind:"kill", n:8, region:"persis", terrain:"campus", hud:{ la:"Vince hostes in campo!", nl:"Versla vijanden op het veld." } },
+              { kind:"win", mission:"pe1", hud:{ la:"Vince in Persis!", nl:"Win de eerste missie in Perzië." } } ],
+      done:[ { la:"Regnum meum tutum est. Gratias tibi ago, dux {naam}!", nl:"Mijn rijk is veilig. Dank je wel, leider {naam}!" } ],
+      reward:{ aes:240, frumentum:130, gloria:4, pxp:50, token:1 } },
+    { id:"a_anus_rom", giver:"amb:anus@roma", region:"roma", nm:{ la:"Filius gladiator", nl:"De zoon van de gladiator" },
+      ask:[ { la:"Heu, hospes {naam}! Filius meus gladiator est.", nl:"Ach, gast {naam}! Mijn zoon is gladiator." },
+            { la:"Roga lanistam: filius meus bene pugnat?", nl:"Vraag het aan de lanista: vecht mijn zoon goed? Ga daarna in de arena vijf vijanden verslaan.", opts:[YES, NO] } ],
+      steps:[ { kind:"talk", npc:"lanista", hud:{ la:"Roga lanistam!", nl:"Praat met de lanista (de gladiatorenschool in Roma)." },
+                lines:[ { la:"Filius illius anus? Fortis est et bene pugnat.", nl:"De zoon van die oude vrouw? Hij is sterk en vecht goed." } ] },
+              { kind:"kill", n:5, region:"roma", terrain:"arena", hud:{ la:"Vince hostes in arena!", nl:"Versla vijanden in de arena." } } ],
+      done:[ { la:"Filius meus fortis est! Gratias tibi ago.", nl:"Mijn zoon is sterk! Dank je wel." } ],
+      reward:{ aes:200, frumentum:110, gloria:3, pxp:40 } },
+    { id:"a_pastor_ger", giver:"amb:pastor@germania", region:"germania", nm:{ la:"Lupi in silva", nl:"Wolven in het bos" },
+      ask:[ { la:"Cave, hospes {naam}! Lupi oves meas petunt.", nl:"Pas op, gast {naam}! Wolven vallen mijn schapen aan." },
+            { la:"Vince sex hostes in silva et quaere ovem perditam.", nl:"Versla zes vijanden in het bos en zoek het verdwaalde schaap.", opts:[YES, NO] } ],
+      steps:[ { kind:"kill", n:6, region:"germania", terrain:"silva", hud:{ la:"Vince hostes in silva!", nl:"Versla vijanden in het bos." } },
+              { kind:"find", region:"germania", icon:"🐑", nm:"verdwaald schaap", hud:{ la:"Quaere ovem!", nl:"Zoek het schaap buiten in Germania." } } ],
+      done:[ { la:"Ovis mea! Gratias tibi ago.", nl:"Mijn schaap! Dank je wel." } ],
+      reward:{ aes:210, frumentum:110, gloria:3, pxp:40 } }
+  );
+  (function(add){ Object.keys(add).forEach(k=>{ if(!CASTRA_GLOSS[k]) CASTRA_GLOSS[k] = add[k]; }); })({
+    "anulus":"ring", "anulum":"ring (4e naamval)", "perditus":"verloren, zoekgeraakt", "perdita":"verloren", "perditum":"verloren", "perditam":"verloren (4e naamval)", "heu":"ach", "agris":"akkers, velden",
+    "quaeso":"alsjeblieft", "vini":"van wijn", "ovis":"schaap", "ovem":"schaap (4e naamval)", "viae":"van de weg", "oppugnant":"vallen aan", "capra":"geit", "capram":"geit (4e naamval)", "filius":"zoon",
+    "murorum":"van de muren", "tuti":"veilig", "tutum":"veilig", "carrus":"kar", "carrum":"kar (4e naamval)", "latrones":"rovers", "ceperunt":"hebben genomen", "merces":"waren", "vas":"vat",
+    "agunt":"doen", "regnum":"koninkrijk", "regni":"van het koninkrijk", "persarum":"van de Perzen", "gladiator":"gladiator", "roga":"vraag", "lanistam":"lanista (4e naamval)", "illius":"van die",
+    "petunt":"vallen aan, zoeken", "magnum":"groot", "cara":"dierbaar" });
+})();

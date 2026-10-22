@@ -26,13 +26,11 @@ const CASTRA_QDEFS = [
             { kind:"catch", n:2, hud:{ la:"Cape duos hostes!", nl:"Vang twee vijanden." } } ],
     done:[ { la:"Optime, dux {naam}! Praemium tibi do.", nl:"Uitstekend, leider {naam}! Hier is je beloning." } ],
     reward:{ aes:120, frumentum:60, gloria:2, pxp:30 } },
-  { id:"l_matrona", giver:"matrona_villa", region:"latium", nm:{ la:"Lupi in silva", nl:"Wolven in het bos" },
-    ask:[ { la:"Salve, hospes {naam}! Lupi in silva sunt.", nl:"Gegroet, gast {naam}! Er zijn wolven in het bos." },
-          { la:"Vince quinque hostes in silva et dic eremitae.", nl:"Versla vijf vijanden in het bos en vertel het aan de kluizenaar.", opts:[CASTRA_DQ_YES, CASTRA_DQ_NO] } ],
-    steps:[ { kind:"kill", n:5, region:"latium", terrain:"silva", hud:{ la:"Vince hostes in silva!", nl:"Versla vijanden in het bos." } },
-            { kind:"talk", npc:"eremita", hud:{ la:"Dic eremitae!", nl:"Praat met de kluizenaar (de grot in Latium)." },
-              lines:[ { la:"Matrona te misit? Bene! Silva tuta est.", nl:"Heeft de matrone je gestuurd? Goed! Het bos is veilig." } ] } ],
-    done:[ { la:"Gratias tibi ago, dux {naam}! Silva tuta est.", nl:"Dank je wel, leider {naam}! Het bos is veilig." } ],
+  { id:"l_matrona", giver:"matrona_villa", region:"latium", nm:{ la:"Anulus perditus", nl:"De verloren ring" },
+    ask:[ { la:"Heu, hospes {naam}! Anulus meus perditus est.", nl:"Ach, gast {naam}! Mijn ring is verdwenen." },
+          { la:"Quaere anulum in agris, quaeso.", nl:"Zoek mijn ring op de velden, alsjeblieft (hij ligt ergens buiten in Latium).", opts:[CASTRA_DQ_YES, CASTRA_DQ_NO] } ],
+    steps:[ { kind:"find", region:"latium", icon:"💍", nm:"verloren ring", hud:{ la:"Quaere anulum!", nl:"Zoek de ring buiten in Latium." } } ],
+    done:[ { la:"Anulus meus! Gratias tibi ago, dux {naam}!", nl:"Mijn ring! Dank je wel, leider {naam}!" } ],
     reward:{ aes:90, frumentum:50, gloria:2, pxp:30, token:1 } },
   { id:"l_faber", giver:"faber", region:"latium", nm:{ la:"Murus novus", nl:"Een nieuwe muur" },
     ask:[ { la:"Salve, dux {naam}! Murum novum aedifico.", nl:"Gegroet, leider {naam}! Ik bouw een nieuwe muur." },
@@ -64,13 +62,12 @@ const CASTRA_QDEFS = [
             { kind:"kill", n:6, region:"troia", terrain:"muros", hud:{ la:"Vince hostes ante muros!", nl:"Versla vijanden voor de muren." } } ],
     done:[ { la:"Optime, dux {naam}! Troia tuta est.", nl:"Uitstekend, leider {naam}! Troje is veilig." } ],
     reward:{ aes:170, frumentum:90, gloria:3, pxp:40 } },
-  { id:"t_servus", giver:"rest_troia", region:"troia", nm:{ la:"Murus Troiae", nl:"De muur van Troje" },
-    ask:[ { la:"Salve, hospes {naam}! Murus Troiae altus est.", nl:"Gegroet, gast {naam}! De muur van Troje is hoog." },
-          { la:"Habe militem firmum et vince in Troia.", nl:"Heb een stevige soldaat (minstens 15 tutela) en win de eerste missie in Troje.", opts:[CASTRA_DQ_YES, CASTRA_DQ_NO] } ],
-    steps:[ { kind:"stat", stat:"tutela", min:15, hud:{ la:"Habe militem firmum!", nl:"Heb een soldaat met minstens 15 tutela." } },
-            { kind:"win", mission:"t1", hud:{ la:"Vince in Troia!", nl:"Win de eerste missie in Troje." } } ],
-    done:[ { la:"Murus firmus est. Gratias tibi ago!", nl:"De muur is stevig. Dank je wel!" } ],
-    reward:{ aes:160, frumentum:90, gloria:3, pxp:40, token:1 } },
+  { id:"t_servus", giver:"rest_troia", region:"troia", nm:{ la:"Vinum perditum", nl:"De verloren wijn" },
+    ask:[ { la:"Salve, hospes {naam}! Amphora vini perdita est.", nl:"Gegroet, gast {naam}! Een amfoor wijn is zoekgeraakt." },
+          { la:"Quaere amphoram in Troia, quaeso.", nl:"Zoek de amfoor ergens buiten in Troje, alsjeblieft.", opts:[CASTRA_DQ_YES, CASTRA_DQ_NO] } ],
+    steps:[ { kind:"find", region:"troia", icon:"🍷", nm:"amfoor wijn", hud:{ la:"Quaere amphoram vini!", nl:"Zoek de amfoor wijn buiten in Troje." } } ],
+    done:[ { la:"Amphora vini! Gratias tibi ago.", nl:"De amfoor wijn! Dank je wel." } ],
+    reward:{ aes:120, frumentum:70, gloria:2, pxp:30, token:1 } },
 ];
 
 /* ---------- toestand ---------- */
@@ -101,16 +98,17 @@ function castraDqStepInfo(q, st){
   if(s.kind==="have"){ const n = (castraWItems()[s.item]||0); return { done:n >= (s.n||1), txt:n+" / "+(s.n||1) }; }
   if(s.kind==="boss") return { done:!!st.b, txt:"" };
   if(s.kind==="talk") return { done:!!st.t, txt:"" };
+  if(s.kind==="find") return { done:!!st.fnd, txt:"" };
   return { done:false, txt:"" };
 }
 // Stappen die voldaan zijn schuiven door (meerdere achter elkaar mogelijk).
-function castraDqRedraw(){ try{ if(typeof el==="function" && el("cwWobj") && typeof castraWobjDraw==="function") castraWobjDraw(); if(typeof castraWRefreshHud==="function" && el("cwHud")) castraWRefreshHud(); }catch(e){} }
+function castraDqRedraw(){ try{ if(typeof el==="function" && el("cwWobj") && typeof castraWobjDraw==="function") castraWobjDraw(); if(typeof castraAmbDraw==="function") castraAmbDraw(); if(typeof castraWRefreshHud==="function" && el("cwHud")) castraWRefreshHud(); }catch(e){} }
 function castraDqSync(quiet){
   let changed = false;
   castraDqActive().forEach(q=>{
     const st = castraDqState(q.id);
     while(st.s < q.steps.length && castraDqStepInfo(q, st).done){
-      st.s++; st.n = 0; st.t = 0; st.b = 0; changed = true;
+      st.s++; st.n = 0; st.t = 0; st.b = 0; st.fnd = 0; delete st.fx; delete st.fy; changed = true;
       if(!quiet && typeof toast==="function") toast("📜 Diarium", st.s>=q.steps.length ? q.nm.nl+": klaar, meld je bij de gever!" : q.nm.nl+": volgende stap!");
     }
   });
@@ -150,9 +148,10 @@ function castraDqReward(q){
 }
 function castraDqTalk(gid){
   const hero = gid.indexOf("hero_")===0 ? castraHero(gid.slice(5)) : null;
-  const e = hero ? { nm:CASTRA_HERO_DATA[hero.id].nm, look:CASTRA_HERO_DATA[hero.id].look } : CASTRA_WENT.find(x=>x.id===gid && x.kind==="npc"); if(!e) return false;
+  const amb = gid.indexOf("amb:")===0 && typeof CASTRA_AMB!=="undefined" ? CASTRA_AMB.list.find(n=>n.gid===gid) : null;
+  const e = hero ? { nm:CASTRA_HERO_DATA[hero.id].nm, look:CASTRA_HERO_DATA[hero.id].look } : amb ? { nm:amb.type.nm, look:amb.look, sheet:amb.sheet } : CASTRA_WENT.find(x=>x.id===gid && x.kind==="npc"); if(!e) return false;
   castraDqSync(true);
-  const look = e.look || (typeof castraWLook==="function" ? castraWLook(e) : null), say = (lines, done)=>castraLatSay(e.nm || "?", look, lines, done);
+  const look = e.look || (typeof castraWLook==="function" ? castraWLook(e) : null), say = (lines, done)=>e.sheet ? castraDlgOpen({ nm:e.nm, look, sheet:e.sheet }, lines, done) : castraLatSay(e.nm || "?", look, lines, done);
   // 1. afgeronde quest bij de gever: beloning
   const ready = castraDqActive().find(q=>q.giver===gid && castraDqState(q.id).s >= q.steps.length);
   if(ready){
@@ -186,6 +185,7 @@ castraNpcTalk = function(id){
 
 /* ---------- Diarium (menu) ---------- */
 function castraDqWhere(q){
+  if(String(q.giver).indexOf("amb:")===0){ const p = String(q.giver).slice(4).split("@"), T = CASTRA_AMB_TYPES.find(t=>t.id===p[0]); return (T ? T.nm : "bewoner")+" (loopt rond in "+((CASTRA_WORLDS[p[1]]||{}).nm||p[1])+")"; }
   if(String(q.giver).indexOf("hero_")===0){ const d = CASTRA_HERO_DATA[String(q.giver).slice(5)]; return (d ? d.nm : "held")+" (menu: Heroes)"; }
   const e = CASTRA_WENT.find(x=>x.id===q.giver), w = e && CASTRA_WORLDS[e.region], par = w && w.interior && w.parent ? CASTRA_WORLDS[w.parent] : null;
   return (e ? (e.nm||"?") : "?") + " · " + (par ? par.nm+", "+w.nm : w ? w.nm : "?");
@@ -274,4 +274,37 @@ function castraDqHud(){
 }
 const _castraQuestHudDq0 = castraQuestHud;
 castraQuestHud = function(){ return _castraQuestHudDq0() + castraDqHud(); };
+
+/* ---------- stap "find": een verloren voorwerp of persoon terugvinden ---------- */
+function castraDqFindSpot(q, st, s){
+  if(st.fx!==undefined) return { x:st.fx, y:st.fy };
+  if(CASTRA_W_REGION!==s.region || typeof castraAmbWalkable!=="function") return null;
+  const W = castraWorldCfg(); let h = 2166136261; (q.id+"|"+st.s).split("").forEach(c=>{ h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); });
+  const rng = castraRng(h>>>0), start = W.start || { x:Math.floor(W.cols/2), y:Math.floor(W.rows/2) };
+  for(let i=0;i<500;i++){
+    const x = 3+Math.floor(rng()*(W.cols-6)), y = 3+Math.floor(rng()*(W.rows-6));
+    if(!castraAmbWalkable(x,y,W) || Math.abs(x-start.x)+Math.abs(y-start.y) < 10) continue;
+    st.fx = x; st.fy = y; castraSave(); return { x, y };
+  }
+  return null;
+}
+function castraDqFinds(){
+  const out = [];
+  castraDqActive().forEach(q=>{ const st = castraDqState(q.id), s = q.steps[st.s]; if(s && s.kind==="find" && s.region===CASTRA_W_REGION){ const p = castraDqFindSpot(q, st, s); if(p) out.push({ q, st, s, x:p.x, y:p.y }); } });
+  return out;
+}
+const _castraWobjDrawDqF0 = castraWobjDraw;
+castraWobjDraw = function(){
+  _castraWobjDrawDqF0();
+  const box = el("cwWobj"); if(!box) return;
+  const html = castraDqFinds().map(f=>`<div title="${esc(f.s.nm||"")}" style="position:absolute;left:${f.x*48}px;top:${f.y*48}px;width:48px;height:48px;z-index:3;display:flex;align-items:center;justify-content:center;font-size:30px;pointer-events:none;animation:castraBlink 1.2s infinite;filter:drop-shadow(0 0 6px #f6dd8e)">${f.s.icon||"✨"}</div>`).join("");
+  if(html) box.insertAdjacentHTML("beforeend", html);
+};
+const _castraWPickupCheckDq0 = castraWPickupCheck;
+castraWPickupCheck = function(x, y){
+  _castraWPickupCheckDq0(x, y);
+  try{
+    castraDqFinds().forEach(f=>{ if(f.x===x && f.y===y){ f.st.fnd = 1; toast((f.s.icon||"✨")+" "+(f.s.nm||"Gevonden"), "Je hebt het gevonden!"); castraDqSync(true); castraSave(); castraDqRedraw(); } });
+  }catch(e){}
+};
 
