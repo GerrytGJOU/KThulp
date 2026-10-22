@@ -24,3 +24,6 @@ GEBRUIK
 
 STAND (2026-12-17): People1.png t/m People4.png (RPG Maker MV, 8 personages per sheet) staan hier en worden gebruikt door de rondlopende
 bewoners (castra-wanderers.js, CASTRA_AMB_TYPES[].sheets = [bestand, personage 0-7]). Personage-nummering: 0-3 bovenste rij, 4-7 onderste rij.
+
+Nature.png (dieren: hond #0, kat #1, kip #2, paard #3) en Vehicle.png (roeiboot #0, schip #1, kar met paard #4 en #5, vlot #7) worden gebruikt
+voor de dieren, de kar op de weg en de boten (castra-wanderers.js). Bewust niet gebruikt: Nature #4-#7 en Vehicle #2, #3, #6.
