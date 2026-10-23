@@ -214,7 +214,12 @@ function castraRecruitTest(){
 /* ---------- scherm: de castra ---------- */
 let CASTRA_BUILT = null;
 function castraBuiltMap(){
-  if(!CASTRA_BUILT) CASTRA_BUILT = castraMapLogic(castraCampDef());
+  if(!CASTRA_BUILT){
+    CASTRA_BUILT = castraMapLogic(castraCampDef());
+    // De tenten (3x3) zijn getekend als driehoek: de hoeken van de bovenste rij zijn gras en dus begaanbaar.
+    CASTRA_BUILDINGS.forEach(b=>{ if(!(b.phase===1 && b.slot)) return; const f = castraBuildingFoot(b);
+      if(f.fw===3 && f.fh===3){ delete CASTRA_BUILT.blocked[b.slot.x+","+b.slot.y]; delete CASTRA_BUILT.blocked[(b.slot.x+2)+","+b.slot.y]; } });
+  }
   return CASTRA_BUILT;
 }
 function castraBlockedMap(){ return castraBuiltMap().blocked; }
@@ -264,7 +269,11 @@ SCREENS.castraHome = function(){
   CASTRA_UI.keyFn = e=>{
     if(!el("castraMap")){ document.removeEventListener("keydown",CASTRA_UI.keyFn); window.removeEventListener("resize",CASTRA_UI.resizeFn); return; }
     const d = {ArrowUp:"up",w:"up",ArrowDown:"down",s:"down",ArrowLeft:"left",a:"left",ArrowRight:"right",d:"right"}[e.key];
-    if(d){ e.preventDefault(); castraStep(d); }
+    if(d){ e.preventDefault(); castraStep(d); return; }
+    if((e.key==="Enter" || e.key===" " || e.key==="e") && !CASTRA_DLG && !(typeof CASTRA_MENU!=="undefined" && CASTRA_MENU.open)){
+      const dd = CASTRA_DELTA[CASTRA_UI.dir] || [0,0], hit = castraBlockedMap()[(CASTRA_UI.px+dd[0])+","+(CASTRA_UI.py+dd[1])];
+      if(typeof hit==="string"){ e.preventDefault(); castraOpen(hit); }
+    }
   };
   CASTRA_UI.resizeFn = castraFit;
   document.addEventListener("keydown", CASTRA_UI.keyFn);
@@ -347,8 +356,7 @@ function castraStep(dir){
   const blocked = castraBlockedMap(), hit = blocked[nx+","+ny];
   if(hit){
     castraDrawAvatar();
-    if(typeof hit==="string") castraOpen(hit);      // tegen een gebouw lopen = naar binnen
-    return false;
+    return false;                                    // tegen een gebouw lopen opent niets meer (tikken, of Enter/spatie voor het gebouw)
   }
   CASTRA_UI.moving = true;
   CASTRA_UI.px = nx; CASTRA_UI.py = ny;
