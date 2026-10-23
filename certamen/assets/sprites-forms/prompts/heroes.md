@@ -1250,3 +1250,68 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 - PORT: Show the golden laurel wreath and circlet with the violet star gem, the floating chestnut hair, the glowing violet-white eyes, the gold sun-disc pendant, the gold shoulder piece and the starry violet cloak.
 - FRONT: The large glowing vision sphere held in the right hand, the left hand raised, the starry violet-and-gold oracle robe, the floating golden tripod with violet smoke.
 - BACK: Show the floating chestnut hair under the golden laurel, the long starry violet cloak with the gold border and the floating tripod.
+
+## hero_prometheus | Prometheus
+
+- ROLE: legendary hero, the Titan who stole fire for humankind (engineer)
+- FMT: the finished 3-cell sheet of the Greek recruit Ephebus: portrait, battle front, battle back
+- INTRO: The attached image is a six-cell sprite sheet of a Greek soldier: it shows only the required LAYOUT, pose list, pixel size and level of detail. The new character is a legendary hero, NOT a soldier: entirely different clothing, colours and equipment as described below; do NOT copy the soldier's clothing, colours or shield.
+- OUTFIT: He wears: NO helmet, the face fully visible (bronzed skin, long untamed black hair, a thick black beard, intense amber eyes, a defiant proud look); a small ember-red gem on a leather cord at his neck; a muscular bare chest under a leather smith's harness with a dark-grey leather apron and coal-black tunic skirt; a SHORT ragged deep-orange cape pinned at one shoulder with an iron clasp; iron-studded leather bracers; sturdy sandals; NO shield, NO sword. In his right hand a long hollow giant fennel stalk (narthex) with a small glowing ember-flame at its tip; in his left hand a smith's tongs holding a glowing ember.
+- REST: standing broad and defiant, facing the viewer, the fennel stalk with the flame held upright in his right hand, the tongs with the ember at his left side
+- ATTACK: one step forward, the fennel stalk thrust forward with a burst of fire, the glowing ember thrown from the tongs
+- HIT: upper body leaning backwards, eyes closed, the stalk tilting, one hand raised
+- PORT: Show the long untamed black hair, the thick black beard, the intense amber eyes, the ember-red gem, the leather harness and the short ragged orange cape with the iron clasp.
+- FRONT: The fennel stalk with the little flame in the right hand, the tongs with the glowing ember in the left, the leather harness and apron.
+- BACK: Show the long black hair, the short ragged orange cape, the leather harness straps and the stalk with the flame.
+
+## hero_prometheus_fab | Prometheus, Faber Ignis
+
+- ROLE: the same legendary hero Prometheus, now the fire-smith (Faber Ignis), engineer
+- FMT: the finished 3-cell sheet of the same hero Prometheus in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Prometheus in his base form: the new form is THE SAME MAN, with the same face as always: bronzed skin, long untamed black hair and a thick black beard, intense amber eyes, a defiant proud look, a small ember-red gem on a leather cord at his neck, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a dark iron smith's mask-visor pushed up on his forehead, the face fully open and clearly visible (the same face as always: bronzed skin, long untamed black hair and a thick black beard, intense amber eyes, a defiant proud look, a small ember-red gem on a leather cord at his neck); heavy dark-iron and bronze plate on shoulders and chest over a coal-black tunic with a thick leather apron burnt at the edges, a belt hung with tongs and small hammers; a LONG deep-orange cape with a darker lining and scorched hem; iron bracers glowing faintly orange at the edges; heavy boots. NO shield, NO sword. In both hands a huge iron blacksmith's war-hammer with a glowing orange-hot head; on his back a small iron forge-pack with a chimney puffing sparks and a tiny cannon-like fire nozzle.
+- REST: standing sturdy, facing the viewer, the huge glowing hammer held upright in both hands, sparks rising from the forge-pack
+- ATTACK: one step forward, the huge hammer swung forward in a heavy blow with a burst of sparks, the nozzle on his back spitting a jet of fire behind him
+- HIT: upper body leaning backwards, eyes closed, the hammer dropping, one hand raised
+- PORT: Show the iron visor pushed up, the black hair and beard, the amber eyes, the ember-red gem, the dark-iron shoulder plate and the orange cape.
+- FRONT: The huge glowing hammer held in both hands, the dark-iron plate over the black tunic, the tool belt with the tongs.
+- BACK: Show the long scorched orange cape, the iron forge-pack with the chimney and fire nozzle on his back, and the hammer.
+
+## hero_prometheus_fab_pr | Prometheus, Titanus Faber
+
+- ROLE: the same legendary hero Prometheus, now the prestige form Titanus Faber (the titanic smith)
+- FMT: the finished 3-cell sheet of the same hero Prometheus in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Prometheus in his specialisation form: the new form is THE SAME MAN, with the same face as always: bronzed skin, long untamed black hair and a thick black beard, intense amber eyes, a defiant proud look, a small ember-red gem on a leather cord at his neck, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a splendid gold-and-black smith's crown-visor pushed up on his forehead with small flames rising from it, the face fully open and clearly visible (the same face as always: bronzed skin, long untamed black hair and a thick black beard, intense amber eyes, a defiant proud look, a small ember-red gem on a leather cord at his neck), a mighty master-smith look; magnificent black-iron and gold plate on shoulders and chest engraved with flame patterns over a coal-black tunic, a gold-studded belt hung with golden tongs and hammers; a LONG, rich orange-and-gold flame-patterned cape with a wide gold border; gold-rimmed iron bracers glowing orange. NO shield, NO sword. In both hands a colossal golden-and-iron war-hammer with a blazing white-hot head; on his back a magnificent golden forge-pack with several chimneys and a roaring fire nozzle. Around the figure a faint glow: a few tiny sparkle pixels, glowing embers and sparks, kept close to the body and completely inside the cell.
+- REST: standing tall and mighty, facing the viewer, the colossal hammer held upright in both hands, embers floating around him
+- ATTACK: one step forward, the colossal hammer swung forward in a heavy blow with a burst of white-hot sparks, the forge-pack roaring a jet of fire behind him
+- HIT: upper body leaning backwards, eyes closed, the hammer dropping, one hand raised
+- PORT: Show the golden crown-visor with the little flames, the black hair and beard, the amber eyes, the ember-red gem, the large gold shoulder plate and the orange-and-gold cape.
+- FRONT: The colossal blazing hammer held in both hands, the black-iron and gold flame-patterned plate, the golden tool belt.
+- BACK: Show the long orange-and-gold cape, the golden forge-pack with the chimneys and the roaring fire nozzle, and the hammer.
+
+## hero_prometheus_tit | Prometheus, Titanus
+
+- ROLE: the same legendary hero Prometheus, now the Titan in his strength (Titanus), brute fighter
+- FMT: the finished 3-cell sheet of the same hero Prometheus in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Prometheus in his base form: the new form is THE SAME MAN, with the same face as always: bronzed skin, long untamed black hair and a thick black beard, intense amber eyes, a defiant proud look, a small ember-red gem on a leather cord at his neck, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: NO helmet, the face fully open and clearly visible (the same face as always: bronzed skin, long untamed black hair and a thick black beard, intense amber eyes, a defiant proud look, a small ember-red gem on a leather cord at his neck), the hair wild, a fierce roaring look; a bare massively muscular chest with a thick iron-chain across it, one huge rough-stone pauldron on his left shoulder, a coal-black loincloth-tunic, a tattered deep-orange cape; heavy iron shackle-cuffs with broken chain links hanging from both wrists; heavy boots. NO shield, NO sword. In both hands a huge rough stone-and-iron maul with a smouldering head, small flames licking around his fists.
+- REST: standing wide and menacing, facing the viewer, the huge maul held upright in both hands, flames licking at his fists
+- ATTACK: a big lunge forward, the huge maul swung forward in both hands, the broken chains flying, sparks flying
+- HIT: upper body leaning backwards, eyes closed, the maul tilting, one hand raised
+- PORT: Show the wild black hair, the thick beard, the fierce amber eyes, the ember-red gem, the iron chain across the bare chest and the stone pauldron.
+- FRONT: The huge smouldering maul held in both hands, the bare muscular chest with the iron chain, the stone pauldron, the broken shackles at the wrists.
+- BACK: Show the long wild black hair, the tattered orange cape, the iron chain across the back and the maul.
+
+## hero_prometheus_tit_pr | Prometheus, Prometheus Liberatus
+
+- ROLE: the same legendary hero Prometheus, now the prestige form Prometheus Liberatus (Prometheus unchained)
+- FMT: the finished 3-cell sheet of the same hero Prometheus in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Prometheus in his specialisation form: the new form is THE SAME MAN, with the same face as always: bronzed skin, long untamed black hair and a thick black beard, intense amber eyes, a defiant proud look, a small ember-red gem on a leather cord at his neck, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a golden laurel crown of fire (small living flames rising from a gold band) on his long black hair, the face fully open and clearly visible (the same face as always: bronzed skin, long untamed black hair and a thick black beard, intense amber eyes, a defiant proud look, a small ember-red gem on a leather cord at his neck), a free and triumphant look; a bare massively muscular chest with a golden chain, large gold shoulder plates, a coal-black tunic with gold flame embroidery; a LONG, rich, shimmering orange-and-gold cape with a wide gold border and a large round gold brooch; gold bracers with the broken shackles glowing gold at the wrists; gold-trimmed boots. NO shield, NO sword. In both hands a huge golden maul with a blazing fire-lit head; a halo-like ring of small flames circles him. Around the figure a faint glow: a few tiny sparkle pixels and golden embers, kept close to the body and completely inside the cell.
+- REST: standing tall and triumphant, facing the viewer, the huge golden maul held upright in both hands, flames circling him
+- ATTACK: a big lunge forward, the golden maul swung forward in both hands with a burst of fire, the cape and flames streaming behind him
+- HIT: upper body leaning backwards, eyes closed, the maul tilting, one hand raised
+- PORT: Show the golden crown of living flames, the black hair and beard, the amber eyes, the ember-red gem, the large gold shoulder plate and the orange-and-gold cape.
+- FRONT: The huge blazing golden maul held in both hands, the bare chest with the golden chain, the gold shoulder plates, the broken shackles glowing gold.
+- BACK: Show the long orange-and-gold cape with the gold border, the golden flame crown and the maul.
