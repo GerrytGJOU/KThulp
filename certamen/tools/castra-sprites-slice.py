@@ -11,7 +11,7 @@ Blad A  (tower defence): 3 kolommen x 2 rijen, in volgorde
         rust | aanval | geraakt  /  loop omlaag | loop opzij (kijkt naar RECHTS) | loop omhoog
         -> [id]_td_idle/attack/hurt/down/side/up.png (48x48) en [id]_td.png (= rust, wat het spel nu leest)
 Blad B  (battle en portret): 3 cellen naast elkaar: portret | battle voor | battle achter
-        -> [id]_portrait.png (128x128), [id]_battle_front.png en [id]_battle_back.png (96x96)
+        -> [id]_portrait.png (128x128), [id]_battle_front.png en [id]_battle_back.png (192x192)
 Portret: een los portret -> [id]_portrait.png (128x128)
 
 De achtergrond is effen magenta (#FF00FF, met marge voor ruis). Alle frames van een blad krijgen
@@ -24,7 +24,7 @@ from PIL import Image
 
 PALET = 64          # 0 = geen kleurreductie
 BOOST = False       # --boost: meer kleur en contrast (nuttig voor flauwere bronnen)
-SIZES = {"td": 48, "battle": 96, "portrait": 128}
+SIZES = {"td": 48, "battle": 192, "portrait": 128}   # battle: 192 (was 96) sinds het grotere gevechtsscherm (castra-vscene.js); het spel schaalt oude 96-bestanden mee
 TD_NAMES = ["idle", "attack", "hurt", "down", "side", "up"]
 
 

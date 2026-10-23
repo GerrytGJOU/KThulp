@@ -143,6 +143,8 @@ function castraMvCalc(A, D, move){
   return { d, m };
 }
 function castraMvEff(m){ return m>1 ? " "+castraLaHTML(castraLaText("optime"), CASTRA_LA.optime.nl, "optime") : m<1 ? " "+castraLaHTML(castraLaText("male"), CASTRA_LA.male.nl, "male") : ""; }
+// Gebeurtenissen van deze beurt voor de animaties (castra-vscene.js); ontbreekt V.fx (balansproef), dan gebeurt er niets.
+function castraMvFx(V, e){ if(V.fx) V.fx.push(e); }
 // Voert één move uit; geeft de logregels terug en past de toestand aan.
 function castraMvExec(V, who, move){
   const A = V.s[who], D = V.s[who==="me" ? "en" : "me"], rng = V.rng, lines = [];
@@ -150,16 +152,16 @@ function castraMvExec(V, who, move){
   if(move.pp) A.pp[move.id] = Math.max(0, (A.pp[move.id]||0)-1);
   if(move.kind==="guard"){
     if(A.lastGuard){ lines.push(head+" "+castraLaHTML("Sed non iterum.", "Maar niet twee keer achter elkaar.", "mv_iter")); A.lastGuard = false; return lines; }
-    A.guard = true; lines.push(head+" "+castraLaHTML("Se defendit.", "Verdedigt zich.", "mv_defendit")); return lines;
+    A.guard = true; castraMvFx(V, { w:who, k:"guard" }); lines.push(head+" "+castraLaHTML("Se defendit.", "Verdedigt zich.", "mv_defendit")); return lines;
   }
   if(move.kind==="heal"){
-    const amt = Math.round(A.max*CASTRA_MV_BAL.healPct/100), got = Math.min(amt, A.max-A.hp); A.hp += got;
+    const amt = Math.round(A.max*CASTRA_MV_BAL.healPct/100), got = Math.min(amt, A.max-A.hp); A.hp += got; castraMvFx(V, { w:who, k:"heal", n:got });
     lines.push(head+" "+(got ? `+${got} ❤️` : castraLaHTML("Nihil iuvat.", "Het helpt niet (al vol).", "mv_nihil"))); return lines;
   }
-  if(move.kind==="buff"){ A.buffImp = CASTRA_MV_BAL.buffTurns; lines.push(head+" ⬆ "+castraLaHTML("Vires crescunt.", "De aanvalskracht stijgt.", "mv_vires")); return lines; }
-  if(move.kind==="shield"){ A.buffTut = CASTRA_MV_BAL.buffTurns; lines.push(head+" 🛡 "+castraLaHTML("Tutela crescit.", "De verdediging stijgt.", "mv_tutela")); return lines; }
+  if(move.kind==="buff"){ castraMvFx(V, { w:who, k:"buff" }); A.buffImp = CASTRA_MV_BAL.buffTurns; lines.push(head+" ⬆ "+castraLaHTML("Vires crescunt.", "De aanvalskracht stijgt.", "mv_vires")); return lines; }
+  if(move.kind==="shield"){ castraMvFx(V, { w:who, k:"buff" }); A.buffTut = CASTRA_MV_BAL.buffTurns; lines.push(head+" 🛡 "+castraLaHTML("Tutela crescit.", "De verdediging stijgt.", "mv_tutela")); return lines; }
   // schade
-  if(rng()*100 >= (move.acc||100)){ lines.push(head+" "+castraLaHTML("Ictus fallit.", "De aanval mist.", "mv_fallit")); return lines; }
+  if(rng()*100 >= (move.acc||100)){ castraMvFx(V, { w:who, k:"miss" }); lines.push(head+" "+castraLaHTML("Ictus fallit.", "De aanval mist.", "mv_fallit")); return lines; }
   const hits = move.hits || 1; let total = 0, last = null, crit = false;
   for(let i=0;i<hits && D.hp>0;i++){
     const r = castraMvCalc(A, D, move); let d = r.d;
@@ -167,6 +169,7 @@ function castraMvExec(V, who, move){
     D.hp -= d; total += d; last = r;
   }
   if(who==="en") V.dmgTaken += total;
+  castraMvFx(V, { w:who, k:"hit", n:total, crit, mult:last.m, hits });
   lines.push(head+` −${total}`+(hits>1?` (${hits}×)`:"")+castraMvEff(last.m)+(crit?" 💥 "+castraLaHTML("Ictus gravis!", "Voltreffer!", "mv_crit"):""));
   if(move.slow && D.hp>0){ D.slow = CASTRA_MV_BAL.slowTurns; D.slowPct = move.slow; lines.push("🐌 "+castraLaHTML(esc(D.name)+" tardior est.", D.name+" is vertraagd.", "mv_tardior")); }
   return lines;
@@ -191,7 +194,7 @@ function castraMvAI(V){
 /* ---------- beurt ---------- */
 function castraMvPrio(m){ return m.prio||0; }
 function castraVTurn(action){
-  const V = CASTRA_V; if(!V || V.over || !V.s) return;
+  const V = CASTRA_V; if(!V || V.over || !V.s || V.busy) return;
   let mine = action==="defende" ? CASTRA_MV_DEFEND : V.s.me.moves.find(m=>m.id===action);
   if(!mine || (mine.pp && (V.s.me.pp[mine.id]||0)<=0)) return;
   castraMvPlay(V, mine);
@@ -199,11 +202,17 @@ function castraVTurn(action){
 // Eén beurt: ik kies `mine` (of niets bij een vangpoging: mine = null), de vijand kiest zelf.
 function castraMvPlay(V, mine){
   castraMvRound(V, mine);
+  if(typeof castraVSceneHTML==="function"){      // speel de beurt eerst af (castra-vscene.js), toon daarna het resultaat
+    castraVRender("battle");
+    V.busy = true;
+    setTimeout(()=>{ V.busy = false; if(CASTRA_V!==V) return; if(V.over){ castraVFinish(); castraVRender("result"); } else castraVRender("battle"); }, castraVSceneDuration(V)+(V.over?900:200));
+    return;
+  }
   if(V.over){ castraVFinish(); castraVRender("result"); } else castraVRender("battle");
 }
 // Alleen de toestand (ook voor de balansproef in tools/castra-moves-test.js).
 function castraMvRound(V, mine){
-  V.round++; V.ask = null; V.log = [];
+  V.round++; V.ask = null; V.log = []; V.fx = []; V.prev = { me:V.s.me.hp, en:V.s.en.hp };
   const me = V.s.me, en = V.s.en; me.guard = false; en.guard = false;
   const theirs = castraMvAI(V), order = [];
   if(mine) order.push(["me", mine]);
@@ -320,6 +329,7 @@ function castraVBattleHTML(){
         <button class="btn" style="flex:1.4;min-height:46px;${catchOk?"":"opacity:.45"}" ${catchOk?"":"disabled"} onclick="castraVCatch()" title="Vang de vijand: hoe minder levenspunten, hoe groter de kans">🪢 ${castraLaText("capere")} (${V.catchLeft}) ${catchOk?`<small style="color:${cl[1]}">${cl[0]}</small>`:"<small>baas</small>"}</button>
         <button class="btn" style="flex:1;min-height:46px" onclick="castraVFlee()">🏃 ${castraLaText("fuga")}</button></div>${tip}`;
   }
+  if(typeof castraVSceneHTML==="function") return castraVSceneHTML(V, me, en, mySpr, enSpr, log, menu);
   return `<div class="panel">
     <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
       <div style="position:relative;width:96px;height:96px">${mySpr}</div>

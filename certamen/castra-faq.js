@@ -18,6 +18,9 @@ const CASTRA_FAQ = [
     <li><b>Laptop:</b> pijltjestoetsen of W A S D. Tik of klik ergens om daarheen te lopen.</li>
     <li><b>Gebouwen:</b> tik op een gebouw om het te openen. Met het toetsenbord sta je ervoor en druk je op Enter of spatie. Er opent niets meer als je er alleen tegenaan loopt.</li>
     <li><b>Praten:</b> staat er iemand naast je, dan verschijnt rechtsonder de knop <b>💬 Praat</b> (of druk op Enter). Je kunt ook tegen de persoon aan lopen of erop tikken.</li>
+    <li><b>Deuren:</b> staat er een deur naast je, dan verschijnt de knop <b>🚪 Binnen</b>. Je kunt ook op het huis tikken.</li>
+    <li><b>Zones:</b> gestippelde vlakken met een naam (bos, weg, veld) zijn zones. Opdrachten tellen vijanden alleen in de juiste zone; het chipje bovenaan zegt waar je staat en waar je heen moet.</li>
+    <li><b>Gesprek per ongeluk gestart?</b> Loop gewoon weg: het sluit vanzelf en je kunt later opnieuw beginnen.</li>
     <li><b>Menu ☰</b> (rechtsboven): je team, helden, voorraad, het Diarium met opdrachten, de Codex en deze handleiding.</li>
     <li><b>⛶ Full-screen:</b> verbergt de balk zodat de kaart het hele scherm vult. Linksboven staan dan knoppen om weer terug te gaan, voor uitleg (?) en om het spel te verlaten (‹).</li></ul>` },
   { id:"kamp", t:"Het kamp: gebouwen en grondstoffen", b:`
