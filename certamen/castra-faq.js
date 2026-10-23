@@ -44,7 +44,8 @@ const CASTRA_FAQ = [
     <p>Na het gevecht krijg je XP en soms grondstoffen. Wie vlucht verliest niets, maar krijgt ook niets.</p>` },
   { id:"td", t:"Tower defence: je kamp verdedigen", b:`
     <p>Via de <b>Porta praetoria</b> kom je bij de campagnekaart met missies. In een missie lopen vijanden langs een weg naar je kamp. Je zet soldaten en helden als <b>torens</b> naast de weg. Ze schieten zelf op alles binnen hun <b>bereik</b>.</p>
-    <ul><li><b>Plaatsen:</b> kies een eenheid onderin en tik op een lege plek. Een cirkel laat het bereik zien (groen = hier mag je staan).</li>
+    <ul><li><b>Scherm:</b> de kaart vult het scherm; je eenheden en knoppen staan onderin. Met <b>⛶ Full-screen</b> wordt de kaart nog groter (op een telefoon werkt het het best liggend).</li>
+    <li><b>Plaatsen:</b> kies een eenheid onderin en tik op een lege plek. Een cirkel laat het bereik zien (groen = hier mag je staan).</li>
     <li><b>Verplaatsen:</b> tik op een eenheid om zijn bereik te zien. Tik dan op een lege plek om hem te verplaatsen, of nogmaals op hem om hem terug te nemen. Dit kan zolang er geen golf loopt.</li>
     <li><b>Golven:</b> start een golf als je klaar bent. Elke vijand die je kamp bereikt kost een leven. Win je de laatste golf, dan krijg je de beloning.</li>
     <li><b>Impete! en State!:</b> met energie geef je je torens tijdelijk meer schade of vertraag je alle vijanden.</li>
