@@ -139,7 +139,7 @@ function castraMenuHeroes(){
     const d = CASTRA_HERO_DATA[h.id], st = castraHeroStats(h), cap = castraHeroCap(h), need = castraXpToNext(h.lvl);
     const hsel = CASTRA_MENU.hsel===h.id;
     return `<div style="${CASTRA_MV_ROW};cursor:pointer" onclick="CASTRA_MENU.hsel=${hsel?'null':JSON.stringify(h.id)};castraMenuRender()">
-      <div style="flex:0 0 52px;width:52px;height:52px;position:relative">${castraAvatarHTML(d.look,"down",1,52)}</div>
+      <div style="flex:0 0 52px;width:52px;height:52px;position:relative">${castraHeroSprHTML(h,"td_idle",52,castraHeroSprHTML(h,"td",52,castraAvatarHTML(d.look,"down",1,52)))}</div>
       <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><b>${esc(d.nm)}</b><span>Lv ${h.lvl} / ${cap}</span></div>
         <div style="font-size:12px;opacity:.7">${esc(CASTRA_TYPE_LA[d.type].sg)} · ${esc((CASTRA_VENATIO[d.region]||{nm:d.region}).nm)}${h.assigned?` · leidt ${esc(castraBuilding(h.assigned).nm)}`:""}</div>
         <div style="display:flex;align-items:center;gap:6px;margin-top:3px"><small style="width:30px">Fides</small><div style="flex:1">${castraMenuBar(h.fides||0,100,"#d4a017")}</div><b style="font-size:12px;width:40px;text-align:right">${h.fides||0}</b></div>

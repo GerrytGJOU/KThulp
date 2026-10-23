@@ -91,6 +91,7 @@ function castraMvInit(V){
   V.log = [ castraLaHTML(`${enName} adest!`, `${enName} verschijnt!`, "mv_adest") ];
   const probe = [[V.enemy.line,"portrait"],[V.enemy.line,"battle_front"]];
   if(V.mine.line) probe.push([V.mine.line,"portrait"],[V.mine.line,"battle_back"]);
+  else if(V.mine.hero && typeof castraHeroFormId==="function"){ const hf = castraHeroFormId(V.mine.h); probe.push([hf,"portrait"],[hf,"battle_back"]); }
   castraFsprProbe(probe, ()=>{ if(CASTRA_V===V && !V.over) castraVRender("battle"); });
 }
 castraVFight = function(sid){
@@ -294,7 +295,7 @@ function castraMvBtn(V, m){
 function castraVBattleHTML(){
   const V = CASTRA_V; if(!V.s) return "";
   const me = V.s.me, en = V.s.en, line = castraLine(V.enemy.line);
-  const mySpr = V.mine.hero ? castraAvatarHTML(CASTRA_HERO_DATA[V.mine.h.id].look, "up", 1, 96) : castraFsprHTML(V.mine.line, "battle_back", 96, castraAvatarHTML(castraPLook(V.mine.line), "up", 1, 96), false);
+  const mySpr = V.mine.hero ? castraHeroSprHTML(V.mine.h, "battle_back", 96, castraAvatarHTML(CASTRA_HERO_DATA[V.mine.h.id].look, "up", 1, 96)) : castraFsprHTML(V.mine.line, "battle_back", 96, castraAvatarHTML(castraPLook(V.mine.line), "up", 1, 96), false);
   const enSpr = castraFsprHTML(V.enemy.line, "battle_front", 96, castraAvatarHTML(castraPLook(V.enemy.line), "down", 1, 96), false);
   const log = V.log.slice(-5).map(l=>`<div style="padding:2px 0">${l}</div>`).join("");
   const unit = (S, e, right)=>`<div style="flex:1;min-width:0;${right?"text-align:right":""}"><b>${S.unit.insignis?"✨ ":""}${esc(S.name)}</b> <small>${castraLaText("gradus")} ${e.lvl||1} ${CASTRA_MV_ICON[S.type]||""}</small>${castraMvStatus(S)}${castraVBar(S.hp,S.max,right?"#c8392a":"#3f9d52")}</div>`;

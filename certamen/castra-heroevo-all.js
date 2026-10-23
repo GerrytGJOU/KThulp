@@ -12,7 +12,7 @@
 // Archetypen: basisklasse van de artes (castra-skills.js), type voor de tower defence en de stat-vermenigvuldigers.
 const CASTRA_HEVO_ARCH = {
   hopliet:     { type:"inf", m:{ vita:1.25, impetus:0.95, tutela:1.3,  celeritas:0.9, ambitus:1.0 }, p:{ vita:1.45, impetus:1.1,  tutela:1.5,  celeritas:1.0, ambitus:1.1 } },
-  spartaan:    { type:"inf", m:{ vita:1.1,  impetus:1.3,  tutela:1.0,  celeritas:1.0, ambitus:1.0 }, p:{ vita:1.25, impetus:1.55, tutela:1.1,  celeritas:1.1, ambitus:1.0 } },
+  spartaan:    { type:"inf", m:{ vita:1.1,  impetus:1.3,  tutela:1.0,  celeritas:1.0, ambitus:1.0 }, p:{ vita:1.25, impetus:1.45, tutela:1.1,  celeritas:1.1, ambitus:1.0 } },   // 1,55 gaf de spartaanse helden bijna 2,5x de schade van een tier 4-soldaat
   boogschutter:{ type:"rng", m:{ vita:0.9,  impetus:1.25, tutela:0.9,  celeritas:1.1, ambitus:1.6 }, p:{ vita:1.0,  impetus:1.55, tutela:1.0,  celeritas:1.2, ambitus:2.0 } },
   cavalerie:   { type:"cav", m:{ vita:1.0,  impetus:1.15, tutela:0.95, celeritas:1.4, ambitus:1.1 }, p:{ vita:1.15, impetus:1.4,  tutela:1.05, celeritas:1.7, ambitus:1.2 } },
   genie:       { type:"rng", m:{ vita:0.95, impetus:1.15, tutela:1.0,  celeritas:0.85, ambitus:1.7 }, p:{ vita:1.1,  impetus:1.4,  tutela:1.1,  celeritas:0.95, ambitus:2.1 } },

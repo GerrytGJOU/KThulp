@@ -55,6 +55,7 @@ function castraBStart(missionId){
   // vormsprites (indien aanwezig) vooraf controleren: alle vijanden van de missie en je eigen soldaten
   const ids = {}; m.waves.forEach(w=>w.forEach(g=>ids[g.line]=1)); (CASTRA.soldiers||[]).forEach(s=>ids[s.line]=1);
   castraFsprProbeTD(Object.keys(ids), null);
+  if(typeof castraHeroSprPreload==="function") castraHeroSprPreload();
   go("castraBattle");
 }
 SCREENS.castraBattle = function(){
@@ -152,7 +153,7 @@ function castraBDrawTower(t){
   const box = el("cbUnits"); if(!box) return;
   const d = document.createElement("div"); d.id = "cbT"+t.id;
   d.style.cssText = `position:absolute;left:${t.x*48}px;top:${t.y*48}px;width:48px;height:48px`;
-  d.innerHTML = `<div class="cbs">${t.look ? castraAvatarHTML(t.look, "down", 1, 48) : castraTdFrameHTML(t.line, "idle", 48, castraAvatarHTML(castraPLook(t.line), "down", 1, 48))}</div>` + (t.type==="sup"?`<div style="position:absolute;top:-4px;right:0;font-size:12px">✨</div>`:"");
+  d.innerHTML = `<div class="cbs">${(t.spr && castraHasTdFrames(t.spr)) ? castraTdFrameHTML(t.spr, "idle", 48, "") : t.look ? castraAvatarHTML(t.look, "down", 1, 48) : castraTdFrameHTML(t.line, "idle", 48, castraAvatarHTML(castraPLook(t.line), "down", 1, 48))}</div>` + (t.type==="sup"?`<div style="position:absolute;top:-4px;right:0;font-size:12px">✨</div>`:"");
   box.appendChild(d);
 }
 
@@ -249,10 +250,11 @@ function castraBTick(){
 }
 // Aanvalsframe van een toren kort tonen (alleen als de vorm zes frames heeft); kijkrichting naar het doelwit.
 function castraBTowerFlash(t, e){
-  if(t.look || !castraHasTdFrames(t.line)) return;
+  const sid = (t.spr && castraHasTdFrames(t.spr)) ? t.spr : (t.look ? null : t.line);   // held met sprites, anders soldaat
+  if(!sid || !castraHasTdFrames(sid)) return;
   const d = document.getElementById("cbT"+t.id), c = d && d.firstChild; if(!c || c._flash) return;
-  c._flash = true; c.innerHTML = castraTdFrameHTML(t.line, "attack", 48, "", e.x < t.cx);
-  setTimeout(()=>{ c._flash = false; c.innerHTML = castraTdFrameHTML(t.line, "idle", 48, ""); }, 220);
+  c._flash = true; c.innerHTML = castraTdFrameHTML(sid, "attack", 48, "", e.x < t.cx);
+  setTimeout(()=>{ c._flash = false; c.innerHTML = castraTdFrameHTML(sid, "idle", 48, ""); }, 220);
 }
 function castraBDrawUnits(){
   const B = CASTRA_B, box = el("cbUnits"); if(!box) return; const tick = B.sim.tick;
