@@ -990,3 +990,68 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 - PORT: Show the golden crown with the silver horse head, the short black beard, the wise look, the silver horse-head pendant, the large gold shoulder plate and the purple mantle with the white collar.
 - FRONT: The golden sceptre with the glowing silver horse head held in the right hand, the left hand open in blessing, the white-and-gold robe with the light gold breastplate.
 - BACK: Show the long purple mantle with the gold border, the golden crown and the sceptre.
+
+## hero_penthesilea | Penthesilea
+
+- ROLE: legendary hero, the fierce queen of the Amazons who fought at Troy (infantry)
+- FMT: the finished 3-cell sheet of the Greek recruit Ephebus: portrait, battle front, battle back
+- INTRO: The attached image is a six-cell sprite sheet of a Greek soldier: it shows only the required LAYOUT, pose list, pixel size and level of detail. The new character is a legendary hero, NOT a soldier: entirely different clothing, colours and equipment as described below; do NOT copy the soldier's clothing, colours or shield.
+- OUTFIT: She wears: NO helmet, the face fully visible (fair freckled skin, long wild fiery-red hair flowing past her shoulders, bright green eyes, a fierce proud look, two thin red war-paint stripes under the eyes, a small gold crescent-moon earring); a fitted bronze breastplate with a purple leather skirt of strips, a spotted leopard-skin band over one shoulder; a LONG deep-purple cape pinned at the left shoulder with a round gold brooch; bronze bracers; leather boots laced to the knee; NO shield. In her right hand a straight short sword with a silver blade and a gold crescent-shaped guard.
+- REST: standing proud and fierce, facing the viewer, the sword pointing down in her right hand
+- ATTACK: one step forward, the sword thrust forward, the long purple cape swinging behind her
+- HIT: upper body leaning backwards, eyes closed, the sword dropping, one hand raised
+- PORT: Show the long wild red hair, the green eyes with the red war paint, the gold crescent earring, the bronze breastplate collar, the leopard-skin band and the long purple cape with the brooch.
+- FRONT: Sword held ready in the right hand, the bronze breastplate, the leopard-skin band, the long purple cape.
+- BACK: Show the long wild red hair, the long purple cape and the sword.
+
+## hero_penthesilea_bip | Penthesilea, Bipennifera
+
+- ROLE: the same legendary hero Penthesilea, now the double-axe bearer (Bipennifera), brute fighter
+- FMT: the finished 3-cell sheet of the same hero Penthesilea in her base form: it shows the format; the new form keeps the same woman's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Penthesilea in her base form: the new form is THE SAME WOMAN, with the same face as always: fair freckled skin, long wild fiery-red hair, bright green eyes, a fierce proud look, two thin red war-paint stripes under the eyes, a small gold crescent-moon earring, but she has changed her equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: NO helmet, the face fully open and clearly visible (the same face as always: fair freckled skin, long wild fiery-red hair, bright green eyes, a fierce proud look, two thin red war-paint stripes under the eyes, a small gold crescent-moon earring), the red hair wild and flying, a fierce battle-cry look; a heavy bronze breastplate with large bronze shoulder plates, a thick spotted leopard-skin pelt over her left shoulder, a short dark-purple leather skirt; thick gold-studded bracers on both forearms; heavy bronze greaves; a short ragged deep-purple cloak. NO shield. In BOTH hands a huge double-bladed battle axe (a labrys) with a long dark wooden shaft and two big curved silver blades, held two-handed.
+- REST: standing wide and menacing, facing the viewer, the huge double-bladed axe held upright in both hands in front of her
+- ATTACK: a big lunge forward, the huge double axe swung forward in both hands, the short purple cloak and the red hair flying behind her
+- HIT: upper body leaning backwards, eyes closed, the axe tilting, one hand raised
+- PORT: Show the wild flying red hair, the fierce look with the red war paint, the gold crescent earring, the heavy bronze shoulder plate and the leopard skin.
+- FRONT: The huge double-bladed axe held ready in both hands, the heavy bronze breastplate and shoulder plates, the leopard skin.
+- BACK: Show the long wild red hair, the short ragged purple cloak, the leopard skin and the huge double axe.
+
+## hero_penthesilea_bip_pr | Penthesilea, Regina Amazonum
+
+- ROLE: the same legendary hero Penthesilea, now the prestige form Regina Amazonum (the queen of the Amazons)
+- FMT: the finished 3-cell sheet of the same hero Penthesilea in her specialisation form: it shows the format; the new prestige form keeps the same woman's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Penthesilea in her specialisation form: the new form is THE SAME WOMAN, with the same face as always: fair freckled skin, long wild fiery-red hair, bright green eyes, a fierce proud look, two thin red war-paint stripes under the eyes, a small gold crescent-moon earring, now at the height of her legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around her, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: a splendid gold crown with tall crescent-moon points on her long red hair, the face fully open and clearly visible (the same face as always: fair freckled skin, long wild fiery-red hair, bright green eyes, a fierce proud look, two thin red war-paint stripes under the eyes, a small gold crescent-moon earring), a proud regal look; a magnificent gold-and-bronze ceremonial armour with large gold shoulder plates and gold crescent-moon ornaments, a spotted leopard-skin mantle over one shoulder, a short purple-and-gold skirt; a LONG, rich, shimmering royal PURPLE cloak with a wide gold border and a large round gold brooch; gold bracers and gold greaves. NO shield. In BOTH hands a huge golden double-bladed battle axe (a labrys) with two big shining silver blades with gold crescent inlays and a gold-banded shaft. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing tall and regal, facing the viewer, the huge golden double axe held upright in both hands in front of her
+- ATTACK: a big lunge forward, the huge golden double axe swung forward in both hands, the long purple cloak and the red hair flying behind her
+- HIT: upper body leaning backwards, eyes closed, the axe tilting, one hand raised
+- PORT: Show the gold crescent crown, the long red hair, the green eyes with the red war paint, the gold crescent earring, the large gold shoulder plate and the purple cloak.
+- FRONT: The huge golden double-bladed axe held ready in both hands, the gold-and-bronze armour with crescent moons, the leopard-skin mantle.
+- BACK: Show the long purple cloak with the gold border, the golden crown with the red hair and the huge golden double axe.
+
+## hero_penthesilea_eqa | Penthesilea, Amazon Equestris
+
+- ROLE: the same legendary hero Penthesilea, now the mounted Amazon (Amazon Equestris), cavalry archer
+- FMT: the finished 3-cell sheet of the same hero Penthesilea in her base form: it shows the format; the new form keeps the same woman's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Penthesilea in her base form: the new form is THE SAME WOMAN, with the same face as always: fair freckled skin, long wild fiery-red hair, bright green eyes, a fierce proud look, two thin red war-paint stripes under the eyes, a small gold crescent-moon earring, but she has changed her equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: NO helmet, the face fully open and clearly visible (the same face as always: fair freckled skin, long wild fiery-red hair, bright green eyes, a fierce proud look, two thin red war-paint stripes under the eyes, a small gold crescent-moon earring), the red hair streaming; a light fitted bronze breastplate, a spotted leopard-skin band, a short purple leather skirt, a LONG purple cape streaming behind her; leather boots. She rides a galloping dark-chestnut horse with a purple saddle blanket with gold trim and a bronze-studded bridle. In her hands a short recurve horn bow with a green-feathered arrow; a quiver at her hip. The whole horse with its rider is drawn as ONE complete figure, fully inside its cell with at least 4 pixel blocks of margin on every side.
+- REST: sitting on the halted horse, facing the viewer, the bow held low in her left hand, the horse standing calmly
+- ATTACK: the horse galloping forward, Penthesilea leaning forward with the bow drawn and an arrow aimed forward, the purple cape streaming behind her
+- HIT: upper body leaning backwards, eyes closed, the horse rearing, the bow tilting
+- PORT: Show the long wild red hair, the green eyes with the red war paint, the gold crescent earring, the bronze breastplate collar and the leopard-skin band.
+- FRONT: Penthesilea on the chestnut horse seen from the front, the bow held ready, the purple saddle blanket, the long purple cape.
+- BACK: Show the horse seen from behind with its tail and the purple saddle blanket, Penthesilea sitting on it with her long red hair and the long purple cape, the quiver at her hip.
+
+## hero_penthesilea_eqa_pr | Penthesilea, Martis Filia
+
+- ROLE: the same legendary hero Penthesilea, now the prestige form Martis Filia (the daughter of Mars)
+- FMT: the finished 3-cell sheet of the same hero Penthesilea in her specialisation form: it shows the format; the new prestige form keeps the same woman's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Penthesilea in her specialisation form: the new form is THE SAME WOMAN, with the same face as always: fair freckled skin, long wild fiery-red hair, bright green eyes, a fierce proud look, two thin red war-paint stripes under the eyes, a small gold crescent-moon earring, now at the height of her legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around her, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: a golden winged circlet on her long red hair, the face fully open and clearly visible (the same face as always: fair freckled skin, long wild fiery-red hair, bright green eyes, a fierce proud look, two thin red war-paint stripes under the eyes, a small gold crescent-moon earring), a proud fiery look; a magnificent gold-and-crimson ceremonial armour with gold shoulder plates and a small glowing red spear emblem of Mars on the chest; a spotted leopard-skin band; a LONG, rich, flowing crimson-and-purple cape with a gold border streaming behind her; gold bracers. She rides a magnificent galloping jet-black horse with golden barding, a crimson saddle blanket with gold trim, golden plumes and a faintly glowing red mane. In her hands a gold-tipped recurve bow with a glowing red arrow; a golden quiver at her hip. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell. The whole horse with its rider is drawn as ONE complete figure, fully inside its cell with at least 4 pixel blocks of margin on every side.
+- REST: sitting on the halted black horse, facing the viewer, the golden bow held low in her left hand, the horse standing proudly
+- ATTACK: the black horse galloping forward, Penthesilea leaning forward with the golden bow drawn and a glowing red arrow aimed forward, the cape streaming behind her
+- HIT: upper body leaning backwards, eyes closed, the horse rearing, the bow tilting
+- PORT: Show the golden winged circlet, the long red hair, the green eyes with the red war paint, the gold crescent earring, the large gold shoulder plate and the crimson cape.
+- FRONT: Penthesilea on the black horse with golden barding seen from the front, the golden bow held ready, the red Mars emblem on her chest.
+- BACK: Show the black horse seen from behind with its tail and the crimson saddle blanket, Penthesilea sitting on it with her long red hair and the long crimson-and-purple cape, the golden quiver.
