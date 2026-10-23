@@ -9,7 +9,7 @@ Gebruik:
 
 Blad A  (tower defence): 3 kolommen x 2 rijen, in volgorde
         rust | aanval | geraakt  /  loop omlaag | loop opzij (kijkt naar RECHTS) | loop omhoog
-        -> [id]_td_idle/attack/hurt/down/side/up.png (48x48) en [id]_td.png (= rust, wat het spel nu leest)
+        -> [id]_td_idle/attack/hurt/down/side/up.png (96x96; het spel toont ze op 48 css-pixels, dus scherper op een telefoon) en [id]_td.png (= rust, wat het spel nu leest)
 Blad B  (battle en portret): 3 cellen naast elkaar: portret | battle voor | battle achter
         -> [id]_portrait.png (128x128), [id]_battle_front.png en [id]_battle_back.png (192x192)
 Portret: een los portret -> [id]_portrait.png (128x128)
@@ -24,7 +24,7 @@ from PIL import Image
 
 PALET = 64          # 0 = geen kleurreductie
 BOOST = False       # --boost: meer kleur en contrast (nuttig voor flauwere bronnen)
-SIZES = {"td": 48, "battle": 192, "portrait": 128}   # battle: 192 (was 96) sinds het grotere gevechtsscherm (castra-vscene.js); het spel schaalt oude 96-bestanden mee
+SIZES = {"td": 96, "battle": 192, "portrait": 128}   # td: 96 (was 48), battle: 192 (was 96) sinds het grotere gevechtsscherm (castra-vscene.js); het spel schaalt oude 96-bestanden mee
 TD_NAMES = ["idle", "attack", "hurt", "down", "side", "up"]
 
 
@@ -110,10 +110,10 @@ def slice_sheet_a(im, fid, out):
         c, r = i % 3, i // 3
         frames.append((name, trim(key(cell(im, c, r, 3, 2)))))
     idle_h = frames[0][1].height
-    size = SIZES["td"]; scale = (size - 5) / idle_h          # rust: 43 px hoog in 48
+    size = SIZES["td"]; scale = (size - 5*size/48) / idle_h          # rust: 43 px hoog in 48 (evenredig bij 96: 86 px)
     res = []
     for name, fr in frames:
-        spr = place(fr, scale, size); spr.save(os.path.join(out, f"{fid}_td_{name}.png")); res.append(spr)
+        spr = place(fr, scale, size, baseline_pad=max(2, 2*size//48)); spr.save(os.path.join(out, f"{fid}_td_{name}.png")); res.append(spr)
         if name == "idle": spr.save(os.path.join(out, f"{fid}_td.png"))
     return res
 
@@ -126,7 +126,7 @@ def slice_sheet_b(im, fid, out):
         if name == "portrait":
             scale = min(size / fr.width, size / fr.height); spr = place(fr, scale * 0.96, size, baseline_pad=4)
         else:
-            scale = (size - 6) / max(frames[1].height, frames[2].height); spr = place(fr, scale, size, baseline_pad=3)
+            scale = (size - 6*size/96) / max(frames[1].height, frames[2].height); spr = place(fr, scale, size, baseline_pad=max(3, 3*size//96))
         spr.save(os.path.join(out, f"{fid}_{name}.png")); res.append(spr)
     return res
 
