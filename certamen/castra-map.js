@@ -167,7 +167,7 @@ function castraCampDef(){
     const site = b.start===0 && typeof CASTRA!=="undefined" && CASTRA && castraLvl(b.id)===0 && art.fw===2 && art.fh===2;
     (site ? CASTRA_BUILDING_SITE : art.pieces).forEach(p=>pieces.push({ o:p.o, x:b.slot.x+p.dx, y:b.slot.y+p.dy, owner:b.id }));
   });
-  [ ["tree_a",1,2],["tree_a",2,1],["tree_a",14,9],["tree_a",1,9],["tree_a",14,5],["tree_a",1,12],["tree_a",6,11],["tree_a",14,12],["tree_a",10,12] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
+  [ ["tree_a",1,2],["tree_a",2,1],["tree_a",14,9],["tree_a",1,9],["tree_a",14,7],["tree_a",1,12],["tree_a",6,11],["tree_a",14,12],["tree_a",10,12] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
   [ ["flower_w",9,2],["flower_p",6,3],["flower_b",11,6],["flower_o",3,10],["plant_c",6,9],["fern",11,10],["flower_p",1,6],["stones",9,4],["flower_w",5,12],["flower_b",10,11],["plant_a",1,10],["fern",6,13],["flower_o",9,13] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
   return { cols, rows, ground:g, pieces, walls };
 }

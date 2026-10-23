@@ -90,10 +90,10 @@ function castraBBuildMap(){
   const B = CASTRA_B, mp = CASTRA_P_MAPS[B.mission.map], cols = CASTRA_P.cols, rows = CASTRA_P.rows;
   const g = castraGroundGrid(cols, rows, "grass"), cells = castraPPathCells(B.mission.map);
   Object.keys(cells).forEach(k=>{ const [x,y] = k.split(",").map(Number); g[y][x] = "sand"; });
-  const pieces = mp.trees.map((t,i)=>({ o:"tree_a", x:t[0], y:t[1]-1 }));
+  const pieces = mp.trees.map((t,i)=>({ o:(typeof castraTdTreeObj==="function" ? castraTdTreeObj(B,i) : "tree_a"), x:t[0], y:t[1]-1 }));
   // bomen staan op de aangegeven cel (stam); de boomtop valt een tegel erboven
   B.cells = cells; B.blockedTrees = {}; mp.trees.forEach(t=>{ B.blockedTrees[t[0]+","+t[1]] = 1; });
-  B.built = castraMapLogic({ cols, rows, ground:g, pieces, walls:[] });
+  B.built = castraMapLogic({ cols, rows, ground:g, pieces, walls:[] }); B.mpDef = mp;
   const map = el("cbMap");
   map.innerHTML = `<canvas id="cbBelow" style="position:absolute;left:0;top:0;image-rendering:pixelated"></canvas>
     <div id="cbPlace" style="position:absolute;left:0;top:0;width:100%;height:100%;z-index:2"></div>
@@ -102,7 +102,7 @@ function castraBBuildMap(){
     <canvas id="cbFx" width="${cols*48}" height="${rows*48}" style="position:absolute;left:0;top:0;pointer-events:none;z-index:4"></canvas>
     <canvas id="cbAbove" style="position:absolute;left:0;top:0;pointer-events:none;image-rendering:pixelated;z-index:5"></canvas>`;
   map.onclick = castraBMapTap;
-  castraTsLoad().then(()=>{ const b=el("cbBelow"), a=el("cbAbove"); if(b&&a) castraDrawMapLayers(B.built, b, a); });
+  castraTsLoad().then(()=>{ const b=el("cbBelow"), a=el("cbAbove"); if(b&&a){ if(typeof castraDrawTdLayers==="function") castraDrawTdLayers(B.built, b, a, B); else castraDrawMapLayers(B.built, b, a); } });
   // pad: begin- en eindpunt aanduiden
   const lanes = mp.lanes || [mp.path], last = mp.path[mp.path.length-1];
   el("cbPlace").innerHTML = lanes.map(L=>`<div style="position:absolute;left:${L[0][0]*48}px;top:${L[0][1]*48}px;width:48px;height:48px;background:rgba(200,57,42,.35)"></div>`).join("")
