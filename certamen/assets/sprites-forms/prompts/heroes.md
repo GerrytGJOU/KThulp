@@ -1,6 +1,6 @@
 # Beeldprompts helden (hero_*)
 
-Gegenereerd op 2026-10-23 via ChatGPT (zie PROMPT_GENERATOR.md en ../HELDEN_EVOLUTIE.md). Klaar: Ulixes (basis, sag, ins, sag_pr = Arcitenens, ins_pr = Callidus), Aeneas (basis, dux, pro, dux_pr = Conditor, pro_pr = Pius) Romulus (basis, rex, bel, rex_pr = Quirinus, bel_pr = Martis filius) Horatius Cocles (basis, cus, pug, cus_pr = Servator Urbis, pug_pr = Heros Tiberis) Cloelia (basis, eq, exp, eq_pr = Domina Equitum, exp_pr = Virgo Fortissima) Mucius Scaevola (basis, ins, for, ins_pr = Sicarius, for_pr = Dextra Ignea) en Camilla (basis, sag, eqs, sag_pr = Virgo Volsca, eqs_pr = Regina Camillarum). Werkwijze: basis-A met `gra_ephebus_A.png` als formaatvoorbeeld, basis-B met eigen A + `gra_ephebus_B.png`; specialisatie-A met de basis-A, specialisatie-B met eigen A + `<held>_B.png` (basis); prestige-A met de A van de specialisatie, prestige-B met eigen A + B van de specialisatie. Elke volgende held: voeg een vormgegeven toe en vul de `{{...}}` in.
+Gegenereerd op 2026-10-23 via ChatGPT (zie PROMPT_GENERATOR.md en ../HELDEN_EVOLUTIE.md). Klaar: Ulixes (basis, sag, ins, mac, sag_pr = Arcitenens, ins_pr = Callidus, mac_pr = Architectus Equi), Aeneas (basis, dux, pro, dux_pr = Conditor, pro_pr = Pius) Romulus (basis, rex, bel, rex_pr = Quirinus, bel_pr = Martis filius) Horatius Cocles (basis, cus, pug, cus_pr = Servator Urbis, pug_pr = Heros Tiberis) Cloelia (basis, eq, exp, eq_pr = Domina Equitum, exp_pr = Virgo Fortissima) Mucius Scaevola (basis, ins, for, ins_pr = Sicarius, for_pr = Dextra Ignea) Camilla (basis, sag, eqs, sag_pr = Virgo Volsca, eqs_pr = Regina Camillarum) en Hercules (basis, ath, sag, ath_pr = Alcides, sag_pr = Deus). Let op bij het snijden: draai daarna `bars.py`-achtige opschoning (losse dunne streepjes aan de rand van battle_front/back verwijderen). Werkwijze: basis-A met `gra_ephebus_A.png` als formaatvoorbeeld, basis-B met eigen A + `gra_ephebus_B.png`; specialisatie-A met de basis-A, specialisatie-B met eigen A + `<held>_B.png` (basis); prestige-A met de A van de specialisatie, prestige-B met eigen A + B van de specialisatie. Elke volgende held: voeg een vormgegeven toe en vul de `{{...}}` in.
 
 ## Sjabloon blad A
 ```
@@ -509,3 +509,94 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 - PORT: Show the golden feather crown, the long black hair blowing, the red paint stripes, the regal thrilled face, the gold shoulder plate and the long green cape.
 - FRONT: Horse and rider facing the viewer, the golden bow in her left hand, the quiver at the saddle, the black war-horse with the gold barding.
 - BACK: Show the black war-horse from behind with its black tail, the rider's long green cape with the gold border, the golden feather crown and the quiver.
+
+## hero_ulixes_mac | Ulixes, Machinator
+
+- ROLE: the same legendary hero Ulixes, now a clever engineer and machine builder (Machinator)
+- FMT: the finished 3-cell sheet of the same hero Ulixes in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Ulixes in his base form: the new form is THE SAME MAN, with the same face as always: olive skin, short curly brown hair, a short brown beard, a thin pale scar on the left cheek, clear dark clever eyes, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his clothing, helmet or weapons.
+- OUTFIT: He wears: an open bronze helmet with cheek guards, NO crest, a bright orange band around it, the face fully open and clearly visible (the same face as always: olive skin, short curly brown hair, a short brown beard, a thin pale scar on the left cheek, clear dark clever eyes, a clever, tinkering look); a medium armour of dark-brown leather with bronze studs and orange trim over a cream linen tunic; bronze shoulder buckles; a LONG bright orange cape down to the calves pinned at the right shoulder with a round bronze gear-shaped brooch; a wide brown leather tool belt with a small mallet, chisels, a set-square and a coil of rope; leather bracers; brown leather boots laced to the knee; NO shield. In both hands a big wooden war-mallet with a heavy iron head and an orange cloth tied to the handle.
+- REST: standing relaxed, facing the viewer, the big mallet resting on his shoulder
+- ATTACK: one step forward, a heavy overhead swing of the mallet, the mallet kept fully inside the cell
+- HIT: upper body leaning backwards, eyes closed, the mallet dropping, one hand raised
+- PORT: Show the open bronze helmet with the orange band, the scar on the cheek, the short beard, the bronze buckle and the long orange cape with the gear-shaped brooch.
+- FRONT: The big mallet held in both hands in front of him, the tool belt with the set-square, the long orange cape.
+- BACK: Show the long orange cape, the wide tool belt with the coil of rope and the big mallet over his shoulder.
+
+## hero_ulixes_mac_pr | Ulixes, Architectus Equi
+
+- ROLE: the same legendary hero Ulixes, now the prestige master builder Architectus Equi (the builder of the great wooden horse)
+- FMT: the finished 3-cell sheet of the same hero Ulixes in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Ulixes in his specialisation form: the new form is THE SAME MAN, with the same face as always: olive skin, short curly brown hair, a short brown beard, a thin pale scar on the left cheek, clear dark clever eyes, now at the height of his legend (prestige form): richer and more impressive than before, with finer gold details, a more splendid cape and a faint glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a tall shiny GOLD open-faced helmet with gold cheek guards and a crest shaped like a small wooden horse's head in gold, an orange band around it, the face fully open and clearly visible (the same face as always: olive skin, short curly brown hair, a short brown beard, a thin pale scar on the left cheek, clear dark clever eyes, a triumphant, cunning look); a ceremonial armour of shiny GOLD plates with orange enamel inlays and a small gold horse emblem on the chest, over a cream tunic with gold trim; gold shoulder plates shaped like gears; a LONG, rich, shimmering ORANGE-and-gold cape down to the ground with a wide gold border, pinned with a large round gold gear brooch; a gold-studded tool belt with golden tools; gold bracers; gold-trimmed brown leather boots laced to the knee; NO shield. In both hands a magnificent golden war-mallet with a heavy head engraved with a horse and a glowing orange handle. Small golden cogs and sparks float around him. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing tall and proud, facing the viewer, the golden mallet resting on his shoulder
+- ATTACK: one step forward, a heavy overhead swing of the golden mallet, the mallet kept fully inside the cell
+- HIT: upper body leaning backwards, eyes closed, the mallet dropping, one hand raised
+- PORT: Show the tall gold helmet with the little golden horse crest, the scar on the cheek, the short beard, the gear-shaped gold shoulder plate and the orange cape with the large gold brooch.
+- FRONT: The golden mallet held in both hands in front of him, the gold armour with the horse emblem, the long orange-and-gold cape.
+- BACK: Show the long orange-and-gold cape with the gold border, the golden tool belt and the golden mallet over his shoulder.
+
+## hero_hercules | Hercules
+
+- ROLE: legendary hero, the mighty strongman who performed twelve labours (infantry)
+- FMT: the finished 3-cell sheet of the Greek recruit Ephebus: portrait, battle front, battle back
+- INTRO: The attached image is a six-cell sprite sheet of a Greek soldier: it shows only the required LAYOUT, pose list, pixel size and level of detail. The new character is a legendary hero, NOT a soldier: entirely different clothing, colours and equipment as described below; do NOT copy the soldier's clothing, colours or shield.
+- OUTFIT: He wears: NO helmet, wild untidy chestnut-brown hair, a thick full brown beard, the face clearly visible (bronze-tanned skin, a heavy brow, powerful warm brown eyes, a fearless grin); a very broad, muscular, bare chest with three long pale claw scars across it; a tawny lion pelt draped over his left shoulder with the lion's paw hanging down; a ragged dark-brown loincloth skirt of torn leather strips with a thick rope belt; heavy bronze arm-rings on both forearms; a LONG ragged burnt-orange cape down to the calves tied at the right shoulder; worn brown leather sandals; NO shield. In his right hand a heavy straight sword with a wide silver blade and a plain iron hilt.
+- REST: standing wide-legged and broad, facing the viewer, the sword resting on his shoulder
+- ATTACK: one big step forward, a mighty overhead slash of the sword, the long ragged orange cape swinging behind him
+- HIT: upper body leaning backwards, eyes closed, the sword dropping, one hand raised
+- PORT: Show the wild brown hair, the thick beard, the claw scars on the broad chest, the tawny lion pelt on the shoulder and the burnt-orange cape.
+- FRONT: Sword held ready in the right hand, the broad bare chest with the claw scars, the lion pelt on his left shoulder.
+- BACK: Show the long ragged orange cape, the tawny lion pelt over the shoulder and the sword.
+
+## hero_hercules_ath | Hercules, Athleta
+
+- ROLE: the same legendary hero Hercules, now a mighty wrestler with a great club (Athleta)
+- FMT: the finished 3-cell sheet of the same hero Hercules in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Hercules in his base form: the new form is THE SAME MAN, with the same face as always: bronze-tanned skin, wild untidy chestnut-brown hair, a thick full brown beard, a heavy brow, powerful warm brown eyes, three long pale claw scars across the chest, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: the head of the tawny lion-skin pulled over his wild hair like a hood, the lion's open jaws and mane framing his forehead, the face fully open and clearly visible (the same face as always: bronze-tanned skin, wild untidy chestnut-brown hair, a thick full brown beard, a heavy brow, powerful warm brown eyes, three long pale claw scars across the chest, a roaring grin); the tawny lion pelt covering his shoulders and back like a cloak with the paws knotted across his chest; a bare muscular chest with the claw scars visible; heavy bronze arm-rings and a heavy bronze wrestler's belt; a short skirt of dark-brown leather strips; bare strong legs with leather wraps and heavy sandals; NO shield. In both hands a huge gnarled wooden club with iron studs at its thick end.
+- REST: standing wide-legged and powerful, facing the viewer, the huge club resting on his shoulder
+- ATTACK: a mighty overhead smash of the club, the club high above his head and coming down, kept fully inside the cell
+- HIT: upper body leaning backwards, eyes closed, the club dropping, one hand raised
+- PORT: Show the lion-head hood over the wild hair, the thick beard, the roaring grin, the claw scars and the lion pelt over the shoulders.
+- FRONT: The huge studded club held in both hands in front of him, the lion pelt cloak with the knotted paws, the bare chest with the claw scars.
+- BACK: Show the lion pelt covering his back with the tail, the bronze belt and the huge club held at his side.
+
+## hero_hercules_sag | Hercules, Sagittarius Herculis
+
+- ROLE: the same legendary hero Hercules, now an archer with the poisoned arrows of the Hydra (Sagittarius Herculis)
+- FMT: the finished 3-cell sheet of the same hero Hercules in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Hercules in his base form: the new form is THE SAME MAN, with the same face as always: bronze-tanned skin, wild untidy chestnut-brown hair, a thick full brown beard, a heavy brow, powerful warm brown eyes, three long pale claw scars across the chest, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a wide leather headband over his wild chestnut-brown hair, the face fully open and clearly visible (the same face as always: bronze-tanned skin, wild untidy chestnut-brown hair, a thick full brown beard, a heavy brow, powerful warm brown eyes, three long pale claw scars across the chest, a focused, fearless look); a light armour of tawny lion-skin straps and dark leather across a bare muscular chest with the claw scars visible; a tawny lion pelt over his left shoulder; a leather archer's bracer on the left forearm and a leather glove on the right hand; a LONG ragged burnt-orange cape down to the calves; a thick rope belt with a short knife; sturdy brown boots; NO shield. In his left hand a huge dark-wood bow with bronze tips. On his back a big leather quiver full of arrows with sickly-green feathers and glowing green poisoned tips.
+- REST: standing wide-legged, facing the viewer, the huge bow held low in his left hand
+- ATTACK: standing with the body turned sideways, the huge bow fully drawn with a green-tipped poisoned arrow nocked and aimed forward, the bow kept close to the body and fully inside the cell
+- HIT: upper body leaning backwards, eyes closed, the bow tilting, one hand raised
+- PORT: Show the leather headband, the wild hair, the thick beard, the claw scars, the lion pelt on the shoulder and the quiver with the green-feathered poisoned arrows.
+- FRONT: The huge bow held ready in the left hand, the quiver with green-feathered arrows over his shoulder, the lion pelt.
+- BACK: Show the long ragged orange cape, the big quiver full of green-feathered poisoned arrows on his back and the huge bow.
+
+## hero_hercules_ath_pr | Hercules, Alcides
+
+- ROLE: the same legendary hero Hercules, now the prestige half-god Alcides (the strong one, descendant of Alcaeus)
+- FMT: the finished 3-cell sheet of the same hero Hercules in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Hercules in his specialisation form: the new form is THE SAME MAN, with the same face as always: bronze-tanned skin, wild untidy chestnut-brown hair, a thick full brown beard, a heavy brow, powerful warm brown eyes, three long pale claw scars across the chest, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: the head of a GOLDEN lion-skin pulled over his wild hair like a hood, its golden mane framing his forehead, the face fully open and clearly visible (the same face as always: bronze-tanned skin, wild untidy chestnut-brown hair, a thick full brown beard, a heavy brow, powerful warm brown eyes, three long pale claw scars across the chest, a proud, godlike roaring grin); a shining GOLDEN lion pelt covering his shoulders and back like a cloak with the paws knotted across his chest, golden eyes and claws; a bare muscular chest with the claw scars and a broad gold collar; heavy gold arm-rings and a heavy gold belt with a lion-head buckle; a short skirt of leather strips with gold studs; gold-trimmed sandals; NO shield. In both hands a colossal club of dark wood bound with gold bands and gold studs, glowing at its thick end. Golden sparks float around him. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing wide-legged and mighty, facing the viewer, the huge golden club resting on his shoulder
+- ATTACK: a mighty overhead smash of the golden club, the club high above his head and coming down, kept fully inside the cell
+- HIT: upper body leaning backwards, eyes closed, the club dropping, one hand raised
+- PORT: Show the golden lion-head hood, the thick beard, the roaring grin, the claw scars, the gold collar and the golden lion pelt.
+- FRONT: The colossal golden-banded club held in both hands in front of him, the golden lion pelt cloak, the broad gold collar and belt.
+- BACK: Show the golden lion pelt covering his back with the tail, the gold belt and the colossal club held at his side.
+
+## hero_hercules_sag_pr | Hercules, Deus
+
+- ROLE: the same legendary hero Hercules, now the prestige form Deus (the hero raised to the gods, apotheosis)
+- FMT: the finished 3-cell sheet of the same hero Hercules in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Hercules in his specialisation form: the new form is THE SAME MAN, with the same face as always: bronze-tanned skin, wild untidy chestnut-brown hair, a thick full brown beard, a heavy brow, powerful warm brown eyes, three long pale claw scars across the chest, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a shining wreath of golden olive leaves on his wild chestnut-brown hair, the face fully open and clearly visible (the same face as always: bronze-tanned skin, wild untidy chestnut-brown hair, a thick full brown beard, a heavy brow, powerful warm brown eyes, three long pale claw scars across the chest, a serene, godlike look); a bare muscular chest with the claw scars glowing softly gold; a radiant WHITE-and-GOLD lion pelt over his left shoulder; a gold collar and gold arm-rings with white gems; a belt of white cloth with a gold buckle; a LONG, flowing, shimmering WHITE-and-GOLD cape down to the ground with a wide gold border, pinned with a gold star brooch; gold-trimmed white sandals; NO shield. In his left hand a magnificent golden bow glowing with white light. On his back a golden quiver full of arrows with white-gold feathers and blazing star-shaped tips. A bright white-gold halo of light and tiny stars shines around him. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing tall and radiant, facing the viewer, the golden bow held low in his left hand
+- ATTACK: standing with the body turned sideways, the golden bow fully drawn with a blazing white-gold arrow nocked and aimed forward, the bow kept close to the body and fully inside the cell
+- HIT: upper body leaning backwards, eyes closed, the bow tilting, one hand raised
+- PORT: Show the golden olive wreath, the thick beard, the serene godlike face, the glowing claw scars, the white-and-gold lion pelt and the gold star brooch.
+- FRONT: The glowing golden bow held ready in the left hand, the golden quiver with star-tipped arrows over his shoulder, the long white-and-gold cape.
+- BACK: Show the long white-and-gold cape with the gold border, the golden quiver with the star-tipped arrows and the golden bow.
