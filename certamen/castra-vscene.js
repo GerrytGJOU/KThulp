@@ -59,7 +59,7 @@ function castraVSceneDuration(V){ const n = (V.fx||[]).length; return n ? 300 + 
 
 function castraVSceneHTML(V, me, en, mySpr, enSpr, log, menu){
   if(!document.getElementById("castraVSceneCss")){ const st = document.createElement("style"); st.id = "castraVSceneCss"; st.textContent = CASTRA_VSCENE_CSS; document.head.appendChild(st); }
-  const play = V.fxRound !== V.round && V.fx && V.fx.length > 0, intro = !V.sceneIntro; V.fxRound = V.round; V.sceneIntro = true;
+  const play = V.fxRound !== V.round && V.fx && V.fx.length > 0, intro = !V.sceneIntro, swIn = !!V.switchIn; V.fxRound = V.round; V.sceneIntro = true; V.switchIn = false;
   const B = CASTRA_VSCENE_BG[CASTRA_VSCENE_KIND[V.terrain && V.terrain.id] || "default"];
   const fx = play ? V.fx : [], T = i=>(0.3 + i).toFixed(2);
   const hits = { me:null, en:null }, acts = { me:null, en:null }, extra = [];
@@ -85,7 +85,7 @@ function castraVSceneHTML(V, me, en, mySpr, enSpr, log, menu){
     const lunge = a!=null ? `animation:${who==="me"?"cbLungeMe":"cbLungeEn"} .55s ease-in-out ${a}s both;` : "";
     const hit = h ? `animation:cbHit .6s ease-in-out ${h.t}s both${faint[who] ? `,cbFaint .9s ease-in ${h.t+0.7}s forwards` : ""};` : (faint[who] && !play ? "opacity:0;" : "");
     return `<div class="cbsp" style="left:${left}%;top:${top}%;--k:${k};transform:translate(-50%,-100%) scale(${k})">
-      <div style="${intro?`animation:${inAnim} .7s ease-out both;`:""}"><div style="${hit}"><div style="${lunge}"><div class="cbi" style="animation-delay:${who==="me"?0:-1.3}s"><div class="cbsh"></div>${html}</div></div></div></div></div>`;
+      <div style="${(intro || (who==="me" && swIn))?`animation:${inAnim} .7s ease-out both;`:""}"><div style="${hit}"><div style="${lunge}"><div class="cbi" style="animation-delay:${who==="me"?0:-1.3}s"><div class="cbsh"></div>${html}</div></div></div></div></div>`;
   };
   const pos = { en:{ x:73, y:44 }, me:{ x:27, y:90 } };
   const floats = (hits.en ? [{ side:"en", t:hits.en.t, txt:"−"+hits.en.n, col:hits.en.crit?"#ffd23a":"#fff", size:hits.en.crit?34:26, mult:hits.en.mult }] : []).concat(hits.me ? [{ side:"me", t:hits.me.t, txt:"−"+hits.me.n, col:hits.me.crit?"#ffd23a":"#fff", size:hits.me.crit?34:26, mult:hits.me.mult }] : []).concat(extra.filter(x=>x.txt)).map(f=>{
