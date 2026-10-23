@@ -63,7 +63,7 @@ SCREENS.castraBattle = function(){
   const B = CASTRA_B, m = B.mission;
   CASTRA_B.units = {}; CASTRA_B.fx = [];
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="castraBExit()">${iconSVG("shield",20,"currentColor")}</button><h2>⚔️ ${castraLaHTML(m.nm, m.nl, "m_"+m.id)}</h2></div>
+  <div class="scrhead"><button class="back" onclick="castraBLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>⚔️ ${castraLaHTML(m.nm, m.nl, "m_"+m.id)}</h2></div>
   <div id="cbHud" class="note" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"></div>
   <div id="cbWrap" style="position:relative;width:100%;overflow:hidden;border:2px solid var(--hi,#d4af37);border-radius:10px;background:#2c3a1f;touch-action:manipulation">
     <div id="cbMap" style="position:absolute;top:0;left:0;width:${CASTRA_P.cols*48}px;height:${CASTRA_P.rows*48}px;transform-origin:top left"></div>
