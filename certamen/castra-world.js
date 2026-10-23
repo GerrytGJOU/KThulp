@@ -111,11 +111,11 @@ function castraWorldDef(){
   // rand: bomen langs de rand (solide muur van bomen), met de uitgang open
   const ring = (x,y)=>x===0||y===0||x===cols-1||y===rows-1;
   // Eén soort boom in de rand: tree_b is een dichte bostegel (sluit aan op zichzelf) en mag niet met doorzichtige bomen (palm, dode boom) door elkaar.
-  const ringO = W.trees.find(t=>!/^tree_[ab]$/.test(t)) || "tree_b";
+  const ringO = W.trees.find(t=>!/^tree_[ab]$/.test(t)) || "tree_a";   // dezelfde boom als de losse bomen (tree_b is een dichte bostegel en paste hier niet)
   for(let y=0;y<rows;y++) for(let x=0;x<cols;x++){
     if(!ring(x,y) || exitCell(x,y)) continue;
     walls.push([x,y]); used[x+","+y]=1;
-    pieces.push({ o:ringO, x, y:y-1, noSolid:true });   // bosrand: alleen tree_b als de regio geen palmen of dode bomen heeft
+    pieces.push({ o:ringO, x, y:y-1, noSolid:true });   // bosrand: tree_a als de regio geen palmen of dode bomen heeft
   }
   // water (geblokkeerd), met een brug waar de weg doorheen loopt
   W.water.forEach(wt=>{
