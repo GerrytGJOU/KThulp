@@ -40,6 +40,12 @@ body.castra-stage-on #app{display:none !important}
 #cgBottom > *:empty{display:none}
 #cgInfo{position:absolute;z-index:80;top:6px;right:58px;left:58px;max-width:520px;margin-left:auto;max-height:calc(100% - 12px);overflow-y:auto;touch-action:pan-y;background:var(--parch,#efe1b9);color:var(--parch-ink,#2b1d0e);border:3px solid var(--parch-edge,#4a3416);border-radius:10px;padding:10px 14px;font-size:14px;box-shadow:0 4px 18px rgba(0,0,0,.6)}
 #cgInfo[hidden]{display:none}
+#cgBar button.cgfs{padding:0 10px;font-size:14px;white-space:nowrap}
+#cgFloat{position:absolute;z-index:75;left:6px;top:56px;display:none;flex-direction:column;gap:6px}
+#cgFloat button{min-width:40px;min-height:40px;font-size:18px;line-height:1;cursor:pointer;font-family:inherit;border:2px solid var(--hi,#d4af37);border-radius:8px;background:rgba(27,20,12,.82);color:var(--hi-bright,#e8c96a)}
+body.castra-immersive #cgBar{display:none}
+body.castra-immersive #cgFloat{display:flex}
+body.castra-immersive .portal-back{display:none !important}
 #cgInfo .foot{margin-top:10px;font-size:12px;opacity:.7;text-align:center}
 `;
 
@@ -48,7 +54,7 @@ let CASTRA_STAGE = { ro:null };
 function castraStageRemove(){
   if(CASTRA_STAGE.ro){ try{ CASTRA_STAGE.ro.disconnect(); }catch(_){} CASTRA_STAGE.ro = null; }
   const s = document.getElementById("castraStage"); if(s) s.remove();
-  document.body.classList.remove("castra-stage-on");
+  document.body.classList.remove("castra-stage-on", "castra-immersive");   // de keuze zelf blijft bewaard (localStorage)
 }
 // Elke schermwissel (H) ruimt de oude speellaag op, ook als een scherm niet via go() wordt geopend.
 const _castraStageH0 = H;
@@ -61,6 +67,23 @@ function castraStageFs(){
     else (d.exitFullscreen || d.webkitExitFullscreen).call(d);
   }catch(_){}
 }
+/* Full-screen (immersief): balk en terugknop van de pagina verdwijnen, de kaart vult alles. De info blijft bereikbaar via
+   de knoppen links (? uitleg, ‹ terug) en het menu (☰); grondstoffen en opdrachten blijven als strook bovenaan. Waar de
+   browser het ondersteunt (laptop, Android, iPad) gaat ook echt volledig scherm aan; op een iPhone is het de verborgen balk. */
+function castraStageImmersive(on){
+  const b = document.body, fsOk = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled), d = document;
+  if(on == null) on = !b.classList.contains("castra-immersive");
+  b.classList.toggle("castra-immersive", !!on);
+  try{ localStorage.setItem("castra_immersive", on ? "1" : "0"); }catch(_){}
+  try{
+    const fsEl = d.fullscreenElement || d.webkitFullscreenElement, e = d.documentElement;
+    if(on && fsOk && !fsEl){ CASTRA_STAGE.fsEntered = true; (e.requestFullscreen || e.webkitRequestFullscreen).call(e); }
+    else if(!on && fsEl){ CASTRA_STAGE.fsEntered = false; (d.exitFullscreen || d.webkitExitFullscreen).call(d); }
+  }catch(_){}
+  const f = document.getElementById("cgFit"); if(f) f.click();
+  window.dispatchEvent(new Event("resize"));
+}
+document.addEventListener("fullscreenchange", ()=>{ if(!document.fullscreenElement && CASTRA_STAGE.fsEntered){ CASTRA_STAGE.fsEntered = false; document.body.classList.remove("castra-immersive"); try{ localStorage.setItem("castra_immersive","0"); }catch(_){} window.dispatchEvent(new Event("resize")); } });
 function castraStageInfoToggle(){ const i = document.getElementById("cgInfo"); if(i) i.hidden = !i.hidden; }
 
 function castraStageBuild(kind){
@@ -69,14 +92,14 @@ function castraStageBuild(kind){
   if(!document.getElementById("castraStageCss")){ const st = document.createElement("style"); st.id = "castraStageCss"; st.textContent = CASTRA_STAGE_CSS; document.head.appendChild(st); }
   const back = app.querySelector(".scrhead .back"), h2 = app.querySelector(".scrhead h2");
   const hodie = el("castraRes") && el("castraRes").nextElementSibling;
-  const fsOk = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
   const help = kind==="world"
     ? `Sleep met je duim of gebruik de pijltjestoetsen om te lopen, of tik ergens om daarheen te gaan. Loop door het <b>hoge, donkere gras</b>: daar kun je vijanden ontmoeten. Het menu (☰) staat rechtsboven.`
     : `Sleep met je duim of gebruik de pijltjestoetsen om te lopen, of tik op een gebouw om het te openen. Het menu (☰) staat rechtsboven.`;
   const st = document.createElement("div"); st.id = "castraStage";
   st.innerHTML = `<div id="cgBar"><span id="cgBackSlot" style="display:flex"></span><div id="cgTitle"></div><span style="flex:1"></span>
-      <button class="cgb" id="cgHelp" aria-label="Uitleg" onclick="castraStageInfoToggle()">?</button>${fsOk ? `<button class="cgb" id="cgFs" aria-label="Volledig scherm" onclick="castraStageFs()">⛶</button>` : ""}</div>
-    <div id="cgMain"><div id="cgTop"></div><div id="cgBottom"></div><div id="cgInfo" hidden><div>${help}</div></div></div>`;
+      <button class="cgb" id="cgHelp" aria-label="Uitleg" onclick="castraStageInfoToggle()">?</button><button class="cgb cgfs" id="cgFs" aria-label="Full-screen" onclick="castraStageImmersive(true)">⛶ Full-screen</button></div>
+    <div id="cgMain"><div id="cgTop"></div><div id="cgBottom"></div><div id="cgInfo" hidden><div>${help}</div></div>
+      <div id="cgFloat"><button aria-label="Sluit full-screen" onclick="castraStageImmersive(false)">⤡</button><button aria-label="Uitleg" onclick="castraStageInfoToggle()">?</button>${back ? `<button aria-label="Terug" onclick="${esc(back.getAttribute("onclick")||"")}">‹</button>` : ""}</div></div>`;
   document.body.appendChild(st);
   document.body.classList.add("castra-stage-on");
   const main = st.querySelector("#cgMain"), top = st.querySelector("#cgTop"), bottom = st.querySelector("#cgBottom"), info = st.querySelector("#cgInfo");
@@ -87,6 +110,8 @@ function castraStageBuild(kind){
   ["cwPanel","castraPanel"].forEach(id=>{ const n = el(id); if(n) bottom.appendChild(n); });
   if(hodie && (hodie.id==="castraHodie" || /castraHodieToggle/.test(hodie.innerHTML))) info.appendChild(hodie);
   info.insertAdjacentHTML("beforeend", foot());
+  let pref = false; try{ pref = localStorage.getItem("castra_immersive")==="1"; }catch(_){}
+  if(pref) document.body.classList.add("castra-immersive");    // eerder gekozen: zonder fullscreen-verzoek (dat vraagt een tik)
   const fit = kind==="world" ? castraWorldFit : castraFit;
   fit();
   if(window.ResizeObserver){ CASTRA_STAGE.ro = new ResizeObserver(()=>fit()); CASTRA_STAGE.ro.observe(wrap); }

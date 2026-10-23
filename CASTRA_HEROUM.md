@@ -472,3 +472,6 @@ Soldaten blijven relevant naast de schaarse helden doordat ze het kamp laten dra
 - Afweging: een werker doet niet mee aan gevechten en jacht (`castraBHealthy`, venatio), kan niet trainen of verhandeld worden tot hij wordt teruggeroepen (één tik). Vóór elke wijziging wordt de productie afgerekend (`castraCollect`).
 - Opslag: `s.job` (gebouw-id) per soldaat. Latijn: "Hic milites laborant." met uitleg.
 - Nog niet getest in een klastest: de bedragen (zie `CASTRA_OPUS`) zijn een eerste inschatting.
+
+## Speelscherm en full-screen (2026-10-23)
+`certamen/castra-stage.js`: kamp en wereld vullen het scherm (vaste laag, geen paginascroll); bovenbalk met terugknop, titel, uitleg (?) en de knop **Full-screen**; grondstoffen en opdrachten als strook bovenaan, gebouw- en personeelsinfo als paneel onderin over de kaart. Full-screen (immersief) verbergt de balk en de terugknop van de pagina, zet waar de browser het kan ook echt volledig scherm aan, en laat links drie knoppen zien (⤡ sluiten, ? uitleg, ‹ terug) naast het menu (☰) rechtsboven. De keuze wordt onthouden (`localStorage castra_immersive`). Nog niet: de gevechtsschermen (Proelium, jacht) hebben deze indeling nog niet.
