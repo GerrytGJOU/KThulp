@@ -925,3 +925,68 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 - PORT: Show the gold crested helmet with the flowing red-and-gold crest, the blond hair, the proud look, the huge gold shoulder plate and the crimson cloak.
 - FRONT: Achilles standing in the golden chariot seen from the front, the two white horses with golden harness in front of the chariot, the spear held upright, the reins in his left hand.
 - BACK: Show the chariot seen from behind, the golden winged wheels, Achilles standing in it with his long crimson cloak and the flowing helmet crest, the two white horses beyond it.
+
+## hero_hector | Hector
+
+- ROLE: legendary hero, the noble prince and chief defender of Troy (infantry)
+- FMT: the finished 3-cell sheet of the Greek recruit Ephebus: portrait, battle front, battle back
+- INTRO: The attached image is a six-cell sprite sheet of a Greek soldier: it shows only the required LAYOUT, pose list, pixel size and level of detail. The new character is a legendary hero, NOT a soldier: entirely different clothing, colours and equipment as described below; do NOT copy the soldier's clothing, colours or shield.
+- OUTFIT: He wears: an open-faced bronze helmet with cheek guards and a tall deep-blue horsehair crest, the face fully visible (tanned skin, short black hair, a short full black beard, dark-brown eyes, a noble earnest look); a small silver horse-head pendant on a cord at his neck; a polished bronze breastplate over a white tunic with a deep-blue hem; a LONG deep-blue cape down to the calves pinned with a round silver brooch; a brown leather belt with a silver buckle; silver-bronze bracers and greaves; NO shield. In his right hand a straight sword with a silver blade and a bronze hilt.
+- REST: standing upright and steady, facing the viewer, the sword pointing down in his right hand
+- ATTACK: one step forward, the sword thrust forward, the long blue cape swinging behind him
+- HIT: upper body leaning backwards, eyes closed, the sword dropping, one hand raised
+- PORT: Show the open bronze helmet with the tall blue crest, the short black beard, the earnest look, the silver horse-head pendant, the bronze breastplate collar and the long blue cape with the silver brooch.
+- FRONT: Sword held ready in the right hand, the bronze breastplate over the white-and-blue tunic, the long blue cape, the silver horse-head pendant.
+- BACK: Show the long deep-blue cape, the tall blue helmet crest and the sword.
+
+## hero_hector_def | Hector, Defensor Troiae
+
+- ROLE: the same legendary hero Hector, now the defender of Troy (Defensor Troiae), hoplite
+- FMT: the finished 3-cell sheet of the same hero Hector in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Hector in his base form: the new form is THE SAME MAN, with the same face as always: tanned skin, short black hair, a short full black beard, dark-brown eyes, a noble earnest look, a small silver horse-head pendant on a cord at his neck, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a heavy steel-grey Corinthian helmet pushed back so the face is fully open and clearly visible (the same face as always: tanned skin, short black hair, a short full black beard, dark-brown eyes, a noble earnest look, a small silver horse-head pendant on a cord at his neck), with a tall deep-blue horsehair crest; a heavy dark-steel-and-bronze plate armour with large shoulder plates over a white tunic with a deep-blue hem; a short deep-blue cape; steel greaves; the small silver horse-head pendant. In his left hand a very big tall oval hoplon shield of dark blue with a silver rim and a white stone tower (the walls of Troy) as emblem. In his right hand a strong spear with a silver leaf-shaped head.
+- REST: standing firmly like a wall, facing the viewer, the big tall shield at his left side, the spear held upright beside him
+- ATTACK: one step forward, the spear thrust forward over the top of the raised shield
+- HIT: upper body leaning backwards, eyes closed, the shield sagging, the spear tilting
+- PORT: Show the steel helmet pushed back with the tall blue crest, the short black beard, the earnest look, the silver horse-head pendant and the dark steel plate armour.
+- FRONT: The very big blue shield with the white tower raised on the left arm, the spear held ready in the right hand, the heavy steel armour.
+- BACK: Show the back of the big blue shield, the short blue cape, the tall blue crest and the spear.
+
+## hero_hector_def_pr | Hector, Murus Troiae
+
+- ROLE: the same legendary hero Hector, now the prestige form Murus Troiae (the wall of Troy)
+- FMT: the finished 3-cell sheet of the same hero Hector in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Hector in his specialisation form: the new form is THE SAME MAN, with the same face as always: tanned skin, short black hair, a short full black beard, dark-brown eyes, a noble earnest look, a small silver horse-head pendant on a cord at his neck, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a magnificent silver-and-gold Corinthian helmet pushed back so the face is fully open and clearly visible (the same face as always: tanned skin, short black hair, a short full black beard, dark-brown eyes, a noble earnest look, a small silver horse-head pendant on a cord at his neck), with a tall crest of deep blue and silver; a splendid ceremonial armour of polished silver and gold plates with large gold shoulder plates over a white tunic with gold embroidery; a LONG, rich golden mantle with a deep-blue lining and a wide gold border, pinned with a large round silver brooch; silver greaves; the small silver horse-head pendant. In his left hand a huge gold-and-silver TOWER shield showing the crenellated stone walls and towers of Troy in relief, with a glowing blue rim. In his right hand a strong spear with a long polished silver head and a gold-banded shaft. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing firmly and radiant like a wall, facing the viewer, the huge tower shield at his left side, the spear held upright beside him
+- ATTACK: one step forward, the spear thrust forward over the top of the raised tower shield
+- HIT: upper body leaning backwards, eyes closed, the shield sagging, the spear tilting
+- PORT: Show the silver-and-gold helmet pushed back with the tall blue-and-silver crest, the short black beard, the silver horse-head pendant, the large gold shoulder plate and the golden mantle.
+- FRONT: The huge tower shield with the walls of Troy raised on the left arm, the spear held ready in the right hand, the silver-and-gold armour.
+- BACK: Show the back of the huge tower shield, the long golden mantle with the blue lining, the tall crest and the spear.
+
+## hero_hector_pat | Hector, Pater Familias
+
+- ROLE: the same legendary hero Hector, now the protective father of Troy (Pater Familias), priest and healer
+- FMT: the finished 3-cell sheet of the same hero Hector in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Hector in his base form: the new form is THE SAME MAN, with the same face as always: tanned skin, short black hair, a short full black beard, dark-brown eyes, a noble earnest look, a small silver horse-head pendant on a cord at his neck, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a plain bronze open circlet-helmet without a crest, the face fully open and clearly visible (the same face as always: tanned skin, short black hair, a short full black beard, dark-brown eyes, a noble earnest look, a small silver horse-head pendant on a cord at his neck), the expression gentle and fatherly; a long white priestly robe with deep-blue and silver borders reaching to the ankles, a deep-blue sash around the waist, a light bronze shoulder guard on his right shoulder only; a deep-blue mantle draped over his shoulders pinned with a round silver brooch; the small silver horse-head pendant; leather sandals. NO shield, NO sword. In his right hand a tall wooden staff topped with a silver horse head that glows with a soft blue light; his left hand held out open in blessing.
+- REST: standing calm and kindly, facing the viewer, the staff held upright in his right hand, the left hand open at his side
+- ATTACK: one step forward, the staff raised and pointed forward, a soft blue glow around the silver horse head, the left hand held out in blessing
+- HIT: upper body leaning backwards, eyes closed, the staff tilting, one hand raised
+- PORT: Show the bronze circlet-helmet, the short black beard, the gentle fatherly look, the silver horse-head pendant, the white robe collar and the blue mantle with the silver brooch.
+- FRONT: The staff with the glowing silver horse head held in the right hand, the left hand open in blessing, the long white-and-blue robe.
+- BACK: Show the long white robe with the blue sash, the blue mantle and the staff.
+
+## hero_hector_pat_pr | Hector, Princeps Troianorum
+
+- ROLE: the same legendary hero Hector, now the prestige form Princeps Troianorum (the prince of the Trojans)
+- FMT: the finished 3-cell sheet of the same hero Hector in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Hector in his specialisation form: the new form is THE SAME MAN, with the same face as always: tanned skin, short black hair, a short full black beard, dark-brown eyes, a noble earnest look, a small silver horse-head pendant on a cord at his neck, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a golden crown with tall points and a small silver horse head in the centre, the face fully open and clearly visible (the same face as always: tanned skin, short black hair, a short full black beard, dark-brown eyes, a noble earnest look, a small silver horse-head pendant on a cord at his neck), a wise and regal look; a splendid long white-and-gold robe with fine gold embroidery under a light gold breastplate with a silver horse-head emblem, large gold shoulder plates; a LONG, rich, shimmering royal PURPLE mantle down to the ground with a white-ermine collar, a wide gold border and a large round gold brooch; gold bracers; the small silver horse-head pendant. NO shield, NO sword. In his right hand a tall golden sceptre topped with a shining silver horse head that glows with a blue light; his left hand held out open in blessing. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing tall and noble, facing the viewer, the golden sceptre held upright in his right hand, the left hand open at his side
+- ATTACK: one step forward, the sceptre raised and pointed forward, a blue glow around the silver horse head, the left hand held out in blessing
+- HIT: upper body leaning backwards, eyes closed, the sceptre tilting, one hand raised
+- PORT: Show the golden crown with the silver horse head, the short black beard, the wise look, the silver horse-head pendant, the large gold shoulder plate and the purple mantle with the white collar.
+- FRONT: The golden sceptre with the glowing silver horse head held in the right hand, the left hand open in blessing, the white-and-gold robe with the light gold breastplate.
+- BACK: Show the long purple mantle with the gold border, the golden crown and the sceptre.
