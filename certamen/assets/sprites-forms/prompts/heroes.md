@@ -730,3 +730,68 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 - PORT: Show the golden crown with the owl, the stubble beard, the gold spiral pendant, the large gold shoulder plate and the purple mantle with the white collar.
 - FRONT: Sword raised in the right hand, the tall golden owl sceptre in the left, the white-and-gold armour with the owl emblem.
 - BACK: Show the long purple mantle with the gold border, the golden crown and the raised sword.
+
+## hero_atalanta | Atalanta
+
+- ROLE: legendary hero, the swift huntress of Greece who outran every suitor (ranged)
+- FMT: the finished 3-cell sheet of the Greek recruit Ephebus: portrait, battle front, battle back
+- INTRO: The attached image is a six-cell sprite sheet of a Greek soldier: it shows only the required LAYOUT, pose list, pixel size and level of detail. The new character is a legendary hero, NOT a soldier: entirely different clothing, colours and equipment as described below; do NOT copy the soldier's clothing, colours or shield.
+- OUTFIT: She wears: a green cloth bandana tied around her forehead, NO helmet, the face clearly visible (olive skin, bright amber eyes, a lively determined look) with a long thick dark-brown braid hanging over her right shoulder tied with a green ribbon; a small gold apple pendant on a thin cord at her neck; a sleeveless tunic of patched tan leather over a short cream chiton, a brown leather belt with a hunting knife, a SHORT forest-green cape pinned at the left shoulder with a small bronze brooch, brown leather bracers, leather-wrapped boots laced to the calf; NO shield. In her left hand a short wooden hunting bow, over her back a brown leather quiver with green-feathered arrows.
+- REST: standing light and alert, facing the viewer, the short bow held low in her left hand
+- ATTACK: one step forward, the bow drawn with an arrow aimed forward, the short green cape swinging behind her
+- HIT: upper body leaning backwards, eyes closed, the bow dropping, one hand raised
+- PORT: Show the green bandana, the long dark-brown braid with the green ribbon, the alert amber eyes, the gold apple pendant and the short green cape with the bronze brooch.
+- FRONT: The short bow held ready in the left hand, the quiver with green-feathered arrows visible over her shoulder, the hunting knife at the belt.
+- BACK: Show the long braid down her back, the short green cape, the quiver with its green-feathered arrows and the bow.
+
+## hero_atalanta_sag | Atalanta, Sagittaria
+
+- ROLE: the same legendary hero Atalanta, now the master markswoman (Sagittaria), archer
+- FMT: the finished 3-cell sheet of the same hero Atalanta in her base form: it shows the format; the new form keeps the same woman's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Atalanta in her base form: the new form is THE SAME WOMAN, with the same face as always: olive skin, a long thick dark-brown braid hanging over her right shoulder tied with a green ribbon, bright amber eyes, a lively determined look, a small gold apple pendant on a thin cord at her neck, but she has changed her equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: a green cloth bandana with a small gold leaf at the brow, NO helmet, the face fully open and clearly visible (the same face as always: olive skin, a long thick dark-brown braid hanging over her right shoulder tied with a green ribbon, bright amber eyes, a lively determined look, a small gold apple pendant on a thin cord at her neck); a fitted light armour of dark-green leather with bronze studs and small bronze shoulder guards over a short cream chiton; a SHORT forest-green cape; a broad brown leather belt with a gold buckle; brown leather bracers with bronze plates; leather boots laced to the calf. NO shield. In both hands a long recurve bow of dark polished wood with gold tips and a green string; on her back a big brown leather quiver full of green-feathered arrows.
+- REST: standing tall and steady, facing the viewer, the long recurve bow held low in her left hand
+- ATTACK: one step forward, the long bow fully drawn with an arrow aimed forward, the short green cape swinging behind her
+- HIT: upper body leaning backwards, eyes closed, the bow tilting, one hand raised
+- PORT: Show the green bandana with the gold leaf, the long braid with the green ribbon, the gold apple pendant, the bronze shoulder guard and the green cape.
+- FRONT: The long recurve bow held ready in the left hand, an arrow in the right, the big quiver with green-feathered arrows over her shoulder, the dark-green leather armour.
+- BACK: Show the long braid, the short green cape, the big quiver full of arrows and the long bow.
+
+## hero_atalanta_sag_pr | Atalanta, Venatrix Dianae
+
+- ROLE: the same legendary hero Atalanta, now the prestige form Venatrix Dianae (the huntress of Diana)
+- FMT: the finished 3-cell sheet of the same hero Atalanta in her specialisation form: it shows the format; the new prestige form keeps the same woman's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Atalanta in her specialisation form: the new form is THE SAME WOMAN, with the same face as always: olive skin, a long thick dark-brown braid hanging over her right shoulder tied with a green ribbon, bright amber eyes, a lively determined look, a small gold apple pendant on a thin cord at her neck, now at the height of her legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around her, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: a thin silver-and-gold circlet with a small silver crescent moon at the brow instead of a bandana, the face fully open and clearly visible (the same face as always: olive skin, a long thick dark-brown braid hanging over her right shoulder tied with a green ribbon, bright amber eyes, a lively determined look, a small gold apple pendant on a thin cord at her neck); a splendid fitted armour of white-and-gold leather with gold plates and silver crescent-moon ornaments on the shoulders over a short white chiton with gold embroidery; a LONG, rich, flowing GOLD cape with a forest-green lining and a gold border, pinned with a round gold brooch; a gold-buckled belt; gold bracers; gold-trimmed boots. NO shield. In her hands a magnificent long recurve bow of white wood with a gold crescent at each end and a glowing silver string, an arrow with a bright glowing silver tip aimed forward; on her back a golden quiver with white-and-gold feathered arrows. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing tall and radiant, facing the viewer, the long glowing bow held low in her left hand
+- ATTACK: one step forward, the long bow fully drawn with a glowing arrow aimed forward, the long gold cape swinging behind her
+- HIT: upper body leaning backwards, eyes closed, the bow tilting, one hand raised
+- PORT: Show the silver crescent circlet, the long braid with the green ribbon, the gold apple pendant, the gold-and-silver shoulder plate and the gold cape with the green lining.
+- FRONT: The long glowing bow held ready in the left hand, the glowing arrow in the right, the golden quiver over her shoulder, the white-and-gold armour with crescent moons.
+- BACK: Show the long braid, the long gold cape with its green lining and gold border, the golden quiver and the glowing bow.
+
+## hero_atalanta_cur | Atalanta, Cursor
+
+- ROLE: the same legendary hero Atalanta, now the swiftest runner of Greece (Cursor), scout
+- FMT: the finished 3-cell sheet of the same hero Atalanta in her base form: it shows the format; the new form keeps the same woman's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Atalanta in her base form: the new form is THE SAME WOMAN, with the same face as always: olive skin, a long thick dark-brown braid hanging over her right shoulder tied with a green ribbon, bright amber eyes, a lively determined look, a small gold apple pendant on a thin cord at her neck, but she has changed her equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: a red cloth bandana tied around her forehead with the ends fluttering behind her, NO helmet, the face fully open and clearly visible (the same face as always: olive skin, a long thick dark-brown braid hanging over her right shoulder tied with a green ribbon, bright amber eyes, a lively determined look, a small gold apple pendant on a thin cord at her neck); the braid swinging free; a very light sleeveless short tunic of pale tan cloth with a bare midriff and a thin brown leather harness across the chest, NO cape; a narrow leather belt with a small pouch; bare arms with thin leather wrist wraps; light leather sandals laced high around the calf. NO shield. In her right hand a slim light throwing javelin with a leaf-shaped bronze tip, in her left hand a second shorter javelin.
+- REST: standing on the balls of her feet, facing the viewer, one javelin held low in each hand, ready to sprint
+- ATTACK: a long running lunge forward, the right javelin thrust forward, the braid and the bandana ends flying behind her
+- HIT: upper body leaning backwards, eyes closed, the javelins dropping, one hand raised
+- PORT: Show the red bandana with the fluttering ends, the long braid, the sharp amber eyes, the gold apple pendant and the brown leather harness.
+- FRONT: A javelin in each hand held ready, the light tan tunic, the leather harness and the light sandals, no cape.
+- BACK: Show the long braid flying, the red bandana ends, the leather harness straps and the javelins.
+
+## hero_atalanta_cur_pr | Atalanta, Velocissima
+
+- ROLE: the same legendary hero Atalanta, now the prestige form Velocissima (the swiftest of all)
+- FMT: the finished 3-cell sheet of the same hero Atalanta in her specialisation form: it shows the format; the new prestige form keeps the same woman's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Atalanta in her specialisation form: the new form is THE SAME WOMAN, with the same face as always: olive skin, a long thick dark-brown braid hanging over her right shoulder tied with a green ribbon, bright amber eyes, a lively determined look, a small gold apple pendant on a thin cord at her neck, now at the height of her legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around her, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: a golden headband with two small white wings at the temples instead of a bandana, the face fully open and clearly visible (the same face as always: olive skin, a long thick dark-brown braid hanging over her right shoulder tied with a green ribbon, bright amber eyes, a lively determined look, a small gold apple pendant on a thin cord at her neck); the braid tied with a gold ribbon; a light tunic of white-and-gold cloth with gold embroidery and a gold-studded leather harness; a SHORT flowing GOLD cape that streams behind her like wind; gold bracers; light golden sandals with small white wings at the ankles. NO shield. In her right hand a slim polished javelin with a gold shaft and a shining silver tip; in her left hand a shining golden apple that glows with a warm light. Around the figure a faint glow: a few tiny sparkle pixels and small white speed lines, kept close to the body and completely inside the cell.
+- REST: standing on the balls of her feet, facing the viewer, the javelin low in her right hand, the glowing golden apple held up in her left
+- ATTACK: a long running lunge forward, the golden javelin thrust forward, the gold cape and the braid streaming behind her
+- HIT: upper body leaning backwards, eyes closed, the javelin dropping, one hand raised
+- PORT: Show the winged golden headband, the long braid with the gold ribbon, the glowing golden apple pendant, the gold shoulder strap and the gold cape.
+- FRONT: The golden javelin held ready in the right hand, the glowing golden apple in the left, the white-and-gold tunic, the winged golden sandals.
+- BACK: Show the long braid with the gold ribbon, the short gold cape streaming like wind, the winged sandals and the javelin.
