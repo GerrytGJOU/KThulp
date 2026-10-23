@@ -294,12 +294,12 @@ _HE_H("hector", "⛑️", "Galea Hectoris", "De helm van Hector",
         steps:[ _HE_K(12,"troia","muros"), _HE_C(3), _HE_B("boss_troia") ] },
       { nm:"Murus Troiae", nl:"De muur van Troje", look:{ armor:"ceremonieel", capekleur:"goud", schild:"tower" },
         leg:{ id:"murus_troiae", la:"Murus Troiae", nl:"De muur van Troje: +1 leven na elke golf, torens dichtbij +12% schade en +10% schade", fx:{ regen:1, aura:{ dmg:12, radius:2000 }, dmg:10 }, mv:_HE_SHIELD } }),
-    _HE_S("hector","dux","centurio","Dux Troianus","Trojaanse bevelhebber","Hector wordt bevelhebber: hij versterkt de torens om zich heen.",
-      { armor:"ceremonieel", cape:"lang", capekleur:"blauw", helm:"open" },
-      { nm:["Exercitus meus","Mijn leger"], seek:["Exercitum meum","mijn leger"], nom:["Exercitus meus","Mijn leger"],
+    _HE_S("hector","pat","priester","Pater Familias","Gezinshoofd","Hector wordt een beschermende vader: hij geneest, zegent en versterkt alle torens.",
+      { armor:"robe", cape:"lang", capekleur:"blauw", helm:"open" },
+      { nm:["Penates mei","Mijn huisgoden"], seek:["Penates meos","mijn huisgoden"], nom:["Penates mei","Mijn huisgoden"],
         steps:[ _HE_K(12,"troia","scamander"), _HE_C(3), _HE_B("boss_graecia") ] },
       { nm:"Princeps Troianorum", nl:"Prins van Troje", look:{ armor:"ceremonieel", capekleur:"paars", helm:"kroon" },
-        leg:{ id:"hortatio_hectoris", la:"Hortatio Hectoris", nl:"De aanmoediging van Hector: alle torens +8% schade en +8% beloning", fx:{ global:8, reward:8 }, mv:_HE_BUFF } }) ]);
+        leg:{ id:"tutela_familiae", la:"Tutela familiae", nl:"De bescherming van het gezin: +1 leven na elke golf en alle torens +5% schade", fx:{ regen:1, global:5 }, mv:{ kind:"heal", pp:3, nl:"Geneest 30% van je levenspunten" } } }) ]);
 
 _HE_H("penthesilea", "🪓", "Bipennis Martis", "De strijdbijl van Mars",
   { nm:["Bipennis Martis","De strijdbijl van Mars"], seek:["Bipennem meam","mijn strijdbijl"], nom:["Bipennis mea","Mijn strijdbijl"],
@@ -368,7 +368,7 @@ Object.keys(CASTRA_HERO_SIG).forEach(id=>{
   "facem":"fakkel (4e naamval)", "fax":"fakkel", "ferro":"van ijzer", "fugere":"vluchten", "hecate":"Hecate (godin van de magie)", "hecates":"van Hecate", "herbae":"kruiden", "herbas":"kruiden (4e naamval)",
   "iasoni":"aan Jason", "icarum":"Icarus (4e naamval)", "ingenium":"vernuft", "instrumenta":"gereedschap", "legit":"verzamelt", "lego":"ik verzamel", "libera":"vrij", "ligno":"van hout",
   "machina":"machine", "machinam":"machine (4e naamval)", "machinas":"machines", "medeae":"van Medea", "minerva":"Minerva", "minoem":"Minos (4e naamval)", "minoi":"voor Minos", "minos":"Minos (koning van Creta)",
-  "pennis":"veren", "domina":"meesteres", "lux":"licht", "venefica":"gifmengster", "maga":"tovenares", "colchica":"uit Colchis", "machinator":"werktuigbouwer", "architectus":"bouwer", "labyrinthi":"van het labyrint", "daedali":"van Daedalus", "volator":"vlieger", "dominus":"heer", "aeris":"van de lucht", "volatus":"vlucht", "equum":"paard (4e naamval)", "ligneum":"houten", "ligneus":"houten", "equi":"van het paard", "qua":"welke", "re":"zaak, ding", "venena":"gif", "venenum":"gif" });
+  "pennis":"veren", "penates":"huisgoden", "mei":"mijn", "familias":"gezin", "pater":"vader", "tutela":"bescherming", "familiae":"van het gezin", "domina":"meesteres", "lux":"licht", "venefica":"gifmengster", "maga":"tovenares", "colchica":"uit Colchis", "machinator":"werktuigbouwer", "architectus":"bouwer", "labyrinthi":"van het labyrint", "daedali":"van Daedalus", "volator":"vlieger", "dominus":"heer", "aeris":"van de lucht", "volatus":"vlucht", "equum":"paard (4e naamval)", "ligneum":"houten", "ligneus":"houten", "equi":"van het paard", "qua":"welke", "re":"zaak, ding", "venena":"gif", "venenum":"gif" });
 
 // Heldenmenu en evolutie gebruiken de heldendata, dus meteen opnieuw toepassen op reeds geladen helden.
 try{ if(typeof castraHeroEvoApplyAll==="function") castraHeroEvoApplyAll(); }catch(e){}
