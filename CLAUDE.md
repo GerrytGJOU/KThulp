@@ -71,6 +71,7 @@ spelregels, features of het datamodel raakt:
   (spelverloop, AP, heldenmodus, profiel, docent-instellingen) niet. Werk bij
   elke Battle Mode-wijziging die de spelregels, klassen of features raakt ook
   deze FAQ bij.
+- Castra Heroum heeft een eigen Handleiding/FAQ (`certamen/castra-faq.js`, `CASTRA_FAQ`; bereikbaar via het Certamen-hoofdmenu → Handleiding en in het spel via ☰ en ?). Werk die bij elke wijziging aan spelregels, bediening, helden, jacht, tower defence of opdrachten bij.
 - Skill-trees (Battle Mode/Boss Battle/Total War, sinds 2026-10-05, live voor alle leerlingen sinds 2026-10-06 — standaard aan, `config/skillTrees/enabled:false` is alleen een noodrem): data in
   `certamen/skilltree-data.js`, scherm in `skilltree.js`, gevechtseffecten in
   `skilltree-engine.js` — zie BATTLE_MODE.md §Skill-trees. Wijzig je een
