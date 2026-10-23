@@ -13,11 +13,12 @@
    Laadt vóór castra.js.
    ============================================================================ */
 
-const CASTRA_TS_VER = "v=1";
+const CASTRA_TS_VER = "v=2";
 const CASTRA_TS_FILES = {
   A5: "assets/tilesets/Outside_A5.png",
   B:  "assets/tilesets/Outside_B.png",
   A1: "assets/tilesets/Outside_A1.png",
+  X:  "assets/tilesets/Castra_extra.png",     // eigen tekeningen (tools/gen_castra_flags.py): vlaggen voor het Praetorium
 };
 const CASTRA_TS_IMG = {};
 let _castraTsPromise = null;
@@ -93,6 +94,9 @@ const CASTRA_OBJ = {
   dry_plant:  { s:"B", c:15, r:5,  w:1, h:1, solid:"none" },
   dry_fern:   { s:"B", c:15, r:6,  w:1, h:1, solid:"none" },
   leaves:     { s:"B", c:12, r:7,  w:1, h:1, solid:"none" },
+  // vlaggen (Castra_extra.png): staan in de hoeken van het Praetorium, naast de ingang; l/r = kant waarheen het doek wappert
+  flag_red_l: { s:"X", c:0, r:0, w:1, h:2, solid:"none" },  flag_red_r:  { s:"X", c:1, r:0, w:1, h:2, solid:"none" },
+  flag_gold_l:{ s:"X", c:2, r:0, w:1, h:2, solid:"none" },  flag_gold_r: { s:"X", c:3, r:0, w:1, h:2, solid:"none" },
 };
 
 /* ---- gebouwen: tegelkunst per gebouw (relatief aan slot; fw×fh = voetafdruk) ---- */
@@ -167,6 +171,9 @@ function castraCampDef(){
     const site = b.start===0 && typeof CASTRA!=="undefined" && CASTRA && castraLvl(b.id)===0 && art.fw===2 && art.fh===2;
     (site ? CASTRA_BUILDING_SITE : art.pieces).forEach(p=>pieces.push({ o:p.o, x:b.slot.x+p.dx, y:b.slot.y+p.dy, owner:b.id }));
   });
+  // Het Praetorium is het hoofdkwartier: twee vlaggen naast de ingang (rood; goud vanaf level 3).
+  { const pr = CASTRA_BUILDINGS.find(b=>b.id==="praetorium"), gold = typeof CASTRA!=="undefined" && CASTRA && castraLvl("praetorium")>=3, c = gold ? "gold" : "red";
+    if(pr && pr.slot){ pieces.push({ o:"flag_"+c+"_l", x:pr.slot.x, y:pr.slot.y+1 }, { o:"flag_"+c+"_r", x:pr.slot.x+2, y:pr.slot.y+1 }); } }
   [ ["tree_a",1,2],["tree_a",2,1],["tree_a",14,9],["tree_a",1,9],["tree_a",14,7],["tree_a",1,12],["tree_a",6,11],["tree_a",14,12],["tree_a",10,12] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
   [ ["flower_w",9,2],["flower_p",6,3],["flower_b",11,6],["flower_o",3,10],["plant_c",6,9],["fern",11,10],["flower_p",1,6],["stones",9,4],["flower_w",5,12],["flower_b",10,11],["plant_a",1,10],["fern",6,13],["flower_o",9,13] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
   return { cols, rows, ground:g, pieces, walls };
