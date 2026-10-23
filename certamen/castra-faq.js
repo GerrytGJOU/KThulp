@@ -88,6 +88,15 @@ const CASTRA_FAQ = [
     <li><b>💬</b> hier moet je praten voor een stap van een lopende opdracht.</li>
     <li><b>❓</b> de opdracht is klaar: ga terug naar de gever voor je beloning.</li></ul>
     <p>Bewoners die rondlopen (boeren, soldaten, kinderen) hebben ook opdrachten; blijf even staan als ze bewegen. Je lopende opdrachten zie je bovenaan het scherm en in het <b>Diarium</b> (menu ☰). Opdrachten passen bij de persoon: een boer mist een dier, een soldaat vraagt om een gevecht.</p>` },
+  { id:"veld", t:"Versperringen en veldacties", b:`
+    <p>Elk land heeft <b>heggen</b> dwars over de kaart met één opening op de weg. Daar staat een <b>versperring</b> die je met de juiste klasse in je leger opruimt:</p>
+    <ul><li>🪨 <b>Rots</b>: een hopliet of spartaan breekt hem.</li>
+    <li>🪵 <b>Omgevallen boom</b>: een genie (bouwer) ruimt hem op.</li>
+    <li>🗿 <b>Vervloekt altaar</b>: een priester of mythisch wezen reinigt het (en geneest je gewonde soldaten).</li>
+    <li>⛺ <b>Verlaten legerplaats</b>: een centurio voert de soldaten aan.</li></ul>
+    <p>Loop ertegenaan of tik erop: het spel vraagt of je wilt beginnen en kiest de beste eenheid. Heb je de klasse niet, dan kun je <b>arbeiders inhuren</b> voor grondstoffen, dus je komt nooit vast te zitten. Een opgeruimde versperring blijft weg.</p>
+    <p>Daarnaast liggen er in elk land <b>veldacties</b> (rots, boom, altaar, legerplaats en 👣 sporen voor een verkenner of ruiter) die elke dag terugkomen en grondstoffen opleveren.</p>
+    <p><b>Terugknop:</b> de knop ‹ linksboven gaat altijd naar het hoofdmenu van Certamen. Naar het kamp ga je met het menu ☰ → Castra (snelle reis).</p>` },
   { id:"latijn", t:"Latijn lezen", b:`
     <p>Tik op een onderstreept woord voor de Nederlandse betekenis, en op ⓘ voor de hele zin. Zo leer je vanzelf: de teksten gebruiken steeds dezelfde eenvoudige woorden en zinnen. Het spel houdt bij welke woorden je opzoekt; je docent ziet alleen een optelling per woord, geen namen.</p>
     <p>Je <b>metgezel</b> in het kamp stelt soms een korte vraag over een lastig woord. Goede antwoorden leveren beloningen op; je kunt altijd op "Later" tikken.</p>` },

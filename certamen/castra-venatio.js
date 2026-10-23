@@ -72,7 +72,7 @@ function castraVBack(){ const w = CASTRA_V && CASTRA_V.fromWorld; CASTRA_V=null;
 
 function castraVRender(stage){
   const reg = CASTRA_VENATIO.latium;
-  const head = `<div class="scrhead"><button class="back" onclick="castraVBack()">${iconSVG("shield",20,"currentColor")}</button><h2>🏹 ${castraLa("venatio_titel")}</h2></div>`;
+  const head = `<div class="scrhead"><button class="back" onclick="castraVLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>🏹 ${castraLa("venatio_titel")}</h2></div>`;
   let body = "";
   if(stage==="kies"){
     body = `<div class="panel"><div style="font-size:17px;margin-bottom:8px">${castraLa("venatio_intro")}</div>
