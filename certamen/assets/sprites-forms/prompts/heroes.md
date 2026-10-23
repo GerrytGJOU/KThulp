@@ -795,3 +795,68 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 - PORT: Show the winged golden headband, the long braid with the gold ribbon, the glowing golden apple pendant, the gold shoulder strap and the gold cape.
 - FRONT: The golden javelin held ready in the right hand, the glowing golden apple in the left, the white-and-gold tunic, the winged golden sandals.
 - BACK: Show the long braid with the gold ribbon, the short gold cape streaming like wind, the winged sandals and the javelin.
+
+## hero_iason | Iason
+
+- ROLE: legendary hero, the leader of the Argonauts who sailed for the Golden Fleece (infantry)
+- FMT: the finished 3-cell sheet of the Greek recruit Ephebus: portrait, battle front, battle back
+- INTRO: The attached image is a six-cell sprite sheet of a Greek soldier: it shows only the required LAYOUT, pose list, pixel size and level of detail. The new character is a legendary hero, NOT a soldier: entirely different clothing, colours and equipment as described below; do NOT copy the soldier's clothing, colours or shield.
+- OUTFIT: He wears: a plain bronze open-faced helmet with cheek guards and NO crest, the face fully visible (tanned skin, short tousled blond hair showing under the helmet, clean-shaven, bright blue eyes, a confident boyish smile); a small gold anchor pendant on a cord at his neck; a bronze breastplate over a deep-blue sea-coloured tunic; a SHORT golden-yellow cape pinned at the right shoulder with a round bronze brooch; a brown leather belt with a bronze buckle; bronze bracers; brown leather sandals laced to the calf; NO shield. In his right hand a straight sword with a silver blade and a bronze hilt.
+- REST: standing upright and confident, facing the viewer, the sword pointing down in his right hand
+- ATTACK: one step forward, the sword thrust forward, the short golden cape swinging behind him
+- HIT: upper body leaning backwards, eyes closed, the sword dropping, one hand raised
+- PORT: Show the bronze open helmet, the blond hair, the confident smile, the gold anchor pendant, the bronze breastplate collar and the short golden cape with the bronze brooch.
+- FRONT: Sword held ready in the right hand, the bronze breastplate over the deep-blue tunic, the short golden cape.
+- BACK: Show the short golden cape, the back of the open bronze helmet with the blond hair, and the sword.
+
+## hero_iason_dra | Iason, Draconis Victor
+
+- ROLE: the same legendary hero Iason, now the dragon slayer (Draconis Victor), hoplite
+- FMT: the finished 3-cell sheet of the same hero Iason in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Iason in his base form: the new form is THE SAME MAN, with the same face as always: tanned skin, short tousled blond hair, clean-shaven, bright blue eyes, a confident boyish smile, a small gold anchor pendant on a cord at his neck, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a heavy bronze Corinthian helmet pushed back so the face is fully open and clearly visible (the same face as always: tanned skin, short tousled blond hair, clean-shaven, bright blue eyes, a confident boyish smile, a small gold anchor pendant on a cord at his neck), with a tall crest of dark-green dragon scales; a heavy bronze scale armour with a dragon-tooth trophy on the chest and large bronze shoulder plates over a deep-blue tunic; a short golden-yellow cape; bronze greaves; the small gold anchor pendant. In his left hand a big ROUND dark-green-and-bronze shield covered in a dragon-scale pattern with a gold rim. In his right hand a strong spear with a silver leaf-shaped head.
+- REST: standing firmly, facing the viewer, the big round dragon-scale shield at his left side, the spear held upright beside him
+- ATTACK: one step forward, the spear thrust forward over the top of the raised shield
+- HIT: upper body leaning backwards, eyes closed, the shield sagging, the spear tilting
+- PORT: Show the bronze helmet pushed back with the green dragon-scale crest, the blond hair, the confident smile, the gold anchor pendant and the bronze scale armour.
+- FRONT: The big round dragon-scale shield raised on the left arm, the spear held ready in the right hand, the dragon-tooth trophy on the chest.
+- BACK: Show the back of the big round green shield, the short golden cape, the green dragon-scale crest and the spear.
+
+## hero_iason_dra_pr | Iason, Aurei Velleris Dominus
+
+- ROLE: the same legendary hero Iason, now the prestige form Aurei Velleris Dominus (the lord of the Golden Fleece)
+- FMT: the finished 3-cell sheet of the same hero Iason in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Iason in his specialisation form: the new form is THE SAME MAN, with the same face as always: tanned skin, short tousled blond hair, clean-shaven, bright blue eyes, a confident boyish smile, a small gold anchor pendant on a cord at his neck, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a magnificent heavy gold-and-bronze Corinthian helmet pushed back so the face is fully open and clearly visible (the same face as always: tanned skin, short tousled blond hair, clean-shaven, bright blue eyes, a confident boyish smile, a small gold anchor pendant on a cord at his neck), with a tall crest of shining gold; a splendid ceremonial gold armour with gold shoulder plates over a white tunic with gold embroidery; the shimmering GOLDEN FLEECE, a thick curly golden sheepskin, draped over his shoulders like a cape with a large round gold brooch; gold greaves; the small gold anchor pendant. In his left hand a huge gold TOWER shield with a golden ram's head as emblem. In his right hand a strong spear with a long polished silver head and a gold-banded shaft. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing firmly and radiant, facing the viewer, the huge gold tower shield at his left side, the spear held upright beside him
+- ATTACK: one step forward, the spear thrust forward over the top of the raised tower shield
+- HIT: upper body leaning backwards, eyes closed, the shield sagging, the spear tilting
+- PORT: Show the gold helmet pushed back with the tall gold crest, the blond hair, the confident smile, the gold anchor pendant, the gold shoulder plate and the curly golden fleece on his shoulders.
+- FRONT: The huge gold tower shield with the ram's head raised on the left arm, the spear held ready in the right hand, the golden fleece on his shoulders.
+- BACK: Show the back of the huge gold shield, the golden fleece hanging down his back, the gold crest and the spear.
+
+## hero_iason_arg | Iason, Argonauta
+
+- ROLE: the same legendary hero Iason, now the captain of the Argo (Argonauta), commander
+- FMT: the finished 3-cell sheet of the same hero Iason in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Iason in his base form: the new form is THE SAME MAN, with the same face as always: tanned skin, short tousled blond hair, clean-shaven, bright blue eyes, a confident boyish smile, a small gold anchor pendant on a cord at his neck, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a bronze open-faced helmet with a small blue plume on top, the face fully open and clearly visible (the same face as always: tanned skin, short tousled blond hair, clean-shaven, bright blue eyes, a confident boyish smile, a small gold anchor pendant on a cord at his neck); a polished bronze cuirass with a gold anchor emblem on the chest and gold shoulder plates over a deep-blue tunic; a LONG royal-blue cape down to the calves with a white lining, pinned with a round gold brooch; a coil of brown ship's rope and a small rolled sea chart hanging from his belt; bronze bracers and greaves. NO shield. In his right hand a straight sword with a silver blade and a gold hilt, raised in command.
+- REST: standing tall and commanding, facing the viewer, the sword resting on his shoulder
+- ATTACK: one step forward, the sword pointing forward in command, the long blue cape swinging behind him
+- HIT: upper body leaning backwards, eyes closed, the sword tilting, one hand raised
+- PORT: Show the bronze helmet with the blue plume, the blond hair, the confident smile, the gold anchor pendant, the gold shoulder plate and the long blue cape with the brooch.
+- FRONT: Sword raised in the right hand, the gold anchor emblem on the cuirass, the coil of rope and the sea chart at the belt.
+- BACK: Show the long royal-blue cape with the white lining, the blue plume on the helmet and the raised sword.
+
+## hero_iason_arg_pr | Iason, Dux Argonautarum
+
+- ROLE: the same legendary hero Iason, now the prestige form Dux Argonautarum (the leader of the Argonauts)
+- FMT: the finished 3-cell sheet of the same hero Iason in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Iason in his specialisation form: the new form is THE SAME MAN, with the same face as always: tanned skin, short tousled blond hair, clean-shaven, bright blue eyes, a confident boyish smile, a small gold anchor pendant on a cord at his neck, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a gold laurel crown on his short blond hair instead of a helmet, the face fully open and clearly visible (the same face as always: tanned skin, short tousled blond hair, clean-shaven, bright blue eyes, a confident boyish smile, a small gold anchor pendant on a cord at his neck); a magnificent ceremonial armour of polished white-and-gold plates with a gold anchor emblem on the chest and large gold shoulder plates over a white tunic with gold embroidery; a LONG, rich, shimmering golden-yellow mantle down to the ground with a deep-blue lining, a wide gold border and a large round gold brooch; gold bracers and gold greaves. NO shield. In his right hand a straight sword with a polished silver blade and an ornate gold hilt, raised high. In his left hand a tall golden standard topped with a golden ship's prow (the prow of the Argo) with a small blue banner. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing tall and noble, facing the viewer, the sword resting on his shoulder, the golden standard at his side
+- ATTACK: one step forward, the sword pointing forward in command, the golden standard raised in the other hand
+- HIT: upper body leaning backwards, eyes closed, the sword tilting, one hand raised
+- PORT: Show the gold laurel crown, the blond hair, the confident smile, the gold anchor pendant, the large gold shoulder plate and the golden mantle with the blue lining.
+- FRONT: Sword raised in the right hand, the tall golden standard with the ship's prow in the left, the white-and-gold armour with the anchor emblem.
+- BACK: Show the long golden mantle with the blue lining and gold border, the gold laurel crown and the raised sword.
