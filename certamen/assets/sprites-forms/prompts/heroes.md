@@ -860,3 +860,68 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 - PORT: Show the gold laurel crown, the blond hair, the confident smile, the gold anchor pendant, the large gold shoulder plate and the golden mantle with the blue lining.
 - FRONT: Sword raised in the right hand, the tall golden standard with the ship's prow in the left, the white-and-gold armour with the anchor emblem.
 - BACK: Show the long golden mantle with the blue lining and gold border, the gold laurel crown and the raised sword.
+
+## hero_achilles | Achilles
+
+- ROLE: legendary hero, the greatest warrior of the Greeks before Troy (infantry)
+- FMT: the finished 3-cell sheet of the Greek recruit Ephebus: portrait, battle front, battle back
+- INTRO: The attached image is a six-cell sprite sheet of a Greek soldier: it shows only the required LAYOUT, pose list, pixel size and level of detail. The new character is a legendary hero, NOT a soldier: entirely different clothing, colours and equipment as described below; do NOT copy the soldier's clothing, colours or shield.
+- OUTFIT: He wears: a plain gold-bronze open-faced helmet with a short red horsehair crest, the face fully visible (fair skin, shoulder-length wavy golden-blond hair flowing from under the helmet, steel-grey eyes, proud sharp features); a gold armband with a small red gem on his left upper arm; a ceremonial polished gold-bronze muscle cuirass over a short deep-red tunic; gold shoulder plates; a SHORT crimson cape pinned at the right shoulder with a round gold brooch; a brown leather belt with a gold buckle; gold bracers; gold greaves and brown sandals; NO shield. In his right hand a straight sword with a silver blade and a gold hilt.
+- REST: standing proud and upright, facing the viewer, the sword pointing down in his right hand
+- ATTACK: one step forward, the sword thrust forward, the short crimson cape swinging behind him
+- HIT: upper body leaning backwards, eyes closed, the sword dropping, one hand raised
+- PORT: Show the open gold helmet with the red crest, the flowing blond hair, the proud look, the gold shoulder plate, the cuirass collar and the short crimson cape with the brooch.
+- FRONT: Sword held ready in the right hand, the gold muscle cuirass, the gold armband with the red gem, the short crimson cape.
+- BACK: Show the short crimson cape, the red helmet crest with the flowing blond hair and the sword.
+
+## hero_achilles_myr | Achilles, Heros Myrmidonum
+
+- ROLE: the same legendary hero Achilles, now the champion of the Myrmidons (Heros Myrmidonum), brute fighter
+- FMT: the finished 3-cell sheet of the same hero Achilles in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Achilles in his base form: the new form is THE SAME MAN, with the same face as always: fair skin, shoulder-length wavy golden-blond hair, steel-grey eyes, proud sharp features, a gold armband with a small red gem on his left upper arm, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: NO helmet, the face fully open and clearly visible (the same face as always: fair skin, shoulder-length wavy golden-blond hair, steel-grey eyes, proud sharp features, a gold armband with a small red gem on his left upper arm), the golden-blond hair wild and flowing, a fierce battle-cry look; a broad bare muscular chest crossed by two thick brown leather straps with a gold disc, a huge bronze pauldron on his right shoulder only; a short tattered deep-red tunic; a ragged crimson war cloak tied at the neck; thick gold-studded leather bracers on both forearms; heavy bronze greaves. NO shield. In BOTH hands a huge long ash-wood spear (the Pelian spear) with a big leaf-shaped bronze head and a red tassel, held two-handed.
+- REST: standing wide and menacing, facing the viewer, the huge spear held upright in both hands in front of him
+- ATTACK: a big lunge forward, the huge spear thrust forward in both hands, the crimson war cloak swinging behind him
+- HIT: upper body leaning backwards, eyes closed, the spear tilting, one hand raised
+- PORT: Show the wild flowing blond hair, the fierce look, the bare chest with the leather straps and the gold disc, the big bronze pauldron and the red cloak.
+- FRONT: The huge Pelian spear held ready in both hands, the bare muscular chest with the crossed straps, the bronze pauldron, the gold-studded bracers.
+- BACK: Show the long wild blond hair, the ragged crimson war cloak, the crossed straps and the huge spear.
+
+## hero_achilles_myr_pr | Achilles, Pelides
+
+- ROLE: the same legendary hero Achilles, now the prestige form Pelides (the son of Peleus, in the divine armour of Hephaestus)
+- FMT: the finished 3-cell sheet of the same hero Achilles in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Achilles in his specialisation form: the new form is THE SAME MAN, with the same face as always: fair skin, shoulder-length wavy golden-blond hair, steel-grey eyes, proud sharp features, a gold armband with a small red gem on his left upper arm, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a splendid gold open-faced crested helmet with a tall flowing crimson-and-gold crest, the face fully open and clearly visible (the same face as always: fair skin, shoulder-length wavy golden-blond hair, steel-grey eyes, proud sharp features, a gold armband with a small red gem on his left upper arm); the shining divine armour of Hephaestus, a full polished gold-and-white muscle cuirass engraved with fine patterns, huge gold shoulder plates, over a deep-red tunic; a LONG rich crimson cloak with a gold border and a large round gold brooch; gold bracers and gold greaves. In his left hand the great round golden Shield of Achilles with many concentric rings of tiny engraved scenes and a bright shining rim. In his right hand a huge long ash-wood spear with a big shining silver head and a gold-banded shaft. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing tall and radiant, facing the viewer, the great golden shield at his left side, the spear held upright beside him
+- ATTACK: a big step forward, the spear thrust forward over the top of the raised golden shield, the cloak swinging behind him
+- HIT: upper body leaning backwards, eyes closed, the shield sagging, the spear tilting
+- PORT: Show the gold crested helmet with the flowing red-and-gold crest, the blond hair, the proud look, the huge gold shoulder plate and the crimson cloak.
+- FRONT: The great round golden shield raised on the left arm, the huge spear held ready in the right hand, the gold-and-white divine armour.
+- BACK: Show the back of the great golden shield, the long crimson cloak with its gold border, the flowing helmet crest and the spear.
+
+## hero_achilles_aur | Achilles, Auriga Heros
+
+- ROLE: the same legendary hero Achilles, now the hero of the war chariot (Auriga Heros), cavalry
+- FMT: the finished 3-cell sheet of the same hero Achilles in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Achilles in his base form: the new form is THE SAME MAN, with the same face as always: fair skin, shoulder-length wavy golden-blond hair, steel-grey eyes, proud sharp features, a gold armband with a small red gem on his left upper arm, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: an open-faced gold-bronze helmet with a tall red horsehair crest, the face fully open and clearly visible (the same face as always: fair skin, shoulder-length wavy golden-blond hair, steel-grey eyes, proud sharp features, a gold armband with a small red gem on his left upper arm); a gold-bronze muscle cuirass over a short deep-red tunic with gold shoulder plates; a short crimson cape; gold bracers. He stands in a light war CHARIOT with two golden wheels, a curved bronze front rail and a red-and-gold pennant, drawn by TWO galloping white horses with red plumes and bronze harness. In his left hand the leather reins, in his right hand a long spear with a silver head. The whole chariot with both horses is drawn as ONE complete figure, fully inside its cell with at least 4 pixel blocks of margin on every side.
+- REST: standing in the halted chariot, facing the viewer, the two white horses standing side by side, the spear held upright in his right hand
+- ATTACK: the chariot charging forward, the horses galloping, Achilles leaning forward with the spear couched forward in his right hand
+- HIT: upper body leaning backwards, eyes closed, the horses rearing, the spear tilting
+- PORT: Show the open gold helmet with the red crest, the flowing blond hair, the proud look, the gold shoulder plate and the short crimson cape.
+- FRONT: Achilles standing in the golden chariot seen from the front, the two white horses in front of the chariot, the spear held upright, the reins in his left hand.
+- BACK: Show the chariot seen from behind, the back of the golden wheels, Achilles standing in it with his crimson cape and the red helmet crest, the two white horses beyond it.
+
+## hero_achilles_aur_pr | Achilles, Invictus
+
+- ROLE: the same legendary hero Achilles, now the prestige form Invictus (the unconquered)
+- FMT: the finished 3-cell sheet of the same hero Achilles in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Achilles in his specialisation form: the new form is THE SAME MAN, with the same face as always: fair skin, shoulder-length wavy golden-blond hair, steel-grey eyes, proud sharp features, a gold armband with a small red gem on his left upper arm, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a splendid gold open-faced crested helmet with a tall flowing crimson-and-gold crest, the face fully open and clearly visible (the same face as always: fair skin, shoulder-length wavy golden-blond hair, steel-grey eyes, proud sharp features, a gold armband with a small red gem on his left upper arm); the shining divine armour of Hephaestus, a polished gold-and-white muscle cuirass with huge gold shoulder plates over a deep-red tunic; a LONG rich crimson cloak with a gold border; gold greaves, one small bright red glowing mark on the heel of the right greave. He stands in a magnificent golden war CHARIOT with great golden wheels with small white wings on the hubs, a carved gold front rail and a long red-and-gold banner, drawn by TWO galloping white horses with golden harness, golden plumes and glowing manes. In his left hand the golden reins, in his right hand a long spear with a shining silver head and a gold-banded shaft. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell. The whole chariot with both horses is drawn as ONE complete figure, fully inside its cell with at least 4 pixel blocks of margin on every side.
+- REST: standing tall and radiant in the halted chariot, facing the viewer, the two white horses standing side by side, the spear held upright in his right hand
+- ATTACK: the chariot charging forward, the horses galloping, Achilles leaning forward with the golden spear couched forward in his right hand, the cloak streaming behind him
+- HIT: upper body leaning backwards, eyes closed, the horses rearing, the spear tilting
+- PORT: Show the gold crested helmet with the flowing red-and-gold crest, the blond hair, the proud look, the huge gold shoulder plate and the crimson cloak.
+- FRONT: Achilles standing in the golden chariot seen from the front, the two white horses with golden harness in front of the chariot, the spear held upright, the reins in his left hand.
+- BACK: Show the chariot seen from behind, the golden winged wheels, Achilles standing in it with his long crimson cloak and the flowing helmet crest, the two white horses beyond it.
