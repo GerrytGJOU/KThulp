@@ -87,7 +87,7 @@ function castraMvInit(V){
   V.rng = castraRng((CASTRA.seed ^ 0x6d2b79f5)>>>0); CASTRA.seed = (CASTRA.seed+5)>>>0;
   V.catchLeft = CASTRA_MV_BAL.catchTries; V.ask = null; V.caught = false; V.lastMe = null;
   castraMvSync(V);
-  V.round = 0; V.over = null; V.dmgTaken = 0;
+  V.round = 0; V.over = null; V.dmgTaken = 0; V.used = [V.mine.id]; V.fainted = []; V.forced = false; V.switching = false;
   V.log = [ castraLaHTML(`${enName} adest!`, `${enName} verschijnt!`, "mv_adest") ];
   const probe = [[V.enemy.line,"portrait"],[V.enemy.line,"battle_front"]];
   if(V.mine.line) probe.push([V.mine.line,"portrait"],[V.mine.line,"battle_back"]);
@@ -109,13 +109,18 @@ castraVFight = function(sid){
 // Held als vechter: ervaring en level voor de held (soldaten en dux regelt castraVFinish zelf), plus het contubernium.
 const _castraVFinishMv0 = castraVFinish;
 castraVFinish = function(){
-  const V = CASTRA_V; _castraVFinishMv0.apply(this, arguments);
+  const V = CASTRA_V;
+  (V && V.fainted || []).forEach(u=>{ const s = CASTRA.soldiers.find(x=>x.id===u.id); if(s && V.mine && s.id!==V.mine.id) castraHurtSoldier(s, CASTRA_V_BAL.hurtMinutesLoss); });   // wie eerder omviel is gewond
+  _castraVFinishMv0.apply(this, arguments);
   if(!V || V.over!=="win" || !V.mine) return;
+  // deelnemers die niet omvielen krijgen de helft van de ervaring
+  (V.used||[]).filter(id=>id!==V.mine.id && !(V.fainted||[]).some(u=>u.id===id)).forEach(id=>{ const s = CASTRA.soldiers.find(x=>x.id===id); if(!s) return;
+    s.xp += Math.round(castraCardXp(castraXpWild(V, s))*0.5); castraLevelUp(s); });
   if(V.mine.hero){
     const hh = V.mine.h, xp = castraCardXp(castraXpWild(V, { lvl:hh.lvl }));
     hh.xp += xp; V.leveled = castraHeroLevelUp(hh); V.heroXp = xp;
   }
-  if(typeof castraContubernium==="function") V.cont = castraContubernium({ V, ids:[V.mine.id] });
+  if(typeof castraContubernium==="function") V.cont = castraContubernium({ V, ids:(V.used && V.used.length) ? V.used.slice() : [V.mine.id] });
   castraSave();
 };
 // Scoutscherm: ook je helden kunnen op jacht.
@@ -231,7 +236,10 @@ function castraMvRound(V, mine){
   V.lastMe = mine ? mine.id : "capere";
   castraMvSync(V);
   if(V.enHp<=0) V.over = "win";
-  else if(V.myHp<=0) V.over = "lose";
+  else if(V.myHp<=0){
+    if(typeof castraMvReserve==="function" && castraMvReserve(V).length){ V.forced = true; (V.fainted = V.fainted || []).push(V.mine); }   // een gezonde reserve: wissel (castra-party.js)
+    else V.over = "lose";
+  }
   else if(V.round>=CASTRA_MV_BAL.maxRounds) V.over = "flee";
 }
 
