@@ -19,7 +19,7 @@
 const CASTRA_STAGE_CSS = `
 body.castra-stage-on{overflow:hidden !important;overscroll-behavior:none}
 body.castra-stage-on #app{display:none !important}
-#castraStage{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;background:#14100a;color:var(--ink,#f0e2b8)}
+#castraStage{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;background:#14100a}
 #cgBar{flex:0 0 auto;height:46px;display:flex;align-items:center;gap:8px;padding:0 8px 0 56px;background:#1b140c;border-bottom:2px solid var(--hi,#d4af37);box-sizing:border-box}
 #cgBar .back{margin:0;flex:0 0 auto}
 #cgTitle{font-size:18px;font-weight:bold;color:var(--hi-bright,#e8c96a);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
@@ -36,8 +36,13 @@ body.castra-stage-on #app{display:none !important}
 #cgTop #cwHud:empty,#cgTop #castraTutBar:empty{display:none}
 #cgTop .note,#cgTop .panel{margin:0 !important;padding:4px 8px !important;font-size:12px !important}
 #cgBottom{position:absolute;z-index:70;left:8px;right:8px;bottom:8px;max-width:720px;margin:0 auto;display:flex;flex-direction:column;pointer-events:none}
-#cgBottom > *{pointer-events:auto;max-height:56vh;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;box-shadow:0 4px 18px rgba(0,0,0,.55);border-radius:10px}
+#cgBottom > *{pointer-events:auto;max-height:56vh;background:linear-gradient(170deg,#30251a,#221a12) !important;border:2px solid var(--stone4,#6b5630);color:#f0e2b8;font-size:16px;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;box-shadow:0 4px 18px rgba(0,0,0,.55);border-radius:10px}
 #cgBottom > *:empty{display:none}
+#cgBottom .panel{background:transparent !important;border:0;box-shadow:none;margin:0 !important}
+#cgBottom .btn{font-size:15px;color:#f0e2b8;background:rgba(255,255,255,.07);border:2px solid #6b5630;border-radius:8px}
+#cgBottom .btn.btn-gold{background:linear-gradient(#e8c96a,#d4af37);color:#2b1d0e;border-color:#9c7c1f}
+#cgBottom h3{font-size:17px}
+#cgBottom small,#cgBottom .note{font-size:14px}
 #cgInfo{position:absolute;z-index:80;top:6px;right:58px;left:58px;max-width:520px;margin-left:auto;max-height:calc(100% - 12px);overflow-y:auto;touch-action:pan-y;background:var(--parch,#efe1b9);color:var(--parch-ink,#2b1d0e);border:3px solid var(--parch-edge,#4a3416);border-radius:10px;padding:10px 14px;font-size:14px;box-shadow:0 4px 18px rgba(0,0,0,.6)}
 #cgInfo[hidden]{display:none}
 #cgBar button.cgfs{padding:0 10px;font-size:14px;white-space:nowrap}
@@ -46,6 +51,7 @@ body.castra-stage-on #app{display:none !important}
 body.castra-immersive #cgBar{display:none}
 body.castra-immersive #cgFloat{display:flex}
 body.castra-immersive .portal-back{display:none !important}
+#cgInfo .panel{background:#241b12 !important;color:#f0e2b8;margin-top:8px !important}
 #cgInfo .foot{margin-top:10px;font-size:12px;opacity:.7;text-align:center}
 `;
 
@@ -94,7 +100,7 @@ function castraStageBuild(kind){
   const hodie = el("castraRes") && el("castraRes").nextElementSibling;
   const help = kind==="world"
     ? `Sleep met je duim of gebruik de pijltjestoetsen om te lopen, of tik ergens om daarheen te gaan. Loop door het <b>hoge, donkere gras</b>: daar kun je vijanden ontmoeten. Het menu (☰) staat rechtsboven.`
-    : `Sleep met je duim of gebruik de pijltjestoetsen om te lopen, of tik op een gebouw om het te openen. Het menu (☰) staat rechtsboven.`;
+    : `Sleep met je duim of gebruik de pijltjestoetsen om te lopen. Tik op een gebouw om het te openen (met toetsenbord: sta ervoor en druk op Enter of spatie). Het menu (☰) staat rechtsboven.`;
   const st = document.createElement("div"); st.id = "castraStage";
   st.innerHTML = `<div id="cgBar"><span id="cgBackSlot" style="display:flex"></span><div id="cgTitle"></div><span style="flex:1"></span>
       <button class="cgb" id="cgHelp" aria-label="Uitleg" onclick="castraStageInfoToggle()">?</button><button class="cgb cgfs" id="cgFs" aria-label="Full-screen" onclick="castraStageImmersive(true)">⛶ Full-screen</button></div>
