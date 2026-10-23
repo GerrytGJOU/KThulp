@@ -102,6 +102,7 @@ const CASTRA_FAQ = [
     <p>Je <b>metgezel</b> in het kamp stelt soms een korte vraag over een lastig woord. Goede antwoorden leveren beloningen op; je kunt altijd op "Later" tikken.</p>` },
   { id:"wereld", t:"Landen, poorten en het paard", b:`
     <p>Via de <b>Porta decumana</b> ga je naar de jacht, via de <b>Porta praetoria</b> naar de campagnekaart. Nieuwe landen (Graecia, Troia, Gallia, Aegyptus, Persis, Africa, Roma, Laconia, Germania, Themiscyra) openen als je missies wint. In elk land vind je eigen vijanden, grotten, huizen en bewoners.</p>
+    <p><b>Dag en nacht:</b> het spel volgt de klok van je apparaat: <i>aurora</i> (dageraad), <i>dies</i> (dag), <i>vesper</i> (avond) en <i>nox</i> (nacht). 's Nachts verschijnen vaker mythische wezens en zijn wilde vijanden iets sterker; overdag verandert er niets. Rechtsboven in de balk zie je het moment van de dag.</p>
     <p>Met de opdracht <b>Equus perditus</b> verdien je een <b>paard</b>: met de knop 🐎 linksboven in de wereld rij je twee keer zo snel (binnen loop je altijd).</p>` },
   { id:"klas", t:"Legio, Colosseum en je klas", b:`
     <p><b>Legio</b> is een klassenevenement dat je docent start: de hele klas verdedigt samen één kamp, elke leerling zet zijn eenheden neer. <b>Colosseum</b> (vanaf niveau 20) is het spel tegen andere spelers: kies een duel of een vierkamp, zet in en win. Je klas en je docent zien de ranglijst per klas.</p>` },
