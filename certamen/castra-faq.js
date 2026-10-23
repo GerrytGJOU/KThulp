@@ -31,6 +31,38 @@ const CASTRA_FAQ = [
     <p>Soldaten werf je in het kamp en krijg je door te jagen. Ze hebben een <b>vorm</b> met een tier (1 tot 4), een volk en een type: infanterie, afstand, ruiterij of ondersteuner. Door te vechten krijgen ze ervaring (XP) en gaan ze een <b>gradus</b> (level) omhoog; sommige vormen kunnen evolueren naar een sterkere vorm, soms met een keuze tussen twee wegen.</p>
     <p>Elke soldaat leert vanaf bepaalde levels <b>artes</b> (vaardigheden). Je kiest er maximaal vier. In de <b>Codex</b> zie je alle vormen die je al hebt ontmoet. Rustende soldaten krijgen ook een beetje XP via het Contubernium.</p>
     <p>Een gewonde soldaat kan niet vechten tot hij hersteld is (Valetudinarium, of betaal om meteen te genezen).</p>` },
+  { id:"eenheden", t:"Eenheden vergeleken: wie is waar goed in?", b:`
+    <p>Elke soldaat en held heeft een <b>soort</b> en (als hij artes leert) een <b>klasse</b>. Het soort bepaalt wat hij van nature kan; de klasse wat hij erbij leert.</p>
+    <h4 style="margin:10px 0 4px">De soorten</h4>
+    <div style="overflow-x:auto"><table style="border-collapse:collapse;font-size:14px;min-width:560px"><thead><tr style="text-align:left;border-bottom:2px solid var(--stone4,#6b5630)"><th style="padding:4px 8px">Soort</th><th style="padding:4px 8px">Sterk</th><th style="padding:4px 8px">Zwak</th><th style="padding:4px 8px">Bereik*</th></tr></thead><tbody>
+      <tr style="border-top:1px solid var(--stone4,#6b5630)"><td style="padding:4px 8px"><b>🛡️ Infanterie</b></td><td style="padding:4px 8px">veel levenspunten en verdediging, stevig</td><td style="padding:4px 8px">kort bereik, weinig tempo</td><td style="padding:4px 8px">±1,6 tegels</td></tr>
+      <tr style="border-top:1px solid var(--stone4,#6b5630)"><td style="padding:4px 8px"><b>🏹 Afstand</b></td><td style="padding:4px 8px">groot bereik, goede schade</td><td style="padding:4px 8px">weinig levenspunten en verdediging</td><td style="padding:4px 8px">±5 tegels (met artes tot ±7)</td></tr>
+      <tr style="border-top:1px solid var(--stone4,#6b5630)"><td style="padding:4px 8px"><b>🐎 Ruiterij</b></td><td style="padding:4px 8px">de meeste schade en het hoogste tempo; extra sterk tegen verzwakte vijanden</td><td style="padding:4px 8px">kort bereik</td><td style="padding:4px 8px">±1,6 tegels</td></tr>
+      <tr style="border-top:1px solid var(--stone4,#6b5630)"><td style="padding:4px 8px"><b>✨ Ondersteuning</b></td><td style="padding:4px 8px">maakt anderen sterker, geneest; commandanten en bouwers</td><td style="padding:4px 8px">zelf weinig schade</td><td style="padding:4px 8px">±3,4 tegels</td></tr>
+      <tr style="border-top:1px solid var(--stone4,#6b5630)"><td style="padding:4px 8px"><b>🐉 Mythisch</b></td><td style="padding:4px 8px">gemengd: vlot, vertraagt vijanden, raakt meer vijanden tegelijk</td><td style="padding:4px 8px">niet de beste in één ding</td><td style="padding:4px 8px">gemiddeld</td></tr>
+      <tr style="border-top:1px solid var(--stone4,#6b5630)"><td style="padding:4px 8px"><b>Rekruut</b></td><td style="padding:4px 8px">beginsoldaat, alles gemiddeld; evolueert naar een soort</td><td style="padding:4px 8px">nog zwak</td><td style="padding:4px 8px">kort</td></tr></tbody></table></div>
+    <p class="note" style="margin-top:4px">* Bereik van een soldaat van tier 3 op gradus 10 in de tower defence; het groeit mee met zijn stats en zijn artes.</p>
+    <h4 style="margin:12px 0 4px">Steen, papier, schaar</h4>
+    <p><b>Infanterie</b> wint van <b>ruiterij</b>, <b>ruiterij</b> van <b>afstand</b> en <b>afstand</b> van <b>infanterie</b>. Heeft je eenheid voordeel, dan doet hij 50% meer schade; heeft hij nadeel, dan maar 75%. In de jacht zie je dat aan een ▲ of ▼ bij een move.</p>
+    <h4 style="margin:12px 0 4px">Samenwerken in de tower defence</h4>
+    <ul><li><b>Muri et sagittae:</b> staat een boogschutter binnen 3 tegels van infanterie, dan vertraagt de infanterie vijanden met 25%.</li>
+    <li><b>Acies:</b> een boogschutter naast ondersteuning (binnen 1,5 tegels) krijgt 15% meer bereik.</li>
+    <li><b>Steun:</b> torens binnen 1,5 tegels van ondersteuning doen 25% meer schade.</li>
+    <li><b>Persecutio:</b> ruiterij doet 50% extra schade aan vijanden die al minder dan de helft van hun levenspunten hebben.</li></ul>
+    <p>Een goede opstelling mengt de soorten: infanterie aan de bocht (vertraagt), boogschutters daarachter met bereik over de weg, ruiterij bij het einde van de weg om te vellen wat nog doorkomt, en ondersteuning in het midden.</p>
+    <h4 style="margin:12px 0 4px">De klassen (artes)</h4>
+    <p>Vanaf bepaalde levels leert een eenheid artes van zijn klasse; je kiest er vier. De schuine tekst achter elke klasse zegt waar ze het best in is.</p>
+    <ul><li><b>Hopliet</b> (zware infanterie): vertraagt vijanden, geeft torens in de buurt extra schade, later +20% bereik en +1 leven voor het kamp na elke golf. <i>Verdediger en frontlijn.</i></li>
+    <li><b>Spartaan</b> (voorvechter): veel extra schade, slagen negeren een deel van het pantser, de eerste treffers van elke golf doen driedubbele schade. <i>Pure schade op korte afstand.</i></li>
+    <li><b>Boogschutter:</b> negeert de helft van het pantser, schiet sneller en dubbel, groter bereik en treft ook vijanden naast het doelwit. <i>Bereik en tempo.</i></li>
+    <li><b>Cavalerie:</b> eerste treffers van een golf dubbele schade, veel tempo, negeert 40% pantser, elke vijfde treffer driedubbel. <i>Snelle uitvallen.</i></li>
+    <li><b>Priester:</b> torens in de buurt en alle torens doen meer schade, genezing voor het kamp na elke golf, extra beloning. <i>Steun voor het hele team.</i></li>
+    <li><b>Centurio</b> (commandant): grote en zeer grote kringen met extra schade voor je torens, alle torens +5%, extra beloning. <i>Aura en leiding.</i></li>
+    <li><b>Genie</b> (bouwers, machines): +30% bereik, schoten die het pantser negeren, schade aan meerdere vijanden. <i>Het grootste bereik van allemaal.</i></li>
+    <li><b>Verkenner:</b> extra bereik, vertraagt vijanden elke tweede treffer, extra beloning. <i>Vertragen en buit.</i></li>
+    <li><b>Myth</b> (mythische wezens): vertraagt, treft meerdere vijanden, geneest het kamp, en alle torens een beetje sterker. <i>Veelzijdig.</i></li></ul>
+    <h4 style="margin:12px 0 4px">Tier en level</h4>
+    <p>Een soldaat van <b>tier 1 tot 4</b> heeft ongeveer 1, 1,6, 2,4 en 3,2 keer de basisstats van zijn soort. Elke <b>gradus</b> (level) geeft er 2,5% bij. <b>Helden</b> zijn nog sterker (ongeveer als een tier 4-soldaat vanaf level 1) en hebben een eigen vaardigheid; zie het kopje over helden.</p>` },
   { id:"helden", t:"Helden: zeldzaam en uniek", b:`
     <p>Helden zijn legendarische soldaten met een eigen verhaal en een eigen vaardigheid vanaf het begin. Ze zijn sterk, dus <b>moeilijk te krijgen</b>:</p>
     <ul><li>Een held verschijnt pas vanaf een bepaald <b>Castra-niveau</b> (Aeneas direct, anderen later) en nadat je zijn spoor hebt gevonden tijdens het jagen.</li>
