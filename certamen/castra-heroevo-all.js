@@ -15,6 +15,9 @@ const CASTRA_HEVO_ARCH = {
   spartaan:    { type:"inf", m:{ vita:1.1,  impetus:1.3,  tutela:1.0,  celeritas:1.0, ambitus:1.0 }, p:{ vita:1.25, impetus:1.55, tutela:1.1,  celeritas:1.1, ambitus:1.0 } },
   boogschutter:{ type:"rng", m:{ vita:0.9,  impetus:1.25, tutela:0.9,  celeritas:1.1, ambitus:1.6 }, p:{ vita:1.0,  impetus:1.55, tutela:1.0,  celeritas:1.2, ambitus:2.0 } },
   cavalerie:   { type:"cav", m:{ vita:1.0,  impetus:1.15, tutela:0.95, celeritas:1.4, ambitus:1.1 }, p:{ vita:1.15, impetus:1.4,  tutela:1.05, celeritas:1.7, ambitus:1.2 } },
+  genie:       { type:"rng", m:{ vita:0.95, impetus:1.15, tutela:1.0,  celeritas:0.85, ambitus:1.7 }, p:{ vita:1.1,  impetus:1.4,  tutela:1.1,  celeritas:0.95, ambitus:2.1 } },
+  myth:        { type:"sup", m:{ vita:1.05, impetus:1.2,  tutela:1.0,  celeritas:1.1,  ambitus:1.2 }, p:{ vita:1.2,  impetus:1.45, tutela:1.15, celeritas:1.2,  ambitus:1.4 } },
+  priester:    { type:"sup", m:{ vita:1.1,  impetus:0.9,  tutela:1.1,  celeritas:1.0,  ambitus:1.4 }, p:{ vita:1.25, impetus:1.05, tutela:1.25, celeritas:1.1,  ambitus:1.7 } },
   centurio:    { type:"sup", m:{ vita:1.05, impetus:1.0,  tutela:1.15, celeritas:1.0, ambitus:1.4 }, p:{ vita:1.2,  impetus:1.15, tutela:1.3,  celeritas:1.1, ambitus:1.7 } },
   verkenner:   { type:"sup", m:{ vita:0.95, impetus:1.1,  tutela:0.95, celeritas:1.5, ambitus:1.3 }, p:{ vita:1.1,  impetus:1.35, tutela:1.1,  celeritas:1.9, ambitus:1.5 } },
 };
@@ -232,6 +235,39 @@ _HE_H("iason", "⚓", "Ancora Argus", "Het anker van de Argo",
       { nm:"Dux Argonautarum", nl:"Leider der Argonauten", look:{ armor:"ceremonieel", capekleur:"goud", helm:"kroon" },
         leg:{ id:"remi_argus", la:"Remi Argus", nl:"De riemen van de Argo: alle torens +8% schade en torens dichtbij +10%", fx:{ global:8, aura:{ dmg:10, radius:2500 } }, mv:_HE_BUFF } }) ]);
 
+/* ----- Graecia: Medea (priester en myth) en Daedalus (genie en cavalerie) ----- */
+_HE_H("medea", "🌿", "Herbae Colchicae", "De Colchische kruiden",
+  { nm:["Herbae Colchicae","De Colchische kruiden"], seek:["Herbas Colchicas","de Colchische kruiden"], nom:["Herbae Colchicae","De Colchische kruiden"],
+    steps:[ _HE_K(8,"graecia","olea"), _HE_F("graecia","🌿","Colchische kruiden","Quaere herbas!","Zoek de kruiden in Graecia."), _HE_B("boss_graecia") ] },
+  [ _HE_S("medea","sac","priester","Sacerdos Hecates","Priesteres van Hecate","Medea wordt priesteres: ze geneest en zegent, en versterkt alle torens.",
+      { armor:"robe", cape:"lang", capekleur:"paars", helm:"geen", wapen:"staf" },
+      { nm:["Fax Hecates","De fakkel van Hecate"], seek:["Facem Hecates","de fakkel van Hecate"], nom:["Fax Hecates","De fakkel van Hecate"],
+        steps:[ _HE_K(12,"graecia","olea"), _HE_C(3), _HE_B("boss_graecia") ] },
+      { nm:"Domina Hecates", nl:"Meesteres van Hecate", look:{ armor:"ceremonieel", capekleur:"goud" },
+        leg:{ id:"lux_hecates", la:"Lux Hecates", nl:"Het licht van Hecate: +1 leven na elke golf en alle torens +4% schade", fx:{ regen:1, global:4 }, mv:{ kind:"heal", pp:3, nl:"Geneest 30% van je levenspunten" } } }),
+    _HE_S("medea","ven","myth","Venefica","Gifmengster","Medea wordt gifmengster: haar treffers vertragen en raken ook vijanden ernaast.",
+      { armor:"robe", cape:"lang", capekleur:"groen", helm:"geen", wapen:"staf" },
+      { nm:["Venenum novum","Een nieuw gif"], seek:["Venenum novum","een nieuw gif"], nom:["Venenum novum","Het nieuwe gif"],
+        steps:[ _HE_K(12,"graecia","litus"), _HE_C(3), _HE_B("boss_troia") ] },
+      { nm:"Maga Colchica", nl:"Tovenares van Colchis", look:{ armor:"ceremonieel", capekleur:"groen" },
+        leg:{ id:"venenum_medeae", la:"Venenum Medeae", nl:"Het gif van Medea: elke 2e treffer vertraagt 40% en treffers raken ook vijanden ernaast (50%)", fx:{ slow:{ pct:40, ticks:40, every:2 }, splash:{ pct:50, radius:1000 } }, mv:{ kind:"dmg", power:100, acc:95, pp:4, slow:40, nl:"Gifwolk die de vijand vertraagt" } } }) ]);
+
+_HE_H("daedalus", "⚙️", "Instrumenta Daedali", "Het gereedschap van Daedalus",
+  { nm:["Instrumenta Daedali","Het gereedschap van Daedalus"], seek:["Instrumenta mea","mijn gereedschap"], nom:["Instrumenta mea","Mijn gereedschap"],
+    steps:[ _HE_K(8,"graecia","litus"), _HE_F("graecia","⚙️","verloren gereedschap","Quaere instrumenta!","Zoek het gereedschap in Graecia."), _HE_B("boss_graecia") ] },
+  [ _HE_S("daedalus","mac","genie","Machinator","Werktuigbouwer","Daedalus wordt werktuigbouwer: zijn machines schieten ver en raken meerdere vijanden.",
+      { armor:"licht", cape:"kort", capekleur:"oranje", helm:"open", wapen:"knuppel" },
+      { nm:["Machina nova","Een nieuwe machine"], seek:["Machinam novam","een nieuwe machine"], nom:["Machina nova","De nieuwe machine"],
+        steps:[ _HE_K(12,"graecia","litus"), _HE_C(3), _HE_B("boss_graecia") ] },
+      { nm:"Architectus Labyrinthi", nl:"Bouwer van het labyrint", look:{ armor:"middel", capekleur:"goud", helm:"open" },
+        leg:{ id:"machina_daedali", la:"Machina Daedali", nl:"De machine van Daedalus: negeert de helft van de verdediging en raakt ook vijanden ernaast (40%)", fx:{ pierce:50, splash:{ pct:40, radius:1000 } }, mv:{ kind:"dmg", power:125, acc:90, pp:3, pierce:50, nl:"Machineschot door het pantser" } } }),
+    _HE_S("daedalus","vol","cavalerie","Volator","Vlieger","Daedalus vliegt op zelfgemaakte vleugels: zeer snel en sterk bij de eerste treffers.",
+      { armor:"licht", cape:"engelenvleugels", capekleur:"goud", helm:"open" },
+      { nm:["Alae ceratae","De vleugels van was"], seek:["Alas ceratas","de vleugels van was"], nom:["Alae ceratae","De vleugels van was"],
+        steps:[ _HE_K(12,"graecia","litus"), _HE_C(3), _HE_B("boss_troia") ] },
+      { nm:"Dominus Aeris", nl:"Heer van de lucht", look:{ armor:"middel", cape:"engelenvleugels", capekleur:"goud" },
+        leg:{ id:"volatus_daedali", la:"Volatus Daedali", nl:"De vlucht van Daedalus: +30% schiettempo en de eerste 3 treffers doen dubbele schade", fx:{ cd:30, charge:{ hits:3, mult:2 } }, mv:{ kind:"dmg", power:105, acc:95, pp:4, prio:1, nl:"Duikvlucht (gaat eerst)" } } }) ]);
+
 /* ----- Troia ----- */
 _HE_H("achilles", "⚔️", "Arma Vulcani", "De wapens van Vulcanus",
   { nm:["Arma Vulcani","De wapens van Vulcanus"], seek:["Arma nova","nieuwe wapens"], nom:["Arma nova","De nieuwe wapens"],
@@ -281,6 +317,16 @@ _HE_H("penthesilea", "🪓", "Bipennis Martis", "De strijdbijl van Mars",
       { nm:"Martis Filia", nl:"Dochter van Mars", look:{ armor:"ceremonieel", capekleur:"goud" },
         leg:{ id:"furor_amazonum", la:"Furor Amazonum", nl:"De woede van de Amazones: +30% schiettempo en +25% schade", fx:{ cd:30, dmg:25 }, mv:{ kind:"dmg", power:115, acc:95, pp:4, prio:1, nl:"Razende aanval te paard (gaat eerst)" } } }) ]);
 
+/* ----- Ulixes krijgt een derde tak: Machinator (genie), met het Trojaanse paard ----- */
+CASTRA_HERO_EVO.ulixes.specs.push(
+  _HE_S("ulixes","mac","genie","Machinator","Werktuigbouwer","Odysseus bouwt het Trojaanse paard: zijn machines schieten ver en raken meerdere vijanden.",
+    { armor:"middel", cape:"lang", capekleur:"oranje", helm:"open", wapen:"knuppel" },
+    { nm:["Equus ligneus","Het houten paard"], seek:["Equum ligneum","het houten paard"], nom:["Equus ligneus","Het houten paard"],
+      steps:[ _HE_K(12,"troia","muros"), _HE_C(3), _HE_B("boss_troia") ] },
+    { nm:"Architectus Equi", nl:"Bouwer van het paard", look:{ armor:"ceremonieel", capekleur:"oranje", helm:"open" },
+      leg:{ id:"equus_troianus", la:"Equus Troianus", nl:"Het Trojaanse paard: +20% bereik en treffers raken ook vijanden ernaast (50%)", fx:{ rng:20, splash:{ pct:50, radius:1000 } }, mv:{ kind:"dmg", power:120, acc:90, pp:3, nl:"Verrassingsaanval uit het paard" } } }));
+castraHeroEvoRegisterClasses("ulixes"); castraHeroEvoRegisterQuests("ulixes");
+
 /* ----- verhaal-arte per held (vanaf level 1, blijft na evolutie) ----- */
 Object.assign(CASTRA_HERO_SIG, {
   aeneas:     { id:"pietas_aeneae", la:"Pietas Aeneae", nl:"Pietas: +1 leven na elke golf, torens dichtbij +6% schade", lvl:1, fx:{ regen:1, aura:{ dmg:6, radius:1500 } }, mv:_HE_SHIELD },
@@ -294,6 +340,8 @@ Object.assign(CASTRA_HERO_SIG, {
   theseus:    { id:"labyrinthus", la:"Labyrinthus", nl:"Het labyrint: elke 3e treffer vertraagt 30%", lvl:1, fx:{ slow:{ pct:30, ticks:30, every:3 } }, mv:{ kind:"dmg", power:55, acc:100, pp:6, slow:30, nl:"Aanval die de vijand laat verdwalen (vertraagt)" } },
   atalanta:   { id:"cursus_atalantae", la:"Cursus Atalantae", nl:"Snelle loopster: +10% schiettempo en +10% bereik", lvl:1, fx:{ cd:10, rng:10 }, mv:{ kind:"dmg", power:52, acc:100, pp:6, prio:1, nl:"Snel schot (gaat eerst)" } },
   iason:      { id:"argonautae", la:"Argonautae", nl:"De Argonauten helpen: alle torens +3% schade", lvl:1, fx:{ global:3 }, mv:_HE_BUFF },
+  medea:      { id:"herbae_medicae", la:"Herbae medicae", nl:"Geneeskrachtige kruiden: +1 leven na elke golf, torens dichtbij +5% schade", lvl:1, fx:{ regen:1, aura:{ dmg:5, radius:1500 } }, mv:{ kind:"heal", pp:4, nl:"Geneest 30% van je levenspunten" } },
+  daedalus:   { id:"ars_daedali", la:"Ars Daedali", nl:"De kunst van Daedalus: +10% bereik en +8% schade", lvl:1, fx:{ rng:10, dmg:8 }, mv:{ kind:"dmg", power:60, acc:100, pp:6, nl:"Precisieschot" } },
   ulixes:     { id:"dolus_ulixis", la:"Dolus Ulixis", nl:"De list van Odysseus: elke 2e treffer vertraagt 25%", lvl:1, fx:{ slow:{ pct:25, ticks:30, every:2 } }, mv:{ kind:"dmg", power:50, acc:100, pp:6, prio:1, slow:25, nl:"List die de vijand vertraagt (gaat eerst)" } },
   achilles:   { id:"furor_pelidae", la:"Furor Pelidae", nl:"De woede van Achilles: +12% schade, elke 4e treffer dubbele schade", lvl:1, fx:{ dmg:12, nth:{ n:4, mult:2 } }, mv:{ kind:"dmg", power:80, acc:90, pp:5, nl:"Woede (zware slag)" } },
   hector:     { id:"defensor_patriae", la:"Defensor patriae", nl:"Verdediger van het vaderland: +1 leven na elke golf", lvl:1, fx:{ regen:1 }, mv:_HE_SHIELD },
@@ -315,7 +363,12 @@ Object.keys(CASTRA_HERO_SIG).forEach(id=>{
   "hasta":"speer", "hastam":"speer (4e naamval)", "hydrae":"van de Hydra", "ictum":"slag (4e naamval)", "laureae":"van laurier", "leonis":"van de leeuw", "lituum":"augurstaf (4e naamval)",
   "lituus":"augurstaf", "minotauri":"van de Minotaurus", "novae":"nieuwe", "pelii":"van Peleus", "pellem":"huid (4e naamval)", "pomum":"appel", "pugio":"dolk", "pugionem":"dolk (4e naamval)",
   "regis":"van de koning", "sceptrum":"scepter", "scutum":"schild", "secreta":"geheime", "secretam":"geheime", "securim":"bijl (4e naamval)", "securis":"bijl", "signum":"veldteken",
-  "speculum":"spiegel", "troianum":"Trojaans", "umbrae":"van de schaduw" });
+  "speculum":"spiegel", "troianum":"Trojaans", "umbrae":"van de schaduw",
+  "carcerem":"gevangenis (4e naamval)", "cera":"was (bijenwas)", "ceratae":"van was", "ceratas":"van was", "colchicae":"uit Colchis", "colchicas":"uit Colchis", "daedalus":"Daedalus (de bouwer)",
+  "facem":"fakkel (4e naamval)", "fax":"fakkel", "ferro":"van ijzer", "fugere":"vluchten", "hecate":"Hecate (godin van de magie)", "hecates":"van Hecate", "herbae":"kruiden", "herbas":"kruiden (4e naamval)",
+  "iasoni":"aan Jason", "icarum":"Icarus (4e naamval)", "ingenium":"vernuft", "instrumenta":"gereedschap", "legit":"verzamelt", "lego":"ik verzamel", "libera":"vrij", "ligno":"van hout",
+  "machina":"machine", "machinam":"machine (4e naamval)", "machinas":"machines", "medeae":"van Medea", "minerva":"Minerva", "minoem":"Minos (4e naamval)", "minoi":"voor Minos", "minos":"Minos (koning van Creta)",
+  "pennis":"veren", "domina":"meesteres", "lux":"licht", "venefica":"gifmengster", "maga":"tovenares", "colchica":"uit Colchis", "machinator":"werktuigbouwer", "architectus":"bouwer", "labyrinthi":"van het labyrint", "daedali":"van Daedalus", "volator":"vlieger", "dominus":"heer", "aeris":"van de lucht", "volatus":"vlucht", "equum":"paard (4e naamval)", "ligneum":"houten", "ligneus":"houten", "equi":"van het paard", "qua":"welke", "re":"zaak, ding", "venena":"gif", "venenum":"gif" });
 
 // Heldenmenu en evolutie gebruiken de heldendata, dus meteen opnieuw toepassen op reeds geladen helden.
 try{ if(typeof castraHeroEvoApplyAll==="function") castraHeroEvoApplyAll(); }catch(e){}

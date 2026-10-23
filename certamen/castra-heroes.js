@@ -234,6 +234,33 @@ Object.assign(CASTRA_HERO_DATA, {
       _T(["Medea me iuvat. Draconem dormire facit.","Medea helpt mij. Ze laat de draak slapen."], ["Quis Iasonem iuvat?","Wie helpt Jason?"], ["Medea.","Medea."], ["Circe.","Circe."], ["Hera.","Hera."]),
     ] },
 
+  medea: { nm:"Medea", region:"graecia", type:"sup", affinity:"praetorium", world:{ x:36, y:13, dir:"down" },
+    base:{ vita:52, impetus:12, tutela:9, celeritas:9, ambitus:6 },
+    look:_look({ huid:"olijf", haar:"lang", haarkleur:"zwart", armor:"robe", cape:"lang", capekleur:"paars", helm:"geen", wapen:"staf" }),
+    chain:[
+      _K("graecia","olea",3, ["Salve, dux {naam}! Medea sum. Herbas quaero. Tres hostes in olea vince.","Gegroet, leider {naam}! Ik ben Medea. Ik zoek kruiden. Versla drie vijanden in de olijfgaard."], ["Hostes in olea vince!","Versla vijanden in de olijfgaard!"], ["Optime! Olea libera est.","Uitstekend! De olijfgaard is vrij."]),
+      _W("g2", ["Bene! Nunc Iasoni auxilium do. Proelium secundum vince.","Goed! Nu help ik Jason. Win het tweede gevecht."], ["Proelium secundum vince!","Win het tweede gevecht!"], ["Proelium vicisti! Gratias tibi ago.","Je hebt het gevecht gewonnen! Ik dank je."]),
+      _P(["Cur tecum veniam, dux {naam}?","Waarom zou ik met je meegaan, leider {naam}?"], ["Quia amicos servo.","Omdat ik vrienden bescherm."], ["Quia venena amo.","Omdat ik van gif houd."], ["Quia fugere volo.","Omdat ik wil vluchten."]),
+    ],
+    talks:[
+      _T(["Herbas in silva lego.","Ik verzamel kruiden in het bos."], ["Quid Medea legit?","Wat verzamelt Medea?"], ["Herbas.","Kruiden."], ["Saxa.","Stenen."], ["Flores.","Bloemen."]),
+      _T(["Hecate dea mea est.","Hecate is mijn godin."], ["Quae dea Medeae est?","Wie is de godin van Medea?"], ["Hecate.","Hecate."], ["Venus.","Venus."], ["Minerva.","Minerva."]),
+      _T(["Draconem dormire facio. Iason vellus capit.","Ik laat de draak slapen. Jason pakt het vlies."], ["Quis draconem dormire facit?","Wie laat de draak slapen?"], ["Medea.","Medea."], ["Iason.","Jason."], ["Hercules.","Hercules."]),
+    ] },
+  daedalus: { nm:"Daedalus", region:"graecia", type:"rng", affinity:"metallum", world:{ x:13, y:22, dir:"right" },
+    base:{ vita:54, impetus:14, tutela:8, celeritas:7, ambitus:7 },
+    look:_look({ huid:"getint", haar:"kort", haarkleur:"bruin", baard:"baard", armor:"licht", cape:"kort", capekleur:"oranje", helm:"geen", wapen:"knuppel" }),
+    chain:[
+      _K("graecia","litus",3, ["Salve, dux {naam}! Daedalus sum. Machinas aedifico. Tres hostes ad litus vince.","Gegroet, leider {naam}! Ik ben Daedalus. Ik bouw machines. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Litus liberavisti.","Uitstekend! Je hebt de kust bevrijd."]),
+      _W("g1", ["Bene! Nunc labyrinthum aedifico. Proelium primum vince.","Goed! Nu bouw ik het labyrint. Win het eerste gevecht."], ["Proelium primum vince!","Win het eerste gevecht!"], ["Proelium vicisti! Gratias tibi ago.","Je hebt het gevecht gewonnen! Ik dank je."]),
+      _P(["Cur tecum veniam, dux {naam}?","Waarom zou ik met je meegaan, leider {naam}?"], ["Quia ingenium tuum magnum est.","Omdat je vernuft groot is."], ["Quia carcerem amo.","Omdat ik van de gevangenis houd."], ["Quia machinas timeo.","Omdat ik bang ben voor machines."]),
+    ],
+    talks:[
+      _T(["Labyrinthum Minoi aedifico.","Ik bouw het labyrint voor Minos."], ["Quis labyrinthum aedificat?","Wie bouwt het labyrint?"], ["Daedalus.","Daedalus."], ["Theseus.","Theseus."], ["Minos.","Minos."]),
+      _T(["Filium meum, Icarum, amo.","Ik hou van mijn zoon Icarus."], ["Quem Daedalus amat?","Van wie houdt Daedalus?"], ["Icarum.","Icarus."], ["Minotaurum.","De Minotaurus."], ["Minoem.","Minos."]),
+      _T(["Alas ex pennis et cera facio.","Ik maak vleugels van veren en was."], ["Ex qua re alae sunt?","Waarvan zijn de vleugels gemaakt?"], ["Ex pennis et cera.","Van veren en was."], ["Ex ferro.","Van ijzer."], ["Ex ligno.","Van hout."]),
+    ] },
+
   /* ----- Troia ----- */
   achilles: { nm:"Achilles", region:"troia", type:"inf", affinity:"campus", world:{ x:20, y:18, dir:"up" },
     base:{ vita:100, impetus:22, tutela:15, celeritas:9, ambitus:3 },
@@ -338,7 +365,7 @@ function castraHeroAssign(id, buildingId){
    Aeneas is er vanaf het begin), en (2) mogen er per gevecht maar weinig helden tegelijk meedoen, afhankelijk van het
    heroum-niveau: 1 held (heroum 1-2), 2 (3-4), 3 (5). De rest van de slagorde bestaat uit soldaten. */
 const CASTRA_HERO_MINLVL = { aeneas:1, romulus:6, horatius:9, cloelia:12, mucius:15, camilla:18,
-  hercules:20, perseus:23, theseus:26, atalanta:29, iason:32, achilles:30, hector:34, ulixes:38, penthesilea:42 };
+  hercules:20, perseus:23, theseus:26, atalanta:29, iason:32, medea:35, daedalus:40, achilles:30, hector:34, ulixes:38, penthesilea:42 };
 function castraHeroMinLvl(id){ return CASTRA_HERO_MINLVL[id] || 1; }
 function castraHeroFieldCap(){ return 1 + Math.floor(Math.max(0, castraLvl("heroum")-1)/2); }
 function castraHeroAsUnit(h){ return { id:"hero_"+h.id, hero:true, h, lvl:h.lvl, line:null, stage:0 }; }

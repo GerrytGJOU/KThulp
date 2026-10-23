@@ -100,9 +100,10 @@ castraLoad = function(){ const r = _castraLoadHevo0.apply(this, arguments); try{
 /* ---------- persoonlijke quests in de questmotor ---------- */
 function castraHeroEvoRegisterQuests(id){
   const E = CASTRA_HERO_EVO[id], hh = ()=>castraHero(id); if(!E) return;
-  CASTRA_QDEFS.push({ id:"evo_"+id+"_1", giver:"hero_"+id, region:null, hero:id, ...E.q1,
+  const has = qid=>CASTRA_QDEFS.some(q=>q.id===qid);
+  if(!has("evo_"+id+"_1")) CASTRA_QDEFS.push({ id:"evo_"+id+"_1", giver:"hero_"+id, region:null, hero:id, ...E.q1,
     can:()=>{ const h = hh(); return !!h && (h.evo||0)===0 && (h.lvl||1) >= CASTRA_HEVO_LVL[0]; } });
-  E.specs.forEach(sp=>CASTRA_QDEFS.push({ id:"evo_"+id+"_2_"+sp.id, giver:"hero_"+id, region:null, hero:id, ...sp.q2,
+  E.specs.filter(sp=>!has("evo_"+id+"_2_"+sp.id)).forEach(sp=>CASTRA_QDEFS.push({ id:"evo_"+id+"_2_"+sp.id, giver:"hero_"+id, region:null, hero:id, ...sp.q2,
     can:()=>{ const h = hh(); return !!h && h.evo===1 && h.spec===sp.id && (h.lvl||1) >= CASTRA_HEVO_LVL[1]; } }));
 }
 Object.keys(CASTRA_HERO_EVO).forEach(castraHeroEvoRegisterQuests);
@@ -148,9 +149,10 @@ function castraHeroEvolve(id){
     if(typeof castraMenuRender==="function" && CASTRA_MENU.open) castraMenuRender();
   };
   if((h.evo||0)===0){
-    castraLatSay(d.nm, look, [ { la:"Duas vias video. Quam viam eligis?", nl:"Ik zie twee wegen. Welke weg kies je? (Definitief!)" },
-      { la:E.specs[0].nm+" an "+E.specs[1].nm+"?", nl:E.specs[0].nm+" ("+E.specs[0].nl+") of "+E.specs[1].nm+" ("+E.specs[1].nl+")?", opts:[ { la:E.specs[0].nm, nl:E.specs[0].nl }, { la:E.specs[1].nm, nl:E.specs[1].nl }, CASTRA_DQ_NO ] } ],
-      k=>{ if(k===0||k===1) finish(E.specs[k]); });
+    const n = E.specs.length;
+    castraLatSay(d.nm, look, [ { la:(n>2?"Tres vias video.":"Duas vias video.")+" Quam viam eligis?", nl:"Ik zie "+(n>2?"drie":"twee")+" wegen. Welke weg kies je? (Definitief!)" },
+      { la:E.specs.map(x=>x.nm).join(" an ")+"?", nl:E.specs.map(x=>x.nm+" ("+x.nl+")").join(" of ")+"?", opts:E.specs.map(x=>({ la:x.nm, nl:x.nl })).concat([ CASTRA_DQ_NO ]) } ],
+      k=>{ if(k<n) finish(E.specs[k]); });
   } else {
     const sp = castraHeroSpec(h);
     castraLatSay(d.nm, look, [ { la:"Ambrosia! Nunc "+sp.prestige.nm+" fio.", nl:"Ambrosia! Nu word ik "+sp.prestige.nm+" ("+sp.prestige.nl+")." }, { la:"Paratus es?", nl:"Ben je er klaar voor?", opts:[ CASTRA_DQ_YES, CASTRA_DQ_NO ] } ], k=>{ if(k===0) finish(null); });
