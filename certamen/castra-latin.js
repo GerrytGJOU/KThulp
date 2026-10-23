@@ -185,7 +185,7 @@ const CASTRA_VENATIO = {
       { id:"litus", la:"Ad litus", nl:"Aan de kust",        prefs:{ inf:2, rng:2 }, myth:{ p:0.20, taks:["Harpijen","Sirenen","Zeepaarden"] } },
       { id:"urbs",  la:"In urbe",  nl:"In de stad",         prefs:{ inf:3, cav:2, rng:1 }, myth:{ p:0.05, taks:["Gezaaide mannen","Myrmidonen"] } },
     ],
-    traces:[ "hercules","perseus","theseus","atalanta","iason" ], traceChance:0.15,
+    traces:[ "hercules","perseus","theseus","atalanta","iason","medea","daedalus" ], traceChance:0.15,
   },
   troia: {
     nm:"Troia", min:36, max:44, tierMax:4, folk:{ tro:72, gra:12, ama:6, per:4, aeg:3, spa:2, car:1 },
