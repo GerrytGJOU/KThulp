@@ -45,6 +45,8 @@ body.castra-stage-on #app{display:none !important}
 #cgBottom small,#cgBottom .note{font-size:14px}
 #cgInfo{position:absolute;z-index:80;top:6px;right:58px;left:58px;max-width:520px;margin-left:auto;max-height:calc(100% - 12px);overflow-y:auto;touch-action:pan-y;background:var(--parch,#efe1b9);color:var(--parch-ink,#2b1d0e);border:3px solid var(--parch-edge,#4a3416);border-radius:10px;padding:10px 14px;font-size:14px;box-shadow:0 4px 18px rgba(0,0,0,.6)}
 #cgInfo[hidden]{display:none}
+#cgTalk{position:absolute;z-index:72;right:10px;bottom:12px;display:none;align-items:center;gap:6px;min-height:48px;padding:0 16px;font-size:17px;font-family:inherit;font-weight:bold;cursor:pointer;border:3px solid #9c7c1f;border-radius:12px;background:linear-gradient(#e8c96a,#d4af37);color:#2b1d0e;box-shadow:0 3px 12px rgba(0,0,0,.55)}
+#cgInfo .btn{margin-top:8px;min-height:44px}
 #cgBar button.cgfs{padding:0 10px;font-size:14px;white-space:nowrap}
 #cgFloat{position:absolute;z-index:75;left:6px;top:56px;display:none;flex-direction:column;gap:6px}
 #cgFloat button{min-width:40px;min-height:40px;font-size:18px;line-height:1;cursor:pointer;font-family:inherit;border:2px solid var(--hi,#d4af37);border-radius:8px;background:rgba(27,20,12,.82);color:var(--hi-bright,#e8c96a)}
@@ -55,10 +57,11 @@ body.castra-immersive .portal-back{display:none !important}
 #cgInfo .foot{margin-top:10px;font-size:12px;opacity:.7;text-align:center}
 `;
 
-let CASTRA_STAGE = { ro:null };
+let CASTRA_STAGE = { ro:null, talkTimer:null };
 
 function castraStageRemove(){
   if(CASTRA_STAGE.ro){ try{ CASTRA_STAGE.ro.disconnect(); }catch(_){} CASTRA_STAGE.ro = null; }
+  if(CASTRA_STAGE.talkTimer){ clearInterval(CASTRA_STAGE.talkTimer); CASTRA_STAGE.talkTimer = null; }
   const s = document.getElementById("castraStage"); if(s) s.remove();
   document.body.classList.remove("castra-stage-on", "castra-immersive");   // de keuze zelf blijft bewaard (localStorage)
 }
@@ -99,7 +102,7 @@ function castraStageBuild(kind){
   const back = app.querySelector(".scrhead .back"), h2 = app.querySelector(".scrhead h2");
   const hodie = el("castraRes") && el("castraRes").nextElementSibling;
   const help = kind==="world"
-    ? `Sleep met je duim of gebruik de pijltjestoetsen om te lopen, of tik ergens om daarheen te gaan. Loop door het <b>hoge, donkere gras</b>: daar kun je vijanden ontmoeten. Het menu (☰) staat rechtsboven.`
+    ? `Sleep met je duim of gebruik de pijltjestoetsen om te lopen, of tik ergens om daarheen te gaan. Loop door het <b>hoge, donkere gras</b>: daar kun je vijanden ontmoeten. Staat er iemand met een ❗ naast je, dan vertelt de knop <b>💬 Praat</b> (of Enter) je zijn opdracht. Het menu (☰) staat rechtsboven.`
     : `Sleep met je duim of gebruik de pijltjestoetsen om te lopen. Tik op een gebouw om het te openen (met toetsenbord: sta ervoor en druk op Enter of spatie). Het menu (☰) staat rechtsboven.`;
   const st = document.createElement("div"); st.id = "castraStage";
   st.innerHTML = `<div id="cgBar"><span id="cgBackSlot" style="display:flex"></span><div id="cgTitle"></div><span style="flex:1"></span>
@@ -115,13 +118,34 @@ function castraStageBuild(kind){
   ["castraRes","castraTutBar","cwHud"].forEach(id=>{ const n = el(id); if(n) top.appendChild(n); });
   ["cwPanel","castraPanel"].forEach(id=>{ const n = el(id); if(n) bottom.appendChild(n); });
   if(hodie && (hodie.id==="castraHodie" || /castraHodieToggle/.test(hodie.innerHTML))) info.appendChild(hodie);
+  if(typeof castraFaqOpen==="function") info.insertAdjacentHTML("beforeend", `<button class="btn btn-gold" onclick="castraFaqOpen('game')">📖 Volledige handleiding</button>`);
   info.insertAdjacentHTML("beforeend", foot());
+  if(kind==="world"){
+    const tb = document.createElement("button"); tb.id = "cgTalk"; tb.textContent = "💬 Praat"; tb.onclick = castraWorldTalkNear; tb.onpointerdown = ev=>ev.stopPropagation(); main.appendChild(tb);
+    const upd = ()=>{ tb.style.display = castraWorldNearNpc() ? "flex" : "none"; };
+    upd(); CASTRA_STAGE.talkTimer = setInterval(upd, 300);
+  }
   let pref = false; try{ pref = localStorage.getItem("castra_immersive")==="1"; }catch(_){}
   if(pref) document.body.classList.add("castra-immersive");    // eerder gekozen: zonder fullscreen-verzoek (dat vraagt een tik)
   const fit = kind==="world" ? castraWorldFit : castraFit;
   fit();
   if(window.ResizeObserver){ CASTRA_STAGE.ro = new ResizeObserver(()=>fit()); CASTRA_STAGE.ro.observe(wrap); }
 }
+
+/* ---------- praten met wie naast je staat (opdrachten accepteren) ---------- */
+function castraWorldNearNpc(){
+  if(typeof castraNpcAt!=="function" || !el("cwMap")) return null;
+  const px = CASTRA_W_UI.px, py = CASTRA_W_UI.py;
+  for(const [dx,dy] of [[0,0],[0,-1],[0,1],[-1,0],[1,0]]){ const id = castraNpcAt(px+dx, py+dy); if(id) return id; }
+  return null;
+}
+function castraWorldTalkNear(){ if(CASTRA_DLG) return; const id = castraWorldNearNpc(); if(id) castraNpcTalk(id); }
+document.addEventListener("keydown", e=>{
+  if((e.key!=="Enter" && e.key!==" " && e.key!=="e") || !document.getElementById("castraStage") || !el("cwMap")) return;
+  if(CASTRA_DLG || (typeof CASTRA_MENU!=="undefined" && CASTRA_MENU.open)) return;
+  const t = e.target && e.target.tagName; if(t==="INPUT" || t==="TEXTAREA" || t==="BUTTON") return;
+  if(castraWorldNearNpc()){ e.preventDefault(); castraWorldTalkNear(); }
+});
 
 /* ---------- de kaart past zich aan het hele scherm aan ---------- */
 const _castraWorldFitSt0 = castraWorldFit;

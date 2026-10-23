@@ -50,6 +50,11 @@ SCREENS.home = function(){
     <h3>Mijn profiel</h3>
     <p>Rang, XP, eerbewijzen, munten en avatars die je hebt verdiend.</p>
   </button>
+  <button class="tile" onclick="go('helpHub')">
+    <span class="ic">${iconSVG("torch",44,"currentColor")}</span>
+    <h3>📖 Handleiding</h3>
+    <p>Uitleg en veelgestelde vragen bij Battle Mode en Castra Heroum.</p>
+  </button>
   <button class="tile tile-compact" onclick="go('teacherLogin')">
     <span class="ic">${iconSVG("column",44,"currentColor")}</span>
     <h3>Docentenportaal</h3>
