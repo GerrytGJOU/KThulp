@@ -102,7 +102,7 @@ function castraStageBuild(kind){
   const back = app.querySelector(".scrhead .back"), h2 = app.querySelector(".scrhead h2");
   const hodie = el("castraRes") && el("castraRes").nextElementSibling;
   const help = kind==="world"
-    ? `Sleep met je duim of gebruik de pijltjestoetsen om te lopen, of tik ergens om daarheen te gaan. Loop door het <b>hoge, donkere gras</b>: daar kun je vijanden ontmoeten. Staat er iemand met een ❗ naast je, dan vertelt de knop <b>💬 Praat</b> (of Enter) je zijn opdracht. Het menu (☰) staat rechtsboven.`
+    ? `Sleep met je duim of gebruik de pijltjestoetsen om te lopen, of tik ergens om daarheen te gaan. Loop door het <b>hoge, donkere gras</b>: daar kun je vijanden ontmoeten. Staat er iemand met een ❗ naast je, dan vertelt de knop <b>💬 Praat</b> (of Enter) je zijn opdracht; bij een deur staat de knop <b>🚪 Binnen</b>. Gestippelde vlakken met een naam zijn zones (bos, weg, veld): opdrachten tellen vijanden alleen in de juiste zone, het chipje bovenaan zegt waar je staat. Het menu (☰) staat rechtsboven.`
     : `Sleep met je duim of gebruik de pijltjestoetsen om te lopen. Tik op een gebouw om het te openen (met toetsenbord: sta ervoor en druk op Enter of spatie). Het menu (☰) staat rechtsboven.`;
   const st = document.createElement("div"); st.id = "castraStage";
   st.innerHTML = `<div id="cgBar"><span id="cgBackSlot" style="display:flex"></span><div id="cgTitle"></div><span style="flex:1"></span>
@@ -121,8 +121,8 @@ function castraStageBuild(kind){
   if(typeof castraFaqOpen==="function") info.insertAdjacentHTML("beforeend", `<button class="btn btn-gold" onclick="castraFaqOpen('game')">📖 Volledige handleiding</button>`);
   info.insertAdjacentHTML("beforeend", foot());
   if(kind==="world"){
-    const tb = document.createElement("button"); tb.id = "cgTalk"; tb.textContent = "💬 Praat"; tb.onclick = castraWorldTalkNear; tb.onpointerdown = ev=>ev.stopPropagation(); main.appendChild(tb);
-    const upd = ()=>{ tb.style.display = castraWorldNearNpc() ? "flex" : "none"; };
+    const tb = document.createElement("button"); tb.id = "cgTalk"; tb.textContent = "💬 Praat"; tb.onclick = ()=>{ if(castraWorldNearNpc()) castraWorldTalkNear(); else castraWorldEnterDoor(); }; tb.onpointerdown = ev=>ev.stopPropagation(); main.appendChild(tb);
+    const upd = ()=>{ const n = castraWorldNearNpc(), d = n ? null : castraWorldNearDoor(); tb.style.display = (n||d) ? "flex" : "none"; const t = n ? "💬 Praat" : "🚪 Binnen"; if(tb.textContent!==t) tb.textContent = t; };
     upd(); CASTRA_STAGE.talkTimer = setInterval(upd, 300);
   }
   let pref = false; try{ pref = localStorage.getItem("castra_immersive")==="1"; }catch(_){}
@@ -139,13 +139,52 @@ function castraWorldNearNpc(){
   for(const [dx,dy] of [[0,0],[0,-1],[0,1],[-1,0],[1,0]]){ const id = castraNpcAt(px+dx, py+dy); if(id) return id; }
   return null;
 }
+// Deuren (huizen, grotten): op of naast de deurtegel kun je met de knop 🚪 Binnen naar binnen.
+function castraWorldNearDoor(){
+  const W = castraWorldCfg(), px = CASTRA_W_UI.px, py = CASTRA_W_UI.py;
+  return (W.doors||[]).find(d=>Math.abs(d.x-px)+Math.abs(d.y-py)<=1) || null;
+}
+function castraWorldEnterDoor(){ const d = castraWorldNearDoor(); if(d && typeof castraGeoDoor==="function") castraGeoDoor(d.x, d.y); }
 function castraWorldTalkNear(){ if(CASTRA_DLG) return; const id = castraWorldNearNpc(); if(id) castraNpcTalk(id); }
 document.addEventListener("keydown", e=>{
   if((e.key!=="Enter" && e.key!==" " && e.key!=="e") || !document.getElementById("castraStage") || !el("cwMap")) return;
   if(CASTRA_DLG || (typeof CASTRA_MENU!=="undefined" && CASTRA_MENU.open)) return;
   const t = e.target && e.target.tagName; if(t==="INPUT" || t==="TEXTAREA" || t==="BUTTON") return;
   if(castraWorldNearNpc()){ e.preventDefault(); castraWorldTalkNear(); }
+  else if(castraWorldNearDoor()){ e.preventDefault(); castraWorldEnterDoor(); }
 });
+
+/* ---------- een gesprek sluit zodra je wegloopt en kan daarna opnieuw beginnen ----------
+   Een per ongeluk begonnen gesprek (tegen iemand aangelopen) bleef open staan als je doorliep. Nu sluit het bij de
+   eerste stap die je zet: zonder dat er iets verandert (er is niets aangenomen of afgerond), dus je kunt het later
+   opnieuw beginnen door weer met de persoon te praten. */
+// Dialogen die in de wereld opengaan (nadat het tutorial klaar is) krijgen een vlag; een stap weg sluit ze stil.
+const _castraDlgOpenCl0 = castraDlgOpen;
+castraDlgOpen = function(){
+  _castraDlgOpenCl0.apply(this, arguments);
+  try{ if(CASTRA_DLG && el("cwMap") && !(CASTRA.tut && CASTRA.tut.step<99)) CASTRA_DLG.world = true; }catch(_){}
+};
+function castraWorldCloseTalk(){
+  if(CASTRA_DLG && CASTRA_DLG.world) castraDlgClose(true);              // stil sluiten: aannemen e.d. wordt niet uitgevoerd, dus later opnieuw te beginnen
+  const p = el("cwPanel");                                                // gesprekspaneel van een held (keten, overtuigen)
+  if(p && /castraNpc(Accept|Persuade|Close|Next)/.test(p.innerHTML)){ if(typeof castraNpcClose==="function") castraNpcClose(); else p.innerHTML = ""; }
+}
+// Tik op het huis of de grot zelf (de gevel) en je loopt naar de deur en gaat naar binnen.
+const _castraWorldTapDr0 = castraWorldTap;
+castraWorldTap = function(e){
+  const map = el("cwMap"); if(map){
+    const r = map.getBoundingClientRect(), s = CASTRA_W_UI.scale||1, tx = Math.floor((e.clientX-r.left)/s/48), ty = Math.floor((e.clientY-r.top)/s/48);
+    const W = castraWorldCfg(), npc = typeof castraNpcAt==="function" ? castraNpcAt(tx,ty) : null;
+    if(!npc && castraWBlocked(tx,ty) && W.doors){
+      const d = W.doors.find(d=>Math.abs(d.x-tx)<=2 && ty<=d.y && d.y-ty<=3);
+      if(d){ if(CASTRA_W_UI.px===d.x && CASTRA_W_UI.py===d.y){ castraGeoDoor(d.x, d.y); return; }
+        const p = castraWorldPath(CASTRA_W_UI.px, CASTRA_W_UI.py, d.x, d.y); if(p && p.length){ castraWorldWalk(p); return; } }
+    }
+  }
+  return _castraWorldTapDr0.apply(this, arguments);
+};
+const _castraWStepCl0 = castraWStep;
+castraWStep = function(dir){ const r = _castraWStepCl0.apply(this, arguments); if(r===true) castraWorldCloseTalk(); return r; };
 
 /* ---------- de kaart past zich aan het hele scherm aan ---------- */
 const _castraWorldFitSt0 = castraWorldFit;
