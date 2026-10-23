@@ -1185,3 +1185,68 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 - PORT: Show the golden laurel wreath and flying cap with the goggles, the wind-swept grey-streaked hair and beard, the compass pendant, the large gold shoulder plate and the golden feathered wings rising behind his shoulders.
 - FRONT: The golden feathered wings spread behind him, the gold-and-white flight armour with the golden sun emblem, the golden hammer in the right hand.
 - BACK: Show the two big golden feathered wings, the long orange-gold scarf-cape and the harness straps on his back.
+
+## hero_cassandra | Cassandra
+
+- ROLE: legendary hero, the princess of Troy who sees the future but is never believed (seer)
+- FMT: the finished 3-cell sheet of the Greek recruit Ephebus: portrait, battle front, battle back
+- INTRO: The attached image is a six-cell sprite sheet of a Greek soldier: it shows only the required LAYOUT, pose list, pixel size and level of detail. The new character is a legendary hero, NOT a soldier: entirely different clothing, colours and equipment as described below; do NOT copy the soldier's clothing, colours or shield.
+- OUTFIT: She wears: NO helmet, the face fully visible (fair skin, long wavy chestnut-brown hair with a small golden laurel sprig above the left ear, large violet-grey eyes with a distant visionary gaze); a small gold sun-disc pendant on a thin chain at her neck; a long soft cream-and-rose Trojan princess gown with gold trim, a rose-pink sash, wide sleeves; a SHORT rose-pink shawl-cape pinned at the shoulders with two small gold brooches; gold bangles; soft sandals; NO shield, NO sword. In her right hand a slender ash-wood staff topped with a small green laurel wreath; her left hand holds out a small glowing violet-white vision spark.
+- REST: standing gentle and distant, facing the viewer, the slender staff held upright in her right hand, the left hand holding the glowing spark at her side
+- ATTACK: one step forward, the staff pointed forward, a burst of violet-white light from the laurel wreath, the left hand held out casting sparks
+- HIT: upper body leaning backwards, eyes closed, the staff tilting, one hand raised
+- PORT: Show the long wavy chestnut hair with the golden laurel sprig, the large violet-grey visionary eyes, the gold sun-disc pendant, the cream-and-rose gown collar and the rose-pink shawl with the gold brooches.
+- FRONT: The slender staff with the laurel wreath held in the right hand, the glowing spark in the left, the cream-and-rose gown with the rose sash.
+- BACK: Show the long wavy chestnut hair with the laurel sprig, the rose-pink shawl-cape, the gown with the sash and the staff.
+
+## hero_cassandra_sac | Cassandra, Sacerdos Apollinis
+
+- ROLE: the same legendary hero Cassandra, now the priestess of Apollo (Sacerdos Apollinis), priestess and healer
+- FMT: the finished 3-cell sheet of the same hero Cassandra in her base form: it shows the format; the new form keeps the same woman's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Cassandra in her base form: the new form is THE SAME WOMAN, with the same face as always: fair skin, long wavy chestnut-brown hair with a small golden laurel sprig above the left ear, large violet-grey eyes with a distant visionary gaze, a small gold sun-disc pendant on a thin chain at her neck, but she has changed her equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: a golden radiant sun-ray diadem on her brow, the face fully open and clearly visible (the same face as always: fair skin, long wavy chestnut-brown hair with a small golden laurel sprig above the left ear, large violet-grey eyes with a distant visionary gaze, a small gold sun-disc pendant on a thin chain at her neck); a long flowing white-and-saffron priestess robe with gold sun embroidery, a gold sash, wide bell sleeves; a LONG saffron-yellow cape with a gold border pinned with a gold sun brooch; gold bangles; the small gold sun-disc pendant. NO shield, NO sword. In her right hand a tall golden staff topped with a golden sun disc with rays that shines with a warm light; her left hand held out open in blessing, a few golden sparks around it.
+- REST: standing calm and serene, facing the viewer, the tall golden sun staff held upright in her right hand, the left hand open at her side
+- ATTACK: one step forward, the sun staff pointed forward with a bright golden flash, the left hand held out casting golden sparks
+- HIT: upper body leaning backwards, eyes closed, the staff tilting, one hand raised
+- PORT: Show the golden sun-ray diadem, the long chestnut hair with the laurel sprig, the violet-grey eyes, the gold sun-disc pendant, the white-and-saffron robe collar and the saffron cape.
+- FRONT: The tall golden sun staff held in the right hand, the left hand open in blessing, the long white-and-saffron robe.
+- BACK: Show the long chestnut hair with the laurel sprig, the long saffron cape with the gold border, the robe and the sun staff.
+
+## hero_cassandra_sac_pr | Cassandra, Prophetissa
+
+- ROLE: the same legendary hero Cassandra, now the prestige form Prophetissa (the prophetess)
+- FMT: the finished 3-cell sheet of the same hero Cassandra in her specialisation form: it shows the format; the new prestige form keeps the same woman's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Cassandra in her specialisation form: the new form is THE SAME WOMAN, with the same face as always: fair skin, long wavy chestnut-brown hair with a small golden laurel sprig above the left ear, large violet-grey eyes with a distant visionary gaze, a small gold sun-disc pendant on a thin chain at her neck, now at the height of her legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around her, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: a splendid golden laurel crown with a large radiant sun-disc gem in front, the face fully open and clearly visible (the same face as always: fair skin, long wavy chestnut-brown hair with a small golden laurel sprig above the left ear, large violet-grey eyes with a distant visionary gaze, a small gold sun-disc pendant on a thin chain at her neck), a wise sorrowful look; a magnificent long white-and-gold prophetess robe with rich gold embroidery of suns and laurel, gold shoulder pieces; a LONG, rich, shimmering saffron-and-gold cape with a wide gold border and a large round gold brooch; gold bangles; the small gold sun-disc pendant. NO shield, NO sword. In her right hand a tall golden staff topped with a big blazing golden sun with long rays; a ring of small golden sun sparks floats around her; her left hand held out open in blessing. Around the figure a faint glow: a few tiny sparkle pixels and golden light, kept close to the body and completely inside the cell.
+- REST: standing tall and radiant, facing the viewer, the golden sun staff held upright in her right hand, the left hand open at her side
+- ATTACK: one step forward, the sun staff pointed forward with a blazing golden flash, the left hand held out casting golden light
+- HIT: upper body leaning backwards, eyes closed, the staff tilting, one hand raised
+- PORT: Show the golden laurel crown with the sun gem, the long chestnut hair, the violet-grey eyes, the gold sun-disc pendant, the gold shoulder piece and the saffron-and-gold cape.
+- FRONT: The golden staff with the blazing sun held in the right hand, the left hand open in blessing, the white-and-gold robe with suns and laurel.
+- BACK: Show the long chestnut hair under the golden laurel crown, the long saffron-and-gold cape with the gold border and the staff with the sun.
+
+## hero_cassandra_vat | Cassandra, Vates Furens
+
+- ROLE: the same legendary hero Cassandra, now the seer in ecstasy (Vates Furens), seer
+- FMT: the finished 3-cell sheet of the same hero Cassandra in her base form: it shows the format; the new form keeps the same woman's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Cassandra in her base form: the new form is THE SAME WOMAN, with the same face as always: fair skin, long wavy chestnut-brown hair with a small golden laurel sprig above the left ear, large violet-grey eyes with a distant visionary gaze, a small gold sun-disc pendant on a thin chain at her neck, but she has changed her equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: NO crown, the face fully open and clearly visible (the same face as always: fair skin, long wavy chestnut-brown hair with a small golden laurel sprig above the left ear, large violet-grey eyes with a distant visionary gaze, a small gold sun-disc pendant on a thin chain at her neck), the hair wild and floating around her head as if in a wind, the eyes wide and glowing pale violet-white in a trance; a flowing ragged deep-indigo robe with small silver stars and a torn hem, a silver sash, bare forearms with silver bangles; a short tattered violet shawl; bare feet. NO shield, NO sword. In her right hand a glowing crystal-clear sphere full of swirling violet-white visions; her left hand raised high with fingers spread, violet-white star sparks and small floating vision orbs around her.
+- REST: standing tense and entranced, facing the viewer, the glowing vision sphere held in her right hand at chest height, the left hand raised
+- ATTACK: one step forward, the vision sphere thrust forward with a blast of violet-white light, the left hand flung wide, stars flying
+- HIT: upper body leaning backwards, eyes closed, the sphere tilting, one hand raised
+- PORT: Show the wild floating chestnut hair with the laurel sprig, the wide glowing violet-white eyes, the gold sun-disc pendant, the indigo robe collar with the silver stars and the glowing sphere in front.
+- FRONT: The glowing vision sphere held in the right hand, the left hand raised with the sparks, the deep-indigo starred robe.
+- BACK: Show the wild floating chestnut hair, the torn violet shawl, the deep-indigo starred robe and the glowing sphere held aside.
+
+## hero_cassandra_vat_pr | Cassandra, Oraculum
+
+- ROLE: the same legendary hero Cassandra, now the prestige form Oraculum (the oracle)
+- FMT: the finished 3-cell sheet of the same hero Cassandra in her specialisation form: it shows the format; the new prestige form keeps the same woman's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Cassandra in her specialisation form: the new form is THE SAME WOMAN, with the same face as always: fair skin, long wavy chestnut-brown hair with a small golden laurel sprig above the left ear, large violet-grey eyes with a distant visionary gaze, a small gold sun-disc pendant on a thin chain at her neck, now at the height of her legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around her, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy her old clothing or weapons.
+- OUTFIT: She wears: a golden laurel wreath and a thin gold circlet with a violet star gem on her brow, the face fully open and clearly visible (the same face as always: fair skin, long wavy chestnut-brown hair with a small golden laurel sprig above the left ear, large violet-grey eyes with a distant visionary gaze, a small gold sun-disc pendant on a thin chain at her neck), the hair floating, the eyes glowing bright violet-white, a prophetic ecstatic look; a magnificent flowing deep-violet-and-gold oracle robe covered in gold and silver stars and constellations, gold shoulder pieces; a LONG, rich, shimmering midnight-violet cloak with a wide gold border embroidered with stars and a large round gold brooch; gold bangles. NO shield, NO sword. In her right hand a large glowing crystal sphere full of swirling visions on a small golden stand-hand cup; her left hand raised high; a small golden Delphic tripod with violet smoke floats beside her and a ring of glowing stars circles her. Around the figure a faint glow: a few tiny sparkle pixels and violet stars, kept close to the body and completely inside the cell.
+- REST: standing tall and entranced, facing the viewer, the large glowing vision sphere held in her right hand, the left hand raised, the golden tripod floating beside her
+- ATTACK: one step forward, the vision sphere thrust forward with a blast of violet-white light, the left hand flung wide, stars flying
+- HIT: upper body leaning backwards, eyes closed, the sphere tilting, one hand raised
+- PORT: Show the golden laurel wreath and circlet with the violet star gem, the floating chestnut hair, the glowing violet-white eyes, the gold sun-disc pendant, the gold shoulder piece and the starry violet cloak.
+- FRONT: The large glowing vision sphere held in the right hand, the left hand raised, the starry violet-and-gold oracle robe, the floating golden tripod with violet smoke.
+- BACK: Show the floating chestnut hair under the golden laurel, the long starry violet cloak with the gold border and the floating tripod.
