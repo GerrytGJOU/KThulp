@@ -85,7 +85,7 @@ function castraVRender(stage){
     const ing = V.enemy.ingenium;
     const la = `${V.terrain.la} ${tl.pl} adsunt. Hostis ${ing} est.${V.stranger?" "+CASTRA_LA.peregrinus.la:""}`;
     const nl = `${V.terrain.nl} zijn ${tl.nl_pl}. De vijand is ${CASTRA_INGENIUM_NL[ing]||ing}.${V.stranger?" "+CASTRA_LA.peregrinus.nl:""}`;
-    const healthy = CASTRA.soldiers.filter(s=>!castraIsHurt(s));
+    const healthy = CASTRA.soldiers.filter(s=>!castraIsHurt(s) && !s.job);
     const cards = healthy.map(s=>{
       const st = castraStats(s), t = CASTRA_TYPE_LA[castraLine(s.line).type];
       return `<button class="tile" onclick="castraVFight('${s.id}')"><span class="ic">${castraLine(s.line).type==="cav"?"🐎":castraLine(s.line).type==="rng"?"🏹":"🛡️"}</span>

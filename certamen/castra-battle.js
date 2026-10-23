@@ -37,7 +37,7 @@ function castraPLeave(){ CASTRA.pos = { x:14, y:5 }; castraSave(); go("castraHom
 /* ---------- gevecht ---------- */
 function castraBHealthy(){
   if(CASTRA_B && CASTRA_B.endless && typeof castraColoUnits==="function") return castraColoUnits(CASTRA_B.div);
-  const list = (CASTRA.heroes||[]).map(castraHeroAsUnit).concat(CASTRA.soldiers.filter(s=>!castraIsHurt(s)));
+  const list = (CASTRA.heroes||[]).map(castraHeroAsUnit).concat(CASTRA.soldiers.filter(s=>!castraIsHurt(s) && !s.job));
   return list.length ? list : [ { id:"dux", dux:true, line:"rom_hastatus", lvl:1, name:"Dux" } ];
 }
 function castraBCap(){ if(CASTRA_B && CASTRA_B.endless) return CASTRA_COLO.cap[CASTRA_B.div] || 8; return Math.min(4 + 2*castraLvl("praetorium"), (CASTRA_B && CASTRA_B.ed) ? CASTRA_B.ed.cap : 99); }
