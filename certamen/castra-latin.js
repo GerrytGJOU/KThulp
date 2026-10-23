@@ -185,7 +185,7 @@ const CASTRA_VENATIO = {
       { id:"litus", la:"Ad litus", nl:"Aan de kust",        prefs:{ inf:2, rng:2 }, myth:{ p:0.20, taks:["Harpijen","Sirenen","Zeepaarden"] } },
       { id:"urbs",  la:"In urbe",  nl:"In de stad",         prefs:{ inf:3, cav:2, rng:1 }, myth:{ p:0.05, taks:["Gezaaide mannen","Myrmidonen"] } },
     ],
-    traces:[ "hercules","perseus","theseus","atalanta","iason","medea","daedalus" ], traceChance:0.15,
+    traces:[ "hercules","perseus","theseus","atalanta","iason","medea","daedalus","prometheus" ], traceChance:0.15,
   },
   troia: {
     nm:"Troia", min:36, max:44, tierMax:4, folk:{ tro:72, gra:12, ama:6, per:4, aeg:3, spa:2, car:1 },
@@ -195,7 +195,7 @@ const CASTRA_VENATIO = {
       { id:"litus",     la:"Ad litus",      nl:"Aan de kust",      prefs:{ inf:2, rng:2 }, myth:{ p:0.15, taks:["Harpijen","Sirenen"] } },
       { id:"scamander", la:"Ad Scamandrum", nl:"Bij de Scamander", prefs:{ rng:2, sup:1, inf:1 }, myth:{ p:0.15, taks:["Nimfen","Zeepaarden"] } },
     ],
-    traces:[ "achilles","hector","ulixes","penthesilea" ], traceChance:0.15,
+    traces:[ "achilles","hector","ulixes","penthesilea","cassandra","circe" ], traceChance:0.15,
   },
   gallia: {
     nm:"Gallia", min:16, max:24, tierMax:3, folk:{ gal:70, ger:14, rom:8, gla:4, car:2, gra:2 },

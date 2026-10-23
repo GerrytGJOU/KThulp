@@ -268,6 +268,55 @@ _HE_H("daedalus", "⚙️", "Instrumenta Daedali", "Het gereedschap van Daedalus
       { nm:"Dominus Aeris", nl:"Heer van de lucht", look:{ armor:"middel", cape:"engelenvleugels", capekleur:"goud" },
         leg:{ id:"volatus_daedali", la:"Volatus Daedali", nl:"De vlucht van Daedalus: +30% schiettempo en de eerste 3 treffers doen dubbele schade", fx:{ cd:30, charge:{ hits:3, mult:2 } }, mv:{ kind:"dmg", power:105, acc:95, pp:4, prio:1, nl:"Duikvlucht (gaat eerst)" } } }) ]);
 
+/* ----- Cassandra (priester en myth), Prometheus (genie en myth), Circe (myth en priester) ----- */
+_HE_H("cassandra", "🌿", "Laurus Apollinis", "De laurierkrans van Apollo",
+  { nm:["Laurus Apollinis","De laurierkrans van Apollo"], seek:["Laurum Apollinis","de laurierkrans van Apollo"], nom:["Laurus Apollinis","De laurierkrans van Apollo"],
+    steps:[ _HE_K(8,"troia","muros"), _HE_F("troia","🌿","laurierkrans","Quaere laurum!","Zoek de laurierkrans in Troje."), _HE_B("boss_troia") ] },
+  [ _HE_S("cassandra","sac","priester","Sacerdos Apollinis","Priesteres van Apollo","Cassandra wordt priesteres van Apollo: ze geneest, zegent en versterkt alle torens.",
+      { armor:"robe", cape:"lang", capekleur:"goud", helm:"geen", wapen:"staf" },
+      { nm:["Donum Apollinis","De gave van Apollo"], seek:["Donum Apollinis","de gave van Apollo"], nom:["Donum Apollinis","De gave van Apollo"],
+        steps:[ _HE_K(12,"troia","muros"), _HE_C(3), _HE_B("boss_troia") ] },
+      { nm:"Prophetissa", nl:"Profetes", look:{ armor:"ceremonieel", capekleur:"goud" },
+        leg:{ id:"verba_apollinis", la:"Verba Apollinis", nl:"De woorden van Apollo: +1 leven na elke golf en alle torens +5% schade", fx:{ regen:1, global:5 }, mv:{ kind:"heal", pp:3, nl:"Geneest 30% van je levenspunten" } } }),
+    _HE_S("cassandra","vat","myth","Vates Furens","Waarzegster in vervoering","Cassandra ziet de toekomst: haar treffers vertragen vijanden en doen veel schade.",
+      { armor:"robe", cape:"lang", capekleur:"paars", helm:"geen", wapen:"staf" },
+      { nm:["Visio vera","Het ware visioen"], seek:["Visionem veram","het ware visioen"], nom:["Visio vera","Het ware visioen"],
+        steps:[ _HE_K(12,"troia","scamander"), _HE_C(3), _HE_B("boss_graecia") ] },
+      { nm:"Oraculum", nl:"Het orakel", look:{ armor:"ceremonieel", capekleur:"paars" },
+        leg:{ id:"visio_cassandrae", la:"Visio Cassandrae", nl:"Het visioen van Cassandra: elke 2e treffer vertraagt 40%, +25% schade", fx:{ slow:{ pct:40, ticks:40, every:2 }, dmg:25 }, mv:{ kind:"dmg", power:105, acc:100, pp:4, slow:40, nl:"Visioen dat de vijand verlamt (vertraagt)" } } }) ]);
+
+_HE_H("prometheus", "🔥", "Ignis Promethei", "Het vuur van Prometheus",
+  { nm:["Ignis Promethei","Het vuur van Prometheus"], seek:["Ignem caelestem","het hemelse vuur"], nom:["Ignis caelestis","Het hemelse vuur"],
+    steps:[ _HE_K(8,"graecia","litus"), _HE_F("graecia","🔥","hemels vuur","Quaere ignem!","Zoek het vuur in Graecia."), _HE_B("boss_graecia") ] },
+  [ _HE_S("prometheus","fab","genie","Faber Ignis","Vuursmid","Prometheus wordt vuursmid: zijn machines schieten ver en raken meerdere vijanden.",
+      { armor:"vodden", cape:"geen", capekleur:"oranje", helm:"geen", wapen:"knuppel" },
+      { nm:["Fornax nova","Een nieuwe smidse"], seek:["Fornacem novam","een nieuwe smidse"], nom:["Fornax nova","De nieuwe smidse"],
+        steps:[ _HE_K(12,"graecia","litus"), _HE_C(3), _HE_B("boss_graecia") ] },
+      { nm:"Titanus Faber", nl:"Titanische smid", look:{ armor:"middel", capekleur:"oranje" },
+        leg:{ id:"ignis_promethei", la:"Ignis Promethei", nl:"Het vuur van Prometheus: treffers raken ook vijanden ernaast (60%), +20% schade", fx:{ splash:{ pct:60, radius:1200 }, dmg:20 }, mv:{ kind:"dmg", power:115, acc:90, pp:3, nl:"Vuurstoot" } } }),
+    _HE_S("prometheus","tit","myth","Titanus","Titaan","Prometheus toont zijn titanenkracht: zware slagen die vijanden vertragen.",
+      { armor:"zwaar", cape:"geen", capekleur:"oranje", helm:"geen", wapen:"knuppel" },
+      { nm:["Catenae ruptae","De verbroken ketenen"], seek:["Catenas ruptas","verbroken ketenen"], nom:["Catenae ruptae","De verbroken ketenen"],
+        steps:[ _HE_K(12,"graecia","olea"), _HE_C(3), _HE_B("boss_troia") ] },
+      { nm:"Prometheus Liberatus", nl:"Bevrijde Prometheus", look:{ armor:"kampioen", capekleur:"goud" },
+        leg:{ id:"furor_titanum", la:"Furor Titanum", nl:"De woede van de Titanen: +30% schade en elke 3e treffer vertraagt 30%", fx:{ dmg:30, slow:{ pct:30, ticks:30, every:3 } }, mv:{ kind:"dmg", power:120, acc:90, pp:3, slow:30, nl:"Titanenslag (vertraagt)" } } }) ]);
+
+_HE_H("circe", "🪄", "Virga Circes", "De toverstaf van Circe",
+  { nm:["Virga Circes","De toverstaf van Circe"], seek:["Virgam meam","mijn toverstaf"], nom:["Virga mea","Mijn toverstaf"],
+    steps:[ _HE_K(8,"troia","litus"), _HE_F("troia","🪄","toverstaf","Quaere virgam!","Zoek de toverstaf in Troje."), _HE_B("boss_troia") ] },
+  [ _HE_S("circe","mag","myth","Maga","Tovenares","Circe wordt tovenares: haar treffers vertragen en doen veel schade.",
+      { armor:"robe", cape:"kort", capekleur:"groen", helm:"geen", wapen:"staf" },
+      { nm:["Potio nova","Een nieuwe toverdrank"], seek:["Potionem novam","een nieuwe toverdrank"], nom:["Potio nova","De nieuwe toverdrank"],
+        steps:[ _HE_K(12,"troia","litus"), _HE_C(3), _HE_B("boss_graecia") ] },
+      { nm:"Dea Aeaeae", nl:"Godin van Aeaea", look:{ armor:"ceremonieel", capekleur:"groen" },
+        leg:{ id:"metamorphosis", la:"Metamorphosis", nl:"Gedaanteverwisseling: elke 2e treffer vertraagt 50%, +20% schade", fx:{ slow:{ pct:50, ticks:40, every:2 }, dmg:20 }, mv:{ kind:"dmg", power:95, acc:100, pp:4, slow:50, nl:"Verandert de vijand in een zwijn (vertraagt)" } } }),
+    _HE_S("circe","her","priester","Herbaria","Kruidenvrouw","Circe wordt kruidenvrouw: ze geneest en versterkt de torens om zich heen.",
+      { armor:"robe", cape:"lang", capekleur:"blauw", helm:"geen", wapen:"staf" },
+      { nm:["Herba rara","Het zeldzame kruid"], seek:["Herbam raram","een zeldzaam kruid"], nom:["Herba rara","Het zeldzame kruid"],
+        steps:[ _HE_K(12,"troia","scamander"), _HE_C(3), _HE_B("boss_troia") ] },
+      { nm:"Domina Bestiarum", nl:"Meesteres der dieren", look:{ armor:"ceremonieel", capekleur:"blauw" },
+        leg:{ id:"cantus_circes", la:"Cantus Circes", nl:"Het lied van Circe: +1 leven na elke golf en torens dichtbij +12% schade", fx:{ regen:1, aura:{ dmg:12, radius:2000 } }, mv:{ kind:"heal", pp:3, nl:"Geneest 30% van je levenspunten" } } }) ]);
+
 /* ----- Troia ----- */
 _HE_H("achilles", "⚔️", "Arma Vulcani", "De wapens van Vulcanus",
   { nm:["Arma Vulcani","De wapens van Vulcanus"], seek:["Arma nova","nieuwe wapens"], nom:["Arma nova","De nieuwe wapens"],
@@ -342,6 +391,9 @@ Object.assign(CASTRA_HERO_SIG, {
   iason:      { id:"argonautae", la:"Argonautae", nl:"De Argonauten helpen: alle torens +3% schade", lvl:1, fx:{ global:3 }, mv:_HE_BUFF },
   medea:      { id:"herbae_medicae", la:"Herbae medicae", nl:"Geneeskrachtige kruiden: +1 leven na elke golf, torens dichtbij +5% schade", lvl:1, fx:{ regen:1, aura:{ dmg:5, radius:1500 } }, mv:{ kind:"heal", pp:4, nl:"Geneest 30% van je levenspunten" } },
   daedalus:   { id:"ars_daedali", la:"Ars Daedali", nl:"De kunst van Daedalus: +10% bereik en +8% schade", lvl:1, fx:{ rng:10, dmg:8 }, mv:{ kind:"dmg", power:60, acc:100, pp:6, nl:"Precisieschot" } },
+  cassandra:  { id:"praesagium", la:"Praesagium", nl:"Voorspelling: alle torens +3% schade en +8% bereik", lvl:1, fx:{ global:3, rng:8 }, mv:_HE_BUFF },
+  prometheus: { id:"ignis_furtivus", la:"Ignis furtivus", nl:"Het gestolen vuur: +10% schade en treffers raken ook vijanden ernaast (30%)", lvl:1, fx:{ dmg:10, splash:{ pct:30, radius:800 } }, mv:{ kind:"dmg", power:65, acc:95, pp:6, nl:"Vuurspat" } },
+  circe:      { id:"pocula_circes", la:"Pocula Circes", nl:"De bekers van Circe: elke 3e treffer vertraagt 30% en +8% schade", lvl:1, fx:{ slow:{ pct:30, ticks:30, every:3 }, dmg:8 }, mv:{ kind:"dmg", power:55, acc:100, pp:6, slow:30, nl:"Beker die de vijand vertraagt" } },
   ulixes:     { id:"dolus_ulixis", la:"Dolus Ulixis", nl:"De list van Odysseus: elke 2e treffer vertraagt 25%", lvl:1, fx:{ slow:{ pct:25, ticks:30, every:2 } }, mv:{ kind:"dmg", power:50, acc:100, pp:6, prio:1, slow:25, nl:"List die de vijand vertraagt (gaat eerst)" } },
   achilles:   { id:"furor_pelidae", la:"Furor Pelidae", nl:"De woede van Achilles: +12% schade, elke 4e treffer dubbele schade", lvl:1, fx:{ dmg:12, nth:{ n:4, mult:2 } }, mv:{ kind:"dmg", power:80, acc:90, pp:5, nl:"Woede (zware slag)" } },
   hector:     { id:"defensor_patriae", la:"Defensor patriae", nl:"Verdediger van het vaderland: +1 leven na elke golf", lvl:1, fx:{ regen:1 }, mv:_HE_SHIELD },
@@ -368,7 +420,7 @@ Object.keys(CASTRA_HERO_SIG).forEach(id=>{
   "facem":"fakkel (4e naamval)", "fax":"fakkel", "ferro":"van ijzer", "fugere":"vluchten", "hecate":"Hecate (godin van de magie)", "hecates":"van Hecate", "herbae":"kruiden", "herbas":"kruiden (4e naamval)",
   "iasoni":"aan Jason", "icarum":"Icarus (4e naamval)", "ingenium":"vernuft", "instrumenta":"gereedschap", "legit":"verzamelt", "lego":"ik verzamel", "libera":"vrij", "ligno":"van hout",
   "machina":"machine", "machinam":"machine (4e naamval)", "machinas":"machines", "medeae":"van Medea", "minerva":"Minerva", "minoem":"Minos (4e naamval)", "minoi":"voor Minos", "minos":"Minos (koning van Creta)",
-  "pennis":"veren", "penates":"huisgoden", "mei":"mijn", "familias":"gezin", "pater":"vader", "tutela":"bescherming", "familiae":"van het gezin", "domina":"meesteres", "lux":"licht", "venefica":"gifmengster", "maga":"tovenares", "colchica":"uit Colchis", "machinator":"werktuigbouwer", "architectus":"bouwer", "labyrinthi":"van het labyrint", "daedali":"van Daedalus", "volator":"vlieger", "dominus":"heer", "aeris":"van de lucht", "volatus":"vlucht", "equum":"paard (4e naamval)", "ligneum":"houten", "ligneus":"houten", "equi":"van het paard", "qua":"welke", "re":"zaak, ding", "venena":"gif", "venenum":"gif" });
+  "pennis":"veren", "credit":"gelooft", "apollo":"Apollo", "mars":"Mars", "paris":"Paris", "lupos":"wolven", "liberum":"vrij", "sues":"zwijnen", "muto":"ik verander", "insula":"eiland", "aeaea":"Aeaea", "quos":"wie (meervoud)", "mutat":"verandert", "matres":"moeders", "pueros":"jongens", "timet":"is bang", "prometheus":"Prometheus", "hominibus":"aan de mensen", "dedi":"ik gaf", "iovi":"aan Jupiter", "resisto":"ik verzet mij", "iuppiter":"Jupiter", "punit":"straft", "iovem":"Jupiter (4e naamval)", "de":"uit, van", "furatus":"gestolen", "luto":"klei", "feci":"ik heb gemaakt", "auro":"goud", "aquila":"adelaar", "iecur":"lever", "liberat":"bevrijdt", "prometheum":"Prometheus (4e naamval)", "praesagium":"voorspelling", "laurus":"laurierkrans", "laurum":"laurierkrans (4e naamval)", "apollinis":"van Apollo", "donum":"gave", "visio":"visioen", "visionem":"visioen (4e naamval)", "veram":"ware", "vera":"ware", "fornax":"smidse", "fornacem":"smidse (4e naamval)", "catenae":"ketenen", "catenas":"ketenen (4e naamval)", "ruptae":"verbroken", "ruptas":"verbroken", "ignis":"vuur", "ignem":"vuur (4e naamval)", "caelestem":"hemels", "caelestis":"hemels", "virga":"toverstaf", "virgam":"toverstaf (4e naamval)", "potio":"toverdrank", "potionem":"toverdrank (4e naamval)", "herba":"kruid", "herbam":"kruid (4e naamval)", "rara":"zeldzaam", "raram":"zeldzaam", "promethei":"van Prometheus", "circes":"van Circe", "periculum":"gevaar", "tuti":"veilig", "credo":"ik geloof", "credisne":"geloof jij", "non":"niet", "rideo":"ik lach", "pocula":"bekers", "furtivus":"gestolen", "metamorphosis":"gedaanteverwisseling", "cantus":"lied", "verba":"woorden", "furor":"woede", "titanum":"van de Titanen", "penates":"huisgoden", "mei":"mijn", "familias":"gezin", "pater":"vader", "tutela":"bescherming", "familiae":"van het gezin", "domina":"meesteres", "lux":"licht", "venefica":"gifmengster", "maga":"tovenares", "colchica":"uit Colchis", "machinator":"werktuigbouwer", "architectus":"bouwer", "labyrinthi":"van het labyrint", "daedali":"van Daedalus", "volator":"vlieger", "dominus":"heer", "aeris":"van de lucht", "volatus":"vlucht", "equum":"paard (4e naamval)", "ligneum":"houten", "ligneus":"houten", "equi":"van het paard", "qua":"welke", "re":"zaak, ding", "venena":"gif", "venenum":"gif" });
 
 // Heldenmenu en evolutie gebruiken de heldendata, dus meteen opnieuw toepassen op reeds geladen helden.
 try{ if(typeof castraHeroEvoApplyAll==="function") castraHeroEvoApplyAll(); }catch(e){}

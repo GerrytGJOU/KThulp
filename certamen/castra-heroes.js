@@ -261,6 +261,20 @@ Object.assign(CASTRA_HERO_DATA, {
       _T(["Alas ex pennis et cera facio.","Ik maak vleugels van veren en was."], ["Ex qua re alae sunt?","Waarvan zijn de vleugels gemaakt?"], ["Ex pennis et cera.","Van veren en was."], ["Ex ferro.","Van ijzer."], ["Ex ligno.","Van hout."]),
     ] },
 
+  prometheus: { nm:"Prometheus", region:"graecia", type:"inf", affinity:"metallum", world:{ x:50, y:28, dir:"left" },
+    base:{ vita:86, impetus:17, tutela:13, celeritas:6, ambitus:3 },
+    look:_look({ huid:"brons", haar:"wild", haarkleur:"zwart", baard:"baard", armor:"vodden", cape:"geen", wapen:"knuppel" }),
+    chain:[
+      _K("graecia","litus",3, ["Salve, dux {naam}! Prometheus sum. Ignem hominibus dedi. Tres hostes ad litus vince.","Gegroet, leider {naam}! Ik ben Prometheus. Ik gaf de mensen het vuur. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Litus liberavisti.","Uitstekend! Je hebt de kust bevrijd."]),
+      _W("g1", ["Bene! Nunc Iovi resisto. Proelium primum vince.","Goed! Nu verzet ik me tegen Jupiter. Win het eerste gevecht."], ["Proelium primum vince!","Win het eerste gevecht!"], ["Proelium vicisti! Gratias tibi ago.","Je hebt het gevecht gewonnen! Ik dank je."]),
+      _P(["Iuppiter me punit. Cur tecum veniam?","Jupiter straft mij. Waarom zou ik met je meegaan?"], ["Quia homines iuvo.","Omdat ik mensen help."], ["Quia Iovem timeo.","Omdat ik bang ben voor Jupiter."], ["Quia ignem odi.","Omdat ik het vuur haat."]),
+    ],
+    talks:[
+      _T(["Ignem de caelo furatus sum.","Ik heb het vuur uit de hemel gestolen."], ["Quid Prometheus furatus est?","Wat heeft Prometheus gestolen?"], ["Ignem.","Het vuur."], ["Aurum.","Goud."], ["Equum.","Een paard."]),
+      _T(["Homines ex luto feci.","Ik heb de mensen van klei gemaakt."], ["Ex qua re homines sunt?","Waarvan zijn de mensen gemaakt?"], ["Ex luto.","Van klei."], ["Ex auro.","Van goud."], ["Ex aqua.","Van water."]),
+      _T(["Aquila iecur meum edit. Hercules me liberat.","Een adelaar eet mijn lever. Hercules bevrijdt mij."], ["Quis Prometheum liberat?","Wie bevrijdt Prometheus?"], ["Hercules.","Hercules."], ["Iason.","Jason."], ["Achilles.","Achilles."]),
+    ] },
+
   /* ----- Troia ----- */
   achilles: { nm:"Achilles", region:"troia", type:"inf", affinity:"campus", world:{ x:20, y:18, dir:"up" },
     base:{ vita:100, impetus:22, tutela:15, celeritas:9, ambitus:3 },
@@ -314,6 +328,33 @@ Object.assign(CASTRA_HERO_DATA, {
       _T(["Arcum et sagittas habeo.","Ik heb een boog en pijlen."], ["Quid Penthesilea habet?","Wat heeft Penthesilea?"], ["Arcum.","Een boog."], ["Librum.","Een boek."], ["Lyram.","Een lier."]),
       _T(["Cum Achille pugno, sed vincor.","Ik vecht met Achilles, maar ik word verslagen."], ["Quis Penthesileam vincit?","Wie verslaat Penthesilea?"], ["Achilles.","Achilles."], ["Hector.","Hector."], ["Ulixes.","Odysseus."]),
     ] },
+
+  cassandra: { nm:"Cassandra", region:"troia", type:"sup", affinity:"campus", world:{ x:30, y:12, dir:"down" },
+    base:{ vita:50, impetus:10, tutela:9, celeritas:9, ambitus:6 },
+    look:_look({ huid:"licht", haar:"lang", haarkleur:"bruin", armor:"robe", cape:"lang", capekleur:"blauw", helm:"geen", wapen:"staf" }),
+    chain:[
+      _K("troia","muros",3, ["Salve, dux {naam}! Cassandra sum. Periculum video. Tres hostes ante muros vince.","Gegroet, leider {naam}! Ik ben Cassandra. Ik zie gevaar. Versla drie vijanden voor de muren."], ["Hostes ante muros vince!","Versla vijanden voor de muren!"], ["Optime! Muri tuti sunt.","Uitstekend! De muren zijn veilig."]),
+      _W("t1", ["Bene! Nunc Troiam servo. Proelium primum vince.","Goed! Nu red ik Troje. Win het eerste gevecht."], ["Proelium primum vince!","Win het eerste gevecht!"], ["Proelium vicisti! Gratias tibi ago.","Je hebt het gevecht gewonnen! Ik dank je."]),
+      _P(["Nemo mihi credit. Credisne tu mihi?","Niemand gelooft mij. Geloof jij mij?"], ["Credo tibi, Cassandra.","Ik geloof je, Cassandra."], ["Non credo tibi.","Ik geloof je niet."], ["Rideo.","Ik lach."]),
+    ],
+    talks:[
+      _T(["Equum ligneum video. Periculum est!","Ik zie het houten paard. Er is gevaar!"], ["Quid Cassandra videt?","Wat ziet Cassandra?"], ["Equum ligneum.","Het houten paard."], ["Navem magnam.","Een groot schip."], ["Montem altum.","Een hoge berg."]),
+      _T(["Apollo mihi donum dedit, sed nemo mihi credit.","Apollo gaf mij een gave, maar niemand gelooft mij."], ["Quis Cassandrae donum dedit?","Wie gaf Cassandra een gave?"], ["Apollo.","Apollo."], ["Venus.","Venus."], ["Mars.","Mars."]),
+      _T(["Pater meus rex est. Priamus est.","Mijn vader is koning. Hij heet Priamus."], ["Quis pater Cassandrae est?","Wie is de vader van Cassandra?"], ["Priamus.","Priamus."], ["Hector.","Hector."], ["Paris.","Paris."]),
+    ] },
+  circe: { nm:"Circe", region:"troia", type:"sup", affinity:"lignatio", world:{ x:45, y:34, dir:"left" },
+    base:{ vita:50, impetus:13, tutela:8, celeritas:9, ambitus:6 },
+    look:_look({ huid:"olijf", haar:"lang", haarkleur:"rood", armor:"robe", cape:"kort", capekleur:"groen", helm:"geen", wapen:"staf" }),
+    chain:[
+      _K("troia","litus",3, ["Salve, dux {naam}! Circe sum. Herbas et lupos amo. Tres hostes ad litus vince.","Gegroet, leider {naam}! Ik ben Circe. Ik hou van kruiden en wolven. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Litus liberum est.","Uitstekend! De kust is vrij."]),
+      _W("t2", ["Bene! Nunc Ulixem iuvo. Proelium secundum vince.","Goed! Nu help ik Odysseus. Win het tweede gevecht."], ["Proelium secundum vince!","Win het tweede gevecht!"], ["Proelium vicisti! Gratias tibi ago.","Je hebt het gevecht gewonnen! Ik dank je."]),
+      _P(["Homines in sues muto. Cur tecum veniam?","Ik verander mensen in zwijnen. Waarom zou ik met je meegaan?"], ["Quia amicos servo.","Omdat ik vrienden bescherm."], ["Quia sues amo.","Omdat ik van zwijnen houd."], ["Quia fugere volo.","Omdat ik wil vluchten."]),
+    ],
+    talks:[
+      _T(["In insula Aeaea habito.","Ik woon op het eiland Aeaea."], ["Ubi Circe habitat?","Waar woont Circe?"], ["In insula.","Op een eiland."], ["In urbe.","In een stad."], ["In monte.","Op een berg."]),
+      _T(["Socios Ulixis in sues muto.","Ik verander de maten van Odysseus in zwijnen."], ["Quos Circe in sues mutat?","Wie verandert Circe in zwijnen?"], ["Socios Ulixis.","De maten van Odysseus."], ["Matres.","De moeders."], ["Pueros.","De jongens."]),
+      _T(["Herbas habeo. Ulixes me non timet.","Ik heb kruiden. Odysseus is niet bang voor mij."], ["Quid Circe habet?","Wat heeft Circe?"], ["Herbas.","Kruiden."], ["Naves.","Schepen."], ["Arma.","Wapens."]),
+    ] },
 });
 
 /* Antwoordvolgorde schudden (deterministisch per vraag), zodat het goede antwoord niet altijd vooraan staat. */
@@ -365,7 +406,7 @@ function castraHeroAssign(id, buildingId){
    Aeneas is er vanaf het begin), en (2) mogen er per gevecht maar weinig helden tegelijk meedoen, afhankelijk van het
    heroum-niveau: 1 held (heroum 1-2), 2 (3-4), 3 (5). De rest van de slagorde bestaat uit soldaten. */
 const CASTRA_HERO_MINLVL = { aeneas:1, romulus:6, horatius:9, cloelia:12, mucius:15, camilla:18,
-  hercules:20, perseus:23, theseus:26, atalanta:29, iason:32, medea:35, daedalus:40, achilles:30, hector:34, ulixes:38, penthesilea:42 };
+  hercules:20, perseus:23, theseus:26, atalanta:29, iason:32, medea:35, daedalus:40, cassandra:31, prometheus:37, circe:44, achilles:30, hector:34, ulixes:38, penthesilea:42 };
 function castraHeroMinLvl(id){ return CASTRA_HERO_MINLVL[id] || 1; }
 function castraHeroFieldCap(){ return 1 + Math.floor(Math.max(0, castraLvl("heroum")-1)/2); }
 function castraHeroAsUnit(h){ return { id:"hero_"+h.id, hero:true, h, lvl:h.lvl, line:null, stage:0 }; }

@@ -1,7 +1,7 @@
 # Helden-evolutie: wat er aan afbeeldingen bij komt (voor het beeldgesprek)
 
 Stand 2026-10-22. Bron voor de gamedesign: `CASTRA_HEROUM.md` (sectie "Evolutie van helden") en `certamen/castra-heroevo.js`.
-**Alle 17 helden zijn nu uitgewerkt en gebouwd (Ulixes was de pilot; Medea en Daedalus zijn later toegevoegd om priester, genie en myth te dekken).** De keuzes voor de andere 14 helden hieronder zijn door Gerben bevestigd; de afbeeldingen mogen zo ontworpen worden. De evoluties staan in de code (`certamen/castra-heroevo-all.js`).
+**Alle 20 helden zijn nu uitgewerkt en gebouwd (Ulixes was de pilot; Medea, Daedalus, Cassandra, Prometheus en Circe zijn later toegevoegd om priester, genie en myth te dekken).** De keuzes voor de andere 14 helden hieronder zijn door Gerben bevestigd; de afbeeldingen mogen zo ontworpen worden. De evoluties staan in de code (`certamen/castra-heroevo-all.js`).
 
 ## Hoe de evolutie werkt (kort)
 - Een held is een soort legendarische soldaat: zelfde stats en moves als een soldaat, maar uniek.
@@ -19,12 +19,12 @@ Stand 2026-10-22. Bron voor de gamedesign: `CASTRA_HEROUM.md` (sectie "Evolutie 
 ## Hoeveel afbeeldingen
 | Vormen | Aantal vormen | Per vorm | Totaal |
 |---|---|---|---|
-| Basisheld (17) | 17 | P + A + B = 3 | 51 |
-| Specialisaties (35: 2 per held, Ulixes 3) | 35 | P + A + B = 3 | 105 |
-| Prestigevormen (35) | 35 | P + A + B = 3 | 105 |
-| **Totaal volledig** | **87** | | **261** |
+| Basisheld (20) | 20 | P + A + B = 3 | 60 |
+| Specialisaties (41: 2 per held, Ulixes 3) | 41 | P + A + B = 3 | 123 |
+| Prestigevormen (41) | 41 | P + A + B = 3 | 123 |
+| **Totaal volledig** | **102** | | **306** |
 
-Zuinigere varianten: zonder los portret (P) voor de evolutievormen is het 51 + 70 + 70 = **191**; alleen A en B overal: **174**.
+Zuinigere varianten: zonder los portret (P) voor de evolutievormen is het 60 + 82 + 82 = **224** (basis met P, de rest zonder: 60 + 164); alleen A en B overal: **204**.
 Aanbevolen volgorde: eerst Ulixes (de pilot, code staat klaar: 6 evolutievormen), dan de basisheld en zijn specialisaties per held; de prestigevormen zijn pas zichtbaar vanaf gradus 40 en kunnen het laatst.
 
 ## Ontwerpregels voor evolutievormen
@@ -61,3 +61,8 @@ Klasse tussen haakjes: hopliet (zware infanterie), spartaan (voorvechter), boogs
 | *Ulixes (gebouwd, drie takken)* | Sagittarius → Arcitenens | | Insidiator → Callidus; Machinator (`mac`) → Architectus Equi | |
 | *Medea (nieuw, Graecia)* | Sacerdos Hecates (priester, `sac`, robe, staf, paars) → Domina Hecates (goud) | | Venefica (myth, `ven`, robe, staf, groen) → Maga Colchica | |
 | *Daedalus (nieuw, Graecia)* | Machinator (genie, `mac`, licht harnas, oranje cape, hamer) → Architectus Labyrinthi | | Volator (cavalerie, `vol`, vleugels van was, goud) → Dominus Aeris | |
+| *Cassandra (nieuw, Troia)* | Sacerdos Apollinis (priester, `sac`, robe, staf, goud) → Prophetissa (ceremonieel, goud) | | Vates Furens (myth, `vat`, robe, staf, paars) → Oraculum | |
+| *Prometheus (nieuw, Graecia)* | Faber Ignis (genie, `fab`, vodden, hamer, oranje) → Titanus Faber | | Titanus (myth, `tit`, zwaar pantser) → Prometheus Liberatus (kampioen, goud) | |
+| *Circe (nieuw, Troia)* | Maga (myth, `mag`, robe, staf, groen) → Dea Aeaeae | | Herbaria (priester, `her`, robe, staf, blauw) → Domina Bestiarum | |
+
+Basisuiterlijk van de drie nieuwe helden (uit de code): Cassandra: lichte huid, lang bruin haar, blauwe robe met lange cape, staf. Prometheus: bronzen huid, wild zwart haar, baard, vodden, knuppel (een titaan, forse bouw). Circe: olijfkleurige huid, lang rood haar, groene robe met korte cape, staf.
