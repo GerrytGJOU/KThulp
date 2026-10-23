@@ -247,7 +247,7 @@ Object.assign(CASTRA_HERO_DATA, {
       _T(["Hecate dea mea est.","Hecate is mijn godin."], ["Quae dea Medeae est?","Wie is de godin van Medea?"], ["Hecate.","Hecate."], ["Venus.","Venus."], ["Minerva.","Minerva."]),
       _T(["Draconem dormire facio. Iason vellus capit.","Ik laat de draak slapen. Jason pakt het vlies."], ["Quis draconem dormire facit?","Wie laat de draak slapen?"], ["Medea.","Medea."], ["Iason.","Jason."], ["Hercules.","Hercules."]),
     ] },
-  daedalus: { nm:"Daedalus", region:"graecia", type:"rng", affinity:"metallum", world:{ x:13, y:22, dir:"right" },
+  daedalus: { nm:"Daedalus", region:"graecia", type:"rng", affinity:"metallum", cave:"fetch_graecia",   // dezelfde persoon als de bewoner van het labyrint
     base:{ vita:54, impetus:14, tutela:8, celeritas:7, ambitus:7 },
     look:_look({ huid:"getint", haar:"kort", haarkleur:"bruin", baard:"baard", armor:"licht", cape:"kort", capekleur:"oranje", helm:"geen", wapen:"knuppel" }),
     chain:[
@@ -329,7 +329,7 @@ Object.assign(CASTRA_HERO_DATA, {
       _T(["Cum Achille pugno, sed vincor.","Ik vecht met Achilles, maar ik word verslagen."], ["Quis Penthesileam vincit?","Wie verslaat Penthesilea?"], ["Achilles.","Achilles."], ["Hector.","Hector."], ["Ulixes.","Odysseus."]),
     ] },
 
-  cassandra: { nm:"Cassandra", region:"troia", type:"sup", affinity:"campus", world:{ x:30, y:12, dir:"down" },
+  cassandra: { nm:"Cassandra", region:"troia", type:"sup", affinity:"campus", cave:"fetch_troia",   // dezelfde persoon als de bewoner van de grot (geen eigen plek op de kaart)
     base:{ vita:50, impetus:10, tutela:9, celeritas:9, ambitus:6 },
     look:_look({ huid:"licht", haar:"lang", haarkleur:"bruin", armor:"robe", cape:"lang", capekleur:"blauw", helm:"geen", wapen:"staf" }),
     chain:[
@@ -409,6 +409,16 @@ const CASTRA_HERO_MINLVL = { aeneas:1, romulus:6, horatius:9, cloelia:12, mucius
   hercules:20, perseus:23, theseus:26, atalanta:29, iason:32, medea:35, daedalus:40, cassandra:31, prometheus:37, circe:44, achilles:30, hector:34, ulixes:38, penthesilea:42 };
 function castraHeroMinLvl(id){ return CASTRA_HERO_MINLVL[id] || 1; }
 function castraHeroFieldCap(){ return 1 + Math.floor(Math.max(0, castraLvl("heroum")-1)/2); }
+/* ---------- helden die in een grot wonen ----------
+   Cassandra (grot van Troje) en Daedalus (labyrint van Graecia) zijn al opdrachtgever in hun grot (castra-regions.js).
+   Ze zijn één persoon met de held: zolang er geen opdracht loopt en het spoor gevonden is (en het Castra-niveau
+   hoog genoeg), begint hun gesprek in de grot met de heldenketen; na het overtuigen verhuist de bewoner naar je heroum. */
+function castraCaveHeroOf(npcId){
+  const id = Object.keys(CASTRA_HERO_DATA).find(k=>CASTRA_HERO_DATA[k].cave===npcId); if(!id) return null;
+  if(castraHero(id)) return null;
+  if(typeof castraPLevel==="function" && castraPLevel() < castraHeroMinLvl(id)) return null;
+  return (CASTRA.traces && CASTRA.traces[id]) ? id : null;
+}
 function castraHeroAsUnit(h){ return { id:"hero_"+h.id, hero:true, h, lvl:h.lvl, line:null, stage:0 }; }
 
 /* ---------- gesprekken (loyaliteit) ---------- */
@@ -471,7 +481,7 @@ function castraHeroumOpen(){
         <div style="margin-top:6px"><button class="btn btn-gold" ${q.used>=q.max||(T&&T.hid===h.id)?"disabled":""} onclick="castraHeroumTalk('${h.id}')">${castraLaText("colloquium")}</button></div>
       </div></div>${talk}</div>`;
   }).join("") || `<div class="note">${castraLa("heroes_nulli")}</div>`;
-  const hints = Object.keys(CASTRA.traces||{}).filter(id=>CASTRA_HERO_DATA[id] && !castraHero(id)).map(id=>`<div class="note">👣 ${castraLa("vestigia")} <b>${esc(CASTRA_HERO_DATA[id].nm)}</b>. ${castraLa("vestigia_quaere")}</div>`).join("");
+  const hints = Object.keys(CASTRA.traces||{}).filter(id=>CASTRA_HERO_DATA[id] && !castraHero(id)).map(id=>`<div class="note">👣 ${castraLa("vestigia")} <b>${esc(CASTRA_HERO_DATA[id].nm)}</b>. ${castraLa("vestigia_quaere")}${CASTRA_HERO_DATA[id].cave ? " <small>(in de grot)</small>" : ""}</div>`).join("");
   const up = lvl>=maxL ? `<div class="note">${castraLa(lvl>=b.maxLvl?"gradus_max":"praetorium_prius")}</div>`
     : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('heroum')">${castraLaText("meliora")} → ${castraLaText("gradus")} ${lvl+1} — ${costTxt}</button>`;
   castraOpenPanel(`<div class="panel"><h3>${b.icon} ${esc(b.nm)} <small>${castraLaText("gradus")} ${lvl}</small></h3>

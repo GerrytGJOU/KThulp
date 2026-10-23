@@ -245,6 +245,8 @@ function castraRegFetch(e){
   if(CASTRA_DLG) return;
   const rid = CASTRA_WORLDS[e.region].parent, F = CASTRA_REGSPEC[rid].cave.fetch, q = castraWQ(e.id);
   const say = (lines, done)=>castraLatSay(e.nm, e.look, lines, done);
+  const hid = (q.step>=2 && typeof castraCaveHeroOf==="function") ? castraCaveHeroOf(e.id) : null;   // bewoner = held (castra-heroes.js): pas als haar opdracht klaar is
+  if(hid){ castraNpcTalk(hid); return; }
   if(q.step===0){
     say([ F.ask, F.how ], ()=>{ q.step = 1; castraSave(); castraWobjDraw(); castraWRefreshHud && castraWRefreshHud(); });
   } else if(q.step===1){
