@@ -136,11 +136,13 @@ function castraPay(cost){ Object.keys(cost).forEach(r=>{ CASTRA.res[r]-=cost[r];
 
 // Wat staat er klaar bij een producent? Puur uit tijdstempel + level (geen timer),
 // begrensd op producerStoreHours uur opbrengst — geen straf voor later terugkomen.
+// Productiebonus in %: held als voorman (castra-heroes.js) plus soldaten die er werken (castra-opus.js).
+function castraBldBonus(id){ return ((typeof castraHeroBonus==="function") ? castraHeroBonus(id) : 0) + ((typeof castraOpusBonus==="function") ? castraOpusBonus(id) : 0); }
 function castraPending(id){
   const b = castraBuilding(id), st = CASTRA.b[id];
   if(!b || !b.prod || !st) return 0;
   const hours = Math.min(CASTRA_BAL.producerStoreHours, Math.max(0,(castraNow()-st.t)/3600000));
-  const bonus = ((typeof castraHeroBonus==="function") ? castraHeroBonus(id) : 0) + ((typeof castraCardBonus==="function") ? castraCardBonus().prod : 0);
+  const bonus = castraBldBonus(id) + ((typeof castraCardBonus==="function") ? castraCardBonus().prod : 0);
   return Math.floor(hours * b.prod.perHour * st.lvl * CASTRA_BAL.prodPerLevelMult * (100+bonus)/100);
 }
 function castraCollect(id){
@@ -152,7 +154,7 @@ function castraCollect(id){
   CASTRA.res[b.prod.res] += take;
   // Alleen het afgehaalde deel van de tijd "verbruiken"; past het niet in de
   // opslag, dan blijft de rest staan.
-  const perMs = b.prod.perHour*CASTRA.b[id].lvl*CASTRA_BAL.prodPerLevelMult*(100+((typeof castraHeroBonus==="function")?castraHeroBonus(id):0))/100/3600000;
+  const perMs = b.prod.perHour*CASTRA.b[id].lvl*CASTRA_BAL.prodPerLevelMult*(100+castraBldBonus(id))/100/3600000;
   CASTRA.b[id].t = (take>=amt) ? castraNow() : CASTRA.b[id].t + take/perMs;
   castraSave();
   return take;
