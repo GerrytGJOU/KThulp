@@ -665,3 +665,68 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 - PORT: Show the gold winged helmet with the tall blond crest, the triumphant face, the gold shoulder plate and the edge of the glowing mirror shield.
 - FRONT: The shining mirror shield raised on the left arm, the glowing curved sword in the right hand, the gold-and-silver armour with the wing emblem, the large white-feathered wings on the sandals.
 - BACK: Show the long crimson cape ending in the huge white-and-gold wing, the golden helmet crest, the back of the round shield and the curved sword.
+
+## hero_theseus | Theseus
+
+- ROLE: legendary hero, the king-prince of Athens who slew the Minotaur (infantry)
+- FMT: the finished 3-cell sheet of the Greek recruit Ephebus: portrait, battle front, battle back
+- INTRO: The attached image is a six-cell sprite sheet of a Greek soldier: it shows only the required LAYOUT, pose list, pixel size and level of detail. The new character is a legendary hero, NOT a soldier: entirely different clothing, colours and equipment as described below; do NOT copy the soldier's clothing, colours or shield.
+- OUTFIT: He wears: NO helmet, short wavy medium-brown hair, a short neat stubble beard, the face clearly visible (fair skin, grey-green eyes, a strong jaw, a calm heroic look); a gold spiral (labyrinth) pendant on a cord at his neck; a ceremonial polished bronze cuirass with a small gold owl emblem on the chest over a white tunic with a deep-blue hem; gold shoulder plates; a short skirt of white leather strips with gold studs; a SHORT deep royal-blue cape pinned at the right shoulder with a round gold brooch; gold bracers; a brown leather belt with a gold buckle and a small coil of bright RED thread hanging from it; brown leather sandals laced to the calf; NO shield. In his right hand a straight sword with a silver blade and a gold hilt.
+- REST: standing upright and calm, facing the viewer, the sword pointing down in his right hand
+- ATTACK: one step forward, the sword thrust forward, the short blue cape swinging behind him
+- HIT: upper body leaning backwards, eyes closed, the sword dropping, one hand raised
+- PORT: Show the short wavy brown hair, the stubble beard, the gold spiral pendant, the bronze cuirass collar and the short royal-blue cape with the gold brooch.
+- FRONT: Sword held ready in the right hand, the coil of red thread at the belt, the bronze cuirass with the gold owl emblem.
+- BACK: Show the short royal-blue cape, the coil of red thread at the belt and the sword.
+
+## hero_theseus_vic | Theseus, Victor Labyrinthi
+
+- ROLE: the same legendary hero Theseus, now the heavy conqueror of the labyrinth (Victor Labyrinthi), hoplite
+- FMT: the finished 3-cell sheet of the same hero Theseus in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Theseus in his base form: the new form is THE SAME MAN, with the same face as always: fair skin, short wavy medium-brown hair, a short neat stubble beard, grey-green eyes, a strong jaw, a calm heroic look, a gold spiral pendant (a labyrinth) on a cord at his neck, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a heavy bronze Corinthian helmet pushed back so the face is fully open and clearly visible (the same face as always: fair skin, short wavy medium-brown hair, a short neat stubble beard, grey-green eyes, a strong jaw, a calm heroic look, a gold spiral pendant (a labyrinth) on a cord at his neck, a steady, unmoving look), with a short deep-blue horsehair crest; a heavy armour of overlapping bronze scales with large bronze shoulder plates over a white tunic with a deep-blue hem; a short deep royal-blue cape; bronze greaves; the small coil of bright red thread at his belt. In his left hand a big ROUND bronze shield with a wide gold rim and a gold spiral labyrinth pattern as emblem. In his right hand a strong spear with a silver leaf-shaped head.
+- REST: standing firmly, facing the viewer, the big round shield at his left side, the spear held upright beside him
+- ATTACK: one step forward, the spear thrust forward over the top of the raised shield
+- HIT: upper body leaning backwards, eyes closed, the shield sagging, the spear tilting
+- PORT: Show the bronze helmet pushed back with the blue crest, the stubble beard, the gold spiral pendant and the bronze scale armour.
+- FRONT: The big round shield with the gold spiral raised on the left arm, the spear held ready in the right hand, the red thread coil at the belt.
+- BACK: Show the back of the big round bronze shield, the short blue cape, the helmet crest and the spear.
+
+## hero_theseus_rex | Theseus, Rex Atheniensis
+
+- ROLE: the same legendary hero Theseus, now the king of Athens (Rex Atheniensis), commander
+- FMT: the finished 3-cell sheet of the same hero Theseus in his base form: it shows the format; the new form keeps the same man's face but has new equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Theseus in his base form: the new form is THE SAME MAN, with the same face as always: fair skin, short wavy medium-brown hair, a short neat stubble beard, grey-green eyes, a strong jaw, a calm heroic look, a gold spiral pendant (a labyrinth) on a cord at his neck, but he has changed his equipment and bearing as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a thin gold circlet with a small owl ornament on his short wavy brown hair INSTEAD of a helmet, the face fully open and clearly visible (the same face as always: fair skin, short wavy medium-brown hair, a short neat stubble beard, grey-green eyes, a strong jaw, a calm heroic look, a gold spiral pendant (a labyrinth) on a cord at his neck, a regal look); a ceremonial polished bronze-and-gold cuirass with a gold owl emblem and gold shoulder plates over a white tunic with gold embroidery; a deep-blue officer's sash around the waist; a LONG royal-blue cape down to the calves with a white lining and a gold border, pinned with a round gold brooch; gold bracers; gold greaves; the small coil of bright red thread at his belt. NO shield. In his right hand a straight sword with a silver blade and a gold hilt, raised in command. In his left hand a short gold royal sceptre topped with a small gold owl.
+- REST: standing tall and regal, facing the viewer, the sword resting on his shoulder, the sceptre at his side
+- ATTACK: one step forward, the sword pointing forward in command, the sceptre raised in the other hand
+- HIT: upper body leaning backwards, eyes closed, the sword tilting, one hand raised
+- PORT: Show the gold circlet with the owl, the stubble beard, the gold spiral pendant, the gold shoulder plate and the royal-blue cape with the gold brooch.
+- FRONT: Sword raised in the right hand, the gold sceptre with the little owl in the left, the red thread coil at the belt.
+- BACK: Show the long royal-blue cape with the white lining and gold border, the gold circlet and the raised sword.
+
+## hero_theseus_vic_pr | Theseus, Minotauri Victor
+
+- ROLE: the same legendary hero Theseus, now the prestige form Minotauri Victor (the slayer of the Minotaur)
+- FMT: the finished 3-cell sheet of the same hero Theseus in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Theseus in his specialisation form: the new form is THE SAME MAN, with the same face as always: fair skin, short wavy medium-brown hair, a short neat stubble beard, grey-green eyes, a strong jaw, a calm heroic look, a gold spiral pendant (a labyrinth) on a cord at his neck, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a magnificent heavy bronze-and-gold Corinthian helmet pushed back so the face is fully open and clearly visible (the same face as always: fair skin, short wavy medium-brown hair, a short neat stubble beard, grey-green eyes, a strong jaw, a calm heroic look, a gold spiral pendant (a labyrinth) on a cord at his neck, a proud, victorious look), crowned with a pair of big curved bull horns taken from the Minotaur as a trophy and a tall deep-blue crest; a splendid heavy armour of polished bronze and gold scales with large gold shoulder plates over a white tunic with gold embroidery; a LONG royal-blue cape down to the calves with a gold border, pinned with a large round gold brooch; gold greaves; the coil of bright red thread at his belt. In his left hand a huge ROUND gold-rimmed bronze shield with a glowing gold spiral labyrinth and a small bull head in the centre. In his right hand a strong spear with a long polished silver head and a gold-banded shaft. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing firmly, facing the viewer, the huge shining shield at his left side, the spear held upright beside him
+- ATTACK: one step forward, the spear thrust forward over the top of the raised shield
+- HIT: upper body leaning backwards, eyes closed, the shield sagging, the spear tilting
+- PORT: Show the horned bronze-and-gold helmet with the blue crest, the stubble beard, the gold spiral pendant and the gold shoulder plate.
+- FRONT: The huge shining shield with the golden labyrinth raised on the left arm, the spear held ready in the right hand, the bull horns on the helmet.
+- BACK: Show the back of the huge round shield with its gold rim, the long blue cape with the gold border, the horned helmet and the spear.
+
+## hero_theseus_rex_pr | Theseus, Rex Athenarum
+
+- ROLE: the same legendary hero Theseus, now the prestige form Rex Athenarum (the king of the Athenians, founder of the city)
+- FMT: the finished 3-cell sheet of the same hero Theseus in his specialisation form: it shows the format; the new prestige form keeps the same man's face but has richer equipment
+- INTRO: The attached image is the six-cell sprite sheet of the same hero Theseus in his specialisation form: the new form is THE SAME MAN, with the same face as always: fair skin, short wavy medium-brown hair, a short neat stubble beard, grey-green eyes, a strong jaw, a calm heroic look, a gold spiral pendant (a labyrinth) on a cord at his neck, now at the height of his legend (prestige form): richer and more impressive than before, with finer details, a more splendid cape and a glow around him, as described below. Use the attached image for the face, build, pixel size, outline, palette style and the six-cell layout, but do NOT copy his old clothing or weapons.
+- OUTFIT: He wears: a splendid GOLD crown with an owl in the centre and tall gold points on his short wavy brown hair, the face fully open and clearly visible (the same face as always: fair skin, short wavy medium-brown hair, a short neat stubble beard, grey-green eyes, a strong jaw, a calm heroic look, a gold spiral pendant (a labyrinth) on a cord at his neck, a wise and noble look); a magnificent ceremonial armour of polished white-and-gold plates with a gold owl emblem on the chest and large gold shoulder plates over a white tunic with gold embroidery; a LONG, rich, shimmering royal PURPLE mantle down to the ground with a white-ermine collar, a wide gold border and a large round gold brooch; gold bracers and gold greaves; a gold-studded belt with the coil of bright red thread. NO shield. In his right hand a straight sword with a polished silver blade and an ornate gold hilt, raised high. In his left hand a tall golden sceptre topped with a shining golden owl. Around the figure a faint glow: a few tiny sparkle pixels, kept close to the body and completely inside the cell.
+- REST: standing tall and noble, facing the viewer, the sword resting on his shoulder, the golden sceptre at his side
+- ATTACK: one step forward, the sword pointing forward in command, the golden sceptre raised in the other hand
+- HIT: upper body leaning backwards, eyes closed, the sword tilting, one hand raised
+- PORT: Show the golden crown with the owl, the stubble beard, the gold spiral pendant, the large gold shoulder plate and the purple mantle with the white collar.
+- FRONT: Sword raised in the right hand, the tall golden owl sceptre in the left, the white-and-gold armour with the owl emblem.
+- BACK: Show the long purple mantle with the gold border, the golden crown and the raised sword.
