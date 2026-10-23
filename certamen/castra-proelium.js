@@ -273,7 +273,7 @@ function castraPMakeTower(sim, s, x, y){
   const sk = castraSkillAgg(skIds);
   const range = Math.round((CASTRA_P.rangeBase + st.ambitus*CASTRA_P.rangePerAmb)*(100+sk.rng)/100);
   const cooldown = Math.max(CASTRA_P.cdMin, Math.round((CASTRA_P.cdBase - st.celeritas*CASTRA_P.cdPerCel)*(100-sk.cd)/100));
-  return { id:sim.nextId++, sid:s.id, line:s.line, look, type, owner:s.owner||null, x, y, cx:x*1000+500, cy:y*1000+500, st, cd:0,
+  return { id:sim.nextId++, sid:s.id, line:s.line, spr:(s.hero ? castraHeroFormId(s.h) : null), look, type, owner:s.owner||null, x, y, cx:x*1000+500, cy:y*1000+500, st, cd:0,
            range, cooldown, buffed:false, sk, skIds, hits:0, charge: sk.charge ? sk.charge.hits : 0, aura:0 };
 }
 // Automatische golf (eindeloze Colosseum-modus): golf k start op een vaste tick, ook als de vorige nog loopt.

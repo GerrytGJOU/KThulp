@@ -133,7 +133,7 @@ function castraCodexHeroes(){
     const d = CASTRA_HERO_DATA[id], t = CASTRA_TYPE_LA[d.type] || { sg:d.type };
     const have = !!owned[id];
     return `<div style="display:flex;gap:10px;padding:6px 0;border-top:1px solid #4a3d2c;${have?"":"opacity:.6"}">
-      <div style="flex-shrink:0">${have?castraAvatarHTML(d.look,"down",1,48):"<div style='width:48px;height:48px;text-align:center;font-size:28px'>❔</div>"}</div>
+      <div style="flex-shrink:0">${have?castraHeroSprHTML((CASTRA.heroes||[]).find(x=>x.id===id),"td_idle",48,castraHeroSprHTML((CASTRA.heroes||[]).find(x=>x.id===id),"td",48,castraAvatarHTML(d.look,"down",1,48))):"<div style='width:48px;height:48px;text-align:center;font-size:28px'>❔</div>"}</div>
       <div><b>${esc(have?d.nm:"???")}</b> <small>(${esc(t.sg)} · ${esc((CASTRA_VENATIO[d.region]||{nm:d.region}).nm)})</small>
         <div style="font-size:13px;opacity:.85">${have?`Leidt graag: ${esc(castraBuilding(d.affinity)?castraBuilding(d.affinity).nm:d.affinity)}`:"Nog niet in je heroum."}</div></div></div>`;
   }).join("");

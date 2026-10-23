@@ -277,7 +277,7 @@ Object.assign(CASTRA_HERO_DATA, {
 
   /* ----- Troia ----- */
   achilles: { nm:"Achilles", region:"troia", type:"inf", affinity:"campus", world:{ x:20, y:18, dir:"up" },
-    base:{ vita:100, impetus:22, tutela:15, celeritas:9, ambitus:3 },
+    base:{ vita:92, impetus:18, tutela:14, celeritas:9, ambitus:3 },   // was 100/22/15: als prestigevorm schade van 2,4x een tier 4-soldaat, nu ±1,7x (mediaan van de helden ±1,4x)
     look:_look({ huid:"licht", haar:"middel", haarkleur:"blond", baard:"geen", armor:"ceremonieel", cape:"kort", capekleur:"rood", helm:"open" }),
     chain:[
       _K("troia","campus",4, ["Salve, dux {naam}! Achilles sum. Troiani ante muros pugnant. Quattuor hostes in campo vince.","Gegroet, leider {naam}! Ik ben Achilles. De Trojanen vechten voor de muren. Versla vier vijanden op het veld."], ["Hostes in campo vince!","Versla vijanden op het veld!"], ["Optime! Campum purgavisti.","Uitstekend! Je hebt het veld schoongemaakt."]),
