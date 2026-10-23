@@ -502,3 +502,7 @@ Het Praetorium (hoofdkwartier) heeft twee vlaggen naast de ingang, in de hoeken 
 - **Zones** (`certamen/castra-zones.js`): gestippelde rand en naamplaat per zone (bos, weg, veld, ...) op de kaart; bovenaan een chip met de zone waar je staat, met ✔ en een melding als die bij een lopende opdracht hoort, anders de zone die je nodig hebt met een pijl.
 - **Deuren:** op of naast een deur staat de knop **🚪 Binnen** (ook Enter); tikken op het huis of de grot zelf loopt naar de deur (`castra-stage.js`).
 - **Gesprekken:** een gesprek in de wereld sluit stil zodra je een stap zet (er wordt niets aangenomen) en kan opnieuw beginnen.
+
+## Scherpere sprites (2026-10-23)
+- **Weergave** (`certamen/castra-crisp.js`): per afbeelding in `assets/sprites-forms/` kiest het spel hard (`pixelated`, bij opschalen) of zacht tekenen (bij verkleinen), naar de echte weergavegrootte inclusief schaal en scherpte van het scherm. Zo worden grotere bestanden niet gekarteld op een telefoon.
+- **Bestandsformaten:** battle_front en battle_back 192×192 (was 96), td-frames 96×96 (was 48; het spel toont ze nog op 48 css-pixels), portretten 128×128. Het spel werkt met zowel de oude als de nieuwe bestanden; nieuwe bestanden komen via `tools/castra-sprites-slice.py` (`SIZES`) en daarna `CASTRA_FSPR.ver` ophogen. Een grotere TD-kaart (meer dan 125%) vraagt een speelscherm in de stijl van `castra-stage.js` voor de tower defence; dat is nog niet gebouwd.
