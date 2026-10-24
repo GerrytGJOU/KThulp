@@ -4,7 +4,7 @@ const { load } = require("./castra-colo-node.js"), vm = require("vm");
 const w = load({ H(){} }); if(w.errs.length){ console.error(w.errs); process.exit(1); }
 const run = s => vm.runInContext(s, w.ctx), J = x => JSON.stringify(x), R = s => JSON.parse(J(run(s)));
 let fails = 0, checks = 0; const ok = (c, m)=>{ checks++; if(!c){ fails++; console.log("  FOUT  " + m); } };
-const fresh = ()=>run(`CASTRA = castraNewState(); CASTRA.dev = true; CASTRA_W_UI = { px:5, py:5, dir:"up", frame:1, moving:false, scale:1 }; CASTRA.b.praetorium = { lvl:6, t:0 };`);
+const fresh = ()=>run(`CASTRA = castraNewState(); CASTRA.dev = true; CASTRA_W_UI = { px:5, py:5, dir:"up", frame:1, moving:false, scale:1 }; CASTRA.b.praetorium = { lvl:6, t:0 }; CASTRA_PHASE_FORCE = "dies";`);        // overdag: 's nachts verandert castra-dayn.js de ontmoetingen (meer mythische wezens)
 fresh();
 const regs = R("Object.keys(CASTRA_VENATIO)");
 

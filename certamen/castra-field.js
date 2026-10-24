@@ -66,6 +66,7 @@ const _castraWorldDefFl0 = castraWorldDef;
 castraWorldDef = function(){
   const def = _castraWorldDefFl0.apply(this, arguments), rid = CASTRA_W_REGION, gates = CASTRA_FGATES[rid];
   if(!gates || !gates.length) return def;
+  if(typeof castraBarrierHas==="function" && castraBarrierHas(rid)) return def;        // castra-land.js bouwt een natuurlijke afsluiting (bosrand of twee meertjes) in plaats van een rechte rij bomen
   const W = castraWorldCfg(), ring = (W.trees||[]).find(t=>!/^tree_[ab]$/.test(t)) || "tree_a";
   gates.forEach(g=>{
     for(let x=1;x<def.cols-1;x++){
