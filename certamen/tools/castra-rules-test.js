@@ -140,6 +140,15 @@
       const p0 = castraMvCatchChance(V,false); V.s.en.status = "somnus"; const p1 = castraMvCatchChance(V,false); V.s.en.status = null; CASTRA.soldiers = keep;
       T("een slapende vijand is makkelijker te vangen", p1>p0, p0.toFixed(2)+" → "+p1.toFixed(2)); }
 
+    /* ---- vangkans per vorm ---- */
+    T("alle vangfactoren verwijzen naar bestaande vormen", Object.keys(CASTRA_FORM_CATCH).every(id=>CASTRA_FORMS[id]));
+    T("vangfactoren liggen tussen 0,1 en 1,2", Object.values(CASTRA_FORM_CATCH).every(v=>v>=0.1&&v<=1.2));
+    T("onbekende vorm: factor 1", castraFormCatch("rom_hastatus")===1 && castraFormCatch("bestaatniet")===1);
+    { const keep = CASTRA.soldiers; CASTRA.soldiers = [1,2,3];
+      const mk2 = (id)=>{ const V = mkV("rom_hastatus","rom_hastatus"); V.enemy = { ...V.enemy, line:id, lvl:12 }; V.mine = { ...V.mine, lvl:12 }; V.s.en.hp = Math.round(V.s.en.max*0.4); return V; };
+      const a = castraMvCatchChance(mk2("myt_satyrus"),false), b = castraMvCatchChance(mk2("myt_draco"),false);
+      T("een draak is moeilijker te vangen dan een sater", b<a, a.toFixed(2)+" vs "+b.toFixed(2)); CASTRA.soldiers = keep; }
+
     /* ---- moves van wezens met elementen ---- */
     { const mv1 = castraMvSet({ line:"myt_draco", lvl:10 }, "myth").filter(m=>m.kind==="dmg" && m.id!=="oppugna");
       T("een draak krijgt moves met een element", mv1.length>0 && mv1.every(m=>m.el==="ignis"||m.el==="umbra"));
