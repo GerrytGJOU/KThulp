@@ -1316,7 +1316,7 @@ function spCodexImagesHTML(){
   if(!imgs.length) return `<p class="codex-empty">Nog geen scènes met een illustratie bezocht.</p>`;
   return `<div class="codex-gallery">${imgs.map(i=>`
     <div class="codex-gallery-item">
-      <img src="assets/chronica/images/${esc(i.img)}" alt="" onclick="spOpenLightbox(this.src)" onerror="this.parentElement.style.display='none'">
+      <img src="assets/chronica/images/${esc(spImgFile(i.img))}" alt="" onclick="spOpenLightbox(this.src)" onerror="this.parentElement.style.display='none'">
       <div class="codex-gallery-caption">${esc(i.titel)}</div>
     </div>`).join("")}</div>`;
 }
@@ -1415,7 +1415,7 @@ function spCodexSouvenirsHTML(){
 function spSouvenirTileHTML(def){
   return `<div class="codex-gallery-item">
       <div style="width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:rgba(90,58,26,.12);border-radius:6px;overflow:hidden">
-        <img src="assets/chronica/souvenirs/${esc(def.img||'')}" alt="" style="width:100%;height:100%;object-fit:contain;cursor:zoom-in"
+        <img src="assets/chronica/souvenirs/${esc(spImgFile(def.img||''))}" alt="" style="width:100%;height:100%;object-fit:contain;cursor:zoom-in"
           onclick="spOpenLightbox(this.src)"
           onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${esc(def.icon)}</span>'">
       </div>
@@ -1426,7 +1426,7 @@ function spSouvenirEmptyTileHTML(id){
   const variant = spSouvenirPlaceholderVariant(id);
   return `<div class="codex-gallery-item" style="opacity:.55">
       <div style="width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:rgba(90,58,26,.12);border-radius:6px;overflow:hidden">
-        <img src="assets/chronica/souvenirs/museum_${variant.id}.png" alt="" style="width:100%;height:100%;object-fit:contain;cursor:zoom-in"
+        <img src="assets/chronica/souvenirs/museum_${variant.id}.webp" alt="" style="width:100%;height:100%;object-fit:contain;cursor:zoom-in"
           onclick="spOpenLightbox(this.src)"
           onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${variant.icon}</span>'">
       </div>
@@ -2375,7 +2375,7 @@ function spRenderMapHub(scene){
   <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
   <div class="panel">${spChapterEyebrowHTML()}${titleHTML}${textHTML}</div>
   <div class="panel" style="padding:0;overflow:hidden;position:relative">
-    <img src="assets/chronica/images/${esc(mapDef.img)}" alt="" style="width:100%;display:block"
+    <img src="assets/chronica/images/${esc(spImgFile(mapDef.img))}" alt="" style="width:100%;display:block"
       onerror="this.parentElement.querySelector('.sp-map-missing').style.display='block'">
     <div class="sp-map-missing note" style="display:none;padding:40px 16px;text-align:center">Kaart nog niet beschikbaar.</div>
     <div style="position:absolute;left:0;top:0;width:100%;height:100%">${pinsHTML}</div>
@@ -2784,11 +2784,13 @@ function spFinaleHerinneringScore(state){
 // welk van de vijf eindes, of welke zijde-keuze) — zonder de scène zelf te
 // hoeven splitsen. Een gewone, letterlijke bestandsnaam werkt nog altijd
 // ongewijzigd (geen `{...}` erin, dus niets om te resolven).
+// Chronica-afbeeldingen zijn WebP (sinds 2026-10-24: 802 MB werd 50 MB); in de teksten staat nog de oude naam .png.
+function spImgFile(name){ return String(name||"").replace(/\.png$/i, ".webp"); }
 function spSceneImageHTML(scene){
   if(!scene.meta || !scene.meta.IMAGE) return "";
   const filename = SpTextResolver.resolve(scene.meta.IMAGE.trim(), SP_STATE);
   if(!filename) return "";
-  const src = "assets/chronica/images/"+filename;
+  const src = "assets/chronica/images/"+spImgFile(filename);
   return `<img src="${esc(src)}" alt="" style="width:100%;border-radius:10px;display:block;margin-bottom:12px" onerror="this.style.display='none'">`;
 }
 
