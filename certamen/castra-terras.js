@@ -32,6 +32,10 @@ const CASTRA_TERRAS = {
       { x:6,  y:35, w:10, h:4, lv:1 }, { x:13, y:35, w:10, h:4, lv:1 }, { x:37, y:35, w:11, h:3, lv:1 },
     ],
   },
+  // Themiscyra: de bosberg van de Amazones (grasplateaus) in het noordoosten (Mons), met een lage uitloper in het westen
+  themiscyra: { style:"grass", seed:1357, tall:0.4, cut:1,
+    plateaus:[ { x:38, y:3, w:13, h:8, lv:1 }, { x:48, y:4, w:9, h:6, lv:1 }, { x:41, y:3, w:8, h:4, lv:2 }, { x:6, y:26, w:9, h:3, lv:1 } ],
+  },
 };
 
 /* ---------- het plan (puur: alleen getallen) ---------- */
