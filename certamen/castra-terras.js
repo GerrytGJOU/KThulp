@@ -36,6 +36,21 @@ const CASTRA_TERRAS = {
   themiscyra: { style:"grass", seed:1357, tall:0.4, cut:1,
     plateaus:[ { x:38, y:3, w:13, h:8, lv:1 }, { x:48, y:4, w:9, h:6, lv:1 }, { x:41, y:3, w:8, h:4, lv:2 }, { x:6, y:26, w:9, h:3, lv:1 } ],
   },
+  // Persis: rode zandsteenmesa's, per zone gescheiden door ravijnen (de vrije stroken ertussen); de weg in het midden (x 28-35) blijft vrij
+  persis: { style:"sand2", seed:2201, tall:0.3, cut:1,
+    plateaus:[ { x:4, y:3, w:15, h:8, lv:1 }, { x:8, y:3, w:8, h:4, lv:2 }, { x:39, y:3, w:15, h:8, lv:1 }, { x:43, y:3, w:8, h:4, lv:2 },
+               { x:5, y:36, w:12, h:4, lv:1 }, { x:41, y:36, w:12, h:4, lv:1 } ],
+  },
+  // Aegyptus: tafelbergen langs de Nijlvallei (de rivier links blijft vrij)
+  aegyptus: { style:"sand", seed:2202, tall:0.3, cut:1,
+    plateaus:[ { x:12, y:3, w:13, h:7, lv:1 }, { x:15, y:3, w:7, h:3, lv:2 }, { x:39, y:3, w:15, h:8, lv:1 }, { x:43, y:3, w:7, h:4, lv:2 },
+               { x:10, y:37, w:12, h:4, lv:1 }, { x:40, y:36, w:14, h:4, lv:1 } ],
+  },
+  // Africa: de Atlas in het noorden en rotsplateaus in het zuiden
+  africa: { style:"sand2", seed:2203, tall:0.3, cut:1,
+    plateaus:[ { x:5, y:3, w:15, h:8, lv:1 }, { x:9, y:3, w:7, h:4, lv:2 }, { x:40, y:3, w:14, h:8, lv:1 }, { x:44, y:3, w:7, h:4, lv:2 },
+               { x:5, y:33, w:13, h:5, lv:1 }, { x:11, y:33, w:6, h:2, lv:2 }, { x:38, y:34, w:12, h:4, lv:1 } ],
+  },
 };
 
 /* ---------- het plan (puur: alleen getallen) ---------- */
