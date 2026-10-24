@@ -11,7 +11,7 @@ function load(extra){
   const ctx = Object.assign({ console, Math, Date, JSON, Object, Array, String, Number, Set, Map, Promise, setTimeout:()=>0, clearTimeout(){}, setInterval:()=>0, clearInterval(){},
     localStorage:{ getItem:k=>store[k]===undefined?null:store[k], setItem:(k,v)=>{store[k]=String(v);}, removeItem:k=>{delete store[k];} },
     location:{ search:"?dev", href:"" }, navigator:{ userAgent:"node" }, document:stub, Image:function(){ return stub; }, requestAnimationFrame:()=>0, addEventListener(){}, removeEventListener(){},
-    el:()=>null, esc:s=>String(s), confirm:()=>true }, extra||{});
+    el:()=>null, esc:s=>String(s), confirm:()=>true, H(){} }, extra||{});
   ctx.window = ctx; vm.createContext(ctx);
   const errs = [];
   vm.runInContext("var CASTRA_B=null; var SCREENS={}; var _screen=''; function go(n){ _screen=n; } function toast(){}", ctx);

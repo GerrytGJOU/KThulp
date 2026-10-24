@@ -81,6 +81,28 @@ function castraDqAvailable(q){
   if(q.can && !q.can()) return false;
   return true;
 }
+/* ---------- toestanden van een opdracht (zoals het questjournal uit het Overworld-dossier) ----------
+   LOCKED (nog niet te krijgen) → AVAILABLE (de gever biedt hem aan) → ACTIVE (aangenomen, stappen lopen) → READY (alle stappen klaar,
+   meld je bij de gever) → COMPLETED. De toestand wordt altijd uit de bestaande gegevens (CASTRA.dq en de voorwaarden) afgeleid,
+   er is dus geen aparte opslag of migratie. Diarium en markeringen (❗ ❓ 💬) lezen alleen deze functie. */
+const CASTRA_QSTATE = {
+  LOCKED:{ la:"Clausa", nl:"nog dicht" }, AVAILABLE:{ la:"Parata", nl:"beschikbaar" }, ACTIVE:{ la:"Agitur", nl:"bezig" },
+  READY:{ la:"Perfecta", nl:"klaar om in te leveren" }, COMPLETED:{ la:"Confecta", nl:"afgerond" },
+};
+function castraQuestState(id){
+  const q = typeof id==="string" ? castraDqDef(id) : id; if(!q) return null;
+  const st = (CASTRA.dq||{})[q.id];
+  if(st && st.d) return "COMPLETED";
+  if(st && st.a) return st.s >= q.steps.length ? "READY" : "ACTIVE";
+  return castraDqAvailable(q) ? "AVAILABLE" : "LOCKED";
+}
+// Waarom een opdracht nog dicht is (voor de hint in het Diarium); leeg als hij niet vergrendeld is.
+function castraQuestLockReason(id){
+  const q = typeof id==="string" ? castraDqDef(id) : id; if(!q || castraQuestState(q)!=="LOCKED") return "";
+  if(q.after && !((CASTRA.dq||{})[q.after]||{}).d){ const p = castraDqDef(q.after); return "Rond eerst af: "+(p ? p.nm.nl : q.after); }
+  if(q.region && !castraDqRegionOpen(q.region)) return "Het land "+((typeof CASTRA_WORLDS!=="undefined" && CASTRA_WORLDS[q.region]) ? CASTRA_WORLDS[q.region].nm : q.region)+" is nog dicht";
+  return "Nog niet te krijgen";
+}
 function castraDqActive(){ return CASTRA_QDEFS.filter(q=>{ const st = (CASTRA.dq||{})[q.id]; return st && st.a && !st.d; }); }
 function castraDqDone(){ return CASTRA_QDEFS.filter(q=>((CASTRA.dq||{})[q.id]||{}).d); }
 function castraDqBest(stat){
@@ -208,8 +230,9 @@ function castraDqHTML(){
     return `<div style="${row}"><b>${esc(q.nm.la)}</b> <small style="opacity:.7">${esc(q.nm.nl)}</small>${readyAll?` <span style="color:#2a7a32;font-weight:bold">· klaar, meld je!</span>`:""}
       <div style="font-size:12px;opacity:.75">Gever: ${esc(castraDqWhere(q))} · beloning: ${castraDqRewardText(q)}</div>${steps}</div>`; }).join("");
   const avail = CASTRA_QDEFS.filter(castraDqAvailable).map(q=>`<div style="${row}"><b>${esc(q.nm.la)}</b> <small style="opacity:.7">${esc(q.nm.nl)}</small><div style="font-size:12px;opacity:.8">❗ Praat met ${esc(castraDqWhere(q))} · beloning: ${castraDqRewardText(q)}</div></div>`).join("");
+  const locked = CASTRA_QDEFS.filter(q=>castraQuestState(q)==="LOCKED"), lockedHint = locked.length ? `<div class="note" style="margin-top:10px;font-size:13px">🔒 ${locked.length} opdrachten zijn nog dicht. ${castraLaHTML("Terras novas aperi.", "Open nieuwe landen om ze te ontdekken.", "dq_clausa")}</div>` : "";
   const done = castraDqDone().map(q=>`<span style="display:inline-block;margin:2px 8px 2px 0;font-size:13px;opacity:.7">✔ ${esc(q.nm.nl)}</span>`).join("");
-  return `${act ? `<h4 style="margin:8px 0 2px">Lopende opdrachten</h4>${act}` : ""}${avail ? `<h4 style="margin:10px 0 2px">Nieuwe opdrachten</h4>${avail}` : ""}${done ? `<h4 style="margin:10px 0 2px">Afgerond</h4><div>${done}</div>` : ""}${(!act && !avail && !done) ? `<div class="note">Nog geen opdrachten. Praat met mensen in de regio's.</div>` : ""}`;
+  return `${act ? `<h4 style="margin:8px 0 2px">Lopende opdrachten</h4>${act}` : ""}${avail ? `<h4 style="margin:10px 0 2px">Nieuwe opdrachten</h4>${avail}` : ""}${done ? `<h4 style="margin:10px 0 2px">Afgerond</h4><div>${done}</div>` : ""}${lockedHint}${(!act && !avail && !done) ? `<div class="note">Nog geen opdrachten. Praat met mensen in de regio's.</div>` : ""}`;
 }
 (function(){
   const it = CASTRA_MENU_ITEMS.find(x=>x.id==="opus"); if(it){ it.la = "Diarium"; it.nl = "opdrachten"; }
@@ -219,7 +242,7 @@ function castraDqHTML(){
     return `<h3 style="margin:0 0 6px">Diarium <small>opdrachten</small></h3>${castraDqHTML()}<h4 style="margin:10px 0 2px">Lopend in de wereld</h4>${legacy}`;
   };
 })();
-Object.assign(CASTRA_GLOSS, { "diarium":"dagboek", "ostende":"toon", "habe":"heb", "lupi":"wolven", "dic":"zeg, praat", "eremitae":"aan de kluizenaar", "tuta":"veilig",
+Object.assign(CASTRA_GLOSS, { "terras":"landen (4e naamval)", "novas":"nieuwe", "aperi":"open!", "diarium":"dagboek", "ostende":"toon", "habe":"heb", "lupi":"wolven", "dic":"zeg, praat", "eremitae":"aan de kluizenaar", "tuta":"veilig",
   "tutus":"veilig", "matrona":"vrouw des huizes", "misit":"stuurde", "novum":"nieuwe", "celeres":"snelle", "celerem":"snelle", "oraculum":"orakel", "loquitur":"spreekt",
   "poetam":"dichter (4e naamval)", "verum":"waar", "pythia":"Pythia (orakelpriesteres)", "carmen":"lied", "cano":"ik zing", "visio":"visioen", "cassandrae":"aan Cassandra",
   "periculum":"gevaar", "videt":"ziet", "sex":"zes", "video":"ik zie", "firmum":"stevige" });
@@ -229,11 +252,11 @@ Object.assign(CASTRA_GLOSS, { "diarium":"dagboek", "ostende":"toon", "habe":"heb
 function castraDqMark(gid){
   let best = "";
   CASTRA_QDEFS.forEach(q=>{
-    const st = (CASTRA.dq||{})[q.id];
-    if(st && st.a && !st.d){
-      if(q.giver===gid && st.s >= q.steps.length) best = "ready";
+    const state = castraQuestState(q), st = (CASTRA.dq||{})[q.id];
+    if(state==="READY" || state==="ACTIVE"){
+      if(q.giver===gid && state==="READY") best = "ready";
       else { const s = q.steps[st.s]; if(s && s.kind==="talk" && s.npc===gid && best!=="ready") best = "talk"; }
-    } else if(q.giver===gid && !best && castraDqAvailable(q)) best = "offer";
+    } else if(state==="AVAILABLE" && q.giver===gid && !best) best = "offer";
   });
   return best;
 }

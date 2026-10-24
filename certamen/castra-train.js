@@ -46,9 +46,9 @@ castraWobjDraw = function(){
   _castraWobjDrawTr0.apply(this, arguments);
   const box = el("cwWobj"); if(!box) return;
   let html = "";
-  castraWEnts().filter(e=>e.kind==="trainer").forEach(e=>{
+  castraWEnts().filter(e=>e.kind==="trainer" && !e._walk).forEach(e=>{
     const done = castraTrainerDone(e);
-    html += `<div style="position:absolute;left:${e.x*48}px;top:${e.y*48}px;width:48px;height:48px;pointer-events:none;z-index:4;${done?"opacity:.55;filter:grayscale(.5)":""}">${castraAvatarHTML(castraTrainerLook(e), e.dir||"left", 1, 48)}
+    html += `<div style="position:absolute;left:${e.x*48}px;top:${e.y*48}px;width:48px;height:48px;pointer-events:none;z-index:4;${done?"opacity:.55;filter:grayscale(.5)":""}">${castraAvatarHTML(castraTrainerLook(e), castraTrainerDir(e), 1, 48)}
       <div style="position:absolute;left:50%;top:-12px;transform:translateX(-50%);font-size:15px;line-height:1;background:${done?"#5d5":"#d94"};color:#fff;border-radius:10px;padding:1px 5px;box-shadow:0 1px 4px rgba(0,0,0,.6)">${done?"✔":"⚔️"}</div></div>`;
   });
   if(html) box.insertAdjacentHTML("beforeend", html);
@@ -90,22 +90,65 @@ function castraTrainerFight(e, right){
 const _castraMvCatchableTr0 = castraMvCatchable;
 castraMvCatchable = function(V){ if(V && V.boss && String(V.boss.key||"").indexOf("trainer_")===0) return false; return _castraMvCatchableTr0(V); };
 
-/* ---------- uitdagen als je dichtbij komt ---------- */
+/* ---------- uitdagen: de trainer ziet je (zichtlijn), roept "!" en loopt naar je toe ----------
+   Een trainer kijkt naar het midden van de kaart (de weg) en ziet je als je in zijn rij staat, maximaal CASTRA_TRAIN_SIGHT tegels
+   ver en zonder obstakel ertussen. Ook als je naast hem staat. Dan verschijnt een "!", hij loopt naar je toe en het gesprek begint
+   (zoals bij het aanspreken). Is hij vandaag al verslagen, dan zegt hij niets. */
+const CASTRA_TRAIN_SIGHT = 4;
+function castraTrainerDir(e){ const W = castraWorldCfg(); return e.x < W.cols/2 ? "right" : "left"; }
+function castraTrainerSees(e, px, py){
+  if(Math.max(Math.abs(e.x-px), Math.abs(e.y-py))<=1) return true;                  // vlak naast hem
+  const dx = castraTrainerDir(e)==="right" ? 1 : -1;
+  if(py!==e.y) return false;
+  const dist = (px-e.x)*dx; if(dist<1 || dist>CASTRA_TRAIN_SIGHT) return false;
+  for(let i=1;i<dist;i++) if(castraWBlocked(e.x+dx*i, e.y)) return false;            // een boom, rots of persoon ertussen
+  return true;
+}
+function castraTrainerWalkClear(){
+  castraWEnts().forEach(e=>{ if(e._walk) delete e._walk; });
+  const b = el("cwTrW"); if(b) b.innerHTML = "";
+  if(typeof castraWobjDraw==="function") castraWobjDraw();
+}
 const _castraWStepTr0 = castraWStep;
 castraWStep = function(dir){
+  if(CASTRA_W_UI.moving) return _castraWStepTr0.apply(this, arguments);
+  if(castraWEnts().some(e=>e._walk)) castraTrainerWalkClear();                        // de trainer gaat terug naar zijn plek zodra je verder loopt
   const r = _castraWStepTr0.apply(this, arguments);
   if(r===true) setTimeout(castraTrainerCheck, 260);
   return r;
 };
 function castraTrainerCheck(){
-  if(CASTRA_DLG || !el("cwMap")) return;
-  const px = CASTRA_W_UI.px, py = CASTRA_W_UI.py;
+  if(CASTRA_DLG || !el("cwMap") || CASTRA_W_UI.moving) return;
+  const px = CASTRA_W_UI.px, py = CASTRA_W_UI.py; let hit = null;
   castraWEnts().filter(e=>e.kind==="trainer").forEach(e=>{
     const d = Math.max(Math.abs(e.x-px), Math.abs(e.y-py));
     if(d>=5) e._seen = false;
-    else if(d<=2 && !e._seen && !castraTrainerDone(e) && !CASTRA_DLG){ e._seen = true; castraTrainerTalk(e); }
+    else if(!hit && !e._seen && !castraTrainerDone(e) && castraTrainerSees(e, px, py)) hit = e;
   });
+  if(hit) castraTrainerApproach(hit, px, py);
 }
+function castraTrainerApproach(e, px, py){
+  e._seen = true; CASTRA_W_UI.moving = true;
+  const dir = castraTrainerDir(e), dx = dir==="right" ? 1 : -1, box = (()=>{ let b = el("cwTrW"); if(!b){ b = document.createElement("div"); b.id = "cwTrW"; el("cwMap").insertBefore(b, el("cwAbove")); } return b; })();
+  const adjacent = Math.max(Math.abs(e.x-px), Math.abs(e.y-py))<=1, row = py===e.y, steps = adjacent || !row ? 0 : Math.max(0, Math.abs(px-e.x)-1);
+  const look = castraTrainerLook(e), avatar = d=>castraAvatarHTML(look, d, 1, 48);
+  e._walk = { x:e.x };
+  if(typeof castraWobjDraw==="function") castraWobjDraw();
+  box.innerHTML = `<div id="cwTrWm" style="position:absolute;left:${e.x*48}px;top:${e.y*48}px;width:48px;height:48px;z-index:4;transition:left .2s linear;pointer-events:none">${avatar(dir)}
+    <div style="position:absolute;left:50%;top:-16px;transform:translateX(-50%);font-size:20px;font-weight:bold;line-height:1;background:#e8c96a;color:#7a1c14;border:2px solid #7a1c14;border-radius:50%;width:24px;height:24px;text-align:center">!</div></div>`;
+  const stop = ()=>{ CASTRA_W_UI.moving = false; };
+  const face = ()=>{ CASTRA_W_UI.dir = row && px!==e.x ? (px>e.x ? "left" : "right") : CASTRA_W_UI.dir; if(el("cwAv")) castraWorldAvatar(); };
+  const talk = ()=>{ stop(); face(); const bub = el("cwTrWm") && el("cwTrWm").querySelector(":scope > div:last-child"); if(bub && bub.textContent.trim()==="!") bub.remove(); castraTrainerTalk(e); };
+  let i = 0;
+  const walk = ()=>{
+    if(!el("cwTrWm")){ stop(); return; }
+    if(i>=steps){ setTimeout(talk, 220); return; }
+    i++; el("cwTrWm").style.left = ((e.x+dx*i)*48)+"px"; setTimeout(walk, 210);
+  };
+  setTimeout(walk, 620);       // eerst het uitroepteken even laten zien
+}
+const _castraWorldRenderTr0 = castraWorldRender;
+castraWorldRender = function(){ castraWEnts().forEach(e=>{ delete e._walk; }); return _castraWorldRenderTr0.apply(this, arguments); };
 
 /* ---------- insignia ---------- */
 const _castraBossWonIn0 = castraBossWon;
