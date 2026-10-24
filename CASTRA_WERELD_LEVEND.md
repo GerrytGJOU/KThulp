@@ -82,3 +82,13 @@ Omvang: S = ≤ 1 sessie, M = 1-3, L = meerdere.
 3. Volger (L4): ja?
 4. Geluid (L7): alleen kleine synth-geluiden, of ook muziek (zo ja welke tracks)?
 5. Welke van L5, L6 en L8 wil je zeker, welke mag later?
+
+## 7. Bergen, bochtige paden en natuurlijke afsluitingen (2026-10-24)
+
+**Hoe RPG Maker een berg bouwt (studie van `Outside_A4`).** Een A4-blok is een autotile van 96×144 pixels in kwartjes van 24 px: rij 2-5 zijn de rechthoekkwartjes (rand links/rechts/boven/onder), rij 0 de binnenhoeken (kwartjes (2,0), (3,0), (2,1), (3,1)). Per kolompaar staat één bergsoort (gras, zand, zand 2, sneeuw); rij 10-12 is het plateau (bovenvlak), rij 13-14 de klifwand eronder. De wand is een tegel hoog en hoort bij het plateau erboven: wat onder een plateaucel lager ligt, krijgt een wandtegel. Trappen zitten niet in de tegelset; die tekent `castraDrawStairs` zelf. Water (`Outside_A1`) werkt hetzelfde met de vijver-autotile (gras rij 0-2, zand rij 6-8); de waterval staat in kolom 14-15.
+
+**Gebouwd.** `castra-terras.js`: plateaus op twee niveaus (Laconia, Sparta als bergstad) met wand, rand, binnenhoeken en automatische trappen (één per aaneengesloten wandstuk van 3+, twee bij 14+); voorwerpen die in een wand of rand vallen worden verplaatst. `castra-land.js`: kronkelpaden door ankerpunten (poorten, trainers, deuren, uitgangen), meertjes met echte oevers, bossen op een rooster, en een aarden baan die het pad als één zachte lijn tekent. Romeinse landen (Latium, Roma, Gallia) houden hun rechte wegen.
+
+**Natuurlijke afsluitingen.** De poorten in de heggen stonden in een kaarsrechte rij bomen. Nu loopt de afsluiting als een kronkelend lint (deining plus een kortere golf, het lint blijft overal aaneengesloten): of een bosrand van wisselende dikte, of een smalle doorgang van één tegel tussen twee meertjes met bos daarbuiten. De opening blijft op dezelfde plek (de versperring staat erin), met een korte rechte gang. Bij een berg of water loopt het lint recht door, rond kisten en plateaus blijft marge zodat er geen dichtgeknepen zakjes ontstaan, en de oost-westweg blijft vrij. Lukt het nergens, dan valt de code terug op de oude rechte heg. De wereldtest bewaakt bereikbaarheid.
+
+**Wensen voor extra tegelsets.** `Outside_A2` (grondautotiles) zou zachte randen tussen gras, zand en pad geven in plaats van de getekende aarden baan; `Outside_C` kan rotswanden en ruïnes leveren voor woestijnravijnen (Persis, Aegyptus, Africa) en een bosrivier met kliffen in Germania. Open voorstellen: ravijnen en mesa's via `CASTRA_TERRAS` voor die landen, watervallen uit A1.

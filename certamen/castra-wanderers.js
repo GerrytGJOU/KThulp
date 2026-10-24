@@ -154,7 +154,7 @@ function castraAmbExtras(rid, W, rng){
     if(spots.length){ const c = spots[0], h = castraAmbAddAnimal(CASTRA_AMB_ANIMALS.find(t=>t.id==="equus"), c[0], c[1], rng, true); h.dir = c[0]>g.x ? "left" : c[0]<g.x ? "right" : "down"; }
   });
   // een kar met paard op de hoofdweg: het paard trekt, de kar volgt (zijaanzicht)
-  const rd = (W.roads||[]).find(r=>r.x1-r.x0>20 && r.y1-r.y0<=2);
+  const rd = W.cartRoad || (W.roads||[]).find(r=>r.x1-r.x0>20 && r.y1-r.y0<=2);       // bij een bochtige weg (castra-land.js): het langste rechte stuk
   if(rd){
     const y = rd.y0, x0 = rd.x0+3, x1 = rd.x1-3, dir = rng()<0.5 ? 1 : -1, hx = x0 + 3 + Math.floor(rng()*(x1-x0-6));
     const mk = (T, x)=>({ id:"a"+(CASTRA_AMB.id++), type:{ id:T.id, nm:T.nm }, sheet:{ f:T.sheet[0], i:T.sheet[1] }, x, y, hx:x, hy:y, dir:dir>0?"right":"left", frame:1, vehicle:true, lines:T.lines, talking:false, seed:Math.floor(rng()*1e6) });
