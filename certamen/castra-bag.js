@@ -23,20 +23,29 @@ const CASTRA_GOODS = {
   suffimentum: { la:"Suffimentum", icon:"🌿", kind:"repel",   steps:100, price:{ aes:40 },               nl:"rookwerk",     note:"Rook van kruiden en hars. Zwakkere wilde vijanden blijven 100 stappen weg." },
   viaticum:    { la:"Viaticum",    icon:"🪙", kind:"recruit", bonus:0.15, price:{ aes:30 },               nl:"reisgeld",     note:"Het reisgeld dat een rekruut kreeg. Geef het aan een vijand om hem te overtuigen: +15% kans bij het werven." },
   donativum:   { la:"Donativum",   icon:"💰", kind:"recruit", bonus:0.30, price:{ aes:80, gloria:1 },     nl:"geldgeschenk", note:"Het geschenk dat soldaten kregen bij een feestelijke gelegenheid: +30% kans bij het werven." },
+  libum:       { la:"Libum",       icon:"🥧", kind:"heal",    heal:0.40, price:{ frumentum:20 },        nl:"offerkoek",    note:"Een koekje van meel, kaas en honing dat Romeinen aan de goden offerden. Alleen op marktdag (nundinae) te koop.", nundOnly:true },
   hamus:       { la:"Hamus",       icon:"🎣", kind:"tool",                price:{ aes:35 },               nl:"vishaak",      note:"Een vishaak met riet. Met een hamus kun je aan het water vissen; hij blijft in je saccus.", once:true },
 };
-const CASTRA_GOODS_ORDER = ["posca","buccellatum","mulsum","theriaca","suffimentum","viaticum","donativum","hamus"];
+const CASTRA_GOODS_ORDER = ["posca","buccellatum","mulsum","libum","theriaca","suffimentum","viaticum","donativum","hamus"];
 
 function castraBagMap(){ return CASTRA.bag || (CASTRA.bag = {}); }
 function castraBagN(id){ return (CASTRA.bag && CASTRA.bag[id]) || 0; }
 function castraBagAdd(id, n){ if(!CASTRA_GOODS[id]) return 0; const m = castraBagMap(); m[id] = Math.min(99, (m[id]||0)+(n||1)); return m[id]; }
 function castraBagTake(id){ if(castraBagN(id)<1) return false; const m = castraBagMap(); m[id]--; if(m[id]<=0) delete m[id]; return true; }
+// Op marktdag (nundinae, castra-nund.js) kosten grondstoffen 20% minder (afgerond omhoog); gloria niet.
+function castraGoodPrice(id){
+  const g = CASTRA_GOODS[id], on = typeof castraNundinae==="function" && castraNundinae().on, out = {};
+  Object.keys(g.price).forEach(r=>{ out[r] = (on && r!=="gloria") ? Math.max(1, Math.ceil(g.price[r]*0.8)) : g.price[r]; });
+  return out;
+}
 function castraPriceTxt(p){ return Object.keys(p).map(r=>castraRes(r).icon+" "+p[r]).join("  "); }
 function castraBagBuy(id){
   const g = CASTRA_GOODS[id]; if(!g) return "?";
   if(g.once && castraBagN(id)>0) return "al_zo";
-  if(!castraCanPay(g.price)) return "deest";
-  castraPay(g.price); castraBagAdd(id, 1); castraSave(); return null;
+  if(g.nundOnly && !(typeof castraNundinae==="function" && castraNundinae().on)) return "geen_markt";
+  const price = castraGoodPrice(id);
+  if(!castraCanPay(price)) return "deest";
+  castraPay(price); castraBagAdd(id, 1); castraSave(); return null;
 }
 
 /* ---------- gebruik buiten het gevecht ---------- */
@@ -64,7 +73,7 @@ function castraBagUse(id, key){
 let CASTRA_BAGUI = { pick:null };
 function castraBagMsg(code, g){
   return ({ geen:"Dat voorwerp heb je niet meer.", al_vol:"Daar is geen genezing nodig.", niet_buiten:"Die is niet buiten gevecht.", al_aan:"Het suffimentum brandt al.", niet_hier:"Dat gebruik je niet zo.",
-    deest:"Daar heb je niet genoeg grondstoffen voor.", al_zo:"Je hebt al een "+(g?g.la:"")+"." })[code] || "Dat lukt nu niet.";
+    deest:"Daar heb je niet genoeg grondstoffen voor.", geen_markt:"Dat is alleen op marktdag te koop.", al_zo:"Je hebt al een "+(g?g.la:"")+"." })[code] || "Dat lukt nu niet.";
 }
 function castraBagPickTarget(id){ CASTRA_BAGUI.pick = CASTRA_BAGUI.pick===id ? null : id; castraMenuRender(); }
 function castraBagGive(id, key){
@@ -83,7 +92,7 @@ function castraBagUseNow(id){
 function castraBagBuyClick(id){
   const g = CASTRA_GOODS[id], r = castraBagBuy(id);
   if(r){ toast("🏺", castraBagMsg(r, g)); return; }
-  toast(g.icon+" "+g.la, "Gekocht voor "+castraPriceTxt(g.price)+".");
+  toast(g.icon+" "+g.la, "Gekocht voor "+castraPriceTxt(castraGoodPrice(id))+".");
   castraMenuRender(); if(typeof castraRenderRes==="function") castraRenderRes();
 }
 function castraBagRowHTML(id){
@@ -98,14 +107,18 @@ function castraBagRowHTML(id){
   return `<div style="${CASTRA_MV_ROW};flex-wrap:wrap"><span style="font-size:24px;width:32px;text-align:center">${g.icon}</span>
     <div style="flex:1;min-width:140px"><b>${esc(g.la)}</b> <small style="opacity:.7">${esc(g.nl)}</small> <b>×${n}</b><div style="font-size:12px;opacity:.75">${esc(g.note)}</div></div>${act}</div>${tg}`;
 }
+// De winkel is open in het kamp (de mercator), of op marktdag bij een marktkraam in de wereld (CASTRA_BAGUI.market).
+function castraBagShopOpen(){ return !!el("castraMap") || (CASTRA_BAGUI.market && typeof castraNundinae==="function" && castraNundinae().on); }
 function castraBagShopHTML(){
-  const inCamp = !!el("castraMap");
-  if(!inCamp) return `<div class="note" style="margin-top:6px">🏺 De mercator staat in het kamp. Ga met ☰ → Castra naar het kamp om te kopen.</div>`;
+  const nund = typeof castraNundinae==="function" ? castraNundinae() : { on:false, next:0 };
+  const head = nund.on ? `<div class="note" style="margin:4px 0">🏺 ${castraLaHTML("Hodie nundinae sunt!", "Het is marktdag: alles is 20% goedkoper en er is libum te koop.", "bag_nund")}</div>`
+    : `<div class="note" style="margin:4px 0;font-size:12px">🏺 Nundinae (marktdag) over ${nund.next} dag${nund.next===1?"":"en"}: dan is alles 20% goedkoper.</div>`;
+  if(!castraBagShopOpen()) return head + `<div class="note" style="margin-top:6px">🏺 De mercator staat in het kamp (☰ → Castra). Op marktdag staat er ook een kraam bij de reisplek in elk land.</div>`;
   const btn = "min-height:36px;padding:2px 10px;margin-left:6px;font-size:13px;font-family:inherit;cursor:pointer;border:2px solid var(--parch-edge,#4a3416);border-radius:8px;background:#e8c96a;color:var(--parch-ink,#2b1d0e)";
-  return CASTRA_GOODS_ORDER.map(id=>{ const g = CASTRA_GOODS[id], have = castraBagN(id), can = castraCanPay(g.price) && !(g.once && have>0);
+  return head + CASTRA_GOODS_ORDER.filter(id=>!CASTRA_GOODS[id].nundOnly || nund.on).map(id=>{ const g = CASTRA_GOODS[id], have = castraBagN(id), price = castraGoodPrice(id), can = castraCanPay(price) && !(g.once && have>0);
     return `<div style="${CASTRA_MV_ROW};flex-wrap:wrap"><span style="font-size:22px;width:32px;text-align:center">${g.icon}</span>
       <div style="flex:1;min-width:140px"><b>${esc(g.la)}</b> <small style="opacity:.7">${esc(g.nl)}</small><div style="font-size:12px;opacity:.75">${esc(g.note)}</div></div>
-      <button style="${btn};${can?"":"opacity:.5"}" onclick="castraBagBuyClick('${id}')">${g.once && have>0 ? "al gekocht" : castraPriceTxt(g.price)}</button></div>`; }).join("");
+      <button style="${btn};${can?"":"opacity:.5"}" onclick="castraBagBuyClick('${id}')">${g.once && have>0 ? "al gekocht" : castraPriceTxt(price)}</button></div>`; }).join("");
 }
 function castraBagMenuHTML(){
   const owned = CASTRA_GOODS_ORDER.filter(id=>castraBagN(id)>0), rows = owned.map(castraBagRowHTML).join("");
