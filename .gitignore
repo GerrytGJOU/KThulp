@@ -15,3 +15,10 @@ certamen/assets/skills/sheets/
 # Ruwe AI-spritebladen (1-2 MB per stuk) voor het snijscript; horen niet in de repo (.git is al ~1 GB).
 # Alleen de gesneden, spelklare PNG-bestanden in certamen/assets/sprites-forms/ worden gecommit.
 _sprites-bron/
+
+# Archief van bestanden die niet meer nodig zijn maar die we niet willen kwijtraken (klaar of vervangen). Niet in de repo.
+_archief/
+
+# Controle-afbeeldingen (x6 vergroot) die het snijscript naast de sprites schrijft; opnieuw te maken met
+# certamen/tools/castra-sprites-slice.py, niet nodig voor het spel.
+certamen/assets/sprites-forms/*_preview_*.png
