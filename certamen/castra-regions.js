@@ -228,7 +228,7 @@ function castraRegRest(e){
          : { la:"Visne quiescere?", nl:"Wil je uitrusten?", opts:[ { la:"Quiesco", nl:"uitrusten" }, { la:"Vale", nl:"tot ziens" } ] } ],
     k=>{
       if(done || k!==0) return;
-      const hurt = (CASTRA.soldiers||[]).filter(castraIsHurt); hurt.forEach(s=>{ s.hurtUntil = 0; });
+      const hurt = castraHealAll();
       w[key] = castraWDay(); castraSave(); if(typeof castraPxpAdd==="function") castraPxpAdd(12, "Uitgerust");
       toast("🛏️ "+e.nm, (hurt.length ? hurt.length+" soldaat/soldaten zijn weer gezond. " : "Je soldaten waren al gezond. ")+"+12 ervaring.");
     });

@@ -40,7 +40,7 @@ castraMenuView = function(id){
   if(id!=="party") return _castraMenuViewPt0(id);
   const p = castraPartySync(), btn = "min-height:36px;padding:2px 10px;margin-left:6px;font-size:13px;font-family:inherit;cursor:pointer;border:2px solid var(--parch-edge,#4a3416);border-radius:8px;background:#e8c96a;color:var(--parch-ink,#2b1d0e)";
   const row = s=>{ const f = castraLine(s.line), inP = p.indexOf(s.id)>=0, hurt = castraIsHurt(s);
-    return `<div style="${CASTRA_MV_ROW};flex-wrap:wrap">${castraMenuSprite(s.line, castraFormLook(f))}<div style="flex:1;min-width:130px"><b>${s.insignis?"✨ ":""}${esc(castraSoldierName(s))}</b> <small>Lv ${s.lvl} · tier ${f.tier} · ${esc((CASTRA_TYPE_LA[f.type]||{sg:f.type}).sg)}${hurt?" · 🩹":""}${s.job?" · ⚒️":""}</small></div>
+    return `<div style="${CASTRA_MV_ROW};flex-wrap:wrap">${castraMenuSprite(s.line, castraFormLook(f))}<div style="flex:1;min-width:130px"><b>${s.insignis?"✨ ":""}${esc(castraSoldierName(s))}</b> <small>Lv ${s.lvl} · tier ${f.tier} · ${esc((CASTRA_TYPE_LA[f.type]||{sg:f.type}).sg)}${hurt?" · 🩹":""}${s.job?" · ⚒️":""}</small><div>${castraHpHTML(s, 70)}</div></div>
       <div>${inP && p.indexOf(s.id)>0 ? `<button style="${btn}" onclick="castraPartyLead('${s.id}')" title="Zet vooraan">↑ vooraan</button>` : ""}<button style="${btn};${inP?"background:#cfd8c0":""}" onclick="castraPartyToggle('${s.id}')">${inP?"✔ in contubernium":"+ toevoegen"}</button></div></div>`; };
   const inList = p.map(id=>(CASTRA.soldiers||[]).find(s=>s.id===id)).filter(Boolean), rest = (CASTRA.soldiers||[]).filter(s=>p.indexOf(s.id)<0);
   return `<h3 style="margin:0 0 6px">Contubernium <small>${p.length} / ${CASTRA_PARTY_MAX}</small></h3>
@@ -71,7 +71,7 @@ function castraVSwitchMenuHTML(V){
   const list = castraMvReserve(V);
   const cards = list.map(s=>{ const f = castraLine(s.line), st = castraStats(s);
     return `<button class="tile" style="min-height:0;padding:8px 12px;text-align:left" onclick="castraVSwitchPick('${s.id}',${V.forced?"true":"false"})"><h3 style="margin:0 0 2px">${s.insignis?"✨ ":""}${esc(castraSoldierName(s))} <small>${castraLaText("gradus")} ${s.lvl} · ${esc((CASTRA_TYPE_LA[f.type]||{sg:f.type}).sg)}</small></h3>
-      <p style="margin:0">${CASTRA_STATS.slice(0,3).map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</p></button>`; }).join("");
+      <p style="margin:0">${CASTRA_STATS.slice(0,3).map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</p><p style="margin:2px 0 0">${castraHpHTML(s, 80)}</p></button>`; }).join("");
   return `<div style="margin-top:6px"><div style="font-size:16px;margin-bottom:6px"><b>🔄 ${V.forced ? "Je soldaat is gevallen. Kies een nieuwe." : "Wissel van soldaat (kost je beurt)"}</b></div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px">${cards || `<div class="note">Geen reserve beschikbaar.</div>`}</div>
     ${V.forced ? "" : `<button class="btn" style="margin-top:8px;min-height:44px" onclick="castraVSwitchOpen()">Terug</button>`}</div>`;

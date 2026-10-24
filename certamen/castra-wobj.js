@@ -204,9 +204,9 @@ function castraWBldUse(e){
   const B = CASTRA_WBUILD[e.bid], T = CASTRA_WBT[B.type], d = castraWDay(), w = CASTRA.wday || (CASTRA.wday = {});
   if(w[e.bid]===d){ toast(T.la, "Vandaag al gebruikt. Kom morgen terug."); return; }
   if(T.eff==="heal"){
-    const hurt = (CASTRA.soldiers||[]).filter(castraIsHurt);
+    const hurt = castraNeedHeal();
     if(!hurt.length){ toast("⛲ "+T.la, "Je soldaten zijn allemaal gezond."); return; }
-    hurt.forEach(s=>{ s.hurtUntil = 0; }); w[e.bid] = d; castraSave();
+    castraHealAll(); w[e.bid] = d; castraSave();
     toast("⛲ "+castraLaText("recte"), hurt.length+" soldaat/soldaten genezen.");
   } else {
     const t = castraWGive(castraWScaled(T.eff, B.scale)); w[e.bid] = d; castraSave(); toast("🎁 "+T.la, t);

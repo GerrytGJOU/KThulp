@@ -22,8 +22,11 @@ console.log("1. richting en zichtlijn");
     ok(sees(t.x-dx*3, t.y)===false, "ziet je niet achter zich");
     ok(sees(t.x+dx*2, t.y+1)===false, "ziet je niet in een andere rij");
   }
-  ok(sees(t.x+dx*5, t.y)===false, "ziet je niet verder dan "+run("CASTRA_TRAIN_SIGHT")+" tegels");
-  ok(sees(t.x, t.y+1)===true && sees(t.x-1, t.y-1)===true, "ziet je als je vlak naast hem staat, ook schuin of achter hem");
+  ok(sees(t.x+dx*(run("CASTRA_TRAIN_SIGHT")+1), t.y)===false, "ziet je niet verder dan "+run("CASTRA_TRAIN_SIGHT")+" tegels");
+  ok(sees(t.x, t.y+1)===false && sees(t.x, t.y-1)===false, "ziet je niet als je boven of onder hem staat");
+  ok(sees(t.x+dx, t.y+1)===false && sees(t.x+dx, t.y-1)===false, "ziet je niet schuin voor zich");
+  ok(sees(t.x-dx, t.y)===false, "ziet je niet vlak achter zich");
+  ok(sees(t.x+dx, t.y)===true, "ziet je vlak voor zich");
   ok(sees(t.x+dx*2, t.y)===sees(t.x+dx*2, t.y), "ziet is deterministisch");
 }
 
@@ -60,6 +63,34 @@ console.log("4. verslagen trainer en lopen");
   run(`CASTRA.wday = { trainer_trainer_latium0:castraWDay() }`); ok(run(`castraTrainerDone(${e})`)===true, "na verslaan: vandaag klaar");
   ok(typeof run("castraTrainerApproach")==="function" && typeof run("castraTrainerWalkClear")==="function", "loop- en opruimfuncties bestaan");
 }
+
+console.log("5. een trainer met meerdere soldaten");
+{ run(`CASTRA = castraNewState(); CASTRA.dev = true; var _html = ""; H = function(h){ _html = h; }; if(typeof iconSVG==="undefined") iconSVG = ()=>"<svg></svg>"; if(typeof brand==="undefined") brand = ()=>""; if(typeof foot==="undefined") foot = ()=>""; CASTRA.soldiers = [ castraRollSoldier("rom_hastatus") ]; CASTRA.soldiers[0].id = "s0"; CASTRA.soldiers[0].lvl = 10;`);
+  ok(run('castraTrainerCount("latium")')===2 && run('castraTrainerCount("graecia")')===3, "twee soldaten in Latium, daarna drie");
+  const mk = ()=>run(`(function(){ const party = [ { form:"rom_tiro", lvl:5 }, { form:"rom_tiro", lvl:6 }, { form:"rom_tiro", lvl:7 } ];
+    const V = castraForcedEncounter("latium", "silva", { form:party[0].form, lvl:party[0].lvl, boss:{ key:"trainer_testtr", reward:{ aes:50, frumentum:30 }, gloria:2, pxp:12, why:"t", trainer:{ nm:"Venator Test", tk:0, look:castraTrainerLook(CASTRA_WENT.find(e=>e.kind==="trainer")), party, idx:0 } } });
+    V.fromWorld = true; V.log = []; V.round = 0; CASTRA_V = V; return 1; })()`);
+  mk(); ok(run("castraTrainerOf(CASTRA_V).party.length")===3 && run("CASTRA_V.trainer.idx")===0, "de trainer heeft drie soldaten en begint bij de eerste");
+  run('castraVRender("scout")'); const intro = run("_html");
+  ok(/Venator Test/.test(intro) && /tres milites habet/.test(intro) && (intro.match(/🛡️/g)||[]).length>=3, "eerst de intro: naam en drie soldaten, nog geen vijand");
+  ok(!/castraVFight\(/.test(intro), "de intro toont nog geen keuze van je soldaat");
+  run("castraTrainerGo()"); ok(/castraVFight\(/.test(run("_html")), "na Perge kies je welke soldaat je stuurt");
+  // tussentijds winnen: geen trainerbeloning, wel gewone ervaring
+  const day0 = run("JSON.stringify(CASTRA.wday||{})");
+  run(`CASTRA_V.mine = CASTRA.soldiers[0]; CASTRA_V.myStats = castraStats(CASTRA.soldiers[0]); CASTRA_V.myType = "inf"; CASTRA_V.myMax = 100; CASTRA_V.myHp = 80; CASTRA_V.dmgTaken = 10; CASTRA_V.over = "win"; castraVFinish();`);
+  ok(run("JSON.stringify(CASTRA.wday||{})")===day0 && run("!!CASTRA_V.boss")===true, "een tussentijdse winst telt niet als de trainer verslaan (geen dagmarkering, boss blijft bewaard)");
+  run('castraVRender("result")'); const next = run("_html");
+  ok(/Venator Test/.test(next) && /Adhuc duos milites habet/.test(next) && /castraTrainerNext\(\)/.test(next) && !/castraVBack\(\)/.test(next), "daarna: de trainer heeft nog twee soldaten en de knop gaat naar de volgende");
+  ok((next.match(/✖/g)||[]).length===1, "één soldaat is verslagen (✖)");
+  run("castraTrainerNext()"); ok(run("CASTRA_V.trainer.idx")===1 && run("CASTRA_V.enemy.lvl")===6, "de tweede soldaat komt in het veld (gradus 6)");
+  ok(/castraVFight\(/.test(run("_html")), "je kiest opnieuw wie je stuurt");
+  run("Object.assign(CASTRA_V,{ mine:CASTRA.soldiers[0], myStats:castraStats(CASTRA.soldiers[0]), myType:'inf', stats:castraStats(CASTRA_V.enemy), enType:castraLine(CASTRA_V.enemy.line).type }); castraMvInit(CASTRA_V);");
+  ok(run("CASTRA_V.s.en.dots")==="●●○", "naast de naam van de vijand staan de soldaten ●●○ ("+run("CASTRA_V.s.en.dots")+")");
+  ok(/●●○/.test(run("castraMvStatus(CASTRA_V.s.en)")), "castraMvStatus toont ze");
+  run("CASTRA_V.trainer.idx = 2; CASTRA_V.over = null; castraVRender('scout')"); ok(/castraVFight\(/.test(run("_html")), "bij de laatste soldaat geen intro meer");
+  run(`CASTRA_V.mine = CASTRA.soldiers[0]; CASTRA_V.over = "win"; CASTRA_V.myMax = 100; CASTRA_V.myHp = 90; CASTRA_V.dmgTaken = 0; castraVFinish(); castraVRender("result");`);
+  ok(!/castraTrainerNext/.test(run("_html")) && /castraVBack\(\)/.test(run("_html")), "na de laatste soldaat is het gewone resultaat te zien (Perge naar de wereld)");
+  ok(run("(CASTRA.wday||{}).trainer_testtr")!==undefined, "en dan is de trainer voor vandaag verslagen"); }
 
 console.log("\n" + checks + " controles, " + fails + " fouten");
 process.exit(fails ? 1 : 0);

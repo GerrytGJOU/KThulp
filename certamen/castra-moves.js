@@ -102,8 +102,8 @@ function castraMvSet(unit, type){
 /* ---------- toestand ---------- */
 function castraMvSide(unit, stats, type, name){
   const moves = castraMvSet(unit, type), pp = {}; moves.forEach(m=>{ if(m.pp) pp[m.id] = m.pp; });
-  const hpm = Math.round(stats.vita*CASTRA_MV_BAL.hpMult);
-  return { unit, stats, type, name, moves, pp, hp:hpm, max:hpm, elems:(typeof castraUnitElems==="function" ? castraUnitElems(unit) : []),
+  const hpm = Math.round(stats.vita*CASTRA_MV_BAL.hpMult), frac = (typeof castraHpf==="function") ? castraHpf(unit) : 1;   // je soldaat begint met het leven dat hij nog heeft (castra-hp.js)
+  return { unit, stats, type, name, moves, pp, hp:frac>=0.999 ? hpm : Math.max(1, Math.round(hpm*frac)), max:hpm, elems:(typeof castraUnitElems==="function" ? castraUnitElems(unit) : []),
     stages:{}, status:null, sleep:0, guard:false, lastGuard:false };
 }
 function castraMvSync(V){   // oude velden (castraVFinish en anderen lezen die)

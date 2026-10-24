@@ -78,29 +78,100 @@ function castraTrainerTalk(e){
       { la:"Visne pugnare?", nl:"Durf je?", opts:[ { la:"Pugno", nl:"vechten" }, { la:"Nunc non", nl:"nu niet" } ] } ], j=>{ if(j===0) castraTrainerFight(e, right); });
   });
 }
+// Een trainer heeft meerdere soldaten (twee in Latium, daarna drie): ze komen een voor een, zoals de Pokémon van een trainer.
+function castraTrainerCount(rid){ return rid==="latium" ? 2 : 3; }
 function castraTrainerFight(e, right){
   const rid = CASTRA_WORLDS[e.region].parent || e.region, reg = CASTRA_VENATIO[rid];
   const W = castraWorldCfg(), z = (typeof castraZoneAt==="function") ? castraZoneAt(W, e.x, e.y) : null;
   const terrain = (z && reg.terrains.find(t=>t.id===z.t)) || reg.terrains[0];
   const rng = castraRng((CASTRA.seed ^ (e.x*7919+e.y*104729))>>>0); CASTRA.seed = (CASTRA.seed+11)>>>0;
-  const pick = castraWildPick(reg, terrain, rng);
-  castraRegionFight(rid, terrain.id, pick.form.id, pick.lvl+2, { key:"trainer_"+e.id, reward:{ aes:35, frumentum:20 }, gloria:right?2:1, pxp:12, why:"trainer verslagen" });
+  const n = castraTrainerCount(rid), party = [];
+  for(let i=0;i<n;i++){ const pick = castraWildPick(reg, terrain, rng); party.push({ form:pick.form.id, lvl:pick.lvl+1+i }); }   // de laatste is de sterkste
+  castraRegionFight(rid, terrain.id, party[0].form, party[0].lvl, { key:"trainer_"+e.id, reward:{ aes:20+15*n, frumentum:12+8*n }, gloria:right?2:1, pxp:12, why:"trainer verslagen",
+    trainer:{ nm:e.nm, tk:e.tk, look:castraTrainerLook(e), party, idx:0 } });
 }
+/* ---------- de trainer in beeld: eerst zijn soldaten tellen, dan pas de eerste (zoals de ballen in Pokémon) ---------- */
+function castraTrainerOf(V){ if(!V) return null; if(!V.trainer && V.boss && V.boss.trainer) V.trainer = { ...V.boss.trainer }; return V.trainer || null; }
+function castraTrainerBalls(tr, size){
+  let h = ""; for(let i=0;i<tr.party.length;i++){ const gone = i<tr.idx, cur = i===tr.idx;
+    h += `<span title="${gone?"verslagen":cur?"in het veld":"nog in reserve"}" style="display:inline-flex;align-items:center;justify-content:center;width:${size}px;height:${size}px;margin:0 4px;border-radius:50%;border:2px solid ${gone?"#6b5630":"#d4af37"};background:${gone?"rgba(0,0,0,.35)":cur?"linear-gradient(#e8c96a,#d4af37)":"rgba(212,175,55,.18)"};font-size:${Math.round(size*0.55)}px;opacity:${gone?.55:1}">${gone?"✖":"🛡️"}</span>`; }
+  return h;
+}
+function castraTrainerNumLa(n){ return n===1 ? { la:"unum militem", nl:"één soldaat" } : n===2 ? { la:"duos milites", nl:"twee soldaten" } : n===3 ? { la:"tres milites", nl:"drie soldaten" } : { la:n+" milites", nl:n+" soldaten" }; }
+function castraTrainerScreen(kind){
+  const V = CASTRA_V, tr = castraTrainerOf(V), K = CASTRA_TRAIN_KINDS[tr.tk] || CASTRA_TRAIN_KINDS[0];
+  const head = `<div class="scrhead"><button class="back" onclick="castraVLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>🏹 ${castraLa("venatio_titel")}</h2></div>`;
+  const avatar = `<div style="flex:0 0 112px;width:112px;height:112px">${castraAvatarHTML(tr.look, "down", 1, 112)}</div>`;
+  let body;
+  if(kind==="intro"){
+    const left = tr.party.length, c = castraTrainerNumLa(left);
+    body = `<div class="panel"><div style="display:flex;gap:14px;align-items:center">${avatar}
+      <div style="min-width:0"><div style="font-size:21px"><b>${esc(tr.nm)}</b></div>
+        <div style="font-size:17px;margin:6px 0">${castraLaHTML(K.la, K.nl, "trn_q"+tr.tk)}</div></div></div>
+      <div style="font-size:18px;margin:14px 0 6px">${castraLaHTML(esc(tr.nm)+" "+c.la+" habet.", esc(tr.nm)+" heeft "+c.nl+".", "trn_habet")}</div>
+      <div style="margin:8px 0 14px">${castraTrainerBalls(tr, 34)}</div>
+      <button class="btn btn-gold" style="min-height:48px" onclick="castraTrainerGo()">${castraLaText("perge")}</button></div>`;
+  } else {
+    const left = tr.party.length-1-tr.idx, c = castraTrainerNumLa(left);
+    let res = castraVResultHTML().replace(/castraVBack\(\)/g, "castraTrainerNext()");
+    body = `<div class="panel" style="margin-bottom:8px"><div style="display:flex;gap:14px;align-items:center">${avatar}
+      <div><div style="font-size:19px"><b>${esc(tr.nm)}</b></div>
+        <div style="font-size:16px;margin:4px 0">${castraLaHTML(left===1 ? "Adhuc unum militem habet." : "Adhuc "+c.la+" habet.", left===1 ? "Hij heeft nog één soldaat." : "Hij heeft nog "+c.nl+".", "trn_adhuc")}</div>
+        <div>${castraTrainerBalls({ ...tr, idx:tr.idx+1 }, 28)}</div></div></div></div>${res}`;
+  }
+  H(brand(true)+head+`<div id="castraVBody">${body}</div>${foot()}`);
+}
+function castraTrainerGo(){ const V = CASTRA_V; if(!V) return; V.trainerIntroSeen = true; castraVRender("scout"); }
+// De volgende soldaat van de trainer komt het veld in: kies opnieuw wie je stuurt (je mag wisselen).
+function castraTrainerNext(){
+  const old = CASTRA_V, tr = castraTrainerOf(old); if(!old || !tr) return;
+  const i = tr.idx+1, u = tr.party[i];
+  const V2 = castraForcedEncounter(old.region, old.terrain.id, { form:u.form, lvl:u.lvl, boss:old.boss });
+  V2.fromWorld = true; V2.log = []; V2.round = 0; V2.trainer = { ...tr, idx:i }; V2.trainerIntroSeen = true;
+  CASTRA_V = V2; if(typeof castraCodexSee==="function") castraCodexSee(u.form);
+  castraVRender("scout");
+}
+const _castraVRenderTr0 = castraVRender;
+castraVRender = function(stage){
+  const V = CASTRA_V, tr = castraTrainerOf(V);
+  if(tr){
+    if(stage==="scout" && !V.trainerIntroSeen){ castraTrainerScreen("intro"); return; }
+    if(stage==="result" && V.over==="win" && tr.idx < tr.party.length-1){ castraTrainerScreen("next"); return; }
+  }
+  return _castraVRenderTr0.apply(this, arguments);
+};
+// Een tussentijdse winst telt niet als het verslaan van de trainer: geen trainerbeloning, wel ervaring en gewone buit.
+const _castraVFinishTr0 = castraVFinish;
+castraVFinish = function(){
+  const V = CASTRA_V, tr = castraTrainerOf(V);
+  if(tr && V.over==="win" && tr.idx < tr.party.length-1){ const b = V.boss; V.boss = null; try{ return _castraVFinishTr0.apply(this, arguments); } finally { V.boss = b; } }
+  return _castraVFinishTr0.apply(this, arguments);
+};
+// Het aantal soldaten dat de trainer nog heeft, naast zijn naam in het gevecht.
+const _castraMvInitTr0 = castraMvInit;
+castraMvInit = function(V){
+  _castraMvInitTr0.apply(this, arguments);
+  const tr = castraTrainerOf(V); if(tr && V.s && V.s.en) V.s.en.dots = "●".repeat(tr.party.length-tr.idx)+"○".repeat(tr.idx);
+};
+const _castraMvStatusTr0 = castraMvStatus;
+castraMvStatus = function(S){ return _castraMvStatusTr0.apply(this, arguments) + (S && S.dots ? `<span style="font-size:11px;margin-left:5px;letter-spacing:1px;color:#e8c96a" title="soldaten van de trainer: nog in het veld of reserve ●, verslagen ○">${S.dots}</span>` : ""); };
+
 // Trainers zijn niet te vangen.
 const _castraMvCatchableTr0 = castraMvCatchable;
 castraMvCatchable = function(V){ if(V && V.boss && String(V.boss.key||"").indexOf("trainer_")===0) return false; return _castraMvCatchableTr0(V); };
 
 /* ---------- uitdagen: de trainer ziet je (zichtlijn), roept "!" en loopt naar je toe ----------
-   Een trainer kijkt naar het midden van de kaart (de weg) en ziet je als je in zijn rij staat, maximaal CASTRA_TRAIN_SIGHT tegels
-   ver en zonder obstakel ertussen. Ook als je naast hem staat. Dan verschijnt een "!", hij loopt naar je toe en het gesprek begint
+   Een trainer kijkt naar het midden van de kaart (de weg) en ziet je alleen als je recht voor hem staat: in zijn rij, aan de kant
+   waar hij heen kijkt, maximaal CASTRA_TRAIN_SIGHT tegels ver en zonder obstakel ertussen. Naast, schuin of achter hem niet. Dan verschijnt een "!", hij loopt naar je toe en het gesprek begint
    (zoals bij het aanspreken). Is hij vandaag al verslagen, dan zegt hij niets. */
-const CASTRA_TRAIN_SIGHT = 4;
+const CASTRA_TRAIN_SIGHT = 3;
 function castraTrainerDir(e){ const W = castraWorldCfg(); return e.x < W.cols/2 ? "right" : "left"; }
+// Alleen recht voor hem: in zijn rij, aan de kant waar hij heen kijkt, tot CASTRA_TRAIN_SIGHT tegels ver en zonder obstakel ertussen.
+// Naast, schuin of achter hem ziet hij je niet.
 function castraTrainerSees(e, px, py){
-  if(Math.max(Math.abs(e.x-px), Math.abs(e.y-py))<=1) return true;                  // vlak naast hem
-  const dx = castraTrainerDir(e)==="right" ? 1 : -1;
   if(py!==e.y) return false;
-  const dist = (px-e.x)*dx; if(dist<1 || dist>CASTRA_TRAIN_SIGHT) return false;
+  const dx = castraTrainerDir(e)==="right" ? 1 : -1, dist = (px-e.x)*dx;
+  if(dist<1 || dist>CASTRA_TRAIN_SIGHT) return false;
   for(let i=1;i<dist;i++) if(castraWBlocked(e.x+dx*i, e.y)) return false;            // een boom, rots of persoon ertussen
   return true;
 }
@@ -198,6 +269,6 @@ if(typeof castraHodieItems==="function"){
   };
 }
 
-Object.assign(CASTRA_GLOSS, { "venator":"jager", "pugnemus":"laten we vechten", "pugnasne":"vecht je", "mecum":"met mij", "custodio":"ik bewaak", "vires":"krachten", "tuas":"jouw", "experiri":"op de proef stellen",
+Object.assign(CASTRA_GLOSS, { "venator":"jager", "habet":"heeft", "adhuc":"nog", "unum":"één (4e naamval)", "duos":"twee (4e naamval)", "tres":"drie", "militem":"soldaat (4e naamval)", "milites":"soldaten", "pugnemus":"laten we vechten", "pugnasne":"vecht je", "mecum":"met mij", "custodio":"ik bewaak", "vires":"krachten", "tuas":"jouw", "experiri":"op de proef stellen",
   "volo":"ik wil", "veni":"kom", "vicisti":"je hebt gewonnen", "cras":"morgen", "redi":"kom terug", "recte":"goed", "visne":"wil je", "pugnare":"vechten", "pugno":"ik vecht", "tabellarius":"bode", "nuntiat":"meldt",
   "insignia":"insignes", "pugnatorem":"vechter (4e naamval)" });

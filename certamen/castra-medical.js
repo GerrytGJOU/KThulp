@@ -50,7 +50,7 @@ function castraBattleWounds(sim, lost){
 function castraCure(sid){
   const s = CASTRA.soldiers.find(x=>x.id===sid); if(!s || !castraIsHurt(s)) return "?";
   if(!castraCanPay(CASTRA_MED.cureCost)) return "aes_deest";
-  castraPay(CASTRA_MED.cureCost); s.hurtUntil = 0; castraSave(); return null;
+  castraPay(CASTRA_MED.cureCost); castraHealOne(s); castraSave(); return null;
 }
 function castraValetudinariumOpen(){
   CASTRA_UI.panel = "valetudinarium";
