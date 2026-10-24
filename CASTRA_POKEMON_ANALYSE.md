@@ -13,7 +13,7 @@ Pokémon-code, -data of -asset overgenomen; alleen de regels (mechanica) worden 
 | Dossier-domein | Stand in Castra Heroum | Oordeel |
 |---|---|---|
 | Overworld: tilemaps, collision, warps, NPC's | `castra-world/map/wobj`, deuren, zones, binnenruimtes, rondlopende NPC's, paard, veldacties (HM-achtig) | **Bestaat** |
-| Dialoog, flags, quests | `castra-dlg`, questmotor + Diarium, `gen_castra_flags.py` | **Bestaat** |
+| Dialoog, flags, quests | `castra-dlg`, questmotor + Diarium (`castra-diarium.js`); geen centrale flagtabel, zie `CASTRA_OVERWORLD_ANALYSE.md` | **Bestaat** |
 | Dag/nacht | `castra-dayn.js` (echte klok, 4 fasen, meer mythische vijanden 's nachts) | **Bestaat** (alleen effect op encounters) |
 | Wezens: soort, stats, individu | 151 vormen (`castra-troops.js`), soldaat = individu met `indoles` (0-15), `ingenium` (±10%), `insignis` (1/200) | **Bestaat**, maar zie §2 |
 | Gevecht: beurtvolgorde, PP, accuracy, damage, type, AI | `castra-moves.js` | **Bestaat, simpel** (kern van dit document) |

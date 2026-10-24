@@ -537,3 +537,7 @@ Op basis van `CASTRA_POKEMON_ANALYSE.md` (stappen 1-3). Vervangt de beschrijving
 - **AI:** let op ontbrekende status/stage van de speler bij het kiezen van een move; heeft nog geen wisselgedrag.
 - **Tests:** `tools/castra-rules-test.js` (72 regeltests: formule, spreiding, elementen, STAB, statussen, stages, nauwkeurigheid, gelijkspel, event-log, migraties) en `tools/castra-moves-test.js` (balans; de testgevechten sluiten nu de reserve uit, anders eindigden ze nooit). Handleiding: sectie "Het gevecht: elementen, statussen en stages" in `castra-faq.js`.
 - Nog niet (uit de analyse): fysiek/speciaal per move (bewust niet), vangmiddelen en inventaris, vangkans per vorm, schudden bij vangen, learnsets, fides voor soldaten.
+
+## Vangkans per vorm en analyse van de wereldkaart (2026-10-24)
+- **Vangkans per vorm:** `CASTRA_FORM_CATCH` (`castra-moves.js`, factor per vorm, standaard 1) werkt mee in `castraMvCatchChance`: draco en feniks 0,35, gevleugeld paard 0,55, larva en tier-3-centaur 0,6, enzovoort. Schudden bij het vangen is bewust niet gebouwd (we werven, geen bal). Tests in `tools/castra-rules-test.js`.
+- **Wereldkaart:** audit en voorstellen naar het Overworld-dossier in `CASTRA_OVERWORLD_ANALYSE.md` (wereldtest, trainerzicht, verborgen voorwerpen, ontmoetingen als systeem, flags-voorgevel en eventtabel, wereldtoestanden, nundinae). Nog niet gebouwd; wacht op akkoord.

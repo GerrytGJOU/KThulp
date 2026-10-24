@@ -32,6 +32,14 @@ const CASTRA_MV_BAL = {
   ratioMin:0.4, ratioMax:2.5,   // begrenst aanval/verdediging, zodat geen enkele verdediging een muur wordt
   hpMult:2.2,        // levenspunten in dit gevecht (gevechten duren zo ±8 beurten en er is tijd om te vangen)
 };
+// Vangkans per vorm (zoals de catch rate per soort in Pokémon): een factor op de vangkans, 1 = gewoon. Zeldzame en machtige wezens zijn moeilijker
+// te werven. Zonder vermelding geldt 1; tier 3 en 4 van elke tak krijgen daarnaast de tierstraf. Beginners hebben altijd minstens 90%.
+const CASTRA_FORM_CATCH = {
+  myt_draco:0.35, myt_phoenix:0.35, myt_larva:0.6, myt_equusalatus:0.55, myt_pullusalatus:0.8, myt_centaurussagitta:0.6, myt_gryps:0.7,
+  myt_aquilaiovis:0.6, myt_lupusmartius:0.7, myt_serpens:0.75, myt_spartus:0.75, myt_siren:0.8, myt_harpyia:0.85, myt_cyclopsfaber:0.8,
+  myt_lemur:0.8, myt_silenus:0.85,
+};
+function castraFormCatch(formId){ return CASTRA_FORM_CATCH[formId] != null ? CASTRA_FORM_CATCH[formId] : 1; }
 const CASTRA_MV_BASIC  = { id:"oppugna", la:"Oppugna", nl:"Gewone aanval", kind:"dmg", power:50, acc:100, pp:0 };
 const CASTRA_MV_DEFEND = { id:"defende", la:"Defende", nl:"Verdedig: deze beurt de helft minder schade (niet twee keer achter elkaar)", kind:"guard", pp:0, prio:2 };
 // eff = bijwerkingen na een treffer: { st:"vulnus", p:25 } (status op de vijand) of { stage:["cel",-1], p:100 } (stage van de vijand; self:true = van jezelf)
@@ -349,6 +357,7 @@ function castraMvCatchChance(V, latinOk){
   const B = CASTRA_MV_BAL, en = V.s.en, f = castraLine(V.enemy.line), hpFactor = 1 - Math.max(0, en.hp)/en.max;
   let p = B.catchBase + B.catchHp*hpFactor;
   p *= 1 - B.tierPenalty*Math.max(0, f.tier-1);
+  p *= castraFormCatch(V.enemy.line);
   p *= 1 - Math.min(0.5, B.lvlPenalty*Math.max(0, V.enemy.lvl - (V.mine.lvl||1)));
   if(V.enemy.insignis) p -= B.shinyPenalty;
   if(((en.stages||{}).cel||0)<0) p += B.slowBonus;
