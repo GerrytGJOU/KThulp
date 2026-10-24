@@ -70,6 +70,9 @@ function castraVSceneHTML(V, me, en, mySpr, enSpr, log, menu){
     else if(e.k==="heal"){ extra.push({ side:e.w, t:t+0.1, txt:"+"+e.n, col:"#7fe08a", size:26 }); extra.push({ side:e.w, t:t, aura:"rgba(110,240,140,.7)" }); }
     else if(e.k==="buff"){ extra.push({ side:e.w, t:t, aura:"rgba(255,215,90,.75)" }); }
     else if(e.k==="guard"){ extra.push({ side:e.w, t:t, aura:"rgba(120,190,255,.75)" }); }
+    else if(e.k==="status"){ const st = CASTRA_STATUS[e.s]; extra.push({ side:e.w, t:t, aura:"rgba(190,120,230,.7)" }); extra.push({ side:e.w, t:t+0.1, txt:st.icon+" "+st.la, col:"#e8c8ff", size:20 }); }
+    else if(e.k==="stage"){ extra.push({ side:e.w, t:t, aura:e.d>0 ? "rgba(255,215,90,.75)" : "rgba(210,90,90,.7)" }); extra.push({ side:e.w, t:t+0.1, txt:(e.d>0?"⬆ ":"⬇ ")+CASTRA_STAGE_NL[e.stat], col:e.d>0?"#ffe08a":"#ffb0a0", size:18 }); }
+    else if(e.k==="dot"){ extra.push({ side:e.w, t:t, aura:"rgba(220,110,60,.6)" }); extra.push({ side:e.w, t:t+0.1, txt:"−"+e.n, col:"#ffb27a", size:22 }); }
   });
   const faint = { me: me.hp<=0, en: en.hp<=0 };
   const pct = (hp,max)=>Math.max(0, Math.min(100, Math.round(100*hp/Math.max(1,max))));
