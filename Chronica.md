@@ -113,6 +113,9 @@
 
 ---
 
+## 0a. Afbeeldingsformaat (sinds 2026-10-24)
+Illustraties (`assets/chronica/images/`) en souvenirs (`assets/chronica/souvenirs/`) staan als WebP (802 MB → 52 MB, 65 MB → 2,5 MB). In de data (`IMAGE:`/`img:`) blijft `.png` staan; `spImgFile()` in `singleplayer.js` vertaalt dat bij het laden naar `.webp`. Nieuwe afbeeldingen dus als WebP opslaan (zelfde bestandsnaam, extensie maakt niet uit in de data). Combat- en kaartafbeeldingen zijn nog PNG.
+
 ## 0. Wat is er al gebouwd (nu)
 
 Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt (getest in de
