@@ -11,3 +11,7 @@ LET OP LICENTIE: controleer of de RPG Maker MV-licentie het gebruik van deze
 bestanden buiten RPG Maker zelf (hier: een openbare GitHub Pages-site) toestaat.
 Zo niet: deze map vervangen door eigen of vrij gelicentieerde tilesets met
 dezelfde indeling; castra-map.js verwijst alleen via (kolom, rij) naar tegels.
+
+Outside_A4.png  muren en kliffen (autotile-blokken van 96 x 144 px; 16 x 15 tegels van 48 px)   [toegevoegd 2026-10-24]
+                Gebruikt: de rotsklif met plateau (rij 10-14): kolommen 0-1 gras, 2-3 zand, 4-5 zand (variant), 6-7 sneeuw.
+Herkomst: dezelfde RTP van RPG Maker MV (door Gerben aangeleverd op 2026-10-24); zelfde licentievoorbehoud als hierboven.

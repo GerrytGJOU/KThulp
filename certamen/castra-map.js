@@ -18,6 +18,7 @@ const CASTRA_TS_FILES = {
   A5: "assets/tilesets/Outside_A5.png",
   B:  "assets/tilesets/Outside_B.png",
   A1: "assets/tilesets/Outside_A1.png",
+  A4: "assets/tilesets/Outside_A4.png",       // muren en kliffen (Gerben, 2026-10-24): klifwanden en plateaus van de bergen (castra-berg.js)
   X:  "assets/tilesets/Castra_extra.png",     // eigen tekeningen (tools/gen_castra_flags.py): vlaggen voor het Praetorium
 };
 const CASTRA_TS_IMG = {};
