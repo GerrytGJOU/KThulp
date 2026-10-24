@@ -23,7 +23,7 @@ run("CASTRA = castraNewState();");
 // Alles uit het spel halen, in twee toestanden: OPEN (alle missies gewonnen, alle veldpoorten opgeruimd, alles ontgrendeld) en DICHT (verse save).
 // Fouten gaan over de open toestand (er is dan niets dat een doorgang blokkeert); de dichte toestand levert de waarschuwingen.
 function snapshot(open){
-  run("CASTRA = castraNewState(); CASTRA.dev = true; CASTRA_WORLD_BUILT = {};" + (open ? `
+  run("CASTRA = castraNewState(); CASTRA.dev = true; CASTRA.pxp = castraPxpFor(99); CASTRA_WORLD_BUILT = {}; castraNundinae = ()=>({ on:" + (open ? "true" : "false") + ", phase:0, next:0 });" + (open ? `
     CASTRA.proelium = CASTRA.proelium || { done:{} }; CASTRA.proelium.done = CASTRA.proelium.done || {}; CASTRA_P_MISSIONS.forEach(m=>CASTRA.proelium.done[m.id] = true);
     CASTRA.wgate = {}; CASTRA_WENT.filter(e=>e.kind==="veld" && e.gate).forEach(e=>CASTRA.wgate[e.id] = 1);` : ""));
   return JSON.parse(run(`JSON.stringify((function(){
@@ -69,6 +69,14 @@ function reach(rid, sx, sy, gatesOpen){
   return seen;
 }
 const adj = (seen, x, y)=>[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>seen.has(K(x+dx,y+dy)));
+
+console.log("0. scripts laden zonder naamsbotsingen");
+{ // Twee klassieke scripts mogen niet dezelfde top-level const/let declareren: in de browser is dat een SyntaxError en laadt het tweede bestand niet.
+  const fs = require("fs"), path = require("path"), seen = {}, re = /^(?:const|let)\s+([A-Za-z_$][\w$]*)/;
+  require("./castra-colo-node.js").scripts.forEach(f=>{ fs.readFileSync(path.join(__dirname, "..", f), "utf8").split("\n").forEach((l, i)=>{ const m = re.exec(l); if(m) (seen[m[1]] = seen[m[1]] || []).push(f+":"+(i+1)); }); });
+  Object.keys(seen).filter(k=>seen[k].length>1).forEach(k=>ok(false, "dubbele top-level declaratie "+k+" in "+seen[k].join(" en ")));
+  ok(true, "geen dubbele declaraties");
+}
 
 console.log("1. werelden bouwen en de start is vrij");
 ids.forEach(id=>{

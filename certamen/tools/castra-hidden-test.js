@@ -12,7 +12,7 @@ console.log("1. plekken per wereld");
 let total = 0;
 ids.forEach(id=>{
   const sp = R(`castraHidSpots(${J(id)})`), W = R(`(function(){ const W = CASTRA_WORLDS[${J(id)}]; return { cols:W.cols, rows:W.rows, interior:!!W.interior, start:W.start, exit:W.exit||[], doors:(W.doors||[]).map(d=>({x:d.x,y:d.y})) }; })()`);
-  const want = W.interior ? (/^caver|^specus|^catac/.test(id) ? 2 : 1) : 4; total += sp.length;
+  const want = (W.interior ? (/^caver|^specus|^catac/.test(id) ? 2 : 1) : 4) + (!W.interior && run("castraNundinae().on") ? 2 : 0); total += sp.length;
   ok(sp.length===want, id+": "+want+" verborgen plekken verwacht, "+sp.length+" gevonden");
   const reach = R(`(function(){ const r = castraHidReach(${J(id)}); return { seen:[...r.seen], blocked:[...r.blocked] }; })()`), seen = new Set(reach.seen), blocked = new Set(reach.blocked);
   const keys = new Set(); sp.forEach(s=>{
@@ -41,9 +41,9 @@ console.log("3. vinden");
   if(good) ok(run(`castraBagN(${J(good)})`)===1, "het voorwerp ligt in je saccus ("+good+")");
   else ok((run("CASTRA.res")[key]||0) > (res0[key]||0), "de beloning staat in je grondstoffen ("+key+")");
   ok(R(`castraHidFind("latium", ${spot.x}, ${spot.y})`)===null, "dezelfde plek geeft maar één keer iets");
-  ok(R(`castraHidOpen("latium")`).length===3, "er liggen nog 3 vondsten");
+  const NL = 4 + (run("castraNundinae().on") ? 2 : 0); ok(R(`castraHidOpen("latium")`).length===NL-1, "er liggen nog "+(NL-1)+" vondsten");
   ok(R("CASTRA.hid.day")==="2026-10-24" && Object.keys(R("CASTRA.hid.f")).length===1, "alleen de vondst van vandaag is opgeslagen");
-  day("2026-10-25"); ok(R(`castraHidOpen("latium")`).length===4 && R("CASTRA.hid.day")==="2026-10-25", "de volgende dag liggen er weer vier en is de lijst gewist");
+  day("2026-10-25"); ok(R(`castraHidOpen("latium")`).length===4 + (run("castraNundinae().on") ? 2 : 0) && R("CASTRA.hid.day")==="2026-10-25", "de volgende dag liggen er weer evenveel en is de lijst gewist");
   // beloningen schalen mee met het land en kennen alleen bestaande grondstoffen
   ids.forEach(id=>R(`castraHidSpots(${J(id)})`).forEach(s=>Object.keys(s.find.res).forEach(r=>ok(R(`!!castraRes(${J(r)})`), id+": onbekende grondstof "+r))));
   // interieurs gebruiken de beloningsschaal van hun moederregio

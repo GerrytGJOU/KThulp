@@ -45,7 +45,8 @@ function castraHidReach(rid){
 // De verstopte vondsten van vandaag in een wereld: [{ i, x, y, find }].
 function castraHidSpots(rid){
   const W = CASTRA_WORLDS[rid]; if(!W) return [];
-  const day = castraWDay(), n = W.interior ? (/^caver|^specus|^catac/.test(rid) ? CASTRA_HID.perCave : CASTRA_HID.perInterior) : CASTRA_HID.perRegion;
+  const day = castraWDay(), market = !W.interior && typeof castraNundinae=="function" && castraNundinae().on;      // op marktdag (castra-nund.js) is er veel volk op de been: twee extra vondsten
+  const n = (W.interior ? (/^caver|^specus|^catac/.test(rid) ? CASTRA_HID.perCave : CASTRA_HID.perInterior) : CASTRA_HID.perRegion) + (market ? 2 : 0);
   const R = castraHidReach(rid), rng = castraRng(castraHidHash(rid+"|"+day));
   const near = (x,y,t)=>Math.abs(t.x-x)<CASTRA_HID.keepAway && Math.abs(t.y-y)<CASTRA_HID.keepAway;
   const avoid = [ W.start ].concat((W.exit||[]), (W.doors||[]).map(d=>({ x:d.x, y:d.y })), (W.doors||[]).map(d=>d.spawn).filter(Boolean), CASTRA_WENT.filter(e=>e.region===rid && e.kind==="hub").map(e=>({ x:e.x, y:e.y })));
