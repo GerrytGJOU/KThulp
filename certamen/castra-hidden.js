@@ -17,6 +17,9 @@ const CASTRA_HID = {
     { w:4, la:"Spicae frumenti!",         nl:"Aren graan, verloren van een kar.",        res:{ frumentum:[10,25] } },
     { w:4, la:"Lignum siccum!",           nl:"Droog brandhout onder de bladeren.",       res:{ lignum:[12,30] } },
     { w:1, la:"Fibula antiqua!",          nl:"Een oude mantelspeld, mooi bewaard.",       res:{ gloria:[1,1] } },
+    { w:2, la:"Posca in testa!",          nl:"Een scherf met een restje posca.",           res:{}, good:"posca" },
+    { w:1, la:"Suffimentum!",             nl:"Een bundeltje rookkruid, nog geurig.",       res:{}, good:"suffimentum" },
+    { w:1, la:"Viaticum!",                nl:"Een verloren beurs met reisgeld.",           res:{}, good:"viaticum" },
   ],
 };
 function castraHidHash(str){ let h = 2166136261; for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h>>>0; }
@@ -63,7 +66,9 @@ function castraHidFind(rid, x, y){
   const rng = castraRng(castraHidHash(rid+"|"+castraWDay()+"|"+s.i)), base = (CASTRA_WORLDS[rid].parent) || rid, sc = castraWScale(base), res = {};
   Object.keys(s.find.res).forEach(r=>{ const v = castraWRoll(s.find.res[r], rng); res[r] = r==="gloria" ? v : Math.round(v*sc); });
   castraHidState().f[rid+"|"+s.i] = 1;
-  const txt = castraWGive(res); castraSave();
+  let txt = castraWGive(res);
+  if(s.find.good && typeof castraBagAdd==="function"){ castraBagAdd(s.find.good, 1); txt = CASTRA_GOODS[s.find.good].icon+" "+CASTRA_GOODS[s.find.good].la; }
+  castraSave();
   if(typeof castraPxpAdd==="function") castraPxpAdd(2);
   return { spot:s, res, txt };
 }

@@ -241,13 +241,15 @@ function castraAdvice(s){
 
 /* ---- het wild: wie komt er tevoorschijn? ---- */
 function castraWildMaxTier(){ const p = castraLvl("praetorium"); let t = 1; CASTRA_WILD_TIER_PRAE.forEach((need,i)=>{ if(p>=need) t = i+1; }); return t; }
-function castraWildPick(region, terrain, rng){
-  // 1. tier (60/28/10/2), begrensd door het praetorium-level
+// Opgesplitst zodat castra-enc.js (vaste slottabellen) de stukken kan hergebruiken; castraWildPick zelf werkt als vanouds.
+function castraWildTier(region, rng){      // 1. tier (60/28/10/2), begrensd door het praetorium-level
   const maxT = Math.min(castraWildMaxTier(), region.tierMax||4); let r = rng()*CASTRA_WILD_TIER_W.slice(0,maxT).reduce((a,b)=>a+b,0), tier = 1;
   for(let i=0;i<maxT;i++){ r -= CASTRA_WILD_TIER_W[i]; if(r<=0){ tier = i+1; break; } }
-  // 2. mythisch wezen? (alleen terreinen die dat toestaan)
+  return tier;
+}
+function castraWildForm(region, terrain, tier, rng, mythOnly){      // 2-4. mythisch wezen of volk + vorm van die tier, gewogen op het terrein
   let form = null;
-  if(terrain.myth && rng() < terrain.myth.p){
+  if(terrain.myth && (mythOnly===true || (mythOnly!==false && rng() < terrain.myth.p))){
     const pool = CASTRA_FORM_LIST.filter(f=>f.volk==="myt" && terrain.myth.taks.includes(f.tak));
     const tiers = pool.filter(f=>f.tier<=Math.min(tier,3)); const useT = tiers.length ? tiers : pool;
     form = castraWeighted(useT.map(f=>({ f, w: f.tier===1 ? 6 : f.tier===2 ? 3 : 1 })), rng).f;
@@ -259,11 +261,15 @@ function castraWildPick(region, terrain, rng){
     for(let t=tier; t>=1 && !cand.length; t--) cand = CASTRA_FORM_LIST.filter(f=>f.volk===folk && f.tier===t);
     form = castraWeighted(cand.map(f=>({ f, w: f.tier===1 ? 1 : (terrain.prefs&&terrain.prefs[f.cat]!=null ? terrain.prefs[f.cat] : 0.4) })), rng).f;
   }
-  // 5. level: rekruten volgens het gebied, hogere tiers vanaf hun evolutiedrempel
-  let lvl;
-  if(form.tier<=1) lvl = region.min + Math.floor(rng()*(region.max-region.min+1));
-  else lvl = Math.min(50, castraEvoLevel(CASTRA_FORMS[form.from[0]]) + Math.floor(rng()*4));
-  return { form, lvl };
+  return form;
+}
+function castraWildLevel(region, form, rng){      // 5. level: rekruten volgens het gebied, hogere tiers vanaf hun evolutiedrempel
+  if(form.tier<=1) return region.min + Math.floor(rng()*(region.max-region.min+1));
+  return Math.min(50, castraEvoLevel(CASTRA_FORMS[form.from[0]]) + Math.floor(rng()*4));
+}
+function castraWildPick(region, terrain, rng){
+  const tier = castraWildTier(region, rng), form = castraWildForm(region, terrain, tier, rng);
+  return { form, lvl:castraWildLevel(region, form, rng) };
 }
 function castraWeighted(list, rng){ const tot = list.reduce((a,x)=>a+x.w,0); let r = rng()*tot; for(const x of list){ r -= x.w; if(r<=0) return x; } return list[list.length-1]; }
 

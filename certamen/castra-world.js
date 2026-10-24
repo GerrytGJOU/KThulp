@@ -289,13 +289,13 @@ function castraWStep(dir){
     if(typeof castraGeoDoor==="function" && castraGeoDoor(nx,ny)) return;
     if(W.exit.some(e=>e.x===nx&&e.y===ny)){ if(typeof castraGeoExit==="function") castraGeoExit(nx,ny); else castraWorldLeave(); return; }
     const terrain = castraWorldBuilt().tall[nx+","+ny];
-    if(terrain && Math.random() < W.encounterChance) castraWorldEncounter(terrain);
+    if(terrain) castraEncStep(terrain);                                            // kans, veilige stappen en suffimentum: castra-enc.js
   }, CASTRA_W_UI.speedMs || 170);
   return true;
 }
-function castraWorldEncounter(terrainId){
+function castraWorldEncounter(terrainId, pre){
   castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraSave(); castraWorldDetach();
-  CASTRA_V = castraMakeEncounter(castraWorldCfg().parent || CASTRA_W_REGION, terrainId);
+  CASTRA_V = pre || castraMakeEncounter(castraWorldCfg().parent || CASTRA_W_REGION, terrainId);
   CASTRA_V.log = []; CASTRA_V.round = 0; CASTRA_V.fromWorld = true;
   CASTRA_V_PENDING = true;
   go("castraVenatio");

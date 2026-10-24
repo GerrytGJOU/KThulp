@@ -85,6 +85,16 @@ const CASTRA_FAQ = [
       <li>💤 <b>Somnus</b> (slaap): 1 tot 3 beurten kun je niets doen, daarna word je wakker.</li>
       <li>😨 <b>Pavor</b> (schrik): je bent half zo snel en slaat 1 op de 4 keer een beurt over.</li></ul>
     <p><b>Stages:</b> aanval, verdediging, snelheid, nauwkeurigheid en ontwijken kunnen stap voor stap stijgen (⬆) of dalen (⬇), tot zes stappen. Elke stap is ongeveer anderhalf keer zo veel of zo weinig. Je ziet ze naast de naam. Ze blijven tot het gevecht voorbij is of je wisselt van soldaat. Een voltreffer 💥 negeert jouw dalende stages en de stijgende stages van de vijand.</p>` },
+  { id:"saccus", t:"Saccus: voorwerpen, mercator, ontmoetingen en vissen", b:`
+    <p>In je <b>saccus</b> (menu ☰ → Sacculus) zitten voorwerpen die echt bij de Romeinen hoorden. Elk voorwerp heeft een Latijnse naam en een korte uitleg:</p>
+    <ul><li>🍶 <b>Posca</b> (zure wijn met water, de drank van soldaten): geneest 30%. 🥖 <b>Buccellatum</b> (soldatenbeschuit): 15%. 🍯 <b>Mulsum</b> (honingwijn): 60%.</li>
+    <li>⚗️ <b>Theriaca</b> (het wondermiddel van Romeinse artsen): zet een gewonde soldaat of held weer op de been, met de helft van zijn leven.</li>
+    <li>🌿 <b>Suffimentum</b> (rookwerk van kruiden): 100 stappen lang komen zwakkere wilde vijanden niet op je pad (alleen vijanden met een lager level dan je eerste soldaat).</li>
+    <li>🪙 <b>Viaticum</b> (het reisgeld van een rekruut) en 💰 <b>Donativum</b> (het geldgeschenk aan soldaten): geef het mee als je een vijand wilt werven. +15% en +30% kans, ook als het niet lukt is het geschenk weg.</li>
+    <li>🎣 <b>Hamus</b> (vishaak): hiermee kun je aan het water vissen. Hij blijft in je saccus.</li></ul>
+    <p><b>Kopen</b> doe je bij de <b>mercator</b> in het kamp (☰ → Sacculus, onder "Mercator"). <b>Vinden</b> kan ook: in verborgen vondsten, en trainers en kampioenen geven soms een posca of mulsum. In het gevecht heeft het menu een knop <b>Saccus</b>: je gebruikt dan een geneesmiddel voor je soldaat, maar dat kost je beurt.</p>
+    <p><b>Ontmoetingen:</b> in elk soort terrein hoort een vaste lijst van twaalf soorten vijanden, met vaste kansen (gewone vijanden vaak, zeldzame zelden, een enkele heel zelden). De eerste drie stappen na het betreden van een kaart of na een gevecht zijn veilig. Hoe hoger je praetorium, hoe hoger de vijanden die je tegenkomt.</p>
+    <p><b>Vissen:</b> heb je een hamus, loop dan tegen het water aan (of tik op het water naast je). Er kan iets bijten dat in dat water thuishoort. Niet elk land heeft viswater.</p>` },
   { id:"contub", t:"Je contubernium, wisselen, trainers en insignia", b:`
     <p>Een <b>contubernium</b> waren acht legionairs die één tent deelden. Zo heet ook je groep van maximaal <b>acht soldaten</b>. Alleen zij kunnen op jacht mee; beheer ze in het menu ☰ → <b>Contubernium</b> (erin of eruit, vooraan zetten). Wie niet meegaat, rust in de barakken en krijgt toch een beetje ervaring.</p>
     <p><b>Wisselen:</b> in een gevecht kun je met 🔄 <b>Wissel</b> een andere soldaat uit je contubernium inzetten. Dat kost je beurt: de vijand slaat toe. Valt je soldaat om en heb je nog een gezonde reserve, dan kies je meteen een nieuwe, zonder beurt te verliezen. Pas als niemand meer kan vechten, verlies je. Wie omviel is gewond; wie meevocht en overleefde krijgt de helft van de ervaring.</p>
