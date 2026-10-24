@@ -65,15 +65,30 @@ function castraAdoptIdentity(){
     }).catch(()=>{});
   }catch(e){}
 }
-// Oude soldaten (lijn + stadium + tak) naar de troepenbomen; eenmalig per save (s.troopsV).
+/* ---------- migraties ----------
+   Elke wijziging van het opslagformaat is een stap in CASTRA_MIGRATIONS ({ id, run(state) }). Een stap draait precies
+   één keer per save (s.migr[id] = 1) en nooit twee keer; de formaatversie `v` blijft 1 zodat een save nooit wordt weggegooid.
+   Voeg nieuwe stappen ALTIJD onderaan toe en wijzig nooit een bestaande id. Oude vlaggen (heroV, troopsV) tellen mee. */
+const CASTRA_MIGRATIONS = [
+  { id:"heroes_scale", legacy:s=>s.heroV===1, run:s=>{ (s.heroes||[]).forEach(h=>{ h.lvl = Math.min(50, Math.max(1, Math.round((h.lvl||1)*3.2))); h.xp = 0; }); s.heroV = 1; } },   // helden naar de soldatenschaal (level ×3,2, max 50)
+  { id:"troops_trees", legacy:s=>s.troopsV===1, run:s=>{   // oude soldaten (lijn + stadium + tak) naar de troepenbomen
+    s.soldiers = (s.soldiers||[]).map(castraMigrateSoldier);
+    if(s.dilectus && s.dilectus.cands) s.dilectus.cands = s.dilectus.cands.map(castraMigrateSoldier);
+    s.troopsV = 1; } },
+];
 function castraMigrateState(s){
-  // helden naar de soldatenschaal (level ×3,2, max 50), eenmalig
-  if(s.heroV!==1){ (s.heroes||[]).forEach(h=>{ h.lvl = Math.min(50, Math.max(1, Math.round((h.lvl||1)*3.2))); h.xp = 0; }); s.heroV = 1; }
-  if(s.troopsV===1) return s;
-  s.soldiers = (s.soldiers||[]).map(castraMigrateSoldier);
-  if(s.dilectus && s.dilectus.cands) s.dilectus.cands = s.dilectus.cands.map(castraMigrateSoldier);
-  s.troopsV = 1; return s;
+  const done = s.migr || (s.migr = {});
+  CASTRA_MIGRATIONS.forEach(m=>{
+    if(done[m.id]) return;
+    if(!(m.legacy && m.legacy(s))) m.run(s);
+    done[m.id] = 1;
+  });
+  return s;
 }
+// Grootte van de save: de cloudkopie mag 40000 tekens zijn (database.rules.json); waarschuw bij 80%.
+function castraSaveSize(){ try{ return JSON.stringify(CASTRA).length; }catch(e){ return 0; } }
+const CASTRA_SAVE_LIMIT = 40000;
+function castraSaveWarn(){ const n = castraSaveSize(); return n > CASTRA_SAVE_LIMIT*0.8 ? n : 0; }
 function castraLoad(){
   castraAdoptIdentity();
   CASTRA_KEY = castraSaveKey();
@@ -93,6 +108,7 @@ function castraSave(){
   if(!CASTRA) return;
   CASTRA.savedAt = castraNow();
   try{ localStorage.setItem(CASTRA_KEY, JSON.stringify(CASTRA)); }catch(e){}
+  if(castraSaveWarn() && !castraSave._warned){ castraSave._warned = 1; console.warn("Castra-save is bijna vol voor de cloud: "+castraSaveSize()+" van "+CASTRA_SAVE_LIMIT+" tekens"); }
   // Best-effort sync naar het Certamen-profiel (identities/{klas}/{lid}/castra);
   // alleen voor ingelogde leerlingen, gedebounced zodat lopen niets kost.
   clearTimeout(_castraSyncT);

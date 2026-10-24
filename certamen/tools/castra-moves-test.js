@@ -21,14 +21,15 @@ window.CMV = (function(){
     if(style==="spam") return CASTRA_MV_BASIC;
     const heal = av.find(m=>m.kind==="heal");
     if(heal && me.hp/me.max < 0.4) return heal;
-    const buff = av.find(m=>m.kind==="buff"); if(buff && me.buffImp<=0 && V.round<2) return buff;
+    const buff = av.find(m=>m.kind==="buff"); if(buff && ((me.stages||{}).imp||0)<1 && V.round<2) return buff;
     if(me.hp/me.max < 0.25 && !me.lastGuard) return CASTRA_MV_DEFEND;
     const dmg = av.filter(m=>m.kind==="dmg");
     return dmg.sort((a,b)=>castraMvExpected(me,en,b)-castraMvExpected(me,en,a))[0] || CASTRA_MV_BASIC;
   }
   function fight(a, b, style, seed){
-    const V = setup(a, b, seed);
-    while(!V.over) castraMvRound(V, pick(V, style));
+    const V = setup(a, b, seed), keep = castraMvReserve;
+    castraMvReserve = ()=>[];            // geen reserve uit je contubernium (castra-party.js), anders eindigt het duel nooit
+    try{ for(let n=0; !V.over && n<60; n++) castraMvRound(V, pick(V, style)); } finally { castraMvReserve = keep; }
     return V;
   }
   function report(levels){
