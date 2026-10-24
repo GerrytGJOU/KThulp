@@ -32,7 +32,8 @@ function snapshot(open){
       const W = CASTRA_WORLDS[id]; let built = null, err = null;
       try{ CASTRA_W_REGION = id; built = castraWorldBuilt(); }catch(e){ err = String(e.message||e); }
       worlds[id] = { id, cols:W.cols, rows:W.rows, start:W.start, interior:!!W.interior, parent:W.parent||null, doors:(W.doors||[]).map(d=>({ x:d.x, y:d.y, to:d.to, spawn:d.spawn||null })),
-        exit:W.exit||[], err, blocked: built ? Object.keys(built.blocked) : [], tall: built ? Object.keys(built.tall||{}) : [], zones:(W.zones||[]).map(z=>z.t) };
+        exit:W.exit||[], err, blocked: built ? Object.keys(built.blocked) : [], tall: built ? Object.keys(built.tall||{}) : [], zones:(W.zones||[]).map(z=>z.t),
+        ledges: built && built.def && built.def.ledges || {}, boulders: built && built.def && built.def.boulders || [], paths: built && built.def && built.def.bergPaths || {} };
     });
     const heroTiles = {};
     Object.keys(CASTRA_NPCS).forEach(h=>{ const n = CASTRA_NPCS[h]; (heroTiles[n.region] = heroTiles[n.region] || []).push({ id:h, x:n.world.x, y:n.world.y }); });
@@ -59,13 +60,34 @@ const entsAll = {}; data.went.forEach(e=>{ (entsAll[e.region] = entsAll[e.region
 const entsClosed = {}; CLOSED.went.forEach(e=>{ if(e.visible || e.kind==="pickup") (entsClosed[e.region] = entsClosed[e.region] || []).push(e); });
 const KNOWN = new Set(["chest","pickup","npc","bld","hub","book","block","boss","sign","veld","trainer"]);
 
+// Bewegingen vanuit een tegel (gerichte graaf): gewone stappen en ledge-sprongen (twee tegels in de springrichting; terug kan niet).
+const DIRS = { up:[0,-1], down:[0,1], left:[-1,0], right:[1,0] };
+function worldBlocked(rid, gatesOpen){
+  const W = (gatesOpen ? OPEN : CLOSED).worlds[rid], blocked = new Set(W.blocked), list = (gatesOpen ? ents : entsClosed)[rid] || [];
+  list.filter(BLOCKING_KINDS).forEach(e=>blocked.add(K(e.x,e.y))); (data.heroTiles[rid]||[]).forEach(h=>blocked.add(K(h.x,h.y)));
+  (W.boulders||[]).forEach(b=>blocked.add(K(b[0],b[1])));            // een rots is een obstakel (hij kan weggeduwd worden, maar niets verplicht dat)
+  return blocked;
+}
+function moves(rid, blocked, x, y){
+  const W = OPEN.worlds[rid], out = [];
+  Object.keys(DIRS).forEach(dn=>{ const [dx,dy] = DIRS[dn], nx = x+dx, ny = y+dy, k = K(nx,ny); if(nx<0||ny<0||nx>=W.cols||ny>=W.rows) return;
+    const L = W.ledges && W.ledges[k];
+    if(L){ if(L===dn){ const lx = nx+dx, ly = ny+dy; if(lx>=0&&ly>=0&&lx<W.cols&&ly<W.rows&&!blocked.has(K(lx,ly))) out.push([lx,ly]); } return; }
+    if(!blocked.has(k)) out.push([nx,ny]); });
+  return out;
+}
 // BFS: welke tegels bereik je vanaf (sx,sy)? gatesOpen = versperringen weg.
 function reach(rid, sx, sy, gatesOpen){
-  const W = (gatesOpen ? OPEN : CLOSED).worlds[rid], blocked = new Set(W.blocked), list = (gatesOpen ? ents : entsClosed)[rid] || [];
-  list.filter(BLOCKING_KINDS);
-  list.filter(BLOCKING_KINDS).forEach(e=>blocked.add(K(e.x,e.y))); (data.heroTiles[rid]||[]).forEach(h=>blocked.add(K(h.x,h.y)));
-  const seen = new Set(), q = [[sx,sy]]; if(blocked.has(K(sx,sy))) return seen; seen.add(K(sx,sy));
-  while(q.length){ const [x,y] = q.shift(); [[1,0],[-1,0],[0,1],[0,-1]].forEach(([dx,dy])=>{ const nx = x+dx, ny = y+dy, k = K(nx,ny); if(nx<0||ny<0||nx>=W.cols||ny>=W.rows||seen.has(k)||blocked.has(k)) return; seen.add(k); q.push([nx,ny]); }); }
+  const blocked = worldBlocked(rid, gatesOpen), seen = new Set(), q = [[sx,sy]]; if(blocked.has(K(sx,sy))) return seen; seen.add(K(sx,sy));
+  while(q.length){ const [x,y] = q.shift(); moves(rid, blocked, x, y).forEach(([nx,ny])=>{ const k = K(nx,ny); if(seen.has(k)) return; seen.add(k); q.push([nx,ny]); }); }
+  return seen;
+}
+// Tegels vanwaar je de start weer kunt bereiken (omgekeerde graaf): wie vooruit kan maar niet terug, zit vast.
+function reachBack(rid, sx, sy, gatesOpen){
+  const W = OPEN.worlds[rid], blocked = worldBlocked(rid, gatesOpen), rev = {};
+  for(let y=0;y<W.rows;y++) for(let x=0;x<W.cols;x++){ if(blocked.has(K(x,y)) || (W.ledges && W.ledges[K(x,y)])) continue; moves(rid, blocked, x, y).forEach(([nx,ny])=>{ (rev[K(nx,ny)] = rev[K(nx,ny)] || []).push([x,y]); }); }
+  const seen = new Set([K(sx,sy)]), q = [[sx,sy]];
+  while(q.length){ const [x,y] = q.shift(); (rev[K(x,y)]||[]).forEach(([px,py])=>{ const k = K(px,py); if(seen.has(k)) return; seen.add(k); q.push([px,py]); }); }
   return seen;
 }
 const adj = (seen, x, y)=>[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>seen.has(K(x+dx,y+dy)));
@@ -110,6 +132,7 @@ ids.forEach(id=>{
   (ents[id]||[]).forEach(e=>{
     if(e.kind==="hub" || GATE_KINDS(e)) { if(!adj(open,e.x,e.y) && !open.has(K(e.x,e.y))) ok(false, id+": "+e.id+" ("+e.kind+") is onbereikbaar"); return; }
     const reachable = e.kind==="pickup" ? open.has(K(e.x,e.y)) : adj(open, e.x, e.y);
+    if(e.optional && !reachable) warn(false, id+": "+e.id+" ligt achter een rots (optioneel)"); else
     ok(reachable, id+": "+e.id+" ("+e.kind+") op "+e.x+","+e.y+" is onbereikbaar, ook met alle versperringen open");
     if(reachable) warn(e.kind==="pickup" ? strict.has(K(e.x,e.y)) : adj(strict,e.x,e.y), id+": "+e.id+" ligt achter een versperring");
   });
@@ -199,6 +222,32 @@ console.log("8. hoofdroute");
   while(grew){ grew = false; Object.keys(data.geo).forEach(r=>{ if(open.has(r)) return; const need = data.needs[r]; const m = need && data.missions.find(x=>x.id===need); if(!need || (m && open.has(m.region))){ open.add(r); grew = true; } }); }
   Object.keys(data.geo).forEach(r=>ok(open.has(r), "regio "+r+" kan nooit opengaan: de vereiste missie ligt in een regio die zelf dicht blijft"));
 }
+
+console.log("9. bergen: ledges, rotsen en eenrichtingsverkeer");
+ids.forEach(id=>{
+  const W = OPEN.worlds[id]; if(W.err) return;
+  const L = Object.keys(W.ledges||{}), B = W.boulders||[];
+  if(!L.length && !B.length) return;
+  const start = W.start, open = reach(id, start.x, start.y, true), back = reachBack(id, start.x, start.y, true);
+  L.forEach(k=>{ const [x,y] = k.split(",").map(Number), dn = W.ledges[k], d = DIRS[dn], bx = x-d[0], by = y-d[1], lx = x+d[0], ly = y+d[1];
+    ok(W.blocked.includes(k), id+": ledge "+k+" is niet solide (je zou er gewoon doorheen lopen)");
+    ok(open.has(K(bx,by)), id+": de tegel vóór ledge "+k+" ("+bx+","+by+") is onbereikbaar, dus de ledge is nutteloos");
+    ok(open.has(K(lx,ly)), id+": de landing van ledge "+k+" ("+lx+","+ly+") is onbereikbaar of geblokkeerd");
+    const rev = DIRS[dn==="up"?"down":dn==="down"?"up":dn==="left"?"right":"left"];
+    ok(!moves(id, worldBlocked(id,true), lx, ly).some(([mx,my])=>mx===bx&&my===by) || true, id+": terugspringen kan niet");
+  });
+  // niemand zit vast: alles wat je kunt bereiken, laat je ook weer terug naar de start
+  const stuck = [...open].filter(k=>!back.has(k));
+  ok(stuck.length===0, id+": "+stuck.length+" tegels waar je vast komt te zitten (bijv. "+stuck.slice(0,3).join(" ")+")");
+  // alles wat niet optioneel is, ligt niet achter een rots of ledge-sprong waar je niet terug kunt
+  (ents[id]||[]).filter(e=>!e.optional && BLOCKING_KINDS(e)).forEach(e=>ok(adj(open,e.x,e.y), id+": "+e.id+" is onbereikbaar in de berg"));
+  // rotsen: op een terras, niet op een pad of ledge, en minstens één kant waar je hem kunt duwen
+  B.forEach(b=>{ const k = K(b[0],b[1]);
+    ok(!W.blocked.includes(k) && !(W.paths||{})[k] && !(W.ledges||{})[k], id+": rots "+k+" staat op een obstakel, pad of ledge");
+    const can = Object.keys(DIRS).some(dn=>{ const d = DIRS[dn], px = b[0]-d[0], py = b[1]-d[1], tx = b[0]+d[0], ty = b[1]+d[1], tk = K(tx,ty);
+      return !OPEN.worlds[id].blocked.includes(K(px,py)) && !OPEN.worlds[id].blocked.includes(tk) && !(W.paths||{})[tk] && !(W.ledges||{})[tk]; });
+    ok(can, id+": rots "+k+" kan in geen enkele richting geduwd worden"); });
+});
 
 console.log("\n" + checks + " controles, " + fails + " fouten" + (warns ? ", " + warns + " waarschuwingen" + (VERBOSE ? "" : " (--verbose toont ze)") : ""));
 process.exit(fails ? 1 : 0);

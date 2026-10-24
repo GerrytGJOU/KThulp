@@ -72,7 +72,7 @@ console.log("5. werven met een geschenk");
   run(`CASTRA_V.recruitItem = "donativum"; CASTRA_V.ask = { opts:["inf","cav","rng"], ans:0 };`); const n0 = run(`castraBagN("donativum")`);
   run(`castraVCatchTry(-1)`); ok(run(`castraBagN("donativum")`)===n0-1, "een poging verbruikt het geschenk, ook als de vijand niet overtuigd wordt");
   ok(run("CASTRA_V.recruitItem")===null, "daarna staat er geen geschenk meer klaar");
-  mk(); run(`CASTRA_V.recruitItem = "mulsum"`); ok(Math.abs(run("castraMvCatchChance(CASTRA_V, false)")-p0)<0.001, "een voorwerp zonder werfbonus verandert de kans niet");
+  mk(); const q0 = run("castraMvCatchChance(CASTRA_V, false)"); run(`CASTRA_V.recruitItem = "mulsum"`); ok(Math.abs(run("castraMvCatchChance(CASTRA_V, false)")-q0)<0.001, "een voorwerp zonder werfbonus verandert de kans niet");
   mk(); run(`CASTRA_V.recruitItem = "donativum"; CASTRA_V.s.en.hp = 1;`); ok(run("castraMvCatchChance(CASTRA_V, true)")<=0.95, "de kans blijft onder de 95%"); }
 
 console.log("6. in het gevecht");

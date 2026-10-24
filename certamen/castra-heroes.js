@@ -168,7 +168,7 @@ Object.assign(CASTRA_HERO_DATA, {
     ] },
 
   /* ----- Graecia ----- */
-  hercules: { nm:"Hercules", region:"graecia", type:"inf", affinity:"campus", world:{ x:8, y:5, dir:"down" },
+  hercules: { nm:"Hercules", region:"graecia", type:"inf", affinity:"campus", world:{ x:16, y:4, dir:"down" },
     base:{ vita:90, impetus:19, tutela:14, celeritas:6, ambitus:2 },
     look:_look({ huid:"brons", haar:"wild", haarkleur:"bruin", baard:"baard", armor:"vodden", cape:"lang", capekleur:"oranje" }),
     chain:[
@@ -220,7 +220,7 @@ Object.assign(CASTRA_HERO_DATA, {
       _T(["In cursu omnes viros vinco.","In het hardlopen versla ik alle mannen."], ["Quis celerrima est?","Wie is de snelste?"], ["Atalanta.","Atalanta."], ["Hercules.","Hercules."], ["Iason.","Jason."]),
       _T(["Mala aurea me tardant.","Gouden appels houden mij op."], ["Quid Atalantam tardat?","Wat houdt Atalanta op?"], ["Mala aurea.","Gouden appels."], ["Aqua.","Water."], ["Nix.","Sneeuw."]),
     ] },
-  iason: { nm:"Iason", region:"graecia", type:"inf", affinity:"lignatio", world:{ x:25, y:18, dir:"left" },
+  iason: { nm:"Iason", region:"graecia", type:"inf", affinity:"lignatio", world:{ x:23, y:19, dir:"up" },
     base:{ vita:66, impetus:15, tutela:11, celeritas:8, ambitus:3 },
     look:_look({ huid:"getint", haar:"kort", haarkleur:"blond", baard:"geen", armor:"middel", cape:"kort", capekleur:"goud", helm:"open" }),
     chain:[

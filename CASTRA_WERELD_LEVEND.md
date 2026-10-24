@@ -67,6 +67,8 @@ Omvang: S = ≤ 1 sessie, M = 1-3, L = meerdere.
 
 ## 5. Aanbevolen volgorde
 
+> **Stand (2026-10-24):** L1 (proef in Graecia), L2 en de kleine geluiden van L7 zijn gebouwd, zie `CASTRA_HEROUM.md`. Muziek laat Gerben zelf maken (Suno). Open: L3 tot en met L6, L8 en bergen in de andere landen.
+
 1. **L1 Bergpaden** in één land als proef (Graecia of Laconia): terras, pad, ledge, shortcut, vondst bovenop; wereldtest met gerichte graaf. Daarna uitrollen naar Persis en Themiscyra.
 2. **L2 Veldeffecten** (kleinste inspanning, grootste indruk) en meteen de ledgesprong erin.
 3. **L4 Volger** (laat het contubernium zien).
