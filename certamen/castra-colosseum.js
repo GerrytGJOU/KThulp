@@ -73,7 +73,7 @@ function castraColoPvpMission(div, seed){
 function castraColoUnits(div){
   const list = [];
   (CASTRA.heroes||[]).forEach(h=>list.push(castraHeroAsUnit({ ...h, lvl:Math.min(h.lvl, div) })));
-  (CASTRA.soldiers||[]).forEach(s=>list.push({ ...s, lvl:Math.min(s.lvl, div), hurtUntil:0 }));
+  (CASTRA.soldiers||[]).forEach(s=>list.push({ ...s, lvl:Math.min(s.lvl, div), hurtUntil:0, hpf:undefined, hpt:undefined }));
   return list.length ? list : [ { id:"dux", dux:true, line:"rom_hastatus", lvl:1, name:"Dux" } ];
 }
 // Voor kalibratie en later naspelen: laat een run lopen met een vaste plaatsing.

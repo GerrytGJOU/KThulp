@@ -90,7 +90,7 @@ function castraVRender(stage){
       const st = castraStats(s), t = CASTRA_TYPE_LA[castraLine(s.line).type];
       return `<button class="tile" onclick="castraVFight('${s.id}')"><span class="ic">${castraLine(s.line).type==="cav"?"🐎":castraLine(s.line).type==="rng"?"🏹":"🛡️"}</span>
         <h3>${s.insignis?"✨ ":""}${esc(castraSoldierName(s))} <small>${castraLaText("gradus")} ${s.lvl}</small></h3>
-        <p><b>${esc(t.sg)}</b> · ${CASTRA_STATS.slice(0,3).map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</p></button>`;
+        <p><b>${esc(t.sg)}</b> · ${CASTRA_STATS.slice(0,3).map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</p>${typeof castraHpHTML==="function" ? `<p>${castraHpHTML(s, 80)}</p>` : ""}</button>`;
     }).join("");
     const hurt = CASTRA.soldiers.filter(castraIsHurt).map(s=>`<div class="note">🩹 ${esc(castraSoldierName(s))} — ${castraLaText("vulneratus").replace("Miles tuus","").trim()} (${castraHurtMin(s)} min)</div>`).join("");
     body = `<div class="panel"><div style="font-size:15px;opacity:.9">${castraLa("explorator")}</div>
@@ -136,7 +136,7 @@ function castraVFight(sid){
   V.enHp = V.enMax = V.stats.vita;
   V.enType = castraLine(V.enemy.line).type;
   V.log = []; V.round = 0; V.over = null; V.dmgTaken = 0;
-  castraFsprProbe([[mine.line,"battle_back"],[V.enemy.line,"battle_front"]], ()=>{ if(CASTRA_V===V) castraVRender("battle"); });
+  castraFsprProbe([[mine.line,"battle_back"],[V.enemy.line,"battle_front"]], ()=>{ if(CASTRA_V===V && !V.over) castraVRender("battle"); });
 }
 function castraVBar(cur,max,col){
   const p = Math.max(0, Math.round(100*cur/max));
@@ -198,7 +198,7 @@ function castraVFinish(){
   V.loot = null; V.leveled = false; V.trace = null;
   if(soldier){
     if(V.over==="lose") castraHurtSoldier(soldier, CASTRA_V_BAL.hurtMinutesLoss);
-    else if(V.dmgTaken > V.myMax*0.5) castraHurtSoldier(soldier, CASTRA_V_BAL.hurtMinutesWin);
+    // (een zware winst kost nu levenspunten die blijven, zie castra-hp.js; geen aparte gewond-timer meer)
   }
   if(V.over==="win"){
     const rng = castraRng((CASTRA.seed ^ 0x2545f491)>>>0); CASTRA.seed = (CASTRA.seed+3)>>>0;

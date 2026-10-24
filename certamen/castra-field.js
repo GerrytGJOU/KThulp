@@ -118,7 +118,7 @@ function castraFieldReward(e, unit){
   const sc = castraWScale(e.region), res = {};
   Object.keys(T.daily).forEach(r=>{ const a = T.daily[r]; res[r] = r==="gloria" ? castraWRoll(a, rng) : Math.round(castraWRoll(a, rng)*sc*(e.gate?1.5:1)); });
   const txt = castraWGive(res);
-  if(e.field==="ara" && typeof castraIsHurt==="function") (CASTRA.soldiers||[]).forEach(s=>{ s.hurtUntil = 0; });   // de reiniging geneest ook je gewonde soldaten
+  if(e.field==="ara" && typeof castraHealAll==="function") castraHealAll();   // de reiniging geneest ook je gewonde soldaten
   return txt;
 }
 function castraFieldClear(e, unit, hired){

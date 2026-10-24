@@ -9,20 +9,63 @@
    Het Colosseum (lobby met eigen terugpad naar de arena) en de handleiding (terug naar waar je vandaan kwam) houden
    hun eigen terugweg. Laadt NA castra-geo.js, castra-menu.js en castra-battle.js.
    ============================================================================ */
-function castraHomeLeave(){ try{ castraSave(); }catch(_){} go("home"); }
+/* ---------- terug naar Certamen: eerst vragen of je wilt opslaan ----------
+   Alle terugknoppen (de ‹ in de kop én de vaste pijl linksboven, castraPortalBack) vragen eerst: opslaan en terug, terug zonder
+   opslaan (je voortgang wordt op dit apparaat altijd al bewaard, opslaan zet hem ook in je profiel in de cloud), of blijf spelen.
+   De opruimactie (wereld loskoppelen, timers stoppen) gebeurt pas ná de keuze. */
+function castraHomeLeave(clean, save){
+  try{ castraSave(); if(save) castraSync(); }catch(_){}
+  try{ if(clean) clean(); }catch(_){}
+  go("home");
+}
+let CASTRA_LEAVE_ASK = null;
+function castraAskLeave(clean){
+  if(document.getElementById("castraLeaveAsk")) return;
+  CASTRA_LEAVE_ASK = clean || null;
+  const o = document.createElement("div"); o.id = "castraLeaveAsk";
+  o.style.cssText = "position:fixed;inset:0;z-index:100000;background:rgba(10,7,3,.72);display:flex;align-items:center;justify-content:center;padding:16px";
+  const bs = "min-height:46px;font-size:16px;padding:8px 14px;font-family:inherit;cursor:pointer;border-radius:10px;border:2px solid #9c7c1f;";
+  o.innerHTML = `<div role="dialog" aria-modal="true" style="max-width:420px;width:100%;background:#241b12;color:#f0e2b8;border:2px solid #d4af37;border-radius:14px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,.6)">
+    <div style="font-size:19px;margin-bottom:6px"><b>Terug naar Certamen</b></div>
+    <div style="font-size:15px;line-height:1.4;margin-bottom:12px">Wil je je voortgang opslaan? Hij wordt op dit apparaat al bewaard; opslaan zet hem ook in je profiel, zodat je op een ander apparaat verder kunt.</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button style="${bs}background:linear-gradient(#e8c96a,#d4af37);color:#2b1d0e" onclick="castraLeaveChoice('save')">💾 Opslaan en terug</button>
+      <button style="${bs}background:rgba(255,255,255,.08);color:#f0e2b8" onclick="castraLeaveChoice('nosave')">Terug zonder opslaan</button>
+      <button style="${bs}background:transparent;color:#f0e2b8" onclick="castraLeaveChoice('stay')">Blijf spelen</button></div></div>`;
+  document.body.appendChild(o);
+}
+function castraLeaveChoice(c){
+  const o = document.getElementById("castraLeaveAsk"); if(o) o.remove();
+  const clean = CASTRA_LEAVE_ASK; CASTRA_LEAVE_ASK = null;
+  if(c==="stay") return;
+  castraHomeLeave(clean, c==="save");
+}
+// De vaste pijl linksboven (index.html) ging via goBack() één scherm terug: van de wereld naar het kamp of de regiokeuze. Voor de
+// Castra-schermen gaat hij nu net als de ‹-knop naar het hoofdmenu van Certamen (met de opslaan-vraag). Geeft true als hij het afhandelt.
+function castraPortalBack(screen){
+  const f = { castraHome:()=>castraLeave(), castraWorld:()=>castraWorldLeave(), castraVenatio:()=>castraVLeave(), castraProelium:()=>castraPLeave(),
+    castraBattle:()=>castraBLeave(), castraRegions:()=>castraRegionsLeave() }[screen];
+  if(!f) return false;
+  f(); return true;
+}
 
 castraWorldLeave = function(){
-  try{ if(typeof CASTRA_W_UI!=="undefined" && CASTRA_W_UI.px!==undefined) castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraWorldDetach(); }catch(_){}
-  castraHomeLeave();
+  castraAskLeave(()=>{ if(typeof CASTRA_W_UI!=="undefined" && CASTRA_W_UI.px!==undefined) castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraWorldDetach(); });
 };
-castraRegionsLeave = function(){ castraHomeLeave(); };
-castraPLeave = function(){ castraHomeLeave(); };
-function castraVLeave(){ CASTRA_V = null; castraHomeLeave(); }         // jacht en vangen: stil verlaten
-function castraBLeave(){                                               // tower defence: timers opruimen en weg
-  const o = document.getElementById("cbIntro"); if(o) o.remove();
-  if(CASTRA_B){ clearInterval(CASTRA_B.timer); window.removeEventListener("resize", CASTRA_B.resizeFn); }
-  CASTRA_B = null; castraHomeLeave();
+castraRegionsLeave = function(){ castraAskLeave(); };
+castraPLeave = function(){ castraAskLeave(); };
+function castraVLeave(){ castraAskLeave(()=>{ CASTRA_V = null; }); }  // jacht en vangen: stil verlaten
+function castraBLeave(){                                              // tower defence: timers opruimen en weg
+  castraAskLeave(()=>{
+    const o = document.getElementById("cbIntro"); if(o) o.remove();
+    if(CASTRA_B){ clearInterval(CASTRA_B.timer); window.removeEventListener("resize", CASTRA_B.resizeFn); }
+    CASTRA_B = null;
+  });
 }
+// Het kamp zelf: dezelfde vraag; daarna het oude opruimen (toetsen en schaling loskoppelen).
+castraLeave = function(){
+  castraAskLeave(()=>{ if(CASTRA_UI.keyFn) document.removeEventListener("keydown", CASTRA_UI.keyFn); if(CASTRA_UI.resizeFn) window.removeEventListener("resize", CASTRA_UI.resizeFn); });
+};
 
 /* ---------- snelle reis naar het kamp (menu ☰) ---------- */
 function castraFastCamp(){

@@ -180,8 +180,7 @@ function castraMatronaTalk(){
          : { la:"Visne quiescere?", nl:"Wil je uitrusten?", opts:[ { la:"Quiesco", nl:"uitrusten" }, { la:"Vale", nl:"tot ziens" } ] } ];
   castraDlgOpen({ nm:"Matrona", look:CASTRA_MATRONA_LOOK }, lines, k=>{
     if(k===0){
-      const hurt = (CASTRA.soldiers||[]).filter(castraIsHurt);
-      hurt.forEach(s=>{ s.hurtUntil = 0; }); w.hospitium = castraWDay(); castraSave();
+      const hurt = castraHealAll(); w.hospitium = castraWDay(); castraSave();
       toast("🏠 Hospitium", hurt.length ? hurt.length+" soldaat/soldaten zijn weer gezond." : "Je soldaten waren al gezond.");
     }
   });

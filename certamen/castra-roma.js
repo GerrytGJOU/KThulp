@@ -186,7 +186,7 @@ function castraBadTalk(){
          : { la:"Visne lavare?", nl:"Wil je een bad nemen?", opts:[ { la:"Lavo", nl:"baden" }, { la:"Vale", nl:"tot ziens" } ] } ],
     k=>{
       if(done || k!==0) return;
-      const hurt = (CASTRA.soldiers||[]).filter(castraIsHurt); hurt.forEach(s=>{ s.hurtUntil = 0; });
+      const hurt = castraHealAll();
       w.thermae = castraWDay(); castraSave(); if(typeof castraPxpAdd==="function") castraPxpAdd(12, "Gebaad");
       toast("♨️ Thermae", (hurt.length ? hurt.length+" soldaat/soldaten zijn weer gezond. " : "Je soldaten waren al gezond. ")+"+12 ervaring.");
     });
