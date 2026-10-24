@@ -65,6 +65,17 @@ function castraGeoStart(rid){ const W = CASTRA_WORLDS[rid]; return { x:(W.cols>>
   });
 })();
 
+// Aankomsttegels (poorten, start) blijven vrij van toevallig decor: in Persis kwam je uit Troje precies in een rots terecht (gevonden met tools/castra-world-test.js).
+const _castraWorldDefGeo0 = castraWorldDef;
+castraWorldDef = function(){
+  const d = _castraWorldDefGeo0.apply(this, arguments), W = castraWorldCfg(), G = CASTRA_GEO[W.id];
+  if(!G || W.interior) return d;
+  const keep = {}; keep[W.start.x+","+W.start.y] = 1; const s0 = castraGeoStart(W.id); keep[s0.x+","+s0.y] = 1;
+  Object.keys(G.links).forEach(dir=>{ const a = castraGeoSpawnFor(W.id, CASTRA_GEO_OPP[dir]); keep[a.x+","+a.y] = 1; });
+  d.pieces = d.pieces.filter(p=>{ if(p.noSolid) return true; const O = CASTRA_OBJ[p.o]; return !keep[p.x+","+(p.y+(O ? O.h : 1)-1)]; });
+  return d;
+};
+
 function castraGeoName(rid){ return rid==="camp" ? CASTRA_GEO_CAMP.nm : (CASTRA_WORLDS[rid]||{nm:rid}).nm; }
 function castraGeoIcon(rid){ return rid==="camp" ? CASTRA_GEO_CAMP.icon : (CASTRA_WORLDS[rid]||{icon:"📍"}).icon; }
 function castraGeoVisited(rid){ return rid==="camp" || !!(CASTRA.visited && CASTRA.visited[rid]); }

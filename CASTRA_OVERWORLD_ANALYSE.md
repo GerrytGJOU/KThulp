@@ -91,6 +91,8 @@ Het dossier noemt de hooks onBeforeLoad / onEnter / onReady / onStep / onInterac
 
 ## 4. Aanbevolen volgorde
 
+> **Stand (2026-10-24):** ronde 1 gebouwd (W1 wereldtest, W6 quest-toestanden, W3 verborgen voorwerpen, W2 trainerzicht), zie `CASTRA_HEROUM.md`. De wereldtest vond twee echte fouten (Penthesilea in zee, aankomsttegel in een rots). Ronde 2 en 3 zijn open.
+
 1. **W1** wereldtest en validator (onzichtbaar, voorkomt softlocks).
 2. **W6** quest-toestanden (klein) en **W3** verborgen voorwerpen (klein, direct merkbaar).
 3. **W2** trainerzicht.

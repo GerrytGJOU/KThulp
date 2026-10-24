@@ -315,7 +315,7 @@ Object.assign(CASTRA_HERO_DATA, {
       _T(["Domum redire volo. Penelope me exspectat.","Ik wil naar huis terugkeren. Penelope wacht op mij."], ["Quis Ulixem exspectat?","Wie wacht op Odysseus?"], ["Penelope.","Penelope."], ["Circe.","Circe."], ["Calypso.","Calypso."]),
       _T(["Polyphemus unum oculum habet.","Polyphemus heeft één oog."], ["Quot oculos Polyphemus habet?","Hoeveel ogen heeft Polyphemus?"], ["Unum.","Eén."], ["Duos.","Twee."], ["Tres.","Drie."]),
     ] },
-  penthesilea: { nm:"Penthesilea", region:"troia", type:"rng", affinity:"campus", world:{ x:5, y:10, dir:"right" },
+  penthesilea: { nm:"Penthesilea", region:"troia", type:"rng", affinity:"campus", world:{ x:7, y:10, dir:"left" },
     base:{ vita:54, impetus:19, tutela:8, celeritas:12, ambitus:7 },
     look:_look({ huid:"licht", haar:"lang", haarkleur:"rood", armor:"middel", cape:"lang", capekleur:"paars", helm:"geen" }),
     chain:[
