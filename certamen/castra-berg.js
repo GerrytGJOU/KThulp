@@ -11,12 +11,13 @@
    Ledges maken shortcuts naar beneden, een keuze tussen het lange pad en de sprong, en bovenop liggen dingen die je alleen via een
    omweg of een rots bereikt (optioneel: nooit op de weg naar iets wat je nodig hebt; de wereldtest bewaakt dat, met een gerichte
    graaf, zodat je nooit vast kunt komen te zitten). Rotsen staan weer op hun plek als je de kaart opnieuw betreedt.
+   Klif en terrassen: de echte tegels uit Outside_A4 (zie castraDrawBergA4); zonder dat plaatje valt hij terug op de zelfgetekende klifwand.
    Teksten Latijn: "Saxum grave est." (de rots is te zwaar). Kaarten staan in CASTRA_BERG; Graecia is de proef.
    Laadt NA castra-enc.js (en voor castra-fx.js).
    ============================================================================ */
 const CASTRA_BERG = {
   // Graecia: de berg in het noordwesten (x 2-25, y 2-17), drie terrassen die je via haarspeldbochten beklimt, met een ledge-shortcut naar beneden.
-  graecia: { x:2, y:2, seed:4711, tall:0.5, rows:[
+  graecia: { x:2, y:2, seed:4711, tall:0.5, style:"sand", rows:[
     "########################",   //  0
     "#.....#................#",   //  1   top (A): links een nis met een kist, afgesloten door een rots
     "#.....o................#",   //  2
@@ -60,7 +61,11 @@ function castraBergApply(def, rid){
       if(c==="o") boulders.push([x,y]);
       if(rng() < M.tall && c!=="o"){ def.tall[k] = M.terrain || "mons"; def.pieces.push({ o:"dry_grass", x, y }); }
     } } });
-  def.cliffs = cliffs; def.ledges = ledges; def.boulders = boulders; def.bergPaths = paths;
+  const plateau = {}, ramp = {};
+  M.rows.forEach((row, ry)=>{ for(let rx=0; rx<M.w; rx++){ const c = row[rx], k = (M.x+rx)+","+(M.y+ry);
+    if(c==="." || c==="o") plateau[k] = 1;
+    else if(c==="p"){ const up = (M.rows[ry-1]||"")[rx], dn = (M.rows[ry+1]||"")[rx]; if(".o".indexOf(up||" ")>=0 || ".o".indexOf(dn||" ")>=0) ramp[k] = 1; } } });
+  def.cliffs = cliffs; def.ledges = ledges; def.boulders = boulders; def.bergPaths = paths; def.bergPlateau = plateau; def.bergRamp = ramp; def.bergStyle = M.style || "sand"; def.bergRect = { x:M.x, y:M.y, w:M.w, h:M.h };
   return def;
 }
 const _castraWorldDefBerg0 = castraWorldDef;
@@ -91,14 +96,51 @@ function castraDrawCliffCell(ctx, c, up, down, T){
     ctx.fillStyle = "rgba(255,245,220,.5)"; for(let i=0;i<3;i++) ctx.fillRect(x0+4+Math.floor(r()*(T-10)), y0+T-14+Math.floor(r()*8), 3, 2);
   }
 }
+/* ---- met de echte tegels (Outside_A4): plateau met rotsrand en klifwand ----
+   Een plateau-autotile van RPG Maker is een blok van 96 × 144 px (4 × 6 kwartjes van 24 px). Voor een rechthoekig terras kiest elk
+   hoekje van een tegel zijn kwartje uit de buren: links en rechts, boven en onder (zie castraPlateauQuarters). De klif zelf is de
+   onderste twee rijen van het blok; een band van één tegel krijgt de bovenste helft van de bovenste en de onderste helft van de onderste rij. */
+const CASTRA_A4 = { top:{ grass:0, sand:2, sand2:4, snow:6 }, rowTop:10, rowFace:13 };
+function castraPlateauQuarters(L, R, U, D){   // L,R,U,D = er is GEEN plateau links, rechts, boven, onder (dus daar is een rand)
+  const lx = L ? 0 : (R ? 2 : 1), rx = R ? 3 : (L ? 1 : 2), ty = U ? 2 : (D ? 4 : 3), by = D ? 5 : (U ? 3 : 4);
+  return [[lx,ty],[rx,ty],[lx,by],[rx,by]];
+}
+function castraDrawBergA4(g, built, A4, T){
+  const def = built.def, st = def.bergStyle, colTop = CASTRA_A4.top[st] != null ? CASTRA_A4.top[st] : 2, bx = colTop*T, by = CASTRA_A4.rowTop*T;
+  const pl = k=>!!(def.bergPlateau[k] || def.bergRamp[k]), cl = {}; def.cliffs.forEach(c=>{ cl[c.x+","+c.y] = c; });
+  // 1. terrassen (ramp-tegels blijven gewoon zandpad: ze zijn niet plateau-getekend)
+  Object.keys(def.bergPlateau).forEach(k=>{ const [x,y] = k.split(",").map(Number);
+    const q = castraPlateauQuarters(!pl((x-1)+","+y), !pl((x+1)+","+y), !pl(x+","+(y-1)), !pl(x+","+(y+1)));
+    [[0,0],[24,0],[0,24],[24,24]].forEach(([ox,oy],i)=>g.drawImage(A4, bx+q[i][0]*24, by+q[i][1]*24, 24, 24, x*T+ox, y*T+oy, 24, 24)); });
+  // 2. klifwand en ledges: de rotsklif (twee rijen onder het plateau-blok); steeds het middenstuk van het blok, zodat de wand naadloos doorloopt
+  const fy13 = CASTRA_A4.rowFace*T, fy14 = (CASTRA_A4.rowFace+1)*T;
+  def.cliffs.forEach(c=>{ const fx = colTop*T + 24, hasUp = !!cl[c.x+","+(c.y-1)], hasDown = !!cl[c.x+","+(c.y+1)];
+    if(hasDown){ g.drawImage(A4, fx, fy13, T, T, c.x*T, c.y*T, T, T); }                               // midden van een dikke wand
+    else if(hasUp){ g.drawImage(A4, fx, fy14, T, T, c.x*T, c.y*T, T, T); }                            // onderste rij van een dikke wand
+    else { g.drawImage(A4, fx, fy13, T, 24, c.x*T, c.y*T, T, 24); g.drawImage(A4, fx, fy14+24, T, 24, c.x*T, c.y*T+24, T, 24); }   // band van één tegel
+    if(c.k==="ledge") castraDrawLedgeMark(g, c, T); });
+  // 3. de objecten op de terrassen (hoog gras, vondsten) staan weer bovenop
+  const R = def.bergRect, inR = t=>t.x>=R.x && t.x<R.x+R.w && t.y>=R.y && t.y<R.y+R.h;
+  (built.below||[]).filter(inR).forEach(t=>{ const im = CASTRA_TS_IMG[t.s]; if(im) g.drawImage(im, t.sx!=null?t.sx:t.c*T, t.sy!=null?t.sy:t.r*T, T, T, t.x*T, t.y*T, T, T); });
+}
+// De pijltjes van een ledge staan als lichte markering over de rotswand (ook zonder de echte tegels).
+function castraDrawLedgeMark(ctx, c, T){
+  const x0 = c.x*T, y0 = c.y*T, dir = c.dir, cx = x0+T/2, cy = y0+T/2, a = dir==="down" ? [0,1] : dir==="up" ? [0,-1] : dir==="right" ? [1,0] : [-1,0];
+  ctx.fillStyle = "rgba(255,248,225,.62)"; ctx.strokeStyle = "rgba(60,40,20,.55)"; ctx.lineWidth = 1.5;
+  for(let i=-1;i<=1;i+=2){ const px = cx + (a[0] ? 0 : i*11) - a[0]*4, py = cy + (a[1] ? 0 : i*11) - a[1]*4;
+    ctx.beginPath(); ctx.moveTo(px+a[0]*7, py+a[1]*7); ctx.lineTo(px-a[1]*6-a[0]*3, py+a[0]*6-a[1]*3); ctx.lineTo(px+a[1]*6-a[0]*3, py-a[0]*6-a[1]*3); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+}
 const _castraDrawMapLayersBerg0 = castraDrawMapLayers;
 castraDrawMapLayers = function(built, cvBelow, cvAbove){
   _castraDrawMapLayersBerg0.apply(this, arguments);
   const def = built && built.def; if(!def) return;
-  const T = 48, g = cvBelow.getContext("2d");
+  const T = 48, g = cvBelow.getContext("2d"), A4 = (typeof CASTRA_TS_IMG!=="undefined") && CASTRA_TS_IMG.A4;
   if(def.cliffs && def.cliffs.length){
-    const has = {}; def.cliffs.forEach(c=>{ has[c.x+","+c.y] = 1; });
-    def.cliffs.forEach(c=>castraDrawCliffCell(g, c, !!has[c.x+","+(c.y-1)], !!has[c.x+","+(c.y+1)], T));
+    if(A4 && def.bergPlateau) castraDrawBergA4(g, built, A4, T);
+    else {                                                   // zonder het plaatje: de zelfgetekende klifwand
+      const has = {}; def.cliffs.forEach(c=>{ has[c.x+","+c.y] = 1; });
+      def.cliffs.forEach(c=>castraDrawCliffCell(g, c, !!has[c.x+","+(c.y-1)], !!has[c.x+","+(c.y+1)], T));
+    }
   }
   // zachte schaduw onder bomen en palmen (geeft diepte; hoort niet bij de bergen maar tekent op dezelfde laag)
   (def.pieces||[]).forEach(p=>{ const O = CASTRA_OBJ[p.o]; if(!O || O.solid!=="bottom" || p.noSolid) return;
