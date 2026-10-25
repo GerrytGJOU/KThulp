@@ -72,8 +72,10 @@ castraWorldDef = function(){
     for(let x=1;x<def.cols-1;x++){
       if(x===g.x) continue;                                            // de opening: hier staat de versperring
       if(!def.walls.some(w=>w[0]===x && w[1]===g.y)) def.walls.push([x,g.y]);
-      def.pieces.push({ o:ring, x, y:g.y-1, noSolid:true });
+      if(W.cityWall){ if(!def.walls.some(w=>w[0]===x && w[1]===g.y-1)) def.walls.push([x,g.y-1]); }          // de muur is twee tegels dik: een kantelenrij en de gevel
+      else def.pieces.push({ o:ring, x, y:g.y-1, noSolid:true });          // een stad (Roma) heeft een echte muur (castra-urbs.js) in plaats van bomen
     }
+    if(W.cityWall) (def.cityWalls = def.cityWalls || []).push({ y:g.y, gx:g.x });
   });
   return def;
 };
