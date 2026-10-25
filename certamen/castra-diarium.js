@@ -273,7 +273,7 @@ function castraDqMarkDiv(x, y, m){
 function castraDqDoorMark(rid, seen){
   seen = seen || {}; if(seen[rid]) return ""; seen[rid] = 1;
   const rank = { ready:3, talk:2, offer:1, "":0 }; let best = "";
-  CASTRA_WENT.filter(e=>e.region===rid && e.kind==="npc").forEach(e=>{ const m = castraDqMark(e.id); if(rank[m] > rank[best]) best = m; });
+  CASTRA_WENT.filter(e=>e.region===rid && e.kind==="npc" && (typeof castraWEntVisible!=="function" || castraWEntVisible(e))).forEach(e=>{ const m = castraDqMark(e.id); if(rank[m] > rank[best]) best = m; });
   const W = CASTRA_WORLDS[rid];
   if(W && W.interior && Object.keys(seen).length < 4) (W.doors||[]).forEach(d=>{ const t = CASTRA_WORLDS[d.to]; if(t && t.interior){ const m = castraDqDoorMark(d.to, seen); if(rank[m] > rank[best]) best = m; } });
   return best;
@@ -283,7 +283,7 @@ castraWobjDraw = function(){
   _castraWobjDrawDq0();
   const box = el("cwWobj"); if(!box) return;
   let html = "";
-  castraWEnts().filter(e=>e.kind==="npc").forEach(e=>{ const m = castraDqMark(e.id); if(m) html += castraDqMarkDiv(e.x, e.y, m); });
+  castraWEnts().filter(e=>e.kind==="npc" && castraWEntVisible(e)).forEach(e=>{ const m = castraDqMark(e.id); if(m) html += castraDqMarkDiv(e.x, e.y, m); });
   const W = castraWorldCfg();
   (W.doors||[]).forEach(d=>{ const t = CASTRA_WORLDS[d.to]; if(t && t.interior){ const m = castraDqDoorMark(d.to); if(m) html += castraDqMarkDiv(d.x, d.y, m); } });
   if(html) box.insertAdjacentHTML("beforeend", html);
