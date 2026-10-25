@@ -142,6 +142,8 @@ function castraLvl(id){
 }
 /* Bouwen kost tijd (CASTRA_BAL.buildMin): de kosten gaan er meteen af, het level komt erbij als de tijd om is. */
 function castraBuildMinutes(toLvl){ const t = CASTRA_BAL.buildMin; return t[Math.max(0, Math.min(t.length-1, toLvl-1))]; }
+// De bouwtijd in ms met de kaart Fabri (castra-cards.js) erin; wat al bouwt, behoudt zijn eindtijd.
+function castraBuildMs(toLvl){ const x = (typeof castraCardBonus==="function") ? Math.min(60, castraCardBonus().build||0) : 0; return Math.round(castraBuildMinutes(toLvl)*60000*(100-x)/100); }
 function castraBuilders(){ const p = (CASTRA.b.praetorium && CASTRA.b.praetorium.lvl) || 0; return CASTRA_BAL.builderStep.filter(n=>p>=n).length || 1; }
 function castraBuildActive(){ return Object.keys(CASTRA.b).filter(id=>CASTRA.b[id] && CASTRA.b[id].up); }
 function castraBuildLeftMs(id){ const st = CASTRA.b[id]; return st && st.up ? Math.max(0, st.up.end - castraNow()) : 0; }
@@ -156,7 +158,7 @@ function castraFmtLeft(ms){ const m = Math.ceil(ms/60000); return m>=1440 ? Math
 function castraUpgradeUI(id, cost, costTxt, lvl){
   const st = CASTRA.b[id] || {};
   if(st.up) return `<div class="note">🔨 ${castraLaText("aedifica")}: <b>${castraLaText("gradus")} ${st.up.to}</b> — nog ${castraFmtLeft(castraBuildLeftMs(id))}</div>`;
-  const busy = castraBuildActive().length >= castraBuilders(), mins = castraBuildMinutes(lvl+1), time = castraFmtLeft(mins*60000);
+  const busy = castraBuildActive().length >= castraBuilders(), mins = castraBuildMinutes(lvl+1), time = castraFmtLeft(castraBuildMs(lvl+1));
   return `<button class="btn" ${castraCanPay(cost) && !busy ? "" : "disabled"} onclick="castraDoUpgrade('${id}')">${lvl===0?castraLaText("aedifica"):castraLaText("meliora")+" → "+castraLaText("gradus")+" "+(lvl+1)} — ${costTxt} · ⏱ ${time}</button>`
     + (busy ? `<div class="note">Alle bouwers zijn bezig (${castraBuildActive().length}/${castraBuilders()}). Een tweede bouwer krijg je met Praetorium 4, een derde met 8.</div>` : "");
 }
@@ -211,7 +213,7 @@ function castraUpgrade(id){
   castraPay(cost);
   if(!CASTRA.b[id]) CASTRA.b[id] = { lvl:0, t:castraNow() };
   if(dev){ CASTRA.b[id].lvl = L+1; if(castraBuilding(id).prod) CASTRA.b[id].t = castraNow(); }
-  else CASTRA.b[id].up = { to:L+1, end:castraNow() + castraBuildMinutes(L+1)*60000 };
+  else CASTRA.b[id].up = { to:L+1, end:castraNow() + castraBuildMs(L+1) };
   castraSave();
   return true;
 }
