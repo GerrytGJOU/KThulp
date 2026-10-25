@@ -54,7 +54,7 @@ function castraBarrierSolid(rid, chestMargin){
 function castraBarrierPlan(rid){
   if(CASTRA_BARRIER_PLAN[rid]!==undefined) return CASTRA_BARRIER_PLAN[rid];
   const W = CASTRA_WORLDS[rid], gates = (typeof CASTRA_FGATES!=="undefined" && CASTRA_FGATES[rid]) || [];
-  if(!W || W.interior || !gates.length) return CASTRA_BARRIER_PLAN[rid] = null;
+  if(!W || W.interior || W.cityWall || !gates.length) return CASTRA_BARRIER_PLAN[rid] = null;
   const cols = W.cols, rows = W.rows, strict = castraBarrierSolid(rid, true), loose = castraBarrierSolid(rid, false), out = { gates:[] };
   let seedBase = 0; for(const ch of rid) seedBase = (seedBase*31+ch.charCodeAt(0))>>>0;
   for(let gi=0; gi<gates.length; gi++){
