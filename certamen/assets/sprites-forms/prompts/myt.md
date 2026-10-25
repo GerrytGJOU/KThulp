@@ -489,11 +489,11 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 - Blad A, bijlagen: `gra_anker.png` en `myt_aquila_A.png`
 - SECOND: The SECOND image is the finished sheet of the parent form (Aquila): this creature is the next step of the SAME line, so keep the same colours and the same basic design, but bigger, stronger and richer.
 - NAME: Aquila Iovis; TIER: 2; BRANCH: Eagles of Jupiter; ROLE: mythical creature
-- OUTFIT: It is the eagle of Jupiter: a large golden eagle with shining golden-white feathers, a crown of white feathers on its head, a sharp golden beak, bright blue eyes, strong golden legs with big talons holding a golden lightning bolt, and very large wings with golden tips; pale blue lightning sparks crackle around its wings. MOVEMENT in the walking poses: it hops and glides just above the ground with slow wing beats (feet still visible).
-- REST: perched proudly on the ground, facing the viewer, the wings half spread, the lightning bolt in its talons
-- ATTACK: leaping one step forward, the wings spread wide and the lightning bolt thrust forward with a burst of blue sparks
+- OUTFIT: It is the eagle of Jupiter: a large golden eagle with shining golden-white feathers, a crown of white feathers on its head, a sharp golden beak, bright blue eyes, exactly TWO strong golden legs with big talons (the legs never hold anything), and very large wings with golden tips; a golden lightning bolt hovers and crackles in the air just in front of its chest, floating on its own and held by NOTHING, with pale blue lightning sparks crackling around its wings. MOVEMENT in the walking poses: it hops and glides just above the ground with slow wing beats (feet still visible).
+- REST: perched proudly on the ground, facing the viewer, the wings half spread, the golden lightning bolt floating in front of its chest
+- ATTACK: leaping one step forward, the wings spread wide and the floating lightning bolt flung forward with a burst of blue sparks
 - HIT: recoiling backwards, eyes squeezed shut, the wings folding, sparks scattering
 - PORT: Show the white crown feathers, the sharp golden beak and the bright blue eyes.
-- FRONT: The golden eagle seen from the front with the wings half spread and the golden lightning bolt in its talons.
+- FRONT: The golden eagle seen from the front with the wings half spread and the golden lightning bolt floating in front of its chest.
 - BACK: Show the very large golden wings from behind, the white tail feathers and the blue sparks.
 
