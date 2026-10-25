@@ -148,12 +148,15 @@ castraMvRound = function(V, mine){
   if(V && V.bagMsg){ V.log.unshift(V.bagMsg); if(V.fx && V.bagFx) V.fx.unshift(V.bagFx); V.bagMsg = V.bagFx = null; }
   return r;
 };
+function castraBagCapere(){ const V = CASTRA_V; if(!V || V.over || V.busy) return; V.bagOpen = false; castraVCatch(); }
 function castraBagBattleMenuHTML(V){
   const items = castraBagBattleItems(V), S = V.s.me;
   const cards = items.map(id=>{ const g = CASTRA_GOODS[id];
     return `<button class="tile" style="min-height:0;padding:8px 12px;text-align:left" onclick="castraBagBattleUse('${id}')"><h3 style="margin:0 0 2px">${g.icon} ${esc(g.la)} <small>×${castraBagN(id)} · +${Math.round(g.heal*100)}%</small></h3><p style="margin:0;font-size:12px">${esc(g.note)}</p></button>`; }).join("");
-  return `<div style="margin-top:6px"><div style="font-size:16px;margin-bottom:6px"><b>🎒 Saccus</b> <small>(kost je beurt)</small></div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px">${cards || `<div class="note">Niets dat nu helpt.</div>`}</div>
+  const catchOk = castraMvCatchable(V), cl = castraMvChanceLabel(castraMvCatchChance(V,false));
+  const cap = `<button class="tile" style="min-height:0;padding:8px 12px;text-align:left;${catchOk?"":"opacity:.45"}" ${catchOk?"":"disabled"} onclick="castraBagCapere()"><h3 style="margin:0 0 2px">🪢 ${castraLaText("capere")} <small>(${V.catchLeft} over) · ${catchOk?`<span style="color:${cl[1]}">${cl[0]}</span>`:"baas"}</small></h3><p style="margin:0;font-size:12px">Vang de vijand: hoe minder levenspunten, hoe groter de kans. Mislukt het, dan grijpt de vijand zijn kans.</p></button>`;
+  return `<div style="margin-top:6px"><div style="font-size:16px;margin-bottom:6px"><b>🎒 Saccus</b> <small>(voorwerpen kosten je beurt)</small></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px">${cap}${cards}</div>
     <button class="btn" style="margin-top:8px;min-height:44px" onclick="castraBagBattleOpen()">Terug</button></div>`;
 }
 const _castraVBattleHTMLBag0 = castraVBattleHTML;
@@ -171,8 +174,6 @@ castraVBattleHTML = function(){
         return `<button class="btn ${on?"btn-gold":""}" style="margin:3px 6px 3px 0;min-height:40px" title="${esc(g.note)}" onclick="castraBagRecruitPick('${id}')">${g.icon} ${esc(g.la)} ×${castraBagN(id)} <small>+${Math.round(g.bonus*100)}%</small></button>`; }).join("")}</div>`;
       html = html.replace(/(<div style="font-size:15px;margin-bottom:4px">Wat voor soort vijand is dit\?<\/div>)/, `$1${row}`);
     }
-  } else if(!V.over && !V.forced && !V.switching && castraBagBattleItems(V).length){
-    html = html.replace(/(<button class="btn" style="flex:1;min-height:46px" onclick="castraVFlee\(\)">)/, `<button class="btn" style="flex:1;min-height:46px" onclick="castraBagBattleOpen()" title="Gebruik een voorwerp (kost je beurt)">🎒 Saccus</button>$1`);
   }
   return html;
 };

@@ -86,6 +86,5 @@ castraVBattleHTML = function(){
     const menu = castraVSwitchMenuHTML(V);
     return html.replace(/(<div id="castraVMenu"[^>]*>)[^]*?(<\/div><\/div>\s*$)/, (m,a,b)=>a+menu+b);
   }
-  if(reserve && !V.ask) html = html.replace(/(<button class="btn" style="flex:1;min-height:46px" onclick="castraVFlee\(\)">)/, `<button class="btn" style="flex:1;min-height:46px" onclick="castraVSwitchOpen()" title="Wissel van soldaat (kost je beurt)">🔄 Wissel (${reserve})</button>$1`);
   return html;
 };

@@ -312,6 +312,7 @@ function castraVTurn(action){
 }
 // Eén beurt: ik kies `mine` (of niets bij een vangpoging: mine = null), de vijand kiest zelf.
 function castraMvPlay(V, mine){
+  V.fightOpen = false; V.bagOpen = false;
   castraMvRound(V, mine);
   if(typeof castraVSceneHTML==="function"){      // speel de beurt eerst af (castra-vscene.js), toon daarna het resultaat
     castraVRender("battle");
@@ -427,6 +428,21 @@ function castraMvBtn(V, m){
     <div style="display:flex;justify-content:space-between;gap:6px"><b>${esc(m.la)}</b><span style="font-size:12px;opacity:.85">${tag} ${adv}</span></div>
     <div style="font-size:11px;opacity:.75;line-height:1.2">${esc(m.nl.replace(/ \(kracht.*$/,""))}${castraMvEffNl(m) ? ` · <i>${esc(castraMvEffNl(m))}</i>` : ""}${left!==null?` · <b>${left}/${m.pp}</b>`:""}</div></button>`;
 }
+const CASTRA_VMENU_CSS = `
+.cbmenu{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
+.cbprompt{flex:1 1 180px;min-height:96px;background:rgba(25,18,10,.9);border:3px solid #c9a24a;border-radius:10px;padding:10px 12px;color:#f3e6bd;font-size:17px;display:flex;flex-direction:column;justify-content:center}
+.cbcmds{flex:1.5 1 260px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cbcmd{min-height:62px;border-radius:12px;border:3px solid;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:4px 6px;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 2px 4px rgba(0,0,0,.4);text-shadow:0 1px 0 rgba(0,0,0,.35);color:#fff}
+.cbcmd b{font-size:20px;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
+.cbcmd small{font-size:12px;opacity:.95}
+.cbcmd .cbci{font-size:18px;line-height:1}
+.cbcmd:active{transform:translateY(1px)}
+.cbcmd:disabled{opacity:.45;cursor:default}
+.cmd-fight{background:linear-gradient(#f2a0a0,#d95a5a);border-color:#8a2a2a}
+.cmd-bag{background:linear-gradient(#f3bd6c,#d58a28);border-color:#7a4a10}
+.cmd-party{background:linear-gradient(#86d595,#3f9d52);border-color:#1f5a2c}
+.cmd-run{background:linear-gradient(#86b7ec,#3b7fc4);border-color:#1d4a80}`;
+function castraVFightMenu(on){ const V = CASTRA_V; if(!V || V.over || V.busy) return; V.fightOpen = !!on; castraVRender("battle"); }
 function castraVBattleHTML(){
   const V = CASTRA_V; if(!V.s) return "";
   const me = V.s.me, en = V.s.en, line = castraLine(V.enemy.line);
@@ -445,15 +461,24 @@ function castraVBattleHTML(){
       ${V.ask.opts.map((t,k)=>`<button class="btn" style="margin:3px 6px 3px 0;min-height:44px" onclick="castraVCatchTry(${k})">${esc(CASTRA_TYPE_LA[t].nl_sg)}</button>`).join("")}
       <button class="btn" style="margin:3px 0;min-height:44px;opacity:.85" onclick="castraVCatchTry(-1)">Ik weet het niet, probeer toch</button>
       <div class="note" style="margin-top:4px">Kans nu: <b style="color:${castraMvChanceLabel(castraMvCatchChance(V,false))[1]}">${castraMvChanceLabel(castraMvCatchChance(V,false))[0]}</b>, met goed antwoord: <b style="color:${castraMvChanceLabel(castraMvCatchChance(V,true))[1]}">${castraMvChanceLabel(castraMvCatchChance(V,true))[0]}</b></div></div>`;
-  } else {
+  } else if(V.fightOpen){
     const moves = me.moves.map(m=>castraMvBtn(V, m)).join("");
-    const catchOk = castraMvCatchable(V), cl = castraMvChanceLabel(castraMvCatchChance(V,false));
-    const tip = !(CASTRA.seenTD||{}).vcatch && catchOk ? `<div class="note" style="margin-top:6px">💡 Wil je de vijand in je kamp? Verzwak hem eerst en gebruik <b>Capere</b>. Verslaan betekent dat hij vlucht.</div>` : "";
-    menu = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px">${moves}</div>
+    menu = `<div style="margin-top:6px"><div style="font-size:16px;margin-bottom:6px"><b>⚔️ Pugna</b> <small>(kies een aanval)</small></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${moves}</div>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
         <button class="btn" style="flex:1;min-height:46px" onclick="castraVTurn('defende')" title="${esc(CASTRA_MV_DEFEND.nl)}">🛡 ${castraLaText("defende")}</button>
-        <button class="btn" style="flex:1.4;min-height:46px;${catchOk?"":"opacity:.45"}" ${catchOk?"":"disabled"} onclick="castraVCatch()" title="Vang de vijand: hoe minder levenspunten, hoe groter de kans">🪢 ${castraLaText("capere")} (${V.catchLeft}) ${catchOk?`<small style="color:${cl[1]}">${cl[0]}</small>`:"<small>baas</small>"}</button>
-        <button class="btn" style="flex:1;min-height:46px" onclick="castraVFlee()" title="Vluchten: kost een beurt en lukt niet altijd (voor een trainer kan het niet)">🏃 ${castraLaText("fuga")} <small>(vlucht)</small></button></div>${tip}`;
+        <button class="btn" style="flex:1;min-height:46px" onclick="castraVFightMenu(false)">← Terug</button></div></div>`;
+  } else {
+    // het hoofdmenu zoals in Pokémon: links de vraag, rechts vier grote knoppen; drie ervan openen een submenu, Fuga is direct
+    if(!document.getElementById("castraVMenuCss")){ const st = document.createElement("style"); st.id = "castraVMenuCss"; st.textContent = CASTRA_VMENU_CSS; document.head.appendChild(st); }
+    const reserve = typeof castraMvReserve==="function" ? castraMvReserve(V).length : 0, nm = castraMvName(V.mine);
+    const tip = !(CASTRA.seenTD||{}).vcatch && castraMvCatchable(V) ? `<div style="font-size:12px;margin-top:6px;opacity:.9">💡 Wil je de vijand in je kamp? Open <b>Saccus</b> en kies <b>Capere</b>. Verslaan betekent dat hij vlucht.</div>` : "";
+    const big = (cls, ic, la, nl, click, dis, title)=>`<button class="cbcmd ${cls}" ${dis?"disabled":""} onclick="${click}" title="${esc(title)}"><span class="cbci">${ic}</span><b>${la}</b><small>${nl}</small></button>`;
+    menu = `<div class="cbmenu"><div class="cbprompt">${castraLaHTML("Quid faciet "+nm+"?", "Wat gaat "+nm+" doen?", "mv_quid")}${tip}</div>
+      <div class="cbcmds">${big("cmd-fight","⚔️","Pugna","vechten","castraVFightMenu(true)",false,"Kies een aanval")}
+        ${big("cmd-bag","🎒","Saccus","zak","castraBagBattleOpen()",false,"Voorwerpen en vangen (Capere)")}
+        ${big("cmd-party","👥","Milites","soldaten",reserve?"castraVSwitchOpen()":"",!reserve,reserve?"Wissel van soldaat (kost je beurt)":"Je hebt geen reserve")}
+        ${big("cmd-run","🏃","Fuga","(vlucht)","castraVFlee()",false,"Vluchten: kost een beurt en lukt niet altijd (voor een trainer kan het niet)")}</div></div>`;
   }
   if(typeof castraVSceneHTML==="function") return castraVSceneHTML(V, me, en, mySpr, enSpr, log, menu);
   return `<div class="panel">
