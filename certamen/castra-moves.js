@@ -391,11 +391,20 @@ function castraVCatchTry(k){        // k = gekozen antwoord, of -1 = overslaan
   }
   const pre = (ok ? castraLaHTML("Recte! ", "Goed gelezen! ", "mv_recte") : "") + castraLaHTML("Funis ruptus est!", "Het touw breekt!", "mv_ruptus");
   castraMvPlay(V, null);
-  V.log.unshift(pre); if(!V.over) castraVRender("battle");
+  V.log.unshift(pre); V.log.splice(1, 0, castraLaHTML("Hostis occasionem habet!", "De vijand grijpt zijn kans.", "mv_occasio")); if(!V.over) castraVRender("battle");
+}
+// Vluchten kost een beurt: de kans hangt af van je snelheid ten opzichte van de vijand en groeit met elke poging; mislukt het, dan valt de vijand gratis aan.
+function castraMvFleeChance(V){
+  const a = castraMvSpeed(V.s.me), b = Math.max(1, castraMvSpeed(V.s.en)), tries = V.fleeTries||0;
+  return Math.max(0.25, Math.min(1, (a*128/b + 30*tries)/255));
 }
 function castraVFlee(){
-  const V = CASTRA_V; if(!V || V.over) return;
-  V.over = "flee"; castraVFinish(); castraVRender("result");
+  const V = CASTRA_V; if(!V || V.over || V.busy) return;
+  if(typeof castraTrainerOf==="function" && castraTrainerOf(V)){ V.log = [castraLaHTML("Non potes fugere!", "Voor een trainer kun je niet vluchten.", "mv_nofuga")]; castraVRender("battle"); return; }
+  const p = castraMvFleeChance(V); V.fleeTries = (V.fleeTries||0)+1;
+  if(V.rng() < p){ V.over = "flee"; castraVFinish(); castraVRender("result"); return; }
+  castraMvPlay(V, null);
+  V.log.unshift(castraLaHTML("Fuga non successit!", "Je komt niet weg!", "mv_fuga_mal")); if(!V.over) castraVRender("battle");
 }
 
 /* ---------- weergave ---------- */
@@ -441,10 +450,10 @@ function castraVBattleHTML(){
     const catchOk = castraMvCatchable(V), cl = castraMvChanceLabel(castraMvCatchChance(V,false));
     const tip = !(CASTRA.seenTD||{}).vcatch && catchOk ? `<div class="note" style="margin-top:6px">💡 Wil je de vijand in je kamp? Verzwak hem eerst en gebruik <b>Capere</b>. Verslaan betekent dat hij vlucht.</div>` : "";
     menu = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px">${moves}</div>
-      <div style="display:flex;gap:8px;margin-top:8px">
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
         <button class="btn" style="flex:1;min-height:46px" onclick="castraVTurn('defende')" title="${esc(CASTRA_MV_DEFEND.nl)}">🛡 ${castraLaText("defende")}</button>
         <button class="btn" style="flex:1.4;min-height:46px;${catchOk?"":"opacity:.45"}" ${catchOk?"":"disabled"} onclick="castraVCatch()" title="Vang de vijand: hoe minder levenspunten, hoe groter de kans">🪢 ${castraLaText("capere")} (${V.catchLeft}) ${catchOk?`<small style="color:${cl[1]}">${cl[0]}</small>`:"<small>baas</small>"}</button>
-        <button class="btn" style="flex:1;min-height:46px" onclick="castraVFlee()">🏃 ${castraLaText("fuga")}</button></div>${tip}`;
+        <button class="btn" style="flex:1;min-height:46px" onclick="castraVFlee()" title="Vluchten: kost een beurt en lukt niet altijd (voor een trainer kan het niet)">🏃 Vlucht <small>${castraLaText("fuga")}</small></button></div>${tip}`;
   }
   if(typeof castraVSceneHTML==="function") return castraVSceneHTML(V, me, en, mySpr, enSpr, log, menu);
   return `<div class="panel">
