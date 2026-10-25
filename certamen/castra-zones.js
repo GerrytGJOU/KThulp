@@ -13,7 +13,7 @@ const CASTRA_ZONE_INFO = {
   silva:["🌲","Silva","het bos"], via:["🛤️","Via","de weg"], campus:["🌾","Campus","het veld"], tiberis:["🌊","Tiberis","de Tiber"],
   olea:["🫒","Olea","de olijfgaard"], litus:["🏖️","Litus","de kust"], muros:["🏰","Muri","bij de muren"], scamander:["🌊","Scamander","de rivier"],
   nilus:["🌴","Nilus","de Nijl"], arena:["🏟️","Arena","de arena"], urbs:["🏛️","Urbs","de stad"], vicus:["🏘️","Vicus","het dorp"],
-  cuniculus:["🕳️","Cuniculus","de tunnel"], catacumbae:["💀","Catacumbae","de catacomben"], mons:["⛰️","Mons","de bergen"], castra:["⛺","Castra","bij het kamp"],
+  cuniculus:["🕳️","Cuniculus","de tunnel"], catacumbae:["💀","Catacumbae","de catacomben"], sepulcretum:["⚰️","Sepulcretum","het kerkhof"], mons:["⛰️","Mons","de bergen"], castra:["⛺","Castra","bij het kamp"],
 };
 function castraZoneInfo(t){ return CASTRA_ZONE_INFO[t] || ["📍", String(t||"").charAt(0).toUpperCase()+String(t||"").slice(1), ""]; }
 function castraZoneAt(W, x, y){ return (W.zones||[]).find(z=>x>=z.x && x<z.x+z.w && y>=z.y && y<z.y+z.h) || null; }

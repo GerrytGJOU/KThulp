@@ -70,5 +70,11 @@ console.log("4. vissen");
   Object.keys(want).forEach(r=>ok((run(`(castraWaterTerrain(${J(r)})||{}).id||null`))===want[r], r+": watertreinen "+want[r]));
   ok(R(`castraEncTableView("latium","tiberis")`).length===12, "het watertreinen heeft een eigen tabel"); }
 
+console.log("5. schimmen alleen op het kerkhof en in de catacomben van Roma");
+{ const bad = R(`(function(){ const out = []; Object.keys(CASTRA_VENATIO).forEach(r=>CASTRA_VENATIO[r].terrains.forEach(t=>{ if(t.myth && t.myth.taks.includes("Schimmen") && !(r==="roma" && (t.id==="sepulcretum"||t.id==="catacumbae"))) out.push(r+"/"+t.id); })); return out; })()`);
+  ok(bad.length===0, "Schimmen (Umbra, Lemur, Larva) leven alleen in roma/sepulcretum en roma/catacumbae"+(bad.length?" (ook in: "+bad.join(", ")+")":""));
+  ok(R(`["sepulcretum","catacumbae"].every(id=>castraEncTableView("roma", id).some(s=>s.myth && CASTRA_FORMS[s.form].tak==="Schimmen"))`), "beide Roma-terreinen hebben schimmen in hun tabel");
+  ok(R(`CASTRA_WORLDS.roma.zones.some(z=>z.t==="sepulcretum")`), "het kerkhof is een zone op de kaart van Roma"); }
+
 console.log("\n" + checks + " controles, " + fails + " fouten");
 process.exit(fails ? 1 : 0);

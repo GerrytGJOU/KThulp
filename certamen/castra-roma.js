@@ -23,6 +23,10 @@ Object.assign(CASTRA_GLOSS, {
 
 /* ---------- terrein, voorwerpen ---------- */
 CASTRA_VENATIO.roma.terrains.push({ id:"catacumbae", hidden:true, la:"In catacumbis", nl:"In de catacomben", folk:{ rom:50, gla:10, gal:3, ger:3, gra:3, aeg:3 }, prefs:{ inf:2, sup:3, rng:1 }, myth:{ p:0.40, taks:["Schimmen"] } });
+/* Het kerkhof (sepulcretum) ten zuiden van de catacombentrap: de enige plek buiten de catacomben waar Schimmen (Umbra, Lemur, Larva) leven. */
+CASTRA_VENATIO.roma.terrains.push({ id:"sepulcretum", la:"In sepulcreto", nl:"Op het kerkhof", folk:{ rom:90, gla:6, gra:2, aeg:2 }, prefs:{ inf:2, sup:3, rng:1 }, myth:{ p:0.35, taks:["Schimmen"] } });
+CASTRA_WORLDS.roma.zones.push({ t:"sepulcretum", x:40, y:41, w:16, h:8 });
+Object.assign(CASTRA_GLOSS, { "sepulcreto":"op het kerkhof", "sepulcretum":"kerkhof" });
 CASTRA_ITEMS.lucerna = { nm:"Lucerna", icon:"🪔", nl:"olielamp" };
 
 /* ---------- toegangen in Roma (tenten, trap) ---------- */
@@ -35,10 +39,22 @@ CASTRA_WORLDS.roma.doors = [
   { x:53, y:13, to:"thermae_roma",     label:"♨️ Thermae",            spawn:{ x:9,  y:12, dir:"up" } },
   { x:50, y:40, to:"catacumbae_i",     label:"💀 Catacumbae",         icon:"🪦", spawn:{ x:14, y:18, dir:"up" } },
 ];
+/* de graven: een rooster met gangen ertussen (alleen de steen is solide), een paar zuilen, een engel en botten; vaste volgorde door een eigen seed */
+const CASTRA_ROMA_GRAVES = (function(){
+  const rng = castraMapRng(20261024), out = [], z = { x0:40, y0:41, x1:55, y1:48 };
+  const busy = new Set(); CASTRA_WENT.filter(e=>e.region==="roma").forEach(e=>{ for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++) busy.add((e.x+dx)+","+(e.y+dy)); });
+  for(let y=z.y0+1; y<=z.y1-1; y+=3) for(let x=z.x0+1; x<=z.x1-1; x+=2){
+    if(busy.has(x+","+y) || busy.has(x+","+(y-1)) || rng()<0.22) continue;
+    const r = rng(); out.push({ o: r<0.5 ? "grave_a" : r<0.82 ? "grave_b" : r<0.9 ? "pillar_rd" : r<0.95 ? "pillar_fl" : "angel_a", x, y:y-1 });
+  }
+  [[42,46,"bones_a"],[47,44,"bones_b"],[53,47,"bones_a"],[45,48,"rubble_a"],[52,43,"rubble_b"]].forEach(([x,y,o])=>{ if(!busy.has(x+","+y)) out.push({ o, x, y }); });
+  return out;
+})();
 const _castraWobjPiecesRoma0 = castraWobjPieces;
 castraWobjPieces = function(rid){
   const out = _castraWobjPiecesRoma0(rid);
   if(rid==="roma"){ CASTRA_ROMA_TENTS.concat(CASTRA_ROMA_ROCKS).forEach(([o,x,y])=>out.push({ o, x, y })); }
+  if(rid==="roma") CASTRA_ROMA_GRAVES.forEach(p=>out.push(p));
   return out;
 };
 const _castraWobjSpotsRoma0 = castraWobjSpots;
@@ -47,6 +63,7 @@ castraWobjSpots = function(rid){
   if(rid==="roma"){
     CASTRA_ROMA_TENTS.forEach(([,tx,ty])=>{ for(let y=ty;y<=ty+4;y++) for(let x=tx-1;x<=tx+3;x++) out.push([x,y]); });
     for(let y=38;y<=42;y++) for(let x=48;x<=52;x++) out.push([x,y]);
+    for(let y=41;y<=48;y++) for(let x=40;x<=55;x++) out.push([x,y]);          // het kerkhof houdt zijn eigen inrichting
   }
   return out;
 };

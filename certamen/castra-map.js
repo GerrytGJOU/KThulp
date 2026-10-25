@@ -19,6 +19,7 @@ const CASTRA_TS_FILES = {
   B:  "assets/tilesets/Outside_B.png",
   A1: "assets/tilesets/Outside_A1.png",
   A4: "assets/tilesets/Outside_A4.png",       // muren en kliffen (Gerben, 2026-10-24): klifwanden en plateaus van de bergen (castra-berg.js)
+  C:  "assets/tilesets/Outside_C.png",        // zuilen, grafstenen, beelden (Gerben, 2026-10-24): het kerkhof van Roma
   X:  "assets/tilesets/Castra_extra.png",     // eigen tekeningen (tools/gen_castra_flags.py): vlaggen voor het Praetorium
 };
 const CASTRA_TS_IMG = {};
@@ -95,6 +96,13 @@ const CASTRA_OBJ = {
   dry_plant:  { s:"B", c:15, r:5,  w:1, h:1, solid:"none" },
   dry_fern:   { s:"B", c:15, r:6,  w:1, h:1, solid:"none" },
   leaves:     { s:"B", c:12, r:7,  w:1, h:1, solid:"none" },
+  // kerkhof (Outside_C): grafstenen, zuilen, botten en beelden; een zuil of steen is alleen onderaan solide
+  grave_a:    { s:"C", c:0, r:6,  w:1, h:2, solid:"bottom" },  grave_b:    { s:"C", c:1, r:6,  w:1, h:2, solid:"bottom" },
+  pillar_sq:  { s:"C", c:0, r:0,  w:1, h:2, solid:"bottom" },  pillar_rd:  { s:"C", c:1, r:0,  w:1, h:2, solid:"bottom" },
+  pillar_fl:  { s:"C", c:2, r:0,  w:1, h:2, solid:"bottom" },  rubble_a:   { s:"C", c:0, r:2,  w:1, h:1, solid:"all" },
+  rubble_b:   { s:"C", c:1, r:2,  w:1, h:1, solid:"all" },     bones_a:    { s:"C", c:0, r:3,  w:1, h:1, solid:"none" },
+  bones_b:    { s:"C", c:1, r:3,  w:1, h:1, solid:"none" },    angel_a:    { s:"C", c:0, r:10, w:1, h:2, solid:"bottom" },
+  angel_b:    { s:"C", c:1, r:10, w:1, h:2, solid:"bottom" },   angel_c:    { s:"C", c:2, r:10, w:1, h:2, solid:"bottom" },
   // vlaggen (Castra_extra.png): staan in de hoeken van het Praetorium, naast de ingang; l/r = kant waarheen het doek wappert
   flag_red_l: { s:"X", c:0, r:0, w:1, h:2, solid:"none" },  flag_red_r:  { s:"X", c:1, r:0, w:1, h:2, solid:"none" },
   flag_gold_l:{ s:"X", c:2, r:0, w:1, h:2, solid:"none" },  flag_gold_r: { s:"X", c:3, r:0, w:1, h:2, solid:"none" },
