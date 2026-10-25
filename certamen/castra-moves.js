@@ -453,7 +453,7 @@ function castraVBattleHTML(){
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
         <button class="btn" style="flex:1;min-height:46px" onclick="castraVTurn('defende')" title="${esc(CASTRA_MV_DEFEND.nl)}">🛡 ${castraLaText("defende")}</button>
         <button class="btn" style="flex:1.4;min-height:46px;${catchOk?"":"opacity:.45"}" ${catchOk?"":"disabled"} onclick="castraVCatch()" title="Vang de vijand: hoe minder levenspunten, hoe groter de kans">🪢 ${castraLaText("capere")} (${V.catchLeft}) ${catchOk?`<small style="color:${cl[1]}">${cl[0]}</small>`:"<small>baas</small>"}</button>
-        <button class="btn" style="flex:1;min-height:46px" onclick="castraVFlee()" title="Vluchten: kost een beurt en lukt niet altijd (voor een trainer kan het niet)">🏃 Vlucht <small>${castraLaText("fuga")}</small></button></div>${tip}`;
+        <button class="btn" style="flex:1;min-height:46px" onclick="castraVFlee()" title="Vluchten: kost een beurt en lukt niet altijd (voor een trainer kan het niet)">🏃 ${castraLaText("fuga")} <small>(vlucht)</small></button></div>${tip}`;
   }
   if(typeof castraVSceneHTML==="function") return castraVSceneHTML(V, me, en, mySpr, enSpr, log, menu);
   return `<div class="panel">
