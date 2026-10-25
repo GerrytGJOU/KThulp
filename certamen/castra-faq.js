@@ -102,6 +102,27 @@ const CASTRA_FAQ = [
     <li>liggen er <b>twee extra verborgen vondsten</b> in elk land (er is veel volk op de been).</li></ul>
     <p>Het menu van de saccus vertelt hoeveel dagen het nog duurt tot de volgende marktdag.</p>
     <p><b>Een wereld die verandert:</b> grote gebeurtenissen laten sporen na. Heb je Ardea verdedigd, het labyrint van Kreta schoongemaakt, Alesia of Thermopylae meegemaakt, dan praten de mensen op die plek anders: eerst bezorgd, daarna opgelucht. Spreek ze aan en lees wat ze zeggen. Kom je daarna een land weer binnen, dan meldt het spel de verandering.</p>` },
+  { id:"tabulae", t:"Tabulae: kaarten met bonussen", b:`
+    <p>Vanaf <b>Castra-niveau 5</b> krijg je de <b>Tabulae</b>: kaarten die <b>blijvende bonussen</b> geven aan je hele account. Je opent ze met het menu ☰ → <b>Tabulae</b>. Aeneas kondigt ze aan als je niveau 5 haalt en schenkt je een eerste trekking.</p>
+    <h4 style="margin:12px 0 4px">Kaarten trekken</h4>
+    <ul><li>De <b>eerste trekking van elke dag is gratis</b> (🎁).</li>
+    <li>Daarna gebruik je eerst je <b>kaartentrekkingen</b> (🎟️), die je verdient met opdrachten, missies en nieuwe helden, en anders betaal je <b>5 roem</b> (🏆) per trekking. Roem win je met missies.</li>
+    <li>Elke trekking geeft één kaart: eerst bepaalt het toeval hoe zeldzaam ze is (<b>gewoon 60%</b>, <b>bijzonder 28%</b>, <b>zeldzaam 12%</b>), daarna welke kaart binnen die zeldzaamheid (elke kaart is even waarschijnlijk).</li>
+    <li><b>Medelijden:</b> als je 9 trekkingen achter elkaar geen zeldzame kaart had, is de 10e zeker zeldzaam.</li></ul>
+    <h4 style="margin:12px 0 4px">Sterren</h4>
+    <p>Trek je een kaart die je al hebt, dan wordt ze sterker. Het aantal exemplaren bepaalt de sterren:</p>
+    <p style="text-align:center"><b>1</b> exemplaar = ★ · <b>2</b> = ★★ · <b>4</b> = ★★★ · <b>7</b> = ★★★★ · <b>12</b> = ★★★★★</p>
+    <p>De bonus is het aantal sterren maal de waarde per ster, en de bonussen van al je kaarten tellen op. Zeldzamere kaarten zijn sterker en specialistischer, maar je trekt ze minder vaak.</p>
+    <h4 style="margin:12px 0 4px">De kaarten</h4>
+    ${typeof CASTRA_CARDS!=="undefined" ? (()=>{ const n = r=>CASTRA_CARDS.filter(c=>c.rar===r).length;
+      return `<table style="width:100%;border-collapse:collapse;font-size:14px"><tr style="text-align:left"><th>Kaart</th><th>Soort</th><th>Kans per trekking</th><th>Bonus per ster</th><th>Op ★5</th></tr>` + CASTRA_CARDS.map(c=>{
+        const R = CASTRA_CARD_RARITY[c.rar], p = Math.round(R.w/n(c.rar)*10)/10, clean = t=>t.replace(/(\d)\.(\d)/g,"$1,$2").replace(/ \(geldt[^)]*\)/,"").replace(/ \(1 per 2 sterren\)/,""), per = c.eff==="lives" ? "+½ leven (1 per 2 sterren)" : clean(c.txt(c.per)), max = c.eff==="lives" ? "+"+Math.floor(c.per*5)+" levens voor het kamp" : clean(c.txt(c.per*5));
+        return `<tr style="border-top:1px solid #c2a96f"><td><b>${esc(c.la)}</b></td><td style="color:${R.col}">${R.nm}</td><td>${String(p).replace(".",",")}%</td><td>${esc(per)}</td><td>${esc(max)}</td></tr>`; }).join("") + `</table>`; })() : ""}
+    <p class="note" style="margin-top:6px">Een gewone kaart naar ★5 vraagt gemiddeld rond de honderd trekkingen, een zeldzame ruim vierhonderd. Daar hoef je niet naar te streven: ook ★1 en ★2 helpen al.</p>
+    <h4 style="margin:12px 0 4px">Waar werken ze?</h4>
+    <ul><li>De <b>gevechtskaarten</b> (Vires, Celeritas, Acies, Gelu, Murus, Praeda en de vijf typekaarten) werken in de gewone tower defence. Je ziet ze samengevat onder de kaart, en in de Legio tellen ze niet mee, zodat iedereen daar dezelfde regels heeft.</li>
+    <li><b>Horrea</b> verhoogt de productie van je producenten, <b>Disciplina</b> de ervaring van je soldaten en helden, en <b>Fabri</b> laat gebouwen in het kamp sneller bouwen (voor bouwwerken die je daarna start).</li>
+    <li>Kaarten die je nog niet hebt, staan met een ❔ in het menu, met de waarde per ster, zodat je weet waar je naar zoekt.</li></ul>`},
   { id:"berg", t:"Bergen, ledges, rotsen en geluid", b:`
     <p>In sommige landen loop je niet over een vlakte maar langs <b>terrassen in de berg</b> (nu: de bergen van Graecia, linksboven). Een <b>klifwand</b> houdt je tegen, maar er zijn <b>hellingen</b> (zandpaden) om omhoog te lopen, en <b>ledges</b>:</p>
     <ul><li>⛰️ <b>Ledge</b> (een rand met kleine pijltjes): loop er in de richting van het pijltje tegenaan en je <b>springt</b> over de rand en landt twee tegels verder. Zo ga je snel naar beneden. Terug omhoog kan niet: dan neem je de helling.</li>
