@@ -25,6 +25,8 @@ const CASTRA_VSCENE_CSS = `
 .cbt .cbbox .cbhp{height:11px;margin-top:4px;background:#3b2d1a;border:2px solid #4a3416;border-radius:7px;overflow:hidden}
 .cbt .cbbox .cbhp i{display:block;height:100%;border-radius:5px;transition:width 1s ease-out}
 .cbt .cbnum{font-size:12px;text-align:right;margin-top:1px}
+.cbt .cbxp{height:6px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.25);border-radius:4px;margin-top:3px;overflow:hidden}
+.cbt .cbxp i{display:block;height:100%;background:linear-gradient(#6cc4ff,#2f86d6);transition:width .6s ease-out}
 .cbt .cbdmg{position:absolute;z-index:8;font-size:26px;font-weight:bold;color:#fff;text-shadow:0 2px 0 #000,0 0 6px #000;pointer-events:none;opacity:0;transform:translate(-50%,0)}
 .cbt .cbaura{position:absolute;z-index:4;width:130px;height:130px;margin:-65px 0 0 -65px;border-radius:50%;pointer-events:none;opacity:0}
 .cbt .cbmsg{position:absolute;left:0;right:0;bottom:0;padding:8px 12px;z-index:5}
@@ -57,6 +59,13 @@ function castraVSceneBg(V){
 }
 function castraVSceneDuration(V){ const n = (V.fx||[]).length; return n ? 300 + n*1000 + 600 : 400; }
 
+// De ervaringsbalk (blauw) onder de levensbalk van je eigen eenheid: hoever je is naar het volgende level (bij het maximum vol).
+function castraVSceneXpBar(e){
+  if(!e || e.dux) return "";
+  const lvl = (e.hero ? e.h.lvl : e.lvl) || 1, xp = (e.hero ? e.h.xp : e.xp) || 0, cap = e.hero ? castraHeroCap(e.h) : castraSoldierCap();
+  const need = castraXpToNext(lvl), p = lvl>=cap ? 100 : Math.max(0, Math.min(100, Math.round(100*xp/Math.max(1,need))));
+  return `<div class="cbxp" title="Ervaring: ${lvl>=cap ? "maximaal" : xp+" / "+need}"><i style="width:${p}%"></i></div>`;
+}
 function castraVSceneHTML(V, me, en, mySpr, enSpr, log, menu){
   if(!document.getElementById("castraVSceneCss")){ const st = document.createElement("style"); st.id = "castraVSceneCss"; st.textContent = CASTRA_VSCENE_CSS; document.head.appendChild(st); }
   const play = V.fxRound !== V.round && V.fx && V.fx.length > 0, intro = !V.sceneIntro, swIn = !!V.switchIn; V.fxRound = V.round; V.sceneIntro = true; V.switchIn = false;
@@ -81,7 +90,7 @@ function castraVSceneHTML(V, me, en, mySpr, enSpr, log, menu){
     const prev = play && V.prev ? V.prev[who] : S.hp, p0 = pct(prev,S.max), p1 = pct(S.hp,S.max), h = hits[who], d = h ? h.t : 0;
     return `<div class="cbbox" style="${style};${intro?"animation:cbFade .5s ease-out both":""}"><div style="display:flex;justify-content:space-between;gap:6px;align-items:baseline"><span><b>${S.unit.insignis?"✨ ":""}${esc(S.name)}</b>${castraMvStatus(S)}</span>
       <small>${castraLaText("gradus")} ${e.lvl||1} ${CASTRA_MV_ICON[S.type]||""}</small></div>
-      <div class="cbhp"><i data-to="${p1}" data-c="${col(p1)}" style="width:${p0}%;background:${col(p0)};transition-delay:${d}s"></i></div><div class="cbnum">${Math.max(0,S.hp)} / ${S.max}</div></div>`;
+      <div class="cbhp"><i data-to="${p1}" data-c="${col(p1)}" style="width:${p0}%;background:${col(p0)};transition-delay:${d}s"></i></div><div class="cbnum">${Math.max(0,S.hp)} / ${S.max}</div>${who==="me" ? castraVSceneXpBar(e) : ""}</div>`;
   };
   const sprite = (who, html, left, top, kInner, inAnim)=>{
     const a = acts[who], h = hits[who], k = `var(--k${who==="me"?"p":"e"})`;
