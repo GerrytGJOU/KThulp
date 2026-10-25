@@ -483,7 +483,7 @@ function castraHeroumOpen(){
   }).join("") || `<div class="note">${castraLa("heroes_nulli")}</div>`;
   const hints = Object.keys(CASTRA.traces||{}).filter(id=>CASTRA_HERO_DATA[id] && !castraHero(id)).map(id=>`<div class="note">👣 ${castraLa("vestigia")} <b>${esc(CASTRA_HERO_DATA[id].nm)}</b>. ${castraLa("vestigia_quaere")}${CASTRA_HERO_DATA[id].cave ? " <small>(in de grot)</small>" : ""}</div>`).join("");
   const up = lvl>=maxL ? `<div class="note">${castraLa(lvl>=b.maxLvl?"gradus_max":"praetorium_prius")}</div>`
-    : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('heroum')">${castraLaText("meliora")} → ${castraLaText("gradus")} ${lvl+1} — ${costTxt}</button>`;
+    : castraUpgradeUI('heroum', cost, costTxt, lvl);
   castraOpenPanel(`<div class="panel"><h3>${b.icon} ${esc(b.nm)} <small>${castraLaText("gradus")} ${lvl}</small></h3>
     <div style="font-style:italic;margin-bottom:6px">${castraLaHTML(b.lat||"", b.desc||"", "bld_heroum")}</div>
     <div class="note">${castraLaText("colloquia_hodie")}: ${q.used} / ${q.max}</div>${cards}${hints}

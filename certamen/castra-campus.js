@@ -93,7 +93,7 @@ function castraCampusOpen(){
       <div style="margin-top:4px">${act}</div>${ev?`<div style="margin-top:4px">${ev}</div>`:""}</div>`;
   }).join("") || `<div class="note">${castraLa("nullus_exercitus")}</div>`;
   const up = lvl>=maxL ? `<div class="note">${castraLa(lvl>=castraBuilding("campus").maxLvl?"gradus_max":"praetorium_prius")}</div>`
-    : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('campus')">${castraLaText("meliora")} → ${castraLaText("gradus")} ${lvl+1} — ${costTxt}</button>`;
+    : castraUpgradeUI('campus', cost, costTxt, lvl);
   castraOpenPanel(`<div class="panel"><h3>🏟️ ${castraLa("campus_titel")} <small>${castraLaText("gradus")} ${lvl}</small></h3>
     <div class="note">${castraLaText("loca")}: ${training} / ${lvl} · ${castraLaText("hodie")}: ${today.n} / ${T.perDay} · +${castraTrainXp()} XP</div>
     ${rows}<div style="margin-top:8px">${up}</div>

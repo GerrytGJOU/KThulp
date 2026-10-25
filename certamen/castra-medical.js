@@ -62,7 +62,7 @@ function castraValetudinariumOpen(){
       <button class="btn btn-gold" style="float:right" ${castraCanPay(CASTRA_MED.cureCost)?"":"disabled"} onclick="castraDoCure('${s.id}')">${castraLaText("cura")} ${castraRes("aes").icon} ${CASTRA_MED.cureCost.aes}</button></div>`).join("")
     || `<div class="note">${castraLa("nulli_vulnerati")}</div>`;
   const up = lvl>=maxL ? `<div class="note">${castraLa(lvl>=b.maxLvl?"gradus_max":"praetorium_prius")}</div>`
-    : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('valetudinarium')">${castraLaText("meliora")} → ${castraLaText("gradus")} ${lvl+1} — ${costTxt}</button>`;
+    : castraUpgradeUI('valetudinarium', cost, costTxt, lvl);
   castraOpenPanel(`<div class="panel"><h3>${b.icon} ${esc(b.nm)} <small>${castraLaText("gradus")} ${lvl}</small></h3>
     <div style="font-style:italic;margin-bottom:6px">${castraLaHTML(b.lat||"", b.desc||"", "bld_valetudinarium")}</div>
     <div class="note">${castraLaText("celerius")}: −${pct}%</div>${rows}
@@ -149,7 +149,7 @@ function castraDilectusOpen(){
       <button class="btn btn-gold" onclick="castraDoHire('${s.id}')">${castraLaText("conscribe_hunc")} (${Object.keys(castraHireCost(s)).map(r=>castraRes(r).icon+" "+castraHireCost(s)[r]).join(" ")})</button></div>`;
   }).join("") || `<div class="note">${castraLa("nulli_candidati")}</div>`;
   const up = lvl>=maxL ? `<div class="note">${castraLa(lvl>=b.maxLvl?"gradus_max":"praetorium_prius")}</div>`
-    : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('dilectus')">${castraLaText("meliora")} → ${castraLaText("gradus")} ${lvl+1} — ${costTxt}</button>`;
+    : castraUpgradeUI('dilectus', cost, costTxt, lvl);
   castraOpenPanel(`<div class="panel"><h3>${b.icon} ${esc(b.nm)} <small>${castraLaText("gradus")} ${lvl}</small></h3>
     <div style="font-style:italic;margin-bottom:6px">${castraLaHTML(b.lat||"", b.desc||"", "bld_dilectus")}</div>
     <div class="note">${castraLaText("milites")}: ${CASTRA.soldiers.length} / ${castraBarracksCap()} · ↻ ${Math.floor(left/60)}h ${left%60}m</div>${cards}

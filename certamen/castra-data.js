@@ -37,43 +37,43 @@ const CASTRA_STATS = [
    maxLvl: bovengrens; alle gebouwen behalve het praetorium zijn bovendien
            begrensd door het praetorium-level. */
 const CASTRA_BUILDINGS = [
-  { id:"praetorium",  nm:"Praetorium",  nl:"Hoofdgebouw", icon:"🏛️", phase:1, slot:{x:3,y:1},  maxLvl:5,
+  { id:"praetorium",  nm:"Praetorium",  nl:"Hoofdgebouw", icon:"🏛️", phase:1, slot:{x:3,y:1},  maxLvl:10,
     prod:{ res:"frumentum", perHour:8 }, cost:{ lignum:60, aes:60 },
     lat:"Hic est praetorium. Ibi dux habitat.", desc:"Bepaalt het maximale level van alle andere gebouwen." },
-  { id:"contubernia", nm:"Contubernia", nl:"Barakken",    icon:"⛺", phase:1, slot:{x:10,y:2}, maxLvl:5,
+  { id:"contubernia", nm:"Contubernia", nl:"Barakken",    icon:"⛺", phase:1, slot:{x:10,y:2}, maxLvl:10,
     cost:{ lignum:50, aes:30 },
     lat:"Hic milites dormiunt.", desc:"Hier staan je soldaten. Meer level = meer soldaten tegelijk." },
-  { id:"lignatio",    nm:"Lignatio",    nl:"Houthakker",  icon:"🪓", phase:1, slot:{x:13,y:1}, maxLvl:5,
+  { id:"lignatio",    nm:"Lignatio",    nl:"Houthakker",  icon:"🪓", phase:1, slot:{x:13,y:1}, maxLvl:10,
     prod:{ res:"lignum", perHour:20 }, cost:{ lignum:40, aes:40 },
     lat:"Hic ligna caeduntur.", desc:"Levert lignum (hout)." },
-  { id:"campus",      nm:"Campus",      nl:"Trainen en evolueren", icon:"🏟️", phase:1, slot:{x:2,y:6}, maxLvl:5,
+  { id:"campus",      nm:"Campus",      nl:"Trainen en evolueren", icon:"🏟️", phase:1, slot:{x:2,y:6}, maxLvl:10,
     cost:{ lignum:70, aes:50 },
     lat:"Hic milites exercentur.", desc:"Soldaten trainen en laten evolueren. (Volgt in een latere stap.)" },
-  { id:"metallum",    nm:"Metallum",    nl:"Mijn",        icon:"⛏️", phase:1, slot:{x:12,y:8}, maxLvl:5,
+  { id:"metallum",    nm:"Metallum",    nl:"Mijn",        icon:"⛏️", phase:1, slot:{x:12,y:8}, maxLvl:10,
     prod:{ res:"aes", perHour:20 }, cost:{ lignum:50, aes:40 },
     lat:"Hic aes effoditur.", desc:"Levert aes (brons)." },
-  { id:"horreum",     nm:"Horreum",     nl:"Opslag",      icon:"🏺", phase:1, slot:{x:4,y:8},  maxLvl:5,
+  { id:"horreum",     nm:"Horreum",     nl:"Opslag",      icon:"🏺", phase:1, slot:{x:4,y:8},  maxLvl:10,
     cost:{ lignum:60, aes:30 },
     lat:"Hic frumentum servatur.", desc:"Verhoogt het opslagmaximum van je grondstoffen." },
   { id:"principia",   nm:"Principia",   nl:"Klassenevenementen", icon:"🚩", phase:1, slot:{x:7,y:5}, maxLvl:1, fixed:true,
     lat:"Hic legio convenit.", desc:"Midden in het kamp: hier start straks de Legio (klassenevenement)." },
   // Nog niet geplaatst (zie CASTRA_HEROUM.md, tabel Gebouwen):
-  { id:"ludus",        nm:"Ludus",        nl:"Nieuwe aanvallen leren", phase:9, slot:null, maxLvl:5, cost:{ lignum:80, aes:60 } },
-  { id:"fabrica",      nm:"Fabrica",      nl:"Smederij",       phase:9, slot:null, maxLvl:5, cost:{ lignum:80, aes:80 } },
-  { id:"heroum",       nm:"Heroum",       nl:"Heldenzaal",     icon:"⭐", phase:1, slot:{x:9,y:7}, maxLvl:5, cost:{ lignum:100, aes:100 },
+  { id:"ludus",        nm:"Ludus",        nl:"Nieuwe aanvallen leren", phase:9, slot:null, maxLvl:10, cost:{ lignum:80, aes:60 } },
+  { id:"fabrica",      nm:"Fabrica",      nl:"Smederij",       phase:9, slot:null, maxLvl:10, cost:{ lignum:80, aes:80 } },
+  { id:"heroum",       nm:"Heroum",       nl:"Heldenzaal",     icon:"⭐", phase:1, slot:{x:9,y:7}, maxLvl:10, cost:{ lignum:100, aes:100 },
     lat:"Hic heroes habitant.", desc:"Hier wonen je helden: praat met ze, wijs ze toe aan een gebouw en neem ze mee het gevecht in." },
-  { id:"valetudinarium",nm:"Valetudinarium",nl:"Herstel",      icon:"🩹", phase:1, slot:{x:2,y:8}, maxLvl:5, cost:{ lignum:60, aes:40 },
+  { id:"valetudinarium",nm:"Valetudinarium",nl:"Herstel",      icon:"🩹", phase:1, slot:{x:2,y:8}, maxLvl:10, cost:{ lignum:60, aes:40 },
     lat:"Hic vulnerati curantur.", desc:"Gewonde soldaten herstellen hier sneller; tegen betaling genezen ze meteen." },
-  { id:"dilectus",     nm:"Dilectus",     nl:"Werving",        icon:"📜", phase:1, slot:{x:13,y:3}, maxLvl:5, cost:{ lignum:60, aes:60 },
+  { id:"dilectus",     nm:"Dilectus",     nl:"Werving",        icon:"📜", phase:1, slot:{x:13,y:3}, maxLvl:10, cost:{ lignum:60, aes:60 },
     lat:"Hic milites novi conscribuntur.", desc:"Elke paar uur nieuwe rekruten; de trainer beoordeelt hun aanleg in het Latijn." },
-  { id:"templum",      nm:"Templum",      nl:"Zegen van een god", phase:9, slot:null, maxLvl:5, cost:{ lignum:90, aes:90 } },
-  { id:"forum",        nm:"Forum",        nl:"Ruilen",         phase:9, slot:null, maxLvl:5, cost:{ lignum:70, aes:70 } },
-  { id:"navalia",      nm:"Navalia",      nl:"Scheepswerf",    icon:"⚓", phase:1, slot:{x:12,y:11}, start:0, maxLvl:5, cost:{ lignum:120, aes:80 },
+  { id:"templum",      nm:"Templum",      nl:"Zegen van een god", phase:9, slot:null, maxLvl:10, cost:{ lignum:90, aes:90 } },
+  { id:"forum",        nm:"Forum",        nl:"Ruilen",         phase:9, slot:null, maxLvl:10, cost:{ lignum:70, aes:70 } },
+  { id:"navalia",      nm:"Navalia",      nl:"Scheepswerf",    icon:"⚓", phase:1, slot:{x:12,y:11}, start:0, maxLvl:10, cost:{ lignum:120, aes:80 },
     lat:"Hic naves aedificantur.", desc:"Scheepswerf: ontgrendelt de vlootvormen (Remex, Classiarius, Navarchus)." },
-  { id:"stabula",      nm:"Stabula",      nl:"Stallen",        icon:"🐎", phase:1, slot:{x:2,y:11}, start:0, maxLvl:5, cost:{ lignum:90, aes:60 },
+  { id:"stabula",      nm:"Stabula",      nl:"Stallen",        icon:"🐎", phase:1, slot:{x:2,y:11}, start:0, maxLvl:10, cost:{ lignum:90, aes:60 },
     lat:"Hic equi et currus parantur.", desc:"Stallen: ontgrendelt ruiterij, strijdwagens en olifanten in de troepenbomen." },
-  { id:"bibliotheca",  nm:"Bibliotheca",  nl:"Codex",          phase:9, slot:null, maxLvl:5, cost:{ lignum:70, aes:50 } },
-  { id:"murus",        nm:"Murus",        nl:"Verdediging",    phase:9, slot:null, maxLvl:5, cost:{ lignum:100, aes:60 } },
+  { id:"bibliotheca",  nm:"Bibliotheca",  nl:"Codex",          phase:9, slot:null, maxLvl:10, cost:{ lignum:70, aes:50 } },
+  { id:"murus",        nm:"Murus",        nl:"Verdediging",    phase:9, slot:null, maxLvl:10, cost:{ lignum:100, aes:60 } },
   { id:"arcus",        nm:"Arcus triumphalis", nl:"Decoratie", phase:9, slot:null, maxLvl:1, cost:{ lignum:0, aes:0 } },
 ];
 
@@ -185,7 +185,11 @@ const CASTRA_REGIONS = [
 
 /* ---- Balans ---- */
 const CASTRA_BAL = {
-  maxLvl: 5,
+  maxLvl: 10,
+  // Bouwtijd (echte tijd, loopt door als je weg bent): minuten om naar level 1, 2, ... 10 te gaan; vanaf level 6 duurt het uren, level 10 bijna twee dagen.
+  // Samen ongeveer 64 uur per gebouw, dus level 10 is een kwestie van weken. Gelijktijdig bouwen: 1 bouwer, een tweede vanaf Praetorium 4, een derde vanaf 8.
+  buildMin: [1, 2, 5, 12, 30, 75, 180, 420, 960, 2160],
+  builderStep: [1, 4, 8],
   costExp: 1.6,            // kosten level L→L+1 = basis × L^costExp
   walletBase: 300,         // opslagmaximum grondstoffen = base + perHorreumLvl × horreum-level
   walletPerHorreum: 300,
