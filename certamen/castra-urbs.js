@@ -41,6 +41,11 @@ function castraUrbsApply(def, rid){
     if(!p.noSolid && /^tree_[ab]$/.test(p.o) && p.x>=3 && p.x<cols-4 && p.y>=3 && p.y<rows-4 && rng()>U.keepTrees) return false;
     return true; });
   def.tall = def.tall || {}; Object.keys(def.tall).forEach(k=>{ if(cells[k]) delete def.tall[k]; });
+  // bestrating: binnen de buitenmuur is het gras plavuizen (de ontmoetingszones blijven donker gras: dat zijn de plantsoenen); losse planten en bloemen verdwijnen daar
+  const outer = Math.max.apply(null, walls.concat([0])), paved = {};
+  for(let y=1;y<outer;y++) for(let x=1;x<cols-1;x++) if(def.ground[y] && def.ground[y][x]==="grass"){ def.ground[y][x] = rng()<0.12 ? "pave2" : "pave"; paved[x+","+y] = 1; }
+  def.pieces = def.pieces.filter(p=>{ const O = CASTRA_OBJ[p.o]; return !(O && O.solid==="none" && !p.noSolid && paved[p.x+","+p.y]); });
+  def.tall = def.tall || {}; Object.keys(def.tall).forEach(k=>{ if(paved[k]) delete def.tall[k]; });
   const have = {}; def.walls.forEach(w=>have[w[0]+","+w[1]] = 1);
   Object.keys(cells).forEach(k=>{ if(!have[k]){ const [x,y] = k.split(",").map(Number); def.walls.push([x,y]); } });
   // standbeelden en zuilen (alleen op vrije plekken: niet op een weg, deur of object)
