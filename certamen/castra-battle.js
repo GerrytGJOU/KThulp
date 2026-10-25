@@ -42,7 +42,7 @@ function castraBHealthy(){
   const list = (CASTRA.heroes||[]).map(castraHeroAsUnit).concat(CASTRA.soldiers.filter(s=>!castraIsHurt(s) && !s.job));
   return list.length ? list : [ { id:"dux", dux:true, line:"rom_hastatus", lvl:1, name:"Dux" } ];
 }
-function castraBCap(){ if(CASTRA_B && CASTRA_B.endless) return CASTRA_COLO.cap[CASTRA_B.div] || 8; return Math.min(4 + 2*castraLvl("praetorium"), (CASTRA_B && CASTRA_B.ed) ? CASTRA_B.ed.cap : 99); }
+function castraBCap(){ if(CASTRA_B && CASTRA_B.endless) return CASTRA_COLO.cap[CASTRA_B.div] || 8; return Math.min(14, 4 + 2*castraLvl("praetorium"), (CASTRA_B && CASTRA_B.ed) ? CASTRA_B.ed.cap : 99); }
 function castraBStart(missionId){
   const m = (missionId==="weekly" && typeof castraWeeklyMission==="function") ? castraWeeklyMission() : CASTRA_P_MISSIONS.find(x=>x.id===missionId);
   if(!m || (!m.weekly && !castraPMissionOpen(m))) return;

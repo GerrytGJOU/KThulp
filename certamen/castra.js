@@ -135,7 +135,31 @@ function castraPullRemote(done){
 }
 
 /* ---------- gebouwen, grondstoffen ---------- */
-function castraLvl(id){ return (CASTRA.b[id] && CASTRA.b[id].lvl) || 0; }
+function castraLvl(id){
+  const st = CASTRA.b[id]; if(!st) return 0;
+  if(st.up && castraNow() >= st.up.end) castraBuildDone(id);          // een afgeronde bouw telt meteen mee
+  return st.lvl || 0;
+}
+/* Bouwen kost tijd (CASTRA_BAL.buildMin): de kosten gaan er meteen af, het level komt erbij als de tijd om is. */
+function castraBuildMinutes(toLvl){ const t = CASTRA_BAL.buildMin; return t[Math.max(0, Math.min(t.length-1, toLvl-1))]; }
+function castraBuilders(){ const p = (CASTRA.b.praetorium && CASTRA.b.praetorium.lvl) || 0; return CASTRA_BAL.builderStep.filter(n=>p>=n).length || 1; }
+function castraBuildActive(){ return Object.keys(CASTRA.b).filter(id=>CASTRA.b[id] && CASTRA.b[id].up); }
+function castraBuildLeftMs(id){ const st = CASTRA.b[id]; return st && st.up ? Math.max(0, st.up.end - castraNow()) : 0; }
+function castraBuildDone(id){
+  const st = CASTRA.b[id]; if(!st || !st.up) return;
+  const to = st.up.to; st.lvl = to; if(castraBuilding(id).prod) st.t = st.up.end; delete st.up;
+  castraSave();
+  if(typeof toast==="function" && typeof castraToastLa==="function" && CASTRA_LA && CASTRA_LA.melioratum) castraToastLa("melioratum", castraBuilding(id).nm+" → "+castraLaText("gradus")+" "+to);
+}
+function castraFmtLeft(ms){ const m = Math.ceil(ms/60000); return m>=1440 ? Math.floor(m/1440)+" d "+Math.floor(m%1440/60)+" u" : m>=60 ? Math.floor(m/60)+" u "+(m%60)+" m" : m+" m"; }
+// De knop of de voortgang van een bouw (gedeeld door alle gebouwpanelen)
+function castraUpgradeUI(id, cost, costTxt, lvl){
+  const st = CASTRA.b[id] || {};
+  if(st.up) return `<div class="note">🔨 ${castraLaText("aedifica")}: <b>${castraLaText("gradus")} ${st.up.to}</b> — nog ${castraFmtLeft(castraBuildLeftMs(id))}</div>`;
+  const busy = castraBuildActive().length >= castraBuilders(), mins = castraBuildMinutes(lvl+1), time = castraFmtLeft(mins*60000);
+  return `<button class="btn" ${castraCanPay(cost) && !busy ? "" : "disabled"} onclick="castraDoUpgrade('${id}')">${lvl===0?castraLaText("aedifica"):castraLaText("meliora")+" → "+castraLaText("gradus")+" "+(lvl+1)} — ${costTxt} · ⏱ ${time}</button>`
+    + (busy ? `<div class="note">Alle bouwers zijn bezig (${castraBuildActive().length}/${castraBuilders()}). Een tweede bouwer krijg je met Praetorium 4, een derde met 8.</div>` : "");
+}
 function castraWalletCap(){ return CASTRA_BAL.walletBase + CASTRA_BAL.walletPerHorreum*castraLvl("horreum"); }
 function castraBarracksCap(){ return CASTRA_BAL.barracksBase + CASTRA_BAL.barracksPerLvl*castraLvl("contubernia"); }
 function castraMaxLvl(id){
@@ -178,12 +202,16 @@ function castraCollect(id){
 function castraUpgrade(id){
   const L = castraLvl(id);
   if(L>=castraMaxLvl(id)) return false;
+  if(CASTRA.b[id] && CASTRA.b[id].up) return false;                       // deze is al in aanbouw
+  const dev = !!CASTRA.dev;                                                // ontwikkelaarsstand: meteen klaar (tests)
+  if(!dev && castraBuildActive().length >= castraBuilders()) return false;   // geen vrije bouwer
   const cost = castraUpgradeCost(id);
   if(!castraCanPay(cost)) return false;
   if(castraBuilding(id).prod) castraCollect(id);   // niets verliezen bij een upgrade
   castraPay(cost);
-  CASTRA.b[id].lvl = L+1;
-  if(castraBuilding(id).prod) CASTRA.b[id].t = castraNow();
+  if(!CASTRA.b[id]) CASTRA.b[id] = { lvl:0, t:castraNow() };
+  if(dev){ CASTRA.b[id].lvl = L+1; if(castraBuilding(id).prod) CASTRA.b[id].t = castraNow(); }
+  else CASTRA.b[id].up = { to:L+1, end:castraNow() + castraBuildMinutes(L+1)*60000 };
   castraSave();
   return true;
 }
@@ -477,7 +505,7 @@ function castraOpen(id){
   if(b.fixed) extra += `<div class="note">${castraLa("legio_mox")}</div>`;
   const up = b.fixed ? "" : (lvl>=maxL
     ? `<div class="note">${castraLa(lvl>=b.maxLvl?"gradus_max":"praetorium_prius")}</div>`
-    : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('${id}')">${lvl===0?castraLaText("aedifica"):castraLaText("meliora")+" → "+castraLaText("gradus")+" "+(lvl+1)} — ${costTxt}</button>`);
+    : castraUpgradeUI(id, cost, costTxt, lvl));
   castraOpenPanel(`<div class="panel"><h3>${b.icon} ${esc(b.nm)} ${b.fixed?"":`<small>${castraLaText("gradus")} ${lvl}</small>`}</h3>
     <div style="font-style:italic;margin-bottom:6px">${castraLaHTML(b.lat||"", b.desc||b.nl||"", "bld_"+id)}</div>${extra}${up}
     <div style="margin-top:8px"><button class="btn" onclick="castraClosePanel()">${castraLaText("claude")}</button></div></div>`);
@@ -489,6 +517,9 @@ function castraDoCollect(id){
   if(!n) castraToastLa("plenum"); else castraToastLa("collectum", "+"+n+" "+castraRes(b.prod.res).nm);
   castraRefresh(id);
 }
-function castraDoUpgrade(id){ if(castraUpgrade(id)) castraToastLa("melioratum", castraBuilding(id).nm+" → "+castraLaText("gradus")+" "+castraLvl(id)); castraRefresh(id); }
+function castraDoUpgrade(id){
+  if(castraUpgrade(id)){ const st = CASTRA.b[id]; if(st && st.up) toast("🔨 "+castraBuilding(id).nm, "Wordt gebouwd: klaar over "+castraFmtLeft(castraBuildLeftMs(id))+"."); else castraToastLa("melioratum", castraBuilding(id).nm+" → "+castraLaText("gradus")+" "+castraLvl(id)); }
+  castraRefresh(id);
+}
 function castraDoRecruit(){ const err = castraRecruitTest(); if(err) castraToastLa(err); castraRefresh("contubernia"); }
 

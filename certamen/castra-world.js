@@ -21,7 +21,7 @@ const CASTRA_WORLDS = {
     zones:[ { t:"silva", x:4, y:6, w:22, h:20 }, { t:"via", x:28, y:2, w:8, h:18 }, { t:"campus", x:36, y:22, w:18, h:22 }, { t:"tiberis", x:42, y:4, w:12, h:16 } ],
     trees:["tree_a","tree_b"], big:"tree_big", sparse:0.07, dense:0.22, denseZone:"silva",
     doors:[ { x:9,  y:22, to:"specus_latium", label:"🕳️ Specus Lupae", spawn:{ x:12, y:17, dir:"up" } },       // grot in het bos
-            { x:38, y:35, to:"villa_latium",  label:"🏠 Hospitium", spawn:{ x:10, y:11, dir:"up" } } ] },  // herberg bij de weg
+            { x:38, y:35, to:"villa_latium",  feat:"open", label:"🏠 Hospitium", spawn:{ x:10, y:11, dir:"up" } } ] },  // herberg bij de weg
   graecia: { ...CASTRA_WORLD_BASE, id:"graecia", nm:"Graecia", icon:"🏛️", seed:20261101, base:"sand2", road:"stone", bank:"sand",
     cols:64, rows:48, start:{ x:31, y:46 },                       // grote regio (64×48), Pokémon-formaat
     roads:[ {x0:31,y0:1,x1:32,y1:47}, {x0:2,y0:20,x1:61,y1:21} ],
