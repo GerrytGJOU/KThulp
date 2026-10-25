@@ -45,6 +45,8 @@ const CASTRA_GROUND = {
   stone:   { s:"A5", c:2, r:6 },
   stoneb:  { s:"A5", c:0, r:6 },
   cobble:  { s:"A5", c:2, r:4 },
+  pave:    { s:"A5", c:0, r:4 },    // lichte plavuizen (Roma binnen de muren)
+  pave2:   { s:"A5", c:3, r:4 },    // lichte tegels, af en toe tussen de plavuizen
   wall:    { s:"A5", c:0, r:9 },    // houten palissade
   plank:   { s:"A5", c:2, r:0 },    // brugdek
   water:   { s:"A1", px:24, py:72 }, // vulling van een waterautotile (pure water, geen oever)

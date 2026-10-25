@@ -59,7 +59,7 @@ function castraFxStep(x, y){
   if(tall){ castraFxGrass(x, y); castraSfx("grass"); }
   else if(g==="sand" || g==="sand2"){ castraFxPrint(x, y, U.dir); castraSfx("sand"); }
   else if(g==="plank"){ castraSfx("wood"); }
-  else if(g==="stone" || g==="stoneb" || g==="cobble"){ castraSfx("stone"); }
+  else if(g==="stone" || g==="stoneb" || g==="cobble" || g==="pave" || g==="pave2"){ castraSfx("stone"); }
   else castraSfx("soft");
   // water ernaast: een rimpel op de watertegel
   [[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>{ if(typeof castraIsWater==="function" && castraIsWater(rid, x+dx, y+dy)){ castraFxRipple(x+dx, y+dy); castraSfx("ripple"); return true; } return false; });
