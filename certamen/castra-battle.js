@@ -30,8 +30,10 @@ SCREENS.castraProelium = function(){
   }).join("");
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="castraPLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>⚔️ ${castraLa("proelium_titel")}</h2></div>
+  <button class="btn btn-gold" style="min-height:44px;margin:0 0 8px" onclick="castraPToCamp()">🏕️ Terug naar het kamp</button>
   ${typeof castraColoCard==="function"?castraColoCard():""}${cards}${foot()}`);
 };
+function castraPToCamp(){ CASTRA.pos = { x:14, y:5 }; castraSave(); go("castraHome"); }
 function castraPLeave(){ CASTRA.pos = { x:14, y:5 }; castraSave(); go("castraHome"); }
 
 /* ---------- gevecht ---------- */
@@ -81,6 +83,11 @@ SCREENS.castraBattle = function(){
   B.timer = setInterval(B.legio ? castraLegioTick : castraBTick, CASTRA_P.tickMs);
   if(typeof castraBIntroStart==="function") castraBIntroStart();   // uitleg van nieuwe missieregels (pauzeert tot begrepen)
 };
+function castraBToCamp(){          // het gevecht verlaten (zonder uitslag) en terug naar het kamp
+  const o = document.getElementById("cbIntro"); if(o) o.remove();
+  if(CASTRA_B){ clearInterval(CASTRA_B.timer); window.removeEventListener("resize", CASTRA_B.resizeFn); }
+  const legio = CASTRA_B && CASTRA_B.legio; CASTRA_B = null; if(!legio) CASTRA.pos = { x:14, y:5 }; castraSave(); go("castraHome");
+}
 function castraBExit(){
   { const o = document.getElementById("cbIntro"); if(o) o.remove(); }
   if(CASTRA_B){ clearInterval(CASTRA_B.timer); window.removeEventListener("resize", CASTRA_B.resizeFn); }
@@ -203,7 +210,8 @@ function castraBRenderCtl(){
   c.innerHTML = pickHtml + `<button class="btn btn-gold" ${s.waveActive||s.over||B.pick?"disabled":""} onclick="castraBStartWave()">${castraLaText("incipe")} ${!s.waveActive&&nextWave<B.mission.waves.length?"("+(nextWave+1)+"/"+B.mission.waves.length+")":""}</button>
     <button class="btn" style="min-height:44px" onclick="castraBSpeed()">${B.speed===1?"▶":"⏩"} ${B.speed}× ${castraLaText("celerius")}</button>
     <button class="btn ${B.auto?"btn-gold":""}" style="min-height:44px" onclick="castraBAutoToggle()" title="Start de volgende golf automatisch">⟳ Auto ${B.auto?"aan":"uit"}</button>
-    <button class="btn" style="min-height:44px" onclick="castraBInfo()" title="Vijanden en regels in deze missie">ⓘ</button>` + have;
+    <button class="btn" style="min-height:44px" onclick="castraBInfo()" title="Vijanden en regels in deze missie">ⓘ</button>
+    <button class="btn" style="min-height:44px" onclick="castraBToCamp()" title="Het gevecht verlaten en terug naar het kamp">🏕️ Kamp</button>` + have;
 }
 function castraBStartWave(){
   const B = CASTRA_B; if(!B || B.sim.over) return;

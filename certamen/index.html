@@ -312,6 +312,10 @@ body.greek .qcard .word{color:#143a5e}
 .toast .x{flex:0 0 auto;background:none;border:none;color:var(--hi-dim);font-size:20px;line-height:1;
   cursor:pointer;padding:2px 4px;align-self:flex-start;font-family:serif}
 .toast .x:hover{color:var(--hi)}
+/* tower defence: meldingen bovenaan, zodat ze de soldatenkaarten onderaan niet bedekken, en ze vangen geen tikken op */
+body:has(#cbMap) .toast{bottom:auto;top:58px;transform:translateX(-50%) translateY(-140px);pointer-events:none}
+body:has(#cbMap) .toast.show{transform:translateX(-50%) translateY(0)}
+body:has(#cbMap) .toast .x{pointer-events:auto}
 
 /* eerbewijs-ontgrendel-popup: groter/duidelijker dan .toast, lichtgloed achter het medaillon */
 .achpop-bg{position:fixed;inset:0;z-index:90;background:rgba(10,7,3,.6);display:flex;align-items:center;justify-content:center;
@@ -1204,7 +1208,7 @@ body.greek .qcard .word{color:#143a5e}
 <script src="castra-cards.js?v=20261212f"></script>
 <script src="castra-unlocks.js?v=20261213d"></script>
 <script src="castra-proelium.js?v=20261229a"></script>
-<script src="castra-battle.js?v=20270112a"></script>
+<script src="castra-battle.js?v=20270112b"></script>
 <script src="castra-tdmap.js?v=20270101b"></script>
 <script src="castra-range.js?v=20270102a"></script>
 <script src="castra-legio.js?v=20261213b"></script>
