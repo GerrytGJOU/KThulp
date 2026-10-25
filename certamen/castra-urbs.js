@@ -15,13 +15,44 @@ const CASTRA_URBS = {
   roma: {
     // x, y = linkerbovenhoek; w = breedte (de deur zit in het midden op rij y+3); roof/wall = kolom (groep) in Outside_A3 (dak: band 0, gevel: band 1)
     buildings:[ { x:7,  y:10, w:5, roof:0, wall:5 }, { x:27, y:10, w:5, roof:1, wall:2 }, { x:43, y:10, w:5, roof:0, wall:5 },
-                { x:51, y:10, w:5, roof:1, wall:2 }, { x:12, y:29, w:9, roof:0, wall:5 } ],
+                { x:51, y:10, w:5, roof:1, wall:2 } ],
+    // grote gebouwen als één plaatje (Roma_A/B.png, Gerben 2026-10-25): bron (sx,sy,sw,sh) in px, plek (x,y) en grootte (w,h) in tegels;
+    // shape "ovaal" = alleen de cellen binnen de ellips zijn solide; door = deurcel (blijft open)
+    landmarks:[
+      { id:"colosseum", img:"RA", sx:336, sy:144, sw:432, sh:624, x:12, y:20, w:9, h:13, shape:"ovaal", door:{ x:16, y:32 } },
+      { id:"templum",   img:"RB", sx:336, sy:144, sw:432, sh:624, x:57, y:1,  w:9, h:13 },
+    ],
+    // de stadspoorten: de triomfboog (Roma_A.png), verkleind, met de doorgang precies op de poortopening
+    arch:{ img:"RA", sx:0, sy:384, sw:240, sh:384, scale:0.6, passX:117 },
     statues:[ ["angel_a",33,24],["angel_b",38,24],["angel_c",33,30],["angel_a",38,30],["pillar_fl",31,27],["pillar_fl",40,27],["pillar_rd",20,15],["pillar_rd",50,15],
-              ["angel_b",34,15],["angel_c",37,15],["pillar_sq",34,39],["pillar_sq",37,39] ],
+              ["angel_b",34,15],["angel_c",37,15],["pillar_sq",33,39],["pillar_sq",38,39] ],
     keepTrees:0.3,
   },
 };
-CASTRA_WORLDS.roma.cityWall = true;          // castra-field.js zet dan een muur in plaats van een rij bomen; castra-land.js laat de natuurlijke afsluiting weg
+CASTRA_WORLDS.roma.cityWall = true;
+// de dwarsstraat (y 26-27) begint nu bij het Colosseum
+CASTRA_WORLDS.roma.roads = CASTRA_WORLDS.roma.roads.map(r=>(r.y0===26 && r.x0===2) ? Object.assign({}, r, { x0:21 }) : r);
+function castraUrbsLmCells(L){          // de solide cellen van een groot gebouw
+  const out = {};
+  for(let y=L.y;y<L.y+L.h;y++) for(let x=L.x;x<L.x+L.w;x++){
+    if(L.door && x===L.door.x && y===L.door.y) continue;
+    if(L.shape==="ovaal"){ const dx = (x+0.5-(L.x+L.w/2))/(L.w/2), dy = (y+0.5-(L.y+L.h/2))/(L.h/2); if(dx*dx+dy*dy>1.08) continue; }
+    out[x+","+y] = 1; }
+  return out;
+}
+// wat in een groot gebouw zou staan (een kist, een voorwerp) verhuist bij het laden naar de dichtstbijzijnde vrije plek
+(function(){
+  Object.keys(CASTRA_URBS).forEach(rid=>{ const U = CASTRA_URBS[rid], all = {};
+    (U.landmarks||[]).forEach(L=>Object.assign(all, castraUrbsLmCells(L)));
+    const used = {}; CASTRA_WENT.filter(e=>e.region===rid).forEach(e=>used[e.x+","+e.y] = 1);
+    CASTRA_WENT.filter(e=>e.region===rid && all[e.x+","+e.y]).forEach(e=>{
+      for(let r=1;r<12;r++){ let done = false;
+        for(let dy=-r;dy<=r && !done;dy++) for(let dx=-r;dx<=r && !done;dx++){ const x = e.x+dx, y = e.y+dy, k = x+","+y;
+          if(Math.max(Math.abs(dx),Math.abs(dy))!==r || all[k] || used[k] || y===26 || y===27) continue;
+          delete used[e.x+","+e.y]; e.x = x; e.y = y; used[k] = 1; done = true; }
+        if(done) break; } });
+  });
+})();          // castra-field.js zet dan een muur in plaats van een rij bomen; castra-land.js laat de natuurlijke afsluiting weg
 const CASTRA_URBS_A3 = { roofBand:0, wallBand:1 };      // in Outside_A3: groepen van 96×96 px, 8 per rij; band 0 = daken, band 1 = gevels
 
 function castraUrbsDoor(b){ return { x:b.x+(b.w>>1), y:b.y+3 }; }
@@ -32,29 +63,30 @@ function castraUrbsApply(def, rid){
   CASTRA_WENT.filter(e=>e.region===rid).forEach(e=>busy[e.x+","+e.y] = 1);
   (W.doors||[]).forEach(d=>busy[d.x+","+d.y] = 1);
   U.buildings.forEach(b=>{ const dr = castraUrbsDoor(b); for(let y=b.y;y<b.y+4;y++) for(let x=b.x;x<b.x+b.w;x++) if(!(x===dr.x && y===dr.y)) cells[x+","+y] = 1; });
+  (U.landmarks||[]).forEach(L=>{ Object.assign(cells, castraUrbsLmCells(L)); for(let y=L.y;y<L.y+L.h;y++) for(let x=L.x;x<L.x+L.w;x++) cells["lm"+x+","+y] = 1; });
   // de tenten verdwijnen; wat in een gebouw of in de poortrij staat, ook; en de meeste losse bomen binnen de muren
   const walls = (def.cityWalls||[]).map(c=>c.y);
   def.pieces = def.pieces.filter(p=>{
     if(/^tent_/.test(p.o)) return false;
     const O = CASTRA_OBJ[p.o], w = O?O.w:1, h = O?O.h:1;
-    for(let dy=0;dy<h;dy++) for(let dx=0;dx<w;dx++){ const k = (p.x+dx)+","+(p.y+dy); if(cells[k]) return false; if(!p.noSolid && walls.indexOf(p.y+dy)>=0) return false; }
+    for(let dy=0;dy<h;dy++) for(let dx=0;dx<w;dx++){ const k = (p.x+dx)+","+(p.y+dy); if(cells[k] || cells["lm"+k]) return false; if(!p.noSolid && walls.indexOf(p.y+dy)>=0) return false; }
     if(!p.noSolid && /^tree_[ab]$/.test(p.o) && p.x>=3 && p.x<cols-4 && p.y>=3 && p.y<rows-4 && rng()>U.keepTrees) return false;
     return true; });
   def.tall = def.tall || {}; Object.keys(def.tall).forEach(k=>{ if(cells[k]) delete def.tall[k]; });
   // bestrating: binnen de buitenmuur is het gras plavuizen (de ontmoetingszones blijven donker gras: dat zijn de plantsoenen); losse planten en bloemen verdwijnen daar
   const outer = Math.max.apply(null, walls.concat([0])), paved = {};
-  for(let y=1;y<outer;y++) for(let x=1;x<cols-1;x++) if(def.ground[y] && def.ground[y][x]==="grass"){ def.ground[y][x] = rng()<0.12 ? "pave2" : "pave"; paved[x+","+y] = 1; }
+  for(let y=1;y<outer;y++) for(let x=1;x<cols-1;x++) if(def.ground[y] && def.ground[y][x]==="grass"){ def.ground[y][x] = rng()<0.04 ? "pave2" : "pave"; paved[x+","+y] = 1; }
   def.pieces = def.pieces.filter(p=>{ const O = CASTRA_OBJ[p.o]; return !(O && O.solid==="none" && !p.noSolid && paved[p.x+","+p.y]); });
   def.tall = def.tall || {}; Object.keys(def.tall).forEach(k=>{ if(paved[k]) delete def.tall[k]; });
   const have = {}; def.walls.forEach(w=>have[w[0]+","+w[1]] = 1);
-  Object.keys(cells).forEach(k=>{ if(!have[k]){ const [x,y] = k.split(",").map(Number); def.walls.push([x,y]); } });
+  Object.keys(cells).forEach(k=>{ if(k.indexOf("lm")===0) return; if(!have[k]){ const [x,y] = k.split(",").map(Number); def.walls.push([x,y]); } });
   // standbeelden en zuilen (alleen op vrije plekken: niet op een weg, deur of object)
   const road = (x,y)=>(W.roads||[]).some(r=>x>=r.x0&&x<=r.x1&&y>=r.y0&&y<=r.y1);
   const taken = {}; def.pieces.forEach(p=>{ const O = CASTRA_OBJ[p.o]; if(!O) return; for(let dy=0;dy<O.h;dy++) for(let dx=0;dx<O.w;dx++) taken[(p.x+dx)+","+(p.y+dy)] = 1; });
   const wallSet = {}; def.walls.forEach(w=>wallSet[w[0]+","+w[1]] = 1);
   (U.statues||[]).forEach(([o,x,y])=>{ const k = x+","+y; if(road(x,y)||road(x,y-1)||busy[k]||cells[k]||wallSet[k]||wallSet[x+","+(y-1)]||taken[k]||taken[x+","+(y-1)]) return;
     def.pieces.push({ o, x, y:y-1 }); def.walls.push([x,y]); });
-  def.urbs = { buildings:U.buildings, walls:def.cityWalls||[] };
+  def.urbs = { buildings:U.buildings, walls:def.cityWalls||[], landmarks:U.landmarks||[], arch:U.arch||null };
   return def;
 }
 const _castraWorldDefUrbs0 = castraWorldDef;
@@ -80,6 +112,11 @@ castraDrawMapLayers = function(built, cvBelow, cvAbove){
       if(x%2===0){ g.fillStyle = "#e6d7ac"; g.fillRect(x*T+4, cap*T-6, 16, 8); g.fillStyle = "#b39b64"; g.fillRect(x*T+4, cap*T+2, 16, 2); }
       g.drawImage(A4, 3*96+24, 144, 48, 48, x*T, c.y*T, T, T);                                              // onderste rij: de gevel
       g.fillStyle = "rgba(40,25,10,.28)"; g.fillRect(x*T, c.y*T+T-5, T, 5); } }); }
+  def.urbs.landmarks.forEach(L=>{ const im = CASTRA_TS_IMG[L.img]; if(im) g.drawImage(im, L.sx, L.sy, L.sw, L.sh, L.x*T, L.y*T, L.w*T, L.h*T); });
+  const AR = def.urbs.arch, aim = AR && CASTRA_TS_IMG[AR.img];
+  if(aim && cvAbove){ const ga = cvAbove.getContext("2d"), dw = AR.sw*AR.scale, dh = AR.sh*AR.scale; ga.save(); ga.imageSmoothingEnabled = true;
+    def.urbs.walls.forEach(c=>{ const left = c.gx*T + T/2 - AR.passX*AR.scale, bottom = (c.y+1)*T; ga.drawImage(aim, AR.sx, AR.sy, AR.sw, AR.sh, left, bottom-dh, dw, dh); });
+    ga.restore(); }
   if(A3){
     def.urbs.buildings.forEach(b=>{ const dr = castraUrbsDoor(b);
       castraUrbsRect(g, A3, b.roof*96, CASTRA_URBS_A3.roofBand*96, b.x, b.y, b.w, 2, T);

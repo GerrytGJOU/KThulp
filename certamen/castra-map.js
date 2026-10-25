@@ -13,12 +13,14 @@
    Laadt vóór castra.js.
    ============================================================================ */
 
-const CASTRA_TS_VER = "v=2";
+const CASTRA_TS_VER = "v=3";
 const CASTRA_TS_FILES = {
   A5: "assets/tilesets/Outside_A5.png",
   B:  "assets/tilesets/Outside_B.png",
   A1: "assets/tilesets/Outside_A1.png",
-  A3: "assets/tilesets/Outside_A3.png",       // daken en gevels van de gebouwen in Roma (castra-urbs.js)
+  A3: "assets/tilesets/Outside_A3.png",
+  RA: "assets/tilesets/Roma_A.png",           // Colosseum en triomfboog (Gerben, 2026-10-25)
+  RB: "assets/tilesets/Roma_B.png",           // tempel met zuilen en tholos (Gerben, 2026-10-25)       // daken en gevels van de gebouwen in Roma (castra-urbs.js)
   A4: "assets/tilesets/Outside_A4.png",       // muren en kliffen (Gerben, 2026-10-24): klifwanden en plateaus van de bergen (castra-berg.js)
   C:  "assets/tilesets/Outside_C.png",        // zuilen, grafstenen, beelden (Gerben, 2026-10-24): het kerkhof van Roma
   X:  "assets/tilesets/Castra_extra.png",     // eigen tekeningen (tools/gen_castra_flags.py): vlaggen voor het Praetorium
