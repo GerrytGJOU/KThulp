@@ -111,7 +111,11 @@ function castraInteriorDef(W){
 /* ---------- deuren ---------- */
 function castraGeoDoor(x, y){
   const W = castraWorldCfg(); const d = (W.doors||[]).find(d=>d.x===x && d.y===y); if(!d) return false;
-  if(typeof castraUnlocked==="function" && !castraUnlocked(d.feat || "wereld")) return false;      // vóór het vereiste niveau doet de deur niets
+  if(typeof castraUnlocked==="function" && !castraUnlocked(d.feat || "wereld")){          // vóór het vereiste niveau blijft de deur dicht, maar je krijgt wel te horen waarom
+    const u = typeof castraUnlockDef==="function" ? castraUnlockDef(d.feat || "wereld") : null, now = Date.now();
+    if(typeof toast==="function" && !(window.__castraDoorMsg > now-2500)){ window.__castraDoorMsg = now; toast("🔒 De deur is nog dicht", "Deze deur gaat open vanaf Castra-niveau "+(u ? u.lvl : 3)+(u ? ": "+u.nl : "")+"."); }
+    return false;
+  }
   castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraWorldDetach();
   const to = CASTRA_WORLDS[d.to];
   CASTRA_W_REGION = d.to; CASTRA_GEO_SPAWN = d.spawn;
