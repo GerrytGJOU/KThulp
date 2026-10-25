@@ -68,9 +68,21 @@ function castraDlgClose(silent){
   // daarna eventuele ontgrendelingen (nieuw Castra-niveau) laten volgen
   if(!silent && typeof castraUnlockShow==="function") setTimeout(()=>{ if(!CASTRA_DLG && (document.getElementById("castraMap")||document.getElementById("cwMap"))) castraUnlockShow(); }, 450);
 }
+/* Portretten: assets/portraits/<naam>.png (144×144, naam = kleine letters zonder accenten, bv. matrona.png, venator_graecus.png) of een vlak uit een
+   RPG Maker-gezichtenblad (576×288, 4×2 gezichten van 144 px, bv. People1.png): CASTRA_PORTRAIT_SHEETS.matrona = { file:"assets/portraits/People1.png", i:3 }.
+   Zonder bestand blijft de avatar zichtbaar (zie assets/portraits/README.txt en tools/castra-portraits-manifest.js). */
+const CASTRA_PORTRAIT_SHEETS = {};
+const CASTRA_PORTRAIT_VER = 1;
+function castraPortraitSlug(s){ return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,""); }
+function castraPortraitLayer(d, size){
+  const slug = castraPortraitSlug(d.id || d.nm), S = CASTRA_PORTRAIT_SHEETS[slug];
+  if(S){ const f = size/144; return `<div style="position:absolute;left:0;top:0;width:${size}px;height:${size}px;background:url(${S.file}?v=${CASTRA_PORTRAIT_VER}) -${(S.i%4)*144*f}px -${(S.i>>2)*144*f}px/${576*f}px ${288*f}px no-repeat;image-rendering:pixelated"></div>`; }
+  if(!slug) return "";
+  return `<img src="assets/portraits/${slug}.png?v=${CASTRA_PORTRAIT_VER}" alt="" draggable="false" onerror="this.style.display='none'" style="position:absolute;left:0;top:0;width:${size}px;height:${size}px;object-fit:cover;image-rendering:pixelated">`;
+}
 function castraDlgPortrait(d){
   return `<div style="flex:0 0 112px;width:112px;height:112px;overflow:hidden;border-radius:8px;background:#d9c590;border:2px solid var(--parch-edge,#4a3416);position:relative">
-    <div style="position:absolute;left:0;top:0;width:112px;height:112px">${d.sheet && typeof castraSheetHTML==="function" ? castraSheetHTML(d.sheet,"down",1,112) : castraAvatarHTML(d.look,"down",1,112)}</div></div>`;
+    <div style="position:absolute;left:0;top:0;width:112px;height:112px">${d.sheet && typeof castraSheetHTML==="function" ? castraSheetHTML(d.sheet,"down",1,112) : castraAvatarHTML(d.look,"down",1,112)}</div>${castraPortraitLayer(d, 112)}</div>`;
 }
 function castraDlgLine(){
   const D = CASTRA_DLG, box = document.getElementById("castraDlg"); if(!D || !box) return;
