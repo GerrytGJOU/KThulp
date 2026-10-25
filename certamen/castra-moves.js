@@ -432,16 +432,17 @@ const CASTRA_VMENU_CSS = `
 .cbmenu{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
 .cbprompt{flex:1 1 180px;min-height:96px;background:rgba(25,18,10,.9);border:3px solid #c9a24a;border-radius:10px;padding:10px 12px;color:#f3e6bd;font-size:17px;display:flex;flex-direction:column;justify-content:center}
 .cbcmds{flex:1.5 1 260px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.cbcmd{min-height:62px;border-radius:12px;border:3px solid;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:4px 6px;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 2px 4px rgba(0,0,0,.4);text-shadow:0 1px 0 rgba(0,0,0,.35);color:#fff}
-.cbcmd b{font-size:20px;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
-.cbcmd small{font-size:12px;opacity:.95}
-.cbcmd .cbci{font-size:18px;line-height:1}
+.cbcmd{min-height:62px;border-radius:12px;border:2px solid var(--hi,#c9a24a);cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:4px 6px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.35),inset 0 2px 0 rgba(255,235,170,.18),0 2px 5px rgba(0,0,0,.5);text-shadow:0 1px 2px rgba(0,0,0,.7);color:#f3e6bd}
+.cbcmd b{font-size:20px;letter-spacing:.06em;text-transform:uppercase;line-height:1.1;font-family:Palatino,"Palatino Linotype",serif}
+.cbcmd small{font-size:12px;opacity:.85}
+.cbcmd .cbci{font-size:18px;line-height:1;filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))}
+.cbcmd:hover:not(:disabled){filter:brightness(1.15)}
 .cbcmd:active{transform:translateY(1px)}
 .cbcmd:disabled{opacity:.45;cursor:default}
-.cmd-fight{background:linear-gradient(#f2a0a0,#d95a5a);border-color:#8a2a2a}
-.cmd-bag{background:linear-gradient(#f3bd6c,#d58a28);border-color:#7a4a10}
-.cmd-party{background:linear-gradient(#86d595,#3f9d52);border-color:#1f5a2c}
-.cmd-run{background:linear-gradient(#86b7ec,#3b7fc4);border-color:#1d4a80}`;
+.cmd-fight{background:linear-gradient(#8a2b34,#521820)}
+.cmd-bag{background:linear-gradient(#97692a,#5f3f14)}
+.cmd-party{background:linear-gradient(#5a6b3c,#37452a)}
+.cmd-run{background:linear-gradient(#3f6585,#27425b)}`;
 function castraVFightMenu(on){ const V = CASTRA_V; if(!V || V.over || V.busy) return; V.fightOpen = !!on; castraVRender("battle"); }
 function castraVBattleHTML(){
   const V = CASTRA_V; if(!V.s) return "";
