@@ -24,6 +24,7 @@ const CASTRA_CARDS = [
   { id:"acies",      la:"Acies",      rar:1, eff:"rng",  per:2,  txt:v=>`alle torens +${v}% bereik` },
   { id:"horrea",     la:"Horrea",     rar:1, eff:"prod", per:3,  txt:v=>`+${v}% grondstoffenproductie` },
   { id:"disciplina", la:"Disciplina", rar:1, eff:"xp",   per:3,  txt:v=>`+${v}% ervaring voor soldaten en helden` },
+  { id:"fabri",      la:"Fabri",      rar:2, eff:"build",per:3,  txt:v=>`gebouwen in het kamp bouwen ${v}% sneller (geldt voor nieuwe bouwwerken)` },
   { id:"gelu",       la:"Gelu",       rar:2, eff:"spd",  per:1.5,txt:v=>`vijanden lopen ${v}% langzamer` },
   { id:"murus",      la:"Murus",      rar:2, eff:"lives",per:0.5,txt:v=>`+${Math.floor(v)} leven${Math.floor(v)===1?"":"s"} voor het kamp (1 per 2 sterren)` },
   { id:"praeda",     la:"Praeda",     rar:2, eff:"reward",per:3, txt:v=>`+${v}% beloning na een missie` },
@@ -37,9 +38,9 @@ function castraCardCopies(id){ return (CASTRA.cards||{})[id]||0; }
 function castraCardStars(id){ const n = castraCardCopies(id); let s = 0; CASTRA_CARD_STARS.forEach((t,i)=>{ if(n>=t) s = i+1; }); return s; }
 function castraCardNext(id){ const n = castraCardCopies(id); const t = CASTRA_CARD_STARS.find(x=>x>n); return t||null; }
 function castraCardVal(c){ const st = castraCardStars(c.id); return st ? Math.round(st*c.per*10)/10 : 0; }
-// Som van alle bonussen: { dmg, cd, rng, prod, xp, spd, lives, reward, type:{inf,rng,cav,sup,myth} }
+// Som van alle bonussen: { dmg, cd, rng, prod, xp, spd, lives, reward, build, type:{inf,rng,cav,sup,myth} }
 function castraCardBonus(){
-  const b = { dmg:0, cd:0, rng:0, prod:0, xp:0, spd:0, lives:0, reward:0, type:{ inf:0, rng:0, cav:0, sup:0, myth:0 } };
+  const b = { dmg:0, cd:0, rng:0, prod:0, xp:0, spd:0, lives:0, reward:0, build:0, type:{ inf:0, rng:0, cav:0, sup:0, myth:0 } };
   if(typeof CASTRA==="undefined" || !CASTRA) return b;
   CASTRA_CARDS.forEach(c=>{ const v = castraCardVal(c); if(!v) return;
     if(c.eff.indexOf("t_")===0) b.type[c.eff.slice(2)] += v; else b[c.eff] += (c.eff==="lives" ? Math.floor(v) : v); });

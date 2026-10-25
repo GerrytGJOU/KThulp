@@ -42,5 +42,12 @@ console.log("5. opslaan en terugkomen");
 { fresh(); run("castraUpgrade('praetorium')"); const s = run("JSON.stringify(CASTRA)"); const t0 = R("CASTRA.b.praetorium.up.end");
   run(`CASTRA = JSON.parse(${J(s)}); _T = ${t0} + 1000;`); ok(R("castraLvl('praetorium')")===2, "na opslaan en later terugkomen is de bouw klaar (ook zonder dat het spel open stond)"); }
 
+console.log("6. de kaart Fabri bouwt sneller");
+{ fresh(); const base = R("castraBuildMs(2)");
+  run("CASTRA.cards = { fabri:12 };"); ok(R("castraCardStars('fabri')")===5 && R("castraCardBonus().build")===15, "Fabri op ster 5 geeft 15% sneller bouwen");
+  const fast = R("castraBuildMs(2)"); ok(fast===Math.round(base*0.85), "de bouwtijd wordt 15% korter ("+base+" -> "+fast+" ms)");
+  run("castraUpgrade('praetorium')"); ok(R("CASTRA.b.praetorium.up.end - _T")===fast, "een nieuwe bouw gebruikt de verkorte tijd");
+  run("CASTRA.cards = {};"); ok(R("castraBuildMs(2)")===base, "zonder de kaart weer de normale tijd"); }
+
 console.log("\n" + checks + " controles, " + fails + " fouten");
 process.exit(fails ? 1 : 0);
