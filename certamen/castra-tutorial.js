@@ -75,7 +75,9 @@ const CASTRA_PORTRAIT_SHEETS = {};
 const CASTRA_PORTRAIT_VER = 1;
 function castraPortraitSlug(s){ return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,""); }
 function castraPortraitLayer(d, size){
-  const slug = castraPortraitSlug(d.id || d.nm), S = CASTRA_PORTRAIT_SHEETS[slug];
+  const slug = castraPortraitSlug(d.id || d.nm);
+  // Wandelaars met een RPG Maker-personagesheet (People1-4) krijgen het gezicht uit het gezichtenblad met dezelfde naam en hetzelfde nummer: gezicht en poppetje horen bij elkaar.
+  const S = (d.sheet && /^People[1-4]\.png$/.test(d.sheet.f)) ? { file:"assets/portraits/" + d.sheet.f, i:d.sheet.i } : CASTRA_PORTRAIT_SHEETS[slug];
   if(S){ const f = size/144; return `<div style="position:absolute;left:0;top:0;width:${size}px;height:${size}px;background:url(${S.file}?v=${CASTRA_PORTRAIT_VER}) -${(S.i%4)*144*f}px -${(S.i>>2)*144*f}px/${576*f}px ${288*f}px no-repeat;image-rendering:pixelated"></div>`; }
   if(!slug) return "";
   return `<img src="assets/portraits/${slug}.png?v=${CASTRA_PORTRAIT_VER}" alt="" draggable="false" onerror="this.style.display='none'" style="position:absolute;left:0;top:0;width:${size}px;height:${size}px;object-fit:cover;image-rendering:pixelated">`;

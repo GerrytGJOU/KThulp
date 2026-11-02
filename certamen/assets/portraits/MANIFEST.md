@@ -1,6 +1,6 @@
 # Portretten (gegenereerd, niet met de hand bewerken)
 
-107 personen, 0 met portret, 107 zonder.
+107 personen, 5 met portret, 102 zonder.
 
 Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RPG Maker-gezichtenbladen).
 
@@ -36,7 +36,7 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | explorator_germanus.png | Explorator Germanus | trainer | germania | nee |
 | explorator_graecus.png | Explorator Graecus | trainer | graecia | nee |
 | explorator_persa.png | Explorator Persa | trainer | persis | nee |
-| explorator_romanus.png | Explorator Romanus | trainer | roma | nee |
+| explorator_romanus.png | Explorator Romanus | trainer | roma | ja |
 | explorator_spartiates.png | Explorator Spartiates | trainer | laconia | nee |
 | explorator_troianus.png | Explorator Troianus | trainer | troia | nee |
 | faber.png | Faber | builder | latium, graecia, troia, gallia … | nee |
@@ -68,10 +68,10 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | miles_viae_gallus.png | Miles viae Gallus | trainer | gallia | nee |
 | miles_viae_germanus.png | Miles viae Germanus | trainer | germania | nee |
 | miles_viae_graecus.png | Miles viae Graecus | trainer | graecia | nee |
-| miles_viae_latinus.png | Miles viae Latinus | trainer | latium | nee |
+| miles_viae_latinus.png | Miles viae Latinus | trainer | latium | ja |
 | miles_viae_persa.png | Miles viae Persa | trainer | persis | nee |
 | miles_viae_poenus.png | Miles viae Poenus | trainer | africa | nee |
-| miles_viae_romanus.png | Miles viae Romanus | trainer | roma | nee |
+| miles_viae_romanus.png | Miles viae Romanus | trainer | roma | ja |
 | miles_viae_spartiates.png | Miles viae Spartiates | trainer | laconia | nee |
 | miles_viae_troianus.png | Miles viae Troianus | trainer | troia | nee |
 | mucius.png | mucius | held | - | nee |
@@ -105,10 +105,10 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | venator_gallus.png | Venator Gallus | trainer | gallia | nee |
 | venator_germanus.png | Venator Germanus | trainer | germania | nee |
 | venator_graecus.png | Venator Graecus | trainer | graecia | nee |
-| venator_latinus.png | Venator Latinus | trainer | latium | nee |
+| venator_latinus.png | Venator Latinus | trainer | latium | ja |
 | venator_persa.png | Venator Persa | trainer | persis | nee |
 | venator_poenus.png | Venator Poenus | trainer | africa | nee |
-| venator_romanus.png | Venator Romanus | trainer | roma | nee |
+| venator_romanus.png | Venator Romanus | trainer | roma | ja |
 | venator_senex.png | Venator senex | gfetch | caverna_germania | nee |
 | venator_spartiates.png | Venator Spartiates | trainer | laconia | nee |
 | venator_troianus.png | Venator Troianus | trainer | troia | nee |
