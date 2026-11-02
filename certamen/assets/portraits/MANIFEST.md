@@ -1,6 +1,6 @@
 # Portretten (gegenereerd, niet met de hand bewerken)
 
-107 personen, 5 met portret, 102 zonder.
+107 personen, 87 met portret, 20 zonder.
 
 Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RPG Maker-gezichtenbladen).
 
@@ -8,108 +8,108 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 |---|---|---|---|---|
 | achilles.png | achilles | held | - | nee |
 | aeneas.png | aeneas | held | - | nee |
-| agricola.png | Agricola | quest | latium | nee |
-| amazon.png | Amazon | quest, gchamp | themiscyra, taberna_themiscyra | nee |
+| agricola.png | Agricola | quest | latium | ja |
+| amazon.png | Amazon | quest, gchamp | themiscyra, taberna_themiscyra | ja |
 | atalanta.png | atalanta | held | - | nee |
-| athleta.png | Athleta | gchamp | taberna_graecia | nee |
-| balneator.png | Balneator | balneator | thermae_roma | nee |
-| bardus.png | Bardus | gquiz | domus_gallia | nee |
+| athleta.png | Athleta | gchamp | taberna_graecia | ja |
+| balneator.png | Balneator | balneator | thermae_roma | ja |
+| bardus.png | Bardus | gquiz | domus_gallia | ja |
 | camilla.png | camilla | held | - | nee |
 | cassandra.png | Cassandra | gfetch, held | caverna_troia, - | nee |
-| caupo.png | Caupo | grest | taberna_gallia, taberna_germania, taberna_persis | nee |
+| caupo.png | Caupo | grest | taberna_gallia, taberna_germania, taberna_persis | ja |
 | circe.png | circe | held | - | nee |
-| civis_ardeae.png | Civis Ardeae | say | latium | nee |
+| civis_ardeae.png | Civis Ardeae | say | latium | ja |
 | cloelia.png | cloelia | held | - | nee |
-| consul.png | Consul | consul | curia_roma | nee |
-| coquus.png | Coquus | grest | taberna_laconia | nee |
-| custos.png | Custos | quest, custos | troia, catacumbae_i | nee |
-| custos_pharaonis.png | Custos Pharaonis | gchamp | taberna_aegyptus | nee |
-| custos_portae.png | Custos portae | gchamp | taberna_troia | nee |
+| consul.png | Consul | consul | curia_roma | ja |
+| coquus.png | Coquus | grest | taberna_laconia | ja |
+| custos.png | Custos | quest, custos | troia, catacumbae_i | ja |
+| custos_pharaonis.png | Custos Pharaonis | gchamp | taberna_aegyptus | ja |
+| custos_portae.png | Custos portae | gchamp | taberna_troia | ja |
 | daedalus.png | Daedalus | gfetch, held | caverna_graecia, - | nee |
-| druida.png | Druida | gfetch | caverna_gallia | nee |
-| elephantarius.png | Elephantarius | gfetch | caverna_africa | nee |
-| equiso.png | Equiso | grest | taberna_themiscyra | nee |
-| eremita.png | Eremita | eremita | specus_latium | nee |
-| explorator_aegyptius.png | Explorator Aegyptius | trainer | aegyptus | nee |
-| explorator_amazon.png | Explorator Amazon | trainer | themiscyra | nee |
-| explorator_gallus.png | Explorator Gallus | trainer | gallia | nee |
-| explorator_germanus.png | Explorator Germanus | trainer | germania | nee |
-| explorator_graecus.png | Explorator Graecus | trainer | graecia | nee |
-| explorator_persa.png | Explorator Persa | trainer | persis | nee |
+| druida.png | Druida | gfetch | caverna_gallia | ja |
+| elephantarius.png | Elephantarius | gfetch | caverna_africa | ja |
+| equiso.png | Equiso | grest | taberna_themiscyra | ja |
+| eremita.png | Eremita | eremita | specus_latium | ja |
+| explorator_aegyptius.png | Explorator Aegyptius | trainer | aegyptus | ja |
+| explorator_amazon.png | Explorator Amazon | trainer | themiscyra | ja |
+| explorator_gallus.png | Explorator Gallus | trainer | gallia | ja |
+| explorator_germanus.png | Explorator Germanus | trainer | germania | ja |
+| explorator_graecus.png | Explorator Graecus | trainer | graecia | ja |
+| explorator_persa.png | Explorator Persa | trainer | persis | ja |
 | explorator_romanus.png | Explorator Romanus | trainer | roma | ja |
-| explorator_spartiates.png | Explorator Spartiates | trainer | laconia | nee |
-| explorator_troianus.png | Explorator Troianus | trainer | troia | nee |
-| faber.png | Faber | builder | latium, graecia, troia, gallia … | nee |
-| fugitivus.png | Fugitivus | say | latium | nee |
-| gallus_defessus.png | Gallus defessus | say | gallia | nee |
-| gallus_pacatus.png | Gallus pacatus | say | gallia | nee |
-| geron.png | Geron | gquiz | domus_laconia | nee |
-| gladiator.png | Gladiator | quest | roma | nee |
-| gymnasiarches.png | Gymnasiarches | grest | taberna_graecia | nee |
+| explorator_spartiates.png | Explorator Spartiates | trainer | laconia | ja |
+| explorator_troianus.png | Explorator Troianus | trainer | troia | ja |
+| faber.png | Faber | builder | latium, graecia, troia, gallia … | ja |
+| fugitivus.png | Fugitivus | say | latium | ja |
+| gallus_defessus.png | Gallus defessus | say | gallia | ja |
+| gallus_pacatus.png | Gallus pacatus | say | gallia | ja |
+| geron.png | Geron | gquiz | domus_laconia | ja |
+| gladiator.png | Gladiator | quest | roma | ja |
+| gymnasiarches.png | Gymnasiarches | grest | taberna_graecia | ja |
 | hector.png | hector | held | - | nee |
 | hercules.png | hercules | held | - | nee |
-| hippolyta.png | Hippolyta | gquiz | domus_themiscyra | nee |
+| hippolyta.png | Hippolyta | gquiz | domus_themiscyra | ja |
 | horatius.png | horatius | held | - | nee |
-| hortulanus.png | Hortulanus | grest | taberna_aegyptus | nee |
+| hortulanus.png | Hortulanus | grest | taberna_aegyptus | ja |
 | iason.png | iason | held | - | nee |
-| immortalis.png | Immortalis | gchamp | taberna_persis | nee |
-| lanista.png | Lanista | lanista | ludus_roma | nee |
-| magistra.png | Magistra | puzzle | latium, graecia, troia, gallia … | nee |
-| magus.png | Magus | quest, gquiz | persis, domus_persis | nee |
-| magus_senex.png | Magus senex | gfetch | caverna_persis | nee |
-| mater_anxia.png | Mater anxia | say | graecia | nee |
-| mater_laeta.png | Mater laeta | say | graecia | nee |
-| matrona.png | Matrona | host | villa_latium | nee |
+| immortalis.png | Immortalis | gchamp | taberna_persis | ja |
+| lanista.png | Lanista | lanista | ludus_roma | ja |
+| magistra.png | Magistra | puzzle | latium, graecia, troia, gallia … | ja |
+| magus.png | Magus | quest, gquiz | persis, domus_persis | ja |
+| magus_senex.png | Magus senex | gfetch | caverna_persis | ja |
+| mater_anxia.png | Mater anxia | say | graecia | ja |
+| mater_laeta.png | Mater laeta | say | graecia | ja |
+| matrona.png | Matrona | host | villa_latium | ja |
 | medea.png | medea | held | - | nee |
-| mercator.png | Mercator | quest | gallia | nee |
-| mercator_nundinarum.png | Mercator nundinarum | mercator | latium, graecia, troia, gallia … | nee |
-| miles_viae_aegyptius.png | Miles viae Aegyptius | trainer | aegyptus | nee |
-| miles_viae_amazon.png | Miles viae Amazon | trainer | themiscyra | nee |
-| miles_viae_gallus.png | Miles viae Gallus | trainer | gallia | nee |
-| miles_viae_germanus.png | Miles viae Germanus | trainer | germania | nee |
-| miles_viae_graecus.png | Miles viae Graecus | trainer | graecia | nee |
+| mercator.png | Mercator | quest | gallia | ja |
+| mercator_nundinarum.png | Mercator nundinarum | mercator | latium, graecia, troia, gallia … | ja |
+| miles_viae_aegyptius.png | Miles viae Aegyptius | trainer | aegyptus | ja |
+| miles_viae_amazon.png | Miles viae Amazon | trainer | themiscyra | ja |
+| miles_viae_gallus.png | Miles viae Gallus | trainer | gallia | ja |
+| miles_viae_germanus.png | Miles viae Germanus | trainer | germania | ja |
+| miles_viae_graecus.png | Miles viae Graecus | trainer | graecia | ja |
 | miles_viae_latinus.png | Miles viae Latinus | trainer | latium | ja |
-| miles_viae_persa.png | Miles viae Persa | trainer | persis | nee |
-| miles_viae_poenus.png | Miles viae Poenus | trainer | africa | nee |
+| miles_viae_persa.png | Miles viae Persa | trainer | persis | ja |
+| miles_viae_poenus.png | Miles viae Poenus | trainer | africa | ja |
 | miles_viae_romanus.png | Miles viae Romanus | trainer | roma | ja |
-| miles_viae_spartiates.png | Miles viae Spartiates | trainer | laconia | nee |
-| miles_viae_troianus.png | Miles viae Troianus | trainer | troia | nee |
+| miles_viae_spartiates.png | Miles viae Spartiates | trainer | laconia | ja |
+| miles_viae_troianus.png | Miles viae Troianus | trainer | troia | ja |
 | mucius.png | mucius | held | - | nee |
-| nauta.png | Nauta | quest, grest | africa, taberna_africa | nee |
-| pastor.png | Pastor | gfetch | caverna_laconia | nee |
+| nauta.png | Nauta | quest, grest | africa, taberna_africa | ja |
+| pastor.png | Pastor | gfetch | caverna_laconia | ja |
 | penthesilea.png | penthesilea | held | - | nee |
 | perseus.png | perseus | held | - | nee |
-| poeta.png | Poeta | quest | graecia | nee |
-| pontifex.png | Pontifex | pontifex | templum_roma | nee |
-| praeco.png | Praeco | praeco | colosseum_roma | nee |
+| poeta.png | Poeta | quest | graecia | ja |
+| pontifex.png | Pontifex | pontifex | templum_roma | ja |
+| praeco.png | Praeco | praeco | colosseum_roma | ja |
 | prometheus.png | prometheus | held | - | nee |
-| pugnator_gallus.png | Pugnator Gallus | gchamp | taberna_gallia | nee |
-| pugnator_germanus.png | Pugnator Germanus | gchamp | taberna_germania | nee |
-| pythia.png | Pythia | gquiz | domus_graecia | nee |
+| pugnator_gallus.png | Pugnator Gallus | gchamp | taberna_gallia | ja |
+| pugnator_germanus.png | Pugnator Germanus | gchamp | taberna_germania | ja |
+| pythia.png | Pythia | gquiz | domus_graecia | ja |
 | romulus.png | romulus | held | - | nee |
-| sacerdos.png | Sacerdos | gquiz, gfetch | domus_aegyptus, caverna_themiscyra | nee |
-| sacerdos_senex.png | Sacerdos senex | gfetch | caverna_aegyptus | nee |
-| scriba.png | Scriba | quest | aegyptus | nee |
-| senator.png | Senator | senator | solarium_latium | nee |
-| servus.png | Servus | grest | taberna_troia | nee |
-| spartiata.png | Spartiata | gchamp | taberna_laconia | nee |
-| spartiates.png | Spartiates | quest, say | laconia | nee |
-| spartiates_senex.png | Spartiates senex | say | laconia | nee |
-| suffes.png | Suffes | gquiz | domus_africa | nee |
+| sacerdos.png | Sacerdos | gquiz, gfetch | domus_aegyptus, caverna_themiscyra | ja |
+| sacerdos_senex.png | Sacerdos senex | gfetch | caverna_aegyptus | ja |
+| scriba.png | Scriba | quest | aegyptus | ja |
+| senator.png | Senator | senator | solarium_latium | ja |
+| servus.png | Servus | grest | taberna_troia | ja |
+| spartiata.png | Spartiata | gchamp | taberna_laconia | ja |
+| spartiates.png | Spartiates | quest, say | laconia | ja |
+| spartiates_senex.png | Spartiates senex | say | laconia | ja |
+| suffes.png | Suffes | gquiz | domus_africa | ja |
 | theseus.png | theseus | held | - | nee |
 | ulixes.png | ulixes | held | - | nee |
-| vates.png | Vates | gquiz | domus_troia, domus_germania | nee |
-| venator.png | Venator | quest, bounty | germania, latium, roma, gallia … | nee |
-| venator_aegyptius.png | Venator Aegyptius | trainer | aegyptus | nee |
-| venator_amazon.png | Venator Amazon | trainer | themiscyra | nee |
-| venator_gallus.png | Venator Gallus | trainer | gallia | nee |
-| venator_germanus.png | Venator Germanus | trainer | germania | nee |
-| venator_graecus.png | Venator Graecus | trainer | graecia | nee |
+| vates.png | Vates | gquiz | domus_troia, domus_germania | ja |
+| venator.png | Venator | quest, bounty | germania, latium, roma, gallia … | ja |
+| venator_aegyptius.png | Venator Aegyptius | trainer | aegyptus | ja |
+| venator_amazon.png | Venator Amazon | trainer | themiscyra | ja |
+| venator_gallus.png | Venator Gallus | trainer | gallia | ja |
+| venator_germanus.png | Venator Germanus | trainer | germania | ja |
+| venator_graecus.png | Venator Graecus | trainer | graecia | ja |
 | venator_latinus.png | Venator Latinus | trainer | latium | ja |
-| venator_persa.png | Venator Persa | trainer | persis | nee |
-| venator_poenus.png | Venator Poenus | trainer | africa | nee |
+| venator_persa.png | Venator Persa | trainer | persis | ja |
+| venator_poenus.png | Venator Poenus | trainer | africa | ja |
 | venator_romanus.png | Venator Romanus | trainer | roma | ja |
-| venator_senex.png | Venator senex | gfetch | caverna_germania | nee |
-| venator_spartiates.png | Venator Spartiates | trainer | laconia | nee |
-| venator_troianus.png | Venator Troianus | trainer | troia | nee |
-| veteranus_libyus.png | Veteranus Libyus | gchamp | taberna_africa | nee |
+| venator_senex.png | Venator senex | gfetch | caverna_germania | ja |
+| venator_spartiates.png | Venator Spartiates | trainer | laconia | ja |
+| venator_troianus.png | Venator Troianus | trainer | troia | ja |
+| veteranus_libyus.png | Veteranus Libyus | gchamp | taberna_africa | ja |
