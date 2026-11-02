@@ -1,31 +1,31 @@
 # Portretten (gegenereerd, niet met de hand bewerken)
 
-107 personen, 87 met portret, 20 zonder.
+107 personen, 107 met portret, 0 zonder.
 
 Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RPG Maker-gezichtenbladen).
 
 | Bestand | Naam | Soort | Waar | Aanwezig |
 |---|---|---|---|---|
-| achilles.png | achilles | held | - | nee |
-| aeneas.png | aeneas | held | - | nee |
+| achilles.png | achilles | held | - | ja |
+| aeneas.png | aeneas | held | - | ja |
 | agricola.png | Agricola | quest | latium | ja |
 | amazon.png | Amazon | quest, gchamp | themiscyra, taberna_themiscyra | ja |
-| atalanta.png | atalanta | held | - | nee |
+| atalanta.png | atalanta | held | - | ja |
 | athleta.png | Athleta | gchamp | taberna_graecia | ja |
 | balneator.png | Balneator | balneator | thermae_roma | ja |
 | bardus.png | Bardus | gquiz | domus_gallia | ja |
-| camilla.png | camilla | held | - | nee |
-| cassandra.png | Cassandra | gfetch, held | caverna_troia, - | nee |
+| camilla.png | camilla | held | - | ja |
+| cassandra.png | Cassandra | gfetch, held | caverna_troia, - | ja |
 | caupo.png | Caupo | grest | taberna_gallia, taberna_germania, taberna_persis | ja |
-| circe.png | circe | held | - | nee |
+| circe.png | circe | held | - | ja |
 | civis_ardeae.png | Civis Ardeae | say | latium | ja |
-| cloelia.png | cloelia | held | - | nee |
+| cloelia.png | cloelia | held | - | ja |
 | consul.png | Consul | consul | curia_roma | ja |
 | coquus.png | Coquus | grest | taberna_laconia | ja |
 | custos.png | Custos | quest, custos | troia, catacumbae_i | ja |
 | custos_pharaonis.png | Custos Pharaonis | gchamp | taberna_aegyptus | ja |
 | custos_portae.png | Custos portae | gchamp | taberna_troia | ja |
-| daedalus.png | Daedalus | gfetch, held | caverna_graecia, - | nee |
+| daedalus.png | Daedalus | gfetch, held | caverna_graecia, - | ja |
 | druida.png | Druida | gfetch | caverna_gallia | ja |
 | elephantarius.png | Elephantarius | gfetch | caverna_africa | ja |
 | equiso.png | Equiso | grest | taberna_themiscyra | ja |
@@ -46,12 +46,12 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | geron.png | Geron | gquiz | domus_laconia | ja |
 | gladiator.png | Gladiator | quest | roma | ja |
 | gymnasiarches.png | Gymnasiarches | grest | taberna_graecia | ja |
-| hector.png | hector | held | - | nee |
-| hercules.png | hercules | held | - | nee |
+| hector.png | hector | held | - | ja |
+| hercules.png | hercules | held | - | ja |
 | hippolyta.png | Hippolyta | gquiz | domus_themiscyra | ja |
-| horatius.png | horatius | held | - | nee |
+| horatius.png | horatius | held | - | ja |
 | hortulanus.png | Hortulanus | grest | taberna_aegyptus | ja |
-| iason.png | iason | held | - | nee |
+| iason.png | iason | held | - | ja |
 | immortalis.png | Immortalis | gchamp | taberna_persis | ja |
 | lanista.png | Lanista | lanista | ludus_roma | ja |
 | magistra.png | Magistra | puzzle | latium, graecia, troia, gallia … | ja |
@@ -60,7 +60,7 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | mater_anxia.png | Mater anxia | say | graecia | ja |
 | mater_laeta.png | Mater laeta | say | graecia | ja |
 | matrona.png | Matrona | host | villa_latium | ja |
-| medea.png | medea | held | - | nee |
+| medea.png | medea | held | - | ja |
 | mercator.png | Mercator | quest | gallia | ja |
 | mercator_nundinarum.png | Mercator nundinarum | mercator | latium, graecia, troia, gallia … | ja |
 | miles_viae_aegyptius.png | Miles viae Aegyptius | trainer | aegyptus | ja |
@@ -74,19 +74,19 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | miles_viae_romanus.png | Miles viae Romanus | trainer | roma | ja |
 | miles_viae_spartiates.png | Miles viae Spartiates | trainer | laconia | ja |
 | miles_viae_troianus.png | Miles viae Troianus | trainer | troia | ja |
-| mucius.png | mucius | held | - | nee |
+| mucius.png | mucius | held | - | ja |
 | nauta.png | Nauta | quest, grest | africa, taberna_africa | ja |
 | pastor.png | Pastor | gfetch | caverna_laconia | ja |
-| penthesilea.png | penthesilea | held | - | nee |
-| perseus.png | perseus | held | - | nee |
+| penthesilea.png | penthesilea | held | - | ja |
+| perseus.png | perseus | held | - | ja |
 | poeta.png | Poeta | quest | graecia | ja |
 | pontifex.png | Pontifex | pontifex | templum_roma | ja |
 | praeco.png | Praeco | praeco | colosseum_roma | ja |
-| prometheus.png | prometheus | held | - | nee |
+| prometheus.png | prometheus | held | - | ja |
 | pugnator_gallus.png | Pugnator Gallus | gchamp | taberna_gallia | ja |
 | pugnator_germanus.png | Pugnator Germanus | gchamp | taberna_germania | ja |
 | pythia.png | Pythia | gquiz | domus_graecia | ja |
-| romulus.png | romulus | held | - | nee |
+| romulus.png | romulus | held | - | ja |
 | sacerdos.png | Sacerdos | gquiz, gfetch | domus_aegyptus, caverna_themiscyra | ja |
 | sacerdos_senex.png | Sacerdos senex | gfetch | caverna_aegyptus | ja |
 | scriba.png | Scriba | quest | aegyptus | ja |
@@ -96,8 +96,8 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | spartiates.png | Spartiates | quest, say | laconia | ja |
 | spartiates_senex.png | Spartiates senex | say | laconia | ja |
 | suffes.png | Suffes | gquiz | domus_africa | ja |
-| theseus.png | theseus | held | - | nee |
-| ulixes.png | ulixes | held | - | nee |
+| theseus.png | theseus | held | - | ja |
+| ulixes.png | ulixes | held | - | ja |
 | vates.png | Vates | gquiz | domus_troia, domus_germania | ja |
 | venator.png | Venator | quest, bounty | germania, latium, roma, gallia … | ja |
 | venator_aegyptius.png | Venator Aegyptius | trainer | aegyptus | ja |
