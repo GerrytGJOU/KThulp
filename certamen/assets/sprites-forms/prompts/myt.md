@@ -497,3 +497,29 @@ AVOID: NO TEXT OF ANY KIND (no labels, captions, pose names, titles, numbers or 
 - FRONT: The golden eagle seen from the front with the wings half spread and the golden lightning bolt floating in front of its chest.
 - BACK: Show the very large golden wings from behind, the white tail feathers and the blue sparks.
 
+
+## myt_mumia | Mumia | tier 3 | Mummies | ouder: -
+
+- Blad A, bijlagen: `gra_anker.png` en `rom_tiro_A.png` (alleen stijlreferentie; geen eigen anker)
+- SECOND: The SECOND image is the finished Roman recruit sheet (Tiro): use it ONLY for the sheet format, the pixel size, the outline and the pose layout; do NOT copy its clothing, body or face. This unit is a mythical creature, not a soldier.
+- NAME: Mumia; TIER: 3; BRANCH: Mummies; ROLE: mythical creature (boss)
+- OUTFIT: It is a mummy of an Egyptian king, a boss of the pyramids: a tall figure completely wrapped in old yellowed linen bandages with loose ends hanging off, wearing a shiny GOLD royal burial mask with blue-and-gold striped nemes headdress and a gold cobra on the brow, two glowing pale-blue eyes in the dark eye holes, a broad gold collar with blue and red lapis inlay, gold arm bands and a gold belt over the bandages; only the thin bandaged hands show a little dark brown dry skin. In its right hand a gold shepherd's crook; in its left hand a gold-and-blue flail; a faint pale-blue glow around it. Chibi proportions: the head about one third of the body height. MOVEMENT in the walking poses: it shuffles stiffly forward.
+- REST: standing stiffly upright, facing the viewer, the crook and the flail crossed over the chest
+- ATTACK: one stiff step forward, the flail swung forward in a wide arc with a burst of pale blue sparks
+- HIT: recoiling backwards, the head tilted, bandage ends flying, the crook dropping
+- PORT: Show the golden burial mask with the striped headdress and the cobra, the glowing blue eyes and the gold collar.
+- FRONT: The tall mummy seen from the front with the crossed crook and flail and the wrapped body.
+- BACK: Show the back of the striped headdress, the wrapped back with the loose bandage ends and the gold belt.
+
+## myt_draco2 | Draco Persicus | tier 3 | Dragons | ouder: Draco
+
+- Blad A, bijlagen: `gra_anker.png` en `myt_draco_A.png`
+- SECOND: The SECOND image is the finished sheet of the Draco (green-and-gold dragon): this is a PERSIAN variant of the same dragon, so keep the same basic body shape, pose layout and pixel style, but redraw it with a different colour scheme and details as described below.
+- NAME: Draco Persicus; TIER: 3; BRANCH: Dragons; ROLE: mythical creature (boss)
+- OUTFIT: It is a Persian dragon: a large creature with deep royal purple scales, a golden-yellow belly with plates, a long neck and a horned head with two curved golden horns and a golden crest, fierce yellow eyes, a toothy mouth with small flames, a strong body on four legs with sharp gold-tipped claws, large bat-like wings with purple skin and gold membranes patterned with small yellow lion marks, a long spiked tail with a gold tip, and a thin gold collar with a small yellow lion emblem. Fierce but not gory. MOVEMENT in the walking poses: it stalks on four legs with the wings folded.
+- REST: standing proudly on four legs, facing the viewer, the wings half raised, a small flame flickering from the mouth
+- ATTACK: rearing one step forward, the wings spread wide and a bright golden fire breath streaming forward from the open mouth
+- HIT: recoiling backwards, eyes squeezed shut, the wings folding, smoke puffing
+- PORT: Show the horned head with the golden crest, the yellow eyes, the toothy mouth and the small flames.
+- FRONT: The purple dragon seen from the front with the wings half raised, the golden belly and the clawed legs.
+- BACK: Show the wings seen from behind with the gold membranes, the spiked purple back and the long tail.
