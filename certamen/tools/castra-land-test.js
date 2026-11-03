@@ -6,6 +6,7 @@ const run = s => vm.runInContext(s, w.ctx), J = x => JSON.stringify(x), R = s =>
 let fails = 0, checks = 0; const ok = (c, m)=>{ checks++; if(!c){ fails++; console.log("  FOUT  " + m); } };
 run("CASTRA = castraNewState(); CASTRA.dev = true; CASTRA.pxp = castraPxpFor(99);");
 const LANDS = R("Object.keys(CASTRA_LAND)"), ROMAN = ["latium","roma","gallia"];
+LANDS.forEach(r=>run(`castraLandInit(${J(r)})`));          // de wegen worden pas bij de eerste bouw vervangen
 
 console.log("1. autotile: welk kwartje bij welke buren");
 { const q = (a,b,c,d,e,f,g,h)=>R(`castraPlateauQuarters(${a},${b},${c},${d},${e||false},${f||false},${g||false},${h||false})`);

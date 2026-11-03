@@ -197,20 +197,20 @@ function castraLandPlan(rid){
   return CASTRA_LAND_PLAN[rid] = plan;
 }
 
-/* ---------- de rechte wegen vervangen door de bochtige ---------- */
-(function(){
-  Object.keys(CASTRA_LAND).forEach(rid=>{
-    const W = CASTRA_WORLDS[rid]; if(!W || CASTRA_LAND_ROMAN[rid]) return;
-    const plan = castraLandPlan(rid); if(!plan) return;
-    // de oorspronkelijke rechte stukken blijven alleen staan als het bochtige pad niet lukte
-    const keep = (W.roads||[]).filter(r=>{ const vertical = r.y1-r.y0 > r.x1-r.x0; return vertical ? !plan.pathOk.ns : !plan.pathOk.ew; });
-    const rows = {}; Object.keys(plan.path).forEach(k=>{ const [x,y] = k.split(",").map(Number); (rows[y] = rows[y] || []).push(x); });
-    const rects = []; Object.keys(rows).forEach(y=>{ const xs = rows[y].sort((a,b)=>a-b); let s = xs[0], p = xs[0]; for(let i=1;i<=xs.length;i++){ if(i<xs.length && xs[i]===p+1){ p = xs[i]; continue; } rects.push({ x0:s, y0:+y, x1:p, y1:+y }); s = xs[i]; p = xs[i]; } });
-    W.roadsOld = W.roads; W.roads = keep.concat(rects);
-    // de wagen op de hoofdweg: het langste rechte stuk van de oost-westweg
-    const run = {}; rects.forEach(r=>{ const len = r.x1-r.x0+1; if(len>=22 && (!run.r || len>run.len)){ run.r = r; run.len = len; } }); if(run.r) W.cartRoad = { x0:run.r.x0, x1:run.r.x1, y0:run.r.y0, y1:run.r.y0 };
-  });
-})();
+/* ---------- de rechte wegen vervangen door de bochtige (pas als de regio voor het eerst wordt gebouwd: scheelt zo'n 125 ms bij het laden) ---------- */
+const CASTRA_LAND_INIT = {};
+function castraLandInit(rid){
+  if(CASTRA_LAND_INIT[rid]) return; CASTRA_LAND_INIT[rid] = true;
+  const W = CASTRA_WORLDS[rid]; if(!W || CASTRA_LAND_ROMAN[rid] || !CASTRA_LAND[rid]) return;
+  const plan = castraLandPlan(rid); if(!plan) return;
+  // de oorspronkelijke rechte stukken blijven alleen staan als het bochtige pad niet lukte
+  const keep = (W.roads||[]).filter(r=>{ const vertical = r.y1-r.y0 > r.x1-r.x0; return vertical ? !plan.pathOk.ns : !plan.pathOk.ew; });
+  const rows = {}; Object.keys(plan.path).forEach(k=>{ const [x,y] = k.split(",").map(Number); (rows[y] = rows[y] || []).push(x); });
+  const rects = []; Object.keys(rows).forEach(y=>{ const xs = rows[y].sort((a,b)=>a-b); let s = xs[0], p = xs[0]; for(let i=1;i<=xs.length;i++){ if(i<xs.length && xs[i]===p+1){ p = xs[i]; continue; } rects.push({ x0:s, y0:+y, x1:p, y1:+y }); s = xs[i]; p = xs[i]; } });
+  W.roadsOld = W.roads; W.roads = keep.concat(rects);
+  // de wagen op de hoofdweg: het langste rechte stuk van de oost-westweg
+  const run = {}; rects.forEach(r=>{ const len = r.x1-r.x0+1; if(len>=22 && (!run.r || len>run.len)){ run.r = r; run.len = len; } }); if(run.r) W.cartRoad = { x0:run.r.x0, x1:run.r.x1, y0:run.r.y0, y1:run.r.y0 };
+}
 
 /* ---------- op de kaart zetten ---------- */
 function castraLandApply(def, rid){
@@ -232,7 +232,7 @@ function castraLandApply(def, rid){
   return def;
 }
 const _castraWorldDefLand0 = castraWorldDef;
-castraWorldDef = function(){ let d = _castraWorldDefLand0.apply(this, arguments); const W = castraWorldCfg(); if(W.interior) return d; d = castraBarrierApply(d, W.id); return (!CASTRA_LAND[W.id] || CASTRA_LAND_ROMAN[W.id]) ? d : castraLandApply(d, W.id); };
+castraWorldDef = function(){ const W0 = castraWorldCfg(); if(!W0.interior && CASTRA_LAND[W0.id]) castraLandInit(W0.id); let d = _castraWorldDefLand0.apply(this, arguments); const W = castraWorldCfg(); if(W.interior) return d; d = castraBarrierApply(d, W.id); return (!CASTRA_LAND[W.id] || CASTRA_LAND_ROMAN[W.id]) ? d : castraLandApply(d, W.id); };
 
 /* ---------- het spoor: een vereniging van ronde vlekken, dus met zachte randen en bochten ---------- */
 function castraDrawTrack(g, lines, T){
