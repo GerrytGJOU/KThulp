@@ -72,7 +72,7 @@ function castraDlgClose(silent){
    RPG Maker-gezichtenblad (576×288, 4×2 gezichten van 144 px, bv. People1.png): CASTRA_PORTRAIT_SHEETS.matrona = { file:"assets/portraits/People1.png", i:3 }.
    Zonder bestand blijft de avatar zichtbaar (zie assets/portraits/README.txt en tools/castra-portraits-manifest.js). */
 const CASTRA_PORTRAIT_SHEETS = {};
-const CASTRA_PORTRAIT_VER = 1;
+const CASTRA_PORTRAIT_VER = 2;
 function castraPortraitSlug(s){ return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,""); }
 function castraPortraitLayer(d, size){
   const slug = castraPortraitSlug(d.id || d.nm);

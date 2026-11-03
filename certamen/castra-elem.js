@@ -38,7 +38,7 @@ const CASTRA_TAK_ELEM = {
   "Draken":["ignis"], "Gevleugelde paarden":["aer","lux"], "Feniks":["ignis","lux"], "Wolven van Mars":["ignis"],
   "Adelaars van Jupiter":["aer","lux"],
 };
-const CASTRA_FORM_ELEM = { myt_dryas:["terra"], myt_oreas:["terra"], myt_larva:["umbra","aqua"], myt_draco:["ignis","umbra"] };
+const CASTRA_FORM_ELEM = { myt_dryas:["terra"], myt_oreas:["terra"], myt_larva:["umbra","aqua"], myt_draco:["ignis","umbra"], myt_mumia:["umbra","terra"], myt_draco2:["ignis","lux"] };
 const CASTRA_HERO_ELEM = {
   aeneas:["lux"], romulus:["ignis"], horatius:["aqua"], cloelia:["aqua"], mucius:["ignis"], camilla:["aer"], hercules:["terra"],
   perseus:["aer"], theseus:["terra"], atalanta:["aer"], iason:["aqua"], medea:["ignis","umbra"], daedalus:["aer"], prometheus:["ignis"],

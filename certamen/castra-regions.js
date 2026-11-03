@@ -44,7 +44,7 @@ const CASTRA_REGSPEC = {
         ask:{ la:"Salve, hospes {naam}! Scarabaeum sacrum quaero.", nl:"Gegroet, gast {naam}! Ik zoek de heilige scarabee." }, how:{ la:"Descende in pyramidem et refer scarabaeum.", nl:"Ga diep de piramide in en breng de scarabee." },
         wait:{ la:"Ubi est scarabaeus?", nl:"Waar is de scarabee?" }, thanks:{ la:"Scarabaeus! Gratias tibi ago, dux {naam}!", nl:"De scarabee! Dank je wel, leider {naam}!" },
         hud:{ la:"Scarabaeum refer!", nl:"Haal de heilige scarabee voor de priester uit het diepste van de piramide." } },
-      boss:{ nm:"Mumia", form:"myt_larva", lvl:54, icon:"👻" } },
+      boss:{ nm:"Mumia", form:"myt_mumia", lvl:54, icon:"👻" } },
     sentences:[ ["Pharao in pyramide sepelitur.","De farao wordt in de piramide begraven."],["Nilus agros aqua rigat.","De Nijl bevloeit de akkers met water."],["Sacerdotes deos colunt.","De priesters vereren de goden."],["Scribae hieroglyphos scribunt.","De schrijvers schrijven hiërogliefen."],["Sol per caelum currit.","De zon loopt door de hemel."],["Cleopatra regina Aegypti est.","Cleopatra is de koningin van Egypte."] ],
   },
   laconia: {
@@ -104,7 +104,7 @@ const CASTRA_REGSPEC = {
         ask:{ la:"Salve, hospes {naam}! Ignem sacrum quaero.", nl:"Gegroet, gast {naam}! Ik zoek het heilige vuur." }, how:{ la:"Descende in sepulcrum et refer ignem.", nl:"Ga diep het graf in en breng het heilige vuur." },
         wait:{ la:"Ubi est ignis?", nl:"Waar is het vuur?" }, thanks:{ la:"Ignis sacer! Gratias tibi ago, dux {naam}!", nl:"Het heilige vuur! Dank je wel, leider {naam}!" },
         hud:{ la:"Ignem refer!", nl:"Haal het heilige vuur voor de magiër uit het diepste van het koningsgraf." } },
-      boss:{ nm:"Draco", form:"myt_draco", lvl:54, icon:"🐉" } },
+      boss:{ nm:"Draco Persicus", form:"myt_draco2", lvl:54, icon:"🐉" } },
     sentences:[ ["Rex Persarum magnus est.","De koning van de Perzen is groot."],["Persae sagittis pugnant.","De Perzen vechten met pijlen."],["Magi ignem sacrum custodiunt.","De magiërs bewaken het heilige vuur."],["Dareus exercitum ducit.","Darius leidt het leger."],["Via regia longa est.","De koninklijke weg is lang."],["Equites in campo currunt.","De ruiters rennen over het veld."] ],
   },
   africa: {

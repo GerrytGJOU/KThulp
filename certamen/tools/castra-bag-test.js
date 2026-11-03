@@ -4,7 +4,7 @@ const { load } = require("./castra-colo-node.js"), vm = require("vm");
 const w = load({ H(){} }); if(w.errs.length){ console.error(w.errs); process.exit(1); }
 const run = s => vm.runInContext(s, w.ctx), J = x => JSON.stringify(x), R = s => JSON.parse(J(run(s)));
 let fails = 0, checks = 0; const ok = (c, m)=>{ checks++; if(!c){ fails++; console.log("  FOUT  " + m); } };
-const fresh = ()=>run(`CASTRA = castraNewState(); CASTRA.dev = true; var _now = 1700000000000; castraNow = ()=>_now; CASTRA.res = { aes:1000, frumentum:1000, lignum:1000, gloria:10 };
+const fresh = ()=>run(`CASTRA = castraNewState(); CASTRA.dev = true; var _now = 1700000000000; castraNow = ()=>_now; castraNundinae = ()=>({ on:false, phase:3, next:5 }); CASTRA.res = { aes:1000, frumentum:1000, lignum:1000, gloria:10 };
   CASTRA.soldiers = [ castraRollSoldier("rom_hastatus"), castraRollSoldier("rom_funditor") ]; CASTRA.soldiers.forEach((s,i)=>{ s.id = "s"+i; s.lvl = 12; });
   CASTRA.heroes = [ { id:"aeneas", lvl:10, xp:0, fides:10 } ]; var _toast = []; toast = function(a,b){ _toast.push(a+"|"+b); }; if(typeof iconSVG==="undefined") iconSVG = ()=>""; if(typeof brand==="undefined") brand = ()=>""; if(typeof foot==="undefined") foot = ()=>"";`);
 fresh();

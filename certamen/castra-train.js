@@ -91,6 +91,31 @@ function castraTrainerFight(e, right){
     trainer:{ nm:e.nm, tk:e.tk, look:castraTrainerLook(e), party, idx:0 } });
 }
 /* ---------- de trainer in beeld: eerst zijn soldaten tellen, dan pas de eerste (zoals de ballen in Pokémon) ---------- */
+/* ---------- de trainer in beeld (sprites: assets/sprites-forms/trn_<regio>_<soort>_battle_front.png, portret: assets/portraits/<naam>.png) ---------- */
+const CASTRA_TRN_SOORT = ["venator", "miles", "explorator"];
+function castraTrnSpriteId(V, tr){ return "trn_" + (V.region || "x") + "_" + (CASTRA_TRN_SOORT[tr.tk] || "venator"); }
+function castraTrnPortraitUrl(name){ return "assets/portraits/" + castraPortraitSlug(name) + ".png?v=" + CASTRA_PORTRAIT_VER; }
+// Laad de pose vooraf (tr.trnOk = true/false), zodat het gevecht weet of er een trainersprite is.
+function castraTrnPreload(V, tr){
+  if(tr.trnOk!==undefined) return; tr.trnOk = null;
+  const im = new Image(); im.onload = ()=>{ tr.trnOk = true; }; im.onerror = ()=>{ tr.trnOk = false; }; im.src = castraFsprUrl(castraTrnSpriteId(V, tr), "battle_front");
+}
+// Het VS-scherm: links jij (dux), rechts de trainer; zonder portret staat er de avatar.
+function castraVsHTML(meName, me, themName, them){
+  if(!document.getElementById("castraVsCss")){ const st = document.createElement("style"); st.id = "castraVsCss"; st.textContent = `
+.cbvs{position:relative;display:flex;height:150px;border-radius:12px;overflow:hidden;border:3px solid var(--hi,#c9a24a);box-shadow:0 4px 14px rgba(0,0,0,.5);margin-bottom:12px}
+.cbvs .l,.cbvs .r{flex:1;position:relative;display:flex;align-items:flex-end;padding:0 8px;overflow:hidden}
+.cbvs .l{background:linear-gradient(110deg,#28445e,#3f6585 60%,#2c4b66);justify-content:flex-start;animation:cbvsL .7s ease-out both}
+.cbvs .r{background:linear-gradient(250deg,#521820,#8a2b34 60%,#5c1c25);justify-content:flex-end;animation:cbvsR .7s ease-out both}
+.cbvs .l::after,.cbvs .r::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 8px,transparent 8px 22px)}
+.cbvs img,.cbvs .av{position:relative;z-index:1;height:128px;width:128px;image-rendering:pixelated;object-fit:contain}
+.cbvs .nm{position:absolute;bottom:4px;z-index:2;font-size:13px;color:#f3e6bd;text-shadow:0 1px 3px #000;font-weight:bold}
+.cbvs .l .nm{right:10px}.cbvs .r .nm{left:10px}
+.cbvs .vs{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;font-size:44px;font-weight:bold;font-family:Palatino,serif;color:#f4d27a;text-shadow:2px 2px 0 #7a1c14,-1px -1px 0 #7a1c14,0 0 12px rgba(0,0,0,.8);letter-spacing:.04em;animation:cbvsV .5s .5s ease-out both}
+@keyframes cbvsL{from{transform:translateX(-60%)}to{transform:none}}@keyframes cbvsR{from{transform:translateX(60%)}to{transform:none}}@keyframes cbvsV{from{transform:translate(-50%,-50%) scale(2.4);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}`; document.head.appendChild(st); }
+  const face = (nm, look, mirror)=>`<div style="position:relative;width:128px;height:128px;z-index:1"><div class="av" style="position:absolute;left:0;top:0;overflow:hidden">${castraAvatarHTML(look,"down",1,128)}</div><img src="${castraTrnPortraitUrl(nm)}" alt="" draggable="false" onerror="this.style.display='none'" style="position:absolute;left:0;top:0;${mirror?"transform:scaleX(-1);":""}"></div>`;
+  return `<div class="cbvs"><div class="l">${face(meName, me, false)}<span class="nm">${esc(meName)}</span></div><div class="vs">VS</div><div class="r">${face(themName, them, true)}<span class="nm">${esc(themName)}</span></div></div>`;
+}
 function castraTrainerOf(V){ if(!V) return null; if(!V.trainer && V.boss && V.boss.trainer) V.trainer = { ...V.boss.trainer }; return V.trainer || null; }
 function castraTrainerBalls(tr, size){
   let h = ""; for(let i=0;i<tr.party.length;i++){ const gone = i<tr.idx, cur = i===tr.idx;
@@ -104,8 +129,9 @@ function castraTrainerScreen(kind){
   const avatar = `<div style="flex:0 0 112px;width:112px;height:112px">${castraAvatarHTML(tr.look, "down", 1, 112)}</div>`;
   let body;
   if(kind==="intro"){
-    const left = tr.party.length, c = castraTrainerNumLa(left);
-    body = `<div class="panel"><div style="display:flex;gap:14px;align-items:center">${avatar}
+    const left = tr.party.length, c = castraTrainerNumLa(left); castraTrnPreload(V, tr);
+    const meLook = (CASTRA_V.mine && CASTRA_V.mine.look) || (typeof CASTRA_ROMA_LOOKS!=="undefined" ? CASTRA_ROMA_LOOKS.consul : tr.look);
+    body = `<div class="panel">${castraVsHTML("Dux", meLook, tr.nm, tr.look)}<div style="display:flex;gap:14px;align-items:center">${avatar}
       <div style="min-width:0"><div style="font-size:21px"><b>${esc(tr.nm)}</b></div>
         <div style="font-size:17px;margin:6px 0">${castraLaHTML(K.la, K.nl, "trn_q"+tr.tk)}</div></div></div>
       <div style="font-size:18px;margin:14px 0 6px">${castraLaHTML(esc(tr.nm)+" "+c.la+" habet.", esc(tr.nm)+" heeft "+c.nl+".", "trn_habet")}</div>

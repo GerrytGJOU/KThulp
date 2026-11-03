@@ -25,6 +25,9 @@ const CASTRA_VSCENE_CSS = `
 .cbt .cbbox .cbhp{height:11px;margin-top:4px;background:#3b2d1a;border:2px solid #4a3416;border-radius:7px;overflow:hidden}
 .cbt .cbbox .cbhp i{display:block;height:100%;border-radius:5px;transition:width 1s ease-out}
 .cbt .cbnum{font-size:12px;text-align:right;margin-top:1px}
+.cbt .cbtrn{position:absolute;left:73%;top:44%;transform:translate(-50%,-100%);z-index:6;pointer-events:none;width:calc(var(--ke,1)*104px);animation:cbTrn 1.9s ease-in-out both}
+@keyframes cbTrn{0%{opacity:0;margin-left:60px}15%{opacity:1;margin-left:0}72%{opacity:1;margin-left:0}100%{opacity:0;margin-left:70px}}
+.cbt .cbsp-late{animation:cbLate 1.9s linear both}@keyframes cbLate{0%,78%{opacity:0}100%{opacity:1}}
 .cbt .cbxp{height:6px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.25);border-radius:4px;margin-top:3px;overflow:hidden}
 .cbt .cbxp i{display:block;height:100%;background:linear-gradient(#6cc4ff,#2f86d6);transition:width .6s ease-out}
 .cbt .cbdmg{position:absolute;z-index:8;font-size:26px;font-weight:bold;color:#fff;text-shadow:0 2px 0 #000,0 0 6px #000;pointer-events:none;opacity:0;transform:translate(-50%,0)}
@@ -121,7 +124,8 @@ function castraVSceneHTML(V, me, en, mySpr, enSpr, log, menu){
 // Schaal de strijders naar de grootte van de scène en laat de levensbalken zacht leeglopen.
 function castraVSceneFit(){
   const s = document.getElementById("castraVScene"); if(!s) return;
-  const w = s.clientWidth, h = s.clientHeight, ke = Math.max(1, Math.min(2.2, h*0.40/96, w*0.30/96)), kp = Math.min(ke*1.35, h*0.62/96, w*0.38/96);   // de vijand (rechtsboven) past boven zijn platform, jouw eenheid is groter
+  const V0 = typeof CASTRA_V!=="undefined" ? CASTRA_V : null, bossK = (V0 && V0.boss && !(typeof castraTrainerOf==="function" && castraTrainerOf(V0))) ? 1.2 : 1;          // een baas staat groter in beeld
+  const w = s.clientWidth, h = s.clientHeight, ke = Math.max(1, Math.min(2.2*bossK, h*0.40*bossK/96, w*0.30*bossK/96)), kp = Math.min(ke*1.35, h*0.62/96, w*0.38/96);   // de vijand (rechtsboven) past boven zijn platform, jouw eenheid is groter
   s.style.setProperty("--ke", ke.toFixed(2)); s.style.setProperty("--kp", kp.toFixed(2));
 }
 function castraVSceneAfter(){
@@ -130,6 +134,18 @@ function castraVSceneAfter(){
   const V = CASTRA_V, m = document.getElementById("castraVMenu");
   if(V && m && m.style.pointerEvents==="none") setTimeout(()=>{ const mm = document.getElementById("castraVMenu"); if(mm){ mm.style.opacity = ""; mm.style.pointerEvents = ""; } }, castraVSceneDuration(V));
 }
+// Een trainer verschijnt eerst zelf aan de vijandkant (zoals in Pokémon) en stuurt dan zijn soldaat het veld in; zonder sprite blijft alles zoals het was.
+const _castraVSceneHTMLTrn0 = castraVSceneHTML;
+castraVSceneHTML = function(V){
+  let html = _castraVSceneHTMLTrn0.apply(this, arguments);
+  const tr = typeof castraTrainerOf==="function" ? castraTrainerOf(V) : null;
+  if(!tr || V.round!==0 || tr.trnOk!==true) return html;
+  if(!V.trnT0) V.trnT0 = Date.now();
+  const el = Date.now() - V.trnT0; if(el > 1900) return html;                         // tijdens de eerste 1,9 s; een nieuwe tekening halverwege gaat door waar de animatie was
+  const d = "animation-delay:-" + (el/1000).toFixed(2) + "s;";
+  html = html.replace('<div class="cbsp" style="left:73%', '<div class="cbsp cbsp-late" style="' + d + 'left:73%');
+  return html.replace('<div class="cbh"></div>', '<div class="cbh"></div><img class="cbtrn" style="' + d + '" src="' + castraFsprUrl(castraTrnSpriteId(V, tr), "battle_front") + '" alt="" draggable="false">');
+};
 const _castraVRenderScn0 = castraVRender;
 castraVRender = function(stage){
   const r = _castraVRenderScn0.apply(this, arguments);

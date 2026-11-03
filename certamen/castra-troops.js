@@ -142,12 +142,15 @@ const CASTRA_FORM_ROWS = [].concat(
     ["Phoenix",1,"Feniks","myth",null],
     ["Lupus",1,"Wolven van Mars","myth",null], ["Lupus Martius",2,"Wolven van Mars","myth","Lupus"],
     ["Aquila",1,"Adelaars van Jupiter","myth",null], ["Aquila Iovis",2,"Adelaars van Jupiter","myth","Aquila"],
+    // alleen als baas (geen enkel terrein noemt de tak "Bazen", dus nooit in het wild): de Mumia van Aegyptus en de Perzische draak
+    ["Mumia",3,"Bazen","myth",null], ["Draco Persicus",3,"Bazen","myth",null],
   ]),
 );
 
 const CASTRA_FORMS = {};
 (function build(){
-  const idOf = (v,n)=> v + "_" + n.toLowerCase().replace(/[^a-z]/g,"").slice(0,16);
+  const ID_OVERRIDE = { "myt|Draco Persicus":"myt_draco2" };          // de spritebestanden heten myt_draco2 (cijfers vallen anders weg uit het id)
+  const idOf = (v,n)=> ID_OVERRIDE[v+"|"+n] || (v + "_" + n.toLowerCase().replace(/[^a-z]/g,"").slice(0,16));
   const byName = {};
   CASTRA_FORM_ROWS.forEach(r=>{
     const [v,nm,tier,tak,type,from,needs] = r;

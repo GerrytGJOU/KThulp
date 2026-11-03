@@ -37,7 +37,7 @@ const CASTRA_MV_BAL = {
 const CASTRA_FORM_CATCH = {
   myt_draco:0.35, myt_phoenix:0.35, myt_larva:0.6, myt_equusalatus:0.55, myt_pullusalatus:0.8, myt_centaurussagitta:0.6, myt_gryps:0.7,
   myt_aquilaiovis:0.6, myt_lupusmartius:0.7, myt_serpens:0.75, myt_spartus:0.75, myt_siren:0.8, myt_harpyia:0.85, myt_cyclopsfaber:0.8,
-  myt_lemur:0.8, myt_silenus:0.85,
+  myt_lemur:0.8, myt_silenus:0.85, myt_mumia:0.6, myt_draco2:0.35,
 };
 function castraFormCatch(formId){ return CASTRA_FORM_CATCH[formId] != null ? CASTRA_FORM_CATCH[formId] : 1; }
 const CASTRA_MV_BASIC  = { id:"oppugna", la:"Oppugna", nl:"Gewone aanval", kind:"dmg", power:50, acc:100, pp:0 };
