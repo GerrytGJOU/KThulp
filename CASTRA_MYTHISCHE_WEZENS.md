@@ -64,4 +64,6 @@ Alle takken hebben nu hun plekken; de plekken staan in `CASTRA_MYTH_SPOTS` (regi
 
 Draken verder alleen in de grotten (labyrinth, Hercynia, de graven), en een Draco niet in het wild (die is baas). Een plek met `when` heeft buiten haar tijd gewone soldaten. De dagdelen zijn aurora (6-8 u), dies (8-18), vesper (18-21) en nox (21-6).
 
-Nog niet gedaan uit dit plan: een bord of persoon die naar een plek wijst, en de dagdeel-regel voor de Lemur op het kerkhof (nu altijd mogelijk).
+**Raadgevers (2026-11-03):** elke regio heeft één persoon, niet ver van de reisplek, die in het Latijn (met vertaling) naar de goede plekken wijst. Latium: Pastor Latinus (de wolven- en faunengrot); Roma: Augur (Capitool, Marsveld, kerkhof); Gallia: Bardus senex; Germania: Venator Hercynius; Graecia: Rhapsodos (kust, olijfgaarden, stad); Laconia: Hilotes; Troia: Pastor Idaeus; Themiscyra: Venatrix Amazon; Persis: Senex Persa; Aegyptus: Augur Solis; Africa: Nauta Poenus. De teksten staan in `CASTRA_MYTH_HINTS` (`castra-mythos.js`), de richtingen in het Latijn (oriens, occidens, septentrio, meridies), en de moeilijke woorden zijn tikbaar vertaald (`CASTRA_GLOSS`).
+
+Nog niet gedaan uit dit plan: de dagdeel-regel voor de Lemur op het kerkhof (nu altijd mogelijk). Voor het sprites-gesprek: de elf raadgevers hebben nog geen portret (`assets/portraits/<naam>.png`, zie `MANIFEST.md`).

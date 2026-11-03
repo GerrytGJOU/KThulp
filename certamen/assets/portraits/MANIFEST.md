@@ -1,6 +1,6 @@
 # Portretten (gegenereerd, niet met de hand bewerken)
 
-107 personen, 107 met portret, 0 zonder.
+118 personen, 107 met portret, 11 zonder.
 
 Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RPG Maker-gezichtenbladen).
 
@@ -12,8 +12,11 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | amazon.png | Amazon | quest, gchamp | themiscyra, taberna_themiscyra | ja |
 | atalanta.png | atalanta | held | - | ja |
 | athleta.png | Athleta | gchamp | taberna_graecia | ja |
+| augur.png | Augur | say | roma | nee |
+| augur_solis.png | Augur Solis | say | aegyptus | nee |
 | balneator.png | Balneator | balneator | thermae_roma | ja |
 | bardus.png | Bardus | gquiz | domus_gallia | ja |
+| bardus_senex.png | Bardus senex | say | gallia | nee |
 | camilla.png | camilla | held | - | ja |
 | cassandra.png | Cassandra | gfetch, held | caverna_troia, - | ja |
 | caupo.png | Caupo | grest | taberna_gallia, taberna_germania, taberna_persis | ja |
@@ -48,6 +51,7 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | gymnasiarches.png | Gymnasiarches | grest | taberna_graecia | ja |
 | hector.png | hector | held | - | ja |
 | hercules.png | hercules | held | - | ja |
+| hilotes.png | Hilotes | say | laconia | nee |
 | hippolyta.png | Hippolyta | gquiz | domus_themiscyra | ja |
 | horatius.png | horatius | held | - | ja |
 | hortulanus.png | Hortulanus | grest | taberna_aegyptus | ja |
@@ -76,7 +80,10 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | miles_viae_troianus.png | Miles viae Troianus | trainer | troia | ja |
 | mucius.png | mucius | held | - | ja |
 | nauta.png | Nauta | quest, grest | africa, taberna_africa | ja |
+| nauta_poenus.png | Nauta Poenus | say | africa | nee |
 | pastor.png | Pastor | gfetch | caverna_laconia | ja |
+| pastor_idaeus.png | Pastor Idaeus | say | troia | nee |
+| pastor_latinus.png | Pastor Latinus | say | latium | nee |
 | penthesilea.png | penthesilea | held | - | ja |
 | perseus.png | perseus | held | - | ja |
 | poeta.png | Poeta | quest | graecia | ja |
@@ -86,11 +93,13 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | pugnator_gallus.png | Pugnator Gallus | gchamp | taberna_gallia | ja |
 | pugnator_germanus.png | Pugnator Germanus | gchamp | taberna_germania | ja |
 | pythia.png | Pythia | gquiz | domus_graecia | ja |
+| rhapsodos.png | Rhapsodos | say | graecia | nee |
 | romulus.png | romulus | held | - | ja |
 | sacerdos.png | Sacerdos | gquiz, gfetch | domus_aegyptus, caverna_themiscyra | ja |
 | sacerdos_senex.png | Sacerdos senex | gfetch | caverna_aegyptus | ja |
 | scriba.png | Scriba | quest | aegyptus | ja |
 | senator.png | Senator | senator | solarium_latium | ja |
+| senex_persa.png | Senex Persa | say | persis | nee |
 | servus.png | Servus | grest | taberna_troia | ja |
 | spartiata.png | Spartiata | gchamp | taberna_laconia | ja |
 | spartiates.png | Spartiates | quest, say | laconia | ja |
@@ -105,6 +114,7 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | venator_gallus.png | Venator Gallus | trainer | gallia | ja |
 | venator_germanus.png | Venator Germanus | trainer | germania | ja |
 | venator_graecus.png | Venator Graecus | trainer | graecia | ja |
+| venator_hercynius.png | Venator Hercynius | say | germania | nee |
 | venator_latinus.png | Venator Latinus | trainer | latium | ja |
 | venator_persa.png | Venator Persa | trainer | persis | ja |
 | venator_poenus.png | Venator Poenus | trainer | africa | ja |
@@ -112,4 +122,5 @@ Bestand = `assets/portraits/<naam>.png` (144 x 144); zie README.txt (ook voor RP
 | venator_senex.png | Venator senex | gfetch | caverna_germania | ja |
 | venator_spartiates.png | Venator Spartiates | trainer | laconia | ja |
 | venator_troianus.png | Venator Troianus | trainer | troia | ja |
+| venatrix_amazon.png | Venatrix Amazon | say | themiscyra | nee |
 | veteranus_libyus.png | Veteranus Libyus | gchamp | taberna_africa | ja |

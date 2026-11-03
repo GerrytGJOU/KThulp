@@ -98,6 +98,10 @@ console.log("6. mythische wezens alleen op verborgen plekken en in grotten");
   const night = R(`(function(){ const reg = CASTRA_VENATIO.graecia, t = reg.terrains.find(x=>x.id==="anthemoessa"), rng = castraRng(5); let n = 0; for(let i=0;i<600;i++){ if(castraWildPick(reg, t, rng).form.volk==="myt") n++; } return n; })()`);
   ok(day===0 && night>60, "de Sirenen van Anthemoessa zijn er 's nachts ("+night+" van 600), overdag niet ("+day+")");
   run(`CASTRA_PHASE_FORCE = "dies";`);
+  // elke regio heeft een raadgever met hints in het Latijn (met vertaling)
+  const regs = R("Object.keys(CASTRA_WORLDS).filter(r=>!CASTRA_WORLDS[r].interior)");
+  const hint = R(`(function(){ const out = {}; Object.keys(CASTRA_WORLDS).filter(r=>!CASTRA_WORLDS[r].interior).forEach(r=>{ const e = CASTRA_WENT.find(x=>x.id==="raad_"+r); out[r] = e ? (e.say||[]).filter(l=>l.la && l.nl).length : 0; }); return out; })()`);
+  regs.forEach(r=>ok(hint[r]>=2, r+": een raadgever met "+hint[r]+" hints in het Latijn"));
   // de plekken hebben hoog gras met hun eigen terrein
   const tallOk = R(`(function(){ const bad = []; Object.keys(CASTRA_MYTH_RECTS).forEach(r=>{ CASTRA_W_REGION = r; CASTRA_WORLD_BUILT = {}; const B = castraWorldBuilt(); CASTRA_MYTH_RECTS[r].forEach(z=>{ let n = 0; Object.keys(B.tall).forEach(k=>{ if(B.tall[k]===z.id) n++; }); if(n<3) bad.push(r+"/"+z.id+" ("+n+")"); }); }); return bad; })()`);
   ok(tallOk.length===0, "elke verborgen plek heeft hoog gras met zijn eigen terrein"+(tallOk.length ? " (te weinig: "+tallOk.join(", ")+")" : "")); }
