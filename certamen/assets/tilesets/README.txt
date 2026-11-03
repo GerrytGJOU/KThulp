@@ -20,3 +20,6 @@ Herkomst: dezelfde RTP van RPG Maker MV (door Gerben aangeleverd op 2026-10-24);
 Outside_A2 (gronden: gras/zand/steen als autotile), Outside_A3 (daken en muren), Outside_C (zuilen, torens, daken),
 Dungeon_A1 (water/lava/ijs), Dungeon_A2 (gronden), Dungeon_A4 (muren), Dungeon_A5 (vloeren), Dungeon_B (objecten), Dungeon_C (kolommen, kisten, meubels).
 Nog niet in de code gebruikt; Outside_A1, A4, A5 en B stonden er al.
+
+2026-11-03: Outside_A1, A3, A4, B, C en Roma_A/B staan als lossless WebP (`.webp`; pixel-voor-pixel gelijk aan het origineel, een derde tot de helft kleiner).
+De PNG-bronnen staan in de git-geschiedenis. Outside_A5 en Castra_extra blijven PNG. De Roma-sets (A3, C, Roma_A/B) worden pas geladen in Roma (castra-map.js).

@@ -14,7 +14,7 @@ window.CASTRA_MAPS = (function(){
   }
   async function render(rid){
     if(!window.__mapsReady){ await setup(); window.__mapsReady = true; }
-    const keep = CASTRA_W_REGION; CASTRA_W_REGION = rid; CASTRA_WORLD_BUILT = {};
+    const keep = CASTRA_W_REGION; CASTRA_W_REGION = rid; CASTRA_WORLD_BUILT = {}; await castraTsLoad();          // Roma laadt zijn eigen tilesets pas als de regio Roma is
     const B = castraWorldBuilt(), W = CASTRA_WORLDS[rid], S = 24, top = 64;
     const big = document.createElement("canvas"), cb = document.createElement("canvas"), ca = document.createElement("canvas");
     castraDrawMapLayers(B, cb, ca); big.width = cb.width; big.height = cb.height; const bg = big.getContext("2d"); bg.drawImage(cb,0,0); bg.drawImage(ca,0,0);

@@ -142,56 +142,7 @@ function castraVBar(cur,max,col){
   const p = Math.max(0, Math.round(100*cur/max));
   return `<div style="height:12px;background:#1b150e;border:1px solid #4a3d2c;border-radius:6px;overflow:hidden"><div style="width:${p}%;height:100%;background:${col}"></div></div><small>${Math.max(0,cur)} / ${max}</small>`;
 }
-function castraVBattleHTML(){
-  const V = CASTRA_V, line = castraLine(V.enemy.line);
-  const myName = V.mine.dux ? "Dux" : castraSoldierName(V.mine);
-  const log = V.log.slice(-6).map(l=>`<div style="padding:2px 0">${l}</div>`).join("");
-  const mySpr = castraFsprHTML(V.mine.line, "battle_back", 96, castraAvatarHTML(castraPLook(V.mine.line), "up", 1, 96), false);
-  const enSpr = castraFsprHTML(V.enemy.line, "battle_front", 96, castraAvatarHTML(castraPLook(V.enemy.line), "down", 1, 96), false);
-  return `<div class="panel">
-    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
-      <div style="position:relative;width:96px;height:96px">${mySpr}</div>
-      <div style="position:relative;width:96px;height:96px">${enSpr}</div>
-    </div>
-    <div style="display:flex;gap:12px">
-      <div style="flex:1"><b>${esc(myName)}</b> <small>(${esc(CASTRA_TYPE_LA[V.myType].sg)})</small>${castraVBar(V.myHp,V.myMax,"#3f9d52")}</div>
-      <div style="flex:1;text-align:right"><b>${esc(castraSoldierName(V.enemy))}</b> <small>${castraLaText("gradus")} ${V.enemy.lvl} (${esc(CASTRA_TYPE_LA[line.type].sg)})</small>${castraVBar(V.enHp,V.enMax,"#c8392a")}</div>
-    </div>
-    <div id="castraVLog" style="min-height:96px;margin:10px 0;font-size:15px">${log}</div>
-    <div style="display:flex;gap:10px"><button class="btn btn-gold" style="flex:1" onclick="castraVTurn('attack')">${castraLaText("oppugna")}</button>
-      <button class="btn" style="flex:1" onclick="castraVTurn('defend')">${castraLaText("defende")}</button></div>
-    <div class="note" style="margin-top:6px">${castraLa("oppugna")} · ${castraLa("defende")}</div>
-  </div>`;
-}
-function castraVHit(att, def, atkType, defType, defending){
-  let m = castraTypeMult(atkType, defType);
-  let d = Math.max(1, Math.round(att.impetus*m - def.tutela*0.4));
-  if(defending) d = Math.max(1, Math.round(d*CASTRA_V_BAL.defendTakes));
-  return { d, m };
-}
-function castraVTurn(action){
-  const V = CASTRA_V; if(!V || V.over) return;
-  V.round++;
-  const defending = action==="defend";
-  const myFirst = V.myStats.celeritas >= V.stats.celeritas;
-  const eff = m=> m>1 ? " "+castraLaHTML(castraLaText("optime"), CASTRA_LA.optime.nl,"optime") : m<1 ? " "+castraLaHTML(castraLaText("male"), CASTRA_LA.male.nl,"male") : "";
-  const mineAct = ()=>{
-    if(defending){ V.log.push(castraLa("miles_defendit")); return; }
-    const h = castraVHit(V.myStats, V.stats, V.myType, V.enType, false);
-    V.enHp -= h.d; V.log.push(castraLa("miles_oppugnat")+eff(h.m));
-  };
-  const enemyAct = ()=>{
-    const h = castraVHit(V.stats, V.myStats, V.enType, V.myType, defending);
-    V.myHp -= h.d; V.dmgTaken += h.d; V.log.push(castraLa("hostis_oppugnat")+eff(h.m));
-  };
-  if(myFirst){ mineAct(); if(V.enHp>0) enemyAct(); } else { enemyAct(); if(V.myHp>0) mineAct(); }
-  if(V.enHp<=0) V.over = "win";
-  else if(V.myHp<=0) V.over = "lose";
-  else if(V.round>=CASTRA_V_BAL.maxRounds) V.over = "flee";
-  if(V.over){ castraVFinish(); castraVRender("result"); }
-  else castraVRender("battle");
-}
-
+/* (De oudere versies van castraVBattleHTML, castraVTurn en castraVResultHTML, en het werven na de winst, zijn vervangen door het beurtgevecht in castra-moves.js en verwijderd.) */
 /* ---------- afloop ---------- */
 function castraVFinish(){
   const V = CASTRA_V, soldier = V.mine.dux ? null : CASTRA.soldiers.find(s=>s.id===V.mine.id);
@@ -224,41 +175,4 @@ function castraVFinish(){
   }
   castraSave();
 }
-function castraVResultHTML(){
-  const V = CASTRA_V;
-  let h = `<div class="panel">`;
-  if(V.over==="win"){
-    h += `<div style="font-size:22px;margin-bottom:6px">${castraLa("vicisti")}</div>
-      <div style="font-size:15px">${castraLa("hostis_fugit")}</div>`;
-    if(V.loot) h += `<div style="margin-top:6px">${castraLa("praeda")} 🪙 +${V.loot.aes} · 🌾 +${V.loot.fru} · 🏆 +1</div>`;
-    (V.quests||[]).forEach(m=>{ h += `<div class="note">📜 ${esc(m.nm)}: ${m.n} / ${m.need}</div>`; });
-    if(V.leveled) h += `<div class="note">⭐ ${esc(castraSoldierName(V.mine))} → ${castraLaText("gradus")} ${castraSoldierLvl(V.mine)}</div>`;
-    if(V.trace){ const hero = CASTRA_HEROES.find(x=>x.id===V.trace); h += `<div class="note" style="font-size:15px">${castraLa("vestigia")} <b>${esc(hero?hero.nm:"")}</b></div>`; }
-    if(V.mine.dux || true){
-      const full = CASTRA.soldiers.length >= castraBarracksCap();
-      h += `<div style="margin-top:12px;font-size:15px">${castraLa("hostis_dicit")}</div>
-        <div style="font-size:17px;margin:6px 0">${castraLa("visne_recipere")}</div>`;
-      if(full) h += `<div class="note">${castraLa("castra_plena")}</div>`;
-      h += `<div style="display:flex;gap:10px"><button class="btn btn-gold" ${full||V.recruited?"disabled":""} onclick="castraVRecruit()">${castraLaText("recipio")}</button>
-        <button class="btn" onclick="castraVAfter()">${castraLaText("dimitto")}</button></div>`;
-      if(V.recruited) h += `<div class="note" style="margin-top:8px">✔ ${esc(castraSoldierName(V.enemy))} ${castraLa("adiungit")}</div>`;
-    }
-  } else {
-    h += `<div style="font-size:22px;margin-bottom:6px">${castraLa(V.over==="lose"?"victus_es":"hostis_fugit")}</div>`;
-    if(V.over==="lose" && !V.mine.dux) h += `<div class="note">${castraLa("vulneratus")}</div>`;
-  }
-  h += V.fromWorld
-    ? `<div style="display:flex;gap:10px;margin-top:14px"><button class="btn btn-gold" onclick="castraVBack()">${castraLaText("perge")}</button></div></div>`
-    : `<div style="display:flex;gap:10px;margin-top:14px"><button class="btn" onclick="castraVStart('${V.region}')">${castraLaText("iterum")}</button>
-    <button class="btn" onclick="castraVBack()">${castraLaText("redi")}</button></div></div>`;
-  return h;
-}
 function castraSoldierLvl(s){ const r = CASTRA.soldiers.find(x=>x.id===s.id); return r ? r.lvl : s.lvl; }
-function castraVAfter(){ castraVRender("result"); }
-function castraVRecruit(){
-  const V = CASTRA_V; if(!V || V.recruited) return;
-  if(CASTRA.soldiers.length >= castraBarracksCap()) return;
-  CASTRA.soldiers.push(V.enemy);   // de wilde soldaat behoudt zijn eigen aanleg/karakter/insignis
-  V.recruited = true; castraSave(); if(typeof castraPxpAdd==="function") castraPxpAdd(10);
-  castraVRender("result");
-}

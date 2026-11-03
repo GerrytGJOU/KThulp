@@ -13,28 +13,39 @@
    Laadt vóór castra.js.
    ============================================================================ */
 
-const CASTRA_TS_VER = "v=3";
+const CASTRA_TS_VER = "v=4";
+// Alle tilesets zijn lossless WebP (even scherp als de PNG's, een derde tot de helft kleiner); de PNG-bronnen staan in de git-geschiedenis.
 const CASTRA_TS_FILES = {
   A5: "assets/tilesets/Outside_A5.png",
-  B:  "assets/tilesets/Outside_B.png",
-  A1: "assets/tilesets/Outside_A1.png",
-  A3: "assets/tilesets/Outside_A3.png",
-  RA: "assets/tilesets/Roma_A.png",           // Colosseum en triomfboog (Gerben, 2026-10-25)
-  RB: "assets/tilesets/Roma_B.png",           // tempel met zuilen en tholos (Gerben, 2026-10-25)       // daken en gevels van de gebouwen in Roma (castra-urbs.js)
-  A4: "assets/tilesets/Outside_A4.png",       // muren en kliffen (Gerben, 2026-10-24): klifwanden en plateaus van de bergen (castra-berg.js)
-  C:  "assets/tilesets/Outside_C.png",        // zuilen, grafstenen, beelden (Gerben, 2026-10-24): het kerkhof van Roma
+  B:  "assets/tilesets/Outside_B.webp",
+  A1: "assets/tilesets/Outside_A1.webp",
+  A4: "assets/tilesets/Outside_A4.webp",       // muren en kliffen (Gerben, 2026-10-24): klifwanden en plateaus van de bergen (castra-berg.js)
   X:  "assets/tilesets/Castra_extra.png",     // eigen tekeningen (tools/gen_castra_flags.py): vlaggen voor het Praetorium
 };
+// Alleen nodig in Roma (castra-urbs.js): daken en gevels, het Colosseum, de triomfboog, de tempel, grafstenen en beelden. Pas geladen als je in Roma bent.
+const CASTRA_TS_ROMA = {
+  A3: "assets/tilesets/Outside_A3.webp",
+  C:  "assets/tilesets/Outside_C.webp",
+  RA: "assets/tilesets/Roma_A.webp",
+  RB: "assets/tilesets/Roma_B.webp",
+};
 const CASTRA_TS_IMG = {};
-let _castraTsPromise = null;
-function castraTsLoad(){
-  if(_castraTsPromise) return _castraTsPromise;
-  _castraTsPromise = Promise.all(Object.keys(CASTRA_TS_FILES).map(k=>new Promise(res=>{
+let _castraTsPromise = null, _castraTsRomaPromise = null;
+function castraTsLoadSet(files){
+  return Promise.all(Object.keys(files).map(k=>new Promise(res=>{
     const im = new Image();
     im.onload = ()=>{ CASTRA_TS_IMG[k] = im; res(); };
     im.onerror = ()=>res();                      // ontbrekend plaatje = leeg, geen crash
-    im.src = CASTRA_TS_FILES[k] + "?" + CASTRA_TS_VER;
+    im.src = files[k] + "?" + CASTRA_TS_VER;
   })));
+}
+function castraTsLoad(){
+  if(!_castraTsPromise) _castraTsPromise = castraTsLoadSet(CASTRA_TS_FILES);
+  const W = (typeof CASTRA_W_REGION!=="undefined" && typeof CASTRA_WORLDS!=="undefined") ? CASTRA_WORLDS[CASTRA_W_REGION] : null;
+  if(W && (W.id==="roma" || W.parent==="roma")){          // Roma zelf en zijn binnenruimtes (de tempel gebruikt zuilen en beelden)
+    if(!_castraTsRomaPromise) _castraTsRomaPromise = castraTsLoadSet(CASTRA_TS_ROMA);
+    return Promise.all([_castraTsPromise, _castraTsRomaPromise]);
+  }
   return _castraTsPromise;
 }
 
