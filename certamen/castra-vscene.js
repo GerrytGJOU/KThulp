@@ -139,12 +139,14 @@ const _castraVSceneHTMLTrn0 = castraVSceneHTML;
 castraVSceneHTML = function(V){
   let html = _castraVSceneHTMLTrn0.apply(this, arguments);
   const tr = typeof castraTrainerOf==="function" ? castraTrainerOf(V) : null;
-  if(!tr || V.round!==0 || tr.trnOk!==true) return html;
+  // de pose: van de trainer (trn_<regio>_<soort>) of van een kampioen (boss.pose, bv. trn_champ_gallia)
+  const pose = tr ? (tr.trnOk===true ? castraTrnSpriteId(V, tr) : null) : (V.boss && V.boss.pose && castraFsprHas(V.boss.pose, "battle_front")===true ? V.boss.pose : null);
+  if(!pose || V.round!==0) return html;
   if(!V.trnT0) V.trnT0 = Date.now();
   const el = Date.now() - V.trnT0; if(el > 1900) return html;                         // tijdens de eerste 1,9 s; een nieuwe tekening halverwege gaat door waar de animatie was
   const d = "animation-delay:-" + (el/1000).toFixed(2) + "s;";
   html = html.replace('<div class="cbsp" style="left:73%', '<div class="cbsp cbsp-late" style="' + d + 'left:73%');
-  return html.replace('<div class="cbh"></div>', '<div class="cbh"></div><img class="cbtrn" style="' + d + '" src="' + castraFsprUrl(castraTrnSpriteId(V, tr), "battle_front") + '" alt="" draggable="false">');
+  return html.replace('<div class="cbh"></div>', '<div class="cbh"></div><img class="cbtrn" style="' + d + '" src="' + castraFsprUrl(pose, "battle_front") + '" alt="" draggable="false">');
 };
 const _castraVRenderScn0 = castraVRender;
 castraVRender = function(stage){

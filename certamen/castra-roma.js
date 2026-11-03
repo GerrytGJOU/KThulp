@@ -212,11 +212,12 @@ function castraBadTalk(){
 /* Lanista: dagelijkse kampioen */
 function castraLanistaTalk(){
   if(CASTRA_DLG) return;
+  castraFsprProbe([["trn_kampioen_roma", "battle_front"]]);
   const done = (CASTRA.wday||{}).kampioen===castraWDay();
   romaSay("Lanista", CASTRA_ROMA_LOOKS.lanista, [ { la:"Salve, dux {naam}! Gladiatorem fortem habeo.", nl:"Gegroet, leider {naam}! Ik heb een sterke gladiator." },
     done ? { la:"Hodie eum vicisti. Cras redi!", nl:"Vandaag heb je hem verslagen. Kom morgen terug!" }
          : { la:"Visne cum eo pugnare?", nl:"Durf je tegen hem te vechten? Wie wint, krijgt een beloning.", opts:[ { la:"Pugno", nl:"vechten" }, { la:"Nunc non", nl:"nu niet" } ] } ],
-    k=>{ if(!done && k===0) castraRomaFight("arena", "gla_primuspalus", 20, { key:"kampioen", reward:{ aes:90, frumentum:40 }, gloria:2, pxp:25, token:true, why:"kampioen verslagen" }); });
+    k=>{ if(!done && k===0) castraRomaFight("arena", "gla_primuspalus", 20, { key:"kampioen", reward:{ aes:90, frumentum:40 }, gloria:2, pxp:25, token:true, why:"kampioen verslagen", pose:"trn_kampioen_roma" }); });
 }
 
 /* Custos van de catacomben: lucerna-opdracht */

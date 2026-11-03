@@ -236,10 +236,11 @@ function castraRegRest(e){
 function castraRegChamp(e){
   if(CASTRA_DLG) return;
   const key = "champ_"+e.id, done = (CASTRA.wday||{})[key]===castraWDay(), rid = CASTRA_WORLDS[e.region].parent;
+  castraFsprProbe([["trn_champ_"+rid, "battle_front"]]);          // de pose van de kampioen alvast controleren (castra-vscene.js toont hem aan het begin van het gevecht)
   castraLatSay(e.nm, e.look, [ { la:"Salve, dux {naam}! Pugnatorem fortem habeo.", nl:"Gegroet, leider {naam}! Ik heb een sterke vechter." },
     done ? { la:"Hodie eum vicisti. Cras redi!", nl:"Vandaag heb je hem verslagen. Kom morgen terug!" }
          : { la:"Visne cum eo pugnare?", nl:"Durf je tegen hem te vechten? Wie wint, krijgt een beloning.", opts:[ { la:"Pugno", nl:"vechten" }, { la:"Nunc non", nl:"nu niet" } ] } ],
-    k=>{ if(!done && k===0) castraRegionFight(rid, e.fight.terrain, e.fight.form, e.fight.lvl, { key, reward:CASTRA_REG_REWARD.champ, gloria:2, pxp:25, token:true, why:"kampioen verslagen" }); });
+    k=>{ if(!done && k===0) castraRegionFight(rid, e.fight.terrain, e.fight.form, e.fight.lvl, { key, reward:CASTRA_REG_REWARD.champ, gloria:2, pxp:25, token:true, why:"kampioen verslagen", pose:"trn_champ_"+rid }); });
 }
 function castraRegFetch(e){
   if(CASTRA_DLG) return;
