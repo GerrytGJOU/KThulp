@@ -28,3 +28,40 @@ Mythische wezens komen voor via de **tak** (`taks`) van een terrein: een terrein
 - Dag/nacht: `CASTRA_PHASE`/`castra-dayn.js` kent al een nachtlaag; "alleen 's nachts" (Lemur, Sirenen) en "alleen overdag" (Adelaars) is daar een kleine uitbreiding.
 - Zeldzaamheid: `myth.p` per terrein (nu 0.03–0.40) plus de kans op een ontmoeting in de regio. Voorstel: één plek per wezen op 0.25–0.35, en de rest van de kaart op 0 voor die tak.
 - Om ze te vinden: een bord of persoon die erheen wijst (zoals de catacomben-Custos), liefst met een Latijnse hint.
+
+---
+
+## Gebouwd (2026-11-03): `certamen/castra-mythos.js`
+
+Alle takken hebben nu hun plekken; de plekken staan in `CASTRA_MYTH_SPOTS` (regio, ouderzone, rechthoek, takken, vormen, kans, dagdelen). Een verborgen plek is een kleine rechthoek in hoog gras van een gewone zone, zonder rand en zonder naamplaat. Daar ontmoet je naast de gewone soldaten de wezens van die plek; de gewone zones hebben er geen meer. De eerste keer dat je een plek betreedt, krijg je een melding en 4 ervaring. Grotten behouden hun wezens (Schimmen alleen op het kerkhof en in de catacomben); de Pelion van Graecia houdt alleen de centauren.
+
+| Plek | Regio (ouderzone) | Wezens | Kans | Wanneer |
+|---|---|---|---|---|
+| Een lichting van Bacchus | Graecia (olijfgaard) | Saters (Satyrus, Silenus) | 30% | altijd |
+| De heilige eik | Themiscyra (bos) | Nympha, Dryas | 30% | altijd |
+| Een verborgen bron | Troia (Scamander) | Nympha, Naias | 30% | altijd |
+| Waar de bergnimfen dansen | Themiscyra (berg) | Nympha, Oreas | 30% | altijd |
+| Waar de zeenimfen spelen | Troia (kust) | Nympha, Nereis | 30% | altijd |
+| De weide van de centauren | Themiscyra (veld) | Centauren | 30% | altijd |
+| De kust van Phineus | Graecia (kust) | Harpijen | 30% | altijd |
+| De kliffen van de Amazones | Themiscyra (berg) | Harpijen | 30% | altijd |
+| Het nest van de grijpvogels | Persis (berg) | Grijpvogels | 30% | altijd |
+| Het eiland van de Sirenen | Graecia (kust) | Sirenen | 28% | avond en nacht |
+| De klip van de Sirenen | Africa (kust) | Sirenen | 28% | avond en nacht |
+| De muur van de Cyclopen | Troia (muren) | Cyclopen | 30% | altijd |
+| De baai van Poseidon | Graecia (kust) | Zeepaarden | 30% | altijd |
+| De monding van de Scamander | Troia (Scamander) | Zeepaarden | 25% | altijd |
+| De mierenheuvel van Aegina | Graecia (stad) | Myrmidonen | 30% | altijd |
+| De akker met de drakentanden | Graecia (stad) | Gezaaide mannen | 25% | altijd |
+| Het veld van de gezaaide mannen | Laconia (stad) | Gezaaide mannen | 25% | altijd |
+| Een spleet in de zandsteen | Persis (stad) | Anguis, Serpens | 30% | altijd |
+| De bron van Pegasus | Graecia (olijfgaard) | Gevleugelde paarden | 25% | altijd |
+| De weide van de gevleugelde paarden | Themiscyra (veld) | Gevleugelde paarden | 25% | altijd |
+| De zonnetempel van Heliopolis | Aegyptus (stad) | Feniks | 22% | ochtend en dag |
+| Het Marsveld | Roma (kamp) | Wolven van Mars | 30% | altijd |
+| Het Capitool van Iuppiter | Roma (Forum) | Adelaars van Jupiter | 30% | ochtend en dag |
+| Boven de Via Appia | Roma (Via) | Adelaars van Jupiter | 25% | ochtend en dag |
+
+Draken verder alleen in de grotten (labyrinth, Hercynia, de graven), en een Draco niet in het wild (die is baas). Een plek met `when` heeft buiten haar tijd gewone soldaten. De dagdelen zijn aurora (6-8 u), dies (8-18), vesper (18-21) en nox (21-6).
+
+Nog niet gedaan uit dit plan: een bord of persoon die naar een plek wijst, en de dagdeel-regel voor de Lemur op het kerkhof (nu altijd mogelijk).

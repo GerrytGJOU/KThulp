@@ -76,5 +76,31 @@ console.log("5. schimmen alleen op het kerkhof en in de catacomben van Roma");
   ok(R(`["sepulcretum","catacumbae"].every(id=>castraEncTableView("roma", id).some(s=>s.myth && CASTRA_FORMS[s.form].tak==="Schimmen"))`), "beide Roma-terreinen hebben schimmen in hun tabel");
   ok(R(`CASTRA_WORLDS.roma.zones.some(z=>z.t==="sepulcretum")`), "het kerkhof is een zone op de kaart van Roma"); }
 
+console.log("6. mythische wezens alleen op verborgen plekken en in grotten");
+{ const TAKS = R(`[...new Set(CASTRA_FORM_LIST.filter(f=>f.volk==="myt" && f.tak!=="Bazen").map(f=>f.tak))]`);
+  // elke tak heeft minstens één plek
+  const where = R(`(function(){ const o = {}; Object.keys(CASTRA_VENATIO).forEach(r=>CASTRA_VENATIO[r].terrains.forEach(t=>{ if(t.myth) t.myth.taks.forEach(k=>{ (o[k] = o[k]||[]).push(r+"/"+t.id); }); })); return o; })()`);
+  TAKS.forEach(k=>ok((where[k]||[]).length>=1, "de tak "+k+" heeft minstens één plek ("+(where[k]||[]).join(", ")+")"));
+  // de gewone zones hebben geen wezens meer
+  const generic = R(`(function(){ const bad = []; Object.keys(CASTRA_VENATIO).forEach(r=>CASTRA_VENATIO[r].terrains.forEach(t=>{ if(t.myth && !(t.hidden || CASTRA_MYTH_CAVES.includes(t.id) || (r==="graecia" && t.id==="mons"))) bad.push(r+"/"+t.id); })); return bad; })()`);
+  ok(generic.length===0, "alleen grotten, verborgen plekken en de Pelion hebben wezens"+(generic.length ? " (ook: "+generic.join(", ")+")" : ""));
+  // een mythisch slot trekt alleen een vorm van de plek zelf
+  const stray = R(`(function(){ const bad = []; Object.keys(CASTRA_VENATIO).forEach(r=>CASTRA_VENATIO[r].terrains.forEach(t=>{ castraEncTableView(r, t.id).forEach(s=>{ const f = CASTRA_FORMS[s.form]; if(s.myth && !(t.myth.taks.includes(f.tak) && (!t.myth.forms || t.myth.forms.includes(f.id)))) bad.push(r+"/"+t.id+": "+f.id); if(!s.myth && f.volk==="myt") bad.push(r+"/"+t.id+": gewoon slot met "+f.id); }); })); return bad.slice(0,5); })()`);
+  ok(stray.length===0, "elk mythisch slot hoort bij de tak en vormen van zijn plek"+(stray.length ? " ("+stray.join("; ")+")" : ""));
+  // 's nachts komen er buiten die plekken geen wezens bij
+  run(`CASTRA_PHASE_FORCE = "nox";`);
+  const leak = R(`(function(){ let n = 0; Object.keys(CASTRA_VENATIO).forEach(r=>{ const reg = CASTRA_VENATIO[r]; reg.terrains.filter(t=>!t.myth).forEach(t=>{ const rng = castraRng(777); for(let i=0;i<400;i++){ const p = castraWildPick(reg, t, rng); if(p.form.volk==="myt") n++; } }); }); return n; })()`);
+  ok(leak===0, "'s nachts lekken geen wezens uit gewone zones ("+leak+")");
+  // de tijd van een plek: een Sirenen-plek is overdag leeg van wezens
+  run(`CASTRA_PHASE_FORCE = "dies";`);
+  const day = R(`(function(){ const reg = CASTRA_VENATIO.graecia, t = reg.terrains.find(x=>x.id==="anthemoessa"), rng = castraRng(5); let n = 0; for(let i=0;i<600;i++){ if(castraWildPick(reg, t, rng).form.volk==="myt") n++; } return n; })()`);
+  run(`CASTRA_PHASE_FORCE = "nox";`);
+  const night = R(`(function(){ const reg = CASTRA_VENATIO.graecia, t = reg.terrains.find(x=>x.id==="anthemoessa"), rng = castraRng(5); let n = 0; for(let i=0;i<600;i++){ if(castraWildPick(reg, t, rng).form.volk==="myt") n++; } return n; })()`);
+  ok(day===0 && night>60, "de Sirenen van Anthemoessa zijn er 's nachts ("+night+" van 600), overdag niet ("+day+")");
+  run(`CASTRA_PHASE_FORCE = "dies";`);
+  // de plekken hebben hoog gras met hun eigen terrein
+  const tallOk = R(`(function(){ const bad = []; Object.keys(CASTRA_MYTH_RECTS).forEach(r=>{ CASTRA_W_REGION = r; CASTRA_WORLD_BUILT = {}; const B = castraWorldBuilt(); CASTRA_MYTH_RECTS[r].forEach(z=>{ let n = 0; Object.keys(B.tall).forEach(k=>{ if(B.tall[k]===z.id) n++; }); if(n<3) bad.push(r+"/"+z.id+" ("+n+")"); }); }); return bad; })()`);
+  ok(tallOk.length===0, "elke verborgen plek heeft hoog gras met zijn eigen terrein"+(tallOk.length ? " (te weinig: "+tallOk.join(", ")+")" : "")); }
+
 console.log("\n" + checks + " controles, " + fails + " fouten");
 process.exit(fails ? 1 : 0);

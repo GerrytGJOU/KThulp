@@ -53,7 +53,10 @@ castraWildPick = function(reg, terrain, rng){
   const pick = _castraWildPickDn0.apply(this, arguments), P = castraDayPhase();
   if(!P.myth || !pick || !pick.form) return pick;
   if(rng() >= P.myth) return { ...pick, lvl:pick.lvl + P.lvl, night:P.id };                // gewone vijand, nacht maakt hem iets sterker
-  const t = pick.form.tier || 1, pool = CASTRA_FORM_LIST.filter(f=>f.volk==="myt" && Math.abs((f.tier||1)-t)<=1);
+  // alleen binnen een terrein dat al mythische wezens heeft (een grot of een verborgen plek), en dan alleen zijn eigen wezens
+  if(!terrain || !terrain.myth) return { ...pick, lvl:pick.lvl + P.lvl, night:P.id };
+  const t = pick.form.tier || 1, mine = CASTRA_FORM_LIST.filter(f=>f.volk==="myt" && terrain.myth.taks.includes(f.tak) && (!terrain.myth.forms || terrain.myth.forms.includes(f.id)));
+  const pool = mine.filter(f=>Math.abs((f.tier||1)-t)<=1);
   if(!pool.length) return pick;
   return { form: pool[Math.floor(rng()*pool.length)], lvl:pick.lvl + P.lvl, night:P.id };
 };

@@ -253,7 +253,7 @@ function castraWildTier(region, rng){      // 1. tier (60/28/10/2), begrensd doo
 function castraWildForm(region, terrain, tier, rng, mythOnly){      // 2-4. mythisch wezen of volk + vorm van die tier, gewogen op het terrein
   let form = null;
   if(terrain.myth && (mythOnly===true || (mythOnly!==false && rng() < terrain.myth.p))){
-    const pool = CASTRA_FORM_LIST.filter(f=>f.volk==="myt" && terrain.myth.taks.includes(f.tak));
+    const pool = CASTRA_FORM_LIST.filter(f=>f.volk==="myt" && terrain.myth.taks.includes(f.tak) && (!terrain.myth.forms || terrain.myth.forms.includes(f.id)));
     const tiers = pool.filter(f=>f.tier<=Math.min(tier,3)); const useT = tiers.length ? tiers : pool;
     form = castraWeighted(useT.map(f=>({ f, w: f.tier===1 ? 6 : f.tier===2 ? 3 : 1 })), rng).f;
   } else {
