@@ -12,7 +12,7 @@
    mist: node certamen/tools/castra-sprites-manifest.js (schrijft MANIFEST.md).
    Laadt NA castra-troops.js.
    ============================================================================ */
-const CASTRA_FSPR = { dir:"assets/sprites-forms/", ver:"v=6", have:{}, pending:{} };
+const CASTRA_FSPR = { dir:"assets/sprites-forms/", ver:"v=7", have:{}, pending:{} };
 const CASTRA_FSPR_KINDS = { battle_front:96, battle_back:96, td:48, portrait:128, td_idle:48, td_attack:48, td_hurt:48, td_down:48, td_side:48, td_up:48 };
 
 function castraFsprUrl(id, kind){ return CASTRA_FSPR.dir + id + "_" + kind + ".webp?" + CASTRA_FSPR.ver; }
@@ -38,6 +38,14 @@ function castraFsprHTML(id, kind, size, fallbackHtml, flip){
   if(castraFsprHas(id, kind)!==true) return fallbackHtml;
   return `<img src="${castraFsprUrl(id, kind)}" width="${size}" height="${size}" alt="" draggable="false" style="image-rendering:pixelated;display:block${flip?";transform:scaleX(-1)":""}">`;
 }
+
+// Een paar battle_front-sprites (boogschutters, de werper Veles) zijn in zijaanzicht getekend en kijken naar RECHTS, van de speler af.
+// De vijand staat rechtsboven en moet naar links (naar de speler) kijken: deze vormen worden daar gespiegeld. Frontaal getekende sprites staan niet in de lijst.
+const CASTRA_FRONT_FACES_RIGHT = new Set(["rom_veles","rom_sagittarius","gra_toxota","gra_toxotacretensis","per_sagittariusscyth","per_sagittariuspersa","tro_sagittariustroia","aeg_sagittariusaegyp","ama_sagittaria","ama_sagittariaequest","hero_atalanta_sag","hero_atalanta_sag_pr"]);
+function castraFrontFlip(id){ return CASTRA_FRONT_FACES_RIGHT.has(id); }
+// Idem voor jouw eigen soldaat (battle_back): deze achteraanzichten kijken naar LINKS, terwijl de vijand rechtsboven staat; ze worden gespiegeld.
+const CASTRA_BACK_FACES_LEFT = new Set(["rom_veles"]);
+function castraBackFlip(id){ return CASTRA_BACK_FACES_LEFT.has(id); }
 
 /* ---------- tower defence: zes frames per vorm (rust, aanval, geraakt, lopen omlaag/opzij/omhoog) ---------- */
 // Eerst alleen td_idle controleren (één mogelijke 404 per vorm zonder sprites); bestaat die, dan de overige frames.

@@ -80,11 +80,12 @@ function castraPortraitLayer(d, size){
   const S = (d.sheet && /^People[1-4]\.png$/.test(d.sheet.f)) ? { file:"assets/portraits/" + d.sheet.f.replace(/\.png$/, ".webp"), i:d.sheet.i } : CASTRA_PORTRAIT_SHEETS[slug];
   if(S){ const f = size/144; return `<div style="position:absolute;left:0;top:0;width:${size}px;height:${size}px;background:url(${S.file}?v=${CASTRA_PORTRAIT_VER}) -${(S.i%4)*144*f}px -${(S.i>>2)*144*f}px/${576*f}px ${288*f}px no-repeat;image-rendering:pixelated"></div>`; }
   if(!slug) return "";
-  return `<img src="assets/portraits/${slug}.webp?v=${CASTRA_PORTRAIT_VER}" alt="" draggable="false" onerror="this.style.display='none'" style="position:absolute;left:0;top:0;width:${size}px;height:${size}px;object-fit:cover;image-rendering:pixelated">`;
+  // Zodra het portret geladen is, verdwijnt de avatar eronder (anders schijnt hij door de transparante delen van het portret heen).
+  return `<img src="assets/portraits/${slug}.webp?v=${CASTRA_PORTRAIT_VER}" alt="" draggable="false" onload="var a=this.parentNode.querySelector('.cdAv');if(a)a.style.display='none'" onerror="this.style.display='none'" style="position:absolute;left:0;top:0;width:${size}px;height:${size}px;object-fit:cover;image-rendering:pixelated">`;
 }
 function castraDlgPortrait(d){
   return `<div style="flex:0 0 112px;width:112px;height:112px;overflow:hidden;border-radius:8px;background:#d9c590;border:2px solid var(--parch-edge,#4a3416);position:relative">
-    <div style="position:absolute;left:0;top:0;width:112px;height:112px">${d.sheet && typeof castraSheetHTML==="function" ? castraSheetHTML(d.sheet,"down",1,112) : castraAvatarHTML(d.look,"down",1,112)}</div>${castraPortraitLayer(d, 112)}</div>`;
+    <div class="cdAv" style="position:absolute;left:0;top:0;width:112px;height:112px">${d.sheet && typeof castraSheetHTML==="function" ? castraSheetHTML(d.sheet,"down",1,112) : castraAvatarHTML(d.look,"down",1,112)}</div>${castraPortraitLayer(d, 112)}</div>`;
 }
 function castraDlgLine(){
   const D = CASTRA_DLG, box = document.getElementById("castraDlg"); if(!D || !box) return;

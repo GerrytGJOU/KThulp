@@ -447,8 +447,8 @@ function castraVFightMenu(on){ const V = CASTRA_V; if(!V || V.over || V.busy) re
 function castraVBattleHTML(){
   const V = CASTRA_V; if(!V.s) return "";
   const me = V.s.me, en = V.s.en, line = castraLine(V.enemy.line);
-  const mySpr = V.mine.hero ? castraHeroSprHTML(V.mine.h, "battle_back", 96, castraAvatarHTML(CASTRA_HERO_DATA[V.mine.h.id].look, "up", 1, 96)) : castraFsprHTML(V.mine.line, "battle_back", 96, castraAvatarHTML(castraPLook(V.mine.line), "up", 1, 96), false);
-  const enSpr = castraFsprHTML(V.enemy.line, "battle_front", 96, castraAvatarHTML(castraPLook(V.enemy.line), "down", 1, 96), false);
+  const mySpr = V.mine.hero ? castraHeroSprHTML(V.mine.h, "battle_back", 96, castraAvatarHTML(CASTRA_HERO_DATA[V.mine.h.id].look, "up", 1, 96)) : castraFsprHTML(V.mine.line, "battle_back", 96, castraAvatarHTML(castraPLook(V.mine.line), "up", 1, 96), castraBackFlip(V.mine.line));
+  const enSpr = castraFsprHTML(V.enemy.line, "battle_front", 96, castraAvatarHTML(castraPLook(V.enemy.line), "down", 1, 96), castraFrontFlip(V.enemy.line));
   const log = V.log.slice(-5).map(l=>`<div style="padding:2px 0">${l}</div>`).join("");
   const unit = (S, e, right)=>`<div style="flex:1;min-width:0;${right?"text-align:right":""}"><b>${S.unit.insignis?"✨ ":""}${esc(S.name)}</b> <small>${castraLaText("gradus")} ${e.lvl||1} ${CASTRA_MV_ICON[S.type]||""}</small>${castraMvStatus(S)}${castraVBar(S.hp,S.max,right?"#c8392a":"#3f9d52")}</div>`;
   let menu;
