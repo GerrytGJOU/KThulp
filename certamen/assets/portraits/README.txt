@@ -13,7 +13,7 @@ EIGEN PORTRET (per persoon)
 
 RPG MAKER MV GEZICHTENBLAD (kant-en-klaar uit de installatie, RPG Maker MV\NewData\img\faces)
   Zet het blad in deze map (576 x 288 px, 4 x 2 gezichten van 144 x 144), bv. People1.png, en koppel een gezicht aan een persoon in
-  castra-tutorial.js:   CASTRA_PORTRAIT_SHEETS.matrona = { file:"assets/portraits/People1.png", i:3 };
+  castra-tutorial.js:   CASTRA_PORTRAIT_SHEETS.matrona = { file:"assets/portraits/People1.webp", i:3 };
   i = nummer van het gezicht (0 t/m 7: linksboven naar rechtsonder, eerst de bovenste rij).
   Een eigen bestand <naam>.png gaat voor op een gezichtenblad.
 

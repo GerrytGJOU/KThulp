@@ -135,7 +135,7 @@ function bmStProbeIcons(){
   const t=BM_SKILLTREES[BM_ST_CLASS];
   const nodes=[t.root,t.master,...t.identity.flatMap(r=>[r.A,r.B]),...["A","B"].flatMap(p=>t.pathNodes[p].flatMap(r=>[r.a,r.b])),...t.prestige];
   nodes.forEach(n=>{ if(!n.icon||n.icon in BM_ST_IMG_OK) return; BM_ST_IMG_OK[n.icon]=false;
-    const im=new Image(); im.onload=()=>{ BM_ST_IMG_OK[n.icon]=true; if(_screen==="skillTree") bmStRender(); }; im.src="assets/skills/"+n.icon; });
+    const im=new Image(); im.onload=()=>{ BM_ST_IMG_OK[n.icon]=true; if(_screen==="skillTree") bmStRender(); }; im.src="assets/skills/"+n.icon.replace(/\.png$/,".webp"); });
 }
 // Een perfect rechte lijn/curve (x1===x2 of y1===y2) heeft een bounding box met
 // breedte of hoogte 0: het gewone gloed-filter (objectBoundingBox-eenheden)
@@ -165,7 +165,7 @@ function bmStNode(g,x,y,n,color,state,onPick,meta){
     const cid="bmStClip"+(++BM_ST_CLIP_N), svgDefs=g.ownerSVGElement?.querySelector("defs");
     if(svgDefs){ const cp=bmStEl("clipPath",{id:cid},svgDefs); bmStEl("polygon",{points:bmStHex(x,y,r-1.5)},cp); }
     const sz=r*2;
-    bmStEl("image",{href:"assets/skills/"+n.icon,x:x-sz/2,y:y-sz/2,width:sz,height:sz,"clip-path":svgDefs?`url(#${cid})`:"",preserveAspectRatio:"xMidYMid slice",opacity:state==="locked"?.3:state==="closed"?.45:1},grp);
+    bmStEl("image",{href:"assets/skills/"+n.icon.replace(/\.png$/,".webp"),x:x-sz/2,y:y-sz/2,width:sz,height:sz,"clip-path":svgDefs?`url(#${cid})`:"",preserveAspectRatio:"xMidYMid slice",opacity:state==="locked"?.3:state==="closed"?.45:1},grp);
   } else {
     const tx=bmStEl("text",{x,y:y+1,"text-anchor":"middle","dominant-baseline":"central","font-size":r*.85,fill:lit?"#fff6dc":state==="open"?color:"#6b5b45",opacity:state==="locked"?.5:1},grp);
     tx.textContent=(n.glyph||"?")+"︎";
@@ -343,7 +343,7 @@ function bmStActionsRender(){
   const t=BM_SKILLTREES[BM_ST_CLASS], cls=BM_CLASSES.find(c=>c.id===BM_ST_CLASS); if(!t||!cls){ box.innerHTML=""; return; }
   const stars=bmStStars(BM_ST_CLASS), eff=bmStEffectivePicks(BM_ST_CLASS,BM_ST_PICKS,stars);
   const pay=(typeof bmStPayloadFor==="function"&&bmStPayloadFor(BM_ST_CLASS,BM_ST_PICKS,stars))||{nodes:[],prestige:null};
-  const ico=n=>n&&n.icon&&BM_ST_IMG_OK[n.icon]?`<img class="bmst-ai" src="assets/skills/${n.icon}" alt="">`:`<span class="bmst-ai g">${esc(n?.glyph||"◆")}</span>`;
+  const ico=n=>n&&n.icon&&BM_ST_IMG_OK[n.icon]?`<img class="bmst-ai" src="assets/skills/${n.icon.replace(/\.png$/,".webp")}" alt="">`:`<span class="bmst-ai g">${esc(n?.glyph||"◆")}</span>`;
   const chips=s=>{ const out=[], d=(k)=>s.n[k]-s.b[k], up=k=>d(k)>0?` <i>+${d(k)}</i>`:d(k)<0?` <i class="dn">${d(k)}</i>`:"";
     if(s.n.dmg) out.push(`<span class="bmst-c dmg" title="Schade">⚔ ${s.n.dmg}${s.aoe?" <small>elk</small>":""}${up("dmg")}</span>`);
     if(s.n.heal) out.push(`<span class="bmst-c heal" title="Heling van je leger">✚ ${s.n.heal}${up("heal")}</span>`);

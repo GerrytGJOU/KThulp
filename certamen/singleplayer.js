@@ -1479,7 +1479,7 @@ SCREENS.spWorldMap = function(){
   </div>
   <div class="panel"><p class="note">${esc(panel.nm)} — nieuwe plekken verschijnen zodra je ze in het verhaal hebt bezocht. Plekken te dicht op elkaar? Zoom in.</p></div>
   <div class="panel" style="padding:0;overflow:auto;position:relative;max-height:65vh">
-    <img id="spMapImg" src="assets/chronica/maps/${esc(panel.img)}" alt="" style="width:${Math.round(SP_MAP_ZOOM*100)}%;display:block" onload="spPositionMapPins()" onerror="this.parentElement.querySelector('.sp-map-missing').style.display='block'">
+    <img id="spMapImg" src="assets/chronica/maps/${esc(spImgFile(panel.img))}" alt="" style="width:${Math.round(SP_MAP_ZOOM*100)}%;display:block" onload="spPositionMapPins()" onerror="this.parentElement.querySelector('.sp-map-missing').style.display='block'">
     <div class="sp-map-missing note" style="display:none;padding:40px 16px;text-align:center">Kaart nog niet beschikbaar.</div>
     <div id="spMapPins" style="position:absolute;left:0;top:0">${pins}</div>
   </div>
@@ -1546,7 +1546,7 @@ SCREENS.spCityMaps = function(){
   </div>
   <div class="panel"><p class="note">${esc(panel.nm)} — nieuwe plekken verschijnen zodra je ze in het verhaal hebt bezocht. Plekken te dicht op elkaar? Zoom in.</p></div>
   <div class="panel" style="padding:0;overflow:auto;position:relative;max-height:65vh">
-    <img id="spCityMapImg" src="assets/chronica/maps/${esc(panel.img)}" alt="" style="width:${Math.round(SP_CITY_MAP_ZOOM*100)}%;display:block" onload="spPositionCityMapPins()" onerror="this.parentElement.querySelector('.sp-map-missing').style.display='block'">
+    <img id="spCityMapImg" src="assets/chronica/maps/${esc(spImgFile(panel.img))}" alt="" style="width:${Math.round(SP_CITY_MAP_ZOOM*100)}%;display:block" onload="spPositionCityMapPins()" onerror="this.parentElement.querySelector('.sp-map-missing').style.display='block'">
     <div class="sp-map-missing note" style="display:none;padding:40px 16px;text-align:center">Kaart nog niet beschikbaar.</div>
     <div id="spCityMapPins" style="position:absolute;left:0;top:0">${pins}</div>
   </div>

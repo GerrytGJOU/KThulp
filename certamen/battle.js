@@ -2415,19 +2415,19 @@ function bmBgTheme(theme){
    terug op het standaard CSS-landschapsthema. */
 const BATTLE_BACKGROUNDS = {
   // Tweelaags (RPG Maker MV): floor = Battleback1, wall = Battleback2.
-  "grasland":    { nm:"Grasvlakte",  floor:"assets/battlebacks/Grassland1.png",  wall:"assets/battlebacks/Grassland2.png" },
-  "bos":         { nm:"Bos",         floor:"assets/battlebacks/forest1.png",     wall:"assets/battlebacks/forest2.png" },
-  "woestijn":    { nm:"Woestijn",    floor:"assets/battlebacks/Desert1.png",     wall:"assets/battlebacks/Desert2.png" },
-  "tempel":      { nm:"Tempel",      floor:"assets/battlebacks/Temple1.png",     wall:"assets/battlebacks/Temple2.png" },
-  "ruines":      { nm:"Ruïnes",      floor:"assets/battlebacks/Ruins1.png",      wall:"assets/battlebacks/Ruins2.png" },
-  "fort":        { nm:"Fort",        floor:"assets/battlebacks/Fort1.png",       wall:"assets/battlebacks/Fort2.png" },
-  "stad":        { nm:"Stad",        floor:"assets/battlebacks/Town1.png",       wall:"assets/battlebacks/Town2.png" },
-  "haven":       { nm:"Haven",       floor:"assets/battlebacks/Port1.png",       wall:"assets/battlebacks/Port2.png" },
-  "wolken":      { nm:"Wolken",      floor:"assets/battlebacks/Clouds1.png",     wall:"assets/battlebacks/Clouds2.png" },
-  "hemel":       { nm:"Hemel",       floor:"assets/battlebacks/Sky1.png",        wall:"assets/battlebacks/Sky2.png" },
-  "onderwereld": { nm:"Onderwereld", floor:"assets/battlebacks/Underworld1.png", wall:"assets/battlebacks/Underworld2.png" },
+  "grasland":    { nm:"Grasvlakte",  floor:"assets/battlebacks/Grassland1.webp",  wall:"assets/battlebacks/Grassland2.webp" },
+  "bos":         { nm:"Bos",         floor:"assets/battlebacks/forest1.webp",     wall:"assets/battlebacks/forest2.webp" },
+  "woestijn":    { nm:"Woestijn",    floor:"assets/battlebacks/Desert1.webp",     wall:"assets/battlebacks/Desert2.webp" },
+  "tempel":      { nm:"Tempel",      floor:"assets/battlebacks/Temple1.webp",     wall:"assets/battlebacks/Temple2.webp" },
+  "ruines":      { nm:"Ruïnes",      floor:"assets/battlebacks/Ruins1.webp",      wall:"assets/battlebacks/Ruins2.webp" },
+  "fort":        { nm:"Fort",        floor:"assets/battlebacks/Fort1.webp",       wall:"assets/battlebacks/Fort2.webp" },
+  "stad":        { nm:"Stad",        floor:"assets/battlebacks/Town1.webp",       wall:"assets/battlebacks/Town2.webp" },
+  "haven":       { nm:"Haven",       floor:"assets/battlebacks/Port1.webp",       wall:"assets/battlebacks/Port2.webp" },
+  "wolken":      { nm:"Wolken",      floor:"assets/battlebacks/Clouds1.webp",     wall:"assets/battlebacks/Clouds2.webp" },
+  "hemel":       { nm:"Hemel",       floor:"assets/battlebacks/Sky1.webp",        wall:"assets/battlebacks/Sky2.webp" },
+  "onderwereld": { nm:"Onderwereld", floor:"assets/battlebacks/Underworld1.webp", wall:"assets/battlebacks/Underworld2.webp" },
   // Enkellaags (één afbeelding, bv. een foto/JPG): gebruik 'single'.
-  "olympus":     { nm:"Olympus",     single:"assets/battlebacks/Olympus.jpg", smooth:true },
+  "olympus":     { nm:"Olympus",     single:"assets/battlebacks/Olympus.webp", smooth:true },
 };
 // Inline style-string voor #bmField op basis van de gekozen achtergrond.
 // Tweelaags: muur eerst genoemd (bovenste laag), vloer als tweede (eronder).

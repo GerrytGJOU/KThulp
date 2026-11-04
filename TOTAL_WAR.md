@@ -218,9 +218,9 @@ aan het bestaande gedeelde profiel (zie §6) zodra de leerling die heeft.
   2. **Bouwanimatie** — avatar "bouwt" (hamer-motion; kan `"swing"` hergebruiken
      met een ander wapen-sprite) de verdedigingswerken van de eigen provincie
      op, in stadia die oplopen met `walls` (§4/§5.2): eerst een fort
-     (`assets/bosses/fort.png`), dan verschijnt daarvoor een palissade
-     (`assets/bosses/Palissade.png`), die bij een hoger `walls`-niveau overgaat
-     in een stenen muur (`assets/bosses/wall.png`) — alle drie de sprites zijn
+     (`assets/bosses/fort.webp`), dan verschijnt daarvoor een palissade
+     (`assets/bosses/Palissade.webp`), die bij een hoger `walls`-niveau overgaat
+     in een stenen muur (`assets/bosses/wall.webp`) — alle drie de sprites zijn
      al aanwezig. Puur visueel, geen eigen
      opslag nodig — de trap wordt afgeleid van de al bestaande `walls`-waarde.
 - Fout antwoord: geen Trainingspunten, gewoon door naar de volgende vraag
@@ -1130,8 +1130,8 @@ moet de siege weapon dus opnieuw bouwen voor een volgende poging.
   ongeacht terrein. Zodra bos als terreintype bestaat (§5.3), volgt de
   grasland/woestijn/bos-multiplier op siege weapons als aparte fase.
 - **Sprite-afbeeldingen — ✅ geleverd (2026-09-18)**, op precies de al
-  bestaande paden: `assets/bosses/ram.png`, `assets/bosses/siegetower.png`,
-  `assets/bosses/catapult.png` (één plaatje per type, geen tier0/1/2 zoals
+  bestaande paden: `assets/bosses/ram.webp`, `assets/bosses/siegetower.webp`,
+  `assets/bosses/catapult.webp` (één plaatje per type, geen tier0/1/2 zoals
   bij de bestaande structuren, want siege weapons zijn AAN/UIT). De
   tekst/voortgangsbalk-fallback (`onerror` verbergt een ontbrekend bestand
   geruisloos) blijft gewoon in de code staan als vangnet.

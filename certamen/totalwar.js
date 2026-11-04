@@ -141,9 +141,9 @@ const TW_SIEGE_RAM_HP_CUT_PCT = 20;
 const TW_SIEGE_TOWER_SYNERGY_FACTOR = 0.7; // vermenigvuldigt de al-N-geschaalde drempel
 const TW_SIEGE_CATAPULT_BONUS_ROUNDS = 10;
 const TW_SIEGE_WEAPONS = {
-  ram:      { field:"ramPoints",        nm:"Stormram",         icon:"🐏", sprite:"assets/bosses/ram.png" },
-  tower:    { field:"siegeTowerPoints", nm:"Belegeringstoren", icon:"🗼", sprite:"assets/bosses/siegetower.png" },
-  catapult: { field:"catapultPoints",   nm:"Catapult",         icon:"🎯", sprite:"assets/bosses/catapult.png" },
+  ram:      { field:"ramPoints",        nm:"Stormram",         icon:"🐏", sprite:"assets/bosses/ram.webp" },
+  tower:    { field:"siegeTowerPoints", nm:"Belegeringstoren", icon:"🗼", sprite:"assets/bosses/siegetower.webp" },
+  catapult: { field:"catapultPoints",   nm:"Catapult",         icon:"🎯", sprite:"assets/bosses/catapult.webp" },
 };
 
 // Scant de provincies van attackerCiv die aan targetId grenzen (zelfde
@@ -200,9 +200,9 @@ const TW_STAGE_HP_REF_N = 20; // klasgrootte waarvoor TW_STAGE_HP hierboven getu
 // (garrison_farmers/garrison_militia/garrison_{volk}) — zelfde reeks als de
 // civ-specifieke garnizoensplaatjes hieronder.
 const TW_STRUCTURES = {
-  militia: { field:"militiaPoints", tier0:"assets/bosses/garrison_farmers.png", tier1:"assets/bosses/garrison_militia.png", tier2:"civ" },
-  walls:   { field:"wallPoints",    tier0:null, tier1:"assets/bosses/Palissade.png", tier2:"assets/bosses/wall.png" },
-  towers:  { field:"towerPoints",   tier0:"assets/bosses/farm.png", tier1:"assets/bosses/watchtower.png", tier2:"assets/bosses/fort.png" },
+  militia: { field:"militiaPoints", tier0:"assets/bosses/garrison_farmers.webp", tier1:"assets/bosses/garrison_militia.webp", tier2:"civ" },
+  walls:   { field:"wallPoints",    tier0:null, tier1:"assets/bosses/Palissade.webp", tier2:"assets/bosses/wall.webp" },
+  towers:  { field:"towerPoints",   tier0:"assets/bosses/farm.webp", tier1:"assets/bosses/watchtower.webp", tier2:"assets/bosses/fort.webp" },
 };
 
 // Cosmetische schaalcorrectie per sprite-pad (op verzoek, 2026-09-10) — zie
@@ -212,8 +212,8 @@ const TW_STRUCTURES = {
 // dan de wachttoren (tier1) — terwijl die laatste juist de upgrade is.
 // Ontbrekende sprites vallen terug op schaal 1 (ongewijzigd).
 const TW_SPRITE_SCALE = {
-  "assets/bosses/farm.png": 0.8,
-  "assets/bosses/watchtower.png": 1.15,
+  "assets/bosses/farm.webp": 0.8,
+  "assets/bosses/watchtower.webp": 1.15,
 };
 
 // Volksnaam per beschaving, voor het civ-specifieke garnizoensplaatje
@@ -285,7 +285,7 @@ function twSpriteFor(structureKey, tier, civId){
   const raw = tier>=2?def.tier2:tier>=1?def.tier1:def.tier0;
   if(raw!=="civ") return raw;
   const suffix = TW_GARRISON_SPRITE_BY_CIV[civId];
-  return suffix ? "assets/bosses/garrison_"+suffix+".png" : "assets/bosses/garrison_militia.png";
+  return suffix ? "assets/bosses/garrison_"+suffix+".webp" : "assets/bosses/garrison_militia.webp";
 }
 
 /* ---- Demo-stand voor de publieke "Binnenkort"-uitlegkaart (SCREENS.totalWar).
@@ -2050,9 +2050,9 @@ function twProvinceInfo(id){
    dat is een latere, aparte fase (TOTAL_WAR.md §5.8/§5.9); dit is voorlopig
    puur de visuele achtergrond. */
 const TW_TERRAIN_BG = {
-  grassland:["assets/battlebacks/Grassland1.png"],
-  desert:["assets/battlebacks/Desert1.png"],
-  forest:["assets/battlebacks/forest2.png","assets/battlebacks/forest1.png"],
+  grassland:["assets/battlebacks/Grassland1.webp"],
+  desert:["assets/battlebacks/Desert1.webp"],
+  forest:["assets/battlebacks/forest2.webp","assets/battlebacks/forest1.webp"],
 };
 function twTerrainBg(provinceId){
   const terrain = (_twRegistry && _twRegistry[provinceId] && _twRegistry[provinceId].terrain) || "grassland";

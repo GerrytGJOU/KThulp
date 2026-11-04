@@ -15,7 +15,7 @@
 const CASTRA_FSPR = { dir:"assets/sprites-forms/", ver:"v=6", have:{}, pending:{} };
 const CASTRA_FSPR_KINDS = { battle_front:96, battle_back:96, td:48, portrait:128, td_idle:48, td_attack:48, td_hurt:48, td_down:48, td_side:48, td_up:48 };
 
-function castraFsprUrl(id, kind){ return CASTRA_FSPR.dir + id + "_" + kind + ".png?" + CASTRA_FSPR.ver; }
+function castraFsprUrl(id, kind){ return CASTRA_FSPR.dir + id + "_" + kind + ".webp?" + CASTRA_FSPR.ver; }
 // true = bestaat, false = bestaat niet, undefined = nog niet gecontroleerd
 function castraFsprHas(id, kind){ return CASTRA_FSPR.have[id+"|"+kind]; }
 // list: [[vormId, kind], ...]; cb draait zodra alles gecontroleerd is (meteen als alles al bekend is).

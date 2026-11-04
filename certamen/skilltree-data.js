@@ -828,7 +828,7 @@ const BM_SKILLTREES = {
   // sprite: bestaande Total War-sprite (assets/bosses/), klein achter het eigen leger.
   // WAL IN BEELD (besluit 2026-10-05): geen palissade achter het leger, maar een
   //   palissade die van achter naar voren TUSSEN de legers loopt (nieuwe sprite,
-  //   assets/bosses/palissade_midden_1.png (heel), _2 (beschadigd), _3 (bijna verwoest); prompts in het ontwerpgesprek).
+  //   assets/bosses/palissade_midden_1.webp (heel), _2 (beschadigd), _3 (bijna verwoest); prompts in het ontwerpgesprek).
   //   - Beide teams kunnen een muur hebben → dan staan er twee in beeld: elk iets
   //     naar het eigen team toe geschoven, die van team B horizontaal gespiegeld.
   //   - Afbrokkelen zichtbaar via drie sprites (heel / beschadigd / bijna
@@ -863,10 +863,10 @@ const BM_SKILLTREES = {
     identity: [
       { star:1,
         A:{ id:"katapult_bouwen", nm:"Katapult Bouwen", desc:"Katapult zet ook een katapult neer: die doet de 2 rondes erna elk +2 schade, in rondes waarin jij goed antwoordt.", glyph:"⚒",
-            fx:{ type:"ability_mod", ability:"katapult", engine:{ dmg:2, rounds:2, sprite:"assets/bosses/catapult.png" } },
+            fx:{ type:"ability_mod", ability:"katapult", engine:{ dmg:2, rounds:2, sprite:"assets/bosses/catapult.webp" } },
             iconSubject:"a small wooden catapult (onager) with its throwing arm pulled back", icon:"genie_katapult_bouwen.png" },
         B:{ id:"palissade", nm:"Palissade", desc:"Veldreparatie bouwt ook een muur van +3 HP die klappen opvangt (eigen HP-balk, telt niet als schild).", glyph:"⩚",
-            fx:{ type:"ability_mod", ability:"veldreparatie", wall:{ shld:3, sprite:"assets/bosses/Palissade.png" } },
+            fx:{ type:"ability_mod", ability:"veldreparatie", wall:{ shld:3, sprite:"assets/bosses/Palissade.webp" } },
             iconSubject:"a row of sharpened wooden stakes forming a palisade wall", icon:"genie_palissade.png" } },
       { star:2,
         A:{ id:"omslaan", nm:"Omslaan", desc:"Haalt een vaardigheid van jou schild weg terwijl de vijand geen schild heeft, dan wordt de helft daarvan schade (niet bij je passief).", glyph:"⇄",
@@ -895,14 +895,14 @@ const BM_SKILLTREES = {
       A: [
         { star:6,
           a:{ id:"stormram", nm:"Stormram", desc:"Je werktuig haalt elke ronde ook 2 vijandelijk schild weg.", glyph:"⊳",
-              fx:{ type:"engine_shld_remove", val:2, sprite:"assets/bosses/ram.png" },
+              fx:{ type:"engine_shld_remove", val:2, sprite:"assets/bosses/ram.webp" },
               iconSubject:"a covered battering ram with a bronze ram's head on a wheeled frame", icon:"genie_stormram.png" },
           b:{ id:"lange_belegering", nm:"Lange Belegering", desc:"Je werktuig blijft 3 rondes staan in plaats van 2.", glyph:"⌛",
               fx:{ type:"engine_rounds", rounds:3 },
               iconSubject:"an hourglass standing next to a small wooden siege engine", icon:"genie_lange_belegering.png" } },
         { star:7,
           a:{ id:"belegeringstoren", nm:"Belegeringstoren", desc:"Zolang je werktuig staat, doen je eigen aanvallen +1.", glyph:"♖",
-              fx:{ type:"engine_attack_bonus", val:1, sprite:"assets/bosses/siegetower.png" },
+              fx:{ type:"engine_attack_bonus", val:1, sprite:"assets/bosses/siegetower.webp" },
               iconSubject:"a tall wooden siege tower on wheels with a drawbridge at the top", icon:"genie_belegeringstoren.png" },
           b:{ id:"zware_stenen", nm:"Zware Stenen", desc:"Je werktuig doet +3 per ronde in plaats van +2.", glyph:"●",
               fx:{ type:"engine_dmg", dmg:3 },
@@ -928,14 +928,14 @@ const BM_SKILLTREES = {
               fx:{ type:"ability_mod", ability:"veldreparatie", heal:2 },
               iconSubject:"a hammer and a roll of bandage lying on a wooden plank", icon:"genie_veldherstel.png" },
           b:{ id:"stenen_muur", nm:"Stenen Muur", desc:"Palissade bouwt +5 muur-HP in plaats van +3.", glyph:"▦",
-              fx:{ type:"wall_val", node:"palissade", shld:5, sprite:"assets/bosses/wall.png" },
+              fx:{ type:"wall_val", node:"palissade", shld:5, sprite:"assets/bosses/wall.webp" },
               iconSubject:"a solid wall of cut stone blocks with a walkway on top", icon:"genie_stenen_muur.png" } },
         { star:7,
           a:{ id:"snelbouw", nm:"Snelbouw", desc:"Veldreparatie kost 3 AP in plaats van 4.", glyph:"⚡",
               fx:{ type:"ability_mod", ability:"veldreparatie", cost:-1 },
               iconSubject:"a builder's hammer striking a wooden beam with motion lines", icon:"genie_snelbouw.png" },
           b:{ id:"wachttoren", nm:"Wachttoren", desc:"Vijandelijke schildsloop raakt je muur maar half.", glyph:"♖",
-              fx:{ type:"wall_shld_remove_resist", frac:0.5, sprite:"assets/bosses/watchtower.png" },
+              fx:{ type:"wall_shld_remove_resist", frac:0.5, sprite:"assets/bosses/watchtower.webp" },
               iconSubject:"a wooden watchtower with a small roof and a lookout platform", icon:"genie_wachttoren.png" } },
         { star:8,
           a:{ id:"vesting", nm:"Vesting", desc:"Je muur herstelt 1 HP in elke ronde waarin jij goed antwoordt.", glyph:"⛫",
@@ -961,7 +961,7 @@ const BM_SKILLTREES = {
         iconSubject:"large curved bronze mirrors focusing a beam of sunlight onto a burning ship", icon:"genie_archimedes.png" },
       { id:"muren_van_syracuse", nm:"Muren van Syracuse", cost:13, path:"B",
         desc:"Schild +8 voor je team, én +10 muur-HP; je leger heelt +4.", glyph:"⛫",
-        fx:{ type:"shield_and_heal", shld:8, heal:4, wall:{ shld:10, sprite:"assets/bosses/wall.png" } },
+        fx:{ type:"shield_and_heal", shld:8, heal:4, wall:{ shld:10, sprite:"assets/bosses/wall.webp" } },
         iconSubject:"high stone city walls above the sea with strange wooden cranes on top", icon:"genie_muren_van_syracuse.png" },
     ],
   },

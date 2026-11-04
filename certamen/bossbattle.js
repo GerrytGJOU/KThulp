@@ -51,19 +51,19 @@ const BOSS_DIFF_ORDER = ["easy","normal","hard","heroic","legendary"];
 const BOSS_PRESETS = {
   hydra:    { id:"hydra",    nm:"De Hydra van Lerna",   emoji:"🐉", color:"#2e7d32",
     desc:"Laat steeds nieuwe koppen aangroeien — alleen een gezamenlijke harde klap schroeit de stomp dicht.",
-    img:"assets/bosses/hydra.png",
-    heads:["assets/bosses/hydrahead1.png","assets/bosses/hydrahead2.png","assets/bosses/hydrahead3.png",
-           "assets/bosses/hydrahead4.png","assets/bosses/hydrahead5.png","assets/bosses/hydrahead6.png",
-           "assets/bosses/hydrahead7.png"],
-    hero:{ nm:"Herakles", img:"assets/commanders/heroes/herakles.png" } },
+    img:"assets/bosses/hydra.webp",
+    heads:["assets/bosses/hydrahead1.webp","assets/bosses/hydrahead2.webp","assets/bosses/hydrahead3.webp",
+           "assets/bosses/hydrahead4.webp","assets/bosses/hydrahead5.webp","assets/bosses/hydrahead6.webp",
+           "assets/bosses/hydrahead7.webp"],
+    hero:{ nm:"Herakles", img:"assets/commanders/heroes/herakles.webp" } },
   cyclops:  { id:"cyclops",  nm:"Polyfemus de Cycloop", emoji:"👁️", color:"#ef6c00",
     desc:"Elke paar rondes dreigt een metgezellenmaaltijd — alleen gezamenlijk schild kan die nog onderbreken.",
-    img:"assets/bosses/cyclops.png",
-    hero:{ nm:"Odysseus", img:"assets/commanders/heroes/odysseus.png" } },
+    img:"assets/bosses/cyclops.webp",
+    hero:{ nm:"Odysseus", img:"assets/commanders/heroes/odysseus.webp" } },
   minotaur: { id:"minotaur", nm:"De Minotaurus",        emoji:"🐂", color:"#c62828",
     desc:"Verstopt zich achter een Labyrinth-schild en gaat daarna in Enrage.",
-    img:"assets/bosses/Minotaur.png",
-    hero:{ nm:"Theseus", img:"assets/commanders/heroes/theseus.png" } },
+    img:"assets/bosses/Minotaur.webp",
+    hero:{ nm:"Theseus", img:"assets/commanders/heroes/theseus.webp" } },
   // Verborgen baas voor Total War-belegeringen (twStartAttack() in
   // totalwar.js) — bewust NIET in BOSS_PRESET_ORDER, dus nooit los kiesbaar
   // in het normale Boss Battle-menu. Geen mythologische held/tegenstander,
@@ -71,7 +71,7 @@ const BOSS_PRESETS = {
   // garnizoensbonus zit al in de HP (zie bmStartBossGame() in battle.js).
   garrison: { id:"garrison", nm:"Het Garnizoen",         emoji:"🏰", color:"#6b5d4f",
     desc:"De muren, torens en het garnizoen van de belegerde provincie.",
-    img:"assets/bosses/fort.png" }, // placeholder, wordt later vervangen
+    img:"assets/bosses/fort.webp" }, // placeholder, wordt later vervangen
 };
 const BOSS_PRESET_ORDER = ["hydra","cyclops","minotaur"];
 

@@ -222,28 +222,28 @@ const BM_FACTIONS = [
 // Vervang .svg door .png zodra echte artwork beschikbaar is (één regelwijziging per commandant).
 const BM_COMMANDERS = {
   rome_gaul: {
-    A: { nm:"Julius Caesar",   img:"assets/commanders/romans/caesar.png"       },
-    B: { nm:"Vercingetorix",   img:"assets/commanders/gauls/vercingetorix.png" },
+    A: { nm:"Julius Caesar",   img:"assets/commanders/romans/caesar.webp"       },
+    B: { nm:"Vercingetorix",   img:"assets/commanders/gauls/vercingetorix.webp" },
   },
   athene_sparta: {
-    A: { nm:"Pericles",        img:"assets/commanders/athenians/perikles.png"  },
-    B: { nm:"Leonidas",        img:"assets/commanders/spartans/leonidas.png"   },
+    A: { nm:"Pericles",        img:"assets/commanders/athenians/perikles.webp"  },
+    B: { nm:"Leonidas",        img:"assets/commanders/spartans/leonidas.webp"   },
   },
   grieken_perzen: {
-    A: { nm:"Themistokles",    img:"assets/commanders/athenians/themistocles.png" },
-    B: { nm:"Xerxes",          img:"assets/commanders/persians/xerxes.png"     },
+    A: { nm:"Themistokles",    img:"assets/commanders/athenians/themistocles.webp" },
+    B: { nm:"Xerxes",          img:"assets/commanders/persians/xerxes.webp"     },
   },
   rome_carthago: {
-    A: { nm:"Scipio Africanus", img:"assets/commanders/romans/scipio.png"      },
-    B: { nm:"Hannibal",         img:"assets/commanders/carthage/hannibal.png"  },
+    A: { nm:"Scipio Africanus", img:"assets/commanders/romans/scipio.webp"      },
+    B: { nm:"Hannibal",         img:"assets/commanders/carthage/hannibal.webp"  },
   },
   grieken_trojanen: {
-    A: { nm:"Agamemnon",       img:"assets/commanders/greeks/agamemnon.png"    },
-    B: { nm:"Hector",          img:"assets/commanders/trojans/hector.png"      },
+    A: { nm:"Agamemnon",       img:"assets/commanders/greeks/agamemnon.webp"    },
+    B: { nm:"Hector",          img:"assets/commanders/trojans/hector.webp"      },
   },
   goden_titanen: {
-    A: { nm:"Zeus",            img:"assets/commanders/gods/zeus.png"           },
-    B: { nm:"Kronos",          img:"assets/commanders/titans/kronos.png"       },
+    A: { nm:"Zeus",            img:"assets/commanders/gods/zeus.webp"           },
+    B: { nm:"Kronos",          img:"assets/commanders/titans/kronos.webp"       },
   },
 };
 
@@ -253,14 +253,14 @@ const BM_COMMANDERS = {
 // Boss Battle-helden staan in BOSS_PRESETS[id].hero (zie bossbattle.js).
 // Nieuwe beschaving: 1) voeg PNG toe, 2) voeg één regel toe — geen code nodig.
 const TW_CIV_COMMANDERS = {
-  roma:     { nm:"Julius Caesar",      img:"assets/commanders/romans/caesar.png"                  },
-  gallii:   { nm:"Vercingetorix",      img:"assets/commanders/gauls/vercingetorix.png"            },
-  germani:  { nm:"Arminius",           img:"assets/commanders/germans/arminius.png"               },
-  athenae:  { nm:"Alexander de Grote", img:"assets/commanders/greeks/alexander the great.png"     },
-  persae:   { nm:"Xerxes",             img:"assets/commanders/persians/xerxes.png"                },
-  carthago: { nm:"Hannibal",           img:"assets/commanders/carthage/hannibal.png"              },
-  aegyptii: { nm:"Cleopatra",          img:"assets/commanders/egyptians/cleopatra.png"            },
-  britanni: { nm:"Boudicca",           img:"assets/commanders/britons/boudica.png"                },
+  roma:     { nm:"Julius Caesar",      img:"assets/commanders/romans/caesar.webp"                  },
+  gallii:   { nm:"Vercingetorix",      img:"assets/commanders/gauls/vercingetorix.webp"            },
+  germani:  { nm:"Arminius",           img:"assets/commanders/germans/arminius.webp"               },
+  athenae:  { nm:"Alexander de Grote", img:"assets/commanders/greeks/alexander the great.webp"     },
+  persae:   { nm:"Xerxes",             img:"assets/commanders/persians/xerxes.webp"                },
+  carthago: { nm:"Hannibal",           img:"assets/commanders/carthage/hannibal.webp"              },
+  aegyptii: { nm:"Cleopatra",          img:"assets/commanders/egyptians/cleopatra.webp"            },
+  britanni: { nm:"Boudicca",           img:"assets/commanders/britons/boudica.webp"                },
 };
 
 /* ---- CONFIGURATIETABELLEN: M6 AVATAR / NIVEAU / MASTERY / ACHIEVEMENTS ---- */

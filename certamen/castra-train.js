@@ -94,7 +94,7 @@ function castraTrainerFight(e, right){
 /* ---------- de trainer in beeld (sprites: assets/sprites-forms/trn_<regio>_<soort>_battle_front.png, portret: assets/portraits/<naam>.png) ---------- */
 const CASTRA_TRN_SOORT = ["venator", "miles", "explorator"];
 function castraTrnSpriteId(V, tr){ return "trn_" + (V.region || "x") + "_" + (CASTRA_TRN_SOORT[tr.tk] || "venator"); }
-function castraTrnPortraitUrl(name){ return "assets/portraits/" + castraPortraitSlug(name) + ".png?v=" + CASTRA_PORTRAIT_VER; }
+function castraTrnPortraitUrl(name){ return "assets/portraits/" + castraPortraitSlug(name) + ".webp?v=" + CASTRA_PORTRAIT_VER; }
 // Laad de pose vooraf (tr.trnOk = true/false), zodat het gevecht weet of er een trainersprite is.
 function castraTrnPreload(V, tr){
   if(tr.trnOk!==undefined) return; tr.trnOk = null;

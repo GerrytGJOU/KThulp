@@ -4251,96 +4251,96 @@ const SP_FIN_EPILOOG_ROMEINSE_POLITIEK_IMAGE = {
 };
 
 const SP_COMBAT_ENEMIES = {
-  nemeische_leeuw: { nm:"De Nemeïsche Leeuw", icon:"🦁", img:"assets/chronica/combat/nemeische_leeuw.png", hp:40,
+  nemeische_leeuw: { nm:"De Nemeïsche Leeuw", icon:"🦁", img:"assets/chronica/combat/nemeische_leeuw.webp", hp:40,
     intro:"Een leeuw met een huid die geen enkel wapen kan doorboren — Herakles zal hem uiteindelijk met blote handen moeten wurgen." },
-  hydra: { nm:"De Hydra van Lerna", icon:"🐍", img:"assets/chronica/combat/hydra.png",
-    heads:["assets/chronica/combat/hydrahead1.png","assets/chronica/combat/hydrahead2.png","assets/chronica/combat/hydrahead3.png",
-           "assets/chronica/combat/hydrahead4.png","assets/chronica/combat/hydrahead5.png","assets/chronica/combat/hydrahead6.png",
-           "assets/chronica/combat/hydrahead7.png"],
+  hydra: { nm:"De Hydra van Lerna", icon:"🐍", img:"assets/chronica/combat/hydra.webp",
+    heads:["assets/chronica/combat/hydrahead1.webp","assets/chronica/combat/hydrahead2.webp","assets/chronica/combat/hydrahead3.webp",
+           "assets/chronica/combat/hydrahead4.webp","assets/chronica/combat/hydrahead5.webp","assets/chronica/combat/hydrahead6.webp",
+           "assets/chronica/combat/hydrahead7.webp"],
     hp:60,
     intro:"Een veelkoppig moeras-monster dat voor elke afgehakte kop er twee nieuwe laat aangroeien — alleen vuur kan de wonden dichtschroeien voor ze weer aangroeien." },
 
   // ---- Hoofdstuk 3, Lijn Herakles ----
   // Cerberus heeft, net als de Hydra, geen losse koppen-bestanden — één
   // enkele statische illustratie i.p.v. de Hydra-koppenstapeling.
-  centauren: { nm:"De Dronken Centaurenkudde", icon:"🐴", img:"assets/chronica/combat/centauren.png", hp:50,
+  centauren: { nm:"De Dronken Centaurenkudde", icon:"🐴", img:"assets/chronica/combat/centauren.webp", hp:50,
     intro:"Een woeste kudde centauren, dronken van Pholus' gedeelde wijnkruik en meteen vijandig tegenover elke indringer." },
-  kretenzische_stier: { nm:"De Kretenzische Stier", icon:"🐂", img:"assets/chronica/combat/kretenzische_stier.png", hp:55,
+  kretenzische_stier: { nm:"De Kretenzische Stier", icon:"🐂", img:"assets/chronica/combat/kretenzische_stier.webp", hp:55,
     intro:"Een reusachtige, door Neptunus razend gemaakte stier die al jaren de akkers van Kreta verwoest." },
-  merries_van_diomedes: { nm:"De Merries van Diomedes", icon:"🐎", img:"assets/chronica/combat/merries_van_diomedes.png", hp:55,
+  merries_van_diomedes: { nm:"De Merries van Diomedes", icon:"🐎", img:"assets/chronica/combat/merries_van_diomedes.webp", hp:55,
     intro:"Vier merries, afgericht op mensenvlees door hun eigen meester — enkel honger drijft hun waanzin aan." },
-  amazones: { nm:"De Amazones", icon:"🏹", img:"assets/chronica/combat/amazones.png", hp:60,
+  amazones: { nm:"De Amazones", icon:"🏹", img:"assets/chronica/combat/amazones.webp", hp:60,
     intro:"Hippolytes trouwe strijdsters, opgehitst door een gerucht dat Juno zelf verspreidde — een gevecht dat nooit had moeten plaatsvinden." },
-  geryon: { nm:"Geryon", icon:"👹", img:"assets/chronica/combat/geryon.png", hp:70,
+  geryon: { nm:"Geryon", icon:"👹", img:"assets/chronica/combat/geryon.webp", hp:70,
     intro:"Een reus met drie gekoppelde lichamen op één paar benen, die zijn kudde rood vee met drievoudige kracht verdedigt." },
-  cerberus: { nm:"Cerberus", icon:"🐕", img:"assets/chronica/combat/cerberus.png", hp:80,
+  cerberus: { nm:"Cerberus", icon:"🐕", img:"assets/chronica/combat/cerberus.webp", hp:80,
     intro:"De driekoppige hond die de poort van de onderwereld bewaakt — de zwaarste van alle twaalf beproevingen, en de enige die met blote handen gewonnen moet worden." },
 
   // ---- Hoofdstuk 4, Lijn Theseus ----
-  minotaurus: { nm:"De Minotaurus", icon:"🐃", img:"assets/chronica/combat/minotaurus.png", hp:65,
+  minotaurus: { nm:"De Minotaurus", icon:"🐃", img:"assets/chronica/combat/minotaurus.webp", hp:65,
     intro:"Half mens, half stier — het gevolg van een oude, gebroken belofte van koning Minos — al negen jaar gevoed met Atheens offervlees, en vandaag voor het eerst tegenover iemand die niet van plan is zich te laten offeren." },
 
   // ---- Hoofdstuk 5 — Het Gulden Vlies ----
-  amycus: { nm:"Amycus", icon:"🥊", img:"assets/chronica/combat/amycus.png", hp:55,
+  amycus: { nm:"Amycus", icon:"🥊", img:"assets/chronica/combat/amycus.webp", hp:55,
     intro:"De reusachtige koning van de Bebryciërs, die elke vreemdeling die aan land komt verplicht tot een bokswedstrijd daagt — een uitdaging die tot nu toe niemand heeft overleefd." },
-  drakon_vlies: { nm:"De Draak van Colchis", icon:"🐉", img:"assets/chronica/combat/drakon_vlies.png", hp:75,
+  drakon_vlies: { nm:"De Draak van Colchis", icon:"🐉", img:"assets/chronica/combat/drakon_vlies.webp", hp:75,
     intro:"Een nooit slapende draak, al jaren opgerold rond de boom waar het Gulden Vlies hangt — koning Aeëtes' laatste en zwaarste verdediging." },
 
   // ---- Hoofdstuk 6 — De Vloek van Thebe ----
-  laodamas: { nm:"Laodamas", icon:"🛡️", img:"assets/chronica/combat/laodamas.png", hp:60,
+  laodamas: { nm:"Laodamas", icon:"🛡️", img:"assets/chronica/combat/laodamas.webp", hp:60,
     intro:"De zoon van Eteokles en de laatste verdediger van Thebe's poorten — vastbesloten zijn vaders stad niet te verliezen aan de zonen van de mannen die zijn vader ooit versloeg." },
 
   // ---- Hoofdstuk 8 — De Wrok van Achilles ----
-  trojaanse_voorhoede: { nm:"De Trojaanse Voorhoede", icon:"🔥", img:"assets/chronica/combat/trojaanse_voorhoede.png", hp:50,
+  trojaanse_voorhoede: { nm:"De Trojaanse Voorhoede", icon:"🔥", img:"assets/chronica/combat/trojaanse_voorhoede.webp", hp:50,
     intro:"Een groep Trojaanse strijders, vlak bij de Griekse schepen, met fakkels in de hand — als de wal nu breekt, staat de hele vloot in brand voor de avond valt." },
   // flip:true — de illustratie toont Hector naar rechts (van de speler af)
   // i.p.v. naar links (naar de speler toe); leerlingfeedback 2026-08-25.
-  hektor: { nm:"Hector", icon:"⚔️", img:"assets/chronica/combat/hektor.png", hp:90, flip:true,
+  hektor: { nm:"Hector", icon:"⚔️", img:"assets/chronica/combat/hektor.webp", hp:90, flip:true,
     intro:"Troje's grootste verdediger, gedwongen door zijn eigen eer om te blijven staan — Athena, vermomd als zijn broer Deiphobus, heeft er net voor gezorgd dat hij niet meer kan vluchten." },
 
   // ---- Hoofdstuk 9 — Ilion in Vlammen ----
-  trojaanse_wachters: { nm:"De Laatste Wachters van Troje", icon:"🔥", img:"assets/chronica/combat/trojaanse_wachters.png", hp:55,
+  trojaanse_wachters: { nm:"De Laatste Wachters van Troje", icon:"🔥", img:"assets/chronica/combat/trojaanse_wachters.webp", hp:55,
     intro:"Een handvol dronken, half-wakkere verdedigers bij de poort — alles wat er nog over is van Troje's waakzaamheid, op de nacht dat het er het meest toe doet." },
 
   // ---- Hoofdstuk 12 — Odysseus' Wraak ----
-  vrijers_ithaka: { nm:"De Vrijers van Ithaka", icon:"🏹", img:"assets/chronica/combat/vrijers_ithaka.png", hp:85,
+  vrijers_ithaka: { nm:"De Vrijers van Ithaka", icon:"🏹", img:"assets/chronica/combat/vrijers_ithaka.webp", hp:85,
     intro:"Meer dan honderd mannen, drie jaar lang gewend aan een paleis dat niet van hen is — verrast, ongewapend, en voor het eerst tegenover de koning die ze allang dood waanden." },
 
   // ---- Hoofdstuk 26 — Een Rijk in Crisis ----
-  bataven: { nm:"De Bataafse Opstandelingen", icon:"🛡️", img:"assets/chronica/combat/bataven.png", hp:60,
+  bataven: { nm:"De Bataafse Opstandelingen", icon:"🛡️", img:"assets/chronica/combat/bataven.webp", hp:60,
     intro:"Julius Civilis' strijders, thuis in elk moeras en elke rivierarm langs de Rijn — een tegenstander die vecht op een slagveld dat geen enkel Romeins handboek beschrijft." },
 
   // ---- Finale — De Rivier Lethe, opnieuw en voorgoed ----
   // hp is een BASISwaarde: spStartCombatFromScene herberekent 'm via
   // spFinaleLetheHp() (±20%, "zachte schaling", Chronica.md §7.101) op basis
   // van fin_kennis_score/fin_herinnering_score — nergens anders gebeurt dat.
-  fin_lethe: { nm:"Lethe", icon:"🌊", img:"assets/chronica/combat/fin_lethe.png", hp:130,
+  fin_lethe: { nm:"Lethe", icon:"🌊", img:"assets/chronica/combat/fin_lethe.webp", hp:130,
     intro:"Geen monster, geen leger — alleen Lethe zelf, rustig, onvermurwbaar, en vastberadener dan ooit sinds jullie eerste ontmoeting bij de rivier." },
 
   /* ---- Hoofdstuk 18-27 — post-build audit 2026-08-23. Tot deze ronde had de
      hele tweede helft van de campagne één enkel gevecht (de Bataven, H26).
      Elf nieuwe tegenstanders, verdeeld over beide taalsporen. ---- */
-  naxos_afgescheidenen: { nm:"De Afgescheiden Naxiërs", icon:"🛡️", img:"assets/chronica/combat/naxos_afgescheidenen.png", hp:55,
+  naxos_afgescheidenen: { nm:"De Afgescheiden Naxiërs", icon:"🛡️", img:"assets/chronica/combat/naxos_afgescheidenen.webp", hp:55,
     intro:"Eilandbewoners die ooit vrijwillig toetraden en er nu vrijwillig uit willen — en die tot hun eigen verbazing moeten vechten tegen de vloot die hen kwam beschermen." },
-  senaatsknokploeg: { nm:"De Knuppelploeg van Nasica", icon:"🪵", img:"assets/chronica/combat/senaatsknokploeg.png", hp:55,
+  senaatsknokploeg: { nm:"De Knuppelploeg van Nasica", icon:"🪵", img:"assets/chronica/combat/senaatsknokploeg.webp", hp:55,
     intro:"Senatoren met afgebroken bankpoten in hun handen, in hun eigen toga’s, op weg naar een tribuun die zij een koning noemen — het eerste politieke bloedvergieten binnen Rome zelf." },
-  korinthische_triere: { nm:"De Korinthische Trireme", icon:"⛵", img:"assets/chronica/combat/korinthische_triere.png", hp:60,
+  korinthische_triere: { nm:"De Korinthische Trireme", icon:"⛵", img:"assets/chronica/combat/korinthische_triere.webp", hp:60,
     intro:"Een Korinthische oorlogsgalei die op Corcyra afkoerst — op zichzelf een grensconflict van niets, en tegelijk de vonk waaruit zevenentwintig jaar oorlog voortkomt." },
-  parthische_boogschutters: { nm:"De Parthische Boogschutters", icon:"🏹", img:"assets/chronica/combat/parthische_boogschutters.png", hp:65,
+  parthische_boogschutters: { nm:"De Parthische Boogschutters", icon:"🏹", img:"assets/chronica/combat/parthische_boogschutters.webp", hp:65,
     intro:"Lichte ruiterij die nooit stilstaat en nooit van dichtbij vecht — berucht om het Parthische schot: achterwaarts afgevuurd, midden in een schijnbare vlucht." },
-  perzische_onsterfelijken: { nm:"De Onsterfelijken van Darius", icon:"👑", img:"assets/chronica/combat/perzische_onsterfelijken.png", hp:75,
+  perzische_onsterfelijken: { nm:"De Onsterfelijken van Darius", icon:"👑", img:"assets/chronica/combat/perzische_onsterfelijken.webp", hp:75,
     intro:"De keurtroepen van de Perzische koning, tienduizend man sterk gehouden doordat elke gevallene onmiddellijk wordt vervangen — vandaar hun naam, en vandaar het gevoel dat er nooit één minder komt te staan." },
-  gallische_ontzettingsmacht: { nm:"Het Gallische Ontzettingsleger", icon:"⚔️", img:"assets/chronica/combat/gallische_ontzettingsmacht.png", hp:80,
+  gallische_ontzettingsmacht: { nm:"Het Gallische Ontzettingsleger", icon:"⚔️", img:"assets/chronica/combat/gallische_ontzettingsmacht.webp", hp:80,
     intro:"Heel Gallië, eenmaal in zijn geschiedenis verenigd, valt aan op de buitenste omwalling van Alesia — terwijl Vercingetorix van binnenuit tegelijk uitbreekt." },
-  nijlkrokodillen: { nm:"De Krokodillen van de Nijl", icon:"🐊", img:"assets/chronica/combat/nijlkrokodillen.png", hp:60,
+  nijlkrokodillen: { nm:"De Krokodillen van de Nijl", icon:"🐊", img:"assets/chronica/combat/nijlkrokodillen.webp", hp:60,
     intro:"De oversteek loopt mis, de stroom pakt de gelederen uiteen — en wat er daarna in het troebele water op de drenkelingen afkomt, staat in geen enkel Macedonisch veldslagverslag beschreven." },
-  proscriptie_sluipmoordenaars: { nm:"De Premiejagers van de Dodenlijst", icon:"🗡️", img:"assets/chronica/combat/proscriptie_sluipmoordenaars.png", hp:60,
+  proscriptie_sluipmoordenaars: { nm:"De Premiejagers van de Dodenlijst", icon:"🗡️", img:"assets/chronica/combat/proscriptie_sluipmoordenaars.webp", hp:60,
     intro:"Geen soldaten, geen vijandelijk leger — gewone burgers die een naam op een muur lazen en uitrekenden wat het hoofd erbij waard is." },
-  agrippas_vloot: { nm:"Agrippa’s Blokkade", icon:"⚓", img:"assets/chronica/combat/agrippas_vloot.png", hp:70,
+  agrippas_vloot: { nm:"Agrippa’s Blokkade", icon:"⚓", img:"assets/chronica/combat/agrippas_vloot.webp", hp:70,
     intro:"Lichte, wendbare Romeinse schepen die de uitbraak uit de Ambracische Golf al wekenlang dichthouden — geduldig wachtend tot honger en ziekte het werk hebben gedaan." },
-  antonius_vloot: { nm:"Antonius’ Zware Schepen", icon:"🚢", img:"assets/chronica/combat/antonius_vloot.png", hp:70,
+  antonius_vloot: { nm:"Antonius’ Zware Schepen", icon:"🚢", img:"assets/chronica/combat/antonius_vloot.webp", hp:70,
     intro:"Hoge, zwaar getimmerde oorlogsschepen, gebouwd om te rammen en te enteren — en juist daardoor te log voor de zee waarop dit vandaag beslist wordt." },
-  visigoten: { nm:"De Visigoten in de Pas", icon:"🪓", img:"assets/chronica/combat/visigoten.png", hp:70,
+  visigoten: { nm:"De Visigoten in de Pas", icon:"🪓", img:"assets/chronica/combat/visigoten.webp", hp:70,
     intro:"Krijgers van een volk dat het rijk half binnenliet en half buitensloot — en dat op deze bergweg geen enkele reden meer ziet om te onderhandelen." },
 };
 
@@ -4615,7 +4615,7 @@ const SP_COMBAT_ITEMS = {
    die al bestonden voor de oude CHECK-versie (geen scène-graaf-wijziging
    nodig, alleen de trigger veranderde van CHECK: naar RACE:). ---- */
 const SP_RACES = {
-  atalanta: { nm:"Atalanta", playerNm:"Hippomenes", icon:"🏃‍♀️", img:"assets/chronica/combat/atalanta.png",
+  atalanta: { nm:"Atalanta", playerNm:"Hippomenes", icon:"🏃‍♀️", img:"assets/chronica/combat/atalanta.webp",
     finish:21, stepCorrect:3, opponentStep:3, appleCount:3, appleSetback:5,
     targets:{ vol:"CH16_GRE_004_VOL", deels:"CH16_GRE_004_DEELS", gefaald:"CH16_GRE_004_GEFAALD", kritiek:"CH16_GRE_004_KRITIEK" } },
 };

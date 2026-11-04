@@ -22,7 +22,7 @@ In Pokémon zie je bij een trainer een grote pose in het gevecht en een portret 
 `<naam>` = de naam zoals in het spel, kleine letters, zonder accenten, spaties en leestekens als `_` (bv. `Matrona` → `matrona.png`, `Venator Graecus` → `venator_graecus.png`). Personen met dezelfde naam delen een portret (alle Fabers, alle Magistrae). Het volledige overzicht met de exacte bestandsnamen en wat er al is staat in `certamen/assets/portraits/MANIFEST.md` (opnieuw genereren: `node certamen/tools/castra-portraits-manifest.js`, vanuit `certamen/`).
 
 **Uit RPG Maker MV halen kan voor de NPC-portretten:** zet een gezichtenblad uit `RPG Maker MV\NewData\img\faces` (576×288, 4×2 gezichten van 144 px, bv. `People1.png`) in `certamen/assets/portraits/` en koppel een gezicht aan een naam in `certamen/castra-tutorial.js`:
-`CASTRA_PORTRAIT_SHEETS.matrona = { file:"assets/portraits/People1.png", i:3 };` (i = 0 t/m 7, linksboven naar rechtsonder). Een eigen `<naam>.png` gaat voor op een gezichtenblad. De NPC-spritesheets (overworld) kunnen op dezelfde manier uit MV komen, zie `certamen/assets/npcs/README.txt`. Zonder bestand valt het spel terug op de avatar; ze kunnen dus één voor één binnenkomen.
+`CASTRA_PORTRAIT_SHEETS.matrona = { file:"assets/portraits/People1.webp", i:3 };` (i = 0 t/m 7, linksboven naar rechtsonder). Een eigen `<naam>.png` gaat voor op een gezichtenblad. De NPC-spritesheets (overworld) kunnen op dezelfde manier uit MV komen, zie `certamen/assets/npcs/README.txt`. Zonder bestand valt het spel terug op de avatar; ze kunnen dus één voor één binnenkomen.
 
 ## A. Trainers (31), gevechtspose en portret
 

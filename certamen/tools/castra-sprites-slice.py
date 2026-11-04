@@ -9,10 +9,10 @@ Gebruik:
 
 Blad A  (tower defence): 3 kolommen x 2 rijen, in volgorde
         rust | aanval | geraakt  /  loop omlaag | loop opzij (kijkt naar RECHTS) | loop omhoog
-        -> [id]_td_idle/attack/hurt/down/side/up.png (96x96; het spel toont ze op 48 css-pixels, dus scherper op een telefoon) en [id]_td.png (= rust, wat het spel nu leest)
+        -> [id]_td_idle/attack/hurt/down/side/up.webp (96x96; het spel toont ze op 48 css-pixels, dus scherper op een telefoon) en [id]_td.webp (= rust, wat het spel nu leest)
 Blad B  (battle en portret): 3 cellen naast elkaar: portret | battle voor | battle achter
-        -> [id]_portrait.png (128x128), [id]_battle_front.png en [id]_battle_back.png (192x192)
-Portret: een los portret -> [id]_portrait.png (128x128)
+        -> [id]_portrait.webp (128x128), [id]_battle_front.webp en [id]_battle_back.webp (192x192)
+Portret: een los portret -> [id]_portrait.webp (128x128)
 
 De achtergrond is effen magenta (#FF00FF, met marge voor ruis). Alle frames van een blad krijgen
 dezelfde schaal (bepaald door het rustframe), staan met de voeten op dezelfde lijn en worden naar
@@ -113,8 +113,8 @@ def slice_sheet_a(im, fid, out):
     size = SIZES["td"]; scale = (size - 5*size/48) / idle_h          # rust: 43 px hoog in 48 (evenredig bij 96: 86 px)
     res = []
     for name, fr in frames:
-        spr = place(fr, scale, size, baseline_pad=max(2, 2*size//48)); spr.save(os.path.join(out, f"{fid}_td_{name}.png")); res.append(spr)
-        if name == "idle": spr.save(os.path.join(out, f"{fid}_td.png"))
+        spr = place(fr, scale, size, baseline_pad=max(2, 2*size//48)); spr.save(os.path.join(out, f"{fid}_td_{name}.webp"), lossless=True); res.append(spr)
+        if name == "idle": spr.save(os.path.join(out, f"{fid}_td.webp"), lossless=True)
     return res
 
 
@@ -127,14 +127,14 @@ def slice_sheet_b(im, fid, out):
             scale = min(size / fr.width, size / fr.height); spr = place(fr, scale * 0.96, size, baseline_pad=4)
         else:
             scale = (size - 6*size/96) / max(frames[1].height, frames[2].height); spr = place(fr, scale, size, baseline_pad=max(3, 3*size//96))
-        spr.save(os.path.join(out, f"{fid}_{name}.png")); res.append(spr)
+        spr.save(os.path.join(out, f"{fid}_{name}.webp"), lossless=True); res.append(spr)
     return res
 
 
 def slice_portrait(im, fid, out):
     fr = trim(key(im)); size = SIZES["portrait"]
     scale = min(size / fr.width, size / fr.height) * 0.96
-    spr = place(fr, scale, size, baseline_pad=4); spr.save(os.path.join(out, f"{fid}_portrait.png")); return [spr]
+    spr = place(fr, scale, size, baseline_pad=4); spr.save(os.path.join(out, f"{fid}_portrait.webp"), lossless=True); return [spr]
 
 
 def preview(sprites, path, S=6):

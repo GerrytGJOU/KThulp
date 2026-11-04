@@ -528,12 +528,12 @@ function bmStRenderField(){
     if(solo&&BM_PLAYERS?.[BM_PID]?.team!==t&&BM_META?.mode!=="boss") continue;
     const st=BM_ST_ROOM[t]||{}, stage=bmStWallStage(st);
     if(stage&&!(BM_META?.mode==="boss"&&t==="B"))
-      parts.push(`<img class="bmst-pal ${t}" src="assets/bosses/palissade_midden_${stage}.png?${typeof SPRITE_VER!=="undefined"?SPRITE_VER:""}" alt="" onerror="this.style.display='none'">`);
+      parts.push(`<img class="bmst-pal ${t}" src="assets/bosses/palissade_midden_${stage}.webp?${typeof SPRITE_VER!=="undefined"?SPRITE_VER:""}" alt="" onerror="this.style.display='none'">`);
     // werktuigen achter het eigen leger (één per soort)
     const kinds=new Set();
     for(const q of Object.values(BM_PLAYERS||{})){ if(q.team!==t||!q.stS||!q.stS.engine||!(q.stS.engine.rounds>0)||q.stS.engine.burn) continue;
       kinds.add(bmStHas(q,"belegeringstoren")?"siegetower":q.stS.engine.ram?"ram":"catapult"); }
-    [...kinds].forEach((k,i)=>parts.push(`<img class="bmst-eng ${t} ${k}" style="--i:${i}" src="assets/bosses/${k}.png?${typeof SPRITE_VER!=="undefined"?SPRITE_VER:""}" alt="" onerror="this.style.display='none'">`));
+    [...kinds].forEach((k,i)=>parts.push(`<img class="bmst-eng ${t} ${k}" style="--i:${i}" src="assets/bosses/${k}.webp?${typeof SPRITE_VER!=="undefined"?SPRITE_VER:""}" alt="" onerror="this.style.display='none'">`));
   }
   const html=parts.join("");
   if(lay.dataset.h!==html){ lay.dataset.h=html; lay.innerHTML=html; }

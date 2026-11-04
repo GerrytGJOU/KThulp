@@ -1441,7 +1441,7 @@ NPC-commentaar (zie hieronder) — precies zoals in het gesprek vastgelegd.
   kretenzische_stier, merries_van_diomedes, amazones, geryon, cerberus) — nog
   zonder eigen tekeningen (net als de Nemeïsche Leeuw vóór Hoofdstuk 2),
   `img`-pad alvast ingevuld, valt terug op `icon`-emoji. Cerberus hergebruikt
-  bewust het bestaande Boss Battle-bestand (`assets/bosses/Cerberus.png`) als
+  bewust het bestaande Boss Battle-bestand (`assets/bosses/Cerberus.webp`) als
   enkelvoudige illustratie — geen losse koppen-bestanden beschikbaar, dus geen
   Hydra-achtige koppenstapeling.
 
@@ -6307,7 +6307,7 @@ als doel, alleen het mechanisme om er te komen veranderde. De nu overbodige
   Volledige hoofdstuk-doorloop (alle drie taalsporen, `CH15_MUSEUM_00` tot
   `CH16_WORDT_VERVOLGD`) opnieuw bevestigd met de race erin verwerkt.
 
-Sprite (`assets/chronica/combat/atalanta.png`) nog te maken — valt tot
+Sprite (`assets/chronica/combat/atalanta.webp`) nog te maken — valt tot
 die tijd stil terug op het 🏃‍♀️-icoon (zelfde `onerror`-patroon als de
 Combat-vijanden).
 
