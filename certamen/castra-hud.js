@@ -89,7 +89,7 @@ function castraTrackToggle(){ const o = CASTRA.opts || (CASTRA.opts = {}); o.tra
 function castraTrackOff(){ const o = CASTRA.opts || {}; return o.trackOff!==undefined ? !!o.trackOff : window.innerWidth<520; }
 function castraTrackUpdate(force){
   const box = document.getElementById("cgQuests"); if(!box) return;
-  const items = castraTrackItems(), off = castraTrackOff();
+  const items = (CASTRA.tut && CASTRA.tut.step<99) ? [] : castraTrackItems(), off = castraTrackOff();      // tijdens de tutorial staat de opdracht al in de balk
   const h = items.length ? `<div class="qh" onclick="castraTrackToggle()"><span>📜 Opdrachten${off?" ("+items.length+")":""}</span><span>${off?"▸":"▾"}</span></div>` + (off ? "" : items.map(i=>`<div class="qr ${i.c}" onclick="castraNavPick('opus')">${esc(i.t)}</div>`).join("")) : "";
   if(force || box.dataset.h!==h){ box.dataset.h = h; box.innerHTML = h; }
 }
@@ -129,6 +129,7 @@ function castraHudTick(){
   const done = castraBuildActive().filter(id=>CASTRA.b[id].up.end <= castraNow());
   if(done.length){ done.forEach(id=>castraLvl(id)); castraRenderMap(); castraRenderRes(); if(CASTRA_UI.panel) castraOpen(CASTRA_UI.panel); }
   castraHudUpdate();
+  if(typeof castraDecorTick==='function') castraDecorTick();
 }
 function castraHudStart(){
   castraHudCss(); castraHudUpdate();

@@ -25,6 +25,15 @@ const CASTRA_TUT_STARTER_LVL = 10;
 const CASTRA_TUT_REWARD = { aes:80, frumentum:60, gloria:2 };
 
 const CASTRA_TUT_TEXT = {
+  place0:[
+    { la:"Salve, dux {naam}! Aeneas sum. Castra tua vacua sunt.", nl:"Gegroet, leider {naam}! Ik ben Aeneas. Je kamp is nog leeg." },
+    { la:"Primum praetorium aedifica. Ubi vis?", nl:"Bouw eerst het Praetorium, je hoofdgebouw. Tik op het gras waar de ingang moet komen: groen mag, rood niet." },
+  ],
+  place1:[
+    { la:"Optime! Nunc plura aedificia pone.", nl:"Uitstekend! Zet nu meer gebouwen neer: een Lignatio (hout), een Metallum (brons), een Valetudinarium (herstel) en Contubernia (barakken)." },
+    { la:"Ligna et aes tibi do. Vias liberas serva!", nl:"Hout en brons krijg je van mij, alles is gratis. Houd de paden en de poorten vrij!" },
+  ],
+  bar_m2:{ la:"Praetorium aedifica!", nl:"Opdracht 1: zet je Praetorium neer. Tik op een vrij grasvak waar de ingang moet komen." },
   intro:[
     { la:"Salve, dux {naam}! Aeneas sum. Castra tua nova sunt.", nl:"Gegroet, leider {naam}! Ik ben Aeneas. Je kamp is nieuw." },
     { la:"Milites tibi opus sunt. Unum militem tibi do.", nl:"Je hebt soldaten nodig. Ik geef je er één." },
@@ -141,7 +150,8 @@ function castraDlgOpt(k){ const D = CASTRA_DLG; if(!D) return; D.chosen = k; cas
 function castraTutInit(){
   if(CASTRA.tut) return;
   const fresh = !(CASTRA.soldiers||[]).length && !(CASTRA.heroes||[]).length && !castraPMissionDone("m1");
-  CASTRA.tut = { step: fresh ? 0 : 99 };
+  CASTRA.tut = { step: fresh ? -2 : 99 };
+  if(fresh) castraStartEmptyCamp();       // een nieuw kamp begint leeg: jij zet de gebouwen neer (castra-plan.js)
   castraSave();
 }
 function castraTutPick(k){
@@ -151,9 +161,28 @@ function castraTutPick(k){
   castraDlgOpen(CASTRA_TUT_GUIDE, CASTRA_TUT_TEXT.chosen, ()=>{ castraTutBar(); });
   castraRenderRes();
 }
+// Aangeroepen door castra-plan.js na elk geplaatst gebouw; stuurt de eerste stappen van de tutorial.
+function castraTutPlaced(id){
+  const T = CASTRA.tut; if(!T || T.step>=0) return;
+  if(T.step===-2 && id==="praetorium"){
+    T.step = -1; T.s1 = 1;
+    ["lignum","aes","frumentum"].forEach(r=>{ CASTRA.res[r] = Math.max(CASTRA.res[r]||0, 300); });
+    castraSave(); castraRenderRes(); castraTutBar();
+    castraDlgOpen(CASTRA_TUT_GUIDE, CASTRA_TUT_TEXT.place1, ()=>{ castraPlanOpenList(); });
+    return;
+  }
+  if(T.step===-1){
+    castraTutBar();
+    if(CASTRA_TUT_BUILDINGS.every(b=>castraSlot(castraBuilding(b)))){
+      T.step = 0; castraSave(); castraTutBar(); castraPlanCancel();
+      castraDlgOpen(CASTRA_TUT_GUIDE, CASTRA_TUT_TEXT.intro, null);
+    } else castraPlanOpenList();
+  }
+}
 function castraTutBar(){
   const bar = document.getElementById("castraTutBar"); if(!bar) return;
-  const T = CASTRA.tut, t = T && (T.step===1 ? CASTRA_TUT_TEXT.bar1 : T.step===2 ? CASTRA_TUT_TEXT.bar2 : null);
+  const T = CASTRA.tut, left = (typeof CASTRA_TUT_BUILDINGS!=="undefined") ? CASTRA_TUT_BUILDINGS.filter(id=>!castraSlot(castraBuilding(id))) : [];
+  const t = T && (T.step===-2 ? CASTRA_TUT_TEXT.bar_m2 : T.step===-1 ? { la:"Plura aedifica!", nl:"Opdracht 2: zet de gebouwen uit de bouwlijst 🔨 neer ("+((typeof CASTRA_TUT_BUILDINGS!=="undefined"?CASTRA_TUT_BUILDINGS.length:4)-left.length)+" van "+(typeof CASTRA_TUT_BUILDINGS!=="undefined"?CASTRA_TUT_BUILDINGS.length:4)+")." } : T.step===1 ? CASTRA_TUT_TEXT.bar1 : T.step===2 ? CASTRA_TUT_TEXT.bar2 : null);
   bar.innerHTML = t ? `<div style="margin:6px auto 10px;max-width:860px;padding:8px 12px;border:2px solid var(--hi,#d4af37);border-radius:10px;background:rgba(212,175,55,.12)">
       <div style="font-size:17px">🎯 ${castraLaHTML(t.la, t.nl, "tutbar"+T.step)}</div>
       <div style="font-size:13px;opacity:.85;margin-top:2px">${esc(t.nl)}</div></div>` : "";
@@ -161,10 +190,17 @@ function castraTutBar(){
 // Aangeroepen aan het eind van SCREENS.castraHome.
 function castraTutOnHome(){
   if(!CASTRA) return;
-  castraTutInit(); if(typeof castraUnlockCheck==="function") castraUnlockCheck();
+  const had = !!CASTRA.tut; castraTutInit();
+  if(!had && CASTRA.camp2){ CASTRA_BUILT = null; castraRenderMap(); castraRenderRes(); if(typeof castraFit==="function") castraFit(); }   // nieuw kamp: leeg
+  if(typeof castraUnlockCheck==="function") castraUnlockCheck();
   const T = CASTRA.tut; castraTutBar();
   if(CASTRA_DLG) return;
-  if(T.step===0){
+  if(T.step===-2){
+    castraDlgOpen(CASTRA_TUT_GUIDE, CASTRA_TUT_TEXT.place0, ()=>{ castraPlanStart("praetorium", { tut:true }); });
+  } else if(T.step===-1){
+    if(!T.s1){ T.s1 = 1; castraSave(); castraDlgOpen(CASTRA_TUT_GUIDE, CASTRA_TUT_TEXT.place1, ()=>castraPlanOpenList()); }
+    else castraPlanOpenList();
+  } else if(T.step===0){
     castraDlgOpen(CASTRA_TUT_GUIDE, CASTRA_TUT_TEXT.intro, null);
   } else if(T.step===1 && CASTRA.soldiers.length>=2){
     T.step = 2; castraSave();
@@ -179,3 +215,9 @@ function castraTutOnHome(){
     castraDlgOpen(CASTRA_TUT_GUIDE, CASTRA_TUT_TEXT.done, ()=>{ castraTutBar(); castraToastLa("recte", "🎁 "+Object.keys(CASTRA_TUT_REWARD).map(r=>castraRes(r).icon+" "+CASTRA_TUT_REWARD[r]).join(" ")); });
   } else if(typeof castraUnlockShow==="function") castraUnlockShow();
 }
+
+(function(){   // woorden van de nieuwe tutorialstappen (alleen toevoegen wat nog ontbreekt)
+  const g = { "vacua":"leeg", "primum":"eerst", "aedifica":"bouw!", "ubi":"waar", "vis":"je wilt", "optime":"uitstekend", "nunc":"nu", "plura":"meer", "aedificia":"gebouwen", "pone":"zet neer!",
+    "ligna":"hout", "aes":"brons", "do":"ik geef", "vias":"wegen (4e naamval)", "liberas":"vrije", "serva":"houd!", "praetorium":"hoofdgebouw", "castra":"kamp", "tua":"jouw", "sunt":"zijn", "et":"en", "tibi":"aan jou" };
+  Object.keys(g).forEach(k=>{ if(!(k in CASTRA_GLOSS)) CASTRA_GLOSS[k] = g[k]; });
+})();

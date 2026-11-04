@@ -125,6 +125,7 @@ function castraStageBuild(kind){
   main.insertBefore(wrap, main.firstChild);
   if(kind!=="world" && typeof castraTrackBuild==="function") castraTrackBuild(main);
   if(kind!=="world" && typeof castraDecorBuild==="function") castraDecorBuild(main);
+  if(kind!=="world" && typeof castraPlanBuild==="function") castraPlanBuild(main);
   if(back) st.querySelector("#cgBackSlot").appendChild(back);
   st.querySelector("#cgTitle").textContent = h2 ? h2.textContent : "Castra Heroum";
   ["castraRes","castraBuilders","castraTutBar","cwHud"].forEach(id=>{ const n = el(id); if(n) top.appendChild(n); });

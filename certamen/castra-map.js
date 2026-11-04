@@ -223,26 +223,47 @@ function castraMapRng(seed){
 }
 function castraGroundGrid(cols, rows, key){ return Array.from({length:rows},()=>Array(cols).fill(key)); }
 
+/* ---- vaste planten en bomen van het kamp: kunnen weggehaald worden (castra-decor.js; CASTRA.cleared = sleutels "voorwerp:x:y") ---- */
+const CASTRA_SCENERY = [ ["tree_a",1,2],["tree_a",2,1],["tree_a",14,9],["tree_a",1,9],["tree_a",14,7],["tree_a",1,12],["tree_a",6,11],["tree_a",14,12],["tree_a",10,12],
+  ["flower_w",9,2],["flower_p",6,3],["flower_b",11,6],["flower_o",3,10],["plant_c",6,9],["fern",11,10],["flower_p",1,6],["stones",9,4],["flower_w",5,12],["flower_b",10,11],["plant_a",1,10],["fern",6,13],["flower_o",9,13] ];
+function castraSceneryKey(t){ return t[0]+":"+t[1]+":"+t[2]; }
+function castraSceneryLeft(){
+  const cl = (typeof CASTRA!=="undefined" && CASTRA && CASTRA.cleared) || [];
+  return CASTRA_SCENERY.filter(t=>cl.indexOf(castraSceneryKey(t))<0);
+}
+
+/* Plek van een gebouw: de eigen keuze van de speler (CASTRA.slots) of, bij oudere saves die nog niets verplaatsten, de plek uit castra-data.js.
+   Een kamp dat met de nieuwe tutorial begon (CASTRA.camp2) kent alleen geplaatste gebouwen: wie geen plek heeft, staat er nog niet. */
+function castraSlot(b){
+  if(b.fixed) return b.slot;
+  const C = (typeof CASTRA!=="undefined") ? CASTRA : null;
+  return (C && C.slots && C.slots[b.id]) || ((C && C.camp2) ? null : b.slot);
+}
+
 /* ---- het kamp ---- */
 function castraCampDef(){
   const T = CASTRA_MAP, cols = T.cols, rows = T.rows, g = castraGroundGrid(cols, rows, "grass");
   const rect = (x0,y0,x1,y1,k)=>{ for(let y=y0;y<=y1;y++) for(let x=x0;x<=x1;x++) if(g[y]&&g[y][x]) g[y][x]=k; };
-  rect(7,0,8,rows-2,"sand"); rect(9,5,15,6,"sand"); rect(2,4,13,4,"sand"); rect(6,4,9,7,"stone");
+  rect(7,0,8,rows-2,"sand"); rect(9,5,cols-1,6,"sand"); rect(2,4,13,4,"sand"); rect(6,4,9,7,"stone");
   const walls = [];
   for(let x=0;x<cols;x++){ walls.push([x,0],[x,rows-1]); g[0][x]=g[rows-1][x]="wall"; }
   for(let y=0;y<rows;y++){ walls.push([0,y],[cols-1,y]); g[y][0]=g[y][cols-1]="wall"; }
   T.gates.forEach(gt=>gt.tiles.forEach(t=>{ g[t.y][t.x]="sand"; const i = walls.findIndex(w=>w[0]===t.x&&w[1]===t.y); if(i>=0) walls.splice(i,1); }));
   const pieces = [];
-  CASTRA_BUILDINGS.filter(b=>b.phase===1&&b.slot).forEach(b=>{
+  const foot = {};     // cellen onder gebouwen: vaste planten die er vanaf nu onder zouden staan verdwijnen
+  CASTRA_BUILDINGS.filter(b=>b.phase===1&&castraSlot(b)).forEach(b=>{
     const art = castraBuildingArtFor(b); if(!art) return;
-    const site = b.start===0 && typeof CASTRA!=="undefined" && CASTRA && castraLvl(b.id)===0 && art.fw===2 && art.fh===2;
-    (site ? CASTRA_BUILDING_SITE : art.pieces).forEach(p=>pieces.push({ o:p.o, t:p.t, x:b.slot.x+p.dx, y:b.slot.y+p.dy, owner:b.id }));
+    const S = castraSlot(b);
+    for(let dy=0; dy<art.fh; dy++) for(let dx=0; dx<art.fw; dx++) foot[(S.x+dx)+","+(S.y+dy)] = 1;
+    const site = typeof CASTRA!=="undefined" && CASTRA && castraLvl(b.id)===0;
+    const oy = site ? art.fh-2 : 0, ox = site ? Math.floor((art.fw-2)/2) : 0;      // een bouwplaats (2×2) staat onderin het vak
+    (site ? CASTRA_BUILDING_SITE : art.pieces).forEach(p=>pieces.push({ o:p.o, t:p.t, x:S.x+p.dx+ox, y:S.y+p.dy+oy, owner:b.id }));
   });
   // Het Praetorium is het hoofdkwartier: twee vlaggen naast de ingang (rood; goud vanaf level 3).
   { const pr = CASTRA_BUILDINGS.find(b=>b.id==="praetorium"), gold = typeof CASTRA!=="undefined" && CASTRA && castraLvl("praetorium")>=3, c = gold ? "gold" : "red";
-    if(pr && pr.slot && castraBuildingTier(pr)===0){ pieces.push({ o:"flag_"+c+"_l", x:pr.slot.x, y:pr.slot.y+1 }, { o:"flag_"+c+"_r", x:pr.slot.x+2, y:pr.slot.y+1 }); } }
-  [ ["tree_a",1,2],["tree_a",2,1],["tree_a",14,9],["tree_a",1,9],["tree_a",14,7],["tree_a",1,12],["tree_a",6,11],["tree_a",14,12],["tree_a",10,12] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
-  [ ["flower_w",9,2],["flower_p",6,3],["flower_b",11,6],["flower_o",3,10],["plant_c",6,9],["fern",11,10],["flower_p",1,6],["stones",9,4],["flower_w",5,12],["flower_b",10,11],["plant_a",1,10],["fern",6,13],["flower_o",9,13] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
+    const PS = pr ? castraSlot(pr) : null;
+    if(PS && castraBuildingTier(pr)===0 && castraLvl("praetorium")>0){ pieces.push({ o:"flag_"+c+"_l", x:PS.x, y:PS.y+1 }, { o:"flag_"+c+"_r", x:PS.x+2, y:PS.y+1 }); } }
+  castraSceneryLeft().forEach(t=>{ if(!foot[t[1]+","+t[2]]) pieces.push({ o:t[0], x:t[1], y:t[2] }); });
   return { cols, rows, ground:g, pieces, walls };
 }
 // Bouwplaats: gebouwen op niveau 0 (nog te bouwen) tonen dit i.p.v. hun eigen kunst (zelfde voetafdruk, altijd solide).

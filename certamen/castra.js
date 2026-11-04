@@ -221,9 +221,10 @@ function castraUpgrade(id){
   const L = castraLvl(id);
   if(L>=castraMaxLvl(id)) return false;
   if(CASTRA.b[id] && CASTRA.b[id].up) return false;                       // deze is al in aanbouw
-  const dev = !!CASTRA.dev;                                                // ontwikkelaarsstand: meteen klaar (tests)
+  const tutFree = !!(CASTRA.tut && CASTRA.tut.step<0);                        // tutorial: bouwen is gratis en meteen klaar
+  const dev = !!CASTRA.dev || tutFree;                                     // ontwikkelaarsstand: meteen klaar (tests)
   if(!dev && castraBuildActive().length >= castraBuilders()) return false;   // geen vrije bouwer
-  const cost = castraUpgradeCost(id);
+  const cost = tutFree ? {} : castraUpgradeCost(id);
   if(!castraCanPay(cost)) return false;
   if(castraBuilding(id).prod) castraCollect(id);   // niets verliezen bij een upgrade
   castraPay(cost);
@@ -279,16 +280,16 @@ function castraBuiltMap(){
   if(!CASTRA_BUILT){
     CASTRA_BUILT = castraMapLogic(castraCampDef());
     // De tenten (3x3) zijn getekend als driehoek: de hoeken van de bovenste rij zijn gras en dus begaanbaar.
-    CASTRA_BUILDINGS.forEach(b=>{ if(!(b.phase===1 && b.slot)) return; const f = castraBuildingFoot(b);
-      if(f.fw===3 && f.fh===3 && castraBuildingTier(b)===0){ delete CASTRA_BUILT.blocked[b.slot.x+","+b.slot.y]; delete CASTRA_BUILT.blocked[(b.slot.x+2)+","+b.slot.y]; } });
+    CASTRA_BUILDINGS.forEach(b=>{ const S = castraSlot(b); if(!(b.phase===1 && S)) return; const f = castraBuildingFoot(b);
+      if(f.fw===3 && f.fh===3 && castraBuildingTier(b)===0 && castraLvl(b.id)>0){ delete CASTRA_BUILT.blocked[S.x+","+S.y]; delete CASTRA_BUILT.blocked[(S.x+2)+","+S.y]; } });
   }
   return CASTRA_BUILT;
 }
 function castraBlockedMap(){ return castraBuiltMap().blocked; }
 function castraGateAt(x,y){ return CASTRA_MAP.gates.find(g=>g.tiles.some(t=>t.x===x&&t.y===y)); }
 function castraBuildingAt(x,y){
-  return CASTRA_BUILDINGS.find(b=>{ if(!(b.phase===1&&b.slot)) return false; const f = castraBuildingFoot(b);
-    return x>=b.slot.x&&x<b.slot.x+f.fw&&y>=b.slot.y&&y<b.slot.y+f.fh; });
+  return CASTRA_BUILDINGS.find(b=>{ const S = castraSlot(b); if(!(b.phase===1&&S)) return false; const f = castraBuildingFoot(b);
+    return x>=S.x&&x<S.x+f.fw&&y>=S.y&&y<S.y+f.fh; });
 }
 
 SCREENS.castraHome = function(){
@@ -367,14 +368,15 @@ function castraRenderRes(){
 function castraRenderMap(){
   const map = el("castraMap"); if(!map) return;
   const T = CASTRA_MAP, t = T.tile;
+  map.style.width = T.cols*t+"px"; map.style.height = T.rows*t+"px";
   CASTRA_BUILT = null; castraBuiltMap();
   // gebouwlabels en -badges (klikbaar) bovenop de tegelkunst
   let h = `<canvas id="cmBelow" style="position:absolute;left:0;top:0;image-rendering:pixelated"></canvas>`;
-  CASTRA_BUILDINGS.filter(b=>b.phase===1&&b.slot).forEach(b=>{
-    const f = castraBuildingFoot(b), lvl = castraLvl(b.id), pend = b.prod ? castraPending(b.id) : 0;
-    h += `<div onclick="castraOpen('${b.id}')" style="position:absolute;left:${b.slot.x*t}px;top:${b.slot.y*t}px;width:${f.fw*t}px;height:${f.fh*t}px;cursor:pointer;z-index:3">
+  CASTRA_BUILDINGS.filter(b=>b.phase===1&&castraSlot(b)).forEach(b=>{
+    const f = castraBuildingFoot(b), lvl = castraLvl(b.id), pend = b.prod ? castraPending(b.id) : 0, S = castraSlot(b);
+    h += `<div onclick="castraOpen('${b.id}')" style="position:absolute;left:${S.x*t}px;top:${S.y*t}px;width:${f.fw*t}px;height:${f.fh*t}px;cursor:pointer;z-index:3">
       <div style="position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-size:var(--lbl,11px);font-weight:700;color:var(--cream,#f1e6c4);background:rgba(27,21,14,.85);border:1px solid var(--hi-dim,#8a6d2f);border-radius:6px;padding:0 6px;white-space:nowrap">${b.icon} ${esc(b.nm)}${b.fixed?"":` · ${lvl||"🔨"}`}</div>
-      ${b.fixed?"":`<div class="cBub" data-b="${b.id}" ${b.slot.y<3?'style="top:2px"':""} onclick="castraBubbleTap(event,'${b.id}')"></div>`}
+      ${b.fixed?"":`<div class="cBub" data-b="${b.id}" ${S.y<3?'style="top:2px"':""} onclick="castraBubbleTap(event,'${b.id}')"></div>`}
     </div>`;
   });
   // poortborden: een houten bord met letters op de kampmuur naast de poort (valt zo in de scène).
@@ -478,7 +480,7 @@ function castraGate(g){
     return;
   }
   if(g.to==="proelium"){
-    CASTRA.pos = { x:14, y:5 }; castraSave();
+    CASTRA.pos = { x:CASTRA_MAP.cols-2, y:5 }; castraSave();
     if(CASTRA_UI.keyFn) document.removeEventListener("keydown", CASTRA_UI.keyFn);
     if(CASTRA_UI.resizeFn) window.removeEventListener("resize", CASTRA_UI.resizeFn);
     go("castraProelium"); return;
