@@ -34,12 +34,14 @@ const CASTRA_MENU_ITEMS = [
 const CASTRA_MENU_NAV = ["milites","heroes","mundus","opus","sacculus"];
 const CASTRA_MENU_SYS = ["servare","faq","sonus","restart","exeo"];
 const CASTRA_MENU_ICON = { milites:"🛡️", heroes:"⭐", mundus:"🗺️", opus:"📜", sacculus:"🎒", servare:"💾", faq:"📖", sonus:"🔊", restart:"🔄", exeo:"🚪" };
+// Onderdelen die onder een ander onderdeel hangen: Contubernium en Labor bij Milites, Insignia bij Tabulae.
+const CASTRA_MENU_SUB = { party:"milites", labor:"milites", insignia:"tabulae" };
 let CASTRA_MENU = { open:false, view:null, parent:null };
 // Is de onderbalk in beeld? Zo niet (andere schermen, of full-screen) dan staan de vijf knoppen gewoon in de lijst.
 function castraNavShown(){ return !!document.getElementById("cgNav") && !document.body.classList.contains("castra-immersive"); }
 function castraMenuList(){
   const nav = castraNavShown();
-  return CASTRA_MENU_ITEMS.filter(it=>!CASTRA_MENU_SYS.includes(it.id) && !(nav && CASTRA_MENU_NAV.includes(it.id)))
+  return CASTRA_MENU_ITEMS.filter(it=>!CASTRA_MENU_SYS.includes(it.id) && !CASTRA_MENU_SUB[it.id] && !(nav && CASTRA_MENU_NAV.includes(it.id)))
     .concat([{ id:"systema", la:"Systema", nl:"opslaan, geluid, uitleg, afsluiten" }]);
 }
 
@@ -105,7 +107,7 @@ function castraMenuPick(id){
   if(id==="mundus"){ castraMenuClose(); castraGeoMapOpen(); return; }
   if(id==="servare"){ castraSave(); castraToastLa("recte", "💾 Servatum"); castraMenuClose(); return; }
   if(id==="exeo"){ castraMenuClose(); castraLeave(); return; }
-  CASTRA_MENU.parent = (CASTRA_MENU.view==='systema' && id!=='systema') ? 'systema' : null;
+  CASTRA_MENU.parent = (CASTRA_MENU.view==='systema' && id!=='systema') ? 'systema' : (CASTRA_MENU_SUB[id] && CASTRA_MENU.view===CASTRA_MENU_SUB[id]) ? CASTRA_MENU_SUB[id] : null;
   CASTRA_MENU.view = id; CASTRA_MENU.rs = 0; castraMenuRender();
 }
 
@@ -127,10 +129,10 @@ function castraMenuSprite(formId, look){
 }
 function castraMenuView(id){
   if(id==="systema") return castraMenuSystem();
-  if(id==="milites") return castraMenuTeam();
+  if(id==="milites") return castraMenuTeam() + castraMenuSubLinks("milites");
   if(id==="heroes") return castraMenuHeroes();
   if(id==="sacculus") return castraMenuBag();
-  if(id==="tabulae") return castraCardsView();
+  if(id==="tabulae") return castraCardsView() + castraMenuSubLinks("tabulae");
   if(id==="vergelijk") return castraMenuCompare();
   if(id==="mundus") return castraGeoMapView();
   if(id==="opus") return castraMenuQuest();
@@ -210,6 +212,14 @@ function castraMenuProfile(){
   const lv = typeof castraPLevelInfo==="function" ? castraPLevelInfo() : null;
   const lvHtml = lv ? `<div style="margin:2px 0 8px"><div style="display:flex;justify-content:space-between;font-size:14px"><b>Castra-niveau ${lv.L}</b><span style="opacity:.7">${lv.x - lv.a} / ${lv.b - lv.a} XP</span></div>${castraMenuBar(lv.x-lv.a, lv.b-lv.a, "#d4a017")}<div style="font-size:12px;opacity:.8;margin-top:2px">${lv.next?`Volgende ontgrendeling op niveau ${lv.next.lvl}: <b>${esc(lv.next.la)}</b> (${esc(lv.next.nl)})`:"Alles is ontgrendeld."}</div></div>` : "";
   return `<h3 style="margin:0 0 2px">${esc(name)}</h3><div style="font-size:14px;margin-bottom:6px;color:#7a2a14"><b>${ti?esc(ti.title):"—"}</b> <small>${ti?"("+esc(ti.nl)+")":""}</small>${stars?` · ⭐ ${stars}`:""}</div>${lvHtml}<div style="display:flex;gap:12px;align-items:center">${av}<div style="flex:1">${rows.map(r=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid var(--parch-line,#c2a96f)"><span>${r[0]}</span><b>${r[1]}</b></div>`).join("")}</div></div>`;
+}
+
+// Knoppen onderaan een onderdeel naar zijn onderdelen (zie CASTRA_MENU_SUB)
+function castraMenuSubLinks(parent){
+  const its = CASTRA_MENU_ITEMS.filter(it=>CASTRA_MENU_SUB[it.id]===parent); if(!its.length) return "";
+  return `<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">${its.map(it=>{
+    const lock = it.unl && typeof castraUnlocked==="function" && !castraUnlocked(it.unl);
+    return `<button class="btn" style="min-height:44px" onclick="castraMenuPick('${it.id}')">${lock?"🔒 ":""}${esc(it.la)} <small style="opacity:.65">${esc(it.nl)}</small></button>`; }).join("")}</div>`;
 }
 
 /* ---------- Systema: de technische knoppen bij elkaar ---------- */
