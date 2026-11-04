@@ -154,10 +154,26 @@ function castraBuildDone(id){
   if(typeof toast==="function" && typeof castraToastLa==="function" && CASTRA_LA && CASTRA_LA.melioratum) castraToastLa("melioratum", castraBuilding(id).nm+" → "+castraLaText("gradus")+" "+to);
 }
 function castraFmtLeft(ms){ const m = Math.ceil(ms/60000); return m>=1440 ? Math.floor(m/1440)+" d "+Math.floor(m%1440/60)+" u" : m>=60 ? Math.floor(m/60)+" u "+(m%60)+" m" : m+" m"; }
+// Live aflopende tijd: onder het uur met seconden. Eén teller (per seconde) werkt alle .cLeft-spans in het open paneel bij; is de tijd om, dan wordt het paneel opnieuw opgebouwd (de bouw is dan af).
+function castraFmtLeftLive(ms){
+  const t = Math.max(0, Math.ceil(ms/1000)), h = Math.floor(t/3600), m = Math.floor(t%3600/60), sc = t%60;
+  return t>=86400 ? castraFmtLeft(ms) : h>=1 ? h+" u "+m+" m" : m>=1 ? m+" m "+sc+" s" : sc+" s";
+}
+let CASTRA_LEFT_TIMER = null;
+function castraLeftTick(){
+  const els = document.querySelectorAll(".cLeft");
+  if(!els.length){ clearInterval(CASTRA_LEFT_TIMER); CASTRA_LEFT_TIMER = null; return; }
+  els.forEach(el=>{
+    const left = Number(el.dataset.end) - castraNow();
+    if(left <= 0){ if(typeof castraRefresh==="function") castraRefresh(el.dataset.id); }
+    else el.textContent = castraFmtLeftLive(left);
+  });
+}
+function castraLeftStart(){ if(!CASTRA_LEFT_TIMER) CASTRA_LEFT_TIMER = setInterval(castraLeftTick, 1000); }
 // De knop of de voortgang van een bouw (gedeeld door alle gebouwpanelen)
 function castraUpgradeUI(id, cost, costTxt, lvl){
   const st = CASTRA.b[id] || {};
-  if(st.up) return `<div class="note">🔨 ${castraLaText("aedifica")}: <b>${castraLaText("gradus")} ${st.up.to}</b> — nog ${castraFmtLeft(castraBuildLeftMs(id))}</div>`;
+  if(st.up) return `<div class="note">🔨 ${castraLaText("aedifica")}: <b>${castraLaText("gradus")} ${st.up.to}</b> — nog <span class="cLeft" data-id="${id}" data-end="${st.up.end}">${castraFmtLeftLive(castraBuildLeftMs(id))}</span></div>`;
   const busy = castraBuildActive().length >= castraBuilders(), mins = castraBuildMinutes(lvl+1), time = castraFmtLeft(castraBuildMs(lvl+1));
   return `<button class="btn" ${castraCanPay(cost) && !busy ? "" : "disabled"} onclick="castraDoUpgrade('${id}')">${lvl===0?castraLaText("aedifica"):castraLaText("meliora")+" → "+castraLaText("gradus")+" "+(lvl+1)} — ${costTxt} · ⏱ ${time}</button>`
     + (busy ? `<div class="note">Alle bouwers zijn bezig (${castraBuildActive().length}/${castraBuilders()}). Een tweede bouwer krijg je met Praetorium 4, een derde met 8.</div>` : "");
@@ -470,7 +486,7 @@ function castraGate(g){
 }
 
 /* ---------- panelen ---------- */
-function castraOpenPanel(html){ const p = el("castraPanel"); if(p){ p.innerHTML = html; p.scrollIntoView({behavior:"smooth",block:"nearest"}); } }
+function castraOpenPanel(html){ const p = el("castraPanel"); if(p){ p.innerHTML = html; if(html.indexOf("cLeft")>=0) castraLeftStart(); p.scrollIntoView({behavior:"smooth",block:"nearest"}); } }
 function castraClosePanel(){ CASTRA_UI.panel=null; const p=el("castraPanel"); if(p) p.innerHTML=""; }
 function castraOpen(id){
   CASTRA_UI.panel = id;
