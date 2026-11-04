@@ -385,8 +385,8 @@ rijen die al ✅ zijn.
 | Proloog | `wapen:boog`/`speer`/`zwaard` | Klassekeuze bij het Orakel (Boogschutter/Hopliet/Cavalerist) | ✅ gebouwd |
 | Hoofdstuk 1 (elke lijn) | `armor:robe` | Het Orakel zelf hult de speler in een mantel, na de eerste lijn | ✅ gebouwd |
 | Hoofdstuk 2 (`CH2_H09`) | `armor:licht` | Herakles draagt voortaan de huid van de Nemeïsche Leeuw als mantel en geeft zijn oude harnas aan de speler | ✅ gebouwd |
-| **Hoofdstuk 4** (Theseus/Labyrint) | `helm:standard` | Koning Aegeus geeft de speler een eenvoudige bronzen helm mee voor de afdaling in het Labyrint |  |
-| **Hoofdstuk 4** (Theseus/Labyrint) | `schild:rond` | Een rond schild, gevonden in het wapenarsenaal van het paleis van Knossos |  |
+| **Hoofdstuk 4** (Theseus/Labyrint) | `helm:standard` | Koning Aegeus geeft de speler een eenvoudige bronzen helm mee voor de afdaling in het Labyrint || ✅ gebouwd |
+| **Hoofdstuk 4** (Theseus/Labyrint) | `schild:rond` | Een rond schild, gevonden in het wapenarsenaal van het paleis van Knossos || ✅ gebouwd |
 | Hoofdstuk 5 (Argonauten, `CH5_006`) | `armor:middel` | Standaard reisharnas, uitgedeeld aan de hele bemanning van de Argo bij vertrek | ✅ gebouwd |
 | Hoofdstuk 5 (Argonauten, `CH5_006`) | `helm:bandana` | Een eenvoudige hoofddoek tegen zon en zeewind tijdens de lange tocht | ✅ gebouwd |
 | Hoofdstuk 8 (`CH8_EPI_004`) | `armor:zwaar` | Hephaistos smeedt nieuw, goddelijk harnas voor Achilles nadat Hector Patroklos' (Achilles') oude wapenrusting buitmaakte — de speler krijgt een eigen exemplaar | ✅ gebouwd |

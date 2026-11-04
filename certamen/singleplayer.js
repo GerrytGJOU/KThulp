@@ -834,6 +834,21 @@ const SP_PATCHES = [
       if(!fresh.length) return false;
       state.codex = [...have, ...fresh];
     } },
+  // Hoofdstuk 4: de bronzen helm (CH4_T02) en het ronde schild (CH4_T03) zijn
+  // achteraf toegevoegd. De uitrusting hangt aan deze twee flags
+  // (SP_AVATAR_STORY_UNLOCKS); beide scènes liggen op het enige pad door het
+  // hoofdstuk, dus wie voorbij Hoofdstuk 4 is, heeft ze gepasseerd.
+  { id:"h4-helm-schild", vanaf:5,
+    omschrijving:"FLAG ch4_aegeus_helm (CH4_T02) en ch4_knossos_schild (CH4_T03) achteraf gezet; ontgrendelt helm:standard en schild:rond.",
+    melding:"Aegeus gaf je bij het vertrek uit Athene een bronzen helm, en in Knossos vond je een rond schild. Beide staan nu in de avatar-editor.",
+    apply(state){
+      state.flags = state.flags || {};
+      let gezet = false;
+      for(const f of ["ch4_aegeus_helm","ch4_knossos_schild"]){
+        if(!state.flags[f]){ state.flags[f] = true; gezet = true; }
+      }
+      if(!gezet) return false;
+    } },
 ];
 
 function spApplyPatches(state, depth){

@@ -6486,6 +6486,11 @@ const SP_AVATAR_STORY_UNLOCKS = {
   // mantel en heeft zijn oude harnas niet meer nodig — hij geeft het aan de
   // (voor de rest van het verhaal onzichtbare) speler.
   "armor:licht":  { flag:"herakles_harnas" },
+  // Hoofdstuk 4: Aegeus geeft de speler bij vertrek uit Athene (CH4_T02) een
+  // bronzen helm mee voor de afdaling in het Labyrint; bij aankomst in
+  // Knossos (CH4_T03) vindt de speler een rond schild in het wapenarsenaal.
+  "helm:standard": { flag:"ch4_aegeus_helm" },
+  "schild:rond":   { flag:"ch4_knossos_schild" },
   // Hoofdstuk 5: bij vertrek uit Iolcus krijgt de hele bemanning van de Argo
   // (dus ook de speler) een standaard reisharnas én een bandana tegen zon en
   // zeewind — één FLAG voor beide, want het is letterlijk hetzelfde moment
@@ -11010,11 +11015,16 @@ Vlak voor het schip vertrekt, roept Aegeus zijn zoon nog één keer bij zich, aa
 
 "Beloof me één ding," zegt hij, zijn stem nauwelijks vast. "Als je overleeft — als je dat monster verslaat en teruggevaren wordt — hijs dan witte zeilen in plaats van zwarte, zodra de kust in zicht komt. Dan weet ik het al voor het schip de haven bereikt. Beloof het me, Theseus." Theseus belooft het zonder aarzelen — een belofte die op dit moment vederlicht aanvoelt, een kleinigheid vergeleken met het monster dat voor hem ligt.
 
+Vlak voordat het schip losmaakt, valt Aegeus' blik nog even opzij — recht naar de plek waar jij onopgemerkt staat te kijken, alsof hij, net als Herakles ooit, toch iets aanvoelt van een aanwezigheid die niemand anders opmerkt. Zonder er verder woorden aan vuil te maken, drukt hij je een eenvoudige bronzen helm in handen. "Als jij hem tot in dat labyrint moet volgen," zegt hij zacht, "kom dan zelf ook heelhuids terug."
+
 IMAGE:
 ch4_aegeus_belofte_zeilen.png
 
 PUZZLE:
 puzzle_ch4t_infinitivus
+
+FLAG:
+ch4_aegeus_helm=true
 
 CHOICES:
 
@@ -11032,8 +11042,13 @@ Het schip meert aan in Knossos, de machtige hoofdstad van Kreta, waar koning Min
 
 Theseus, die niets van dit alles weet, ziet enkel een paleis groter dan hij ooit heeft gezien, en ergens daaronder — hij voelt het bijna door de vloer heen — het labyrint waar Daidalos, de beroemdste bouwmeester van zijn tijd, ooit een bouwwerk optrok dat zelfs zijn eigen maker bijna niet meer kon verlaten.
 
+Terwijl de koninklijke ontvangst ieders aandacht opeist, glipt niemand het op dat jij een moment afdwaalt naar het wapenarsenaal van het paleis — rijen speren en zwaarden, opgeslagen voor een garnizoen dat een eiland zonder vijanden toch angstvallig blijft bewapenen. Tussen de rekken ligt een rond schild, ongebruikt genoeg om niemand te zullen missen; je neemt het mee voor wat je in het labyrint nog te wachten staat.
+
 PERSON:
 ariadne:intro, minos:intro, daidalos:intro
+
+FLAG:
+ch4_knossos_schild=true
 
 CHOICES:
 
