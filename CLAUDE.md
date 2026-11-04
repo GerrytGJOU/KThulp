@@ -78,6 +78,13 @@ spelregels, features of het datamodel raakt:
   knooppunt, werk dan ook de balanssimulatie (`certamen/tools/
   skilltree-balance.js`) en de FAQ-sectie "🌳 Skill-trees" bij.
 
+- Gedeelde woordenlijsten (sinds 2026-11-04): de frequentielijst (±1000 woorden per
+  taal) staat één keer in `assets/vocab/` (`vocab-la.js`, `vocab-el.js`, kern
+  `vocab-core.js`, zie README daar) en wordt door Ludus, Agora, Verba (Latijn +
+  Grieks) en Certamen (`certamen/vocab.js`) geladen. Voeg woorden dáár toe, nooit
+  in een app. Bij een wijziging: `?v=`-cachebuster in alle laders ophogen.
+  Casusdata, stamtijden en werkwoordsvormen zijn nog aparte datasets.
+
 ## Stijl
 - Donkere steen-achtergrond, goud; oxblood-accent voor Latijn,
   Aegeïsch blauw voor Grieks. Palatino in apps.
