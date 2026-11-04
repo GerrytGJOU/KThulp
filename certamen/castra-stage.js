@@ -115,7 +115,7 @@ function castraStageBuild(kind){
   main.insertBefore(wrap, main.firstChild);
   if(back) st.querySelector("#cgBackSlot").appendChild(back);
   st.querySelector("#cgTitle").textContent = h2 ? h2.textContent : "Castra Heroum";
-  ["castraRes","castraTutBar","cwHud"].forEach(id=>{ const n = el(id); if(n) top.appendChild(n); });
+  ["castraRes","castraBuilders","castraTutBar","cwHud"].forEach(id=>{ const n = el(id); if(n) top.appendChild(n); });
   ["cwPanel","castraPanel"].forEach(id=>{ const n = el(id); if(n) bottom.appendChild(n); });
   if(hodie && (hodie.id==="castraHodie" || /castraHodieToggle/.test(hodie.innerHTML))) info.appendChild(hodie);
   if(typeof castraFaqOpen==="function") info.insertAdjacentHTML("beforeend", `<button class="btn btn-gold" onclick="castraFaqOpen('game')">📖 Volledige handleiding</button>`);
