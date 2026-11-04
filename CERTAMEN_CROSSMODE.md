@@ -25,7 +25,7 @@ Eén bescheiden bonus per voltooid Boek (`CX_BOOKS`, plan in `Chronica.md` §6.1
 | Kroniekschrijver Boek V | +5% munten (samen met Boek III maximaal +10%) |
 | Meester der Herinnering (Finale) | +1 AP op elk juist antwoord (`be_on_correct`) |
 
-Plafond per bonussoort, nooit stapelend binnen een soort behalve munten (max. 10%). De haken staan in `bmFinishAnswer`, `bmPickClass`/`bmApplyHeadStart` en `bmAwardBattle` (`battle.js`); `spBonusVal(type, scope)` en `bmBonusScope()` zijn de enige leesplekken. Eerder waren deze bonussen alleen zichtbaar op het profiel, niet verrekend.
+Plafond per bonussoort, nooit stapelend binnen een soort behalve munten (max. 10%). De haken staan in `bmFinishAnswer`, `bmPickClass`/`bmApplyHeadStart` en `bmAwardBattle` (`battle.js`); `spBonusVal(type, scope)` en `bmBonusScope()` zijn de enige leesplekken. Eerder waren deze bonussen alleen zichtbaar op het profiel, niet verrekend. De overige eretitels (`chNN_*`/`fin_*`, één of meer per climaxscène van Hoofdstuk 1 t/m 29 + Finale) hebben `bonus:null` en tellen alleen mee voor het profiel; ze veranderen niets aan bovenstaande bonussen.
 
 ## 2. Chronica → Castra
 Elk voltooid Boek (en de Finale) geeft eenmalig 1 kaarttrekking in Castra (`cxCastraBookTokens`, bijgehouden in `CASTRA.cxPaid`).

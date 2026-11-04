@@ -412,8 +412,15 @@ straks wel een cape maar geen enkele kleur ervoor beschikbaar.
 ## 6. Eretitels (Titles)
 
 - **Account-breed** (niet per saveslot): een titel die je in slot 2 behaalt,
-  zie je ook als je in slot 1 speelt.
-- Toegekend via een `EERETITEL: <id>`-sectie in een CNS-scène (`spAwardTitle`).
+  zie je ook als je in slot 1 speelt. Gespiegeld naar
+  `identities/{klas}/{lid}/singleplayer/titles` in Firebase zodra `BM_IDENT`
+  bekend is (`spAwardTitle`/`spLoadTitles`), dus ook cross-device.
+- Toegekend via een `EERETITEL: <id>`-sectie in een CNS-scène (`spAwardTitle`),
+  **behalve** `kroniekschrijver_boek_1..5`: die hangen aan geen eigen scène
+  maar worden door `cxSyncBookTitles()` (`crossmode.js`) toegekend zodra een
+  Chronica-slot voorbij het bijbehorende boek is (hoofdstukdiepte, niet "alle
+  `chNN_*`-titels binnen"). `meester_der_herinnering` gebruikt wél een gewone
+  EERETITEL-scène (`FIN_EPILOOG`).
 - Zichtbaar op het slotscherm (`spTitlesSectionHTML`, tikbaar om te
   equippen) én op het masterprofiel; **één** titel is kiesbaar ("equipped") en
   verschijnt als pill in de **Battle Mode/Boss Battle-lobby**.
@@ -424,35 +431,39 @@ straks wel een cape maar geen enkele kleur ervoor beschikbaar.
   als "Chronica Classica (X/Y)" — een eigen categorie naast "Algemeen" en
   "Klassieke Spellen" (`ACH_CATEGORIES.chronica`, core.js), niet een los,
   afwijkend paneel.
-- **`SP_TITLES`** (nu 7): `boogschutter_orakel`, `hopliet_orakel`,
-  `cavalerist_orakel` (klassekeuze in de proloog), `bewaarder_herinnering`
-  (proloog voltooid, met een `bonus`-veld: +1 AP bij snel antwoord, scope
-  battle/boss/totalwar), en `ch1_a_midas`/`ch1_b_athena`/`ch1_c_prometheus`
-  (welke lijn van Hoofdstuk 1 je voltooide — bewust zonder bonus, bonussen
-  blijven voorbehouden aan grotere mijlpalen). Alle titels hebben
+- **`SP_TITLES`** (nu 142 in `singleplayer-data.js`, plus de vijf `kroniekschrijver_boek_*`
+  die `crossmode.js` bij het laden toevoegt): één of meer titels per grote
+  climaxscène in elk van de 29 hoofdstukken + Finale (`chNN_*`/`fin_*`-ids,
+  toegekend door een `EERETITEL:`-blok in de scène), plus de vier proloog-titels
+  (`boogschutter_orakel`/`hopliet_orakel`/`cavalerist_orakel`/
+  `bewaarder_herinnering`) en `meester_der_herinnering`. Alle titels hebben
   `secret:true`: niet-behaalde titels tonen "???"/"Geheim eerbewijs" op het
   profiel, om geen verhaalspoilers weg te geven.
-- **Belangrijke beperking:** de `bonus` is nu **puur informatief** — getoond,
-  maar nog **niet verrekend** in het gevecht. De passieve-bonus-logica van
-  Battle Mode zit verspreid over meerdere plekken in `battle.js`; het
-  daadwerkelijk toepassen hoort bij de Combat-bridge-bouwstap (§8).
+- **`bonus`-veld:** alleen `bewaarder_herinnering`, de vijf boek-mijlpalen en
+  `meester_der_herinnering` hebben een bonus; alle `chNN_*`/`fin_*`-titels hebben
+  `bonus:null` (puur cosmetisch). De bonussen zijn **echt verrekend** in Battle
+  Mode/Boss Battle/Total War via `spBonusVal()` (`crossmode.js`), zie §6.1 en
+  `CERTAMEN_CROSSMODE.md`.
 
-### 6.1 Bonus-eretitels — routekaart (**vastgelegd, nog te bouwen**)
+### 6.1 Bonus-eretitels (**gebouwd; verrekening via `crossmode.js`**)
 
 Doel: het moet voor een ervaren multiplayer-speler (Battle Mode/Boss Battle/
 Total War) ook echt lonen om Chronica te spelen, zonder dat de bonussen
 diezelfde speler in multiplayer **overpowered** maken. Daarom NIET elk
 hoofdstuk een eigen bonus (29 hoofdstukken + finale zou een enorme stapel
 kleine voordelen worden, oncontroleerbaar voor balans) maar **één bonus per
-Boek** (6 boeken, bijgewerkt 2026-08-09 — zie de hoofdstuktabel in §0) plus
-de al bestaande proloog-bonus — zeven bonus-momenten over de HELE campagne,
-elk bescheiden en met een plafond, zelfde `bonus:{scope,type,val,desc}`-vorm
-als `bewaarder_herinnering`. Net als de bestaande titel geldt de scope
-altijd `["battle","boss","totalwar"]` — NOOIT Chronica zelf, want het punt
-is juist dat multiplayer-vaardigheid niet nodig is om deze te verdienen,
-maar wel profiteert.
+Boek** (6 boeken, zie de hoofdstuktabel in §0) plus de proloog-bonus — zeven
+bonus-momenten over de HELE campagne (Boek VI + Finale delen er één:
+`meester_der_herinnering`), elk bescheiden en met een plafond, zelfde
+`bonus:{scope,type,val,desc}`-vorm. Scope is altijd `["battle","boss",
+"totalwar"]` — NOOIT Chronica zelf, want het punt is juist dat
+multiplayer-vaardigheid niet nodig is om deze te verdienen, maar wel
+profiteert. `totalwar` heeft in de code geen eigen pad: Total War-gevechten
+hergebruiken `BM_META.mode==="pvp"`/`"boss"` van Battle Mode/Boss Battle
+(`totalwar.js: twStartAttack()`), dus alle onderstaande hooks in `battle.js`
+gelden automatisch ook daar.
 
-| Titel (id, te maken) | Ontgrendeld bij | Bonus (voorstel) | Waarom dit thematisch past |
+| Titel | Ontgrendeld bij | Bonus | Hoe toegepast |
 |---|---|---|---|
 | `bewaarder_herinnering` | Proloog voltooid | +1 AP bij een snel juist antwoord | Al **gebouwd** — het bestaande precedent |
 | `kroniekschrijver_boek_1` | Boek I compleet (Hoofdstuk 1 t/m 9, "De Ontwaakte Herinnering") | `streak_shield` — één fout antwoord per wedstrijd breekt je combo niet | Letterlijk Hoofdstuk 2's kernboodschap: "heldendom ontstaat niet wanneer het lot je gunstig gezind is, maar wanneer je weigert eraan ten onder te gaan" |
@@ -467,12 +478,7 @@ bonus mag zijn — maar elke bonus blijft een KLEINE, eenmalige of
 percentage-gebonden aanpassing (nooit een vermenigvuldiger op alle schade of
 een permanente flat-AP-verhoging zonder voorwaarde), en de duurste/sterkste
 titel is expres gekoppeld aan de zwaarste eis (de hele campagne, niet één
-hoofdstuk). Nieuwe `bonus.type`-waarden (`streak_shield`/`be_head_start`/
-`coin_bonus_pct`/`first_answer_free`/`be_on_correct`) bestaan nog nergens in
-`battle.js`/`bossbattle.js`/`core.js` — ze moeten, samen met
-`bewaarder_herinnering`'s eigen `be_on_fast`, alsnog echt worden ingebouwd in
-de Combat-bridge-bouwstap (§8) voor ze iets doen; tot die tijd blijven ze
-puur informatief, zoals de bestaande titel dat nu ook al is.
+hoofdstuk). De bonussen worden gelezen via `spBonusVal(type, scope)` (`crossmode.js`; `coin_bonus_pct` is daar begrensd op +10%) en toegepast in `battle.js` (`bmAwardBattle`, `bmDistributeQs`/relay, `bmAnswer`). De titel-toekenning zelf loopt via `cxSyncBookTitles()`; zie `CERTAMEN_CROSSMODE.md`.
 
 ---
 
