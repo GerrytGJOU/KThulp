@@ -22,3 +22,6 @@ _archief/
 # Controle-afbeeldingen (x6 vergroot) die het snijscript naast de sprites schrijft; opnieuw te maken met
 # certamen/tools/castra-sprites-slice.py, niet nodig voor het spel.
 certamen/assets/sprites-forms/*_preview_*.png
+
+# Python-cache van de scripts in certamen/tools/
+__pycache__/
