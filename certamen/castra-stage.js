@@ -50,6 +50,14 @@ body.castra-stage-on #app{display:none !important}
 #cgBar button.cgfs{padding:0 10px;font-size:14px;white-space:nowrap}
 #cgFloat{position:absolute;z-index:75;left:6px;top:56px;display:none;flex-direction:column;gap:6px}
 #cgFloat button{min-width:40px;min-height:40px;font-size:18px;line-height:1;cursor:pointer;font-family:inherit;border:2px solid var(--hi,#d4af37);border-radius:8px;background:rgba(27,20,12,.82);color:var(--hi-bright,#e8c96a)}
+#cgNav{flex:0 0 auto;display:flex;justify-content:center;gap:6px;padding:5px 8px calc(5px + env(safe-area-inset-bottom,0px));background:#1b140c;border-top:2px solid var(--hi,#d4af37);box-sizing:border-box}
+#cgNav:empty{display:none}
+#cgNav .cgn{position:relative;flex:1 1 0;max-width:110px;min-height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px 4px;font-family:inherit;cursor:pointer;border:2px solid var(--hi-dim,#8a6d2f);border-radius:10px;background:linear-gradient(#3a2d1c,#261c10);color:#f0e2b8}
+#cgNav .cgn .ic{font-size:22px;line-height:1}
+#cgNav .cgn .lb{font-size:11px;font-weight:bold;letter-spacing:.02em;white-space:nowrap}
+#cgNav .cgn .bd{position:absolute;top:-6px;right:-4px;font-size:13px}
+#cgNav .cgn:active{transform:translateY(1px);filter:brightness(1.2)}
+body.castra-immersive #cgNav{display:none}
 body.castra-immersive #cgBar{display:none}
 body.castra-immersive #cgFloat{display:flex}
 body.castra-immersive .portal-back{display:none !important}
@@ -109,10 +117,14 @@ function castraStageBuild(kind){
       <button class="cgb" id="cgHelp" aria-label="Uitleg" onclick="castraStageInfoToggle()">?</button><button class="cgb cgfs" id="cgFs" aria-label="Full-screen" onclick="castraStageImmersive(true)">⛶ Full-screen</button></div>
     <div id="cgMain"><div id="cgTop"></div><div id="cgBottom"></div><div id="cgInfo" hidden><div>${help}</div></div>
       <div id="cgFloat"><button aria-label="Sluit full-screen" onclick="castraStageImmersive(false)">⤡</button><button aria-label="Uitleg" onclick="castraStageInfoToggle()">?</button>${back ? `<button aria-label="Terug" onclick="${esc(back.getAttribute("onclick")||"")}">‹</button>` : ""}</div></div>`;
+  if(typeof castraNavHTML==="function") st.insertAdjacentHTML("beforeend", '<div id="cgNav"></div>');
   document.body.appendChild(st);
   document.body.classList.add("castra-stage-on");
+  if(typeof castraNavRefresh==="function") castraNavRefresh();
   const main = st.querySelector("#cgMain"), top = st.querySelector("#cgTop"), bottom = st.querySelector("#cgBottom"), info = st.querySelector("#cgInfo");
   main.insertBefore(wrap, main.firstChild);
+  if(kind!=="world" && typeof castraTrackBuild==="function") castraTrackBuild(main);
+  if(kind!=="world" && typeof castraDecorBuild==="function") castraDecorBuild(main);
   if(back) st.querySelector("#cgBackSlot").appendChild(back);
   st.querySelector("#cgTitle").textContent = h2 ? h2.textContent : "Castra Heroum";
   ["castraRes","castraBuilders","castraTutBar","cwHud"].forEach(id=>{ const n = el(id); if(n) top.appendChild(n); });

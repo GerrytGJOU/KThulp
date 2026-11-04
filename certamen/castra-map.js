@@ -19,12 +19,12 @@ const CASTRA_TS_FILES = {
   A5: "assets/tilesets/Outside_A5.png",
   B:  "assets/tilesets/Outside_B.webp",
   A1: "assets/tilesets/Outside_A1.webp",
+  A3: "assets/tilesets/Outside_A3.webp",       // daken en muren: gebouwen krijgen vanaf niveau 4 en 7 een ander uiterlijk (castraBuildingArtFor)
   A4: "assets/tilesets/Outside_A4.webp",       // muren en kliffen (Gerben, 2026-10-24): klifwanden en plateaus van de bergen (castra-berg.js)
   X:  "assets/tilesets/Castra_extra.png",     // eigen tekeningen (tools/gen_castra_flags.py): vlaggen voor het Praetorium
 };
 // Alleen nodig in Roma (castra-urbs.js): daken en gevels, het Colosseum, de triomfboog, de tempel, grafstenen en beelden. Pas geladen als je in Roma bent.
 const CASTRA_TS_ROMA = {
-  A3: "assets/tilesets/Outside_A3.webp",
   C:  "assets/tilesets/Outside_C.webp",
   RA: "assets/tilesets/Roma_A.webp",
   RB: "assets/tilesets/Roma_B.webp",
@@ -140,11 +140,53 @@ const CASTRA_BUILDING_ART = {
   principia:   { fw:2, fh:2, pieces:[ {o:"sign",dx:0,dy:0}, {o:"pot",dx:1,dy:0}, {o:"well",dx:0,dy:1}, {o:"barrel",dx:1,dy:1} ] },
 };
 
+/* ---- gebouwen groeien mee: vanaf niveau 4 en 7 een ander uiterlijk (zelfde voetafdruk en plek) ----
+   Tier 0 = de tegelkunst hierboven (tent of voorwerpen), tier 1 (niveau 4-6) = een houten of bakstenen huis met een warm dak,
+   tier 2 (niveau 7-10) = een stenen huis met een gekleurd dak. Dak- en muurtegels komen uit Outside_A3 (kolom, rij van het
+   linkerbovenvak van de autotile), deur en raam uit Outside_B. */
+const CASTRA_TIER_FROM = [1, 4, 7];
+const CASTRA_ROOF = { orange:0, orange2:2, blue:4, green:6, teal:8, pink:10, moss:12 };
+const CASTRA_WALLS = { plaster:[0,2], brick:[2,2], tan:[4,2], stone:[6,2], cobble:[12,2], white:[10,2], planks:[0,4], planks2:[2,4], logs:[4,6], dark:[0,6] };
+// per gebouw: [dak, muur] voor tier 1 en tier 2
+const CASTRA_TIER_LOOK = {
+  praetorium:   [["orange","brick"],   ["blue","stone"]],
+  contubernia:  [["orange2","tan"],    ["moss","stone"]],
+  heroum:       [["pink","plaster"],   ["teal","white"]],
+  lignatio:     [["moss","logs"],      ["orange","logs"]],
+  metallum:     [["moss","cobble"],    ["blue","stone"]],
+  horreum:      [["orange2","planks"], ["orange","brick"]],
+  campus:       [["green","planks2"],  ["green","plaster"]],
+  valetudinarium:[["pink","plaster"],  ["teal","white"]],
+  dilectus:     [["blue","planks"],    ["blue","tan"]],
+  stabula:      [["orange2","dark"],   ["moss","logs"]],
+  navalia:      [["blue","logs"],      ["teal","stone"]],
+};
+function castraBuildingTier(b){
+  const L = (typeof CASTRA!=="undefined" && CASTRA && CASTRA.b && CASTRA.b[b.id]) ? (CASTRA.b[b.id].lvl||0) : 0;
+  let t = 0; CASTRA_TIER_FROM.forEach((f,i)=>{ if(L>=f && i>0) t = i; });
+  return CASTRA_TIER_LOOK[b.id] ? t : 0;
+}
+function castraHouseArt(fw, fh, roof, wall, tier){
+  const rc = CASTRA_ROOF[roof], [wc, wr] = CASTRA_WALLS[wall], pieces = [], A = (c,r,dx,dy)=>pieces.push({ t:{ s:"A3", c, r, w:1, h:1, solid:"all" }, dx, dy });
+  const Bt = (c,r,dx,dy)=>pieces.push({ t:{ s:"B", c, r, w:1, h:1, solid:"all" }, dx, dy });
+  for(let dy=0; dy<fh-1; dy++) for(let dx=0; dx<fw; dx++) A(dx===fw-1 ? rc+1 : rc, dy===0 ? 0 : 1, dx, dy);   // dak: bovenrand, daarna de dakvlakte
+  for(let dx=0; dx<fw; dx++) A(wc + (dx===fw-1 ? 1 : 0), wr+1, dx, fh-1);                                        // muur onderin
+  const door = Math.floor(fw/2); Bt(2, 6, door, fh-1);                                                          // deur
+  if(fw===3){ Bt(0,4,0,fh-1); Bt(0,4,2,fh-1); } else if(tier>=2) Bt(0,4,door===0?1:0,fh-1);                     // ramen
+  return { fw, fh, pieces };
+}
+function castraBuildingArtFor(b){
+  const base = CASTRA_BUILDING_ART[b.id]; if(!base) return null;
+  const t = castraBuildingTier(b); if(!t) return base;
+  const look = CASTRA_TIER_LOOK[b.id][t-1];
+  return castraHouseArt(base.fw, base.fh, look[0], look[1], t);
+}
+
 /* ---- kaartlogica (synchroon): blocked["x,y"] = 1 of gebouw-id ---- */
 function castraMapLogic(def){
   const blocked = {}, below = [], above = [];
   const put = (o, x, y, owner)=>{
-    const O = CASTRA_OBJ[o]; if(!O) return;
+    const O = typeof o==='string' ? CASTRA_OBJ[o] : o; if(!O) return;
     for(let dy=0; dy<O.h; dy++) for(let dx=0; dx<O.w; dx++){
       const cx = x+dx, cy = y+dy;
       const isBottom = dy===O.h-1;
@@ -155,7 +197,7 @@ function castraMapLogic(def){
       (O.solid==="bottom" && !isBottom ? above : below).push(tile);
     }
   };
-  (def.pieces||[]).forEach(p=>put(p.o, p.x, p.y, p.owner));
+  (def.pieces||[]).forEach(p=>put(p.t || p.o, p.x, p.y, p.owner));
   (def.walls||[]).forEach(w=>{ blocked[w[0]+","+w[1]] = 1; });
   return { cols:def.cols, rows:def.rows, ground:def.ground, blocked, below, above, def };
 }
@@ -192,13 +234,13 @@ function castraCampDef(){
   T.gates.forEach(gt=>gt.tiles.forEach(t=>{ g[t.y][t.x]="sand"; const i = walls.findIndex(w=>w[0]===t.x&&w[1]===t.y); if(i>=0) walls.splice(i,1); }));
   const pieces = [];
   CASTRA_BUILDINGS.filter(b=>b.phase===1&&b.slot).forEach(b=>{
-    const art = CASTRA_BUILDING_ART[b.id]; if(!art) return;
+    const art = castraBuildingArtFor(b); if(!art) return;
     const site = b.start===0 && typeof CASTRA!=="undefined" && CASTRA && castraLvl(b.id)===0 && art.fw===2 && art.fh===2;
-    (site ? CASTRA_BUILDING_SITE : art.pieces).forEach(p=>pieces.push({ o:p.o, x:b.slot.x+p.dx, y:b.slot.y+p.dy, owner:b.id }));
+    (site ? CASTRA_BUILDING_SITE : art.pieces).forEach(p=>pieces.push({ o:p.o, t:p.t, x:b.slot.x+p.dx, y:b.slot.y+p.dy, owner:b.id }));
   });
   // Het Praetorium is het hoofdkwartier: twee vlaggen naast de ingang (rood; goud vanaf level 3).
   { const pr = CASTRA_BUILDINGS.find(b=>b.id==="praetorium"), gold = typeof CASTRA!=="undefined" && CASTRA && castraLvl("praetorium")>=3, c = gold ? "gold" : "red";
-    if(pr && pr.slot){ pieces.push({ o:"flag_"+c+"_l", x:pr.slot.x, y:pr.slot.y+1 }, { o:"flag_"+c+"_r", x:pr.slot.x+2, y:pr.slot.y+1 }); } }
+    if(pr && pr.slot && castraBuildingTier(pr)===0){ pieces.push({ o:"flag_"+c+"_l", x:pr.slot.x, y:pr.slot.y+1 }, { o:"flag_"+c+"_r", x:pr.slot.x+2, y:pr.slot.y+1 }); } }
   [ ["tree_a",1,2],["tree_a",2,1],["tree_a",14,9],["tree_a",1,9],["tree_a",14,7],["tree_a",1,12],["tree_a",6,11],["tree_a",14,12],["tree_a",10,12] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
   [ ["flower_w",9,2],["flower_p",6,3],["flower_b",11,6],["flower_o",3,10],["plant_c",6,9],["fern",11,10],["flower_p",1,6],["stones",9,4],["flower_w",5,12],["flower_b",10,11],["plant_a",1,10],["fern",6,13],["flower_o",9,13] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
   return { cols, rows, ground:g, pieces, walls };

@@ -20,6 +20,11 @@ function castraHudCss(){
   #cgTop #castraBuilders::-webkit-scrollbar{display:none}
   #cgTop #castraBuilders:empty{display:none}
   #cgTop .cBldr{flex:0 0 auto;min-width:0;max-width:none;font-size:11px;padding:2px 8px 7px;white-space:nowrap;border-radius:8px}
+  #cgQuests{position:absolute;z-index:58;right:6px;top:58px;width:176px;max-width:46%;box-sizing:border-box;border:2px solid var(--hi-dim,#8a6d2f);border-radius:10px;background:rgba(20,16,10,.84);color:#f0e2b8;font-size:12px;overflow:hidden}
+  #cgQuests:empty{display:none}
+  #cgQuests .qh{display:flex;justify-content:space-between;align-items:center;padding:3px 8px;font-weight:bold;cursor:pointer;background:rgba(212,175,55,.18)}
+  #cgQuests .qr{padding:4px 8px;border-top:1px solid rgba(212,175,55,.25);cursor:pointer;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  #cgQuests .qr.rdy{color:#bfe8a8}
   .cBub{position:absolute;left:50%;top:-30px;transform:translateX(-50%);z-index:4;display:none;align-items:center;gap:3px;white-space:nowrap;font-size:var(--lbl,11px);font-weight:700;line-height:1;padding:3px 8px;border-radius:14px;background:#f3e6bd;color:#2a2118;border:2px solid #8a6d2f;box-shadow:0 2px 4px rgba(0,0,0,.55)}
   .cBub:after{content:"";position:absolute;left:50%;bottom:-7px;margin-left:-5px;border:5px solid transparent;border-top-color:#8a6d2f;border-bottom:0}
   .cBub.collect{display:flex;animation:cBubBob 1.3s ease-in-out infinite;cursor:pointer}
@@ -60,9 +65,45 @@ function castraHudBubble(b){
   return ["", ""];
 }
 
+/* ---------- opdrachtenlijstje aan de zijkant (alleen op de kampkaart) ---------- */
+// Lopende opdrachten van de Diarium-motor, opdrachten uit de wereld en een paar suggesties van "Hodie" (jacht, baas, weekuitdaging).
+function castraTrackItems(){
+  const out = [];
+  try{
+    if(typeof castraDqActive==="function") castraDqActive().forEach(q=>{
+      const st = castraDqState(q.id), ready = st.s >= q.steps.length, s = q.steps[st.s], info = s ? castraDqStepInfo(q, st) : null;
+      out.push(ready ? { c:"rdy", t:"❓ "+q.nm.nl+": meld je bij "+castraDqWhere(q) } : { c:"", t:"📜 "+q.nm.nl+": "+s.hud.nl+(info&&info.txt?" ("+info.txt+")":"") });
+    });
+    if(typeof castraDqAvailable==="function" && typeof CASTRA_QDEFS!=="undefined"){ const q = CASTRA_QDEFS.find(castraDqAvailable); if(q) out.push({ c:"", t:"❗ Nieuw: "+q.nm.nl+" (praat met "+castraDqWhere(q)+")" }); }
+    (typeof castraWobjOpus==="function" ? castraWobjOpus() : []).forEach(t=>out.push({ c:"", t:"📜 "+t.nl }));
+    Object.keys(CASTRA.quests||{}).forEach(id=>{
+      if(typeof castraHero==="function" && castraHero(id)) return;
+      const d = CASTRA_HERO_DATA[id]; if(!d || !CASTRA.quests[id].acc) return;
+      const s = typeof castraStepOf==="function" ? castraStepOf(id) : null; if(s && s.hud) out.push({ c:"", t:"⭐ "+d.nm+": "+s.hud.nl });
+    });
+    if(typeof castraHodieItems==="function") castraHodieItems().filter(i=>/Jachtopdracht|Venator|baas|Wekelijkse/.test(i.t)).slice(0,2).forEach(i=>out.push({ c:"", t:i.icon+" "+i.t }));
+  }catch(e){ console.error(e); }
+  return out.slice(0,5);
+}
+function castraTrackToggle(){ const o = CASTRA.opts || (CASTRA.opts = {}); o.trackOff = !castraTrackOff(); castraSave(); castraTrackUpdate(true); }
+function castraTrackOff(){ const o = CASTRA.opts || {}; return o.trackOff!==undefined ? !!o.trackOff : window.innerWidth<520; }
+function castraTrackUpdate(force){
+  const box = document.getElementById("cgQuests"); if(!box) return;
+  const items = castraTrackItems(), off = castraTrackOff();
+  const h = items.length ? `<div class="qh" onclick="castraTrackToggle()"><span>📜 Opdrachten${off?" ("+items.length+")":""}</span><span>${off?"▸":"▾"}</span></div>` + (off ? "" : items.map(i=>`<div class="qr ${i.c}" onclick="castraNavPick('opus')">${esc(i.t)}</div>`).join("")) : "";
+  if(force || box.dataset.h!==h){ box.dataset.h = h; box.innerHTML = h; }
+}
+function castraTrackBuild(main){
+  if(!main || document.getElementById("cgQuests")) return;
+  const d = document.createElement("div"); d.id = "cgQuests"; d.onpointerdown = ev=>ev.stopPropagation(); main.appendChild(d);
+  castraHudCss(); castraTrackUpdate(true);
+}
+
 function castraHudUpdate(){
   if(!document.getElementById("castraMap")) return;
   castraHudBuilders();
+  castraTrackUpdate();
+  if(typeof castraNavRefresh==='function') castraNavRefresh();
   document.querySelectorAll(".cBub").forEach(el_=>{
     const b = castraBuilding(el_.dataset.b); if(!b) return;
     const [cls, html] = castraHudBubble(b);

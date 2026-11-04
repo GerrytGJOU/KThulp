@@ -84,8 +84,10 @@ function castraPortraitLayer(d, size){
   return `<img src="assets/portraits/${slug}.webp?v=${CASTRA_PORTRAIT_VER}" alt="" draggable="false" onload="var a=this.parentNode.querySelector('.cdAv');if(a)a.style.display='none'" onerror="this.style.display='none'" style="position:absolute;left:0;top:0;width:${size}px;height:${size}px;object-fit:cover;image-rendering:pixelated">`;
 }
 function castraDlgPortrait(d){
-  return `<div style="flex:0 0 112px;width:112px;height:112px;overflow:hidden;border-radius:8px;background:#d9c590;border:2px solid var(--parch-edge,#4a3416);position:relative">
-    <div class="cdAv" style="position:absolute;left:0;top:0;width:112px;height:112px">${d.sheet && typeof castraSheetHTML==="function" ? castraSheetHTML(d.sheet,"down",1,112) : castraAvatarHTML(d.look,"down",1,112)}</div>${castraPortraitLayer(d, 112)}</div>`;
+  // Een gezicht uit een gezichtenblad (<div>) is er meteen: dan geen avatar eronder (het blad heeft transparante hoeken). Een los portretbestand (<img>) verbergt de avatar zodra het geladen is.
+  const layer = castraPortraitLayer(d, 112), sheetFace = /^<div/.test(layer);
+  const av = sheetFace ? "" : `<div class="cdAv" style="position:absolute;left:0;top:0;width:112px;height:112px">${d.sheet && typeof castraSheetHTML==="function" ? castraSheetHTML(d.sheet,"down",1,112) : castraAvatarHTML(d.look,"down",1,112)}</div>`;
+  return `<div style="flex:0 0 112px;width:112px;height:112px;overflow:hidden;border-radius:8px;background:#d9c590;border:2px solid var(--parch-edge,#4a3416);position:relative">${av}${layer}</div>`;
 }
 function castraDlgLine(){
   const D = CASTRA_DLG, box = document.getElementById("castraDlg"); if(!D || !box) return;

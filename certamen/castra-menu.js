@@ -28,7 +28,20 @@ const CASTRA_MENU_ITEMS = [
   { id:"restart",la:"Restart",  nl:"opnieuw beginnen" },          // bewust Nederlands/Engels, geen Latijn
   { id:"exeo",   la:"Exeo",     nl:"terug naar het portaal" },
 ];
-let CASTRA_MENU = { open:false, view:null };
+/* Indeling (2026-11-04): vijf vaste knoppen in de onderbalk (castraNavHTML), de rest onder ☰ ("meer"), en
+   opslaan, geluid, uitleg, opnieuw beginnen en afsluiten in het submenu Systema. Andere bestanden voegen nog steeds
+   gewoon items toe aan CASTRA_MENU_ITEMS; wat hier niet genoemd staat komt onder ☰. */
+const CASTRA_MENU_NAV = ["milites","heroes","mundus","opus","sacculus"];
+const CASTRA_MENU_SYS = ["servare","faq","sonus","restart","exeo"];
+const CASTRA_MENU_ICON = { milites:"🛡️", heroes:"⭐", mundus:"🗺️", opus:"📜", sacculus:"🎒", servare:"💾", faq:"📖", sonus:"🔊", restart:"🔄", exeo:"🚪" };
+let CASTRA_MENU = { open:false, view:null, parent:null };
+// Is de onderbalk in beeld? Zo niet (andere schermen, of full-screen) dan staan de vijf knoppen gewoon in de lijst.
+function castraNavShown(){ return !!document.getElementById("cgNav") && !document.body.classList.contains("castra-immersive"); }
+function castraMenuList(){
+  const nav = castraNavShown();
+  return CASTRA_MENU_ITEMS.filter(it=>!CASTRA_MENU_SYS.includes(it.id) && !(nav && CASTRA_MENU_NAV.includes(it.id)))
+    .concat([{ id:"systema", la:"Systema", nl:"opslaan, geluid, uitleg, afsluiten" }]);
+}
 
 function castraMenuBtn(wrapId){
   wrapId = wrapId || "castraWrap";
@@ -45,12 +58,12 @@ function castraMenuBtn(wrapId){
 }
 function castraMenuToggle(){ if(CASTRA_MENU.open) castraMenuClose(); else castraMenuOpen(); }
 function castraMenuClose(){
-  CASTRA_MENU.open = false; CASTRA_MENU.view = null;
+  CASTRA_MENU.open = false; CASTRA_MENU.view = null; CASTRA_MENU.parent = null;
   const m = document.getElementById("castraMenu"); if(m) m.remove();
   if(CASTRA_MENU.esc){ document.removeEventListener("keydown", CASTRA_MENU.esc); CASTRA_MENU.esc = null; }
 }
 // Esc of "‹ terug": eerst het detailvak sluiten, daarna het hele menu.
-function castraMenuBack(){ if(CASTRA_MENU.view){ CASTRA_MENU.view = null; castraMenuRender(); } else castraMenuClose(); }
+function castraMenuBack(){ if(CASTRA_MENU.view){ CASTRA_MENU.view = CASTRA_MENU.parent; CASTRA_MENU.parent = null; castraMenuRender(); } else castraMenuClose(); }
 function castraMenuOpen(){
   castraMenuClose(); CASTRA_MENU.open = true;
   const m = document.createElement("div"); m.id = "castraMenu";
@@ -66,7 +79,8 @@ function castraMenuRender(){
   const m = document.getElementById("castraMenu"); if(!m) return;
   const name = castraPlayerName() || "Dux";
   const box = "background:linear-gradient(var(--parch,#efe1b9),var(--parch2,#e4d2a1));color:var(--parch-ink,#2b1d0e);border:4px solid var(--parch-edge,#4a3416);border-radius:10px;box-shadow:0 0 0 2px var(--parch-gold,#c9a24a),0 6px 20px rgba(0,0,0,.5);font-family:inherit";
-  const items = CASTRA_MENU_ITEMS.map(it=>{
+  const list = castraMenuList();
+  const items = list.map(it=>{
     const on = CASTRA_MENU.view===it.id, la = it.id==="profiel" ? name : it.la, lock = it.unl && typeof castraUnlocked==="function" && !castraUnlocked(it.unl), lu = lock ? castraUnlockDef(it.unl) : null;
     return `<div role="button" tabindex="0" onclick="castraMenuPick('${it.id}')" style="padding:8px 10px 8px 22px;font-size:20px;cursor:pointer;position:relative;min-height:44px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;${on?"background:rgba(120,80,20,.18)":""}">
       <span style="position:absolute;left:6px;top:50%;transform:translateY(-50%);visibility:${on?"visible":"hidden"}" class="castra-cur">▶</span>
@@ -82,7 +96,7 @@ function castraMenuRender(){
     <div style="${box};flex:0 0 190px;width:190px;padding:4px 0;pointer-events:auto;max-height:calc(100vh - 16px);overflow:auto">
       <div style="display:flex;justify-content:flex-end;padding:2px 6px 0"><button onclick="castraMenuClose()" style="${xbtn};min-width:36px;min-height:36px;font-size:18px" aria-label="Menu sluiten" title="Sluiten (Esc)">✕</button></div>${items}</div></div>`;
   m.querySelectorAll("[role=button]").forEach((n,i)=>{
-    n.onmouseenter = ()=>m.querySelectorAll(".castra-cur").forEach((c,j)=>c.style.visibility = (j===i || CASTRA_MENU_ITEMS[j].id===CASTRA_MENU.view) ? "visible" : "hidden");
+    n.onmouseenter = ()=>m.querySelectorAll(".castra-cur").forEach((c,j)=>c.style.visibility = (j===i || list[j].id===CASTRA_MENU.view) ? "visible" : "hidden");
   });
 }
 function castraMenuPick(id){
@@ -91,6 +105,7 @@ function castraMenuPick(id){
   if(id==="mundus"){ castraMenuClose(); castraGeoMapOpen(); return; }
   if(id==="servare"){ castraSave(); castraToastLa("recte", "💾 Servatum"); castraMenuClose(); return; }
   if(id==="exeo"){ castraMenuClose(); castraLeave(); return; }
+  CASTRA_MENU.parent = (CASTRA_MENU.view==='systema' && id!=='systema') ? 'systema' : null;
   CASTRA_MENU.view = id; CASTRA_MENU.rs = 0; castraMenuRender();
 }
 
@@ -111,6 +126,7 @@ function castraMenuSprite(formId, look){
   return `<div style="flex:0 0 56px;width:56px;height:56px;position:relative">${inner}</div>`;
 }
 function castraMenuView(id){
+  if(id==="systema") return castraMenuSystem();
   if(id==="milites") return castraMenuTeam();
   if(id==="heroes") return castraMenuHeroes();
   if(id==="sacculus") return castraMenuBag();
@@ -196,6 +212,31 @@ function castraMenuProfile(){
   return `<h3 style="margin:0 0 2px">${esc(name)}</h3><div style="font-size:14px;margin-bottom:6px;color:#7a2a14"><b>${ti?esc(ti.title):"—"}</b> <small>${ti?"("+esc(ti.nl)+")":""}</small>${stars?` · ⭐ ${stars}`:""}</div>${lvHtml}<div style="display:flex;gap:12px;align-items:center">${av}<div style="flex:1">${rows.map(r=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid var(--parch-line,#c2a96f)"><span>${r[0]}</span><b>${r[1]}</b></div>`).join("")}</div></div>`;
 }
 
+/* ---------- Systema: de technische knoppen bij elkaar ---------- */
+function castraMenuSystem(){
+  const rows = CASTRA_MENU_SYS.map(id=>CASTRA_MENU_ITEMS.find(x=>x.id===id)).filter(Boolean).map(it=>
+    `<div role="button" tabindex="0" onclick="castraMenuPick('${it.id}')" style="${CASTRA_MV_ROW};cursor:pointer;min-height:48px"><span style="font-size:24px;width:34px;text-align:center">${CASTRA_MENU_ICON[it.id]||"•"}</span><div style="flex:1"><b style="font-size:18px">${esc(it.la)}</b><br><small style="opacity:.65">${esc(it.nl)}</small></div><span style="opacity:.5">›</span></div>`).join("");
+  return `<h3 style="margin:0 0 6px">Systema <small>instellingen en afsluiten</small></h3>${rows}`;
+}
+
+/* ---------- onderbalk: de vijf vaakst gebruikte onderdelen (door castra-stage.js onder de kaart gezet) ---------- */
+function castraNavBadge(id){
+  if(id!=="opus" || typeof castraQuestState!=="function" || typeof CASTRA_QDEFS==="undefined") return "";
+  try{ return CASTRA_QDEFS.some(q=>{ const s = castraQuestState(q); return s==="READY" || s==="AVAILABLE"; }) ? "❗" : ""; }catch(e){ return ""; }
+}
+function castraNavHTML(){
+  return CASTRA_MENU_NAV.map(id=>{
+    const it = CASTRA_MENU_ITEMS.find(x=>x.id===id); if(!it) return "";
+    const lock = it.unl && typeof castraUnlocked==="function" && !castraUnlocked(it.unl), bd = castraNavBadge(id);
+    return `<button class="cgn" data-nav="${id}" onclick="castraNavPick('${id}')" aria-label="${esc(it.la)}"><span class="ic">${lock?"🔒":CASTRA_MENU_ICON[id]}</span><span class="lb">${esc(it.la)}</span>${bd?`<span class="bd">${bd}</span>`:""}</button>`;
+  }).join("");
+}
+function castraNavPick(id){
+  if(id==="mundus"){ castraMenuPick(id); return; }
+  castraMenuOpen(); castraMenuPick(id);
+}
+function castraNavRefresh(){ const n = document.getElementById("cgNav"); if(n){ const h = castraNavHTML(); if(n.dataset.h!==h){ n.dataset.h = h; n.innerHTML = h; } } }
+
 /* ---------- Restart (alles wissen en opnieuw beginnen, met tutorial) ---------- */
 function castraMenuRestart(){
   const step = CASTRA_MENU.rs || 0;
@@ -204,13 +245,13 @@ function castraMenuRestart(){
     <p style="font-size:15px">Wil je Castra Heroum <b>helemaal opnieuw beginnen</b>? Dan begin je weer met het tutorial en een leeg kamp.</p>
     <p style="font-size:14px;opacity:.8">Je verliest: ${list}.</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-      <button class="btn btn-gold" style="min-height:44px" onclick="castraMenuPick('profiel')">Nee, terug</button>
+      <button class="btn btn-gold" style="min-height:44px" onclick="castraMenuPick('systema')">Nee, terug</button>
       <button class="btn" style="min-height:44px" onclick="CASTRA_MENU.rs=1;castraMenuRender()">Ja, opnieuw beginnen…</button></div>`;
   return `<h3 style="margin:0 0 6px;color:#8a1c10">Weet je het zeker?</h3>
     <p style="font-size:15px"><b>Dit kan niet ongedaan worden gemaakt.</b> Alles wat je met ${esc(castraPlayerName()||"je profiel")} in Castra Heroum hebt opgebouwd wordt gewist, ook in de cloud-opslag van je profiel.</p>
     <p style="font-size:13px;opacity:.8">Je Battle Mode-profiel, avatar en munten blijven gewoon bestaan.</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-      <button class="btn btn-gold" style="min-height:44px" onclick="castraMenuPick('profiel')">Annuleren</button>
+      <button class="btn btn-gold" style="min-height:44px" onclick="castraMenuPick('systema')">Annuleren</button>
       <button class="btn" style="min-height:44px;border-color:#8a1c10;color:#8a1c10" onclick="castraRestartNow()">Ja, alles wissen</button></div>`;
 }
 function castraRestartNow(){

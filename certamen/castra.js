@@ -280,7 +280,7 @@ function castraBuiltMap(){
     CASTRA_BUILT = castraMapLogic(castraCampDef());
     // De tenten (3x3) zijn getekend als driehoek: de hoeken van de bovenste rij zijn gras en dus begaanbaar.
     CASTRA_BUILDINGS.forEach(b=>{ if(!(b.phase===1 && b.slot)) return; const f = castraBuildingFoot(b);
-      if(f.fw===3 && f.fh===3){ delete CASTRA_BUILT.blocked[b.slot.x+","+b.slot.y]; delete CASTRA_BUILT.blocked[(b.slot.x+2)+","+b.slot.y]; } });
+      if(f.fw===3 && f.fh===3 && castraBuildingTier(b)===0){ delete CASTRA_BUILT.blocked[b.slot.x+","+b.slot.y]; delete CASTRA_BUILT.blocked[(b.slot.x+2)+","+b.slot.y]; } });
   }
   return CASTRA_BUILT;
 }
