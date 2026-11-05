@@ -122,15 +122,41 @@
       if(d) d.innerHTML = 'De of het? &nbsp;<b>' + esc(q.la) + '</b>';
     };
   }
-  // De Senator biedt nu twee oefeningen aan.
+  /* ---- Oefening "Voorzetsels" (A1): het juiste voorzetsel in een zin kiezen ---- */
+  const HK_VZ = /*HK_VZ*/[];
+  window.hkVzStart = function(){
+    const rng = castraRng((castraNow() ^ CASTRA.seed ^ 0x7a15)>>>0); CASTRA.seed = (CASTRA.seed+7)>>>0;
+    const shuf = a => a.slice().sort(()=>rng()-0.5);
+    const qs = shuf(HK_VZ).slice(0,5).map(w=>{ const opts = shuf([w[1]].concat(w[2])); return { la:w[0], opts, ans:opts.indexOf(w[1]), full:w[0].replace("___", w[1]), en:w[3] }; });
+    CASTRA_QUIZ_KIND = { key:"quiz_vz", rid:"latium", words:[], title:"Voorzetsels" };
+    CASTRA_QUIZ = { qs, i:0, score:0, picked:null, done:false };
+    castraQuizRender();
+  };
+  { const qs1 = castraQuizStart; window.castraQuizStart = function(){ if(CASTRA_QUIZ_KIND && CASTRA_QUIZ_KIND.key==="quiz_vz") return hkVzStart(); return qs1.apply(this, arguments); }; }
+  { const rr1 = window.castraQuizRender;
+    window.castraQuizRender = function(){
+      rr1();
+      if(!(CASTRA_QUIZ_KIND && CASTRA_QUIZ_KIND.key==="quiz_vz") || !CASTRA_QUIZ) return;
+      const panel = document.querySelector("#cwPanel .panel"); if(!panel) return;
+      if(CASTRA_QUIZ.done){
+        panel.insertAdjacentHTML("beforeend", '<div class="note" style="margin-top:8px">Tip: leer het voorzetsel samen met het werkwoord: <b>wachten op</b>, <b>houden van</b>, <b>denken aan</b>, <b>bang zijn voor</b>, <b>kijken naar</b>.<br><small style="opacity:.75">Learn the preposition together with the verb: they are fixed expressions.</small></div>');
+        return;
+      }
+      const q = CASTRA_QUIZ.qs[CASTRA_QUIZ.i], d = panel.querySelector('div[style*="font-size:26px"]');
+      if(d) d.innerHTML = '<small style="font-size:14px;opacity:.8">Welk woord past? <span style="opacity:.8">Which word fits?</span></small><br>' + esc(q.la).replace("___", '<b style="border-bottom:3px solid var(--hi,#d4af37);padding:0 14px">&nbsp;&nbsp;&nbsp;</b>');
+      if(CASTRA_QUIZ.picked!==null) panel.insertAdjacentHTML("beforeend", '<div class="note" style="margin-top:8px">'+(CASTRA_QUIZ.picked===q.ans?"✔ ":"✘ ")+'<b>'+esc(q.full)+'</b><br><small style="opacity:.8">'+esc(q.en)+'</small></div>');
+    };
+  }
+  // De Senator biedt nu drie oefeningen aan.
   window.castraQuizOpen = function(){
     if(CASTRA_DLG) return;
     const e = CASTRA_WENT.find(x=>x.id==="senator");
     castraLatSay("Senator", e.look, [ { la:"Gegroet, leider {naam}! Welke oefening kies je?", nl:"Greetings, leader {naam}! Which exercise do you choose?",
-        opts:[ { la:"Woorden", nl:"words" }, { la:"De of het?", nl:"de or het?" }, { la:"Nu niet", nl:"not now" } ] } ],
+        opts:[ { la:"Woorden", nl:"words" }, { la:"De of het?", nl:"de or het?" }, { la:"Voorzetsels", nl:"prepositions" }, { la:"Nu niet", nl:"not now" } ] } ],
       k=>{
         if(k===0){ CASTRA_QUIZ_KIND = { key:"quiz_senator", rid:"latium", words:null, title:"Woordenquiz" }; castraQuizStart(); }
         else if(k===1){ CASTRA_QUIZ_KIND = { key:"quiz_dehet", rid:"latium", words:[], title:"De of het?" }; castraQuizStart(); }
+        else if(k===2){ CASTRA_QUIZ_KIND = { key:"quiz_vz", rid:"latium", words:[], title:"Voorzetsels" }; castraQuizStart(); }
       });
   };
 
@@ -212,7 +238,7 @@
      <span class="hk-en">; CSS verbergt die in de standen "tap" en "off". Gesprekken (woord tikken, ⓘ-vertaling), quizzen en het
      woordenboek zijn uitgesloten, want daar is het Engels de leerstof of de hulp op verzoek. In "off" werken ook tikken en ⓘ niet. */
   const HK_EN = new Set(/*HK_EN*/[]);
-  ["words","de or het?","not now","your looked-up words","change your look","English help","review your words","your words","practise my words","Which exercise do you choose?"].forEach(s=>HK_EN.add(s));
+  ["words","de or het?","prepositions","not now","your looked-up words","change your look","English help","review your words","your words","practise my words","Which exercise do you choose?"].forEach(s=>HK_EN.add(s));
   const hkEnMode = () => { try{ return localStorage.getItem("english") || "all"; }catch(e){ return "all"; } };
   function hkEnApply(){ const m = hkEnMode(); document.body.classList.toggle("hk-en-tap", m==="tap"); document.body.classList.toggle("hk-en-off", m==="off"); }
   { const st = document.createElement("style");

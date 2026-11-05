@@ -68,3 +68,9 @@ Engelse tekst in `<span class="hk-en">`, CSS verbergt die in "tap" en "off". Uit
 (`#cwPanel`) en alles met `data-hk-keep` (woordenboek, instellingen). In "off" werken ook woord-tikken en de ⓘ-knop niet.
 Beperking: alleen Engelse tekst die als eigen tekstknoop in de HTML staat en exact in `enSet` zit wordt herkend; wil je een
 nieuwe plek erbij, zet de Engelse tekst in een catalogus-sleutel met `en::` of voeg hem toe aan de lijst in `heldenkamp-nl.js`.
+
+## Voorzetsel-oefening
+`overlay/voorzetsel-a1.json` ([zin met ___, juist, [fout, fout], Engelse vertaling], 44 zinnen, in elke zin past precies één van
+de drie opties) + sectie "Oefening Voorzetsels" in `overlay/heldenkamp-nl.js`. Bij de Senator (nu 4 keuzes), 5 vragen,
+na elk antwoord de volledige zin met Engelse vertaling, aan het eind een tip over vaste werkwoord+voorzetsel-combinaties,
+dagelijkse beloning via `CASTRA_QUIZ_KIND.key = "quiz_vz"`. Nieuwe zinnen: zorg dat de afleiders echt fout zijn.
