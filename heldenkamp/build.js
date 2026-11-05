@@ -35,4 +35,18 @@ for (const f of fs.readdirSync(path.join(DIST, 'certamen')).filter(f => /^castra
   }
   fs.writeFileSync(p, src);
 }
+// Nederlandse woordhulp (overlay): woordenboek in een script na alle castra-scripts laden
+{
+  const dirO = path.join(__dirname, 'overlay');
+  const gloss = {};
+  for (const f of fs.readdirSync(dirO).filter(f => /^woordenboek.*\.json$/.test(f)).sort()) Object.assign(gloss, JSON.parse(fs.readFileSync(path.join(dirO, f), 'utf8')));
+  const js = fs.readFileSync(path.join(dirO, 'heldenkamp-nl.js'), 'utf8').replace('/*HK_GLOSS*/{}', () => JSON.stringify(gloss));
+  fs.writeFileSync(path.join(DIST, 'certamen', 'heldenkamp-nl.js'), js);
+  const ip = path.join(DIST, 'certamen', 'index.html');
+  let html = fs.readFileSync(ip, 'utf8');
+  const re = /<script src="castra[^"]*"><\/script>/g; let last = null, m;
+  while ((m = re.exec(html))) last = m;
+  if (last) { html = html.slice(0, last.index + last[0].length) + '\n<script src="heldenkamp-nl.js"></script>' + html.slice(last.index + last[0].length); fs.writeFileSync(ip, html); }
+  else console.warn('WAARSCHUWING: geen castra-script gevonden in index.html; heldenkamp-nl.js niet ingevoegd');
+}
 console.log(`Gebouwd in heldenkamp/dist/ — ${totaal} fragmenten vervangen.`);

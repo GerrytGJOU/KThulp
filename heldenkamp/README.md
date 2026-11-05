@@ -34,3 +34,9 @@ Gebouwd: extractie, bouw, workflow, paarregel. Vertaald: alle Latijn/Nederlands-
 fragmenten, o.a. castra-heroevo-all.js, castra-latin.js, castra-regions.js, castra-troops.js, castra-data.js.
 Nog niet gedaan: herontwerp Latijn-leerdeel (castra-latin.js: vertaalhulp, "Vertaal Latijnse zinnen"-opdrachten,
 naamvallen), Engelse aan/uit-schakelaar, portaalknop/Firebase/online onderdelen weglaten.
+
+## Nederlandse woordhulp (stap 1 van LEERDEEL_ONTWERP.md)
+`overlay/heldenkamp-nl.js` (sjabloon) + `overlay/woordenboek*.json` (Nederlands -> Engels) worden bij het bouwen
+tot `dist/certamen/heldenkamp-nl.js` en na het laatste castra-script in `index.html` geladen. Het vervangt
+`castraNorm`, `castraTapWord` en leegt het Latijnse `CASTRA_GLOSS`. Nieuwe tikbare woorden: `node woorden.js`
+(schrijft `woorden-open.json` met woorden zonder glos) en voeg ze toe aan een nieuw `overlay/woordenboek-N.json`.
