@@ -29,8 +29,8 @@ Engelse hulptekst. Die Engelse tekst staat in `nl.json` onder de sleutel `"en::<
 (zonder leesteken) vertaal je met een gewone sleutel.
 
 ## Stand (2026-11-05)
-Gebouwd: extractie, bouw, workflow, paarregel. Vertaald: alle Latijn/Nederlands-paren met Engelse hulptekst
-(helden, quests, NPC's, uitleg in het kamp, jacht, proelium: ~1000 fragmenten). Nog open (`node extract.js`): ~4200 losse
+Gebouwd: extractie, bouw, workflow, paarregel. Vertaald: alle Latijn/Nederlands-paren (ook naam+uitleg-paren met korte uitleg, `{la|nm, nl}`) met Engelse hulptekst
+(helden, quests, NPC's, uitleg in het kamp, jacht, proelium: ~1000 fragmenten). Nog open (`node extract.js`): ~3900 losse
 fragmenten, o.a. castra-heroevo-all.js, castra-latin.js, castra-regions.js, castra-troops.js, castra-data.js.
 Nog niet gedaan: herontwerp Latijn-leerdeel (castra-latin.js: vertaalhulp, "Vertaal Latijnse zinnen"-opdrachten,
 naamvallen), Engelse aan/uit-schakelaar, portaalknop/Firebase/online onderdelen weglaten.

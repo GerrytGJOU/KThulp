@@ -35,12 +35,16 @@ function paarVan(n, anc) {
   if (!par) return null;
   if (par.type === 'Property' && par.value === n && par.key) {
     const obj = anc[anc.length - 3];
-    const rol = par.key.name || par.key.value;
-    if (!obj || obj.type !== 'ObjectExpression' || (rol !== 'la' && rol !== 'nl')) return null;
+    const sleutel = par.key.name || par.key.value;
+    if (!obj || obj.type !== 'ObjectExpression' || (sleutel !== 'la' && sleutel !== 'nm' && sleutel !== 'nl')) return null;
     const vind = k => obj.properties.find(p => p.type === 'Property' && p.key && (p.key.name || p.key.value) === k && isStr(p.value));
-    const la = vind('la'), nl = vind('nl');
-    if (!la || !nl || !ZIN.test(la.value.value.trim())) return null;
-    return { rol, partner: (rol === 'la' ? nl : la).value.value };
+    const la = vind('la') || vind('nm'), nl = vind('nl');
+    if (!la || !nl) return null;
+    const rol = sleutel === 'nl' ? 'nl' : 'la';
+    const los = !ZIN.test(la.value.value.trim());         // naam of woordgroep i.p.v. zin
+    const gl = nl.value.value.trim();
+    if (los && (gl.split(/s+/).length > 4 || /[%:(,.+d]/.test(gl))) return null;   // lange uitleg is geen vertaling van een naam
+    return { rol, los, partner: (rol === 'la' ? nl : la).value.value };
   }
   if (par.type === 'ArrayExpression' && par.elements.length === 2 && par.elements.every(isStr)) {
     // ["Latijnse zin.", "Nederlandse vertaling."] — herkend aan taal: eerste zonder, tweede met Nederlandse functiewoorden
@@ -81,17 +85,27 @@ function zoek(catalogus, bestand, tekst) {
 }
 
 // De vertaling voor een fragment, rekening houdend met de paarregel. undefined = nog niet vertaald.
+const LOS_PAAR = /^(castra-(data|heroevo-all|heroevo|regions|skills|moves|wobj|decor|bag|cards|codex|field|gates|geo|geomap|diarium|mythos|sidequests|roma|wanderers|battle|clue|hodie|interiors|proelium|unlocks|vscene|weekly|zones|roles|train|tutorial|report|plan|opus|party|latium|elem)).js$/;
+function paar(n, bestand) { return n.pair && (!n.pair.los || LOS_PAAR.test(bestand)) ? n.pair : null; }
 function vertaal(catalogus, bestand, n) {
   const eigen = zoek(catalogus, bestand, n.cooked);
-  if (!n.pair) return eigen;
-  if (n.pair.rol === 'la') return eigen !== undefined ? eigen : n.pair.partner;   // Latijn -> bestaande Nederlandse tekst
+  const pr = paar(n, bestand);
+  if (!pr) return eigen;
+  n = { ...n, pair: pr };
+  if (n.pair.rol === 'la') {
+    if (eigen !== undefined) return eigen;
+    const d = n.pair.partner.trim(), hoofd = /^[A-ZÀ-Ž]/.test(n.cooked.trim());
+    return n.pair.los && hoofd ? d.charAt(0).toUpperCase() + d.slice(1) : n.pair.partner;
+  }   // Latijn -> bestaande Nederlandse tekst
   const en = zoek(catalogus, bestand, 'en::' + n.cooked);                          // Nederlands -> Engelse hulptekst
   return en !== undefined ? en : eigen;
 }
 
 // Wat er in de todo-lijst moet staan voor dit fragment (null = niets te doen).
-function sleutelNodig(n) {
-  if (!n.pair) return n.cooked.trim();
+function sleutelNodig(n, bestand) {
+  const pr = paar(n, bestand);
+  if (!pr) return n.cooked.trim();
+  n = { ...n, pair: pr };
   return n.pair.rol === 'nl' ? 'en::' + n.cooked.trim() : null;
 }
 

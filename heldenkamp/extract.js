@@ -16,7 +16,7 @@ for (const f of fs.readdirSync(ROOT).filter(f => /^castra.*\.js$/.test(f) && !SK
   if (filter && !f.includes(filter)) continue;
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   let nodes; try { nodes = collect(src); } catch (e) { console.error('PARSE FOUT', f, e.message); continue; }
-  const uniek = [...new Set(nodes.map(sleutelNodig).filter(Boolean))];
+  const uniek = [...new Set(nodes.map(n => sleutelNodig(n, f)).filter(Boolean))];
   const mist = uniek.filter(s => zoek(catalogus, f, s) === undefined);
   klaar += uniek.length - mist.length; open += mist.length;
   if (mist.length) todo[f] = mist;
