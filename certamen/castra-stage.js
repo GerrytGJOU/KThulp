@@ -254,3 +254,28 @@ const _castraHomeSt0 = SCREENS.castraHome;
 SCREENS.castraHome = function(){ _castraHomeSt0.apply(this, arguments); try{ castraStageBuild("camp"); }catch(e){ console.error(e); } };
 const _castraWorldSt0 = SCREENS.castraWorld;
 SCREENS.castraWorld = function(){ _castraWorldSt0.apply(this, arguments); try{ castraStageBuild("world"); }catch(e){ console.error(e); } };
+
+/* ---------- een geopend gebouwpaneel sluit vanzelf: tik ernaast of loop weg (2026-11-05) ---------- */
+function castraPanelIsOpen(){ const p = el("castraPanel"); return !!(p && p.innerHTML.trim()); }
+const CASTRA_PANEL_AUTO = { px:null, py:null, bound:false };
+function castraPanelOutsideDown(ev){
+  if(!castraPanelIsOpen() || !el("castraMap")) return;
+  const t = ev.target; if(!t || !t.closest) return;
+  // binnen het paneel, in een gesprek (Aeneas, NPC) of in de uitleg: niets doen; ook niet als het element al uit de pagina is
+  if(t.closest("#castraPanel, #castraDlg, #cgInfo, #castraFaq, .toast") || !document.contains(t)) return;
+  castraClosePanel();
+}
+function castraPanelMoveWatch(){
+  const U = typeof CASTRA_UI!=="undefined" ? CASTRA_UI : null, A = CASTRA_PANEL_AUTO;
+  if(!U || !el("castraMap")){ A.px = A.py = null; return; }
+  if(A.px!==null && (A.px!==U.px || A.py!==U.py) && castraPanelIsOpen()) castraClosePanel();      // de avatar liep weg van het gebouw
+  A.px = U.px; A.py = U.py;
+}
+const _castraStageBuildPa0 = castraStageBuild;
+castraStageBuild = function(kind){
+  _castraStageBuildPa0.apply(this, arguments);
+  if(kind!=="world"){
+    CASTRA_PANEL_AUTO.px = CASTRA_PANEL_AUTO.py = null;
+    if(!CASTRA_PANEL_AUTO.bound){ CASTRA_PANEL_AUTO.bound = true; document.addEventListener("pointerdown", castraPanelOutsideDown, true); setInterval(()=>{ try{ castraPanelMoveWatch(); }catch(_){} }, 120); }
+  }
+};
