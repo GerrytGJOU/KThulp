@@ -64,3 +64,32 @@ castraStageBuild = function(kind){
     try{ castraZoneChipUpdate(); }catch(_){}
   }
 };
+
+/* ---------- banner met de provincie waar je bent (linksonder, volgt je van land naar land) ---------- */
+// Sinds 2026-11-05: naam van het land (en bij een binnenruimte de plek), zodat je weet waar je bent. Verschijnt met een korte glijbeweging zodra je
+// van land of plek wisselt en blijft daarna staan. Hoort bij het speelscherm (#castraStage), dus ook in full-screen.
+function castraProvBannerUpdate(){
+  const stage = document.getElementById("castraStage"); if(!stage || !el("cwMap")) return;
+  const W = castraWorldCfg(); if(!W) return;
+  const rid = W.parent || W.id, R = CASTRA_WORLDS[rid] || W, info = (typeof CASTRA_REGIONS!=="undefined" && CASTRA_REGIONS.find(r=>r.id===rid)) || null;
+  const main = `${R.icon||"📍"} ${R.nm}`, sub = W.interior ? W.nm : (info && info.nl && info.nl!==R.nm ? info.nl : "");
+  let b = el("cgProv");
+  if(!b){ b = document.createElement("div"); b.id = "cgProv"; const m = stage.querySelector("#cgMain"); if(!m) return; m.appendChild(b); }
+  if(!document.getElementById("castraProvCss")){ const st = document.createElement("style"); st.id = "castraProvCss"; st.textContent = `
+#cgProv{position:absolute;z-index:65;left:8px;bottom:8px;max-width:46%;padding:5px 14px 6px;border-radius:0 14px 14px 0;border:2px solid var(--hi,#d4af37);border-left:6px solid var(--hi,#d4af37);background:linear-gradient(90deg,rgba(20,16,10,.92),rgba(20,16,10,.72));color:#f3e6bd;pointer-events:none;line-height:1.15;font-family:Palatino,serif;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+#cgProv b{display:block;font-size:17px;letter-spacing:.06em;color:var(--hi-bright,#e8c96a);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#cgProv small{display:block;font-size:12px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#cgProv.nw{animation:cgProvIn .6s ease-out}
+@keyframes cgProvIn{from{transform:translateX(-110%);opacity:0}to{transform:none;opacity:1}}
+@media (max-width:700px){ body.castra-immersive #cgProv{bottom:64px} }`; document.head.appendChild(st); }
+  const key = main+"|"+sub;
+  if(b.dataset.k!==key){ b.dataset.k = key; b.innerHTML = `<b>${esc(main)}</b>${sub?`<small>${esc(sub)}</small>`:""}`; b.classList.remove("nw"); void b.offsetWidth; b.classList.add("nw"); }
+}
+const _castraStageBuildPv0 = castraStageBuild;
+castraStageBuild = function(kind){
+  _castraStageBuildPv0.apply(this, arguments);
+  if(kind==="world"){
+    const t = setInterval(()=>{ if(!document.getElementById("castraStage")){ clearInterval(t); return; } try{ castraProvBannerUpdate(); }catch(_){} }, 400);
+    try{ castraProvBannerUpdate(); }catch(_){}
+  }
+};

@@ -43,6 +43,13 @@
   };
   hkWordPool();
   window.cxQuizExtras = function(){ return []; };
+  // Vangen (Capere): de woordvraag gebruikt hier de Nederlandse woorden met Engelse betekenis (zelfde lijst als de woordenquiz), niet de Latijnse frequentielijst.
+  window.castraVCatchWord = function(rng){
+    const pool = (typeof CASTRA_QUIZ_WORDS!=="undefined" ? CASTRA_QUIZ_WORDS : []).filter(w=>w && w[0] && w[1]);
+    const w = pool[Math.floor(rng()*pool.length)], wrong = pool.filter(x=>x[1]!==w[1]).sort(()=>rng()-0.5).slice(0,2).map(x=>x[1]);
+    const opts = [w[1]].concat(wrong).sort(()=>rng()-0.5);
+    return { word:{ la:w[0], nl:w[1] }, opts, ans:opts.indexOf(w[1]) };
+  };
   // Zinnenquiz: het leesteken van de zin staat anders voor het vraagteken ("...dapper.?").
   if(typeof castraQuizRender==="function"){
     const orig = castraQuizRender;

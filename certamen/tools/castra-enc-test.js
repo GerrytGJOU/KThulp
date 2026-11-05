@@ -106,5 +106,22 @@ console.log("6. mythische wezens alleen op verborgen plekken en in grotten");
   const tallOk = R(`(function(){ const bad = []; Object.keys(CASTRA_MYTH_RECTS).forEach(r=>{ CASTRA_W_REGION = r; CASTRA_WORLD_BUILT = {}; const B = castraWorldBuilt(); CASTRA_MYTH_RECTS[r].forEach(z=>{ let n = 0; Object.keys(B.tall).forEach(k=>{ if(B.tall[k]===z.id) n++; }); if(n<3) bad.push(r+"/"+z.id+" ("+n+")"); }); }); return bad; })()`);
   ok(tallOk.length===0, "elke verborgen plek heeft hoog gras met zijn eigen terrein"+(tallOk.length ? " (te weinig: "+tallOk.join(", ")+")" : "")); }
 
+console.log("7. balans van het wild (castra-troops.js: CASTRA_WILD_CAP)");
+{ fresh(); run(`CASTRA_PHASE_FORCE = "dies"; CASTRA.b.praetorium = { lvl:6, t:0 };`);
+  const mk = (line,lvl)=>`Object.assign(castraRollSoldier(${J(line)}), { lvl:${lvl} })`;
+  const sample = (party, rid)=>{ run(`CASTRA.soldiers = [${party.map(p=>mk(p[0],p[1])).join(",")}]; CASTRA.party = CASTRA.soldiers.map(s=>s.id);`);
+    return R(`(function(){ const reg = CASTRA_VENATIO[${J(rid)}], rng = castraRng(31); const best = castraPartyBest(); let maxTier = 0, maxRatio = 0, maxLvl = 0;
+      for(let i=0;i<2000;i++){ const t = reg.terrains[i%reg.terrains.length], p = castraWildPick(reg, t, rng); maxTier = Math.max(maxTier, p.form.tier); maxLvl = Math.max(maxLvl, p.lvl);
+        if(p.lvl>1) maxRatio = Math.max(maxRatio, castraPowerOf(p.form.id, p.lvl)/best.power); }
+      return { maxTier, maxRatio, maxLvl }; })()`); };
+  const r1 = sample([["rom_tiro",11]], "latium");
+  ok(r1.maxTier===1, "alleen rekruten in je team: alleen tier 1 in het wild (hoogste tier "+r1.maxTier+")");
+  ok(r1.maxRatio<=1.3+1e-9, "een wilde vijand is nooit meer dan 30% sterker dan je sterkste soldaat (max "+r1.maxRatio.toFixed(2)+"x)");
+  const r2 = sample([["rom_tiro",11],["rom_hastatus",20]], "latium");
+  ok(r2.maxTier===2, "met een tier 2-soldaat in je team komt tier 2 in het wild (hoogste tier "+r2.maxTier+")");
+  ok(r2.maxLvl<=run("CASTRA_VENATIO.latium.max")+2, "Latium: ook tier 2 blijft binnen het level van het land + 2 (hoogste "+r2.maxLvl+")");
+  const r3 = sample([["rom_tiro",5]], "graecia");
+  ok(r3.maxRatio<=1.3+1e-9, "ook in een zwaar land word je niet meteen afgestraft met een zwakke soldaat (max "+r3.maxRatio.toFixed(2)+"x)"); }
+
 console.log("\n" + checks + " controles, " + fails + " fouten");
 process.exit(fails ? 1 : 0);

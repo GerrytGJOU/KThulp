@@ -96,6 +96,6 @@ function castraUnlockShow(){
   if(!CASTRA.tut || CASTRA.tut.step<99) return;          // tijdens het tutorial niets aankondigen
   const id = CASTRA.unlQ.shift(), u = castraUnlockDef(id); castraSave(); if(!u) return castraUnlockShow();
   const head = { la:`Gradus ${u.lvl}! ${u.la} aperitur.`, nl:`Niveau ${u.lvl}! Nieuw: ${u.nl}.` };
-  castraDlgOpen("aeneas", [head].concat(u.lines), ()=>{ if(typeof castraRenderRes==="function") castraRenderRes(); castraUnlockShow(); });
+  castraDlgOpen("aeneas", [head].concat(u.lines||[]), ()=>{ if(typeof castraRenderRes==="function") castraRenderRes(); castraUnlockShow(); });
 }
 function castraLockedToast(id){ const u = castraUnlockDef(id); if(u && typeof toast==="function") toast("🔒 Niveau "+u.lvl, "Dit ontgrendel je op Castra-niveau "+u.lvl+" ("+u.nl+")."); }

@@ -37,8 +37,8 @@ const CASTRA_MENU_ICON = { milites:"🛡️", heroes:"⭐", mundus:"🗺️", op
 // Onderdelen die onder een ander onderdeel hangen: Contubernium en Labor bij Milites, Insignia bij Tabulae.
 const CASTRA_MENU_SUB = { party:"milites", labor:"milites", insignia:"tabulae" };
 let CASTRA_MENU = { open:false, view:null, parent:null };
-// Is de onderbalk in beeld? Zo niet (andere schermen, of full-screen) dan staan de vijf knoppen gewoon in de lijst.
-function castraNavShown(){ return !!document.getElementById("cgNav") && !document.body.classList.contains("castra-immersive"); }
+// Is de onderbalk in beeld? Zo niet (andere schermen, bv. zonder kampkaart) dan staan de vijf knoppen gewoon in de lijst.
+function castraNavShown(){ return !!document.getElementById("cgNav"); }      // ook in full-screen: dan zweven de knoppen onderin over de kaart (castra-stage.js)
 function castraMenuList(){
   const nav = castraNavShown();
   return CASTRA_MENU_ITEMS.filter(it=>!CASTRA_MENU_SYS.includes(it.id) && !CASTRA_MENU_SUB[it.id] && !(nav && CASTRA_MENU_NAV.includes(it.id)))

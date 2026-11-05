@@ -243,7 +243,24 @@ function castraAdvice(s){
 }
 
 /* ---- het wild: wie komt er tevoorschijn? ---- */
-function castraWildMaxTier(){ const p = castraLvl("praetorium"); let t = 1; CASTRA_WILD_TIER_PRAE.forEach((need,i)=>{ if(p>=need) t = i+1; }); return t; }
+// Balans van het wild (2026-11-05): wat je tegenkomt hangt niet alleen af van je praetorium, maar ook van wie je bij je hebt.
+//  - tier: in het wild kom je nooit een hogere tier tegen dan de hoogste tier in je team (met alleen rekruten: alleen rekruten; evolueer je, dan komt tier 2).
+//  - regio: een hogere tier is nooit meer dan 2 levels per tier boven het hoogste level van het land (region.max), want hij begon vroeger op zijn
+//    evolutiedrempel (16/32/50) en dat was in Latium (3-10) tweemaal zo hoog als de rest.
+//  - ratio: een wilde vijand is nooit meer dan 30% sterker (som van de stats) dan je sterkste soldaat; zo word je niet meteen afgestraft.
+const CASTRA_WILD_CAP = { regionPerTier:2, ratio:1.3 };
+function castraPowerOf(lineId, lvl){ const st = castraStats({ line:lineId, lvl, indoles:{} }); return Object.keys(st).reduce((a,k)=>a+st[k],0); }
+function castraPartyBest(){          // sterkste soldaat van je team: { lvl, power, tier } (null zolang je er geen hebt)
+  if(typeof CASTRA==="undefined" || !CASTRA) return null;
+  const list = (typeof castraPartyList==="function" ? castraPartyList() : null) || CASTRA.soldiers || []; let best = null;
+  list.forEach(s=>{ if(!s || !s.line || !CASTRA_FORMS[s.line]) return; const pw = castraPowerOf(s.line, s.lvl||1); if(!best) best = { lvl:0, power:0, tier:1 }; best.lvl = Math.max(best.lvl, s.lvl||1); best.tier = Math.max(best.tier, CASTRA_FORMS[s.line].tier||1); best.power = Math.max(best.power, pw); });
+  return best;
+}
+function castraWildMaxTier(){
+  const p = castraLvl("praetorium"); let t = 1; CASTRA_WILD_TIER_PRAE.forEach((need,i)=>{ if(p>=need) t = i+1; });
+  const B = castraPartyBest(); if(B) t = Math.min(t, B.tier);
+  return t;
+}
 // Opgesplitst zodat castra-enc.js (vaste slottabellen) de stukken kan hergebruiken; castraWildPick zelf werkt als vanouds.
 function castraWildTier(region, rng){      // 1. tier (60/28/10/2), begrensd door het praetorium-level
   const maxT = Math.min(castraWildMaxTier(), region.tierMax||4); let r = rng()*CASTRA_WILD_TIER_W.slice(0,maxT).reduce((a,b)=>a+b,0), tier = 1;
@@ -266,9 +283,13 @@ function castraWildForm(region, terrain, tier, rng, mythOnly){      // 2-4. myth
   }
   return form;
 }
-function castraWildLevel(region, form, rng){      // 5. level: rekruten volgens het gebied, hogere tiers vanaf hun evolutiedrempel
-  if(form.tier<=1) return region.min + Math.floor(rng()*(region.max-region.min+1));
-  return Math.min(50, castraEvoLevel(CASTRA_FORMS[form.from[0]]) + Math.floor(rng()*4));
+function castraWildLevel(region, form, rng){      // 5. level: rekruten volgens het gebied, hogere tiers vanaf hun evolutiedrempel (begrensd, zie CASTRA_WILD_CAP)
+  let lvl;
+  if(form.tier<=1) lvl = region.min + Math.floor(rng()*(region.max-region.min+1));
+  else lvl = Math.min(50, castraEvoLevel(CASTRA_FORMS[form.from[0]]) + Math.floor(rng()*4), Math.max(region.min, region.max + CASTRA_WILD_CAP.regionPerTier*(form.tier-1)));
+  const B = castraPartyBest();
+  if(B) while(lvl>1 && castraPowerOf(form.id, lvl) > B.power*CASTRA_WILD_CAP.ratio) lvl--;
+  return lvl;
 }
 function castraWildPick(region, terrain, rng){
   const tier = castraWildTier(region, rng), form = castraWildForm(region, terrain, tier, rng);

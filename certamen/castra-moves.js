@@ -373,14 +373,26 @@ function castraVCatch(){
   if(!castraMvCatchable(V)){ V.log = [castraLaHTML("Hunc hostem capere non potes.", "Deze vijand kun je niet vangen (een baas).", "mv_baas")]; castraVRender("battle"); return; }
   if(V.catchLeft<=0){ V.log = [castraLaHTML("Nulli funes manent.", "Je hebt geen vangpogingen meer.", "mv_nofunes")]; castraVRender("battle"); return; }
   if(CASTRA.soldiers.length >= castraBarracksCap()){ V.log = [castraLa("castra_plena")]; castraVRender("battle"); return; }
-  // optionele Latijnse vraag: welk soort vijand is dit? (het bericht van de verkenner)
-  const types = ["inf","rng","cav","sup","myth"].filter(t=>t!==V.enType).sort(()=>V.rng()-0.5).slice(0,2).concat([V.enType]).sort(()=>V.rng()-0.5);
-  V.ask = { opts:types, ans:types.indexOf(V.enType) };
+  // optionele vraag: wat betekent dit Latijnse woord? (uit de frequentielijst, niet over soldatentypen; goed antwoord = meer kans)
+  V.ask = castraVCatchWord(V.rng);
   castraVRender("battle");
+}
+// Een woord uit de gedeelde frequentielijst (VOCAB_LA, assets/vocab/) met de juiste vertaling en twee verkeerde; liefst een woord dat je in Certamen
+// moeilijk vond (woordenbrug, crossmode.js). Zonder lijst (tests) valt het terug op de korte woordenlijst van de quiz.
+function castraVCatchWord(rng){
+  let pool = [];
+  try{ if(typeof VOCAB_LA!=="undefined") pool = VOCAB_LA.filter(w=>w.f<=400 && /^[a-zāēīōū]+$/i.test(w.la) && w.nl && w.nl.indexOf("\n")<0 && w.nl.length<=22 && !/[(;]/.test(w.nl) && /^(subst|verb|adj)[.]/.test(w.pos||"")); }catch(e){}
+  if(pool.length<20 && typeof CASTRA_QUIZ_WORDS!=="undefined") pool = CASTRA_QUIZ_WORDS.map(w=>({ la:w[0], nl:w[1], pos:"" }));
+  let w = null;
+  try{ if(typeof cxQuizExtras==="function" && rng()<0.5){ const ex = cxQuizExtras().filter(e=>e[0] && e[1] && e[1].indexOf("\n")<0 && e[1].length<=22 && !/[(;]/.test(e[1])); if(ex.length){ const e = ex[Math.floor(rng()*ex.length)]; w = { la:e[0], nl:e[1], pos:"" }; } } }catch(e){}
+  if(!w) w = pool[Math.floor(rng()*pool.length)];
+  const wrong = pool.filter(x=>x.nl!==w.nl && x.la!==w.la).sort(()=>rng()-0.5).slice(0,2).map(x=>x.nl);
+  const opts = [w.nl].concat(wrong).sort(()=>rng()-0.5);
+  return { word:{ la:w.la, nl:w.nl }, opts, ans:opts.indexOf(w.nl) };
 }
 function castraVCatchTry(k){        // k = gekozen antwoord, of -1 = overslaan
   const V = CASTRA_V; if(!V || V.over || !V.ask) return;
-  const ok = k>=0 && V.ask.opts[k]===V.enType;
+  const ok = k>=0 && k===V.ask.ans;
   const p = castraMvCatchChance(V, ok); V.catchLeft--; (CASTRA.seenTD || (CASTRA.seenTD = {})).vcatch = 1;
   const roll = V.rng();
   if(roll < p){
@@ -454,12 +466,12 @@ function castraVBattleHTML(){
   let menu;
   if(V.ask){
     const sc = V.scoutLa ? "" : "";
-    const la = `${V.terrain.la} ${CASTRA_TYPE_LA[V.enType].pl} adsunt.`, nl = `${V.terrain.nl} zijn ${CASTRA_TYPE_LA[V.enType].nl_pl}.`;
+
     menu = `<div style="margin-top:6px;padding:8px;border:2px solid var(--hi,#d4af37);border-radius:10px;background:rgba(212,175,55,.1)">
       <div style="font-size:16px"><b>🪢 ${castraLaText("capere")}</b> <small>(optioneel: goed lezen verhoogt de kans)</small></div>
-      <div style="font-size:17px;margin:6px 0">${castraLaHTML(la, nl, "mv_ask")}</div>
-      <div style="font-size:15px;margin-bottom:4px">Wat voor soort vijand is dit?</div>
-      ${V.ask.opts.map((t,k)=>`<button class="btn" style="margin:3px 6px 3px 0;min-height:44px" onclick="castraVCatchTry(${k})">${esc(CASTRA_TYPE_LA[t].nl_sg)}</button>`).join("")}
+      <div style="font-size:15px;margin:6px 0 2px">Wat betekent dit woord?</div>
+      <div style="font-size:22px;font-style:italic;margin-bottom:6px">${esc(V.ask.word.la)}</div>
+      ${V.ask.opts.map((t,k)=>`<button class="btn" style="margin:3px 6px 3px 0;min-height:44px" onclick="castraVCatchTry(${k})">${esc(t)}</button>`).join("")}
       <button class="btn" style="margin:3px 0;min-height:44px;opacity:.85" onclick="castraVCatchTry(-1)">Ik weet het niet, probeer toch</button>
       <div class="note" style="margin-top:4px">Kans nu: <b style="color:${castraMvChanceLabel(castraMvCatchChance(V,false))[1]}">${castraMvChanceLabel(castraMvCatchChance(V,false))[0]}</b>, met goed antwoord: <b style="color:${castraMvChanceLabel(castraMvCatchChance(V,true))[1]}">${castraMvChanceLabel(castraMvCatchChance(V,true))[0]}</b></div></div>`;
   } else if(V.fightOpen){

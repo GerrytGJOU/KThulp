@@ -61,6 +61,7 @@ const CASTRA_TUT_TEXT = {
 let CASTRA_DLG = null;
 function castraDlgOpen(whoId, lines, done){
   castraDlgClose(true);
+  lines = (lines||[]).filter(Boolean);      // een lege regel liet het venster vastlopen (Labor-ontgrendeling zonder tekst, 2026-11-05)
   CASTRA_DLG = { who:whoId, lines, i:0, typing:null, shown:false, done, chosen:null };
   const box = document.createElement("div");
   box.id = "castraDlg";
