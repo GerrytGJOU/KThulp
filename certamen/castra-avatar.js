@@ -12,7 +12,7 @@
    ============================================================================ */
 
 const CASTRA_SPRITE_DIR = "assets/sprites-topdown/";
-const CASTRA_SPRITE_VER = "v=9";   // ophogen na het vervangen van een PNG
+const CASTRA_SPRITE_VER = "v=15";   // ophogen na het vervangen van een PNG
 const CASTRA_FRAME = 48;           // MV-loopsheet: frame 48×48, 3 kolommen × 4 rijen
 const CASTRA_DIR_ROW = { down:0, left:1, right:2, up:3 };
 
@@ -23,14 +23,14 @@ function castraTdPath(battlerPath){
 
 // Welke top-down base-sprites bestaan al? Gecachet per huidtint; onbekend = null.
 const CASTRA_TD_READY = {};
-// Welke top-down bestanden bestaan er? Eénmalig per sessie gescand (alle PIXEL_ASSETS-paden, behalve wapens);
+// Welke top-down bestanden bestaan er? Eénmalig per sessie gescand (alle PIXEL_ASSETS-paden, behalve wapens en schilden);
 // ontbrekende lagen worden daarna niet meer opgevraagd (geen 404-spam) en krijgen een terugval, zodat een
 // avatar nooit onzichtbaar of kaal wordt zolang er nog sprites ontbreken (zie assets/sprites-topdown/README.txt).
 let CASTRA_TD_EXISTS = null, _castraTdScanP = null;
 function castraTdScan(){
   if(_castraTdScanP) return _castraTdScanP;
   const paths = new Set();
-  Object.keys(PIXEL_ASSETS).forEach(cat=>{ if(cat==="wapen") return; Object.values(PIXEL_ASSETS[cat]).forEach(p=>{ if(p) paths.add(p); }); });
+  Object.keys(PIXEL_ASSETS).forEach(cat=>{ if(cat==="wapen" || cat==="schild") return; Object.values(PIXEL_ASSETS[cat]).forEach(p=>{ if(p) paths.add(p); }); });
   const map = {};
   _castraTdScanP = Promise.all([...paths].map(p=>new Promise(res=>{
     const im = new Image(); im.onload = ()=>{ map[p]=true; res(); }; im.onerror = ()=>{ map[p]=false; res(); };
@@ -58,7 +58,7 @@ function castraTdAvailable(av){
 }
 
 // Zijn alle gekozen onderdelen van deze avatar als top-down sprite aanwezig? (Wapens tellen niet mee: die
-// zijn bewust niet getekend. "geen"-opties hebben geen laag nodig.) Zo nee: de Battle Mode-avatar.
+// en schilden zijn bewust niet getekend. "geen"-opties hebben geen laag nodig.) Zo nee: de Battle Mode-avatar.
 function castraTdComplete(cosm){
   if(!CASTRA_TD_EXISTS) return false;                       // scan nog niet klaar: veilig de battler tonen
   const A = PIXEL_ASSETS, need = [];
@@ -73,7 +73,6 @@ function castraTdComplete(cosm){
     if(baardId==="baardsnor"){ add("baard","baard"); add("baard","snor"); } else add("baard", baardId, ["geen"]);
     add("extra", cosm.extra||"geen", ["geen"]); add("borstband", cosm.borstband||"geen", ["geen"]);
   }
-  add("schild", cosm.schild||"rond", ["geen"]);
   return need.every(p=>CASTRA_TD_EXISTS[p]!==false);
 }
 // Battle Mode-avatar (zijaanzicht) als terugval; bij "links" gespiegeld.
@@ -104,7 +103,7 @@ function castraAvatarHTML(av, dir="down", frame=1, sizePx=48){
   const scale = (sizePx/CASTRA_FRAME).toFixed(4);
   const legId = cosm.legendary && cosm.legendary!=="geen" ? cosm.legendary : null;
   // Wapens bestaan niet als top-down sprite (bewust: in Castra Heroum draagt de dux
-  // geen zichtbaar wapen). Capes en vleugels bestaan alleen als achterkant (rij
+  // geen zichtbaar wapen of schild). Capes en vleugels bestaan alleen als achterkant (rij
   // "omhoog"; zie README): van voren hangen ze achter het lichaam, maar wie van je
   // wegloopt (dir "up") draagt ze óver lichaam en harnas heen.
   const capeL = L(A.cape[cosm.cape||"geen"], capeF);
@@ -112,8 +111,8 @@ function castraAvatarHTML(av, dir="down", frame=1, sizePx=48){
   const armorSrc = A.armor[cosm.armor||"licht"];
   let layers;
   if(legId && A.legendary[legId]){
-    // Legendarische held vervangt de paper doll (net als in battle.js); het schild blijft de keuze van de speler.
-    layers = L(A.legendary[legId]) + L(A.schild[cosm.schild||"rond"]);
+    // Legendarische held vervangt de paper doll (net als in battle.js).
+    layers = L(A.legendary[legId]);
   } else {
     const baardId = cosm.baard||"geen";
     const baardL = baardId==="baardsnor" ? L(A.baard.baard,haarF)+L(A.baard.snor,haarF) : L(A.baard[baardId],haarF);
@@ -127,7 +126,6 @@ function castraAvatarHTML(av, dir="down", frame=1, sizePx=48){
       L(A.haar[bmZichtbaarHaar(cosm)], haarF) +
       baardL +
       L(A.extra[cosm.extra||"geen"]) +
-      L(A.schild[cosm.schild||"rond"]) +
       L(A.helm[cosm.helm||"standard"]);
   }
   return `<span style="position:relative;display:inline-block;width:${sizePx}px;height:${sizePx}px;overflow:hidden;vertical-align:middle;flex-shrink:0"><span style="position:absolute;top:0;left:0;width:${CASTRA_FRAME}px;height:${CASTRA_FRAME}px;transform-origin:top left;transform:scale(${scale});${wrapF}">${layers}</span></span>`;
