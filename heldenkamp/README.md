@@ -91,3 +91,11 @@ Doel van de vriend: verblijfsvergunning/naturalisatie → streven B1 (IND-examen
 "Oefening Werkwoorden" in `overlay/heldenkamp-nl.js`. A1 tegenwoordige tijd (stam/stam+t/infinitief, hebben/zijn/willen), A2 verleden
 tijd, voltooid (hebben/zijn), scheidbare werkwoorden en modale werkwoorden, B1 bijzin met werkwoord achteraan, passief, voorwaardelijk
 en irregulier voltooid deelwoord. Bij elk antwoord staat de volledige zin, de Engelse vertaling en de regel. Telt mee voor het doorstromen.
+
+## Leeshoek (leesteksten)
+Menu ☰ → "Leeshoek": `overlay/lezen-a1|a2|b1.json` ({id, t, s:[[zin, Engels]...], q:[{q, qen, o:[3], a:0}]}; 4 + 4 + 5 teksten) + sectie
+"Leeshoek" in `overlay/heldenkamp-nl.js`. Elke zin is aantikbaar (woorden) met ⓘ voor de vertaling; drie begripsvragen (opties worden
+geschud; juist antwoord staat altijd op index 0 in het bestand); XP eenmaal per dag per tekst bij ≥ 2 goed; telt mee voor het
+doorstromen. Nieuwe tekst: voeg toe aan het bestand en draai `node woorden.js`; voeg ontbrekende woorden toe aan een nieuw
+`overlay/woordenboek-N.json`. De B1-teksten zijn verzonnen voorbeelden (brief gemeente, vacature, zorgverzekering, advertentie, krant);
+feiten daarin zijn illustratief en niet als officiële regel bedoeld.

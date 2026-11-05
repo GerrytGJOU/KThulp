@@ -13,6 +13,10 @@ for (const f of fs.readdirSync(ROOT).filter(f => /^castra.*\.js$/.test(f) && !SK
     for (const w of t.replace(/\{naam\}/g, ' ').split(/\s+/)) { const k = norm(w); if (k.length > 0) freq.set(k, (freq.get(k) || 0) + 1); }
   }
 }
+// Leesteksten (overlay/lezen-*.json): alle zinnen zijn tikbaar
+for (const f of fs.existsSync(path.join(__dirname, 'overlay')) ? fs.readdirSync(path.join(__dirname, 'overlay')).filter(f => /^lezen-.*.json$/.test(f)) : []) {
+  for (const t of JSON.parse(fs.readFileSync(path.join(__dirname, 'overlay', f), 'utf8'))) for (const s of t.s) for (const x of s[0].split(/\s+/)) { const k = norm(x); if (k.length > 0) freq.set(k, (freq.get(k) || 0) + 1); }
+}
 const gloss = {};
 const dir = path.join(__dirname, 'overlay');
 if (fs.existsSync(dir)) for (const f of fs.readdirSync(dir).filter(f => /^woordenboek.*\.json$/.test(f))) Object.assign(gloss, JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')));

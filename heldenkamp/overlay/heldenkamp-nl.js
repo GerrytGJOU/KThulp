@@ -396,6 +396,69 @@
   { const i = CASTRA_MENU_SYS.indexOf("engels"); CASTRA_MENU_SYS.splice(i<0 ? CASTRA_MENU_SYS.length : i+1, 0, "niveau"); }
   { const mv2 = window.castraMenuView; window.castraMenuView = function(id){ return id==="niveau" ? hkLevelHTML() : mv2.apply(this, arguments); }; }
 
+  /* ---- Leeshoek: korte teksten per niveau, elk woord tikbaar, elke zin met vertaling (ⓘ), drie begripsvragen ---- */
+  const HK_LEZEN = /*HK_LEZEN*/{};
+  let HK_RD = { mode:"list" };
+  const hkRdDone = () => { try{ return JSON.parse(localStorage.getItem("readDone") || "{}"); }catch(e){ return {}; } };
+  window.hkRdList = function(){ HK_RD = { mode:"list" }; castraMenuRender(); };
+  window.hkRdOpen = function(i){ const t = (HK_LEZEN[hkLevel()]||[])[i]; if(!t) return; HK_RD = { mode:"text", t }; castraMenuRender(); };
+  window.hkRdQuiz = function(){
+    const t = HK_RD.t; if(!t) return;
+    HK_RD = { mode:"quiz", t, qi:0, picked:null, score:0, showText:false, order:t.q.map(q=>q.o.map((_,k)=>k).sort(()=>Math.random()-0.5)) };
+    castraMenuRender();
+  };
+  window.hkRdToggle = function(){ HK_RD.showText = !HK_RD.showText; castraMenuRender(); };
+  window.hkRdPick = function(k){
+    const R = HK_RD; if(R.mode!=="quiz" || R.picked!==null) return;
+    R.picked = k; if(k===R.t.q[R.qi].a) R.score++; castraMenuRender();
+  };
+  window.hkRdNext = function(){
+    const R = HK_RD;
+    if(R.qi >= R.t.q.length-1){
+      R.mode = "done"; R.xp = 0;
+      const L = hkLevel(), w = CASTRA.wday || (CASTRA.wday = {}), key = "lezen_"+R.t.id;
+      if(R.score >= 2 && w[key]!==castraWDay()){ w[key] = castraWDay(); R.xp = ({A1:3,A2:4,B1:5}[L]||3) * R.score; castraPxpAdd(R.xp, "Gelezen"); }
+      hkRecord(R.score, R.t.q.length);
+      const d = hkRdDone(); d[R.t.id] = Math.max(d[R.t.id]||0, R.score); try{ localStorage.setItem("readDone", JSON.stringify(d)); }catch(e){}
+    } else { R.qi++; R.picked = null; }
+    castraMenuRender();
+  };
+  function hkRdText(t){ return '<div style="font-size:16px;line-height:1.9;margin:6px 0">' + t.s.map((s,i)=>castraLaHTML(s[0], s[1], "lezen_"+t.id+"_"+i)).join(" ") + '</div>'; }
+  function hkLezenHTML(){
+    const R = HK_RD, btn = "min-height:46px", L = hkLevel(), list = HK_LEZEN[L] || [];
+    let body;
+    if(R.mode==="text"){
+      body = '<h3 style="margin:0 0 4px">'+esc(R.t.t)+' <small>'+L+'</small></h3>'
+        + '<div style="font-size:13px;opacity:.8">Tik op een woord voor de betekenis, op ⓘ voor de vertaling van de zin.<br><small>Tap a word for its meaning, ⓘ for the translation of the sentence.</small></div>'
+        + hkRdText(R.t)
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-gold" style="'+btn+'" onclick="hkRdQuiz()">Naar de vragen <small>to the questions</small></button><button class="btn" style="'+btn+'" onclick="hkRdList()">Terug</button></div>';
+    } else if(R.mode==="quiz"){
+      const q = R.t.q[R.qi], order = R.order[R.qi], picked = R.picked!==null;
+      body = '<h3 style="margin:0 0 4px">'+esc(R.t.t)+'</h3><div style="opacity:.8">Vraag '+(R.qi+1)+' van '+R.t.q.length+'</div>'
+        + '<div style="font-size:20px;margin:8px 0 2px">'+esc(q.q)+'</div>' + (q.qen ? '<div class="hk-en" style="font-size:12px;opacity:.75;margin-bottom:6px">'+esc(q.qen)+'</div>' : '')
+        + order.map(k=>{ const ok = k===q.a, sel = R.picked===k;
+            return '<button class="btn '+(picked&&ok?"btn-gold":"")+'" '+(picked?"disabled":"")+' style="display:block;width:100%;margin:5px 0;min-height:48px;font-size:16px;'+(picked&&sel&&!ok?"opacity:.55;text-decoration:line-through":"")+'" onclick="hkRdPick('+k+')">'+esc(q.o[k])+'</button>'; }).join("")
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">'
+        + (picked ? '<button class="btn btn-gold" style="'+btn+'" onclick="hkRdNext()">'+(R.qi>=R.t.q.length-1?"Uitslag":"Volgende")+'</button>' : '')
+        + '<button class="btn" style="'+btn+'" onclick="hkRdToggle()">'+(R.showText?"Verberg de tekst":"📄 Lees de tekst opnieuw")+'</button></div>'
+        + (R.showText ? hkRdText(R.t) : '');
+    } else if(R.mode==="done"){
+      body = '<h3 style="margin:0 0 6px">'+esc(R.t.t)+'</h3><div style="font-size:20px">Score: <b>'+R.score+' / '+R.t.q.length+'</b></div>'
+        + (R.xp ? '<div class="note">🎖️ +'+R.xp+' XP (eenmaal per dag per tekst) <small>· XP once a day per text</small></div>' : '<div class="note">'+(R.score>=2 ? "Deze tekst gaf vandaag al XP." : "Minstens 2 goed voor XP.")+'<br><small>'+(R.score>=2 ? "This text already gave XP today." : "At least 2 correct for XP.")+'</small></div>')
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-gold" style="'+btn+'" onclick="hkRdOpen('+list.findIndex(x=>x.id===R.t.id)+')">Lees opnieuw</button><button class="btn" style="'+btn+'" onclick="hkRdList()">Andere tekst</button></div>';
+    } else {
+      const d = hkRdDone();
+      body = '<h3 style="margin:0 0 6px">Leeshoek <small>reading corner</small></h3>'
+        + '<div style="font-size:14px;margin-bottom:6px">Lees een korte tekst en beantwoord drie vragen. Teksten op niveau <b>'+L+'</b> (verander je niveau onder Instellingen → Niveau).<br><small style="opacity:.8">Read a short text and answer three questions. Texts at level '+L+'.</small></div>'
+        + list.map((t,i)=>'<button class="btn" style="display:block;width:100%;margin:5px 0;min-height:52px;text-align:left" onclick="hkRdOpen('+i+')">'+(d[t.id]!==undefined ? (d[t.id]>=3?"✅ ":"☑️ ") : "📰 ")+esc(t.t)+' <small style="opacity:.7">'+t.s.length+' zinnen'+(d[t.id]!==undefined?" · beste: "+d[t.id]+"/3":"")+'</small></button>').join("");
+    }
+    return '<div data-hk-keep>'+body+'</div>';
+  }
+  CASTRA_MENU_ITEMS.push({ id:"lezen", la:"Leeshoek", nl:"read short texts" });
+  CASTRA_MENU_ICON.lezen = "📰";
+  { const mv3 = window.castraMenuView; window.castraMenuView = function(id){ return id==="lezen" ? hkLezenHTML() : mv3.apply(this, arguments); }; }
+  { const pick3 = window.castraMenuPick; window.castraMenuPick = function(id){ if(id==="lezen") HK_RD = { mode:"list" }; return pick3.apply(this, arguments); }; }
+
   // Heldenkamp heeft geen docentoverzicht en geen Firebase: opzoekingen blijven lokaal in CASTRA.help.
   window.castraHelpSync = function(){};
 })();
