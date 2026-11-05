@@ -1,0 +1,40 @@
+name: Heldenkamp bouwen en publiceren
+
+# Bouwt bij elke wijziging aan Castra de Nederlandse variant en zet die in het
+# aparte repo GerrytGJOU/Heldenkamp (GitHub Pages: branch main, map /).
+# Vereist een geheim "HELDENKAMP_TOKEN" (fine-grained token, alleen contents:write op Heldenkamp).
+# Zonder dat geheim bouwt de workflow alleen (controle), er wordt niets gepubliceerd.
+
+on:
+  push:
+    branches: [main]
+    paths: ['certamen/**', 'assets/**', 'heldenkamp/**']
+  workflow_dispatch:
+
+jobs:
+  bouw:
+    runs-on: ubuntu-latest
+    env:
+      HELDENKAMP_TOKEN: ${{ secrets.HELDENKAMP_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Bouwen
+        working-directory: heldenkamp
+        run: |
+          npm ci
+          node extract.js            # rapport: hoeveel fragmenten nog geen vertaling hebben
+          node build.js
+      - name: Publiceren naar Heldenkamp
+        if: env.HELDENKAMP_TOKEN != ''
+        run: |
+          git clone --depth 1 "https://x-access-token:${HELDENKAMP_TOKEN}@github.com/GerrytGJOU/Heldenkamp.git" site
+          find site -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -r heldenkamp/dist/. site/
+          cp heldenkamp/site-index.html site/index.html
+          cd site
+          git config user.name "Heldenkamp-bouw"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || (git commit -m "Bouw uit KThulp ${GITHUB_SHA::7}" && git push)

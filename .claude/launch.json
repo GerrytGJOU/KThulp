@@ -50,6 +50,12 @@
         "8801"
       ],
       "port": 8801
+    },
+    {
+      "name": "heldenkamp",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8811", "--directory", "heldenkamp/dist"],
+      "port": 8811
     }
   ]
 }

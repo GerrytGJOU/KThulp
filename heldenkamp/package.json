@@ -1,0 +1,13 @@
+{
+  "name": "heldenkamp-build",
+  "private": true,
+  "description": "Bouwt Heldenkamp (Nederlandse variant van Castra Heroum) uit certamen/",
+  "scripts": {
+    "extract": "node extract.js",
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "acorn": "^8.14.0",
+    "acorn-walk": "^8.3.4"
+  }
+}
