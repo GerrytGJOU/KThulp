@@ -45,8 +45,9 @@ for (const f of fs.readdirSync(path.join(DIST, 'certamen')).filter(f => /^castra
   const dirO = path.join(__dirname, 'overlay');
   const gloss = {};
   for (const f of fs.readdirSync(dirO).filter(f => /^woordenboek.*\.json$/.test(f)).sort()) Object.assign(gloss, JSON.parse(fs.readFileSync(path.join(dirO, f), 'utf8')));
-  const js = fs.readFileSync(path.join(dirO, 'heldenkamp-nl.js'), 'utf8').replace('/*HK_GLOSS*/{}', () => JSON.stringify(gloss))
+  let js = fs.readFileSync(path.join(dirO, 'heldenkamp-nl.js'), 'utf8').replace('/*HK_GLOSS*/{}', () => JSON.stringify(gloss))
     .replace('/*HK_WORDQUIZ*/[]', () => JSON.stringify([].concat(...fs.readdirSync(dirO).filter(f => /^woordquiz.*\.json$/.test(f)).sort().map(f => JSON.parse(fs.readFileSync(path.join(dirO, f), 'utf8'))))));
+  js = js.replace('/*HK_DEHET*/[]', () => JSON.stringify([].concat(...fs.readdirSync(dirO).filter(f => /^dehet.*.json$/.test(f)).sort().map(f => JSON.parse(fs.readFileSync(path.join(dirO, f), 'utf8'))))));
   fs.writeFileSync(path.join(DIST, 'certamen', 'heldenkamp-nl.js'), js);
   const ip = path.join(DIST, 'certamen', 'index.html');
   let html = fs.readFileSync(ip, 'utf8');
