@@ -91,7 +91,7 @@
   { const b = castraBuilding("principia"); if(b) b.phase = 0; }
 
   // Menu: geen "Afsluiten" naar het portaal; wel "Uiterlijk" (avatar-editor).
-  { const i = CASTRA_MENU_SYS.indexOf("exeo"); if(i >= 0) CASTRA_MENU_SYS.splice(i, 1); }
+  { const i = CASTRA_MENU_SYS.indexOf("exeo"); if(i >= 0) CASTRA_MENU_SYS.splice(i, 1); const j = CASTRA_MENU_ITEMS.findIndex(x=>x.id==="exeo"); if(j >= 0) CASTRA_MENU_ITEMS.splice(j, 1); }
   CASTRA_MENU_ITEMS.push({ id:"avatar", la:"Uiterlijk", nl:"change your look" });
   CASTRA_MENU_ICON.avatar = "🧑";
   { const pick = castraMenuPick; window.castraMenuPick = function(id){ if(id==="avatar"){ castraMenuClose(); BM_AV_RETURN = "castraHome"; go("battleAvatarEdit"); return; } return pick.apply(this, arguments); }; }
@@ -179,7 +179,8 @@
     castraMenuRender();
   };
   window.hkRevClose = function(){ HK_REV = null; castraMenuRender(); };
-  function hkRevHTML(){
+  function hkRevHTML(){ return '<div data-hk-keep>' + hkRevHTML0() + '</div>'; }
+  function hkRevHTML0(){
     const R = HK_REV, btn = "min-height:44px";
     if(R && !R.done){
       const q = R.qs[R.i];
@@ -205,6 +206,47 @@
   CASTRA_MENU_ICON.woorden = "📖";
   { const mv0 = castraMenuView; window.castraMenuView = function(id){ return id==="woorden" ? hkRevHTML() : mv0.apply(this, arguments); }; }
   { const pick0 = window.castraMenuPick; window.castraMenuPick = function(id){ if(id==="woorden") HK_REV = null; return pick0.apply(this, arguments); }; }
+
+  /* ---- Engelse hulp aan/uit: altijd / alleen bij tikken / uit ----
+     De build verzamelt alle Engelse hulpteksten (HK_EN). Een MutationObserver zet elke losse Engelse tekst in het spel in een
+     <span class="hk-en">; CSS verbergt die in de standen "tap" en "off". Gesprekken (woord tikken, ⓘ-vertaling), quizzen en het
+     woordenboek zijn uitgesloten, want daar is het Engels de leerstof of de hulp op verzoek. In "off" werken ook tikken en ⓘ niet. */
+  const HK_EN = new Set(/*HK_EN*/[]);
+  ["words","de or het?","not now","your looked-up words","change your look","English help","review your words","your words","practise my words","Which exercise do you choose?"].forEach(s=>HK_EN.add(s));
+  const hkEnMode = () => { try{ return localStorage.getItem("english") || "all"; }catch(e){ return "all"; } };
+  function hkEnApply(){ const m = hkEnMode(); document.body.classList.toggle("hk-en-tap", m==="tap"); document.body.classList.toggle("hk-en-off", m==="off"); }
+  { const st = document.createElement("style");
+    st.textContent = "body.hk-en-tap .hk-en,body.hk-en-off .hk-en{display:none!important}body.hk-en-off .cl-i{display:none!important}body.hk-en-off .cl-w{border-bottom-color:transparent!important;cursor:default!important}";
+    document.head.appendChild(st); }
+  function hkEnTag(root){
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode:n=>{
+      const t = n.nodeValue.trim(); if(t.length<2 || !HK_EN.has(t)) return NodeFilter.FILTER_REJECT;
+      const p = n.parentElement; if(!p || p.closest(".hk-en,.cl-s,#cwPanel,[data-hk-keep],script,style,textarea,input,button.btn-gold")) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT; } });
+    const hits = []; while(w.nextNode()) hits.push(w.currentNode);
+    hits.forEach(n=>{ const sp = document.createElement("span"); sp.className = "hk-en"; n.parentNode.replaceChild(sp, n); sp.appendChild(n); });
+  }
+  { const mo = new MutationObserver(muts=>{
+      mo.disconnect();
+      muts.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType===1) hkEnTag(n); else if(n.nodeType===3 && n.parentElement) hkEnTag(n.parentElement); }));
+      mo.observe(document.body, { childList:true, subtree:true });
+    });
+    hkEnApply(); hkEnTag(document.body); mo.observe(document.body, { childList:true, subtree:true }); }
+  window.hkEnSet = function(m){ try{ localStorage.setItem("english", m); }catch(e){} hkEnApply(); castraMenuRender(); };
+  { const t0 = window.castraTapWord; window.castraTapWord = function(ev, node){ if(hkEnMode()==="off"){ ev.stopPropagation(); return; } return t0.apply(this, arguments); }; }
+  function hkEnHTML(){
+    const m = hkEnMode(), b = (v, lab, sub)=>'<button class="btn '+(m===v?"btn-gold":"")+'" style="display:block;width:100%;margin:5px 0;min-height:52px;font-size:17px;text-align:left" data-v="'+v+'" onclick="hkEnSet(this.dataset.v)">'+(m===v?"● ":"○ ")+lab+'<br><small style="opacity:.8">'+sub+'</small></button>';
+    return '<div data-hk-keep><h3 style="margin:0 0 6px">Engelse hulp <small>English help</small></h3>'
+      + '<div style="font-size:14px;margin-bottom:8px">Hoeveel Engels wil je zien? <small>How much English do you want to see?</small></div>'
+      + b("all","Altijd","Always: labels, translations, and tapping a word.")
+      + b("tap","Alleen bij tikken","Only when you tap: a word shows its meaning, the ⓘ button shows the sentence.")
+      + b("off","Uit","Off: only Dutch. (The quizzes and your word list stay English.)")
+      + '</div>';
+  }
+  CASTRA_MENU_ITEMS.push({ id:"engels", la:"Engelse hulp", nl:"English help" });
+  CASTRA_MENU_ICON.engels = "🇬🇧";
+  { const i = CASTRA_MENU_SYS.indexOf("sonus"); CASTRA_MENU_SYS.splice(i<0 ? CASTRA_MENU_SYS.length : i+1, 0, "engels"); }
+  { const mv1 = window.castraMenuView; window.castraMenuView = function(id){ return id==="engels" ? hkEnHTML() : mv1.apply(this, arguments); }; }
 
   // Heldenkamp heeft geen docentoverzicht en geen Firebase: opzoekingen blijven lokaal in CASTRA.help.
   window.castraHelpSync = function(){};

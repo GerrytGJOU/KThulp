@@ -60,3 +60,11 @@ het lidwoord. Ook uitgezet: Certamen-profiel-XP bij quizzen (`castraMasterXp`) e
 Menu ☰ → "Woordenboek" (sectie "Woordenboek (herhaallijst)" in `overlay/heldenkamp-nl.js`): lijst van de woorden die je
 opzocht (`CASTRA.help.words`, zonder functiewoordjes) met Engelse betekenis en aantal keer, plus mini-quiz "Oefen mijn
 woorden" (5 vragen, zwaarste/vaakst opgezochte woorden eerst; geleerd na 3 keer goed achter elkaar, `CASTRA.hkRev`; XP eenmaal per dag).
+
+## Engelse hulp aan/uit
+Menu ☰ → Instellingen → "Engelse hulp": altijd / alleen bij tikken / uit (opgeslagen als `localStorage "english"`, dus `hk_english`).
+De build verzamelt alle Engelse hulpteksten (`enSet` in `build.js`, ± 1800) in `heldenkamp-nl.js`; een MutationObserver zet elke losse
+Engelse tekst in `<span class="hk-en">`, CSS verbergt die in "tap" en "off". Uitgesloten: gesprekken (`.cl-s`), quizzen
+(`#cwPanel`) en alles met `data-hk-keep` (woordenboek, instellingen). In "off" werken ook woord-tikken en de ⓘ-knop niet.
+Beperking: alleen Engelse tekst die als eigen tekstknoop in de HTML staat en exact in `enSet` zit wordt herkend; wil je een
+nieuwe plek erbij, zet de Engelse tekst in een catalogus-sleutel met `en::` of voeg hem toe aan de lijst in `heldenkamp-nl.js`.

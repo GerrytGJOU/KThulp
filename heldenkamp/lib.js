@@ -147,4 +147,4 @@ function laadCatalogus() {
   return cat;
 }
 
-module.exports = { laadCatalogus, collect, zoek, vertaal, sleutelNodig, render, isText, SKIP_FILES };
+module.exports = { paar, laadCatalogus, collect, zoek, vertaal, sleutelNodig, render, isText, SKIP_FILES };
