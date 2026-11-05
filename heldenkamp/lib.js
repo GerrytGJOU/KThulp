@@ -84,10 +84,31 @@ function zoek(catalogus, bestand, tekst) {
   return k in catalogus ? catalogus[k] : (t in catalogus ? catalogus[t] : undefined);
 }
 
+// Namen van eenheden (vormen) in castra-troops.js zijn tegelijk zoek-sleutels (castraFormByName): nooit vertalen.
+let _beschermd = null;
+function beschermd() {
+  if (_beschermd) return _beschermd;
+  _beschermd = new Set();
+  const p = pathx.join(__dirname, '..', 'certamen', 'castra-troops.js');
+  if (!fsx.existsSync(p)) return _beschermd;
+  const ast = acorn.parse(fsx.readFileSync(p, 'utf8'), { ecmaVersion: 'latest', allowHashBang: true });
+  walk.full(ast, n => {
+    if (n.type === 'ArrayExpression') {
+      const e = n.elements;
+      if (e.length > 1 && isStr(e[0]) && e[1] && e[1].type === 'Literal' && typeof e[1].value === 'number') _beschermd.add(e[0].value.trim());
+    }
+    if (n.type === 'VariableDeclarator' && n.id.name && /^_?[A-Z0-9_]+$/.test(n.id.name) && n.init && n.init.type === 'ArrayExpression' && n.init.elements.length > 2 && n.init.elements.every(isStr) && /GLAD/.test(n.id.name))
+      n.init.elements.forEach(x => _beschermd.add(x.value.trim()));
+    if (n.type === 'Property' && n.key && (n.key.name === 'rec') && isStr(n.value)) _beschermd.add(n.value.value.trim());
+  });
+  return _beschermd;
+}
+
 // De vertaling voor een fragment, rekening houdend met de paarregel. undefined = nog niet vertaald.
 const LOS_PAAR = /^(castra-(data|heroevo-all|heroevo|regions|skills|moves|wobj|decor|bag|cards|codex|field|gates|geo|geomap|diarium|mythos|sidequests|roma|wanderers|battle|clue|hodie|interiors|proelium|unlocks|vscene|weekly|zones|roles|train|tutorial|report|plan|opus|party|latium|elem)).js$/;
 function paar(n, bestand) { return n.pair && (!n.pair.los || LOS_PAAR.test(bestand)) ? n.pair : null; }
 function vertaal(catalogus, bestand, n) {
+  if (beschermd().has(n.cooked.trim())) return undefined;
   const eigen = zoek(catalogus, bestand, n.cooked);
   const pr = paar(n, bestand);
   if (!pr) return eigen;
