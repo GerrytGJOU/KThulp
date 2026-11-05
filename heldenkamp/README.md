@@ -106,3 +106,11 @@ Menu ☰ → "Luisterhoek": `overlay/luisteren-a1|a2|b1.json` (zelfde vorm als d
 `nl-NL`, anders elke `nl*`); knoppen Luister / Langzaam / Stop. Heeft het apparaat geen Nederlandse stem, dan valt de oefening terug
 op "Toon de tekst" (leesoefening, geen XP). Wie de tekst toont krijgt geen XP. Na afloop staat de tekst er tikbaar onder.
 Let op: de stemkwaliteit hangt van het apparaat af; ik kon de klank zelf niet beoordelen (testtoestel had alleen en-GB).
+
+## Schrijfhoek
+Menu ☰ → "Schrijfhoek": `overlay/schrijven-a1|a2|b1.json` ({id, t, opdracht, en, min, checks:[{l, e, re}], model:[[zin, Engels]], eigen:[...]}; 2 + 2 + 3
+opdrachten). De leerling typt in een tekstvak (concept wordt bewaard als `hk_writeDraft_<id>`); "Controleer" test automatisch op lengte, hoofdletter/leesteken per zin,
+en per opdracht reguliere uitdrukkingen (aanhef, afsluiting, onderdelen); daarna een tikbaar voorbeeld en een zelfcontrolelijst.
+XP eenmaal per dag als alle controles slagen. De app beoordeelt géén grammatica of spelling. De voorbeeldteksten moeten hun eigen
+controles halen (gecontroleerd met een testscript; houd dat zo bij wijzigingen). Het tekstvak stopt toetsen (`stopPropagation`) zodat
+de spelbesturing (WASD) niet meeleest.

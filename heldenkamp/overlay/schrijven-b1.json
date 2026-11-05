@@ -1,0 +1,214 @@
+[
+ {
+  "id": "w-b1-lekkage",
+  "t": "Brief aan de verhuurder: een lekkage",
+  "opdracht": "Schrijf een formele brief of e-mail (70 tot 100 woorden) aan je verhuurder. Meld dat de kraan in de badkamer lekt, zeg sinds wanneer, leg uit waarom het een probleem is en vraag om reparatie vóór het einde van de week.",
+  "en": "Write a formal letter or e-mail (70 to 100 words) to your landlord. Report that the tap in the bathroom is leaking, say since when, explain why it is a problem, and ask for it to be repaired before the end of the week.",
+  "min": 70,
+  "checks": [
+   {
+    "l": "Je begint formeel (Geachte / Beste meneer / mevrouw)",
+    "e": "You start formally",
+    "re": "\\b(geachte|beste (meneer|mevrouw))\\b"
+   },
+   {
+    "l": "Je meldt het probleem (kraan / lekt / lekkage)",
+    "e": "You report the problem",
+    "re": "\\b(kraan|lekt|lekkage|lekkende)\\b"
+   },
+   {
+    "l": "Je zegt sinds wanneer (sinds / al ... dagen / vorige week)",
+    "e": "You say since when",
+    "re": "\\b(sinds|al \\w+ (dagen|weken)|vorige week|gisteren|maandag)\\b"
+   },
+   {
+    "l": "Je legt uit waarom het een probleem is (omdat / aangezien / waardoor)",
+    "e": "You explain why it is a problem",
+    "re": "\\b(omdat|aangezien|waardoor|daardoor|want)\\b"
+   },
+   {
+    "l": "Je vraagt om reparatie met een deadline (vóór / uiterlijk / voor het einde van de week)",
+    "e": "You ask for a repair with a deadline",
+    "re": "\\b(vóór|voor het einde|uiterlijk|reparatie|repareren|herstellen)\\b"
+   },
+   {
+    "l": "Je sluit netjes af (Met vriendelijke groet / Hoogachtend)",
+    "e": "You close politely",
+    "re": "\\b(met vriendelijke groet|hoogachtend)\\b"
+   }
+  ],
+  "model": [
+   [
+    "Geachte heer De Vries,",
+    "Dear Mr De Vries,"
+   ],
+   [
+    "Ik schrijf u omdat de kraan in de badkamer van mijn woning lekt.",
+    "I am writing to you because the tap in the bathroom of my home is leaking."
+   ],
+   [
+    "Het probleem bestaat sinds vorige week en het wordt steeds erger.",
+    "The problem has existed since last week and it is getting worse."
+   ],
+   [
+    "Er staat nu elke dag water op de vloer, waardoor ik bang ben voor schade aan de woning.",
+    "There is water on the floor every day now, which makes me afraid of damage to the home."
+   ],
+   [
+    "Wilt u er alstublieft voor zorgen dat een loodgieter de kraan uiterlijk vrijdag repareert?",
+    "Could you please make sure that a plumber repairs the tap by Friday at the latest?"
+   ],
+   [
+    "Ik ben overdag thuis en u kunt mij bereiken op 06 12 34 56 78.",
+    "I am at home during the day and you can reach me on 06 12 34 56 78."
+   ],
+   [
+    "Alvast hartelijk dank.",
+    "Many thanks in advance."
+   ],
+   [
+    "Met vriendelijke groet, Tom Smith",
+    "Kind regards, Tom Smith"
+   ]
+  ],
+  "eigen": [
+   "Gebruik je u en uw, en een beleefde vorm (wilt u / zou u)?",
+   "Staan alle belangrijke feiten erin: wat, sinds wanneer, wat je wilt?",
+   "Staat het werkwoord achteraan in bijzinnen (omdat de kraan lekt)?"
+  ]
+ },
+ {
+  "id": "w-b1-mening",
+  "t": "Je mening: thuiswerken",
+  "opdracht": "Moeten mensen vaker thuiswerken? Schrijf je mening in 70 tot 110 woorden. Geef minstens twee argumenten en sluit af met een conclusie.",
+  "en": "Should people work from home more often? Write your opinion in 70 to 110 words. Give at least two arguments and finish with a conclusion.",
+  "min": 70,
+  "checks": [
+   {
+    "l": "Je zegt wat je vindt (ik vind / naar mijn mening / volgens mij)",
+    "e": "You state your opinion",
+    "re": "\\b(ik vind|naar mijn mening|volgens mij|ik denk dat|mijn mening)\\b"
+   },
+   {
+    "l": "Je geeft redenen (omdat / want / doordat)",
+    "e": "You give reasons",
+    "re": "\\b(omdat|want|doordat|aangezien)\\b"
+   },
+   {
+    "l": "Je verbindt argumenten (bovendien / daarnaast / ook / aan de andere kant)",
+    "e": "You link arguments",
+    "re": "\\b(bovendien|daarnaast|aan de andere kant|enerzijds|anderzijds|ook)\\b"
+   },
+   {
+    "l": "Je sluit af met een conclusie (kortom / tot slot / daarom)",
+    "e": "You conclude",
+    "re": "\\b(kortom|tot slot|daarom|concluderend|al met al)\\b"
+   }
+  ],
+  "model": [
+   [
+    "Naar mijn mening moeten mensen vaker thuiswerken.",
+    "In my opinion people should work from home more often."
+   ],
+   [
+    "Ten eerste bespaar je veel tijd, omdat je niet hoeft te reizen.",
+    "Firstly you save a lot of time, because you do not have to travel."
+   ],
+   [
+    "Bovendien is er minder verkeer, en dat is beter voor het milieu.",
+    "Moreover there is less traffic, and that is better for the environment."
+   ],
+   [
+    "Aan de andere kant kan thuiswerken eenzaam zijn, doordat je collega's minder ziet.",
+    "On the other hand working from home can be lonely, because you see your colleagues less."
+   ],
+   [
+    "Daarom lijkt het mij het beste om een paar dagen per week thuis te werken en de rest op kantoor.",
+    "That is why it seems best to me to work from home a few days a week and the rest in the office."
+   ],
+   [
+    "Kortom: een goede combinatie van beide is de beste oplossing.",
+    "In short: a good combination of both is the best solution."
+   ]
+  ],
+  "eigen": [
+   "Staan je argumenten in een logische volgorde?",
+   "Heb je elke alinea of zin met een duidelijk punt?",
+   "Klopt de woordvolgorde na woorden als bovendien en daarom (Daarom lijkt het mij ...)?"
+  ]
+ },
+ {
+  "id": "w-b1-sollicitatie",
+  "t": "Korte sollicitatiebrief",
+  "opdracht": "Schrijf een korte sollicitatiebrief (60 tot 90 woorden) op de vacature klantenservice. Noem waarom je geschikt bent en wat je ervaring is, en vraag om een gesprek.",
+  "en": "Write a short application letter (60 to 90 words) for the customer-service vacancy. Say why you are suitable and what your experience is, and ask for an interview.",
+  "min": 60,
+  "checks": [
+   {
+    "l": "Je begint formeel (Geachte / Beste)",
+    "e": "You start formally",
+    "re": "\\b(geachte|beste)\\b"
+   },
+   {
+    "l": "Je noemt de vacature (vacature / functie / klantenservice)",
+    "e": "You mention the vacancy",
+    "re": "\\b(vacature|functie|klantenservice)\\b"
+   },
+   {
+    "l": "Je schrijft over je ervaring of opleiding (ervaring / gewerkt / opleiding)",
+    "e": "You write about experience or education",
+    "re": "\\b(ervaring|gewerkt|opleiding|diploma|werkte)\\b"
+   },
+   {
+    "l": "Je laat je motivatie zien (graag / enthousiast / motivatie / geschikt)",
+    "e": "You show motivation",
+    "re": "\\b(graag|enthousiast|motivatie|geschikt|interesse)\\b"
+   },
+   {
+    "l": "Je vraagt om een gesprek (uitnodiging / gesprek / kennismaken)",
+    "e": "You ask for an interview",
+    "re": "\\b(gesprek|uitnodiging|kennismaken|ontmoeten)\\b"
+   },
+   {
+    "l": "Je sluit af (Met vriendelijke groet / Hoogachtend)",
+    "e": "You close",
+    "re": "\\b(met vriendelijke groet|hoogachtend)\\b"
+   }
+  ],
+  "model": [
+   [
+    "Geachte mevrouw, geachte heer,",
+    "Dear Sir or Madam,"
+   ],
+   [
+    "Met veel interesse heb ik uw vacature voor medewerker klantenservice gelezen.",
+    "I read your vacancy for customer service employee with great interest."
+   ],
+   [
+    "Ik heb twee jaar ervaring in een winkel, waar ik dagelijks klanten heb geholpen.",
+    "I have two years' experience in a shop, where I helped customers every day."
+   ],
+   [
+    "Ik ben geduldig, spreek goed Nederlands en werk graag in een team.",
+    "I am patient, speak good Dutch and like working in a team."
+   ],
+   [
+    "Graag kom ik bij u op gesprek om mijn motivatie toe te lichten.",
+    "I would be glad to come for an interview to explain my motivation."
+   ],
+   [
+    "Mijn cv vindt u in de bijlage.",
+    "You will find my CV in the attachment."
+   ],
+   [
+    "Met vriendelijke groet, Tom Smith",
+    "Kind regards, Tom Smith"
+   ]
+  ],
+  "eigen": [
+   "Staat je ervaring concreet in de brief (wat deed je, hoe lang)?",
+   "Is de toon formeel en beleefd?",
+   "Heb je gecontroleerd op spelfouten en op de/het?"
+  ]
+ }
+]

@@ -58,6 +58,7 @@ for (const f of fs.readdirSync(path.join(DIST, 'certamen')).filter(f => /^castra
   js = js.replace('/*HK_WW*/{}', () => JSON.stringify(perNiveau('werkwoord')));
   js = js.replace('/*HK_LEZEN*/{}', () => JSON.stringify(perNiveau('lezen')));
   js = js.replace('/*HK_LUISTER*/{}', () => JSON.stringify(perNiveau('luisteren')));
+  js = js.replace('/*HK_SCHRIJF*/{}', () => JSON.stringify(perNiveau('schrijven')));
   js = js.replace('/*HK_DEHET*/{}', () => JSON.stringify(perNiveau('dehet')));
   // Engelse hulpteksten uit de catalogus zelf: sleutels met "en::", en Nederlandse sleutels (woorden uit het woordenboek) met een Engelse waarde.
   {

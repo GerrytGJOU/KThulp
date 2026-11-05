@@ -541,6 +541,78 @@
   { const mv4 = window.castraMenuView; window.castraMenuView = function(id){ return id==="luisteren" ? hkLuisterHTML() : mv4.apply(this, arguments); }; }
   { const pick4 = window.castraMenuPick; window.castraMenuPick = function(id){ hkLiStop(); if(id==="luisteren") HK_LI = { mode:"list" }; return pick4.apply(this, arguments); }; }
 
+  /* ---- Schrijfhoek: schrijfopdrachten per niveau met automatische controle op kenmerken + voorbeeldtekst + zelfcontrole ----
+     De app kan geen grammatica beoordelen: ze controleert aanhef, afsluiting, lengte, verplichte onderdelen en leestekens. */
+  const HK_SCHRIJF = /*HK_SCHRIJF*/{};
+  let HK_WR = { mode:"list" };
+  const hkWrDone = () => { try{ return JSON.parse(localStorage.getItem("writeDone") || "{}"); }catch(e){ return {}; } };
+  const hkWrCount = s => (String(s).trim().match(/[\p{L}\p{N}'’-]+/gu) || []).length;
+  window.hkWrInput = function(ta){
+    const t = HK_WR.t; if(!t) return;
+    const n = hkWrCount(ta.value), c = document.getElementById("hkWrCount");
+    if(c) c.textContent = n + " / " + t.min + " woorden";
+    HK_WR.text = ta.value; try{ localStorage.setItem("writeDraft_"+t.id, ta.value); }catch(e){}
+  };
+  window.hkWrList = function(){ HK_WR = { mode:"list" }; castraMenuRender(); };
+  window.hkWrOpen = function(i){
+    const t = (HK_SCHRIJF[hkLevel()]||[])[i]; if(!t) return;
+    let draft = ""; try{ draft = localStorage.getItem("writeDraft_"+t.id) || ""; }catch(e){}
+    HK_WR = { mode:"task", t, text:draft }; castraMenuRender();
+  };
+  window.hkWrBack = function(){ HK_WR.mode = "task"; castraMenuRender(); };
+  window.hkWrCheck = function(){
+    const ta = document.getElementById("hkWrText"), t = HK_WR.t; if(!ta || !t) return;
+    const text = ta.value; HK_WR.text = text; try{ localStorage.setItem("writeDraft_"+t.id, text); }catch(e){}
+    const res = [], n = hkWrCount(text);
+    res.push({ ok:n >= t.min, l:"Je tekst is lang genoeg: minstens "+t.min+" woorden (nu "+n+")", e:"Long enough: at least "+t.min+" words" });
+    const sens = text.split(/(?<=[.!?])\s+|\n+/).map(s=>s.trim()).filter(Boolean).filter(s=>hkWrCount(s) > 3 && !(hkWrCount(s) <= 6 && /,$/.test(s)));   // aanhef ("Geachte heer De Vries,") en korte regels tellen niet mee
+    const netjes = sens.length > 0 && sens.every((s,k)=>/^[A-ZÀ-Ý"'(]/.test(s) && (/[.!?)"']$/.test(s) || (k===sens.length-1 && hkWrCount(s) <= 8)));   // de afsluiting ("Met vriendelijke groet, Tom") hoeft geen punt
+    res.push({ ok:netjes, l:"Elke zin begint met een hoofdletter en eindigt met een leesteken", e:"Each sentence starts with a capital and ends with punctuation" });
+    t.checks.forEach(c=>{ let ok = false; try{ ok = new RegExp(c.re, "i").test(text); }catch(e){} res.push({ ok, l:c.l, e:c.e }); });
+    const passed = res.filter(r=>r.ok).length;
+    HK_WR.mode = "result"; HK_WR.res = res; HK_WR.passed = passed; HK_WR.xp = 0;
+    if(n >= Math.min(8, t.min)){
+      const L = hkLevel(), w = CASTRA.wday || (CASTRA.wday = {}), key = "schrijf_"+t.id;
+      if(passed === res.length && w[key]!==castraWDay()){ w[key] = castraWDay(); HK_WR.xp = ({A1:6,A2:8,B1:10}[L]||6); castraPxpAdd(HK_WR.xp, "Geschreven"); }
+      hkRecord(passed, res.length);
+      const d = hkWrDone(); d[t.id] = Math.max(d[t.id]||0, Math.round(100*passed/res.length)); try{ localStorage.setItem("writeDone", JSON.stringify(d)); }catch(e){}
+    }
+    castraMenuRender();
+  };
+  function hkWrModel(t){ return '<div style="font-size:16px;line-height:1.9;margin:6px 0;padding:8px;border:1px dashed rgba(120,80,20,.5);border-radius:8px">' + t.model.map((s,i)=>castraLaHTML(s[0], s[1], "schrijf_"+t.id+"_"+i)).join(" ") + '</div>'; }
+  function hkSchrijfHTML(){
+    const R = HK_WR, btn = "min-height:46px", L = hkLevel(), list = HK_SCHRIJF[L] || [];
+    let body;
+    if(R.mode==="task"){
+      const t = R.t;
+      body = '<h3 style="margin:0 0 4px">✍️ '+esc(t.t)+' <small>'+L+'</small></h3>'
+        + '<div style="font-size:15px;margin:6px 0">'+esc(t.opdracht)+'</div><div class="hk-en" style="font-size:12px;opacity:.75;margin-bottom:6px">'+esc(t.en)+'</div>'
+        + '<textarea id="hkWrText" rows="9" oninput="hkWrInput(this)" onkeydown="event.stopPropagation()" onkeyup="event.stopPropagation()" autocapitalize="sentences" spellcheck="true" lang="nl" placeholder="Schrijf hier je tekst… / Write your text here…" style="width:100%;box-sizing:border-box;font-size:17px;padding:8px;border:2px solid var(--parch-edge,#4a3416);border-radius:8px;background:#fffdf5;color:#2b1d0e;font-family:inherit">'+esc(R.text||"")+'</textarea>'
+        + '<div style="font-size:13px;opacity:.8;margin:4px 0"><span id="hkWrCount">'+hkWrCount(R.text||"")+' / '+t.min+' woorden</span></div>'
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-gold" style="'+btn+'" onclick="hkWrCheck()">Controleer <small>check</small></button><button class="btn" style="'+btn+'" onclick="hkWrList()">Terug</button></div>';
+    } else if(R.mode==="result"){
+      const t = R.t;
+      body = '<h3 style="margin:0 0 4px">✍️ '+esc(t.t)+'</h3><div style="font-size:18px">Controle: <b>'+R.passed+' van '+R.res.length+'</b></div>'
+        + (R.xp ? '<div class="note">🎖️ +'+R.xp+' XP (alles goed, eenmaal per dag) <small>· all checks passed, once a day</small></div>' : '')
+        + R.res.map(r=>'<div style="'+CASTRA_MV_ROW+'"><span style="width:24px">'+(r.ok?"✅":"❌")+'</span><span style="flex:1">'+esc(r.l)+'<br><small class="hk-en" style="opacity:.7">'+esc(r.e)+'</small></span></div>').join("")
+        + '<div style="margin-top:10px"><b>Kijk zelf ook na</b> <small>check yourself too</small></div>'
+        + '<ul style="margin:4px 0 8px 18px;padding:0;font-size:14px">'+t.eigen.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>'
+        + '<div><b>Voorbeeld</b> <small>(tik op woorden en ⓘ) · example</small></div>' + hkWrModel(t)
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><button class="btn btn-gold" style="'+btn+'" onclick="hkWrBack()">Verbeter mijn tekst</button><button class="btn" style="'+btn+'" onclick="hkWrList()">Andere opdracht</button></div>'
+        + '<div style="font-size:12px;opacity:.7;margin-top:8px">De controle kijkt alleen naar kenmerken (aanhef, afsluiting, onderdelen, lengte). Spelling en grammatica moet je zelf of met een docent nakijken.<br><small>The check only looks at features, not grammar or spelling.</small></div>';
+    } else {
+      const d = hkWrDone();
+      body = '<h3 style="margin:0 0 6px">✍️ Schrijfhoek <small>writing corner</small></h3>'
+        + '<div style="font-size:14px;margin-bottom:6px">Schrijf een korte tekst. Je krijgt een controle op kenmerken en een voorbeeld. Niveau <b>'+L+'</b>.<br><small style="opacity:.8">Write a short text. You get a feature check and a model answer. Level '+L+'.</small></div>'
+        + list.map((t,i)=>'<button class="btn" style="display:block;width:100%;margin:5px 0;min-height:52px;text-align:left" onclick="hkWrOpen('+i+')">'+(d[t.id]!==undefined ? (d[t.id]>=100?"✅ ":"☑️ ") : "✍️ ")+esc(t.t)+' <small style="opacity:.7">'+(d[t.id]!==undefined?"beste: "+d[t.id]+"%":"")+'</small></button>').join("");
+    }
+    return '<div data-hk-keep>'+body+'</div>';
+  }
+  CASTRA_MENU_ITEMS.push({ id:"schrijven", la:"Schrijfhoek", nl:"write short texts" });
+  CASTRA_MENU_ICON.schrijven = "✍️";
+  { const mv5 = window.castraMenuView; window.castraMenuView = function(id){ return id==="schrijven" ? hkSchrijfHTML() : mv5.apply(this, arguments); }; }
+  { const pick5 = window.castraMenuPick; window.castraMenuPick = function(id){ if(id==="schrijven") HK_WR = { mode:"list" }; return pick5.apply(this, arguments); }; }
+
   // Heldenkamp heeft geen docentoverzicht en geen Firebase: opzoekingen blijven lokaal in CASTRA.help.
   window.castraHelpSync = function(){};
 })();
