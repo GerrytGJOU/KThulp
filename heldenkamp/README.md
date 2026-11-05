@@ -85,3 +85,9 @@ Doel van de vriend: verblijfsvergunning/naturalisatie → streven B1 (IND-examen
 - Automatisch omhoog: gemiddeld ≥ 85% over de laatste 5 rondes op het huidige niveau (`hk_nlStats`). Handmatig wisselen kan altijd.
 - Nog te bouwen voor B1: werkwoordsvormen (nu/verleden/voltooid), woordvolgorde, omdat/want/dat-zinnen, leesteksten, luisteren,
   schrijven, KNM-onderwerpen en moeilijkere gesprekken per regio.
+
+## Werkwoorden-oefening
+`overlay/werkwoord-a1|a2|b1.json` ([zin met ___, juist, [fout, fout], Engels, regel NL, regel EN]; 30 + 30 + 22 zinnen) + sectie
+"Oefening Werkwoorden" in `overlay/heldenkamp-nl.js`. A1 tegenwoordige tijd (stam/stam+t/infinitief, hebben/zijn/willen), A2 verleden
+tijd, voltooid (hebben/zijn), scheidbare werkwoorden en modale werkwoorden, B1 bijzin met werkwoord achteraan, passief, voorwaardelijk
+en irregulier voltooid deelwoord. Bij elk antwoord staat de volledige zin, de Engelse vertaling en de regel. Telt mee voor het doorstromen.

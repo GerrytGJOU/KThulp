@@ -157,16 +157,42 @@
       if(CASTRA_QUIZ.picked!==null) panel.insertAdjacentHTML("beforeend", '<div class="note" style="margin-top:8px">'+(CASTRA_QUIZ.picked===q.ans?"✔ ":"✘ ")+'<b>'+esc(q.full)+'</b><br><small style="opacity:.8">'+esc(q.en)+'</small></div>');
     };
   }
+  /* ---- Oefening "Werkwoorden": de juiste werkwoordsvorm kiezen (A1 tegenwoordig, A2 verleden/voltooid/scheidbaar, B1 bijzin/passief/voorwaardelijk) ---- */
+  const HK_WW = /*HK_WW*/{};
+  window.hkWwStart = function(){
+    const rng = castraRng((castraNow() ^ CASTRA.seed ^ 0x3c77)>>>0); CASTRA.seed = (CASTRA.seed+7)>>>0;
+    const shuf = a => a.slice().sort(()=>rng()-0.5);
+    const qs = hkPoolUniq(shuf(hkMix(HK_WW))).slice(0,5).map(w=>{ const opts = shuf([w[1]].concat(w[2])); return { la:w[0], opts, ans:opts.indexOf(w[1]), full:w[0].replace("___", w[1]), en:w[3], ruleNl:w[4], ruleEn:w[5] }; });
+    CASTRA_QUIZ_KIND = { key:"quiz_ww", rid:"latium", words:[], title:"Werkwoorden "+hkLevel() };
+    CASTRA_QUIZ = { qs, i:0, score:0, picked:null, done:false };
+    castraQuizRender();
+  };
+  { const qs2 = castraQuizStart; window.castraQuizStart = function(){ if(CASTRA_QUIZ_KIND && CASTRA_QUIZ_KIND.key==="quiz_ww") return hkWwStart(); return qs2.apply(this, arguments); }; }
+  { const rr2 = window.castraQuizRender;
+    window.castraQuizRender = function(){
+      rr2();
+      if(!(CASTRA_QUIZ_KIND && CASTRA_QUIZ_KIND.key==="quiz_ww") || !CASTRA_QUIZ) return;
+      const panel = document.querySelector("#cwPanel .panel"); if(!panel) return;
+      if(CASTRA_QUIZ.done){
+        panel.insertAdjacentHTML("beforeend", '<div class="note" style="margin-top:8px">Tip: leer bij elk werkwoord de drie vormen: <b>lopen — liep — gelopen</b>. Bij een bijzin (omdat, dat, of) staat het werkwoord achteraan.<br><small style="opacity:.75">Learn the three forms of every verb: lopen — liep — gelopen. In a subordinate clause (omdat, dat, of) the verb goes last.</small></div>');
+        return;
+      }
+      const q = CASTRA_QUIZ.qs[CASTRA_QUIZ.i], d = panel.querySelector('div[style*="font-size:26px"]');
+      if(d) d.innerHTML = '<small style="font-size:14px;opacity:.8">Welke vorm past? <span style="opacity:.8">Which form fits?</span></small><br>' + esc(q.la).replace("___", '<b style="border-bottom:3px solid var(--hi,#d4af37);padding:0 14px">&nbsp;&nbsp;&nbsp;</b>');
+      if(CASTRA_QUIZ.picked!==null) panel.insertAdjacentHTML("beforeend", '<div class="note" style="margin-top:8px">'+(CASTRA_QUIZ.picked===q.ans?"✔ ":"✘ ")+'<b>'+esc(q.full)+'</b><br><small style="opacity:.8">'+esc(q.en)+'</small><br><span style="font-size:13px">📘 '+esc(q.ruleNl)+'</span><br><small style="opacity:.75">'+esc(q.ruleEn)+'</small></div>');
+    };
+  }
   // De Senator biedt nu drie oefeningen aan.
   window.castraQuizOpen = function(){
     if(CASTRA_DLG) return;
     const e = CASTRA_WENT.find(x=>x.id==="senator");
     castraLatSay("Senator", e.look, [ { la:"Gegroet, leider {naam}! Welke oefening kies je?", nl:"Greetings, leader {naam}! Which exercise do you choose?",
-        opts:[ { la:"Woorden", nl:"words" }, { la:"De of het?", nl:"de or het?" }, { la:"Voorzetsels", nl:"prepositions" }, { la:"Nu niet", nl:"not now" } ] } ],
+        opts:[ { la:"Woorden", nl:"words" }, { la:"De of het?", nl:"de or het?" }, { la:"Voorzetsels", nl:"prepositions" }, { la:"Werkwoorden", nl:"verbs" }, { la:"Nu niet", nl:"not now" } ] } ],
       k=>{
         if(k===0){ hkWordPool(); CASTRA_QUIZ_KIND = { key:"quiz_senator", rid:"latium", words:null, title:"Woordenquiz "+hkLevel() }; castraQuizStart(); }
         else if(k===1){ CASTRA_QUIZ_KIND = { key:"quiz_dehet", rid:"latium", words:[], title:"De of het?" }; castraQuizStart(); }
         else if(k===2){ CASTRA_QUIZ_KIND = { key:"quiz_vz", rid:"latium", words:[], title:"Voorzetsels" }; castraQuizStart(); }
+        else if(k===3){ CASTRA_QUIZ_KIND = { key:"quiz_ww", rid:"latium", words:[], title:"Werkwoorden" }; castraQuizStart(); }
       });
   };
 
@@ -248,7 +274,7 @@
      <span class="hk-en">; CSS verbergt die in de standen "tap" en "off". Gesprekken (woord tikken, ⓘ-vertaling), quizzen en het
      woordenboek zijn uitgesloten, want daar is het Engels de leerstof of de hulp op verzoek. In "off" werken ook tikken en ⓘ niet. */
   const HK_EN = new Set(/*HK_EN*/[]);
-  ["words","de or het?","prepositions","your Dutch level","not now","your looked-up words","change your look","English help","review your words","your words","practise my words","Which exercise do you choose?"].forEach(s=>HK_EN.add(s));
+  ["words","de or het?","prepositions","verbs","your Dutch level","not now","your looked-up words","change your look","English help","review your words","your words","practise my words","Which exercise do you choose?"].forEach(s=>HK_EN.add(s));
   const hkEnMode = () => { try{ return localStorage.getItem("english") || "all"; }catch(e){ return "all"; } };
   function hkEnApply(){ const m = hkEnMode(); document.body.classList.toggle("hk-en-tap", m==="tap"); document.body.classList.toggle("hk-en-off", m==="off"); }
   { const st = document.createElement("style");
@@ -285,7 +311,7 @@
   { const mv1 = window.castraMenuView; window.castraMenuView = function(id){ return id==="engels" ? hkEnHTML() : mv1.apply(this, arguments); }; }
 
   /* ---- Niveau bijhouden, niveautest en niveauscherm ---- */
-  const HK_QKEYS = ["quiz_senator","quiz_dehet","quiz_vz"];
+  const HK_QKEYS = ["quiz_senator","quiz_dehet","quiz_vz","quiz_ww"];
   function hkStats(){ try{ return JSON.parse(localStorage.getItem("nlStats") || "{}"); }catch(e){ return {}; } }
   function hkRecord(score, n){
     const st = hkStats(), L = hkLevel(), a = st[L] || (st[L] = []);
