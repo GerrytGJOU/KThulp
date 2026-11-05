@@ -170,12 +170,46 @@ function castraLeftTick(){
   });
 }
 function castraLeftStart(){ if(!CASTRA_LEFT_TIMER) CASTRA_LEFT_TIMER = setInterval(castraLeftTick, 1000); }
+// Wat levert de volgende verbetering op? Korte uitleg (HTML-regels) bij de bouwknop; rekent uit dezelfde constanten als het spel zelf.
+function castraUpgradeBenefit(id, lvl){
+  const n = lvl+1, b = castraBuilding(id), out = [], arrow = (a,z)=>`<b>${a}</b> → <b>${z}</b>`;
+  const maxL = Math.min(50, CASTRA_LVL_PER_PRAE*n);
+  if(b.prod){ const r = castraRes(b.prod.res); out.push(`${r.icon} Opbrengst: ${arrow(b.prod.perHour*lvl, b.prod.perHour*n)} per uur`); }
+  if(id==="praetorium"){
+    out.push(`Gebouwen kunnen tot level ${n}; soldaten tot level ${maxL}`);
+    if(CASTRA_BAL.builderStep.indexOf(n)>0) out.push(`🔨 Je krijgt een extra bouwer`);
+    if(typeof CASTRA_WILD_TIER_PRAE!=="undefined"){ const t = CASTRA_WILD_TIER_PRAE.indexOf(n); if(t>0) out.push(`Sterkere soldaten (tier ${t+1}) verschijnen in het wild`); }
+  } else if(id==="horreum"){
+    out.push(`Opslag per grondstof: ${arrow(CASTRA_BAL.walletBase+CASTRA_BAL.walletPerHorreum*lvl, CASTRA_BAL.walletBase+CASTRA_BAL.walletPerHorreum*n)}`);
+  } else if(id==="contubernia"){
+    out.push(`Plek voor soldaten: ${arrow(CASTRA_BAL.barracksBase+CASTRA_BAL.barracksPerLvl*lvl, CASTRA_BAL.barracksBase+CASTRA_BAL.barracksPerLvl*n)}`);
+  } else if(id==="campus"){
+    const T = CASTRA_BAL.train;
+    out.push(`Soldaten die tegelijk trainen: ${arrow(lvl, n)}`, `XP per training: ${arrow(T.xpBase+T.xpPerCampusLvl*lvl, T.xpBase+T.xpPerCampusLvl*n)}`);
+    CASTRA_BAL.evo.forEach((e,i)=>{ if(e.campus===n) out.push(`Soldaten kunnen evolueren naar stadium ${i+2}`); });
+  } else if(id==="heroum"){
+    out.push(`Gesprekken met helden per dag: ${arrow(CASTRA_H.talkBase+lvl, CASTRA_H.talkBase+n)}`);
+    const f = (L)=>1+Math.floor(Math.max(0,L-1)/2); if(f(n)>f(lvl)) out.push(`Helden die mee het veld in kunnen: ${arrow(f(lvl), f(n))}`);
+  } else if(id==="valetudinarium"){
+    const h0 = Math.min(75,CASTRA_MED.healPerLvl*lvl), h1 = Math.min(75,CASTRA_MED.healPerLvl*n);
+    out.push(h1>h0 ? `Gewonde soldaten herstellen sneller: ${arrow(h0+"%", h1+"%")}` : `Geen extra snelheid meer (het maximum van ${h0}% is bereikt)`);
+  } else if(id==="dilectus"){
+    out.push(`Rekruten in het aanbod: ${arrow(CASTRA_MED.candsBase+lvl, CASTRA_MED.candsBase+n)}`);
+    if(1+Math.floor((n-1)/2) > 1+Math.floor((lvl-1)/2)) out.push(`Rekruten met een betere aanleg (de beste van meerdere worpen)`);
+    if(n===CASTRA_MED.tier2.dilectus) out.push(`Ook sterkere rekruten (tier 2) in het aanbod — vanaf Praetorium ${CASTRA_MED.tier2.prae}`);
+    if(n===CASTRA_MED.tier3.dilectus) out.push(`Ook topbekwame rekruten (tier 3) in het aanbod — vanaf Praetorium ${CASTRA_MED.tier3.prae}`);
+  } else if(id==="stabula" || id==="navalia"){
+    const info = (typeof castraNeedsInfo==="function") ? castraNeedsInfo(id) : {};
+    if(info[n] && info[n].length) out.push(`Ontgrendelt in de troepenbomen: ${esc(info[n].slice(0,5).join(", "))}${info[n].length>5 ? " en "+(info[n].length-5)+" andere" : ""}`);
+  }
+  return out.length ? `<div class="note" style="margin:4px 0">⬆️ Level ${n}:${out.map(t=>`<div>• ${t}</div>`).join("")}</div>` : "";
+}
 // De knop of de voortgang van een bouw (gedeeld door alle gebouwpanelen)
 function castraUpgradeUI(id, cost, costTxt, lvl){
   const st = CASTRA.b[id] || {};
   if(st.up) return `<div class="note">🔨 ${castraLaText("aedifica")}: <b>${castraLaText("gradus")} ${st.up.to}</b> — nog <span class="cLeft" data-id="${id}" data-end="${st.up.end}">${castraFmtLeftLive(castraBuildLeftMs(id))}</span></div>`;
   const busy = castraBuildActive().length >= castraBuilders(), mins = castraBuildMinutes(lvl+1), time = castraFmtLeft(castraBuildMs(lvl+1));
-  return `<button class="btn" ${castraCanPay(cost) && !busy ? "" : "disabled"} onclick="castraDoUpgrade('${id}')">${lvl===0?castraLaText("aedifica"):castraLaText("meliora")+" → "+castraLaText("gradus")+" "+(lvl+1)} — ${costTxt} · ⏱ ${time}</button>`
+  return castraUpgradeBenefit(id, lvl) + `<button class="btn" ${castraCanPay(cost) && !busy ? "" : "disabled"} onclick="castraDoUpgrade('${id}')">${lvl===0?castraLaText("aedifica"):castraLaText("meliora")+" → "+castraLaText("gradus")+" "+(lvl+1)} — ${costTxt} · ⏱ ${time}</button>`
     + (busy ? `<div class="note">Alle bouwers zijn bezig (${castraBuildActive().length}/${castraBuilders()}). Een tweede bouwer krijg je met Praetorium 4, een derde met 8.</div>` : "");
 }
 function castraWalletCap(){ return CASTRA_BAL.walletBase + CASTRA_BAL.walletPerHorreum*castraLvl("horreum"); }
