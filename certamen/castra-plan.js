@@ -190,3 +190,29 @@ function castraPlanBuild(main){
   Object.assign(CASTRA_PLAN, { on:false, list:false, id:null, x:null, y:null, move:false, pick:false });
   if(typeof castraDecorBuild==="function") castraPlanPanel();
 }
+
+/* ---------- live meebewegende omtrek (muis) ----------
+   Is een gebouw gekozen om te plaatsen of te verplaatsen, dan volgt het groene/rode kader de muis (alleen bij een muis, niet bij aanraking).
+   Een klik op de kaart zet het kader vast (zodat het niet wegschuift terwijl je naar "Bouw hier" beweegt); nog een klik verplaatst het, zoals
+   altijd. Opnieuw kiezen, annuleren of bevestigen maakt de omtrek weer "los". */
+let CASTRA_PLAN_LOCK = false;
+function castraPlanHover(e){
+  const P = CASTRA_PLAN;
+  if(!P.on || P.pick || !P.id || CASTRA_PLAN_LOCK) return;
+  if(e.pointerType && e.pointerType!=="mouse") return;
+  const map = document.getElementById("castraMap");
+  if(!map || !document.getElementById("cgPlan") || !map.contains(e.target)) return;
+  const r = map.getBoundingClientRect(), sc = (typeof CASTRA_UI!=="undefined" && CASTRA_UI && CASTRA_UI.scale) || 1, t = CASTRA_MAP.tile;
+  const tx = Math.floor((e.clientX-r.left)/sc/t), ty = Math.floor((e.clientY-r.top)/sc/t);
+  if(tx<0 || ty<0 || tx>=CASTRA_MAP.cols || ty>=CASTRA_MAP.rows) return;
+  const f = castraPlanFoot(P.id), nx = tx - Math.floor(f.fw/2), ny = ty - f.fh + 1;
+  if(nx===P.x && ny===P.y) return;
+  P.x = nx; P.y = ny; castraPlanGhost(); castraPlanPanel();
+}
+document.addEventListener("pointermove", castraPlanHover, { passive:true });
+{
+  const unlock = name=>{ const f0 = window[name]; if(typeof f0!=="function") return; window[name] = function(){ CASTRA_PLAN_LOCK = false; return f0.apply(this, arguments); }; };
+  unlock("castraPlanStart"); unlock("castraPlanMovePick"); unlock("castraPlanCancel"); unlock("castraPlanConfirm");
+  const tap0 = castraPlanTap;
+  castraPlanTap = function(e){ const had = CASTRA_PLAN.pick; const r = tap0.apply(this, arguments); if(!had && CASTRA_PLAN.id && CASTRA_PLAN.x!=null) CASTRA_PLAN_LOCK = true; else if(had) CASTRA_PLAN_LOCK = false; return r; };
+}

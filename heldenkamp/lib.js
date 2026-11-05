@@ -105,7 +105,7 @@ function beschermd() {
 }
 
 // De vertaling voor een fragment, rekening houdend met de paarregel. undefined = nog niet vertaald.
-const LOS_PAAR = /^(castra-(data|heroevo-all|heroevo|regions|skills|moves|wobj|decor|bag|cards|codex|field|gates|geo|geomap|diarium|mythos|sidequests|roma|wanderers|battle|clue|hodie|interiors|proelium|unlocks|vscene|weekly|zones|roles|train|tutorial|report|plan|opus|party|latium|elem)).js$/;
+const LOS_PAAR = /^(castra-(latin|dayn|urbs|faq|data|heroevo-all|heroevo|regions|skills|moves|wobj|decor|bag|cards|codex|field|gates|geo|geomap|diarium|mythos|sidequests|roma|wanderers|battle|clue|hodie|interiors|proelium|unlocks|vscene|weekly|zones|roles|train|tutorial|report|plan|opus|party|latium|elem)).js$/;
 function paar(n, bestand) { return n.pair && (!n.pair.los || LOS_PAAR.test(bestand)) ? n.pair : null; }
 function vertaal(catalogus, bestand, n) {
   if (beschermd().has(n.cooked.trim())) return undefined;
