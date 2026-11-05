@@ -45,6 +45,9 @@ for (const f of fs.readdirSync(path.join(DIST, 'certamen')).filter(f => /^castra
   fs.writeFileSync(path.join(DIST, 'certamen', 'heldenkamp-nl.js'), js);
   const ip = path.join(DIST, 'certamen', 'index.html');
   let html = fs.readFileSync(ip, 'utf8');
+  // Eigen opslag: Heldenkamp en de Latijn/Grieks-site delen een domein (github.io), dus localStorage-sleutels krijgen een voorvoegsel.
+  const shim = '<script>(function(){var P="hk_",S=Storage.prototype,g=S.getItem,s=S.setItem,r=S.removeItem;S.getItem=function(k){return g.call(this,this===localStorage?P+k:k)};S.setItem=function(k,v){return s.call(this,this===localStorage?P+k:k,v)};S.removeItem=function(k){return r.call(this,this===localStorage?P+k:k)};})();</script>';
+  html = html.replace('<meta charset="UTF-8">', m => m + shim).replace(/<title>[^<]*<\/title>/, '<title>Heldenkamp</title>').replace('content="Certamen"', 'content="Heldenkamp"');
   const re = /<script src="castra[^"]*"><\/script>/g; let last = null, m;
   while ((m = re.exec(html))) last = m;
   if (last) { html = html.slice(0, last.index + last[0].length) + '\n<script src="heldenkamp-nl.js"></script>' + html.slice(last.index + last[0].length); fs.writeFileSync(ip, html); }

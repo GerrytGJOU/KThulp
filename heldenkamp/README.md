@@ -40,3 +40,12 @@ naamvallen), Engelse aan/uit-schakelaar, portaalknop/Firebase/online onderdelen 
 tot `dist/certamen/heldenkamp-nl.js` en na het laatste castra-script in `index.html` geladen. Het vervangt
 `castraNorm`, `castraTapWord` en leegt het Latijnse `CASTRA_GLOSS`. Nieuwe tikbare woorden: `node woorden.js`
 (schrijft `woorden-open.json` met woorden zonder glos) en voeg ze toe aan een nieuw `overlay/woordenboek-N.json`.
+
+## Zelfstandig spel (direct in Castra)
+`overlay/heldenkamp-nl.js` (sectie "Zelfstandig spel") en `build.js` zorgen dat Heldenkamp zonder Certamen werkt:
+- `go("home")` leidt naar Castra; eerste keer eerst `SCREENS.hkStart` (naam) en de avatar-editor.
+- Lokale speler (`BM_IDENT` zonder klascode): Castra synchroniseert dan nooit; `initFirebase` is uitgezet.
+- Avatar-uitrusting wordt vrijgespeeld met het Castra-niveau (`castraPLevel()`): niveau L → 2L, munten C → C/40+3,
+  beheersing 14, prestige 25, Chronica-finale 22, eerbewijzen 20. Menu: ☰ → "Uiterlijk".
+- Opslag krijgt het voorvoegsel `hk_` (Heldenkamp en de Latijnsite delen het domein github.io): shim in `index.html`.
+- Portaalknop weg, "Afsluiten" weg, titel en footer "Heldenkamp · © Gerben de Jong · 2026".
