@@ -29,6 +29,19 @@
     box.style.display = "block";
     clearTimeout(box._t); box._t = setTimeout(()=>{ box.style.display="none"; }, 3500);
   };
+  // Woordenquiz (Senator): Nederlandse woorden met Engelse betekenis i.p.v. de Latijnse lijst; geen Certamen-woordenbrug.
+  const HK_WORDQUIZ = /*HK_WORDQUIZ*/[];
+  if(typeof CASTRA_QUIZ_WORDS!=="undefined"){ CASTRA_QUIZ_WORDS.length = 0; HK_WORDQUIZ.forEach(p=>CASTRA_QUIZ_WORDS.push(p)); }
+  window.cxQuizExtras = function(){ return []; };
+  // Zinnenquiz: het leesteken van de zin staat anders voor het vraagteken ("...dapper.?").
+  if(typeof castraQuizRender==="function"){
+    const orig = castraQuizRender;
+    window.castraQuizRender = function(){
+      orig();
+      const b = document.querySelector('#cwPanel div[style*="font-size:26px"] b');
+      if(b) b.textContent = b.textContent.replace(/[.!?…]+$/, "");
+    };
+  }
   // Heldenkamp heeft geen docentoverzicht en geen Firebase: opzoekingen blijven lokaal in CASTRA.help.
   window.castraHelpSync = function(){};
 })();
