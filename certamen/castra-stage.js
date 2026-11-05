@@ -61,7 +61,7 @@ body.castra-stage-on #app{display:none !important}
 body.castra-immersive #cgNav{position:absolute;z-index:73;left:50%;bottom:8px;transform:translateX(-50%);width:auto;max-width:calc(100% - 16px);gap:4px;padding:4px 6px;background:rgba(27,20,12,.86);border:2px solid var(--hi,#d4af37);border-radius:12px}
 body.castra-immersive #cgNav .cgn{flex:0 0 auto;width:72px;min-height:46px}
 body.castra-immersive #cgNav .cgn .lb{font-size:10px}
-#castraStage:has(#cgBottom > :not(:empty)) #cgNav{display:none !important}
+body.castra-immersive #castraStage:has(#cgBottom > :not(:empty)) #cgNav{display:none !important}
 body.castra-immersive #cgBar{display:none}
 body.castra-immersive #cgFloat{display:flex}
 body.castra-immersive .portal-back{display:none !important}
