@@ -21,7 +21,16 @@ volgende ronde een vertaling in `nl.json`.
 `GerrytGJOU/Heldenkamp` (Pages: *Deploy from a branch*, branch `main`, map `/`).
 Geheim `HELDENKAMP_TOKEN` (fine-grained token, alleen *Contents: write* op Heldenkamp) is nodig.
 
+## Paren Latijn/Nederlands (automatisch)
+Waar de code `{la:"Latijnse zin.", nl:"Nederlandse vertaling."}` of `_K/_W/_T(["Latijn.","Nederlands."])` gebruikt
+(Latijn eindigt op leesteken), wordt het Latijn vervangen door de Nederlandse tekst en het Nederlands door de
+Engelse hulptekst. Die Engelse tekst staat in `nl.json` onder de sleutel `"en::<nederlandse zin>"`
+(`vertalingen/*.json` + `node merge.js _batch.json <bestand> "en::"` voegt een rijtje toe). Namen en losse woorden
+(zonder leesteken) vertaal je met een gewone sleutel.
+
 ## Stand (2026-11-05)
-Proef: `castra-menu.js` voor een deel vertaald (32 van 84 fragmenten). Nog niet gedaan: de overige
-bestanden, het herontwerp van het Latijn-leerdeel (`castra-latin.js`), de Engelse aan/uit-schakelaar,
-en het weglaten van portaalknop, Firebase en de online onderdelen (Colosseum, Legio) in de variant.
+Gebouwd: extractie, bouw, workflow, paarregel. Vertaald: alle Latijn/Nederlands-paren met Engelse hulptekst
+(helden, quests, NPC's, uitleg in het kamp, jacht, proelium: ~1000 fragmenten). Nog open (`node extract.js`): ~4200 losse
+fragmenten, o.a. castra-heroevo-all.js, castra-latin.js, castra-regions.js, castra-troops.js, castra-data.js.
+Nog niet gedaan: herontwerp Latijn-leerdeel (castra-latin.js: vertaalhulp, "Vertaal Latijnse zinnen"-opdrachten,
+naamvallen), Engelse aan/uit-schakelaar, portaalknop/Firebase/online onderdelen weglaten.

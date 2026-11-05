@@ -3,7 +3,7 @@
    de fragmenten die in nl.json staan door hun Nederlandse vertaling. Fragmenten zonder
    vertaling blijven ongewijzigd (zo blijft het spel altijd werken). */
 const fs = require('fs'), path = require('path');
-const { collect, zoek, render, SKIP_FILES } = require('./lib');
+const { collect, vertaal, render, SKIP_FILES } = require('./lib');
 
 const REPO = path.join(__dirname, '..');
 const DIST = path.join(__dirname, 'dist');
@@ -25,10 +25,10 @@ let totaal = 0;
 for (const f of fs.readdirSync(path.join(DIST, 'certamen')).filter(f => /^castra.*\.js$/.test(f) && !SKIP_FILES.test(f))) {
   const p = path.join(DIST, 'certamen', f);
   let src = fs.readFileSync(p, 'utf8');
-  const nodes = collect(src).filter(n => zoek(catalogus, f, n.cooked) !== undefined).sort((a, b) => b.start - a.start);
+  const nodes = collect(src).filter(n => vertaal(catalogus, f, n) !== undefined).sort((a, b) => b.start - a.start);
   if (!nodes.length) continue;
   for (const n of nodes) {
-    const vert = zoek(catalogus, f, n.cooked);
+    const vert = vertaal(catalogus, f, n);
     if (vert === '' || vert == null) continue;
     src = src.slice(0, n.start) + render(n, vert, n.cooked) + src.slice(n.end);
     totaal++;

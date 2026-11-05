@@ -3,7 +3,7 @@
    die nog GEEN vertaling hebben (per bestand). Exitcode 0; rapport op stdout.
    Met --strict faalt het script als er nog iets openstaat (voor de Action). */
 const fs = require('fs'), path = require('path');
-const { collect, zoek, SKIP_FILES } = require('./lib');
+const { collect, zoek, sleutelNodig, SKIP_FILES } = require('./lib');
 
 const ROOT = path.join(__dirname, '..', 'certamen');
 const catPath = path.join(__dirname, 'nl.json');
@@ -16,7 +16,7 @@ for (const f of fs.readdirSync(ROOT).filter(f => /^castra.*\.js$/.test(f) && !SK
   if (filter && !f.includes(filter)) continue;
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   let nodes; try { nodes = collect(src); } catch (e) { console.error('PARSE FOUT', f, e.message); continue; }
-  const uniek = [...new Set(nodes.map(n => n.cooked.trim()))];
+  const uniek = [...new Set(nodes.map(sleutelNodig).filter(Boolean))];
   const mist = uniek.filter(s => zoek(catalogus, f, s) === undefined);
   klaar += uniek.length - mist.length; open += mist.length;
   if (mist.length) todo[f] = mist;
