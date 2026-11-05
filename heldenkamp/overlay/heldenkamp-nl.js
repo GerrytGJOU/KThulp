@@ -30,8 +30,18 @@
     clearTimeout(box._t); box._t = setTimeout(()=>{ box.style.display="none"; }, 3500);
   };
   // Woordenquiz (Senator): Nederlandse woorden met Engelse betekenis i.p.v. de Latijnse lijst; geen Certamen-woordenbrug.
-  const HK_WORDQUIZ = /*HK_WORDQUIZ*/[];
-  if(typeof CASTRA_QUIZ_WORDS!=="undefined"){ CASTRA_QUIZ_WORDS.length = 0; HK_WORDQUIZ.forEach(p=>CASTRA_QUIZ_WORDS.push(p)); }
+  /* ---- Niveaus A1 / A2 / B1: oefenmateriaal per niveau, het huidige niveau telt dubbel, het niveau daaronder één keer (herhaling) ---- */
+  const HK_LV = ["A1","A2","B1"];
+  const hkLevel = () => { let l = null; try{ l = localStorage.getItem("nlLevel"); }catch(e){} return HK_LV.includes(l) ? l : "A1"; };
+  const hkSetLevel = l => { try{ localStorage.setItem("nlLevel", l); }catch(e){} };
+  const hkMix = map => { const L = hkLevel(), i = HK_LV.indexOf(L); return (map[L]||[]).concat(map[L]||[], i>0 ? (map[HK_LV[i-1]]||[]) : []); };
+  const hkPoolUniq = a => { const seen = new Set(); return a.filter(x=>{ if(seen.has(x[0])) return false; seen.add(x[0]); return true; }); };
+  const HK_WORDQUIZ = /*HK_WORDQUIZ*/{};
+  window.hkWordPool = function(){
+    if(typeof CASTRA_QUIZ_WORDS==="undefined") return;
+    CASTRA_QUIZ_WORDS.length = 0; hkPoolUniq(hkMix(HK_WORDQUIZ)).forEach(p=>CASTRA_QUIZ_WORDS.push(p));
+  };
+  hkWordPool();
   window.cxQuizExtras = function(){ return []; };
   // Zinnenquiz: het leesteken van de zin staat anders voor het vraagteken ("...dapper.?").
   if(typeof castraQuizRender==="function"){
@@ -77,7 +87,7 @@
     if(!n){ toast("Naam / Name", "Vul je naam in. / Please enter your name."); return; }
     BM_IDENT = { name:n, coins:0, xp:0, level:1, avatar:bmAvatarDefaults(), classHistory:{}, achievements:[], unlocked:[], lastActive:Date.now() };
     bmIdentSave(BM_IDENT);
-    BM_AV_RETURN = "castraHome"; go("battleAvatarEdit");       // eerst je uiterlijk kiezen, daarna naar het kamp
+    HK_PT_FROM = "start"; go("hkPlace");       // eerst de (optionele) niveautest, daarna je uiterlijk kiezen
   };
   // Colosseum (duel/vierkamp tegen klasgenoten) is online en hoort er niet in: deur in Roma en aankondiging weg.
   if(typeof CASTRA_WORLDS!=="undefined" && CASTRA_WORLDS.roma && CASTRA_WORLDS.roma.doors){
@@ -97,13 +107,13 @@
   { const pick = castraMenuPick; window.castraMenuPick = function(id){ if(id==="avatar"){ castraMenuClose(); BM_AV_RETURN = "castraHome"; go("battleAvatarEdit"); return; } return pick.apply(this, arguments); }; }
 
   /* ---- Oefening "De of het?" (A1): lidwoord kiezen bij een zelfstandig naamwoord ---- */
-  const HK_DEHET = /*HK_DEHET*/[];
+  const HK_DEHET = /*HK_DEHET*/{};
   window.hkDeHetStart = function(){
     const rng = castraRng((castraNow() ^ CASTRA.seed ^ 0x6e41)>>>0); CASTRA.seed = (CASTRA.seed+7)>>>0;
     const shuf = a => a.slice().sort(()=>rng()-0.5);
-    const het = shuf(HK_DEHET.filter(w=>w[1]==="het")).slice(0,2), de = shuf(HK_DEHET.filter(w=>w[1]==="de")).slice(0,3);
+    const pool = hkPoolUniq(shuf(hkMix(HK_DEHET))), het = pool.filter(w=>w[1]==="het").slice(0,2), de = pool.filter(w=>w[1]==="de").slice(0,3);
     const qs = shuf(het.concat(de)).map(w=>({ la:w[0], opts:["de","het"], ans: w[1]==="de" ? 0 : 1 }));
-    CASTRA_QUIZ_KIND = { key:"quiz_dehet", rid:"latium", words:[], title:"De of het?" };
+    CASTRA_QUIZ_KIND = { key:"quiz_dehet", rid:"latium", words:[], title:"De of het? "+hkLevel() };
     CASTRA_QUIZ = { qs, i:0, score:0, picked:null, done:false };
     castraQuizRender();
   };
@@ -123,12 +133,12 @@
     };
   }
   /* ---- Oefening "Voorzetsels" (A1): het juiste voorzetsel in een zin kiezen ---- */
-  const HK_VZ = /*HK_VZ*/[];
+  const HK_VZ = /*HK_VZ*/{};
   window.hkVzStart = function(){
     const rng = castraRng((castraNow() ^ CASTRA.seed ^ 0x7a15)>>>0); CASTRA.seed = (CASTRA.seed+7)>>>0;
     const shuf = a => a.slice().sort(()=>rng()-0.5);
-    const qs = shuf(HK_VZ).slice(0,5).map(w=>{ const opts = shuf([w[1]].concat(w[2])); return { la:w[0], opts, ans:opts.indexOf(w[1]), full:w[0].replace("___", w[1]), en:w[3] }; });
-    CASTRA_QUIZ_KIND = { key:"quiz_vz", rid:"latium", words:[], title:"Voorzetsels" };
+    const qs = hkPoolUniq(shuf(hkMix(HK_VZ))).slice(0,5).map(w=>{ const opts = shuf([w[1]].concat(w[2])); return { la:w[0], opts, ans:opts.indexOf(w[1]), full:w[0].replace("___", w[1]), en:w[3] }; });
+    CASTRA_QUIZ_KIND = { key:"quiz_vz", rid:"latium", words:[], title:"Voorzetsels "+hkLevel() };
     CASTRA_QUIZ = { qs, i:0, score:0, picked:null, done:false };
     castraQuizRender();
   };
@@ -154,7 +164,7 @@
     castraLatSay("Senator", e.look, [ { la:"Gegroet, leider {naam}! Welke oefening kies je?", nl:"Greetings, leader {naam}! Which exercise do you choose?",
         opts:[ { la:"Woorden", nl:"words" }, { la:"De of het?", nl:"de or het?" }, { la:"Voorzetsels", nl:"prepositions" }, { la:"Nu niet", nl:"not now" } ] } ],
       k=>{
-        if(k===0){ CASTRA_QUIZ_KIND = { key:"quiz_senator", rid:"latium", words:null, title:"Woordenquiz" }; castraQuizStart(); }
+        if(k===0){ hkWordPool(); CASTRA_QUIZ_KIND = { key:"quiz_senator", rid:"latium", words:null, title:"Woordenquiz "+hkLevel() }; castraQuizStart(); }
         else if(k===1){ CASTRA_QUIZ_KIND = { key:"quiz_dehet", rid:"latium", words:[], title:"De of het?" }; castraQuizStart(); }
         else if(k===2){ CASTRA_QUIZ_KIND = { key:"quiz_vz", rid:"latium", words:[], title:"Voorzetsels" }; castraQuizStart(); }
       });
@@ -238,7 +248,7 @@
      <span class="hk-en">; CSS verbergt die in de standen "tap" en "off". Gesprekken (woord tikken, ⓘ-vertaling), quizzen en het
      woordenboek zijn uitgesloten, want daar is het Engels de leerstof of de hulp op verzoek. In "off" werken ook tikken en ⓘ niet. */
   const HK_EN = new Set(/*HK_EN*/[]);
-  ["words","de or het?","prepositions","not now","your looked-up words","change your look","English help","review your words","your words","practise my words","Which exercise do you choose?"].forEach(s=>HK_EN.add(s));
+  ["words","de or het?","prepositions","your Dutch level","not now","your looked-up words","change your look","English help","review your words","your words","practise my words","Which exercise do you choose?"].forEach(s=>HK_EN.add(s));
   const hkEnMode = () => { try{ return localStorage.getItem("english") || "all"; }catch(e){ return "all"; } };
   function hkEnApply(){ const m = hkEnMode(); document.body.classList.toggle("hk-en-tap", m==="tap"); document.body.classList.toggle("hk-en-off", m==="off"); }
   { const st = document.createElement("style");
@@ -273,6 +283,92 @@
   CASTRA_MENU_ICON.engels = "🇬🇧";
   { const i = CASTRA_MENU_SYS.indexOf("sonus"); CASTRA_MENU_SYS.splice(i<0 ? CASTRA_MENU_SYS.length : i+1, 0, "engels"); }
   { const mv1 = window.castraMenuView; window.castraMenuView = function(id){ return id==="engels" ? hkEnHTML() : mv1.apply(this, arguments); }; }
+
+  /* ---- Niveau bijhouden, niveautest en niveauscherm ---- */
+  const HK_QKEYS = ["quiz_senator","quiz_dehet","quiz_vz"];
+  function hkStats(){ try{ return JSON.parse(localStorage.getItem("nlStats") || "{}"); }catch(e){ return {}; } }
+  function hkRecord(score, n){
+    const st = hkStats(), L = hkLevel(), a = st[L] || (st[L] = []);
+    a.push(Math.round(100*score/n)); while(a.length > 8) a.shift();
+    const i = HK_LV.indexOf(L);
+    if(i < HK_LV.length-1 && a.length >= 5 && a.slice(-5).reduce((x,y)=>x+y,0)/5 >= 85){
+      st[L] = []; hkSetLevel(HK_LV[i+1]);
+      toast("🎉 Nieuw niveau: "+HK_LV[i+1]+"!", "Je laatste 5 rondes gingen goed: de oefeningen worden moeilijker. / Your last 5 rounds went well: the exercises get harder.");
+    }
+    try{ localStorage.setItem("nlStats", JSON.stringify(st)); }catch(e){}
+  }
+  { const r0 = window.castraQuizReward;
+    window.castraQuizReward = function(){
+      const Z = CASTRA_QUIZ;
+      if(Z && Z.done && !Z.hkRec && CASTRA_QUIZ_KIND && HK_QKEYS.includes(CASTRA_QUIZ_KIND.key)){ Z.hkRec = true; hkRecord(Z.score, Z.qs.length); }
+      return r0.apply(this, arguments);
+    };
+  }
+
+  // Niveautest: 12 vragen (4 per niveau). Startniveau = het eerste niveau waarop je minder dan 3 van de 4 goed hebt (maximaal B1).
+  const HK_TEST = /*HK_TEST*/[];
+  let HK_PT = null, HK_PT_FROM = "start";
+  const hkShuf = a => a.slice().sort(()=>Math.random()-0.5);
+  window.hkPtBegin = function(){ HK_PT = { i:0, ans:[], picked:null, order:HK_TEST.map(q=>hkShuf(q.o.map((_,k)=>k))) }; SCREENS.hkPlace(); };
+  window.hkPtPick = function(k){ if(!HK_PT || HK_PT.picked!==null) return; HK_PT.picked = k; HK_PT.ans[HK_PT.i] = (k===HK_TEST[HK_PT.i].a) ? 1 : 0; SCREENS.hkPlace(); };
+  window.hkPtNext = function(){ if(!HK_PT) return; if(HK_PT.i >= HK_TEST.length-1) HK_PT.done = true; else { HK_PT.i++; HK_PT.picked = null; } SCREENS.hkPlace(); };
+  window.hkPtResult = function(){
+    const c = { A1:0, A2:0, B1:0 }; HK_TEST.forEach((q,i)=>{ c[q.t] += (HK_PT.ans[i]||0); });
+    return { c, level: c.A1<3 ? "A1" : c.A2<3 ? "A2" : "B1" };
+  };
+  window.hkPtFinish = function(skip){
+    if(skip) hkSetLevel("A1"); else if(HK_PT && HK_PT.done) hkSetLevel(hkPtResult().level);
+    HK_PT = null;
+    if(HK_PT_FROM==="start"){ BM_AV_RETURN = "castraHome"; go("battleAvatarEdit"); } else go("castraHome");
+  };
+  window.hkPlaceOpen = function(){ HK_PT_FROM = "menu"; HK_PT = null; castraMenuClose(); go("hkPlace"); };
+  SCREENS.hkPlace = function(){
+    const btn = "display:block;width:100%;margin:6px 0;min-height:52px;font-size:18px", box = 'style="text-align:center;margin-top:18px"';
+    let body;
+    if(!HK_PT){
+      body = '<div class="panel" '+box+'><h2 style="margin:0 0 8px">Niveautest</h2><p>12 korte vragen, ongeveer 3 minuten. Zo begin je op het juiste niveau.<br><small style="opacity:.75">12 short questions, about 3 minutes. This way you start at the right level.</small></p>'
+        + '<button class="btn btn-gold" style="'+btn+'" onclick="hkPtBegin()">Start de test <small>start the test</small></button>'
+        + '<button class="btn" style="'+btn+'" onclick="hkPtFinish(true)">'+(HK_PT_FROM==="start" ? "Overslaan: begin bij A1 <small>skip: start at A1</small>" : "Terug <small>back</small>")+'</button></div>';
+    } else if(HK_PT.done){
+      const r = hkPtResult();
+      const txt = { A1:"Je begint bij A1: korte zinnen en woorden voor elke dag.", A2:"Je begint bij A2: je beheerst de basis. Nu komen verleden tijd, omdat/want en meer woorden.", B1:"Je begint bij B1: lange zinnen, bijzinnen en woorden over werk, wonen en de overheid." }[r.level];
+      body = '<div class="panel" '+box+'><h2 style="margin:0 0 8px">Jouw startniveau: <b>'+r.level+'</b></h2><p>'+txt+'</p>'
+        + '<div style="opacity:.8;margin-bottom:8px">A1: '+r.c.A1+'/4 · A2: '+r.c.A2+'/4 · B1: '+r.c.B1+'/4</div>'
+        + '<p style="font-size:13px;opacity:.8">Je kunt je niveau altijd veranderen in het menu (☰ → Instellingen → Niveau).<br>You can change your level any time in the menu.</p>'
+        + '<button class="btn btn-gold" style="'+btn+'" onclick="hkPtFinish(false)">Verder <small>continue</small></button></div>';
+    } else {
+      const q = HK_TEST[HK_PT.i], order = HK_PT.order[HK_PT.i], picked = HK_PT.picked!==null;
+      const sentence = esc(q.q).replace("___", '<b style="border-bottom:3px solid var(--hi,#d4af37);padding:0 14px">&nbsp;&nbsp;&nbsp;</b>');
+      body = '<div class="panel" '+box+'><div style="opacity:.75">Vraag '+(HK_PT.i+1)+' van '+HK_TEST.length+'</div>'
+        + '<div style="font-size:24px;margin:12px 0">'+sentence+'</div>'
+        + (q.en ? '<div style="font-size:13px;opacity:.7;margin-bottom:6px">'+esc(q.en)+'</div>' : '')
+        + order.map(k=>{ const ok = k===q.a, sel = HK_PT.picked===k;
+            return '<button class="btn '+(picked&&ok?"btn-gold":"")+'" '+(picked?"disabled":"")+' style="'+btn+';'+(picked&&sel&&!ok?"opacity:.55;text-decoration:line-through":"")+'" onclick="hkPtPick('+k+')">'+esc(q.o[k])+'</button>'; }).join("")
+        + (picked ? '<button class="btn btn-gold" style="'+btn+';margin-top:10px" onclick="hkPtNext()">'+(HK_PT.i>=HK_TEST.length-1?"Uitslag":"Volgende")+'</button>' : '') + '</div>';
+    }
+    H(brand()+'<div data-hk-keep>'+body+'</div>'+foot());
+  };
+
+  // Menu ☰ → Instellingen → Niveau
+  window.hkSetLevelUI = function(l){ hkSetLevel(l); castraMenuRender(); };
+  function hkLevelHTML(){
+    const L = hkLevel(), st = hkStats(), last = (st[L]||[]).slice(-5);
+    const info = {
+      A1:["A1 — beginner","Korte zinnen en woorden voor elke dag.","Short sentences and everyday words."],
+      A2:["A2 — basis","Verleden tijd, omdat/want, meer woorden. Dit is meestal het niveau van het inburgeringsexamen voor een verblijfsvergunning of naturalisatie; vraag bij de IND na wat voor jou geldt.","Past tense, omdat/want, more words. This is usually the level of the civic integration exam; ask the IND what applies to you."],
+      B1:["B1 — zelfstandig","Bijzinnen en woorden over werk, wonen en de overheid. Jouw einddoel.","Subordinate clauses and words about work, housing and government. Your goal."]
+    };
+    const b = l => '<button class="btn '+(L===l?"btn-gold":"")+'" style="display:block;width:100%;margin:5px 0;min-height:56px;text-align:left" data-l="'+l+'" onclick="hkSetLevelUI(this.dataset.l)">'+(L===l?"● ":"○ ")+info[l][0]+'<br><small style="opacity:.85">'+info[l][1]+'<br><span style="opacity:.8">'+info[l][2]+'</span></small></button>';
+    return '<div data-hk-keep><h3 style="margin:0 0 6px">Niveau <small>your Dutch level</small></h3>'
+      + '<div style="font-size:14px;margin-bottom:6px">Je oefent nu op niveau <b>'+L+'</b>. Haal je 5 rondes achter elkaar gemiddeld 85% of meer, dan ga je vanzelf een niveau omhoog.<br><small style="opacity:.8">Your exercises use this level. Score 85% or more over 5 rounds in a row and you move up automatically.</small></div>'
+      + (last.length ? '<div style="font-size:13px;margin-bottom:6px">Laatste rondes: <b>'+last.map(x=>x+"%").join(" · ")+'</b></div>' : '')
+      + HK_LV.map(b).join("")
+      + '<button class="btn" style="display:block;width:100%;margin:8px 0;min-height:48px" onclick="hkPlaceOpen()">Doe de niveautest <small>take the level test</small></button></div>';
+  }
+  CASTRA_MENU_ITEMS.push({ id:"niveau", la:"Niveau", nl:"your Dutch level" });
+  CASTRA_MENU_ICON.niveau = "📶";
+  { const i = CASTRA_MENU_SYS.indexOf("engels"); CASTRA_MENU_SYS.splice(i<0 ? CASTRA_MENU_SYS.length : i+1, 0, "niveau"); }
+  { const mv2 = window.castraMenuView; window.castraMenuView = function(id){ return id==="niveau" ? hkLevelHTML() : mv2.apply(this, arguments); }; }
 
   // Heldenkamp heeft geen docentoverzicht en geen Firebase: opzoekingen blijven lokaal in CASTRA.help.
   window.castraHelpSync = function(){};

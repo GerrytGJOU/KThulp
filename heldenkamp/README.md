@@ -74,3 +74,14 @@ nieuwe plek erbij, zet de Engelse tekst in een catalogus-sleutel met `en::` of v
 de drie opties) + sectie "Oefening Voorzetsels" in `overlay/heldenkamp-nl.js`. Bij de Senator (nu 4 keuzes), 5 vragen,
 na elk antwoord de volledige zin met Engelse vertaling, aan het eind een tip over vaste werkwoord+voorzetsel-combinaties,
 dagelijkse beloning via `CASTRA_QUIZ_KIND.key = "quiz_vz"`. Nieuwe zinnen: zorg dat de afleiders echt fout zijn.
+
+## Niveaus A1 / A2 / B1 (oplopende moeilijkheid)
+Doel van de vriend: verblijfsvergunning/naturalisatie → streven B1 (IND-examen nu meestal A2; zie geheugen/LEERDEEL_ONTWERP.md).
+- Oefeninhoud per niveau: `overlay/woordquiz-a1|a2|b1.json`, `dehet-…`, `voorzetsel-…` (de build maakt er `{A1,A2,B1}` van). Nieuw niveau of
+  nieuwe lijst: voeg een bestand toe met dezelfde naamvorm.
+- Het huidige niveau (`localStorage "nlLevel"`, dus `hk_nlLevel`) telt dubbel in een oefening, het niveau eronder één keer (herhaling).
+- Niveautest bij de start (12 vragen uit `overlay/niveautest.json`, 4 per niveau; startniveau = eerste niveau met < 3 goed, max B1);
+  overslaan = A1. Opnieuw doen: ☰ → Instellingen → Niveau.
+- Automatisch omhoog: gemiddeld ≥ 85% over de laatste 5 rondes op het huidige niveau (`hk_nlStats`). Handmatig wisselen kan altijd.
+- Nog te bouwen voor B1: werkwoordsvormen (nu/verleden/voltooid), woordvolgorde, omdat/want/dat-zinnen, leesteksten, luisteren,
+  schrijven, KNM-onderwerpen en moeilijkere gesprekken per regio.

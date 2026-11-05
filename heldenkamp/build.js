@@ -46,12 +46,16 @@ for (const f of fs.readdirSync(path.join(DIST, 'certamen')).filter(f => /^castra
 // Nederlandse woordhulp (overlay): woordenboek in een script na alle castra-scripts laden
 {
   const dirO = path.join(__dirname, 'overlay');
+  // Oefeninhoud per niveau: overlay/<naam>-a1|a2|b1.json -> { A1:[...], A2:[...], B1:[...] }
+  const perNiveau = pre => { const o = { A1: [], A2: [], B1: [] }; for (const f of fs.readdirSync(dirO)) { const m = f.match(new RegExp('^' + pre + '-(a1|a2|b1)\.json$')); if (m) o[m[1].toUpperCase()] = JSON.parse(fs.readFileSync(path.join(dirO, f), 'utf8')); } return o; };
   const gloss = {};
   for (const f of fs.readdirSync(dirO).filter(f => /^woordenboek.*\.json$/.test(f)).sort()) Object.assign(gloss, JSON.parse(fs.readFileSync(path.join(dirO, f), 'utf8')));
   let js = fs.readFileSync(path.join(dirO, 'heldenkamp-nl.js'), 'utf8').replace('/*HK_GLOSS*/{}', () => JSON.stringify(gloss))
-    .replace('/*HK_WORDQUIZ*/[]', () => JSON.stringify([].concat(...fs.readdirSync(dirO).filter(f => /^woordquiz.*\.json$/.test(f)).sort().map(f => JSON.parse(fs.readFileSync(path.join(dirO, f), 'utf8'))))));
-  js = js.replace('/*HK_VZ*/[]', () => JSON.stringify([].concat(...fs.readdirSync(dirO).filter(f => /^voorzetsel.*.json$/.test(f)).sort().map(f => JSON.parse(fs.readFileSync(path.join(dirO, f), 'utf8'))))));
-  js = js.replace('/*HK_DEHET*/[]', () => JSON.stringify([].concat(...fs.readdirSync(dirO).filter(f => /^dehet.*.json$/.test(f)).sort().map(f => JSON.parse(fs.readFileSync(path.join(dirO, f), 'utf8'))))));
+    ;
+  js = js.replace('/*HK_VZ*/{}', () => JSON.stringify(perNiveau('voorzetsel')));
+  js = js.replace('/*HK_WORDQUIZ*/{}', () => JSON.stringify(perNiveau('woordquiz')));
+  js = js.replace('/*HK_TEST*/[]', () => fs.readFileSync(path.join(dirO, 'niveautest.json'), 'utf8').trim());
+  js = js.replace('/*HK_DEHET*/{}', () => JSON.stringify(perNiveau('dehet')));
   // Engelse hulpteksten uit de catalogus zelf: sleutels met "en::", en Nederlandse sleutels (woorden uit het woordenboek) met een Engelse waarde.
   {
     const glossKeys = new Set(Object.keys(gloss));

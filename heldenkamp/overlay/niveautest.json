@@ -1,0 +1,14 @@
+[
+{"t":"A1","q":"Ik ___ Tom.","o":["ben","bent","is"],"a":0,"en":"I am Tom."},
+{"t":"A1","q":"___ kind speelt buiten.","o":["De","Het","Hij"],"a":1,"en":"The child is playing outside."},
+{"t":"A1","q":"Wij ___ naar school.","o":["gaan","gaat","ga"],"a":0,"en":"We go to school."},
+{"t":"A1","q":"Ik heb twee ___.","o":["broers","broer","brood"],"a":0,"en":"I have two brothers."},
+{"t":"A2","q":"Gisteren ___ ik naar de winkel gegaan.","o":["ben","heb","ga"],"a":0,"en":"Yesterday I went to the shop."},
+{"t":"A2","q":"Ik moet vroeg ___.","o":["opstaan","op te staan","opsta"],"a":0,"en":"I have to get up early."},
+{"t":"A2","q":"Hij is groter ___ zijn broer.","o":["dan","als","van"],"a":0,"en":"He is taller than his brother."},
+{"t":"A2","q":"Ik blijf thuis, ___ ik ziek ben.","o":["omdat","want","dus"],"a":0,"en":"I stay at home because I am ill. (verb at the end)"},
+{"t":"B1","q":"Als ik meer tijd ___, zou ik vaker sporten.","o":["had","heb","hebben"],"a":0},
+{"t":"B1","q":"Dit is de man ___ ik gisteren gesproken heb.","o":["die","dat","wat"],"a":0},
+{"t":"B1","q":"Het hangt ___ het weer af.","o":["van","aan","met"],"a":0},
+{"t":"B1","q":"Ik zou graag willen weten ___ de vergadering begint.","o":["wanneer","als","toen"],"a":0}
+]
