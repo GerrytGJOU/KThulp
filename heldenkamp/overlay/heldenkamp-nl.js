@@ -86,6 +86,10 @@
   }
   if(typeof CASTRA_UNLOCKS!=="undefined"){ const i = CASTRA_UNLOCKS.findIndex(u=>u.id==="colosseum"); if(i >= 0) CASTRA_UNLOCKS.splice(i, 1); }
 
+  // Principia (klassenevenementen: Legio en Commercium) heeft een klas en een online database nodig: uit het kamp.
+  // Gebouwen met phase!==1 worden niet getekend, niet aangeklikt en tellen niet mee voor de bereikbaarheid.
+  { const b = castraBuilding("principia"); if(b) b.phase = 0; }
+
   // Menu: geen "Afsluiten" naar het portaal; wel "Uiterlijk" (avatar-editor).
   { const i = CASTRA_MENU_SYS.indexOf("exeo"); if(i >= 0) CASTRA_MENU_SYS.splice(i, 1); }
   CASTRA_MENU_ITEMS.push({ id:"avatar", la:"Uiterlijk", nl:"change your look" });

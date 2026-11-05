@@ -17,7 +17,12 @@ function kopieer(van, naar) {
     if (e.isDirectory()) kopieer(a, b); else fs.copyFileSync(a, b);
   }
 }
-fs.rmSync(DIST, { recursive: true, force: true });
+// Alleen de inhoud wissen, niet de map zelf: een draaiende preview-server houdt de map vast (Windows: EPERM).
+fs.mkdirSync(DIST, { recursive: true });
+for (const e of fs.readdirSync(DIST)) {
+  try { fs.rmSync(path.join(DIST, e), { recursive: true, force: true }); }
+  catch (err) { if (err.code !== 'EPERM' && err.code !== 'EBUSY') throw err; }   // in gebruik door een server: map blijft staan, inhoud wordt overschreven
+}
 kopieer(path.join(REPO, 'certamen'), path.join(DIST, 'certamen'));
 kopieer(path.join(REPO, 'assets'), path.join(DIST, 'assets'));
 
