@@ -79,6 +79,13 @@
     bmIdentSave(BM_IDENT);
     BM_AV_RETURN = "castraHome"; go("battleAvatarEdit");       // eerst je uiterlijk kiezen, daarna naar het kamp
   };
+  // Colosseum (duel/vierkamp tegen klasgenoten) is online en hoort er niet in: deur in Roma en aankondiging weg.
+  if(typeof CASTRA_WORLDS!=="undefined" && CASTRA_WORLDS.roma && CASTRA_WORLDS.roma.doors){
+    const ds = CASTRA_WORLDS.roma.doors;
+    for(let i = ds.length-1; i >= 0; i--) if(ds[i].to==="colosseum_roma") ds.splice(i, 1);
+  }
+  if(typeof CASTRA_UNLOCKS!=="undefined"){ const i = CASTRA_UNLOCKS.findIndex(u=>u.id==="colosseum"); if(i >= 0) CASTRA_UNLOCKS.splice(i, 1); }
+
   // Menu: geen "Afsluiten" naar het portaal; wel "Uiterlijk" (avatar-editor).
   { const i = CASTRA_MENU_SYS.indexOf("exeo"); if(i >= 0) CASTRA_MENU_SYS.splice(i, 1); }
   CASTRA_MENU_ITEMS.push({ id:"avatar", la:"Uiterlijk", nl:"change your look" });
