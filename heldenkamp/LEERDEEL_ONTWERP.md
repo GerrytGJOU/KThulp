@@ -110,3 +110,9 @@ Elke stap is los te testen en mag al online (Heldenkamp werkt altijd, ook half-a
    dus een aparte, voorzichtige ingreep).
 5. Mag ik de woordenlijst zelf opstellen (frequentie-/niveaugebaseerd uit mijn eigen kennis), of heb je een
    voorkeursbron (bijv. een bestaande A1-B1-lijst)?
+
+## Stand van de bouw (2026-11-05)
+Gebouwd (zie `heldenkamp/README.md` voor de werking): tikbare woorden + Woordenboek/herhaallijst, quizzen en Senator-oefeningen (woorden, de/het,
+voorzetsels, werkwoorden), niveaus A1/A2/B1 met niveautest en automatisch doorstromen, Leeshoek, Luisterhoek, Schrijfhoek, Oefenhoek (KNM,
+woordvolgorde, gesprekssituaties), Engelse hulp aan/uit. Nog open: moeilijkere verhaalgesprekken per regio, `vocab-nl.js`, inhoudelijke controle
+door een docent Nederlands, een speelsessie door een echte gebruiker.
