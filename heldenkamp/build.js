@@ -3,11 +3,11 @@
    de fragmenten die in nl.json staan door hun Nederlandse vertaling. Fragmenten zonder
    vertaling blijven ongewijzigd (zo blijft het spel altijd werken). */
 const fs = require('fs'), path = require('path');
-const { collect, vertaal, render, SKIP_FILES } = require('./lib');
+const { collect, vertaal, render, laadCatalogus, SKIP_FILES } = require('./lib');
 
 const REPO = path.join(__dirname, '..');
-const DIST = path.join(__dirname, 'dist');
-const catalogus = JSON.parse(fs.readFileSync(path.join(__dirname, 'nl.json'), 'utf8'));
+const DIST = process.env.HK_DIST ? path.resolve(process.env.HK_DIST) : path.join(__dirname, 'dist');
+const catalogus = laadCatalogus();
 
 function kopieer(van, naar) {
   fs.mkdirSync(naar, { recursive: true });

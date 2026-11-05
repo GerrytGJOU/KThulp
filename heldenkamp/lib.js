@@ -117,4 +117,13 @@ function render(node, vertaling, origineel) {
   return JSON.stringify(tekst).split(String.fromCharCode(0x2028)).join('\\u2028').split(String.fromCharCode(0x2029)).join('\\u2029');
 }
 
-module.exports = { collect, zoek, vertaal, sleutelNodig, render, isText, SKIP_FILES };
+const fsx = require('fs'), pathx = require('path');
+// nl.json + alle vertalingen/*.cat.json (elke sessie/ronde mag een eigen bestand toevoegen)
+function laadCatalogus() {
+  const cat = JSON.parse(fsx.readFileSync(pathx.join(__dirname, 'nl.json'), 'utf8'));
+  const dir = pathx.join(__dirname, 'vertalingen');
+  if (fsx.existsSync(dir)) for (const f of fsx.readdirSync(dir).filter(f => f.endsWith('.cat.json')).sort()) Object.assign(cat, JSON.parse(fsx.readFileSync(pathx.join(dir, f), 'utf8')));
+  return cat;
+}
+
+module.exports = { laadCatalogus, collect, zoek, vertaal, sleutelNodig, render, isText, SKIP_FILES };

@@ -3,11 +3,11 @@
    die nog GEEN vertaling hebben (per bestand). Exitcode 0; rapport op stdout.
    Met --strict faalt het script als er nog iets openstaat (voor de Action). */
 const fs = require('fs'), path = require('path');
-const { collect, zoek, sleutelNodig, SKIP_FILES } = require('./lib');
+const { collect, zoek, sleutelNodig, laadCatalogus, SKIP_FILES } = require('./lib');
 
 const ROOT = path.join(__dirname, '..', 'certamen');
 const catPath = path.join(__dirname, 'nl.json');
-const catalogus = fs.existsSync(catPath) ? JSON.parse(fs.readFileSync(catPath, 'utf8')) : {};
+const catalogus = laadCatalogus();
 const filter = process.argv.slice(2).find(a => !a.startsWith('--'));
 const strict = process.argv.includes('--strict');
 
@@ -21,7 +21,7 @@ for (const f of fs.readdirSync(ROOT).filter(f => /^castra.*\.js$/.test(f) && !SK
   klaar += uniek.length - mist.length; open += mist.length;
   if (mist.length) todo[f] = mist;
 }
-fs.writeFileSync(path.join(__dirname, 'todo.json'), JSON.stringify(todo, null, 1));
+fs.writeFileSync(path.join(__dirname, process.env.HK_TODO || 'todo.json'), JSON.stringify(todo, null, 1));
 console.log(`vertaald: ${klaar}   nog open: ${open}   (zie heldenkamp/todo.json)`);
 for (const [f, l] of Object.entries(todo)) console.log(String(l.length).padStart(5), f);
 if (strict && open) process.exit(1);

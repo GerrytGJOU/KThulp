@@ -2,3 +2,6 @@ node_modules/
 dist/
 todo.json
 _batch.json
+dist*/
+todo*.json
+_batch*.json
