@@ -120,3 +120,12 @@ Menu ☰ → "Oefenhoek": `overlay/knm-a1|a2|b1.json` (Nederland: 10 + 13 + 14 v
 (gesprekssituaties: 6 per niveau). Item: `{q, qen, o:[3], a:0, u:uitleg NL, e:uitleg EN}` (juist antwoord staat op index 0, opties worden geschud).
 Ronde van 5 vragen, XP eenmaal per dag per onderdeel bij ≥ 3 goed, telt mee voor doorstromen. KNM-feiten alleen vaste, algemeen bekende zaken
 (112, BSN, DigiD, leerplicht vanaf 5 jaar, stemmen vanaf 18, Koningsdag 27 april, enz.); controleer bij wijzigingen op rijksoverheid.nl.
+
+## Wat gaat vanzelf en wat niet (updates aan het origineel)
+Alles in `certamen/castra*.js` (spelregels, gevechten, nieuwe functies, bugfixes, nieuwe schermen) komt bij een push naar `main` vanzelf in
+Heldenkamp (build + publicatie door de workflow). Niet vanzelf:
+- **Nieuwe tekst** blijft Latijn/ongewijzigd tot hij vertaald is (`node extract.js`, `node woorden.js`).
+- **Functies die het overlay vervangt** (lijst `VERVANGEN` in `check.js`: o.a. `castraTapWord`, `castraQuizOpen`, `castraNorm`): wijzigt het origineel die,
+  dan geeft `check.js` in de Action een waarschuwing; neem de wijziging dan over in `overlay/heldenkamp-nl.js` en draai `node check.js --snapshot`.
+- **Hernoemde of verwijderde functies** waar het overlay op leunt: `check.js` geeft een fout en de Action publiceert dan NIET (liever een oude dan een kapotte site).
+- **Bewust weggelaten onderdelen** (Colosseum, Legio/Principia/Commercium, Schola, Certamen-menu, Firebase): verbeteringen daaraan komen niet in Heldenkamp.

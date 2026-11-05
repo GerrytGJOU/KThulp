@@ -26,6 +26,7 @@ jobs:
           npm ci
           node extract.js            # rapport: hoeveel fragmenten nog geen vertaling hebben
           node build.js
+          node check.js             # fout = het overlay verwijst naar iets dat in certamen/ verdwenen is (niet publiceren); waarschuwing = een vervangen functie is in het origineel gewijzigd
       - name: Publiceren naar Heldenkamp
         if: env.HELDENKAMP_TOKEN != ''
         run: |
