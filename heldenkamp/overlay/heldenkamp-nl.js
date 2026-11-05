@@ -139,6 +139,73 @@
   window.castraMasterXp = function(){ return 0; };
   { const i = CASTRA_MENU_ITEMS.findIndex(x=>x.id==="schola"); if(i >= 0) CASTRA_MENU_ITEMS.splice(i, 1); }
 
+  /* ---- Woordenboek (herhaallijst): de woorden die je opzocht + mini-quiz op je eigen moeilijke woorden ---- */
+  // Opzoekingen staan in CASTRA.help.words {woord: aantal}; de vooruitgang per woord in CASTRA.hkRev {woord: {ok}}.
+  // Een woord telt als geleerd na 3 goede antwoorden achter elkaar; een fout zet de teller terug op 0.
+  let HK_REV = null;
+  // Functiewoordjes en 1-2 letterwoorden zijn geen leerstof voor de herhaallijst.
+  const HK_STOP = new Set('de het een en of in op is te er ik je jij hij ze we wij u mijn jouw zijn haar hun ons onze me mij jou hem om aan bij met van voor naar uit als dat die dit deze maar ook nog al wel niet geen dan nu zo dus ja nee s n'.split(' '));
+  function hkRevWords(){
+    const h = (CASTRA.help && CASTRA.help.words) || {}, rv = CASTRA.hkRev || (CASTRA.hkRev = {});
+    return Object.keys(h).filter(w=>CASTRA_GLOSS[w] && w.length>2 && !HK_STOP.has(w)).map(w=>({ w, n:h[w], g:CASTRA_GLOSS[w], ok:(rv[w] && rv[w].ok) || 0 }))
+      .sort((a,b)=>b.n-a.n || a.w.localeCompare(b.w));
+  }
+  window.hkRevStart = function(){
+    const all = hkRevWords(), open = all.filter(x=>x.ok<3), pool = open.length ? open : all;
+    const pick = pool.map(x=>({ x, k:x.n*(1+Math.random()) })).sort((a,b)=>b.k-a.k).slice(0,5).map(p=>p.x);
+    const gl = Object.keys(CASTRA_GLOSS).map(k=>CASTRA_GLOSS[k]).filter(g=>g.length<46 && !/[(]/.test(g));
+    const qs = pick.map(x=>{
+      const wrong = []; let guard = 0;
+      while(wrong.length<2 && guard++<200){ const g = gl[Math.floor(Math.random()*gl.length)]; if(g!==x.g && !wrong.includes(g)) wrong.push(g); }
+      const opts = [x.g].concat(wrong).sort(()=>Math.random()-.5);
+      return { w:x.w, opts, ans:opts.indexOf(x.g) };
+    });
+    HK_REV = { qs, i:0, score:0, picked:null, done:false, xp:0 };
+    castraMenuRender();
+  };
+  window.hkRevPick = function(k){
+    const R = HK_REV; if(!R || R.picked!==null) return;
+    R.picked = k; const q = R.qs[R.i], rv = CASTRA.hkRev || (CASTRA.hkRev = {}), r = rv[q.w] || (rv[q.w] = { ok:0 });
+    if(k===q.ans){ R.score++; r.ok++; } else r.ok = 0;
+    castraSave(); castraMenuRender();
+  };
+  window.hkRevNext = function(){
+    const R = HK_REV; if(!R) return;
+    if(R.i >= R.qs.length-1){
+      R.done = true;
+      const w = CASTRA.wday || (CASTRA.wday = {});
+      if(R.score>=3 && w.hkrev!==castraWDay()){ w.hkrev = castraWDay(); R.xp = 3*R.score; castraPxpAdd(R.xp, "Woorden herhaald"); }
+    } else { R.i++; R.picked = null; }
+    castraMenuRender();
+  };
+  window.hkRevClose = function(){ HK_REV = null; castraMenuRender(); };
+  function hkRevHTML(){
+    const R = HK_REV, btn = "min-height:44px";
+    if(R && !R.done){
+      const q = R.qs[R.i];
+      return '<h3 style="margin:0 0 6px">📖 Woorden herhalen <small>review your words</small></h3><div style="opacity:.8">Vraag '+(R.i+1)+' van '+R.qs.length+'</div>'
+        + '<div style="font-size:26px;margin:8px 0">Wat betekent <b>'+esc(q.w)+'</b>?</div>'
+        + q.opts.map((o,k)=>{ const picked = R.picked!==null, ok = k===q.ans, sel = R.picked===k;
+            return '<button class="btn '+(picked&&ok?"btn-gold":"")+'" '+(picked?"disabled":"")+' style="display:block;width:100%;margin:5px 0;min-height:48px;font-size:17px;'+(picked&&sel&&!ok?"opacity:.55;text-decoration:line-through":"")+'" onclick="hkRevPick('+k+')">'+esc(o)+'</button>'; }).join("")
+        + (R.picked!==null ? '<button class="btn btn-gold" style="'+btn+';margin-top:6px" onclick="hkRevNext()">'+(R.i>=R.qs.length-1?"Uitslag":"Volgende")+'</button>' : "");
+    }
+    if(R && R.done){
+      return '<h3 style="margin:0 0 6px">📖 Woorden herhalen</h3><div style="font-size:20px">Score: <b>'+R.score+' / '+R.qs.length+'</b></div>'
+        + (R.xp ? '<div class="note">🎖️ +'+R.xp+' XP (eenmaal per dag) <small>· XP once a day</small></div>' : (R.score>=3 ? '<div class="note">Vandaag al beloond. <small>Already rewarded today.</small></div>' : '<div class="note">Minstens 3 goed voor XP. <small>At least 3 correct for XP.</small></div>'))
+        + '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="btn btn-gold" style="'+btn+'" onclick="hkRevStart()">Nog een ronde</button><button class="btn" style="'+btn+'" onclick="hkRevClose()">Naar de lijst</button></div>';
+    }
+    const L = hkRevWords(), leerd = L.filter(x=>x.ok>=3).length;
+    if(!L.length) return '<h3 style="margin:0 0 6px">📖 Woordenboek <small>your words</small></h3><div class="note">Tik in een gesprek op een woord om de betekenis te zien. Al je opgezochte woorden komen hier te staan.<br><small>Tap a word in a conversation to see its meaning. All the words you look up are collected here.</small></div>';
+    return '<h3 style="margin:0 0 6px">📖 Woordenboek <small>your words</small></h3>'
+      + '<div style="font-size:13px;opacity:.85;margin-bottom:6px">'+L.length+' woorden opgezocht, '+leerd+' geleerd (3 keer goed). <small>'+L.length+' words looked up, '+leerd+' learned (3 correct in a row).</small></div>'
+      + '<button class="btn btn-gold" style="'+btn+';margin-bottom:8px" onclick="hkRevStart()">Oefen mijn woorden <small>practise my words</small></button>'
+      + L.slice(0,80).map(x=>'<div style="'+CASTRA_MV_ROW+'"><b style="min-width:110px">'+(x.ok>=3?"✅ ":"")+esc(x.w)+'</b><span style="flex:1">'+esc(x.g)+'</span><small style="opacity:.6">'+x.n+'×</small></div>').join("");
+  }
+  CASTRA_MENU_ITEMS.push({ id:"woorden", la:"Woordenboek", nl:"your looked-up words" });
+  CASTRA_MENU_ICON.woorden = "📖";
+  { const mv0 = castraMenuView; window.castraMenuView = function(id){ return id==="woorden" ? hkRevHTML() : mv0.apply(this, arguments); }; }
+  { const pick0 = window.castraMenuPick; window.castraMenuPick = function(id){ if(id==="woorden") HK_REV = null; return pick0.apply(this, arguments); }; }
+
   // Heldenkamp heeft geen docentoverzicht en geen Firebase: opzoekingen blijven lokaal in CASTRA.help.
   window.castraHelpSync = function(){};
 })();

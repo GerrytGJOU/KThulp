@@ -55,3 +55,8 @@ tot `dist/certamen/heldenkamp-nl.js` en na het laatste castra-script in `index.h
 `overlay/heldenkamp-nl.js`: de Senator (Latium) biedt "Woorden" of "De of het?" aan; 5 vragen (2 het, 3 de), dagelijkse
 beloning via de bestaande quiz-engine (`CASTRA_QUIZ_KIND.key = "quiz_dehet"`). Controleer bij nieuwe woorden zorgvuldig
 het lidwoord. Ook uitgezet: Certamen-profiel-XP bij quizzen (`castraMasterXp`) en de Schola.
+
+## Woordenboek / herhaallijst
+Menu ☰ → "Woordenboek" (sectie "Woordenboek (herhaallijst)" in `overlay/heldenkamp-nl.js`): lijst van de woorden die je
+opzocht (`CASTRA.help.words`, zonder functiewoordjes) met Engelse betekenis en aantal keer, plus mini-quiz "Oefen mijn
+woorden" (5 vragen, zwaarste/vaakst opgezochte woorden eerst; geleerd na 3 keer goed achter elkaar, `CASTRA.hkRev`; XP eenmaal per dag).
