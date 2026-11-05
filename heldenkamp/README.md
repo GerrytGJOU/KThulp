@@ -99,3 +99,10 @@ geschud; juist antwoord staat altijd op index 0 in het bestand); XP eenmaal per 
 doorstromen. Nieuwe tekst: voeg toe aan het bestand en draai `node woorden.js`; voeg ontbrekende woorden toe aan een nieuw
 `overlay/woordenboek-N.json`. De B1-teksten zijn verzonnen voorbeelden (brief gemeente, vacature, zorgverzekering, advertentie, krant);
 feiten daarin zijn illustratief en niet als officiële regel bedoeld.
+
+## Luisterhoek
+Menu ☰ → "Luisterhoek": `overlay/luisteren-a1|a2|b1.json` (zelfde vorm als de leesteksten; 4 + 4 + 4 teksten) + sectie "Luisterhoek" in
+`overlay/heldenkamp-nl.js`. Het apparaat leest de zinnen voor met de Web Speech API (`speechSynthesis`, een Nederlandse stem:
+`nl-NL`, anders elke `nl*`); knoppen Luister / Langzaam / Stop. Heeft het apparaat geen Nederlandse stem, dan valt de oefening terug
+op "Toon de tekst" (leesoefening, geen XP). Wie de tekst toont krijgt geen XP. Na afloop staat de tekst er tikbaar onder.
+Let op: de stemkwaliteit hangt van het apparaat af; ik kon de klank zelf niet beoordelen (testtoestel had alleen en-GB).

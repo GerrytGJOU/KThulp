@@ -459,6 +459,88 @@
   { const mv3 = window.castraMenuView; window.castraMenuView = function(id){ return id==="lezen" ? hkLezenHTML() : mv3.apply(this, arguments); }; }
   { const pick3 = window.castraMenuPick; window.castraMenuPick = function(id){ if(id==="lezen") HK_RD = { mode:"list" }; return pick3.apply(this, arguments); }; }
 
+  /* ---- Luisterhoek: korte teksten die het apparaat voorleest (Web Speech API, Nederlandse stem), daarna begripsvragen ----
+     Heeft het apparaat geen Nederlandse stem, dan kun je de tekst lezen ("toon tekst"): het wordt dan een leesoefening zonder XP. */
+  const HK_LUISTER = /*HK_LUISTER*/{};
+  let HK_LI = { mode:"list" };
+  const hkSynth = () => (typeof speechSynthesis!=="undefined" && typeof SpeechSynthesisUtterance!=="undefined") ? speechSynthesis : null;
+  const hkNlVoice = () => { const s = hkSynth(); if(!s) return null; const v = s.getVoices() || []; return v.find(x=>/^nl[-_]nl/i.test(x.lang)) || v.find(x=>/^nl/i.test(x.lang)) || null; };
+  if(hkSynth() && hkSynth().addEventListener) hkSynth().addEventListener("voiceschanged", ()=>{ if(CASTRA_MENU && CASTRA_MENU.open && CASTRA_MENU.view==="luisteren") castraMenuRender(); });
+  window.hkLiStop = function(){ const s = hkSynth(); if(s) s.cancel(); };
+  window.hkLiPlay = function(slow){
+    const s = hkSynth(), v = hkNlVoice(), t = HK_LI.t; if(!s || !v || !t) return;
+    s.cancel();
+    const base = ({A1:0.82, A2:0.92, B1:1.0}[hkLevel()] || 0.9) * (slow ? 0.75 : 1);
+    t.s.forEach(sen=>{ const u = new SpeechSynthesisUtterance(sen[0]); u.voice = v; u.lang = v.lang || "nl-NL"; u.rate = base; s.speak(u); });
+    HK_LI.plays = (HK_LI.plays||0) + 1; castraMenuRender();
+  };
+  window.hkLiList = function(){ hkLiStop(); HK_LI = { mode:"list" }; castraMenuRender(); };
+  window.hkLiOpen = function(i){ const t = (HK_LUISTER[hkLevel()]||[])[i]; if(!t) return; hkLiStop(); HK_LI = { mode:"play", t, plays:0, peek:false }; castraMenuRender(); };
+  window.hkLiPeek = function(){ HK_LI.peek = !HK_LI.peek; castraMenuRender(); };
+  window.hkLiQuiz = function(){
+    const t = HK_LI.t; if(!t) return; hkLiStop();
+    HK_LI = { mode:"quiz", t, plays:HK_LI.plays||0, peek:HK_LI.peek, qi:0, picked:null, score:0, order:t.q.map(q=>q.o.map((_,k)=>k).sort(()=>Math.random()-0.5)) };
+    castraMenuRender();
+  };
+  window.hkLiPick = function(k){ const R = HK_LI; if(R.mode!=="quiz" || R.picked!==null) return; R.picked = k; if(k===R.t.q[R.qi].a) R.score++; castraMenuRender(); };
+  window.hkLiNext = function(){
+    const R = HK_LI;
+    if(R.qi >= R.t.q.length-1){
+      R.mode = "done"; R.xp = 0;
+      if(!R.peek){
+        const L = hkLevel(), w = CASTRA.wday || (CASTRA.wday = {}), key = "luister_"+R.t.id;
+        if(R.score >= 2 && w[key]!==castraWDay()){ w[key] = castraWDay(); R.xp = ({A1:3,A2:4,B1:5}[L]||3) * R.score; castraPxpAdd(R.xp, "Geluisterd"); }
+        hkRecord(R.score, R.t.q.length);
+        const d = hkLiDone(); d[R.t.id] = Math.max(d[R.t.id]||0, R.score); try{ localStorage.setItem("listenDone", JSON.stringify(d)); }catch(e){}
+      }
+    } else { R.qi++; R.picked = null; }
+    castraMenuRender();
+  };
+  const hkLiDone = () => { try{ return JSON.parse(localStorage.getItem("listenDone") || "{}"); }catch(e){ return {}; } };
+  function hkLiControls(){
+    const ok = !!hkNlVoice(), btn = "min-height:50px;font-size:17px;margin:3px";
+    if(!hkSynth() || !ok) return '<div class="note">Dit apparaat heeft geen Nederlandse stem. Kies "Toon de tekst" om de tekst te lezen (dan telt het niet voor XP).<br><small>This device has no Dutch voice. Choose "Show the text" to read it instead (no XP then).</small></div>';
+    return '<div style="margin:8px 0"><button class="btn btn-gold" style="'+btn+'" onclick="hkLiPlay(false)">▶ Luister</button><button class="btn" style="'+btn+'" onclick="hkLiPlay(true)">🐢 Langzaam</button><button class="btn" style="'+btn+'" onclick="hkLiStop()">⏹ Stop</button> <small style="opacity:.7">'+(HK_LI.plays||0)+'×</small></div>';
+  }
+  function hkLiText(t){ return '<div style="font-size:16px;line-height:1.9;margin:6px 0">' + t.s.map((s,i)=>castraLaHTML(s[0], s[1], "luister_"+t.id+"_"+i)).join(" ") + '</div>'; }
+  function hkLuisterHTML(){
+    const R = HK_LI, btn = "min-height:46px", L = hkLevel(), list = HK_LUISTER[L] || [];
+    let body;
+    if(R.mode==="play"){
+      body = '<h3 style="margin:0 0 4px">🎧 '+esc(R.t.t)+' <small>'+L+'</small></h3>'
+        + '<div style="font-size:13px;opacity:.8">Luister één of twee keer en beantwoord dan de vragen.<br><small>Listen once or twice, then answer the questions.</small></div>'
+        + hkLiControls()
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><button class="btn btn-gold" style="'+btn+'" onclick="hkLiQuiz()">Naar de vragen <small>to the questions</small></button><button class="btn" style="'+btn+'" onclick="hkLiPeek()">'+(R.peek?"Verberg de tekst":"📄 Toon de tekst")+'</button><button class="btn" style="'+btn+'" onclick="hkLiList()">Terug</button></div>'
+        + (R.peek ? '<div style="margin-top:6px">'+hkLiText(R.t)+'</div>' : '');
+    } else if(R.mode==="quiz"){
+      const q = R.t.q[R.qi], order = R.order[R.qi], picked = R.picked!==null;
+      body = '<h3 style="margin:0 0 4px">🎧 '+esc(R.t.t)+'</h3><div style="opacity:.8">Vraag '+(R.qi+1)+' van '+R.t.q.length+'</div>'
+        + '<div style="font-size:20px;margin:8px 0 2px">'+esc(q.q)+'</div>' + (q.qen ? '<div class="hk-en" style="font-size:12px;opacity:.75;margin-bottom:6px">'+esc(q.qen)+'</div>' : '')
+        + order.map(k=>{ const ok = k===q.a, sel = R.picked===k;
+            return '<button class="btn '+(picked&&ok?"btn-gold":"")+'" '+(picked?"disabled":"")+' style="display:block;width:100%;margin:5px 0;min-height:48px;font-size:16px;'+(picked&&sel&&!ok?"opacity:.55;text-decoration:line-through":"")+'" onclick="hkLiPick('+k+')">'+esc(q.o[k])+'</button>'; }).join("")
+        + hkLiControls()
+        + (picked ? '<button class="btn btn-gold" style="'+btn+'" onclick="hkLiNext()">'+(R.qi>=R.t.q.length-1?"Uitslag":"Volgende")+'</button>' : '')
+        + (R.peek ? hkLiText(R.t) : '');
+    } else if(R.mode==="done"){
+      body = '<h3 style="margin:0 0 6px">🎧 '+esc(R.t.t)+'</h3><div style="font-size:20px">Score: <b>'+R.score+' / '+R.t.q.length+'</b></div>'
+        + (R.peek ? '<div class="note">Je las de tekst, dus geen XP. <small>You read the text, so no XP.</small></div>'
+          : (R.xp ? '<div class="note">🎖️ +'+R.xp+' XP (eenmaal per dag per tekst) <small>· XP once a day per text</small></div>' : '<div class="note">'+(R.score>=2 ? "Deze tekst gaf vandaag al XP." : "Minstens 2 goed voor XP.")+'</div>'))
+        + '<div style="font-size:13px;opacity:.8;margin-top:6px">De tekst, om na te lezen (tik op woorden):<br><small>The text, to read afterwards (tap words):</small></div>' + hkLiText(R.t)
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-gold" style="'+btn+'" onclick="hkLiOpen('+list.findIndex(x=>x.id===R.t.id)+')">Nog eens luisteren</button><button class="btn" style="'+btn+'" onclick="hkLiList()">Andere tekst</button></div>';
+    } else {
+      const d = hkLiDone();
+      body = '<h3 style="margin:0 0 6px">🎧 Luisterhoek <small>listening corner</small></h3>'
+        + '<div style="font-size:14px;margin-bottom:6px">Luister naar een korte tekst en beantwoord drie vragen. Niveau <b>'+L+'</b>.<br><small style="opacity:.8">Listen to a short text and answer three questions. Level '+L+'. The voice comes from your device.</small></div>'
+        + (hkNlVoice() ? '' : '<div class="note">Dit apparaat heeft (nog) geen Nederlandse stem; je kunt de teksten wel lezen. <small>No Dutch voice found on this device.</small></div>')
+        + list.map((t,i)=>'<button class="btn" style="display:block;width:100%;margin:5px 0;min-height:52px;text-align:left" onclick="hkLiOpen('+i+')">'+(d[t.id]!==undefined ? (d[t.id]>=3?"✅ ":"☑️ ") : "🎧 ")+esc(t.t)+' <small style="opacity:.7">'+(d[t.id]!==undefined?"beste: "+d[t.id]+"/3":"")+'</small></button>').join("");
+    }
+    return '<div data-hk-keep>'+body+'</div>';
+  }
+  CASTRA_MENU_ITEMS.push({ id:"luisteren", la:"Luisterhoek", nl:"listen to short texts" });
+  CASTRA_MENU_ICON.luisteren = "🎧";
+  { const mv4 = window.castraMenuView; window.castraMenuView = function(id){ return id==="luisteren" ? hkLuisterHTML() : mv4.apply(this, arguments); }; }
+  { const pick4 = window.castraMenuPick; window.castraMenuPick = function(id){ hkLiStop(); if(id==="luisteren") HK_LI = { mode:"list" }; return pick4.apply(this, arguments); }; }
+
   // Heldenkamp heeft geen docentoverzicht en geen Firebase: opzoekingen blijven lokaal in CASTRA.help.
   window.castraHelpSync = function(){};
 })();
