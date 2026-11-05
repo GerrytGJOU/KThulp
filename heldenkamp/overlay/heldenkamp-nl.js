@@ -613,6 +613,64 @@
   { const mv5 = window.castraMenuView; window.castraMenuView = function(id){ return id==="schrijven" ? hkSchrijfHTML() : mv5.apply(this, arguments); }; }
   { const pick5 = window.castraMenuPick; window.castraMenuPick = function(id){ if(id==="schrijven") HK_WR = { mode:"list" }; return pick5.apply(this, arguments); }; }
 
+  /* ---- Oefenhoek: Nederland (KNM), woordvolgorde en "Wat zeg je?" — meerkeuzeoefeningen per niveau met uitleg ---- */
+  const HK_OEF = { knm:/*HK_KNM*/{}, volgorde:/*HK_VOLGORDE*/{}, gesprek:/*HK_GESPREK*/{} };
+  const HK_OEF_MODES = [
+    { id:"knm", icon:"🇳🇱", t:"Nederland (KNM)", en:"Knowing the Netherlands", d:"Vragen over wonen, werken, zorg en de overheid. Regels kunnen veranderen: controleer belangrijke zaken op rijksoverheid.nl.", de:"Questions about living, working, healthcare and government. Rules can change: check important matters on rijksoverheid.nl." },
+    { id:"volgorde", icon:"🔀", t:"Woordvolgorde", en:"Word order", d:"Kies de zin met de juiste woordvolgorde.", de:"Choose the sentence with the correct word order." },
+    { id:"gesprek", icon:"💬", t:"Wat zeg je?", en:"What do you say?", d:"Kies wat je in deze situatie het beste kunt zeggen.", de:"Choose what to say in this situation." }
+  ];
+  let HK_OF = { mode:"hub" };
+  const hkOfTotal = () => { try{ return JSON.parse(localStorage.getItem("oefenDone") || "{}"); }catch(e){ return {}; } };
+  window.hkOfHub = function(){ HK_OF = { mode:"hub" }; castraMenuRender(); };
+  window.hkOfStart = function(kind){
+    const L = hkLevel(), i = HK_LV.indexOf(L), map = HK_OEF[kind] || {};
+    const pool = (map[L]||[]).concat(map[L]||[], i>0 ? (map[HK_LV[i-1]]||[]) : []).sort(()=>Math.random()-0.5);
+    const seen = new Set(), items = pool.filter(x=>{ if(seen.has(x.q+x.o[0])) return false; seen.add(x.q+x.o[0]); return true; }).slice(0,5);
+    if(!items.length){ HK_OF = { mode:"hub" }; castraMenuRender(); return; }
+    HK_OF = { mode:"quiz", kind, items, qi:0, picked:null, score:0, order:items.map(q=>q.o.map((_,k)=>k).sort(()=>Math.random()-0.5)) };
+    castraMenuRender();
+  };
+  window.hkOfPick = function(k){ const R = HK_OF; if(R.mode!=="quiz" || R.picked!==null) return; R.picked = k; if(k===R.items[R.qi].a) R.score++; castraMenuRender(); };
+  window.hkOfNext = function(){
+    const R = HK_OF;
+    if(R.qi >= R.items.length-1){
+      R.mode = "done"; R.xp = 0;
+      const L = hkLevel(), w = CASTRA.wday || (CASTRA.wday = {}), key = "oefen_"+R.kind;
+      if(R.score >= 3 && w[key]!==castraWDay()){ w[key] = castraWDay(); R.xp = ({A1:3,A2:4,B1:5}[L]||3) * R.score; castraPxpAdd(R.xp, "Geoefend"); }
+      hkRecord(R.score, R.items.length);
+      const d = hkOfTotal(); d[R.kind] = (d[R.kind]||0) + 1; try{ localStorage.setItem("oefenDone", JSON.stringify(d)); }catch(e){}
+    } else { R.qi++; R.picked = null; }
+    castraMenuRender();
+  };
+  function hkOefenHTML(){
+    const R = HK_OF, btn = "min-height:46px", L = hkLevel();
+    let body;
+    if(R.mode==="quiz"){
+      const m = HK_OEF_MODES.find(x=>x.id===R.kind), q = R.items[R.qi], order = R.order[R.qi], picked = R.picked!==null;
+      body = '<h3 style="margin:0 0 4px">'+m.icon+' '+esc(m.t)+' <small>'+L+'</small></h3><div style="opacity:.8">Vraag '+(R.qi+1)+' van '+R.items.length+'</div>'
+        + '<div style="font-size:19px;margin:8px 0 2px">'+esc(q.q)+'</div>' + (q.qen ? '<div class="hk-en" style="font-size:12px;opacity:.75;margin-bottom:6px">'+esc(q.qen)+'</div>' : '')
+        + order.map(k=>{ const ok = k===q.a, sel = R.picked===k;
+            return '<button class="btn '+(picked&&ok?"btn-gold":"")+'" '+(picked?"disabled":"")+' style="display:block;width:100%;margin:5px 0;min-height:48px;font-size:16px;text-align:left;'+(picked&&sel&&!ok?"opacity:.55;text-decoration:line-through":"")+'" onclick="hkOfPick('+k+')">'+esc(q.o[k])+'</button>'; }).join("")
+        + (picked ? '<div class="note" style="margin-top:6px">'+(R.picked===q.a?"✔ ":"✘ ")+esc(q.u)+'<br><small style="opacity:.8">'+esc(q.e)+'</small></div><button class="btn btn-gold" style="'+btn+';margin-top:6px" onclick="hkOfNext()">'+(R.qi>=R.items.length-1?"Uitslag":"Volgende")+'</button>' : '');
+    } else if(R.mode==="done"){
+      const m = HK_OEF_MODES.find(x=>x.id===R.kind);
+      body = '<h3 style="margin:0 0 6px">'+m.icon+' '+esc(m.t)+'</h3><div style="font-size:20px">Score: <b>'+R.score+' / '+R.items.length+'</b></div>'
+        + (R.xp ? '<div class="note">🎖️ +'+R.xp+' XP (eenmaal per dag) <small>· XP once a day</small></div>' : '<div class="note">'+(R.score>=3 ? "Vandaag al XP gekregen voor dit onderdeel." : "Minstens 3 goed voor XP.")+'</div>')
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-gold" style="'+btn+'" onclick="hkOfStart(\''+R.kind+'\')">Nog een ronde</button><button class="btn" style="'+btn+'" onclick="hkOfHub()">Andere oefening</button></div>';
+    } else {
+      const d = hkOfTotal();
+      body = '<h3 style="margin:0 0 6px">🧩 Oefenhoek <small>practice corner</small></h3>'
+        + '<div style="font-size:14px;margin-bottom:6px">Kies een oefening. Niveau <b>'+L+'</b>.<br><small style="opacity:.8">Choose an exercise. Level '+L+'.</small></div>'
+        + HK_OEF_MODES.map(m=>'<button class="btn" style="display:block;width:100%;margin:6px 0;min-height:64px;text-align:left" data-k="'+m.id+'" onclick="hkOfStart(this.dataset.k)">'+m.icon+' <b>'+esc(m.t)+'</b> <small>'+esc(m.en)+'</small><br><small style="opacity:.8">'+esc(m.d)+'</small><br><small style="opacity:.65">'+esc(m.de)+'</small>'+(d[m.id] ? '<br><small style="opacity:.6">'+d[m.id]+' rondes gedaan</small>' : '')+'</button>').join("");
+    }
+    return '<div data-hk-keep>'+body+'</div>';
+  }
+  CASTRA_MENU_ITEMS.push({ id:"oefenen", la:"Oefenhoek", nl:"more exercises" });
+  CASTRA_MENU_ICON.oefenen = "🧩";
+  { const mv6 = window.castraMenuView; window.castraMenuView = function(id){ return id==="oefenen" ? hkOefenHTML() : mv6.apply(this, arguments); }; }
+  { const pick6 = window.castraMenuPick; window.castraMenuPick = function(id){ if(id==="oefenen") HK_OF = { mode:"hub" }; return pick6.apply(this, arguments); }; }
+
   // Heldenkamp heeft geen docentoverzicht en geen Firebase: opzoekingen blijven lokaal in CASTRA.help.
   window.castraHelpSync = function(){};
 })();

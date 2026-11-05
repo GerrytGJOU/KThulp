@@ -114,3 +114,9 @@ en per opdracht reguliere uitdrukkingen (aanhef, afsluiting, onderdelen); daarna
 XP eenmaal per dag als alle controles slagen. De app beoordeelt géén grammatica of spelling. De voorbeeldteksten moeten hun eigen
 controles halen (gecontroleerd met een testscript; houd dat zo bij wijzigingen). Het tekstvak stopt toetsen (`stopPropagation`) zodat
 de spelbesturing (WASD) niet meeleest.
+
+## Oefenhoek (KNM, woordvolgorde, "Wat zeg je?")
+Menu ☰ → "Oefenhoek": `overlay/knm-a1|a2|b1.json` (Nederland: 10 + 13 + 14 vragen), `volgorde-…` (woordvolgorde: 8 per niveau) en `gesprek-…`
+(gesprekssituaties: 6 per niveau). Item: `{q, qen, o:[3], a:0, u:uitleg NL, e:uitleg EN}` (juist antwoord staat op index 0, opties worden geschud).
+Ronde van 5 vragen, XP eenmaal per dag per onderdeel bij ≥ 3 goed, telt mee voor doorstromen. KNM-feiten alleen vaste, algemeen bekende zaken
+(112, BSN, DigiD, leerplicht vanaf 5 jaar, stemmen vanaf 18, Koningsdag 27 april, enz.); controleer bij wijzigingen op rijksoverheid.nl.

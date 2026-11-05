@@ -1,0 +1,10 @@
+[
+{"q":"Welke zin is goed?","qen":"Which sentence is correct?","o":["Ik drink koffie.","Ik koffie drink.","Koffie ik drink."],"a":0,"u":"In een gewone zin staat het werkwoord op plaats 2: Ik drink koffie.","e":"In a normal sentence the verb is in second position: Ik drink koffie."},
+{"q":"Welke zin is goed?","qen":"Which sentence is correct?","o":["Morgen ga ik naar school.","Morgen ik ga naar school.","Ik morgen ga naar school."],"a":0,"u":"Begin je met 'morgen', dan komt het werkwoord direct daarna: Morgen ga ik.","e":"If you start with 'morgen', the verb comes right after: Morgen ga ik."},
+{"q":"Welke zin is goed?","qen":"Which sentence is correct?","o":["Wij wonen in Utrecht.","Wij in Utrecht wonen.","In Utrecht wij wonen."],"a":0,"u":"Het werkwoord staat op plaats 2: Wij wonen in Utrecht.","e":"The verb is in second position: Wij wonen in Utrecht."},
+{"q":"Welke vraag is goed?","qen":"Which question is correct?","o":["Waar woon jij?","Waar jij woon?","Jij waar woon?"],"a":0,"u":"Na het vraagwoord komt het werkwoord: Waar woon jij?","e":"After the question word comes the verb: Waar woon jij?"},
+{"q":"Welke vraag is goed?","qen":"Which question is correct?","o":["Heb je een auto?","Je een auto heb?","Heb een auto je?"],"a":0,"u":"Bij een ja/nee-vraag begint de zin met het werkwoord: Heb je ...?","e":"A yes/no question starts with the verb: Heb je ...?"},
+{"q":"Welke zin is goed?","qen":"Which sentence is correct?","o":["Ik wil graag koffie.","Ik koffie wil graag.","Ik graag wil koffie."],"a":0,"u":"Ik wil graag koffie: het werkwoord staat op plaats 2.","e":"Ik wil graag koffie: the verb is in second position."},
+{"q":"Welke zin is goed?","qen":"Which sentence is correct?","o":["Hij werkt elke dag.","Hij elke dag werkt.","Elke dag hij werkt."],"a":0,"u":"Werkwoord op plaats 2: Hij werkt elke dag.","e":"Verb in second position: Hij werkt elke dag."},
+{"q":"Welke zin is goed?","qen":"Which sentence is correct?","o":["Mijn zus heeft een hond.","Mijn zus een hond heeft.","Een hond mijn zus heeft."],"a":0,"u":"Onderwerp, dan het werkwoord: Mijn zus heeft een hond.","e":"Subject, then the verb: Mijn zus heeft een hond."}
+]
