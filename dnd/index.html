@@ -171,7 +171,14 @@ auth.onAuthStateChanged(async u=>{
 });
 function showLogin(){
   main.innerHTML='<div class="center"><p>Alleen voor Gerben en Maurits.</p><button class="b" id="gl">Inloggen met Google</button><p class="err">'+esc(window._loginErr||'')+'</p></div>';
-  $('#gl').onclick=()=>auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+  $('#gl').onclick=async()=>{
+    const p=new firebase.auth.GoogleAuthProvider();
+    try{ await auth.signInWithPopup(p); }   // popup werkt ook als de browser opslag van derden blokkeert
+    catch(e){
+      if(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment'){ auth.signInWithRedirect(p); }
+      else if(e.code!=='auth/popup-closed-by-user'&&e.code!=='auth/cancelled-popup-request'){ window._loginErr=e.code+': '+e.message; showLogin(); }
+    }
+  };
 }
 function showNoAccess(u,extra){
   main.innerHTML='<div class="center"><p><b>Geen toegang.</b></p><p>Je bent ingelogd als '+esc(u.email||'')+'.<br>Stuur dit UID naar Gerben:</p><pre>'+esc(u.uid)+'</pre><p class="err">'+esc(extra||'')+'</p><button class="b alt" id="lo">Uitloggen</button></div>';
