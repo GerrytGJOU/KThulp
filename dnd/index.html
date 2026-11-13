@@ -616,6 +616,7 @@ Regels:
 - Documenten in CANON die als DM-geheim of "NIET LEZEN ALS SPELER" gemarkeerd zijn, gebruik je voor planning, maar je onthult of citeert ze nooit letterlijk; laat geheimen alleen via het spel zelf blijken.
 - Is de ACTUELE STAND nog leeg ({}), begin dan met een statePatch die de beginsituatie uit D1 Wereldstatus / STAND #1 in canon overneemt. Een PC zonder uitgewerkt personage (zoals PC2 zolang B2 ontbreekt) speel je niet; vraag die speler eerst zijn personage te beschrijven.
 - Portretten: "speakers" = de namen van maximaal 2 NPC's die in deze beurt spreken of centraal staan. Gebruik EXACT de naam uit de lijst BEKENDE NPC'S als de NPC daar al in staat. "newNpcs" = elke NPC die in deze beurt voor het eerst optreedt en NIET in die lijst staat, met "visual": een concrete Engelse beschrijving voor een portret (soort/leeftijd, postuur, gezicht, huid, haar en baard, ogen, littekens, elk kledingstuk met kleur en materiaal, zichtbare uitrusting, uitdrukking). Voor figuren uit Tolkiens boeken: beschrijf zoals in de boeken. Geen geheimen in "visual".
+- Houd de Stand compact: korte zinnen, geen herhaling van canon, verwijder afgehandelde opdrachten en vertrokken NPC's (null), hoogstens ongeveer 3 kennispunten per PC.
 - Worpen: zet ALLE worpen die je zelf doet of verwerkt (NPC's, vijanden, companions en de worpen die de spelers meldden) in "rolls" ({"who":"Orc 1","what":"Attack Roll","natural":14,"mod":5,"total":19,"result":"Hit"}; bij schade {"who","what":"Damage","dice":"1d8+3","total":9}). De app toont ze als chips: schrijf ze dus NIET ook nog eens als haakjes in de vertelling, en toon nooit de DC. Vertel alleen het gevolg. Verwerk een nat 20 of nat 1 als klein extra gevolg in de vertelling.
 - Spelerworpen komen binnen als "[worp: Perception: 14 + 2 = 16]": het totaal is al uitgerekend met het karakterblad, reken niet opnieuw. Vraag je om een check, benoem dan de skill of save duidelijk (bv. "Perception", "Strength Saving Throw").
 - Gevecht: zet "initiative" in de Stand met "active" = wie nu aan de beurt is en "order" met naam, init en enemy:true voor vijanden; werk "active" bij elke beurt bij en zet initiative op null zodra het gevecht voorbij is.
@@ -629,12 +630,12 @@ function rollDice(){
   const r=(s,n)=>Array.from({length:n},()=>1+crypto.getRandomValues(new Uint32Array(1))[0]%s);
   return {d20:r(20,20),d12:r(12,6),d10:r(10,6),d8:r(8,8),d6:r(6,10),d4:r(4,6)};
 }
-async function callGemini(sys,user,retryNote,json){
-  const model=cfg.model||'gemini-2.5-flash';
+async function callGemini(sys,user,retryNote,json,modelOverride){
+  const model=modelOverride||cfg.model||'gemini-2.5-flash';
   const body={
     systemInstruction:{parts:[{text:sys}]},
     contents:[{role:'user',parts:[{text:user+(retryNote?'\n\nLET OP: je vorige antwoord was ongeldig ('+retryNote+'). Antwoord nu met geldige JSON.':'')}]}],
-    generationConfig:Object.assign(json===false?{}:{responseMimeType:'application/json'},{temperature:cfg.temperature!=null?Number(cfg.temperature):0.9,thinkingConfig:{thinkingBudget:0}})
+    generationConfig:Object.assign(json===false?{}:{responseMimeType:'application/json'},{temperature:cfg.temperature!=null?Number(cfg.temperature):0.9,maxOutputTokens:json===false?700:2500,thinkingConfig:{thinkingBudget:0}})
   };
   const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',{
     method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':cfg.geminiKey},body:JSON.stringify(body)});
@@ -668,7 +669,7 @@ async function resolve(retry){
     if(retry) await db.ref(cp('turn',C)).update({status:'resolving',resolvingSince:Date.now(),lastError:null});
     const t=(await db.ref(cp('turn',C)).get()).val();
     const round=t.round;
-    const [pS,sS,cS,mS,lS,smS,meS,cfS]=await Promise.all(['pending','state','canon','messages','log','summaries','memories'].map(k=>db.ref(cp(k,C)).get()).concat([db.ref('dnd/config').get()]));
+    const [pS,sS,cS,mS,lS,smS,meS,cfS]=await Promise.all(['pending','state','canon','messages','log','summaries','memories'].map(k=>{let r=db.ref(cp(k,C)); if(k==='messages'||k==='log') r=r.limitToLast(40); return r.get();}).concat([db.ref('dnd/config').get()]));
     cfg=cfS.val()||cfg;
     if(!cfg.geminiKey) throw new Error('Geen Gemini-sleutel ingesteld (⚙ in het menu).');
     const pendE=Object.entries(pS.val()||{}).filter(([k,p])=>p.round===round);
@@ -677,16 +678,17 @@ async function resolve(retry){
     pl[me.uid]=me.name; db.ref(cp('players/'+me.uid,C)).set(me.name);
     const allNames=[...new Set(Object.values(pl))];
     const state=JSON.parse(sS.val()||'{}');
-    const canonTxt=Object.values(cS.val()||{}).map(d=>'### '+d.title+'\n'+d.text).join('\n\n');
+    const first=!Object.keys(state).length;
+    const canonTxt=Object.values(cS.val()||{}).filter(d=>!d.off&&(!d.opening||first)).map(d=>'### '+d.title+'\n'+d.text).join('\n\n');
     const recent=[];mS.forEach(c=>{recent.push(c.val())});
-    const hist=recent.slice(-30).filter(m=>m.type!=='system').map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
+    const hist=recent.slice(-20).filter(m=>m.type!=='system').map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
     const logs=[];lS.forEach(c=>{logs.push(c.val())});
     const sums=[]; smS.forEach(c=>{sums.push(c.val().text)});
     const mems=[]; meS.forEach(c=>{mems.push('- '+c.val().text)});
     const sheets=allChars().filter(c=>c.player).map(sheetText).join('\n\n');
     const npcNames=Object.values(npcs).filter(n=>!n.forPlayer).map(n=>n.name);
     const user=
-`# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# KARAKTERBLADEN (rekenkundig leidend; de Stand heeft de actuele HP)\n${sheets||'(geen)'}\n\n# LOGBOEK (laatste 60)\n${logs.slice(-60).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
+`# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# KARAKTERBLADEN (rekenkundig leidend; de Stand heeft de actuele HP)\n${sheets||'(geen)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# LOGBOEK (laatste 40)\n${logs.slice(-40).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
     let out,usage,note=null;
     for(let i=0;i<2;i++){
       const r=await callGemini(SYSTEM,user,note);usage=r.usage;
@@ -708,7 +710,7 @@ async function resolve(retry){
     const sj=JSON.stringify(newState), rk=String(round+1).padStart(5,'0');
     up[cp('state',C)]=sj;
     up[cp('stands/'+rk,C)]={json:sj,round:round+1,t:now,undo:{prevState:sS.val()||'{}',turn:t,pend:pendE.map(([k,p])=>({uid:k,...p})),msgs:msgKeys,logs:logKeys}};
-    up[cp('usage/'+rk,C)]={prompt:usage.promptTokenCount||0,out:usage.candidatesTokenCount||0,model:cfg.model||'gemini-2.5-flash'};
+    up[cp('usage/'+rk,C)]={prompt:usage.promptTokenCount||0,cached:usage.cachedContentTokenCount||0,out:usage.candidatesTokenCount||0,model:cfg.model||'gemini-2.5-flash'};
     up[cp('pending',C)]=null;
     up['dnd/campaignIndex/'+C+'/lastPlayed']=now;
     up['dnd/campaignIndex/'+C+'/round']=round+1;
@@ -882,7 +884,7 @@ async function summarize(C,upTo,force){
   ms.forEach(c=>{const m=c.val(); if(m.type!=='system'&&m.round>covered&&m.round<=upTo) list.push(m)});
   if(list.length<4) return false;
   const text=list.map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
-  const r=await callGemini(SUMSYS,'# EERDERE SAMENVATTING\n'+(prev.join('\n')||'(geen)')+'\n\n# NIEUWE BERICHTEN\n'+text,null,false);
+  const r=await callGemini(SUMSYS,'# EERDERE SAMENVATTING\n'+(prev.join('\n')||'(geen)')+'\n\n# NIEUWE BERICHTEN\n'+text,null,false,cfg.summaryModel||'gemini-2.5-flash-lite');
   await db.ref(cp('summaries/'+String(upTo).padStart(5,'0'),C)).set({fromRound:covered+1,toRound:upTo,text:r.txt.trim(),t:Date.now()});
   return true;
 }
@@ -1135,18 +1137,22 @@ function renderCanon(){
   if(screen!=='camp') return;
   const box=$('#canonbox');
   const ids=Object.keys(canon);
-  box.innerHTML=BACK+`<p><small>Canon = spelregels, personages, wereld. Je maakt dit met ChatGPT/Claude; hier plak of upload je het. Gemini krijgt alle documenten bij elke beurt.</small></p>`+
-  ids.map(id=>'<div class="card"><h3>'+esc(canon[id].title)+'</h3><small>'+canon[id].text.length+' tekens</small><div class="row" style="margin-top:6px"><button class="b alt sm" data-e="'+id+'">Bewerk</button><button class="b red sm" data-d="'+id+'">Wis</button></div></div>').join('')+
+  box.innerHTML=BACK+`<p><small>Canon = spelregels, personages, wereld. Je maakt dit met ChatGPT/Claude; hier plak of upload je het. Gemini krijgt de documenten met "Meesturen" aan bij elke beurt ("Alleen opening" = alleen bij de allereerste beurt). Minder tekst = minder tokens en lagere kosten.</small></p><p><small id="canontot"></small></p>`+
+  ids.map(id=>'<div class="card"><h3>'+esc(canon[id].title)+'</h3><small>'+canon[id].text.length+' tekens</small><div class="row" style="margin-top:4px"><label style="font-size:13px"><input type="checkbox" data-cf="'+id+'"'+(canon[id].off?'':' checked')+'> Meesturen</label><label style="font-size:13px"><input type="checkbox" data-co="'+id+'"'+(canon[id].opening?' checked':'')+'> Alleen opening</label></div><div class="row" style="margin-top:6px"><button class="b alt sm" data-e="'+id+'">Bewerk</button><button class="b red sm" data-d="'+id+'">Wis</button></div></div>').join('')+
   `<h2>Nieuw / overschrijven</h2><input type="text" id="ctitle" placeholder="Titel (zelfde titel = overschrijven)"><br><br>
   <textarea id="ctext" style="min-height:140px" placeholder="Plak hier de tekst (Markdown)"></textarea>
   <div class="row" style="margin-top:6px"><label class="b alt" for="cfile">Kies bestand (.md/.txt)</label><input type="file" id="cfile" class="vh" accept=".md,.txt,.json,text/*"><button class="b" id="csave">Opslaan</button></div>`;
+  const tot=ids.filter(i=>!canon[i].off&&!canon[i].opening).reduce((a,i)=>a+canon[i].text.length,0);
+  $('#canontot').textContent='Vast meegestuurd: '+tot+' tekens (ongeveer '+Math.round(tot/3.6)+' tokens) per beurt.';
+  box.querySelectorAll('[data-cf]').forEach(c=>c.onchange=()=>db.ref(cp('canon/'+c.dataset.cf+'/off')).set(c.checked?null:true));
+  box.querySelectorAll('[data-co]').forEach(c=>c.onchange=()=>db.ref(cp('canon/'+c.dataset.co+'/opening')).set(c.checked?true:null));
   box.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{$('#ctitle').value=canon[b.dataset.e].title;$('#ctext').value=canon[b.dataset.e].text;$('#ctext').scrollIntoView()});
   box.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{if(confirm('Document wissen?'))db.ref(cp('canon/'+b.dataset.d)).remove()});
   $('#cfile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$('#ctext').value=r.result;if(!$('#ctitle').value)$('#ctitle').value=f.name.replace(/\.[^.]+$/,'')};r.readAsText(f)};
   $('#csave').onclick=async()=>{
     const t=$('#ctitle').value.trim(),x=$('#ctext').value;
     if(!t||!x.trim()){alert('Titel en tekst invullen.');return}
-    await db.ref(cp('canon/'+slug(t))).set({title:t,text:x,t:Date.now()});
+    await db.ref(cp('canon/'+slug(t))).set(Object.assign({},canon[slug(t)]||{},{title:t,text:x,t:Date.now()}));
   };
 }
 
@@ -1155,18 +1161,19 @@ function renderSet(){
   const box=$('#setbox'); if(!box) return;
   if(box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT') return;
   box.innerHTML=(screen==='camp'?BACK:'')+`<div class="card"><h3>Gemini (de DM)</h3>
-  <label>Model</label><input type="text" id="smodel"><br><br>
+  <label>Model (de DM)</label><input type="text" id="smodel"><br><br>
+  <label>Model voor samenvattingen (goedkoper)</label><input type="text" id="ssum"><br><br>
   <label>Temperatuur</label><input type="number" id="stemp" step="0.1" min="0" max="2"><br><br>
   <label>API-sleutel (gedeeld in de database; alleen jullie twee kunnen lezen)</label><input type="password" id="skey" placeholder="${cfg.geminiKey?'(ingesteld — leeg laten = ongewijzigd)':'plak hier'}"><br><br>
   <button class="b" id="ssave">Opslaan</button></div>
   ${screen==='camp'?'<div class="card"><h3>Verbruik (dit verhaal)</h3><div id="usage">…</div></div>':''}`;
-  $('#smodel').value=cfg.model||'gemini-2.5-flash';$('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
+  $('#smodel').value=cfg.model||'gemini-2.5-flash';$('#ssum').value=cfg.summaryModel||'gemini-2.5-flash-lite';$('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
   $('#ssave').onclick=async()=>{
-    const u={model:$('#smodel').value.trim()||'gemini-2.5-flash',temperature:Number($('#stemp').value)||0.9};
+    const u={model:$('#smodel').value.trim()||'gemini-2.5-flash',summaryModel:$('#ssum').value.trim()||'gemini-2.5-flash-lite',temperature:Number($('#stemp').value)||0.9};
     if($('#skey').value.trim()) u.geminiKey=$('#skey').value.trim();
     await db.ref('dnd/config').update(u);alert('Opgeslagen.');
   };
-  if(screen==='camp'){const C=cid;db.ref(cp('usage',C)).limitToLast(10).get().then(s=>{let h='';s.forEach(c=>{const v=c.val();h='<div><small>Ronde '+Number(c.key)+': '+v.prompt+' in / '+v.out+' uit</small></div>'+h});if($('#usage'))$('#usage').innerHTML=h||'—'})}
+  if(screen==='camp'){const C=cid;db.ref(cp('usage',C)).limitToLast(10).get().then(s=>{let h='';s.forEach(c=>{const v=c.val();h='<div><small>Ronde '+Number(c.key)+': '+v.prompt+' in'+(v.cached?' ('+v.cached+' uit cache)':'')+' / '+v.out+' uit</small></div>'+h});if($('#usage'))$('#usage').innerHTML=h||'—'})}
 }
 </script>
 </body>
