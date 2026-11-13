@@ -111,6 +111,20 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 #gamemain{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
 #side{display:none}
 @media(min-width:1000px){#side{display:block;width:340px;flex:none;overflow-y:auto;padding:10px 12px;border-left:1px solid rgba(200,162,74,.35);background:rgba(20,17,15,.6)}}
+.sh-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:6px;margin-bottom:10px}
+.sh-strip>div{background:rgba(32,27,23,.88);border-radius:8px;padding:6px 8px;text-align:center}
+.sh-strip small{display:block;color:var(--mute);font-size:11px}
+.sh-strip b{font-size:18px;color:var(--gold)}
+.sh-two{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:700px){.sh-two{grid-template-columns:1fr 1fr}}
+.rl{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:15px}
+.rl:hover,.rl.on{background:rgba(200,162,74,.18)}
+.rl b{color:var(--gold);min-width:38px;text-align:right}
+.rl small{color:var(--mute)}
+.sh-strip .rl{display:block;cursor:pointer}
+.sh-ed{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:6px 0}
+.sh label{display:block}
+.rollpanel{position:sticky;bottom:6px;border:1px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.6)}
 input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 .vh{position:absolute!important;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
 </style>
@@ -140,7 +154,7 @@ const main=$('#main');
 /* ---------- toestand ---------- */
 let me=null;                 // {uid,name}
 let screen='menu', cid=null; // menu of campagne
-let cfg={}, npcs={}, locs={}, index={}; let sceneKey='', editKey=null, editDraft='', lastSide='';              // globaal
+let cfg={}, npcs={}, locs={}, chars={}, index={}; let sceneKey='', editKey=null, editDraft='', lastSide='';              // globaal
 let turn=null, canon={}, msgs=[], oocs=[], pending={}, stateStr="{}"; // per campagne
 let tab='game', draft="", rollDraft="";
 let listeners=[];
@@ -231,6 +245,7 @@ function startApp(){
   if(started) return; started=true;
   db.ref('dnd/config').on('value',s=>{cfg=s.val()||{};if(screen==='menu'||tab==='set')renderSet()});
   db.ref('dnd/npcs').on('value',s=>{npcs=s.val()||{};renderNpcs();if(screen==='camp')renderGame()});
+  db.ref('dnd/characters').on('value',s=>{chars=s.val()||{}; if(!sheetEdit){ if(screen==='menu'&&menuView==='chars') renderSheet($('#sheetbox')); else if(screen==='camp'&&tab==='sheet') renderSheetTab(); } if(screen==='camp') renderGame();});
   db.ref('dnd/locations').on('value',s=>{locs=s.val()||{};renderNpcs();if(screen==='camp')renderGame()});
   db.ref('dnd/campaignIndex').on('value',s=>{index=s.val()||{};renderIndex()});
   $('#topback').onclick=()=>showMenu('home');
@@ -257,6 +272,7 @@ function showMenu(view){
   leaveCampaign(); screen='menu'; menuView=view; updateBack();
   if(view==='npcs') return menuNpcs();
   if(view==='set') return menuSet();
+  if(view==='chars') return menuChars();
   main.innerHTML=`<div class="scroll">
   <div class="card">
     <button class="b" id="goon" style="width:100%;font-size:19px;padding:14px">▶ Ga verder</button>
@@ -266,11 +282,13 @@ function showMenu(view){
   </div>
   <h2>Savegames</h2><div id="savelist"></div>
   <div class="row" style="margin-top:14px"><button class="b alt" id="tonpcs" style="flex:1">🖼 Portretten &amp; NPC's</button><button class="b alt" id="toset" style="flex:1">⚙ Instellingen</button></div>
+  <div class="row" style="margin-top:8px"><button class="b alt" id="tochars" style="flex:1">🧾 Karakterblad</button></div>
   </div>`;
   $('#goon').onclick=()=>{const id=latestId(); if(id) enterCampaign(id)};
   $('#newst').onclick=newStoryForm;
   $('#tonpcs').onclick=()=>showMenu('npcs');
   $('#toset').onclick=()=>showMenu('set');
+  $('#tochars').onclick=()=>showMenu('chars');
   renderIndex();
 }
 function backBar(title){return '<div class="row" style="margin-bottom:8px"><button class="b alt sm" id="back">‹ Menu</button><h2 style="margin:0">'+title+'</h2></div>'}
@@ -399,6 +417,7 @@ function enterCampaign(id){
   <section class="tab" id="t-game"><div id="gamewrap"><div id="gamemain"><div id="scenebar"></div><div id="partybar"></div><div id="initbar"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></div><aside id="side"></aside></div></section>
   <section class="tab" id="t-ooc"><div class="scroll" id="oocthread"></div><div class="compose"><div class="row"><input type="text" id="oocin" placeholder="Praat met je broer (de DM leest dit niet)" style="flex:1"><button class="b" id="oocsend">Stuur</button></div></div></section>
   <section class="tab" id="t-diary"><div class="scroll" id="diarybox"></div></section>
+  <section class="tab" id="t-sheet"><div class="scroll" id="sheetbox"></div></section>
   <section class="tab" id="t-more"><div class="scroll" id="morebox"></div></section>
   <section class="tab" id="t-stand"><div class="scroll" id="standbox"></div></section>
   <section class="tab" id="t-canon"><div class="scroll" id="canonbox"></div></section>
@@ -422,15 +441,15 @@ function enterCampaign(id){
 function setTab(t){
   tab=t;
   document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id==='t-'+t));
-  const navT=(t==='stand'||t==='canon'||t==='set')?'more':t;
+  const navT=(t==='stand'||t==='canon'||t==='set'||t==='sheet')?'more':t;
   document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.t===navT));
-  ({game:renderGame,ooc:renderOoc,diary:renderDiary,more:renderMore,stand:renderStand,canon:renderCanon,set:renderSet})[t]();
+  ({game:renderGame,ooc:renderOoc,diary:renderDiary,more:renderMore,sheet:renderSheetTab,stand:renderStand,canon:renderCanon,set:renderSet})[t]();
 }
 document.addEventListener('click',e=>{const g=e.target.closest('[data-goto]'); if(g&&screen==='camp') setTab(g.dataset.goto)});
 const BACK='<button class="b alt sm" data-goto="more" style="margin-bottom:8px">‹ Meer</button>';
 function renderMore(){
   if(screen!=='camp') return;
-  $('#morebox').innerHTML='<button class="b alt more-btn" data-goto="stand">📜 Stand en versies</button><button class="b alt more-btn" data-goto="canon">📚 Canon (documenten)</button><button class="b alt more-btn" data-goto="set">⚙ Instellingen en verbruik</button>';
+  $('#morebox').innerHTML='<button class="b alt more-btn" data-goto="sheet">🧾 Karakterblad (en je worp uitrekenen)</button><button class="b alt more-btn" data-goto="stand">📜 Stand en versies</button><button class="b alt more-btn" data-goto="canon">📚 Canon (documenten)</button><button class="b alt more-btn" data-goto="set">⚙ Instellingen en verbruik</button>';
 }
 
 /* ---------- spel ---------- */
@@ -473,7 +492,7 @@ function renderGame(){
   if(atBottom) th.scrollTop=th.scrollHeight;
 
   const sb=$('#statusbar'), cpz=$('#compose');
-  const keepDraft=document.activeElement&&document.activeElement.id==='act';
+  const cEl=$('#compose'); const keepDraft=!!(cEl&&document.activeElement&&cEl!==document.activeElement&&cEl.contains(document.activeElement));
   if(!turn){
     sb.innerHTML='Nog geen campagne gestart.';
     cpz.innerHTML='<button class="b" id="startc">Start campagne (DM opent het verhaal)</button>';
@@ -506,13 +525,13 @@ function renderGame(){
   if(!myTurn&&!mine){ cpz.innerHTML=others.length?'<small>Niet jouw beurt.</small>':''; return; }
   if(!keepDraft){
     cpz.innerHTML=`<textarea id="act" placeholder="Wat doe je?"></textarea>
-    <div class="row"><input type="text" id="roll" placeholder="Worp (bv. nat 14 +3)" style="flex:1;min-width:120px"></div>
+    ${rollRowHtml()}
     <div class="row"><button class="b" id="send">${mine?'Actie aanpassen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button>
     ${others.length?'<button class="b alt" id="skip">Zonder '+esc(others.join(', '))+' verder</button>':''}</div>
     ${mine?'<small>Ingediend: '+esc(mine.text)+'</small>':''}`;
     if(!draft&&mine) draft=mine.text.replace(/\s*\[worp:[^\]]*\]/i,'');
-    $('#act').value=draft;$('#roll').value=rollDraft;
-    $('#act').oninput=e=>draft=e.target.value;$('#roll').oninput=e=>rollDraft=e.target.value;
+    $('#act').value=draft;
+    $('#act').oninput=e=>draft=e.target.value; wireRoll();
     $('#send').onclick=()=>submit(false);
     $('#pass').onclick=()=>submit(true);
     const sk=$('#skip'); if(sk) sk.onclick=skipOthers;
@@ -523,7 +542,7 @@ async function submit(pass){
   if(!text){alert('Typ eerst een actie.');return}
   const round=turn.round, full=text+(rollDraft.trim()&&!pass?'  [worp: '+rollDraft.trim()+']':'');
   await db.ref(cp('pending/'+me.uid)).set({round,name:me.name,text:full,pass:!!pass,t:Date.now()});
-  draft="";rollDraft="";
+  draft="";rollDraft="";rollKey=null;rollNat="";
   const ok=await removeAwaiting(me.name,round);
   if(ok==='resolve') resolve(false);
   else if(ok==='late') alert('Te laat: de ronde is al afgehandeld. Ververs de pagina.');
@@ -586,6 +605,7 @@ Regels:
 - Is de ACTUELE STAND nog leeg ({}), begin dan met een statePatch die de beginsituatie uit D1 Wereldstatus / STAND #1 in canon overneemt. Een PC zonder uitgewerkt personage (zoals PC2 zolang B2 ontbreekt) speel je niet; vraag die speler eerst zijn personage te beschrijven.
 - Portretten: "speakers" = de namen van maximaal 2 NPC's die in deze beurt spreken of centraal staan. Gebruik EXACT de naam uit de lijst BEKENDE NPC'S als de NPC daar al in staat. "newNpcs" = elke NPC die in deze beurt voor het eerst optreedt en NIET in die lijst staat, met "visual": een concrete Engelse beschrijving voor een portret (soort/leeftijd, postuur, gezicht, huid, haar en baard, ogen, littekens, elk kledingstuk met kleur en materiaal, zichtbare uitrusting, uitdrukking). Voor figuren uit Tolkiens boeken: beschrijf zoals in de boeken. Geen geheimen in "visual".
 - Worpen: zet ALLE worpen die je zelf doet of verwerkt (NPC's, vijanden, companions en de worpen die de spelers meldden) in "rolls" ({"who":"Orc 1","what":"Attack Roll","natural":14,"mod":5,"total":19,"result":"Hit"}; bij schade {"who","what":"Damage","dice":"1d8+3","total":9}). De app toont ze als chips: schrijf ze dus NIET ook nog eens als haakjes in de vertelling, en toon nooit de DC. Vertel alleen het gevolg. Verwerk een nat 20 of nat 1 als klein extra gevolg in de vertelling.
+- Spelerworpen komen binnen als "[worp: Perception: 14 + 2 = 16]": het totaal is al uitgerekend met het karakterblad, reken niet opnieuw. Vraag je om een check, benoem dan de skill of save duidelijk (bv. "Perception", "Strength Saving Throw").
 - Gevecht: zet "initiative" in de Stand met "active" = wie nu aan de beurt is en "order" met naam, init en enemy:true voor vijanden; werk "active" bij elke beurt bij en zet initiative op null zodra het gevecht voorbij is.
 - Locatie: geef "location" (name, description = 1-2 Nederlandse zinnen, visual = Engelse beschrijving voor een landschaps- of interieurillustratie) zodra de PC's op een andere plek zijn of een plek voor het eerst beschreven wordt; laat het anders weg. Houd inGame.location gelijk aan location.name.
 - HERINNERINGEN van de spelers zijn bindend en gaan voor op je eigen aannames.
@@ -651,9 +671,10 @@ async function resolve(retry){
     const logs=[];lS.forEach(c=>{logs.push(c.val())});
     const sums=[]; smS.forEach(c=>{sums.push(c.val().text)});
     const mems=[]; meS.forEach(c=>{mems.push('- '+c.val().text)});
+    const sheets=allChars().filter(c=>c.player).map(sheetText).join('\n\n');
     const npcNames=Object.values(npcs).filter(n=>!n.forPlayer).map(n=>n.name);
     const user=
-`# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# LOGBOEK (laatste 60)\n${logs.slice(-60).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
+`# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# KARAKTERBLADEN (rekenkundig leidend; de Stand heeft de actuele HP)\n${sheets||'(geen)'}\n\n# LOGBOEK (laatste 60)\n${logs.slice(-60).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
     let out,usage,note=null;
     for(let i=0;i<2;i++){
       const r=await callGemini(SYSTEM,user,note);usage=r.usage;
@@ -852,6 +873,213 @@ async function summarize(C,upTo,force){
   const r=await callGemini(SUMSYS,'# EERDERE SAMENVATTING\n'+(prev.join('\n')||'(geen)')+'\n\n# NIEUWE BERICHTEN\n'+text,null,false);
   await db.ref(cp('summaries/'+String(upTo).padStart(5,'0'),C)).set({fromRound:covered+1,toRound:upTo,text:r.txt.trim(),t:Date.now()});
   return true;
+}
+
+/* ---------- Karakterblad ---------- */
+const ABIL=[['str','Strength','STR'],['dex','Dexterity','DEX'],['con','Constitution','CON'],['int','Intelligence','INT'],['wis','Wisdom','WIS'],['cha','Charisma','CHA']];
+const SKILLS=[['acrobatics','Acrobatics','dex'],['animal handling','Animal Handling','wis'],['arcana','Arcana','int'],['athletics','Athletics','str'],['deception','Deception','cha'],['history','History','int'],['insight','Insight','wis'],['intimidation','Intimidation','cha'],['investigation','Investigation','int'],['medicine','Medicine','wis'],['nature','Nature','int'],['perception','Perception','wis'],['performance','Performance','cha'],['persuasion','Persuasion','cha'],['religion','Religion','int'],['sleight of hand','Sleight of Hand','dex'],['stealth','Stealth','dex'],['survival','Survival','wis']];
+const SKNL={atletiek:'athletics',waarneming:'perception',overleven:'survival',inzicht:'insight',intimidatie:'intimidation',intimideren:'intimidation',overtuigen:'persuasion',overtuigingskracht:'persuasion',heimelijkheid:'stealth',sluipen:'stealth',acrobatiek:'acrobatics',geschiedenis:'history',natuurkennis:'nature',onderzoek:'investigation',geneeskunde:'medicine',religie:'religion',bedrog:'deception',misleiden:'deception',optreden:'performance',vingervlugheid:'sleight of hand',dierenhandling:'animal handling',omgaan:'animal handling'};
+const ABNL={kracht:'str',behendigheid:'dex',lichaamsbouw:'con',conditie:'con',intelligentie:'int',wijsheid:'wis',charisma:'cha'};
+let sheetKey='', sheetRage=false, sheetRoll='', sheetEdit=false;
+let rollKey=null, rollNat='', rollRage=false;
+
+function amod(c,k){return Math.floor((((c.abilities||{})[k])||10)/2-5)}
+function pbOf(c){return Math.floor(((Number(c.level)||1)-1)/4)+2}
+function sgn(n){return (n>=0?'+':'−')+Math.abs(n)}
+function skillBonus(c,key,rage){
+  const s=SKILLS.find(x=>x[0]===key); if(!s) return 0;
+  let ab=s[2]; if(rage&&(c.rageSkills||[]).includes(key)) ab='str';
+  return amod(c,ab)+pbOf(c)*(((c.skills||{})[key])||0);
+}
+function myChar(){const l=allChars(); return l.find(c=>me&&c.player===me.name)||null}
+function allChars(){return Object.entries(chars).map(([k,v])=>({k,...v}))}
+function rollList(c,rage){
+  const pb=pbOf(c), out=[];
+  out.push({key:'init',group:'Initiative',label:'Initiative',bonus:amod(c,'dex')+(Number(c.initiativeBonus)||0)});
+  ABIL.forEach(([k,n,s])=>out.push({key:'abil:'+k,group:'Ability Check',label:n+' check',bonus:amod(c,k)}));
+  ABIL.forEach(([k,n,s])=>out.push({key:'save:'+k,group:'Saving Throw',label:n+' Saving Throw',bonus:amod(c,k)+((c.saves||[]).includes(k)?pb:0)}));
+  SKILLS.forEach(([k,n,a])=>out.push({key:'skill:'+k,group:'Skill',label:n,bonus:skillBonus(c,k,rage)}));
+  (c.attacks||[]).forEach((a,i)=>out.push({key:'atk:'+i,group:'Attack',label:(a.name||'Aanval')+' (attack)',bonus:amod(c,a.ability||'str')+(a.prof===false?0:pb)+(Number(a.extra)||0)}));
+  return out;
+}
+function findRoll(c,key,rage){return rollList(c,rage).find(r=>r.key===key)||null}
+function matchCheck(text){
+  const t=String(text||'').toLowerCase();
+  const abKey=w=>{const e=ABIL.find(a=>a[1].toLowerCase()===w); return e?e[0]:(ABNL[w]||'')};
+  let m=t.match(/(strength|dexterity|constitution|intelligence|wisdom|charisma|kracht|behendigheid|lichaamsbouw|conditie|intelligentie|wijsheid)\s*(?:\(?[a-z ]*\)?\s*)?(saving throw|saving|save|redding)/);
+  if(m){const k=abKey(m[1]); if(k) return 'save:'+k;}
+  if(/initiative|initiatief/.test(t)) return 'init';
+  for(const [k,n] of SKILLS){ if(t.includes(n.toLowerCase())) return 'skill:'+k; }
+  for(const w of Object.keys(SKNL)){ if(t.includes(w)) return 'skill:'+SKNL[w]; }
+  m=t.match(/(strength|dexterity|constitution|intelligence|wisdom|charisma|kracht|behendigheid|lichaamsbouw|intelligentie|wijsheid)\s*(check|test|proef)/);
+  if(m){const k=abKey(m[1]); if(k) return 'abil:'+k;}
+  return '';
+}
+function rollText(r,nat){const tot=nat+r.bonus; return r.label+': '+nat+' '+(r.bonus>=0?'+ ':'− ')+Math.abs(r.bonus)+' = '+tot;}
+
+/* --- in het spel: worp bij de actie --- */
+function rollRowHtml(){
+  const c=myChar();
+  if(!c) return '<div class="row"><input type="text" id="roll" placeholder="Worp (bv. nat 14 +3)" style="flex:1;min-width:120px"></div>';
+  if(rollKey===null){const req=turn&&turn.checks&&turn.checks[me.name]; rollKey=req?matchCheck(req):'';}
+  const list=rollList(c,rollRage), groups=[...new Set(list.map(r=>r.group))];
+  const opts=groups.map(g=>'<optgroup label="'+g+'">'+list.filter(r=>r.group===g).map(r=>'<option value="'+r.key+'"'+(r.key===rollKey?' selected':'')+'>'+esc(r.label)+' ('+sgn(r.bonus)+')</option>').join('')+'</optgroup>').join('');
+  return '<div class="row"><select id="rsel" style="flex:2;min-width:150px"><option value="">🎲 Geen worp meegeven</option>'+opts+'</select>'+
+    '<input type="number" id="rnat" inputmode="numeric" min="1" max="20" placeholder="d20" value="'+esc(rollNat)+'" style="width:78px">'+
+    '<span id="rout" class="chip" style="font-size:13px;padding:4px 10px"></span>'+
+    ((c.rageSkills&&c.rageSkills.length)?'<label style="font-size:13px"><input type="checkbox" id="rrage"'+(rollRage?' checked':'')+'> Rage</label>':'')+'</div>';
+}
+function updateRoll(){
+  const c=myChar(), out=$('#rout'); if(!c||!out) return;
+  const r=rollKey?findRoll(c,rollKey,rollRage):null, nat=Number(rollNat);
+  if(r&&nat>=1&&nat<=20){ rollDraft=rollText(r,nat); out.textContent='= '+(nat+r.bonus)+(nat===20?' ✨':nat===1?' 💥':''); }
+  else { rollDraft=''; out.textContent=r?('bonus '+sgn(r.bonus)):'—'; }
+}
+function wireRoll(){
+  const f=$('#roll'); if(f){ f.value=rollDraft; f.oninput=e=>{rollDraft=e.target.value}; return; }
+  const sel=$('#rsel'); if(!sel) return;
+  sel.onchange=e=>{rollKey=e.target.value; updateRoll()};
+  $('#rnat').oninput=e=>{rollNat=e.target.value; updateRoll()};
+  const rg=$('#rrage'); if(rg) rg.onchange=e=>{rollRage=e.target.checked; e.target.blur(); renderGame(); }
+  updateRoll();
+}
+
+/* --- het blad zelf --- */
+function liveHp(c){
+  if(screen!=='camp') return null;
+  const S=getState(), p=(S.pcs||{})[c.name]; return p?hpOf(p):null;
+}
+function dot(p){return p===2?'◎':p===1?'●':'○'}
+function rlRow(r,extra){return '<div class="rl'+(sheetRoll===r.key?' on':'')+'" data-roll="'+r.key+'"><span>'+extra+'</span><b>'+sgn(r.bonus)+'</b></div>';}
+function sheetHtml(c){
+  const pb=pbOf(c), rage=sheetRage, list=rollList(c,rage), by=k=>list.find(r=>r.key===k);
+  const live=liveHp(c), hpTxt=live?live.cur+' / '+live.max+(live.temp?' (+'+live.temp+')':''):(c.hpMax||'—');
+  const pp=10+by('skill:perception').bonus;
+  let h='<div class="card sh"><div class="ppl">'+avatar(c.name)+'<div><h3 style="margin:0">'+esc(c.name)+'</h3><small style="color:var(--mute)">Level '+esc(c.level||1)+' · '+esc([c.species,c.class+(c.subclass?' ('+c.subclass+')':''),c.background].filter(Boolean).join(' · '))+'</small><br><small style="color:var(--mute)">'+esc((c.player?'Speler: '+c.player:'')+(c.alignment?' · '+c.alignment:''))+'</small></div></div></div>';
+  h+='<div class="sh-strip">'+
+    '<div><small>Armor Class</small><b>'+esc(c.ac||'—')+'</b></div>'+
+    '<div><small>Hit Points</small><b>'+esc(hpTxt)+'</b></div>'+
+    '<div data-roll="init" class="rl'+(sheetRoll==='init'?' on':'')+'"><small>Initiative</small><b>'+sgn(by('init').bonus)+'</b></div>'+
+    '<div><small>Speed</small><b>'+esc(c.speed||30)+' ft</b></div>'+
+    '<div><small>Proficiency</small><b>+'+pb+'</b></div>'+
+    '<div><small>Passive Perc.</small><b>'+pp+'</b></div>'+
+    '<div><small>Hit Dice</small><b>'+esc(c.hitDice||'—')+'</b></div></div>';
+  if(c.rageSkills&&c.rageSkills.length) h+='<label class="card" style="display:block"><input type="checkbox" id="shrage"'+(rage?' checked':'')+'> <b>In Rage</b> <small style="color:var(--mute)">(Primal Knowledge: STR voor '+esc(c.rageSkills.join(', '))+')</small></label>';
+  h+='<div class="sh-two"><div class="card"><h3>Abilities &amp; Saving Throws</h3>'+ABIL.map(([k,n,s])=>
+      rlRow(by('abil:'+k),'<b>'+s+'</b> '+esc((c.abilities||{})[k]||10)+' <small>check</small>')+
+      rlRow(by('save:'+k),dot((c.saves||[]).includes(k)?1:0)+' <small>Save '+s+'</small>')).join('')+'</div>'+
+    '<div class="card"><h3>Skills</h3>'+SKILLS.map(([k,n,a])=>rlRow(by('skill:'+k),dot((c.skills||{})[k]||0)+' '+esc(n)+' <small>'+a.toUpperCase()+(rage&&(c.rageSkills||[]).includes(k)?'→STR':'')+'</small>')).join('')+'</div></div>';
+  if((c.attacks||[]).length) h+='<div class="card"><h3>Attacks</h3>'+c.attacks.map((a,i)=>rlRow(by('atk:'+i),'<b>'+esc(a.name)+'</b> <small>'+esc((a.damage?a.damage+' · ':'')+(a.notes||''))+'</small>')).join('')+'</div>';
+  const txt=(t,v)=>v?'<details class="card"><summary>'+t+'</summary><div style="white-space:pre-wrap;font-size:14px">'+esc(v)+'</div></details>':'';
+  const cur=c.currency||{};
+  h+=txt('Features &amp; Traits',c.features)+txt('Uitrusting',(c.equipment||'')+'\n\nGeld: '+['pp','gp','ep','sp','cp'].filter(x=>cur[x]).map(x=>cur[x]+' '+x.toUpperCase()).join(', '))+txt('Languages &amp; Proficiencies',[c.languages,c.proficiencies].filter(Boolean).join('\n\n'))+txt('Uiterlijk',c.appearance)+txt('Backstory',c.backstory);
+  h+='<div class="row" style="margin-bottom:8px"><button class="b alt sm" data-edit="1">✎ Bewerk blad</button></div>';
+  h+='<div id="rollpanel" class="card rollpanel"></div>';
+  return h;
+}
+function editorHtml(c,isNew){
+  const inp=(id,l,v,t)=>'<label><small>'+l+'</small><input type="'+(t||'text')+'" id="'+id+'" value="'+esc(v==null?'':v)+'"></label>';
+  const ta=(id,l,v)=>'<label><small>'+l+'</small><textarea id="'+id+'" style="min-height:90px">'+esc(v||'')+'</textarea></label>';
+  const ab=c.abilities||{}, sv=c.saves||[], sk=c.skills||{}, cur=c.currency||{};
+  const atkLines=(c.attacks||[]).map(a=>[a.name,a.ability||'str',a.prof===false?'n':'y',a.damage||'',a.notes||''].join(' | ')).join('\n');
+  return '<div class="card"><h3>'+(isNew?'Nieuw personage':'Blad bewerken')+'</h3>'+
+    inp('e_name','Naam',c.name)+
+    '<label><small>Speler</small><select id="e_player"><option value="">—</option>'+['Gerben','Maurits'].map(p=>'<option'+(c.player===p?' selected':'')+'>'+p+'</option>').join('')+'</select></label>'+
+    '<div class="sh-ed">'+inp('e_level','Level',c.level||3,'number')+inp('e_ac','Armor Class',c.ac||10,'number')+inp('e_hp','Max HP',c.hpMax||10,'number')+inp('e_speed','Speed (ft)',c.speed||30,'number')+inp('e_init','Initiative-extra',c.initiativeBonus||0,'number')+inp('e_hd','Hit Dice',c.hitDice||'')+'</div>'+
+    inp('e_class','Class',c.class)+inp('e_sub','Subclass',c.subclass)+inp('e_species','Species',c.species)+inp('e_bg','Background',c.background)+inp('e_align','Alignment',c.alignment)+
+    '<h3 style="margin-top:10px">Ability Scores &amp; Saving Throw-proficiency</h3><div class="sh-ed">'+ABIL.map(([k,n,s])=>'<label><small>'+s+'</small><input type="number" id="e_ab_'+k+'" value="'+(ab[k]||10)+'"><span><input type="checkbox" id="e_sv_'+k+'"'+(sv.includes(k)?' checked':'')+'> save</span></label>').join('')+'</div>'+
+    '<h3 style="margin-top:10px">Skills (— / proficient / expertise)</h3><div class="sh-ed">'+SKILLS.map(([k,n],i)=>'<label><small>'+n+'</small><select id="e_sk_'+i+'"><option value="0">—</option><option value="1"'+(sk[k]===1?' selected':'')+'>●</option><option value="2"'+(sk[k]===2?' selected':'')+'>◎</option></select></label>').join('')+'</div>'+
+    '<label style="display:block;margin-top:8px"><input type="checkbox" id="e_rage"'+((c.rageSkills&&c.rageSkills.length)?' checked':'')+'> Primal Knowledge (Barbarian 3): STR tijdens Rage voor Acrobatics, Intimidation, Perception, Stealth, Survival</label>'+
+    ta('e_atk','Aanvallen (één per regel: naam | ability (str/dex/…) | proficient (y/n) | schade | notities)',atkLines)+
+    ta('e_feat','Features &amp; Traits',c.features)+ta('e_eq','Uitrusting',c.equipment)+
+    '<div class="sh-ed">'+inp('e_gp','GP',cur.gp||0,'number')+inp('e_sp','SP',cur.sp||0,'number')+inp('e_cp','CP',cur.cp||0,'number')+'</div>'+
+    ta('e_lang','Languages',c.languages)+ta('e_prof','Proficiencies (wapens, armor, tools)',c.proficiencies)+ta('e_app','Uiterlijk',c.appearance)+ta('e_back','Backstory',c.backstory)+
+    '<div class="row" style="margin-top:8px"><button class="b" data-save="1">Opslaan</button><button class="b alt" data-cancel="1">Annuleer</button>'+(isNew?'':'<button class="b red" data-delchar="1">Wis personage</button>')+'</div></div>';
+}
+function readEditor(el,old){
+  const v=id=>el.querySelector('#'+id), n=(id,d)=>{const x=Number(v(id).value);return isFinite(x)?x:d};
+  const c={name:v('e_name').value.trim(),player:v('e_player').value,level:n('e_level',1),ac:n('e_ac',10),hpMax:n('e_hp',10),speed:n('e_speed',30),initiativeBonus:n('e_init',0),hitDice:v('e_hd').value.trim(),
+    class:v('e_class').value.trim(),subclass:v('e_sub').value.trim(),species:v('e_species').value.trim(),background:v('e_bg').value.trim(),alignment:v('e_align').value.trim(),
+    abilities:{},saves:[],skills:{},features:v('e_feat').value,equipment:v('e_eq').value,languages:v('e_lang').value,proficiencies:v('e_prof').value,appearance:v('e_app').value,backstory:v('e_back').value,
+    currency:{gp:n('e_gp',0),sp:n('e_sp',0),cp:n('e_cp',0)}};
+  ABIL.forEach(([k])=>{c.abilities[k]=n('e_ab_'+k,10); if(v('e_sv_'+k).checked) c.saves.push(k);});
+  SKILLS.forEach(([k],i)=>{const x=Number(v('e_sk_'+i).value); if(x) c.skills[k]=x;});
+  c.rageSkills=v('e_rage').checked?['acrobatics','intimidation','perception','stealth','survival']:[];
+  c.attacks=v('e_atk').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const p=l.split('|').map(s=>s.trim()); return {name:p[0]||'Aanval',ability:(p[1]||'str').toLowerCase(),prof:!/^n/i.test(p[2]||'y'),damage:p[3]||'',notes:p[4]||''}});
+  c.t=Date.now();
+  return c;
+}
+function updateRollPanel(el){
+  const p=el.querySelector('#rollpanel'); if(!p) return;
+  const c=chars[sheetKey]; if(!c||!sheetRoll){p.style.display='none';return}
+  const cc={k:sheetKey,...c}, r=findRoll(cc,sheetRoll,sheetRage); if(!r){p.style.display='none';return}
+  const cur=p.querySelector('#rn'), keep=cur?cur.value:'';
+  const mine=screen==='camp'&&me&&cc.player===me.name;
+  p.style.display='';
+  p.innerHTML='<b>'+esc(r.label)+' '+sgn(r.bonus)+'</b><div class="row" style="margin-top:6px"><input type="number" id="rn" inputmode="numeric" min="1" max="20" placeholder="natural d20" value="'+esc(keep)+'" style="width:130px"><span id="rt" class="chip" style="font-size:14px;padding:5px 12px">—</span></div>'+
+    '<div class="row" style="margin-top:6px"><button class="b sm" data-copy="1">Kopieer worp</button>'+(mine?'<button class="b alt sm" data-use="1">Gebruik in actie</button>':'')+'</div>';
+  const upd=()=>{const nat=Number(p.querySelector('#rn').value); p.querySelector('#rt').textContent=(nat>=1&&nat<=20)?('= '+(nat+r.bonus)+(nat===20?' ✨':nat===1?' 💥':'')):'—'};
+  p.querySelector('#rn').oninput=upd; upd();
+}
+function renderSheet(el,prefix){
+  if(!el) return;
+  const list=allChars();
+  if(!sheetKey||!chars[sheetKey]){const m=myChar(); sheetKey=m?m.k:(list[0]?list[0].k:'');}
+  let h=(prefix||'')+'<div class="row" style="margin-bottom:8px">'+list.map(c=>'<button class="b sm'+(c.k===sheetKey&&sheetEdit!=='new'?'':' alt')+'" data-sk="'+c.k+'">'+esc(c.name)+'</button>').join('')+'<button class="b alt sm" data-newchar="1">＋ Nieuw personage</button></div>';
+  if(sheetEdit==='new') h+=editorHtml({player:me?me.name:''},true);
+  else if(sheetEdit&&chars[sheetKey]) h+=editorHtml({k:sheetKey,...chars[sheetKey]},false);
+  else if(sheetKey&&chars[sheetKey]) h+=sheetHtml({k:sheetKey,...chars[sheetKey]});
+  else h+='<p style="color:var(--mute)">Nog geen personage. Maak er een met "＋ Nieuw personage".</p>';
+  el.innerHTML=h;
+  if(!el._sheetWired){
+    el._sheetWired=true;
+    el.addEventListener('click',async e=>{
+      const t=e.target, q=s=>t.closest(s);
+      if(q('[data-sk]')){sheetKey=q('[data-sk]').dataset.sk; sheetEdit=false; sheetRoll=''; return renderSheet(el,prefix);}
+      if(q('[data-newchar]')){sheetEdit='new'; return renderSheet(el,prefix);}
+      if(q('[data-edit]')){sheetEdit=true; return renderSheet(el,prefix);}
+      if(q('[data-cancel]')){sheetEdit=false; return renderSheet(el,prefix);}
+      if(q('[data-save]')){
+        const old=sheetEdit==='new'?null:chars[sheetKey]; const c=readEditor(el,old);
+        if(!c.name){alert('Geef het personage een naam.');return}
+        const k=slug(c.name), up={}; up['dnd/characters/'+k]=c;
+        if(old&&k!==sheetKey) up['dnd/characters/'+sheetKey]=null;
+        sheetKey=k; sheetEdit=false; await db.ref().update(up); return;
+      }
+      if(q('[data-delchar]')){ if(confirm('Personage definitief wissen?')){const dk=sheetKey; sheetEdit=false; sheetKey=''; await db.ref('dnd/characters/'+dk).remove();} return; }
+      if(q('[data-roll]')){sheetRoll=q('[data-roll]').dataset.roll; el.querySelectorAll('.rl').forEach(x=>x.classList.toggle('on',x.dataset.roll===sheetRoll)); updateRollPanel(el); const p=el.querySelector('#rollpanel'); if(p) p.scrollIntoView({block:'nearest'}); return;}
+      if(q('[data-copy]')){
+        const c={k:sheetKey,...chars[sheetKey]}, r=findRoll(c,sheetRoll,sheetRage), nat=Number(el.querySelector('#rn').value);
+        if(r&&nat>=1&&nat<=20) copyText('[worp: '+rollText(r,nat)+']',q('[data-copy]')); else alert('Vul eerst je natural d20 in.');
+        return;
+      }
+      if(q('[data-use]')){
+        const nat=Number(el.querySelector('#rn').value); if(!(nat>=1&&nat<=20)){alert('Vul eerst je natural d20 in.');return}
+        rollKey=sheetRoll; rollNat=String(nat); rollRage=sheetRage; setTab('game'); return;
+      }
+    });
+    el.addEventListener('change',e=>{ if(e.target.id==='shrage'){sheetRage=e.target.checked; renderSheet(el,prefix);} });
+  }
+  updateRollPanel(el);
+}
+function menuChars(){
+  main.innerHTML='<div class="scroll">'+backBar('Karakterblad')+'<div id="sheetbox"></div></div>';
+  $('#back').onclick=()=>showMenu('home');
+  renderSheet($('#sheetbox'));
+}
+function renderSheetTab(){
+  if(screen!=='camp') return;
+  renderSheet($('#sheetbox'),BACK);
+}
+function sheetText(c){
+  const pb=pbOf(c);
+  const sk=SKILLS.filter(s=>(c.skills||{})[s[0]]).map(s=>s[1]+' '+sgn(skillBonus(c,s[0]))).join(', ');
+  const sv=ABIL.filter(a=>(c.saves||[]).includes(a[0])).map(a=>a[2]+' '+sgn(amod(c,a[0])+pb)).join(', ');
+  return '## '+c.name+' (speler: '+c.player+') — Level '+c.level+' '+[c.species,c.class+(c.subclass?' ('+c.subclass+')':''),c.background].filter(Boolean).join(', ')+'\n'+
+    'AC '+c.ac+', max HP '+c.hpMax+', Speed '+c.speed+' ft, Proficiency +'+pb+'. '+ABIL.map(a=>a[2]+' '+((c.abilities||{})[a[0]]||10)+' ('+sgn(amod(c,a[0]))+')').join(', ')+'\n'+
+    'Saves: '+(sv||'—')+'. Skills: '+(sk||'—')+'.\n'+
+    ((c.attacks||[]).length?'Aanvallen: '+c.attacks.map(a=>a.name+' '+sgn(amod(c,a.ability||'str')+(a.prof===false?0:pb))+(a.damage?' ('+a.damage+')':'')).join('; ')+'\n':'')+
+    (c.features?'Features: '+c.features.replace(/\n+/g,' ')+'\n':'')+(c.equipment?'Uitrusting: '+c.equipment.replace(/\n+/g,' ')+'\n':'');
 }
 
 /* ---------- OOC ---------- */
