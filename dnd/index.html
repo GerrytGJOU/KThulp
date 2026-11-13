@@ -73,6 +73,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 #ov img{max-width:100%;max-height:82vh;border-radius:10px;border:2px solid var(--gold)}
 #ov div{color:var(--gold);font-size:18px}
 input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
+.vh{position:absolute!important;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
 </style>
 </head>
 <body>
@@ -206,8 +207,12 @@ function leaveCampaign(){
   listeners.forEach(([r,e,f])=>r.off(e,f));listeners=[];
   cid=null;turn=null;canon={};msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
 }
-function showMenu(){
-  leaveCampaign(); screen='menu'; $('#menubtn').style.display='none';
+let menuView='home';
+function showMenu(view){
+  view=(typeof view==='string')?view:'home';   // de menuknop geeft een click-event mee
+  leaveCampaign(); screen='menu'; menuView=view; $('#menubtn').style.display='none';
+  if(view==='npcs') return menuNpcs();
+  if(view==='set') return menuSet();
   main.innerHTML=`<div class="scroll">
   <div class="card">
     <button class="b" id="goon" style="width:100%;font-size:19px;padding:14px">▶ Ga verder</button>
@@ -216,25 +221,37 @@ function showMenu(){
     <div id="newform"></div>
   </div>
   <h2>Savegames</h2><div id="savelist"></div>
-  <h2>Portretten &amp; NPC's</h2>
-  <div class="card"><h3>Nieuwe NPC / speler toevoegen</h3>
-    <input type="text" id="nname" placeholder="Naam (exact zoals in het verhaal)"><br><br>
-    <textarea id="nvis" placeholder="Uiterlijk (Engels, concreet: leeftijd, postuur, gezicht, haar, kleding, uitrusting)"></textarea>
-    <div class="row" style="margin-top:6px"><select id="nplayer" style="width:auto"><option value="">NPC</option><option>Gerben</option><option>Maurits</option></select>
-    <label class="b alt sm" for="nfile">Plaatje kiezen</label><input type="file" id="nfile" accept="image/*"><span id="nfileinfo"></span></div>
-    <div class="row" style="margin-top:6px"><button class="b" id="nsave">Opslaan</button></div>
-  </div>
-  <div class="row" style="margin-bottom:8px"><button class="b alt" id="copyall">Kopieer alle ontbrekende prompts</button></div>
-  <div id="npcbox"></div>
-  <h2>Instellingen</h2><div id="setbox"></div>
+  <div class="row" style="margin-top:14px"><button class="b alt" id="tonpcs" style="flex:1">🖼 Portretten &amp; NPC's</button><button class="b alt" id="toset" style="flex:1">⚙ Instellingen</button></div>
   </div>`;
   $('#goon').onclick=()=>{const id=latestId(); if(id) enterCampaign(id)};
   $('#newst').onclick=newStoryForm;
+  $('#tonpcs').onclick=()=>showMenu('npcs');
+  $('#toset').onclick=()=>showMenu('set');
+  renderIndex();
+}
+function backBar(title){return '<div class="row" style="margin-bottom:8px"><button class="b alt sm" id="back">‹ Menu</button><h2 style="margin:0">'+title+'</h2></div>'}
+function menuSet(){
+  main.innerHTML='<div class="scroll">'+backBar('Instellingen')+'<div id="setbox"></div></div>';
+  $('#back').onclick=()=>showMenu('home');
+  renderSet();
+}
+function menuNpcs(){
+  main.innerHTML=`<div class="scroll">${backBar("Portretten &amp; NPC's")}
+  <div class="row" style="margin-bottom:8px"><button class="b" id="copyall">Kopieer alle ontbrekende prompts</button></div>
+  <details class="card"><summary>＋ Nieuwe NPC / speler toevoegen</summary>
+    <input type="text" id="nname" placeholder="Naam (exact zoals in het verhaal)"><br><br>
+    <textarea id="nvis" placeholder="Uiterlijk (Engels, concreet: leeftijd, postuur, gezicht, haar, kleding, uitrusting)"></textarea>
+    <div class="row" style="margin-top:6px"><select id="nplayer" style="width:auto"><option value="">NPC</option><option>Gerben</option><option>Maurits</option></select>
+    <label class="b alt sm" for="nfile">Plaatje kiezen</label><input type="file" id="nfile" class="vh" accept="image/*"><span id="nfileinfo" style="font-size:13px;color:var(--mute)"></span></div>
+    <div class="row" style="margin-top:6px"><button class="b" id="nsave">Opslaan</button></div>
+  </details>
+  <div id="npcbox"></div></div>`;
+  $('#back').onclick=()=>showMenu('home');
   $('#nfile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{window._nimg=await resizeImage(f);$('#nfileinfo').textContent='✓ '+f.name}catch(err){alert(err.message)}};
   $('#nsave').onclick=saveNewNpc;
   $('#copyall').onclick=e=>{
     const miss=Object.entries(npcs).filter(([k,n])=>!n.img&&n.visual);
-    if(!miss.length){alert('Geen NPC\'s zonder plaatje.');return}
+    if(!miss.length){alert("Geen NPC's zonder plaatje.");return}
     copyText(miss.map(([k,n])=>'===== '+n.name+' =====\n'+makePrompt(n)).join('\n\n'),e.target);
   };
   $('#npcbox').addEventListener('change',async e=>{
@@ -249,7 +266,7 @@ function showMenu(){
     if(b.dataset.a==='del'&&confirm(n.name+' definitief wissen (ook het plaatje)?'))db.ref('dnd/npcs/'+k).remove();
     if(b.dataset.a==='delimg'&&confirm('Plaatje van '+n.name+' wissen?'))db.ref('dnd/npcs/'+k+'/img').remove();
   });
-  renderIndex(); renderNpcs(); renderSet();
+  renderNpcs();
 }
 function renderIndex(){
   if(screen!=='menu'||!$('#savelist')) return;
@@ -258,8 +275,8 @@ function renderIndex(){
   $('#goonsub').textContent=id?(index[id].title+' · ronde '+(index[id].round||0)+' · '+new Date(index[id].lastPlayed||index[id].created||0).toLocaleDateString('nl-NL')):'Nog geen verhaal: begin met "Nieuw verhaal".';
   const ids=Object.keys(index).sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0));
   $('#savelist').innerHTML=ids.map(i=>{const x=index[i];
-    return '<div class="card"><h3>'+esc(x.title)+'</h3><small style="color:var(--mute)">ronde '+(x.round||0)+' · laatst gespeeld '+new Date(x.lastPlayed||0).toLocaleString('nl-NL')+'</small>'+
-    '<div class="row" style="margin-top:6px"><button class="b sm" data-open="'+i+'">Open</button><button class="b alt sm" data-ren="'+i+'">Hernoem</button><button class="b red sm" data-del="'+i+'">Wis</button></div></div>'}).join('')||'<small>Geen savegames.</small>';
+    return '<div class="card"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><div style="min-width:0"><b>'+esc(x.title)+'</b><br><small style="color:var(--mute)">ronde '+(x.round||0)+' · '+new Date(x.lastPlayed||0).toLocaleDateString('nl-NL')+'</small></div><button class="b sm" data-open="'+i+'">Open</button></div>'+
+    '<details><summary>Beheer</summary><div class="row"><button class="b alt sm" data-ren="'+i+'">Hernoem</button><button class="b red sm" data-del="'+i+'">Wis</button></div></details></div>'}).join('')||'<small>Geen savegames.</small>';
   $('#savelist').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>enterCampaign(b.dataset.open));
   $('#savelist').querySelectorAll('[data-ren]').forEach(b=>b.onclick=()=>{const v=prompt('Nieuwe naam:',index[b.dataset.ren].title);if(v&&v.trim())db.ref('dnd/campaignIndex/'+b.dataset.ren+'/title').set(v.trim())});
   $('#savelist').querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{
@@ -303,7 +320,7 @@ function renderNpcs(){
     '<small>'+esc((n.visual||'(geen uiterlijk)').slice(0,160))+'</small>'+
     '<details><summary>Prompt voor ChatGPT</summary><textarea readonly rows="7" onclick="this.select()">'+esc(makePrompt(n))+'</textarea></details>'+
     '<div class="row"><button class="b sm" data-a="copy" data-k="'+n.k+'">Kopieer prompt</button>'+
-    '<label class="b alt sm" for="up_'+n.k+'">'+(n.img?'Vervang plaatje':'Upload plaatje')+'</label><input type="file" id="up_'+n.k+'" data-k="'+n.k+'" accept="image/*">'+
+    '<label class="b alt sm" for="up_'+n.k+'">'+(n.img?'Vervang plaatje':'Upload plaatje')+'</label><input type="file" id="up_'+n.k+'" class="vh" data-k="'+n.k+'" accept="image/*">'+
     '<button class="b alt sm" data-a="edit" data-k="'+n.k+'">Uiterlijk</button>'+
     (n.img?'<button class="b alt sm" data-a="delimg" data-k="'+n.k+'">Plaatje wis</button>':'')+
     '<button class="b red sm" data-a="del" data-k="'+n.k+'">Wis</button></div></div></div>').join('')||'<small>Nog geen NPC\'s. De DM voegt ze vanzelf toe zodra ze in het verhaal verschijnen.</small>';
@@ -615,7 +632,7 @@ function renderCanon(){
   ids.map(id=>'<div class="card"><h3>'+esc(canon[id].title)+'</h3><small>'+canon[id].text.length+' tekens</small><div class="row" style="margin-top:6px"><button class="b alt sm" data-e="'+id+'">Bewerk</button><button class="b red sm" data-d="'+id+'">Wis</button></div></div>').join('')+
   `<h2>Nieuw / overschrijven</h2><input type="text" id="ctitle" placeholder="Titel (zelfde titel = overschrijven)"><br><br>
   <textarea id="ctext" style="min-height:140px" placeholder="Plak hier de tekst (Markdown)"></textarea>
-  <div class="row" style="margin-top:6px"><label class="b alt" for="cfile">Kies bestand (.md/.txt)</label><input type="file" id="cfile" accept=".md,.txt,.json,text/*"><button class="b" id="csave">Opslaan</button></div>`;
+  <div class="row" style="margin-top:6px"><label class="b alt" for="cfile">Kies bestand (.md/.txt)</label><input type="file" id="cfile" class="vh" accept=".md,.txt,.json,text/*"><button class="b" id="csave">Opslaan</button></div>`;
   box.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{$('#ctitle').value=canon[b.dataset.e].title;$('#ctext').value=canon[b.dataset.e].text;$('#ctext').scrollIntoView()});
   box.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{if(confirm('Document wissen?'))db.ref(cp('canon/'+b.dataset.d)).remove()});
   $('#cfile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$('#ctext').value=r.result;if(!$('#ctitle').value)$('#ctitle').value=f.name.replace(/\.[^.]+$/,'')};r.readAsText(f)};
