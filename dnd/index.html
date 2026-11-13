@@ -91,6 +91,17 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .ppl{display:flex;gap:10px;align-items:center}
 .ppl .av{width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid #4a3d30;background:#0f0d0b;flex:none;display:flex;align-items:center;justify-content:center;color:var(--mute)}
 .more-btn{width:100%;text-align:left;margin-bottom:8px;padding:14px}
+.rolls{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.rc{font-size:12px;padding:3px 8px;border-radius:12px;background:#3a3027;color:#f3e9d2;border:1px solid #6a5a44;line-height:1.3}
+.rc.ok{border-color:#6a9a5a;background:#2c3a28}.rc.ko{border-color:#a8432f;background:#3d2420}
+.rc.n20{border-color:#f3df9c;background:#5a4515;box-shadow:0 0 8px rgba(243,223,156,.7)}
+.rc.n1{border-color:#e0553a;background:#4a1810;box-shadow:0 0 8px rgba(224,85,58,.6)}
+#initbar{display:flex;gap:5px;overflow-x:auto;padding:5px 12px;background:rgba(60,20,16,.55);border-bottom:1px solid rgba(168,67,47,.6);align-items:center}
+#initbar:empty{display:none}
+#initbar .lbl{color:#e08a76;font-size:13px;flex:none}
+.ic{flex:none;font-size:13px;padding:3px 9px;border-radius:12px;background:#2a231d;border:1px solid #4a3d30;white-space:nowrap}
+.ic.foe{background:#3d2420;border-color:#7a3426}
+.ic.act{outline:2px solid var(--gold);font-weight:bold}
 input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 .vh{position:absolute!important;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
 </style>
@@ -358,7 +369,7 @@ async function saveNewNpc(){
 function enterCampaign(id){
   leaveCampaign(); cid=id; screen='camp'; tab='game'; $('#menubtn').style.display='';
   main.innerHTML=`
-  <section class="tab" id="t-game"><div id="scenebar"></div><div id="partybar"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></section>
+  <section class="tab" id="t-game"><div id="scenebar"></div><div id="partybar"></div><div id="initbar"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></section>
   <section class="tab" id="t-ooc"><div class="scroll" id="oocthread"></div><div class="compose"><div class="row"><input type="text" id="oocin" placeholder="Praat met je broer (de DM leest dit niet)" style="flex:1"><button class="b" id="oocsend">Stuur</button></div></div></section>
   <section class="tab" id="t-diary"><div class="scroll" id="diarybox"></div></section>
   <section class="tab" id="t-more"><div class="scroll" id="morebox"></div></section>
@@ -405,7 +416,7 @@ function portraitsFor(m){
 }
 function renderGame(){
   if(!me||screen!=='camp'||tab!=='game') return;
-  renderParty();
+  renderParty(); renderInit();
   const th=$('#thread');
   const atBottom=th.scrollHeight-th.scrollTop-th.clientHeight<80;
   th.innerHTML=msgs.map(m=>{
@@ -413,7 +424,10 @@ function renderGame(){
     const pts=portraitsFor(m);
     let who=m.type==='narration'?'De DM':m.type==='system'?'':esc(m.author||'');
     if(m.type==='narration'&&pts.length) who+=' · '+pts.map(p=>esc(p[1])).join(' &amp; ');
-    const body=md(m.text);
+    let txt=m.text||''; const wm=[];
+    if(m.type==='action') txt=txt.replace(/\s*\[worp:\s*([^\]]*)\]/gi,(x,y)=>{wm.push(y.trim());return ''});
+    const chips=(m.rolls||[]).map(rollChip).concat(wm.map(w=>'<span class="rc">🎲 '+esc(w)+'</span>')).join('');
+    const body=md(txt)+(chips?'<div class="rolls">'+chips+'</div>':'');
     const inner=pts.length?'<div class="mrow"><div class="pts">'+pts.map(p=>'<img class="pt" src="'+npcs[p[0]].img+'" data-zoom="'+p[0]+'" alt="'+esc(p[1])+'">').join('')+'</div><div class="mtxt">'+body+'</div></div>':body;
     return '<div class="msg '+cls+'">'+(who?'<div class="who">'+who+'</div>':'')+inner+'</div>';
   }).join('')||'<div class="msg system">Nog geen verhaal.</div>';
@@ -526,25 +540,27 @@ Regels:
    "npcs":{"Naam":{"location":"","status":"","attitude":"","knows":[]}},
    "factions":{"Naam":{"stance":"","currentAction":""}},
    "quests":{"open":[{"title":"","detail":""}],"completed":[],"consequences":[]},
-   "initiative":null}
+   "initiative":{"active":"Naam","order":[{"name":"Naam","init":15,"enemy":false}]}  (alleen tijdens een gevecht; anders null)}
   Vul bij het begin hp, resources en inventory van elke PC in uit zijn B-document. Werk hp, resources, conditions, location, inGame en quests bij zodra ze veranderen. Controleer geografie met Tolkiens kaart (Rivendell ligt in Eriador aan de westzijde van de Misty Mountains, ver van de Ered Luin). 
 - Documenten in CANON die als DM-geheim of "NIET LEZEN ALS SPELER" gemarkeerd zijn, gebruik je voor planning, maar je onthult of citeert ze nooit letterlijk; laat geheimen alleen via het spel zelf blijken.
 - Is de ACTUELE STAND nog leeg ({}), begin dan met een statePatch die de beginsituatie uit D1 Wereldstatus / STAND #1 in canon overneemt. Een PC zonder uitgewerkt personage (zoals PC2 zolang B2 ontbreekt) speel je niet; vraag die speler eerst zijn personage te beschrijven.
 - Portretten: "speakers" = de namen van maximaal 2 NPC's die in deze beurt spreken of centraal staan. Gebruik EXACT de naam uit de lijst BEKENDE NPC'S als de NPC daar al in staat. "newNpcs" = elke NPC die in deze beurt voor het eerst optreedt en NIET in die lijst staat, met "visual": een concrete Engelse beschrijving voor een portret (soort/leeftijd, postuur, gezicht, huid, haar en baard, ogen, littekens, elk kledingstuk met kleur en materiaal, zichtbare uitrusting, uitdrukking). Voor figuren uit Tolkiens boeken: beschrijf zoals in de boeken. Geen geheimen in "visual".
+- Worpen: zet ALLE worpen die je zelf doet of verwerkt (NPC's, vijanden, companions en de worpen die de spelers meldden) in "rolls" ({"who":"Orc 1","what":"Attack Roll","natural":14,"mod":5,"total":19,"result":"Hit"}; bij schade {"who","what":"Damage","dice":"1d8+3","total":9}). De app toont ze als chips: schrijf ze dus NIET ook nog eens als haakjes in de vertelling, en toon nooit de DC. Vertel alleen het gevolg. Verwerk een nat 20 of nat 1 als klein extra gevolg in de vertelling.
+- Gevecht: zet "initiative" in de Stand met "active" = wie nu aan de beurt is en "order" met naam, init en enemy:true voor vijanden; werk "active" bij elke beurt bij en zet initiative op null zodra het gevecht voorbij is.
 - logEntries: korte feiten van wat NU echt gebeurd is.
 Antwoord ALLEEN met JSON in dit formaat:
-{"narration":"markdown-tekst","speakers":["Naam"],"newNpcs":[{"name":"Naam","visual":"English description"}],"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."}}}`;
+{"narration":"markdown-tekst","speakers":["Naam"],"rolls":[{"who":"","what":"","natural":0,"mod":0,"total":0,"result":""}],"newNpcs":[{"name":"Naam","visual":"English description"}],"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."}}}`;
 
 function rollDice(){
   const r=(s,n)=>Array.from({length:n},()=>1+crypto.getRandomValues(new Uint32Array(1))[0]%s);
   return {d20:r(20,20),d12:r(12,6),d10:r(10,6),d8:r(8,8),d6:r(6,10),d4:r(4,6)};
 }
-async function callGemini(sys,user,retryNote){
+async function callGemini(sys,user,retryNote,json){
   const model=cfg.model||'gemini-2.5-flash';
   const body={
     systemInstruction:{parts:[{text:sys}]},
     contents:[{role:'user',parts:[{text:user+(retryNote?'\n\nLET OP: je vorige antwoord was ongeldig ('+retryNote+'). Antwoord nu met geldige JSON.':'')}]}],
-    generationConfig:{responseMimeType:'application/json',temperature:cfg.temperature!=null?Number(cfg.temperature):0.9,thinkingConfig:{thinkingBudget:0}}
+    generationConfig:Object.assign(json===false?{}:{responseMimeType:'application/json'},{temperature:cfg.temperature!=null?Number(cfg.temperature):0.9,thinkingConfig:{thinkingBudget:0}})
   };
   const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',{
     method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':cfg.geminiKey},body:JSON.stringify(body)});
@@ -560,6 +576,7 @@ function parseDM(txt,names){
   if(typeof o.narration!=='string'||!o.narration) throw new Error('narration ontbreekt');
   o.statePatch=o.statePatch&&typeof o.statePatch==='object'?o.statePatch:{};
   o.logEntries=Array.isArray(o.logEntries)?o.logEntries:[];
+  o.rolls=Array.isArray(o.rolls)?o.rolls.filter(r=>r&&typeof r.who==='string'&&typeof r.what==='string'&&r.total!=null&&isFinite(Number(r.total))).slice(0,12).map(r=>({who:r.who.slice(0,40),what:r.what.slice(0,40),natural:(r.natural!=null&&isFinite(Number(r.natural)))?Number(r.natural):null,mod:isFinite(Number(r.mod))?Number(r.mod):0,total:Number(r.total),dice:r.dice?String(r.dice).slice(0,20):'',result:r.result?String(r.result).slice(0,30):''})):[];
   o.speakers=Array.isArray(o.speakers)?o.speakers.filter(s=>typeof s==='string').slice(0,2):[];
   o.newNpcs=Array.isArray(o.newNpcs)?o.newNpcs.filter(n=>n&&typeof n.name==='string'&&n.name.trim()):[];
   const nt=o.nextTurn||{};
@@ -576,7 +593,7 @@ async function resolve(retry){
     if(retry) await db.ref(cp('turn',C)).update({status:'resolving',resolvingSince:Date.now(),lastError:null});
     const t=(await db.ref(cp('turn',C)).get()).val();
     const round=t.round;
-    const [pS,sS,cS,mS,lS,cfS]=await Promise.all(['pending','state','canon','messages','log'].map(k=>db.ref(cp(k,C)).get()).concat([db.ref('dnd/config').get()]));
+    const [pS,sS,cS,mS,lS,smS,cfS]=await Promise.all(['pending','state','canon','messages','log','summaries'].map(k=>db.ref(cp(k,C)).get()).concat([db.ref('dnd/config').get()]));
     cfg=cfS.val()||cfg;
     if(!cfg.geminiKey) throw new Error('Geen Gemini-sleutel ingesteld (⚙ in het menu).');
     const pend=Object.values(pS.val()||{}).filter(p=>p.round===round).sort((a,b)=>a.t-b.t);
@@ -588,9 +605,10 @@ async function resolve(retry){
     const recent=[];mS.forEach(c=>{recent.push(c.val())});
     const hist=recent.slice(-30).filter(m=>m.type!=='system').map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
     const logs=[];lS.forEach(c=>{logs.push(c.val())});
+    const sums=[]; smS.forEach(c=>{sums.push(c.val().text)});
     const npcNames=Object.values(npcs).filter(n=>!n.forPlayer).map(n=>n.name);
     const user=
-`# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# LOGBOEK (laatste 60)\n${logs.slice(-60).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
+`# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# LOGBOEK (laatste 60)\n${logs.slice(-60).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
     let out,usage,note=null;
     for(let i=0;i<2;i++){
       const r=await callGemini(SYSTEM,user,note);usage=r.usage;
@@ -602,6 +620,7 @@ async function resolve(retry){
     const nk=db.ref(cp('messages',C)).push().key;
     const nm={type:'narration',author:'dm',text:out.narration,round:round+1,t:now+pend.length+1};
     if(out.speakers.length) nm.speakers=out.speakers;
+    if(out.rolls.length) nm.rolls=out.rolls;
     up[cp('messages/'+nk,C)]=nm;
     out.logEntries.forEach(l=>{if(l&&l.fact){const k=db.ref(cp('log',C)).push().key;up[cp('log/'+k,C)]={fact:String(l.fact),inGameDate:String(l.inGameDate||''),round:round+1,t:now}}});
     out.newNpcs.forEach(n=>{const k=slug(n.name); if(!npcs[k]) up['dnd/npcs/'+k]={name:n.name.trim(),visual:String(n.visual||'').slice(0,1500),t:now,from:C}});
@@ -615,6 +634,7 @@ async function resolve(retry){
     const aw={};out.nextTurn.awaiting.forEach(n=>aw[n]=true);
     up[cp('turn',C)]={round:round+1,status:'waiting',awaiting:aw,prompt:out.nextTurn.prompt,blind:out.nextTurn.blind,checks:out.nextTurn.checks||null,mode:out.nextTurn.awaiting.length>1?'all':'single'};
     await db.ref().update(up);
+    summarize(C,round+1,false).catch(e=>console.warn('samenvatting mislukt',e));
   }catch(e){
     console.error(e);
     await db.ref(cp('turn',C)).update({status:'error',lastError:String(e.message||e),resolvingSince:null});
@@ -663,6 +683,29 @@ function renderParty(){
       '<div class="chips">'+res+con+'</div></div></div>';
   }).join('');
 }
+function rollChip(r){
+  const nat=r.natural!=null&&isFinite(Number(r.natural))?Number(r.natural):null, mod=Number(r.mod)||0;
+  const expr=nat!==null?nat+(mod?(mod>0?' + ':' − ')+Math.abs(mod):'')+' = '+r.total:(r.dice?r.dice+' = ':'')+r.total;
+  const res=String(r.result||'').toLowerCase();
+  const good=/succ|hit|raak|geslaagd|slaagt|gelukt/.test(res), bad=/fail|miss|mis|mislukt|faalt/.test(res);
+  const cls='rc '+(nat===20?'n20':nat===1?'n1':good?'ok':bad?'ko':'');
+  return '<span class="'+cls+'">🎲 <b>'+esc(r.who)+'</b> · '+esc(r.what)+': '+esc(expr)+(r.result?' · '+esc(r.result):'')+(nat===20?' ✨':nat===1?' 💥':'')+'</span>';
+}
+function renderInit(){
+  const bar=$('#initbar'); if(!bar) return;
+  const S=getState(), ini=S.initiative;
+  let order=Array.isArray(ini)?ini:(ini&&Array.isArray(ini.order)?ini.order:[]);
+  if(!order.length){ bar.innerHTML=''; return; }
+  const active=(ini&&!Array.isArray(ini))?ini.active:null;
+  const friends=new Set([...Object.entries(S.pcs||{}).map(([k,v])=>(v&&v.name)||k),...Object.entries(S.companions||{}).map(([k,v])=>(v&&v.name)||k)]);
+  order=order.filter(o=>o&&(o.name||typeof o==='string')).map(o=>typeof o==='string'?{name:o}:o);
+  if(order.every(o=>isFinite(Number(o.init)))) order=order.slice().sort((a,b)=>Number(b.init)-Number(a.init));
+  bar.innerHTML='<span class="lbl">⚔ Initiative</span>'+order.map(o=>{
+    const foe=o.enemy===true||(o.enemy==null&&!friends.has(o.name));
+    const act=o.active===true||(active&&o.name===active);
+    return '<span class="ic'+(foe?' foe':'')+(act?' act':'')+'">'+(o.init!=null?esc(o.init)+' · ':'')+esc(o.name)+(act?' ◀':'')+'</span>';
+  }).join('');
+}
 async function renderDiary(){
   if(screen!=='camp') return;
   const box=$('#diarybox'), C=cid, S=getState(), q=S.quests||{};
@@ -673,12 +716,32 @@ async function renderDiary(){
     const lines=[o.location,o.status,o.attitude].filter(x=>x&&typeof x!=='object').map(esc).join(' · ');
     return '<div class="card ppl">'+avatar((o&&o.name)||k)+'<div><b>'+esc((o&&o.name)||k)+'</b><br><small style="color:var(--mute)">'+(lines||'—')+'</small></div></div>';
   }).join('');
-  box.innerHTML='<h2>Opdrachten</h2>'+(open||'<small style="color:var(--mute)">Nog geen open opdrachten.</small>')+
+  box.innerHTML='<div id="recap"></div><h2>Opdrachten</h2>'+(open||'<small style="color:var(--mute)">Nog geen open opdrachten.</small>')+
     (cons?'<h2>Gevolgen</h2>'+cons:'')+(done?'<h2>Afgerond</h2>'+done:'')+
     '<h2>Personen</h2>'+(ppl||'<small style="color:var(--mute)">Nog geen personen in de Stand.</small>')+
     '<h2>Logboek</h2><div id="logs">Laden…</div>';
+  db.ref(cp('summaries',C)).get().then(ss=>{
+    const arr=[]; ss.forEach(c=>{arr.push(c.val())}); arr.reverse();
+    if(screen!=='camp'||cid!==C||!$('#recap')) return;
+    $('#recap').innerHTML='<details'+(arr.length?' open':'')+'><summary>📖 Voorheen (samenvatting)</summary>'+(arr.map(a=>'<div class="card"><small style="color:var(--mute)">ronde '+a.fromRound+' t/m '+a.toRound+'</small><br>'+md(a.text)+'</div>').join('')||'<small style="color:var(--mute)">Nog geen samenvatting; die komt automatisch na 15 rondes.</small>')+'<div class="row"><button class="b alt sm" id="sumnow">Vat samen tot nu</button></div></details>';
+    $('#sumnow').onclick=async e=>{e.target.disabled=true;e.target.textContent='Bezig…';try{const ok=await summarize(C,turn?turn.round:0,true);if(!ok)alert('Te weinig nieuwe berichten om samen te vatten.')}catch(err){alert(err.message)}renderDiary()};
+  });
   const ls=await db.ref(cp('log',C)).limitToLast(80).get(); const la=[]; ls.forEach(c=>{la.push(c.val())}); la.reverse();
   if(screen==='camp'&&cid===C&&$('#logs')) $('#logs').innerHTML=la.map(l=>'<div class="card"><small style="color:var(--mute)">'+esc(l.inGameDate||'')+'</small><br>'+esc(l.fact)+'</div>').join('')||'<small style="color:var(--mute)">Nog geen feiten vastgelegd.</small>';
+}
+
+const SUMSYS='Je vat voor een D&D-campagne in Midden-aarde de nieuwe berichten samen als feitelijke recap in het Nederlands, in maximaal 180 woorden: wie, wat, waar, beslissingen, gevolgen en openstaande lijnen. Neem de eerdere samenvatting over waar die nog relevant is. Gebruik alleen wat in de berichten staat; voeg geen geheimen of verzinsels toe. Geen opsommingstekens of kopjes, korte alinea\'s.';
+async function summarize(C,upTo,force){
+  const ss=await db.ref(cp('summaries',C)).get(); let covered=0; const prev=[];
+  ss.forEach(c=>{const v=c.val();covered=Math.max(covered,v.toRound||0);prev.push(v.text)});
+  if(!force&&upTo-covered<15) return false;
+  const ms=await db.ref(cp('messages',C)).limitToLast(500).get(); const list=[];
+  ms.forEach(c=>{const m=c.val(); if(m.type!=='system'&&m.round>covered&&m.round<=upTo) list.push(m)});
+  if(list.length<4) return false;
+  const text=list.map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
+  const r=await callGemini(SUMSYS,'# EERDERE SAMENVATTING\n'+(prev.join('\n')||'(geen)')+'\n\n# NIEUWE BERICHTEN\n'+text,null,false);
+  await db.ref(cp('summaries/'+String(upTo).padStart(5,'0'),C)).set({fromRound:covered+1,toRound:upTo,text:r.txt.trim(),t:Date.now()});
+  return true;
 }
 
 /* ---------- OOC ---------- */
