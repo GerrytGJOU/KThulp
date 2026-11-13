@@ -1,5 +1,14 @@
 {
   "rules": {
+    "dndAccess": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid"
+      }
+    },
+    "dnd": {
+      ".read": "auth != null && root.child('dndAccess/'+auth.uid).exists()",
+      ".write": "auth != null && root.child('dndAccess/'+auth.uid).exists()"
+    },
     "rooms": {
       "$code": {
         ".read": true,
