@@ -72,6 +72,25 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 #ov{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:16px}
 #ov img{max-width:100%;max-height:82vh;border-radius:10px;border:2px solid var(--gold)}
 #ov div{color:var(--gold);font-size:18px}
+#scenebar{padding:4px 12px;font-size:13px;color:var(--gold);background:rgba(11,18,32,.7);border-bottom:1px solid rgba(200,162,74,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#partybar{display:flex;gap:8px;overflow-x:auto;padding:6px 12px;background:rgba(20,17,15,.75);border-bottom:1px solid rgba(200,162,74,.3)}
+#partybar:empty,#scenebar:empty{display:none}
+.pc{display:flex;gap:8px;align-items:center;flex:none;min-width:170px;max-width:240px;padding:5px 8px;border-radius:8px;background:rgba(42,35,29,.9);border:1px solid #4a3d30}
+.pc .av{width:44px;height:44px;border-radius:50%;flex:none;object-fit:cover;object-position:top;border:2px solid var(--gold);background:#0f0d0b;display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:bold}
+.pc .pi{min-width:0;flex:1}
+.pc b{font-size:14px}
+.hpb{height:6px;border-radius:3px;background:#0f0d0b;margin:3px 0 2px;overflow:hidden}
+.hpb i{display:block;height:100%;background:var(--ok)}
+.hpb i.mid{background:#c8a24a}.hpb i.low{background:var(--red)}
+.pc small{color:var(--mute);font-size:12px}
+.chips{display:flex;gap:3px;flex-wrap:wrap;margin-top:2px}
+.chip{font-size:11px;padding:1px 6px;border-radius:9px;background:#3a3027;color:var(--text)}
+.chip.bad{background:var(--red);color:#fff}
+.q{border-left:3px solid var(--gold);padding:4px 10px;margin:0 0 8px;background:rgba(32,27,23,.7);border-radius:0 6px 6px 0}
+.q.done{border-color:var(--ok);color:var(--mute)}
+.ppl{display:flex;gap:10px;align-items:center}
+.ppl .av{width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid #4a3d30;background:#0f0d0b;flex:none;display:flex;align-items:center;justify-content:center;color:var(--mute)}
+.more-btn{width:100%;text-align:left;margin-bottom:8px;padding:14px}
 input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 .vh{position:absolute!important;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
 </style>
@@ -339,17 +358,19 @@ async function saveNewNpc(){
 function enterCampaign(id){
   leaveCampaign(); cid=id; screen='camp'; tab='game'; $('#menubtn').style.display='';
   main.innerHTML=`
-  <section class="tab" id="t-game"><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></section>
+  <section class="tab" id="t-game"><div id="scenebar"></div><div id="partybar"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></section>
   <section class="tab" id="t-ooc"><div class="scroll" id="oocthread"></div><div class="compose"><div class="row"><input type="text" id="oocin" placeholder="Praat met je broer (de DM leest dit niet)" style="flex:1"><button class="b" id="oocsend">Stuur</button></div></div></section>
+  <section class="tab" id="t-diary"><div class="scroll" id="diarybox"></div></section>
+  <section class="tab" id="t-more"><div class="scroll" id="morebox"></div></section>
   <section class="tab" id="t-stand"><div class="scroll" id="standbox"></div></section>
   <section class="tab" id="t-canon"><div class="scroll" id="canonbox"></div></section>
   <section class="tab" id="t-set"><div class="scroll" id="setbox"></div></section>
-  <nav><button data-t="game">Spel</button><button data-t="ooc">Chat</button><button data-t="stand">Stand</button><button data-t="canon">Canon</button><button data-t="set">⚙</button></nav>`;
+  <nav><button data-t="game">Spel</button><button data-t="ooc">Chat</button><button data-t="diary">Dagboek</button><button data-t="more">Meer</button></nav>`;
   document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
   $('#oocsend').onclick=sendOoc;
   $('#oocin').onkeydown=e=>{if(e.key==='Enter')sendOoc()};
   on(db.ref(cp('turn')),'value',s=>{turn=s.val();renderGame()});
-  on(db.ref(cp('state')),'value',s=>{stateStr=s.val()||"{}";if(tab==='stand')renderStand()});
+  on(db.ref(cp('state')),'value',s=>{stateStr=s.val()||"{}";if(tab==='stand')renderStand();if(tab==='diary')renderDiary();renderGame()});
   on(db.ref(cp('canon')),'value',s=>{canon=s.val()||{};if(tab==='canon')renderCanon()});
   on(db.ref(cp('pending')),'value',s=>{pending=s.val()||{};renderGame()});
   const mq=db.ref(cp('messages')).limitToLast(300);
@@ -361,8 +382,15 @@ function enterCampaign(id){
 function setTab(t){
   tab=t;
   document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id==='t-'+t));
-  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
-  ({game:renderGame,ooc:renderOoc,stand:renderStand,canon:renderCanon,set:renderSet})[t]();
+  const navT=(t==='stand'||t==='canon'||t==='set')?'more':t;
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.t===navT));
+  ({game:renderGame,ooc:renderOoc,diary:renderDiary,more:renderMore,stand:renderStand,canon:renderCanon,set:renderSet})[t]();
+}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-goto]'); if(g&&screen==='camp') setTab(g.dataset.goto)});
+const BACK='<button class="b alt sm" data-goto="more" style="margin-bottom:8px">‹ Meer</button>';
+function renderMore(){
+  if(screen!=='camp') return;
+  $('#morebox').innerHTML='<button class="b alt more-btn" data-goto="stand">📜 Stand en versies</button><button class="b alt more-btn" data-goto="canon">📚 Canon (documenten)</button><button class="b alt more-btn" data-goto="set">⚙ Instellingen en verbruik</button>';
 }
 
 /* ---------- spel ---------- */
@@ -377,6 +405,7 @@ function portraitsFor(m){
 }
 function renderGame(){
   if(!me||screen!=='camp'||tab!=='game') return;
+  renderParty();
   const th=$('#thread');
   const atBottom=th.scrollHeight-th.scrollTop-th.clientHeight<80;
   th.innerHTML=msgs.map(m=>{
@@ -490,7 +519,15 @@ Regels:
 - Spelers rollen zelf fysiek; hun worp staat in hun actie ("[worp: ...]"). Vraag een check via nextTurn.checks (naam → welke check en waarom); verklap DC's niet.
 - Voor worpen van NPC's/vijanden gebruik je UITSLUITEND de meegegeven voorgegooide dobbelstenen, in volgorde (d20 voor aanvallen/checks/saves, d6/d8/d10/d12 voor schade). Noem de worp kort in de vertelling.
 - Als beide spelers moeten reageren zet je beide namen in awaiting; bij combat de volgende speler; bij een enkele speler alleen die naam.
-- Houd de STAND bij via statePatch (deep merge; null verwijdert een sleutel; lijsten worden vervangen). Houd bij: inGame (date, timeOfDay), pcs (location, hp, conditions, inventory, knowledge), companions, npcs, factions, quests, initiative.
+- Houd de STAND bij via statePatch (deep merge; null verwijdert een sleutel; lijsten worden vervangen). Gebruik EXACT dit schema, met de naam van het personage als sleutel:
+  {"inGame":{"date":"24 oktober 3018","timeOfDay":"ochtend","location":"Rivendell, Last Homely House"},
+   "pcs":{"Wulfgrim":{"player":"Gerben","location":"","hp":{"current":41,"max":41,"temp":0},"resources":{"Rage":"3/3","Hit Dice":"3d12"},"conditions":[],"inventory":[],"knowledge":[]}},
+   "companions":{"Naam":{"location":"","hp":{"current":0,"max":0,"temp":0},"status":"","attitude":""}},
+   "npcs":{"Naam":{"location":"","status":"","attitude":"","knows":[]}},
+   "factions":{"Naam":{"stance":"","currentAction":""}},
+   "quests":{"open":[{"title":"","detail":""}],"completed":[],"consequences":[]},
+   "initiative":null}
+  Vul bij het begin hp, resources en inventory van elke PC in uit zijn B-document. Werk hp, resources, conditions, location, inGame en quests bij zodra ze veranderen. Controleer geografie met Tolkiens kaart (Rivendell ligt in Eriador aan de westzijde van de Misty Mountains, ver van de Ered Luin). 
 - Documenten in CANON die als DM-geheim of "NIET LEZEN ALS SPELER" gemarkeerd zijn, gebruik je voor planning, maar je onthult of citeert ze nooit letterlijk; laat geheimen alleen via het spel zelf blijken.
 - Is de ACTUELE STAND nog leeg ({}), begin dan met een statePatch die de beginsituatie uit D1 Wereldstatus / STAND #1 in canon overneemt. Een PC zonder uitgewerkt personage (zoals PC2 zolang B2 ontbreekt) speel je niet; vraag die speler eerst zijn personage te beschrijven.
 - Portretten: "speakers" = de namen van maximaal 2 NPC's die in deze beurt spreken of centraal staan. Gebruik EXACT de naam uit de lijst BEKENDE NPC'S als de NPC daar al in staat. "newNpcs" = elke NPC die in deze beurt voor het eerst optreedt en NIET in die lijst staat, met "visual": een concrete Engelse beschrijving voor een portret (soort/leeftijd, postuur, gezicht, huid, haar en baard, ogen, littekens, elk kledingstuk met kleur en materiaal, zichtbare uitrusting, uitdrukking). Voor figuren uit Tolkiens boeken: beschrijf zoals in de boeken. Geen geheimen in "visual".
@@ -584,6 +621,66 @@ async function resolve(retry){
   }finally{ resolving=false; }
 }
 
+/* ---------- Stand lezen: partybalk, scenekop, dagboek ---------- */
+function getState(){try{return JSON.parse(stateStr)||{}}catch(e){return{}}}
+function itemText(x){
+  if(x==null) return '';
+  if(typeof x!=='object') return String(x);
+  const t=x.title||x.name||x.quest||x.naam||x.titel||'', d=x.detail||x.description||x.beschrijving||x.status||x.summary||'';
+  return t&&d?t+' — '+d:(t||d||Object.values(x).filter(v=>typeof v!=='object').join(' · '));
+}
+function listOf(x){
+  if(!x) return [];
+  if(Array.isArray(x)) return x.map(itemText).filter(Boolean);
+  if(typeof x==='object') return Object.entries(x).map(([k,v])=>k+': '+(typeof v==='object'&&v?itemText(v):v));
+  return [String(x)];
+}
+function hpOf(c){
+  let hp=c&&(c.hp!=null?c.hp:c.HP); if(hp==null) return null;
+  if(typeof hp==='object'){const cur=Number(hp.current!=null?hp.current:hp.cur),max=Number(hp.max!=null?hp.max:hp.maximum);
+    return isFinite(cur)&&isFinite(max)&&max>0?{cur,max,temp:Number(hp.temp)||0}:null}
+  if(typeof hp==='string'){const m=hp.match(/(\d+)\s*\/\s*(\d+)/); return m?{cur:+m[1],max:+m[2],temp:0}:null}
+  return null;
+}
+function avatar(name){
+  const k=slug(name), n=npcs[k];
+  return n&&n.img?'<img class="av" src="'+n.img+'" data-zoom="'+k+'" alt="">':'<div class="av">'+esc(String(name).charAt(0).toUpperCase())+'</div>';
+}
+function renderParty(){
+  const S=getState(), sb=$('#scenebar'), pb=$('#partybar'); if(!sb||!pb) return;
+  const g=S.inGame||{}, pcs=Object.entries(S.pcs||{});
+  const loc=g.location||g.plaats||(pcs[0]&&pcs[0][1]&&pcs[0][1].location)||'';
+  const bits=[loc&&'📍 '+loc,g.date&&'📅 '+g.date,g.timeOfDay].filter(Boolean);
+  sb.textContent=bits.join(' · ');
+  const members=[...pcs.map(([k,v])=>({name:(v&&v.name)||k,c:v||{}})),...Object.entries(S.companions||{}).map(([k,v])=>({name:(v&&v.name)||k,c:v||{},comp:true}))];
+  pb.innerHTML=members.map(m=>{
+    const c=m.c, hp=hpOf(c);
+    const pct=hp?Math.max(0,Math.min(100,Math.round(hp.cur/hp.max*100))):0, cls=pct<=25?'low':pct<=60?'mid':'';
+    const res=listOf(c.resources).slice(0,4).map(r=>'<span class="chip">'+esc(r)+'</span>').join('');
+    const con=listOf(c.conditions).slice(0,3).map(r=>'<span class="chip bad">'+esc(r)+'</span>').join('');
+    return '<div class="pc">'+avatar(m.name)+'<div class="pi"><b>'+esc(m.name)+'</b>'+(m.comp?' <small>metgezel</small>':'')+
+      (hp?'<div class="hpb"><i class="'+cls+'" style="width:'+pct+'%"></i></div><small>HP '+hp.cur+'/'+hp.max+(hp.temp?' (+'+hp.temp+')':'')+'</small>':'')+
+      '<div class="chips">'+res+con+'</div></div></div>';
+  }).join('');
+}
+async function renderDiary(){
+  if(screen!=='camp') return;
+  const box=$('#diarybox'), C=cid, S=getState(), q=S.quests||{};
+  const qs=(arr,cls)=>listOf(arr).map(t=>'<div class="q '+cls+'">'+esc(t)+'</div>').join('');
+  const open=qs(q.open,''), done=qs(q.completed,'done'), cons=listOf(q.consequences).map(t=>'<div class="q">'+esc(t)+'</div>').join('');
+  const ppl=Object.entries(S.npcs||{}).map(([k,v])=>{
+    const o=(v&&typeof v==='object')?v:{status:v};
+    const lines=[o.location,o.status,o.attitude].filter(x=>x&&typeof x!=='object').map(esc).join(' · ');
+    return '<div class="card ppl">'+avatar((o&&o.name)||k)+'<div><b>'+esc((o&&o.name)||k)+'</b><br><small style="color:var(--mute)">'+(lines||'—')+'</small></div></div>';
+  }).join('');
+  box.innerHTML='<h2>Opdrachten</h2>'+(open||'<small style="color:var(--mute)">Nog geen open opdrachten.</small>')+
+    (cons?'<h2>Gevolgen</h2>'+cons:'')+(done?'<h2>Afgerond</h2>'+done:'')+
+    '<h2>Personen</h2>'+(ppl||'<small style="color:var(--mute)">Nog geen personen in de Stand.</small>')+
+    '<h2>Logboek</h2><div id="logs">Laden…</div>';
+  const ls=await db.ref(cp('log',C)).limitToLast(80).get(); const la=[]; ls.forEach(c=>{la.push(c.val())}); la.reverse();
+  if(screen==='camp'&&cid===C&&$('#logs')) $('#logs').innerHTML=la.map(l=>'<div class="card"><small style="color:var(--mute)">'+esc(l.inGameDate||'')+'</small><br>'+esc(l.fact)+'</div>').join('')||'<small style="color:var(--mute)">Nog geen feiten vastgelegd.</small>';
+}
+
 /* ---------- OOC ---------- */
 function sendOoc(){
   const i=$('#oocin'),v=i.value.trim(); if(!v) return; i.value='';
@@ -601,10 +698,9 @@ async function renderStand(){
   if(screen!=='camp') return;
   const box=$('#standbox'), C=cid;
   let pretty=stateStr; try{pretty=JSON.stringify(JSON.parse(stateStr),null,1)}catch(e){}
-  box.innerHTML=`<h2>Huidige Stand</h2><textarea id="stedit" style="min-height:260px;font-family:monospace;font-size:13px"></textarea>
+  box.innerHTML=BACK+`<h2>Huidige Stand</h2><textarea id="stedit" style="min-height:260px;font-family:monospace;font-size:13px"></textarea>
   <div class="row" style="margin-top:6px"><button class="b" id="stsave">Stand opslaan</button></div>
-  <h2>Versies</h2><div id="vers">Laden…</div>
-  <h2>Logboek</h2><div id="logs">Laden…</div>`;
+  <h2>Versies</h2><div id="vers">Laden…</div>`;
   $('#stedit').value=pretty;
   $('#stsave').onclick=async()=>{
     try{const o=JSON.parse($('#stedit').value);await db.ref(cp('state',C)).set(JSON.stringify(o));
@@ -619,8 +715,6 @@ async function renderStand(){
     await db.ref(cp('state',C)).set(v.json);
     await db.ref(cp('messages',C)).push(sysMsg(me.name+' zette de Stand terug naar na ronde '+v.round+'.'));
   });
-  const ls=await db.ref(cp('log',C)).limitToLast(80).get();const la=[];ls.forEach(c=>{la.push(c.val())});la.reverse();
-  if($('#logs')) $('#logs').innerHTML=la.map(l=>'<div class="card"><small>'+esc(l.inGameDate||'')+'</small><br>'+esc(l.fact)+'</div>').join('')||'—';
 }
 
 /* ---------- Canon ---------- */
@@ -628,7 +722,7 @@ function renderCanon(){
   if(screen!=='camp') return;
   const box=$('#canonbox');
   const ids=Object.keys(canon);
-  box.innerHTML=`<p><small>Canon = spelregels, personages, wereld. Je maakt dit met ChatGPT/Claude; hier plak of upload je het. Gemini krijgt alle documenten bij elke beurt.</small></p>`+
+  box.innerHTML=BACK+`<p><small>Canon = spelregels, personages, wereld. Je maakt dit met ChatGPT/Claude; hier plak of upload je het. Gemini krijgt alle documenten bij elke beurt.</small></p>`+
   ids.map(id=>'<div class="card"><h3>'+esc(canon[id].title)+'</h3><small>'+canon[id].text.length+' tekens</small><div class="row" style="margin-top:6px"><button class="b alt sm" data-e="'+id+'">Bewerk</button><button class="b red sm" data-d="'+id+'">Wis</button></div></div>').join('')+
   `<h2>Nieuw / overschrijven</h2><input type="text" id="ctitle" placeholder="Titel (zelfde titel = overschrijven)"><br><br>
   <textarea id="ctext" style="min-height:140px" placeholder="Plak hier de tekst (Markdown)"></textarea>
@@ -647,7 +741,7 @@ function renderCanon(){
 function renderSet(){
   const box=$('#setbox'); if(!box) return;
   if(box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT') return;
-  box.innerHTML=`<div class="card"><h3>Gemini (de DM)</h3>
+  box.innerHTML=(screen==='camp'?BACK:'')+`<div class="card"><h3>Gemini (de DM)</h3>
   <label>Model</label><input type="text" id="smodel"><br><br>
   <label>Temperatuur</label><input type="number" id="stemp" step="0.1" min="0" max="2"><br><br>
   <label>API-sleutel (gedeeld in de database; alleen jullie twee kunnen lezen)</label><input type="password" id="skey" placeholder="${cfg.geminiKey?'(ingesteld — leeg laten = ongewijzigd)':'plak hier'}"><br><br>
