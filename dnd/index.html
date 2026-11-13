@@ -9,27 +9,42 @@
 :root{--bg:#14110f;--panel:#201b17;--panel2:#2a231d;--gold:#c8a24a;--text:#ece3d0;--mute:#9a8f7a;--red:#a8432f;--ok:#6a9a5a}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Palatino,"Palatino Linotype","Book Antiqua",Georgia,serif;font-size:16px}
-body{display:flex;flex-direction:column}
+body{display:flex;flex-direction:column;position:relative;
+  background:
+   radial-gradient(ellipse at 50% 0%,rgba(200,162,74,.18),transparent 55%),
+   radial-gradient(circle at 15% 12%,rgba(255,244,210,.9) 0 1.2px,transparent 2px),
+   radial-gradient(circle at 78% 8%,rgba(255,244,210,.8) 0 1px,transparent 2px),
+   radial-gradient(circle at 42% 20%,rgba(255,244,210,.7) 0 1px,transparent 2px),
+   radial-gradient(circle at 90% 26%,rgba(255,244,210,.6) 0 1px,transparent 2px),
+   linear-gradient(180deg,#0b1220 0%,#16202a 38%,#241c15 100%);
+  background-attachment:fixed}
+/* bergketen (Nevelbergen) onderaan */
+body::before{content:"";position:fixed;left:0;right:0;bottom:0;height:46vh;z-index:0;pointer-events:none;opacity:.55;
+  background:
+   url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'><path fill='%2310161c' d='M0 300V190l70-60 50 40 90-120 80 100 60-50 110 130 70-80 90 90 120-160 90 120 70-60 100 90 70-70 100 110V300z'/><path fill='%230a0e13' d='M0 300V240l90-50 70 45 110-80 90 70 80-40 120 80 90-60 130 70 110-90 100 80 90-40 120 70V300z'/><path fill='%23fff' fill-opacity='.35' d='M210 50l-22 40 22-10 22 10zM770 40l-24 44 24-12 24 12zM490 130l-18 30 18-8 18 8z'/></svg>") bottom/100% 100% no-repeat}
+body>*{position:relative;z-index:1}
+.portal-back{position:fixed!important}
 .portal-back{position:fixed;top:8px;left:8px;z-index:9999;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--gold);border-radius:50%;color:var(--gold)}
-header{padding:10px 12px 8px 52px;border-bottom:1px solid #3a3027;display:flex;justify-content:space-between;align-items:center;gap:8px}
-header h1{font-size:18px;margin:0;color:var(--gold)}
+header{padding:10px 12px 8px 52px;border-bottom:1px solid rgba(200,162,74,.45);background:linear-gradient(180deg,rgba(11,18,32,.85),rgba(11,18,32,.4));display:flex;justify-content:space-between;align-items:center;gap:8px}
+header h1{font-size:20px;margin:0;letter-spacing:.14em;text-transform:uppercase;font-weight:normal;background:linear-gradient(180deg,#f3df9c,#b8892f);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 1px 2px #000)}
 header small{color:var(--mute)}
 main{flex:1;min-height:0;display:flex;flex-direction:column}
 .tab{display:none;flex:1;min-height:0;flex-direction:column}
 .tab.on{display:flex}
 .scroll{flex:1;min-height:0;overflow-y:auto;padding:10px 12px}
-nav{display:flex;border-top:1px solid #3a3027;background:var(--panel)}
+nav{display:flex;border-top:1px solid rgba(200,162,74,.45);background:rgba(20,17,15,.88);backdrop-filter:blur(6px)}
 nav button{flex:1;background:none;border:0;color:var(--mute);padding:12px 4px;font:inherit;font-size:14px}
 nav button.on{color:var(--gold);border-top:2px solid var(--gold);margin-top:-1px}
-.msg{margin:0 0 12px;padding:10px 12px;border-radius:8px;background:var(--panel);line-height:1.45;word-wrap:break-word}
-.msg.dm{border-left:3px solid var(--gold);background:var(--panel2)}
-.msg.action{border-left:3px solid #5b7fa8}
-.msg.system{color:var(--mute);font-style:italic;background:none;padding:2px 12px}
-.msg .who{font-size:12px;color:var(--gold);margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em}
+.msg{margin:0 0 12px;padding:10px 12px;border-radius:8px;background:rgba(32,27,23,.82);line-height:1.5;word-wrap:break-word;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.msg.dm{background:linear-gradient(180deg,#eadcb8,#d9c690);color:#2b2012;border:1px solid #9c7f3c;border-left:4px solid #7a5a1c;font-size:17px;box-shadow:0 3px 12px rgba(0,0,0,.55),inset 0 0 30px rgba(120,85,20,.25)}
+.msg.dm .who{color:#6a4a12}
+.msg.action{border-left:3px solid #5b7fa8;background:rgba(24,34,48,.8)}
+.msg.system{color:var(--mute);font-style:italic;background:none;box-shadow:none;padding:2px 12px;text-align:center}
+.msg .who{font-size:12px;color:var(--gold);margin-bottom:3px;text-transform:uppercase;letter-spacing:.08em}
 .msg.ooc .who{color:#8aa}
-.status{padding:8px 12px;background:var(--panel);border-top:1px solid #3a3027;font-size:14px}
+.status{padding:8px 12px;background:rgba(32,27,23,.9);border-top:1px solid rgba(200,162,74,.45);font-size:14px}
 .status b{color:var(--gold)}
-.compose{padding:8px 12px 10px;background:var(--panel);display:flex;flex-direction:column;gap:6px}
+.compose{padding:8px 12px 10px;background:rgba(32,27,23,.9);display:flex;flex-direction:column;gap:6px}
 textarea,input[type=text],input[type=password],input[type=number],select{width:100%;background:#0f0d0b;color:var(--text);border:1px solid #4a3d30;border-radius:6px;padding:9px;font:inherit;font-size:16px}
 textarea{resize:vertical;min-height:70px}
 .row{display:flex;gap:6px;flex-wrap:wrap}
