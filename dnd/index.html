@@ -307,8 +307,8 @@ function menuNpcs(){
     <label class="b alt sm" for="nfile">Plaatje kiezen</label><input type="file" id="nfile" class="vh" accept="image/*"><span id="nfileinfo" style="font-size:13px;color:var(--mute)"></span></div>
     <div class="row" style="margin-top:6px"><button class="b" id="nsave">Opslaan</button></div>
   </details>
-  <h2>NPC's &amp; spelers</h2><div id="npcbox"></div>
-  <h2>Locaties</h2><div id="locbox"></div></div>`;
+  <h2 id="npctitle">NPC's &amp; spelers</h2><div id="npcbox"></div>
+  <h2 id="loctitle">Locaties</h2><div id="locbox"></div></div>`;
   $('#back').onclick=()=>showMenu('home');
   $('#nfile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{window._nimg=await resizeImage(f);$('#nfileinfo').textContent='✓ '+f.name}catch(err){alert(err.message)}};
   $('#nsave').onclick=saveNewNpc;
@@ -319,6 +319,7 @@ function menuNpcs(){
     copyText(miss.join('\n\n'),e.target);
   };
   ['#npcbox','#locbox'].forEach(sel=>{
+    $(sel).addEventListener('toggle',e=>{const d=e.target; if(d.dataset&&d.dataset.done) doneOpen[d.dataset.done]=d.open;},true);
     $(sel).addEventListener('change',async e=>{
       const inp=e.target.closest('input[type=file][data-k]'); if(!inp||!inp.files[0]) return;
       const base=inp.dataset.kind==='loc'?'dnd/locations/':'dnd/npcs/';
@@ -394,11 +395,22 @@ function libCard(kind,n){
     (n.img?'<button class="b alt sm" data-a="delimg" data-kind="'+kind+'" data-k="'+k+'">Plaatje wis</button>':'')+
     '<button class="b red sm" data-a="del" data-kind="'+kind+'" data-k="'+k+'">Wis</button></div></div></div>';
 }
+const doneOpen={npc:false,loc:false};
+function libGroups(kind,list){
+  const incomplete=n=>!n.img||!n.visual||(kind==='loc'&&!n.desc);
+  const todo=list.filter(incomplete), done=list.filter(n=>!incomplete(n));
+  return (todo.map(n=>libCard(kind,n)).join('')||'<small style="color:var(--mute)">Alles compleet ✓</small>')+
+    (done.length?'<details class="card" data-done="'+kind+'"'+(doneOpen[kind]?' open':'')+'><summary>✔ Compleet ('+done.length+') — opgeborgen</summary>'+done.map(n=>libCard(kind,n)).join('')+'</details>':'');
+}
 function renderNpcs(){
   const box=$('#npcbox'); if(screen!=='menu'||!box) return;
-  const arr=o=>Object.entries(o).map(([k,v])=>({k,...v})).sort((a,b)=>(!!a.img-!!b.img)||String(a.name).localeCompare(b.name));
-  box.innerHTML=arr(npcs).map(n=>libCard('npc',n)).join('')||"<small>Nog geen NPC's. De DM voegt ze vanzelf toe zodra ze in het verhaal verschijnen.</small>";
-  const lb=$('#locbox'); if(lb) lb.innerHTML=arr(locs).map(n=>libCard('loc',n)).join('')||'<small>Nog geen locaties. De DM voegt ze toe bij een nieuwe plek.</small>';
+  const arr=o=>Object.entries(o).map(([k,v])=>({k,...v})).sort((a,b)=>String(a.name).localeCompare(b.name));
+  const miss=l=>l.filter(n=>!n.img||!n.visual).length;
+  box.innerHTML=libGroups('npc',arr(npcs));
+  const lb=$('#locbox'); if(lb) lb.innerHTML=libGroups('loc',arr(locs));
+  const t1=$('#npctitle'), t2=$('#loctitle');
+  if(t1) t1.textContent="NPC's & spelers"+(miss(arr(npcs))?' — '+miss(arr(npcs))+' missen iets':'');
+  if(t2) t2.textContent='Locaties'+(miss(arr(locs))?' — '+miss(arr(locs))+' missen iets':'');
 }
 async function saveNewNpc(){
   const name=$('#nname').value.trim(); if(!name){alert('Naam invullen.');return}
