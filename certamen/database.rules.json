@@ -5,9 +5,14 @@
         ".read": "auth != null && auth.uid === $uid"
       }
     },
+    "dndAccessEmail": {
+      "$e": {
+        ".read": "auth != null && auth.token.email_verified === true && $e === auth.token.email.toLowerCase().replace('.', ',')"
+      }
+    },
     "dnd": {
-      ".read": "auth != null && root.child('dndAccess/'+auth.uid).exists()",
-      ".write": "auth != null && root.child('dndAccess/'+auth.uid).exists()"
+      ".read": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+      ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
     },
     "rooms": {
       "$code": {
