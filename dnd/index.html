@@ -23,11 +23,11 @@ body::before{content:"";position:fixed;left:0;right:0;bottom:0;height:46vh;z-ind
   background:
    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'><path fill='%2310161c' d='M0 300V190l70-60 50 40 90-120 80 100 60-50 110 130 70-80 90 90 120-160 90 120 70-60 100 90 70-70 100 110V300z'/><path fill='%230a0e13' d='M0 300V240l90-50 70 45 110-80 90 70 80-40 120 80 90-60 130 70 110-90 100 80 90-40 120 70V300z'/><path fill='%23fff' fill-opacity='.35' d='M210 50l-22 40 22-10 22 10zM770 40l-24 44 24-12 24 12zM490 130l-18 30 18-8 18 8z'/></svg>") bottom/100% 100% no-repeat}
 body>*{position:relative;z-index:1}
-.portal-back{position:fixed!important}
-.portal-back{position:fixed;top:8px;left:8px;z-index:9999;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--gold);border-radius:50%;color:var(--gold)}
+.portal-back{position:fixed!important;top:8px;left:8px;z-index:9999;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--gold);border-radius:50%;color:var(--gold)}
 header{padding:10px 12px 8px 52px;border-bottom:1px solid rgba(200,162,74,.45);background:linear-gradient(180deg,rgba(11,18,32,.85),rgba(11,18,32,.4));display:flex;justify-content:space-between;align-items:center;gap:8px}
-header h1{font-size:20px;margin:0;letter-spacing:.14em;text-transform:uppercase;font-weight:normal;background:linear-gradient(180deg,#f3df9c,#b8892f);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 1px 2px #000)}
-header small{color:var(--mute)}
+header h1{font-size:20px;margin:0;letter-spacing:.14em;text-transform:uppercase;font-weight:normal;background:linear-gradient(180deg,#f3df9c,#b8892f);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 2px #000)}
+header small{color:var(--mute);white-space:nowrap}
+#menubtn{background:none;border:1px solid var(--gold);color:var(--gold);border-radius:6px;padding:4px 10px;font:inherit;font-size:14px;cursor:pointer;display:none}
 main{flex:1;min-height:0;display:flex;flex-direction:column}
 .tab{display:none;flex:1;min-height:0;flex-direction:column}
 .tab.on{display:flex}
@@ -42,28 +42,42 @@ nav button.on{color:var(--gold);border-top:2px solid var(--gold);margin-top:-1px
 .msg.system{color:var(--mute);font-style:italic;background:none;box-shadow:none;padding:2px 12px;text-align:center}
 .msg .who{font-size:12px;color:var(--gold);margin-bottom:3px;text-transform:uppercase;letter-spacing:.08em}
 .msg.ooc .who{color:#8aa}
+.mrow{display:flex;gap:10px;align-items:flex-start}
+.pts{display:flex;flex-direction:column;gap:6px;flex:none}
+.pt{width:64px;height:64px;object-fit:cover;object-position:top;border-radius:50%;border:2px solid var(--gold);box-shadow:0 2px 6px rgba(0,0,0,.6);cursor:pointer;background:#000}
+.mtxt{flex:1;min-width:0}
 .status{padding:8px 12px;background:rgba(32,27,23,.9);border-top:1px solid rgba(200,162,74,.45);font-size:14px}
 .status b{color:var(--gold)}
 .compose{padding:8px 12px 10px;background:rgba(32,27,23,.9);display:flex;flex-direction:column;gap:6px}
 textarea,input[type=text],input[type=password],input[type=number],select{width:100%;background:#0f0d0b;color:var(--text);border:1px solid #4a3d30;border-radius:6px;padding:9px;font:inherit;font-size:16px}
 textarea{resize:vertical;min-height:70px}
-.row{display:flex;gap:6px;flex-wrap:wrap}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 button.b,label.b{background:var(--gold);color:#1a140c;border:0;border-radius:6px;padding:9px 14px;font:inherit;font-weight:bold;cursor:pointer;display:inline-block}
 button.b.alt,label.b.alt{background:#3a3027;color:var(--text)}
 button.b.red{background:var(--red);color:#fff}
+button.b.sm,label.b.sm{padding:5px 10px;font-size:14px}
 button:disabled{opacity:.4}
 pre{white-space:pre-wrap;word-break:break-word;background:#0f0d0b;padding:10px;border-radius:6px;font-size:13px}
-.card{background:var(--panel);border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.card{background:rgba(32,27,23,.88);border-radius:8px;padding:10px 12px;margin-bottom:10px}
 .card h3{margin:0 0 6px;color:var(--gold);font-size:16px}
+.npc{display:flex;gap:10px}
+.npc .th{width:72px;height:72px;flex:none;border-radius:8px;border:1px solid #4a3d30;background:#0f0d0b;object-fit:cover;object-position:top;display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:12px;text-align:center;cursor:pointer}
+.npc .info{flex:1;min-width:0}
+.npc small{color:var(--mute)}
+details summary{cursor:pointer;color:var(--gold);font-size:14px;margin:4px 0}
 .center{margin:auto;max-width:420px;padding:24px;text-align:center}
 .err{color:#e08a76}
 footer{text-align:center;color:var(--mute);font-size:12px;padding:4px 0 6px}
 h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:16px}
+#ov img{max-width:100%;max-height:82vh;border-radius:10px;border:2px solid var(--gold)}
+#ov div{color:var(--gold);font-size:18px}
+input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 </style>
 </head>
 <body>
 <a class="portal-back" href="../" aria-label="Terug naar portaal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
-<header><h1>⚔ Midden-aarde</h1><small id="who"></small></header>
+<header><h1>⚔ Midden-aarde</h1><span><button id="menubtn">☰ Menu</button> <small id="who"></small></span></header>
 <main id="main"><div class="center" id="boot">Laden…</div></main>
 <footer>Midden-aarde D&amp;D · &copy; Gerben de Jong · 2026</footer>
 
@@ -83,27 +97,58 @@ const auth=firebase.auth(), db=firebase.database();
 const $=s=>document.querySelector(s);
 const main=$('#main');
 
-let me=null;            // {uid,name}
-let turn=null, stateStr="{}", cfg={}, canon={}, msgs=[], oocs=[], pending={};
-let tab='game', draft="", rollDraft="", oocDraft="";
+/* ---------- toestand ---------- */
+let me=null;                 // {uid,name}
+let screen='menu', cid=null; // menu of campagne
+let cfg={}, npcs={}, index={};              // globaal
+let turn=null, canon={}, msgs=[], oocs=[], pending={}, stateStr="{}"; // per campagne
+let tab='game', draft="", rollDraft="";
+let listeners=[];
 const LEASE_MS=3*60*1000;
+const cp=(p,C)=>'dnd/campaigns/'+(C||cid)+'/'+p;
 
 /* ---------- helpers ---------- */
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function md(s){
   return esc(s||"").replace(/^### (.*)$/gm,'<b>$1</b>').replace(/^## (.*)$/gm,'<b>$1</b>').replace(/^# (.*)$/gm,'<b>$1</b>')
     .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>').replace(/\n/g,'<br>');
 }
+function slug(s){return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,60)||'x'}
 function awaitingNames(){return turn&&turn.awaiting?Object.keys(turn.awaiting):[]}
 function deepMerge(t,p){
   if(p===null||typeof p!=='object'||Array.isArray(p)) return p;
   const out=(t&&typeof t==='object'&&!Array.isArray(t))?{...t}:{};
-  for(const k of Object.keys(p)){
-    if(p[k]===null) delete out[k]; else out[k]=deepMerge(out[k],p[k]);
-  }
+  for(const k of Object.keys(p)){ if(p[k]===null) delete out[k]; else out[k]=deepMerge(out[k],p[k]); }
   return out;
 }
 function sysMsg(text){return {type:'system',author:'systeem',text,t:Date.now()}}
+function on(ref,ev,fn){ref.on(ev,fn);listeners.push([ref,ev,fn])}
+function copyText(t,btn){
+  const done=()=>{if(btn){const o=btn.textContent;btn.textContent='Gekopieerd ✓';setTimeout(()=>btn.textContent=o,1500)}};
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done,()=>fallback());
+  else fallback();
+  function fallback(){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(e){alert('Kopiëren mislukt; selecteer de tekst handmatig.')}a.remove()}
+}
+function resizeImage(file,max){
+  max=max||360;
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>{const im=new Image();
+      im.onload=()=>{const s=Math.min(1,max/Math.max(im.width,im.height));
+        const c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
+        c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.82))};
+      im.onerror=()=>rej(new Error('Geen geldige afbeelding'));im.src=r.result};
+    r.onerror=()=>rej(new Error('Lezen mislukt'));r.readAsDataURL(file);
+  });
+}
+function zoom(src,name){
+  const o=document.createElement('div');o.id='ov';
+  o.innerHTML='<img src="'+src+'" alt=""><div>'+esc(name||'')+'</div>';
+  o.onclick=()=>o.remove();document.body.appendChild(o);
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-zoom]'); if(t){const n=npcs[t.dataset.zoom]; if(n&&n.img) zoom(n.img,n.name)}
+});
 
 /* ---------- login ---------- */
 auth.getRedirectResult().catch(e=>{window._loginErr=e.message});
@@ -133,10 +178,142 @@ function showNoAccess(u,extra){
   $('#lo').onclick=()=>auth.signOut();
 }
 
-/* ---------- app ---------- */
+/* ---------- start: globale listeners ---------- */
 let started=false;
 function startApp(){
   if(started) return; started=true;
+  db.ref('dnd/config').on('value',s=>{cfg=s.val()||{};if(screen==='menu'||tab==='set')renderSet()});
+  db.ref('dnd/npcs').on('value',s=>{npcs=s.val()||{};renderNpcs();if(screen==='camp')renderGame()});
+  db.ref('dnd/campaignIndex').on('value',s=>{index=s.val()||{};renderIndex()});
+  $('#menubtn').onclick=showMenu;
+  setInterval(()=>{if(screen==='camp'&&turn&&turn.status==='resolving')renderGame()},15000);
+  showMenu();
+}
+
+/* ============================ HOOFDMENU ============================ */
+function latestId(){
+  const ids=Object.keys(index); if(!ids.length) return null;
+  return ids.sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0))[0];
+}
+function leaveCampaign(){
+  listeners.forEach(([r,e,f])=>r.off(e,f));listeners=[];
+  cid=null;turn=null;canon={};msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
+}
+function showMenu(){
+  leaveCampaign(); screen='menu'; $('#menubtn').style.display='none';
+  main.innerHTML=`<div class="scroll">
+  <div class="card">
+    <button class="b" id="goon" style="width:100%;font-size:19px;padding:14px">▶ Ga verder</button>
+    <div id="goonsub" style="text-align:center;color:var(--mute);font-size:14px;margin:4px 0 10px"></div>
+    <button class="b alt" id="newst" style="width:100%">＋ Nieuw verhaal</button>
+    <div id="newform"></div>
+  </div>
+  <h2>Savegames</h2><div id="savelist"></div>
+  <h2>Portretten &amp; NPC's</h2>
+  <div class="card"><h3>Nieuwe NPC / speler toevoegen</h3>
+    <input type="text" id="nname" placeholder="Naam (exact zoals in het verhaal)"><br><br>
+    <textarea id="nvis" placeholder="Uiterlijk (Engels, concreet: leeftijd, postuur, gezicht, haar, kleding, uitrusting)"></textarea>
+    <div class="row" style="margin-top:6px"><select id="nplayer" style="width:auto"><option value="">NPC</option><option>Gerben</option><option>Maurits</option></select>
+    <label class="b alt sm" for="nfile">Plaatje kiezen</label><input type="file" id="nfile" accept="image/*"><span id="nfileinfo"></span></div>
+    <div class="row" style="margin-top:6px"><button class="b" id="nsave">Opslaan</button></div>
+  </div>
+  <div class="row" style="margin-bottom:8px"><button class="b alt" id="copyall">Kopieer alle ontbrekende prompts</button></div>
+  <div id="npcbox"></div>
+  <h2>Instellingen</h2><div id="setbox"></div>
+  </div>`;
+  $('#goon').onclick=()=>{const id=latestId(); if(id) enterCampaign(id)};
+  $('#newst').onclick=newStoryForm;
+  $('#nfile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{window._nimg=await resizeImage(f);$('#nfileinfo').textContent='✓ '+f.name}catch(err){alert(err.message)}};
+  $('#nsave').onclick=saveNewNpc;
+  $('#copyall').onclick=e=>{
+    const miss=Object.entries(npcs).filter(([k,n])=>!n.img&&n.visual);
+    if(!miss.length){alert('Geen NPC\'s zonder plaatje.');return}
+    copyText(miss.map(([k,n])=>'===== '+n.name+' =====\n'+makePrompt(n)).join('\n\n'),e.target);
+  };
+  $('#npcbox').addEventListener('change',async e=>{
+    const inp=e.target.closest('input[type=file][data-k]'); if(!inp||!inp.files[0]) return;
+    try{const img=await resizeImage(inp.files[0]); await db.ref('dnd/npcs/'+inp.dataset.k+'/img').set(img)}catch(err){alert(err.message)}
+  });
+  $('#npcbox').addEventListener('click',e=>{
+    const b=e.target.closest('button[data-a]'); if(!b) return;
+    const k=b.dataset.k,n=npcs[k]; if(!n) return;
+    if(b.dataset.a==='copy') copyText(makePrompt(n),b);
+    if(b.dataset.a==='edit'){const v=prompt('Uiterlijk (Engels, concreet) voor '+n.name+':',n.visual||'');if(v!==null)db.ref('dnd/npcs/'+k+'/visual').set(v)}
+    if(b.dataset.a==='del'&&confirm(n.name+' definitief wissen (ook het plaatje)?'))db.ref('dnd/npcs/'+k).remove();
+    if(b.dataset.a==='delimg'&&confirm('Plaatje van '+n.name+' wissen?'))db.ref('dnd/npcs/'+k+'/img').remove();
+  });
+  renderIndex(); renderNpcs(); renderSet();
+}
+function renderIndex(){
+  if(screen!=='menu'||!$('#savelist')) return;
+  const id=latestId(), g=$('#goon');
+  g.disabled=!id;
+  $('#goonsub').textContent=id?(index[id].title+' · ronde '+(index[id].round||0)+' · '+new Date(index[id].lastPlayed||index[id].created||0).toLocaleDateString('nl-NL')):'Nog geen verhaal: begin met "Nieuw verhaal".';
+  const ids=Object.keys(index).sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0));
+  $('#savelist').innerHTML=ids.map(i=>{const x=index[i];
+    return '<div class="card"><h3>'+esc(x.title)+'</h3><small style="color:var(--mute)">ronde '+(x.round||0)+' · laatst gespeeld '+new Date(x.lastPlayed||0).toLocaleString('nl-NL')+'</small>'+
+    '<div class="row" style="margin-top:6px"><button class="b sm" data-open="'+i+'">Open</button><button class="b alt sm" data-ren="'+i+'">Hernoem</button><button class="b red sm" data-del="'+i+'">Wis</button></div></div>'}).join('')||'<small>Geen savegames.</small>';
+  $('#savelist').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>enterCampaign(b.dataset.open));
+  $('#savelist').querySelectorAll('[data-ren]').forEach(b=>b.onclick=()=>{const v=prompt('Nieuwe naam:',index[b.dataset.ren].title);if(v&&v.trim())db.ref('dnd/campaignIndex/'+b.dataset.ren+'/title').set(v.trim())});
+  $('#savelist').querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{
+    const x=index[b.dataset.del];
+    if(!confirm('"'+x.title+'" definitief wissen, met alle berichten, Stand en canon? Dit kan niet ongedaan worden gemaakt.')) return;
+    await db.ref().update({['dnd/campaignIndex/'+b.dataset.del]:null,['dnd/campaigns/'+b.dataset.del]:null});
+  });
+}
+function newStoryForm(){
+  const f=$('#newform'); if(f.innerHTML){f.innerHTML='';return}
+  const ids=Object.keys(index).sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0));
+  f.innerHTML='<br><input type="text" id="ntitle" placeholder="Naam van het nieuwe verhaal">'+
+   (ids.length?'<br><br><label><small>Canon overnemen van:</small></label><select id="ncopy"><option value="">— geen (leeg beginnen) —</option>'+ids.map(i=>'<option value="'+i+'">'+esc(index[i].title)+'</option>').join('')+'</select>':'')+
+   '<br><br><button class="b" id="ncreate">Verhaal aanmaken</button>';
+  if(ids.length) $('#ncopy').value=ids[0];
+  $('#ncreate').onclick=async()=>{
+    const t=$('#ntitle').value.trim(); if(!t){alert('Geef het verhaal een naam.');return}
+    const copy=$('#ncopy')?$('#ncopy').value:'';
+    const id=db.ref('dnd/campaignIndex').push().key, now=Date.now(), up={};
+    up['dnd/campaignIndex/'+id]={title:t,created:now,lastPlayed:now,round:0};
+    if(copy){const s=await db.ref(cp('canon',copy)).get(); if(s.exists()) up[cp('canon',id)]=s.val();}
+    await db.ref().update(up);
+    enterCampaign(id);
+  };
+}
+
+/* ----- NPC's en portretten ----- */
+const STYLE="Classic hand-drawn / painterly Tolkien-style tabletop RPG fantasy illustration: traditional details, visible ink outlines, atmospheric lighting, believable anatomy, historical materials.";
+function makePrompt(n){
+  return STYLE+"\nSquare head-and-shoulders character portrait of "+n.name+", facing the viewer in a slight three-quarter view, plain dark muted background with subtle texture.\n"+
+  "Character: "+(n.visual||'(no description yet)')+"\n"+
+  "If this is a character from Tolkien's books, follow the written descriptions in the books, not the likeness of any film actor.\n"+
+  "Avoid: photorealism, cartoon or anime look, 3D game render, modern clothing or objects, text, captions, watermarks, logos, borders, extra people, extra fingers, deformed hands.";
+}
+function renderNpcs(){
+  const box=$('#npcbox'); if(screen!=='menu'||!box) return;
+  const arr=Object.entries(npcs).map(([k,v])=>({k,...v})).sort((a,b)=>(!!a.img-!!b.img)||String(a.name).localeCompare(b.name));
+  box.innerHTML=arr.map(n=>'<div class="card npc">'+
+    (n.img?'<img class="th" src="'+n.img+'" data-zoom="'+n.k+'" alt="">':'<div class="th">geen plaatje</div>')+
+    '<div class="info"><h3 style="margin-bottom:2px">'+esc(n.name)+(n.forPlayer?' <small>· speler '+esc(n.forPlayer)+'</small>':'')+'</h3>'+
+    '<small>'+esc((n.visual||'(geen uiterlijk)').slice(0,160))+'</small>'+
+    '<details><summary>Prompt voor ChatGPT</summary><textarea readonly rows="7" onclick="this.select()">'+esc(makePrompt(n))+'</textarea></details>'+
+    '<div class="row"><button class="b sm" data-a="copy" data-k="'+n.k+'">Kopieer prompt</button>'+
+    '<label class="b alt sm" for="up_'+n.k+'">'+(n.img?'Vervang plaatje':'Upload plaatje')+'</label><input type="file" id="up_'+n.k+'" data-k="'+n.k+'" accept="image/*">'+
+    '<button class="b alt sm" data-a="edit" data-k="'+n.k+'">Uiterlijk</button>'+
+    (n.img?'<button class="b alt sm" data-a="delimg" data-k="'+n.k+'">Plaatje wis</button>':'')+
+    '<button class="b red sm" data-a="del" data-k="'+n.k+'">Wis</button></div></div></div>').join('')||'<small>Nog geen NPC\'s. De DM voegt ze vanzelf toe zodra ze in het verhaal verschijnen.</small>';
+}
+async function saveNewNpc(){
+  const name=$('#nname').value.trim(); if(!name){alert('Naam invullen.');return}
+  const rec={name,visual:$('#nvis').value.trim(),t:Date.now()};
+  if($('#nplayer').value) rec.forPlayer=$('#nplayer').value;
+  if(window._nimg) rec.img=window._nimg;
+  const k=slug(name), old=npcs[k]||{};
+  await db.ref('dnd/npcs/'+k).set({...old,...rec});
+  window._nimg=null;$('#nname').value='';$('#nvis').value='';$('#nfile').value='';$('#nfileinfo').textContent='';$('#nplayer').value='';
+}
+
+/* ============================ CAMPAGNE ============================ */
+function enterCampaign(id){
+  leaveCampaign(); cid=id; screen='camp'; tab='game'; $('#menubtn').style.display='';
   main.innerHTML=`
   <section class="tab" id="t-game"><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></section>
   <section class="tab" id="t-ooc"><div class="scroll" id="oocthread"></div><div class="compose"><div class="row"><input type="text" id="oocin" placeholder="Praat met je broer (de DM leest dit niet)" style="flex:1"><button class="b" id="oocsend">Stuur</button></div></div></section>
@@ -147,15 +324,15 @@ function startApp(){
   document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
   $('#oocsend').onclick=sendOoc;
   $('#oocin').onkeydown=e=>{if(e.key==='Enter')sendOoc()};
-  db.ref('dnd/turn').on('value',s=>{turn=s.val();renderGame()});
-  db.ref('dnd/state').on('value',s=>{stateStr=s.val()||"{}";if(tab==='stand')renderStand()});
-  db.ref('dnd/config').on('value',s=>{cfg=s.val()||{};if(tab==='set')renderSet()});
-  db.ref('dnd/canon').on('value',s=>{canon=s.val()||{};if(tab==='canon')renderCanon()});
-  db.ref('dnd/pending').on('value',s=>{pending=s.val()||{};renderGame()});
-  db.ref('dnd/messages').limitToLast(300).on('value',s=>{msgs=[];s.forEach(c=>{msgs.push(c.val())});renderGame()});
-  db.ref('dnd/ooc').limitToLast(200).on('value',s=>{oocs=[];s.forEach(c=>{oocs.push(c.val())});renderOoc()});
+  on(db.ref(cp('turn')),'value',s=>{turn=s.val();renderGame()});
+  on(db.ref(cp('state')),'value',s=>{stateStr=s.val()||"{}";if(tab==='stand')renderStand()});
+  on(db.ref(cp('canon')),'value',s=>{canon=s.val()||{};if(tab==='canon')renderCanon()});
+  on(db.ref(cp('pending')),'value',s=>{pending=s.val()||{};renderGame()});
+  const mq=db.ref(cp('messages')).limitToLast(300);
+  on(mq,'value',s=>{msgs=[];s.forEach(c=>{msgs.push(c.val())});renderGame()});
+  const oq=db.ref(cp('ooc')).limitToLast(200);
+  on(oq,'value',s=>{oocs=[];s.forEach(c=>{oocs.push(c.val())});renderOoc()});
   setTab('game');
-  setInterval(()=>{if(turn&&turn.status==='resolving')renderGame()},15000);
 }
 function setTab(t){
   tab=t;
@@ -165,22 +342,35 @@ function setTab(t){
 }
 
 /* ---------- spel ---------- */
+function portraitsFor(m){
+  if(m.type==='narration'&&Array.isArray(m.speakers)){
+    return m.speakers.map(n=>[slug(n),n]).filter(([k])=>npcs[k]&&npcs[k].img).slice(0,2);
+  }
+  if(m.type==='action'||m.type==='pass'){
+    const e=Object.entries(npcs).find(([k,n])=>n.forPlayer===m.author&&n.img); return e?[[e[0],e[1].name]]:[];
+  }
+  return [];
+}
 function renderGame(){
-  if(!me||tab!=='game') return;
+  if(!me||screen!=='camp'||tab!=='game') return;
   const th=$('#thread');
   const atBottom=th.scrollHeight-th.scrollTop-th.clientHeight<80;
   th.innerHTML=msgs.map(m=>{
     const cls=m.type==='narration'?'dm':m.type==='action'||m.type==='pass'?'action':m.type==='system'?'system':'';
-    const who=m.type==='narration'?'De DM':m.type==='system'?'':esc(m.author||'');
-    return '<div class="msg '+cls+'">'+(who?'<div class="who">'+who+'</div>':'')+md(m.text)+'</div>';
+    const pts=portraitsFor(m);
+    let who=m.type==='narration'?'De DM':m.type==='system'?'':esc(m.author||'');
+    if(m.type==='narration'&&pts.length) who+=' · '+pts.map(p=>esc(p[1])).join(' &amp; ');
+    const body=md(m.text);
+    const inner=pts.length?'<div class="mrow"><div class="pts">'+pts.map(p=>'<img class="pt" src="'+npcs[p[0]].img+'" data-zoom="'+p[0]+'" alt="'+esc(p[1])+'">').join('')+'</div><div class="mtxt">'+body+'</div></div>':body;
+    return '<div class="msg '+cls+'">'+(who?'<div class="who">'+who+'</div>':'')+inner+'</div>';
   }).join('')||'<div class="msg system">Nog geen verhaal.</div>';
   if(atBottom) th.scrollTop=th.scrollHeight;
 
-  const sb=$('#statusbar'), cp=$('#compose');
+  const sb=$('#statusbar'), cpz=$('#compose');
   const keepDraft=document.activeElement&&document.activeElement.id==='act';
   if(!turn){
     sb.innerHTML='Nog geen campagne gestart.';
-    cp.innerHTML='<button class="b" id="startc">Start campagne (DM opent het verhaal)</button>';
+    cpz.innerHTML='<button class="b" id="startc">Start campagne (DM opent het verhaal)</button>';
     $('#startc').onclick=startCampaign; return;
   }
   const aw=awaitingNames(), mine=pending[me.uid]&&pending[me.uid].round===turn.round?pending[me.uid]:null;
@@ -188,12 +378,12 @@ function renderGame(){
   if(turn.status==='resolving'){
     const stuck=turn.resolvingSince&&Date.now()-turn.resolvingSince>LEASE_MS;
     sb.innerHTML='De DM vertelt…'+(stuck?' (duurt lang)':'');
-    cp.innerHTML=stuck?'<button class="b red" id="retry">Opnieuw proberen</button>':'';
+    cpz.innerHTML=stuck?'<button class="b red" id="retry">Opnieuw proberen</button>':'';
     if(stuck)$('#retry').onclick=()=>resolve(true); return;
   }
   if(turn.status==='error'){
     sb.innerHTML='<span class="err">Fout: '+esc(turn.lastError||'onbekend')+'</span>';
-    cp.innerHTML='<button class="b red" id="retry">Opnieuw proberen</button>';
+    cpz.innerHTML='<button class="b red" id="retry">Opnieuw proberen</button>';
     $('#retry').onclick=()=>resolve(true); return;
   }
   const others=aw.filter(n=>n!==me.name);
@@ -202,19 +392,14 @@ function renderGame(){
   const checks=turn.checks&&turn.checks[me.name];
   if(checks) st+='<br>🎲 <b>Worp gevraagd:</b> '+esc(checks);
   if(!turn.blind){
-    const seen=Object.values(pending).filter(p=>p.round===turn.round&&p.name!==me.name);
-    seen.forEach(p=>{st+='<br><small>'+esc(p.name)+': '+esc(p.text)+'</small>'});
-  } else {
-    const n=Object.values(pending).filter(p=>p.round===turn.round&&p.name!==me.name).length;
-    if(n) st+='<br><small>(blind) De ander heeft ingediend.</small>';
+    Object.values(pending).filter(p=>p.round===turn.round&&p.name!==me.name).forEach(p=>{st+='<br><small>'+esc(p.name)+': '+esc(p.text)+'</small>'});
+  } else if(Object.values(pending).some(p=>p.round===turn.round&&p.name!==me.name)){
+    st+='<br><small>(blind) De ander heeft ingediend.</small>';
   }
   sb.innerHTML=st;
-  if(!myTurn&&!mine){
-    cp.innerHTML=others.length?'<small>Niet jouw beurt.</small>':'';
-    return;
-  }
+  if(!myTurn&&!mine){ cpz.innerHTML=others.length?'<small>Niet jouw beurt.</small>':''; return; }
   if(!keepDraft){
-    cp.innerHTML=`<textarea id="act" placeholder="Wat doe je?"></textarea>
+    cpz.innerHTML=`<textarea id="act" placeholder="Wat doe je?"></textarea>
     <div class="row"><input type="text" id="roll" placeholder="Worp (bv. nat 14 +3)" style="flex:1;min-width:120px"></div>
     <div class="row"><button class="b" id="send">${mine?'Actie aanpassen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button>
     ${others.length?'<button class="b alt" id="skip">Zonder '+esc(others.join(', '))+' verder</button>':''}</div>
@@ -230,22 +415,21 @@ async function submit(pass){
   const text=pass?'(past / wacht af)':draft.trim();
   if(!text){alert('Typ eerst een actie.');return}
   const round=turn.round, full=text+(rollDraft.trim()&&!pass?'  [worp: '+rollDraft.trim()+']':'');
-  await db.ref('dnd/pending/'+me.uid).set({round,name:me.name,text:full,pass:!!pass,t:Date.now()});
+  await db.ref(cp('pending/'+me.uid)).set({round,name:me.name,text:full,pass:!!pass,t:Date.now()});
   draft="";rollDraft="";
   const ok=await removeAwaiting(me.name,round);
   if(ok==='resolve') resolve(false);
   else if(ok==='late') alert('Te laat: de ronde is al afgehandeld. Ververs de pagina.');
   else{ $('#compose').innerHTML=''; renderGame(); }
 }
-// haalt een naam uit awaiting; geeft 'resolve' terug als wij nu moeten afhandelen
 async function removeAwaiting(name,round){
-  let became=false,late=false;
-  const r=await db.ref('dnd/turn').transaction(t=>{
-    if(!t||t.round!==round||t.status!=='waiting'){late=true;return;}
-    late=false;became=false;
+  let became=false;
+  const r=await db.ref(cp('turn')).transaction(t=>{
+    if(!t||t.round!==round||t.status!=='waiting') return;
+    became=false;
     if(t.awaiting&&t.awaiting[name]){
       delete t.awaiting[name];
-      if(!Object.keys(t.awaiting).length){t.awaiting=null;}
+      if(!Object.keys(t.awaiting).length) t.awaiting=null;
     }
     if(!t.awaiting){t.status='resolving';t.resolvingSince=Date.now();became=true;}
     return t;
@@ -257,9 +441,9 @@ async function skipOthers(){
   const others=awaitingNames().filter(n=>n!==me.name);
   if(!confirm('Doorgaan zonder '+others.join(', ')+'? Die doet dan niets deze ronde.')) return;
   if(!(pending[me.uid]&&pending[me.uid].round===turn.round)){
-    await db.ref('dnd/pending/'+me.uid).set({round:turn.round,name:me.name,text:draft.trim()||'(past / wacht af)',pass:!draft.trim(),t:Date.now()});
+    await db.ref(cp('pending/'+me.uid)).set({round:turn.round,name:me.name,text:draft.trim()||'(past / wacht af)',pass:!draft.trim(),t:Date.now()});
   }
-  await db.ref('dnd/messages').push(sysMsg(others.join(', ')+' wordt overgeslagen deze ronde.'));
+  await db.ref(cp('messages')).push(sysMsg(others.join(', ')+' wordt overgeslagen deze ronde.'));
   let res='ok';
   for(const n of [...others,me.name]) res=await removeAwaiting(n,turn.round);
   if(res==='resolve') resolve(false);
@@ -267,7 +451,7 @@ async function skipOthers(){
 async function startCampaign(){
   if(!cfg.geminiKey){alert('Zet eerst je Gemini-sleutel bij ⚙.');setTab('set');return}
   if(!Object.keys(canon).length&&!confirm('Er is nog geen canon. Toch starten?'))return;
-  await db.ref('dnd/turn').set({round:0,status:'resolving',resolvingSince:Date.now(),awaiting:null});
+  await db.ref(cp('turn')).set({round:0,status:'resolving',resolvingSince:Date.now(),awaiting:null});
   resolve(false);
 }
 
@@ -277,7 +461,7 @@ Regels:
 - Bronnenhiërarchie: (1) CANON (spelregels en personages) (2) LOGBOEK (3) de actuele STAND (4) rest. Verzin geen feiten over het verleden die hiermee botsen.
 - Houd je aan het scene-pacing uit A1: kort vertellen, één betekenisvolle ontwikkeling per beurt, doorgaans 80-180 woorden (alleen bij reizen, omgevingsintroducties of een expliciete wens langer). Stop op een natuurlijk reactiemoment. Geen openingsgroet of meta-uitleg ("Welkom in…"); begin direct in de scène.
 - Schrijf niets over wat een PC denkt, voelt of besluit; beschrijf alleen de wereld, NPC's en de zintuiglijke waarneming van de PC's.
-- Speel NOOIT een PC. Beslis niet voor de spelers wat hun personage doet of zegt.
+- Speel NOOIT een PC.
 - Tolkien-personages overschaduwen de PC's niet.
 - Spelers rollen zelf fysiek; hun worp staat in hun actie ("[worp: ...]"). Vraag een check via nextTurn.checks (naam → welke check en waarom); verklap DC's niet.
 - Voor worpen van NPC's/vijanden gebruik je UITSLUITEND de meegegeven voorgegooide dobbelstenen, in volgorde (d20 voor aanvallen/checks/saves, d6/d8/d10/d12 voor schade). Noem de worp kort in de vertelling.
@@ -285,9 +469,10 @@ Regels:
 - Houd de STAND bij via statePatch (deep merge; null verwijdert een sleutel; lijsten worden vervangen). Houd bij: inGame (date, timeOfDay), pcs (location, hp, conditions, inventory, knowledge), companions, npcs, factions, quests, initiative.
 - Documenten in CANON die als DM-geheim of "NIET LEZEN ALS SPELER" gemarkeerd zijn, gebruik je voor planning, maar je onthult of citeert ze nooit letterlijk; laat geheimen alleen via het spel zelf blijken.
 - Is de ACTUELE STAND nog leeg ({}), begin dan met een statePatch die de beginsituatie uit D1 Wereldstatus / STAND #1 in canon overneemt. Een PC zonder uitgewerkt personage (zoals PC2 zolang B2 ontbreekt) speel je niet; vraag die speler eerst zijn personage te beschrijven.
+- Portretten: "speakers" = de namen van maximaal 2 NPC's die in deze beurt spreken of centraal staan. Gebruik EXACT de naam uit de lijst BEKENDE NPC'S als de NPC daar al in staat. "newNpcs" = elke NPC die in deze beurt voor het eerst optreedt en NIET in die lijst staat, met "visual": een concrete Engelse beschrijving voor een portret (soort/leeftijd, postuur, gezicht, huid, haar en baard, ogen, littekens, elk kledingstuk met kleur en materiaal, zichtbare uitrusting, uitdrukking). Voor figuren uit Tolkiens boeken: beschrijf zoals in de boeken. Geen geheimen in "visual".
 - logEntries: korte feiten van wat NU echt gebeurd is.
 Antwoord ALLEEN met JSON in dit formaat:
-{"narration":"markdown-tekst","statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."}}}`;
+{"narration":"markdown-tekst","speakers":["Naam"],"newNpcs":[{"name":"Naam","visual":"English description"}],"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."}}}`;
 
 function rollDice(){
   const r=(s,n)=>Array.from({length:n},()=>1+crypto.getRandomValues(new Uint32Array(1))[0]%s);
@@ -310,10 +495,12 @@ async function callGemini(sys,user,retryNote){
   return {txt,usage:j.usageMetadata||{}};
 }
 function parseDM(txt,names){
-  let o=JSON.parse(txt.replace(/^```(?:json)?\s*/,'').replace(/```\s*$/,''));
+  const o=JSON.parse(txt.replace(/^```(?:json)?\s*/,'').replace(/```\s*$/,''));
   if(typeof o.narration!=='string'||!o.narration) throw new Error('narration ontbreekt');
   o.statePatch=o.statePatch&&typeof o.statePatch==='object'?o.statePatch:{};
   o.logEntries=Array.isArray(o.logEntries)?o.logEntries:[];
+  o.speakers=Array.isArray(o.speakers)?o.speakers.filter(s=>typeof s==='string').slice(0,2):[];
+  o.newNpcs=Array.isArray(o.newNpcs)?o.newNpcs.filter(n=>n&&typeof n.name==='string'&&n.name.trim()):[];
   const nt=o.nextTurn||{};
   let aw=Array.isArray(nt.awaiting)?nt.awaiting.filter(n=>names.includes(n)):[];
   if(!aw.length) aw=names.slice();
@@ -323,26 +510,26 @@ function parseDM(txt,names){
 let resolving=false;
 async function resolve(retry){
   if(resolving) return; resolving=true;
+  const C=cid;
   try{
-    if(retry){ await db.ref('dnd/turn').update({status:'resolving',resolvingSince:Date.now(),lastError:null}); }
-    const t=(await db.ref('dnd/turn').get()).val();
+    if(retry) await db.ref(cp('turn',C)).update({status:'resolving',resolvingSince:Date.now(),lastError:null});
+    const t=(await db.ref(cp('turn',C)).get()).val();
     const round=t.round;
-    const [pS,sS,cS,mS,lS,aS,cfS]=await Promise.all(['pending','state','canon','messages','log','dndAccess','config'].map(k=>k==='dndAccess'?Promise.resolve(null):db.ref('dnd/'+k).get()));
-    if(cfS) cfg=cfS.val()||cfg;
-    if(!cfg.geminiKey) throw new Error('Geen Gemini-sleutel ingesteld (⚙).');
+    const [pS,sS,cS,mS,lS,cfS]=await Promise.all(['pending','state','canon','messages','log'].map(k=>db.ref(cp(k,C)).get()).concat([db.ref('dnd/config').get()]));
+    cfg=cfS.val()||cfg;
+    if(!cfg.geminiKey) throw new Error('Geen Gemini-sleutel ingesteld (⚙ in het menu).');
     const pend=Object.values(pS.val()||{}).filter(p=>p.round===round).sort((a,b)=>a.t-b.t);
-    const names=[...new Set([...(t.known||[]),...pend.map(p=>p.name),me.name])];
-    // namen van beide spelers: bewaar in dnd/players
-    const pl=(await db.ref('dnd/players').get()).val()||{};
-    pl[me.uid]=me.name; db.ref('dnd/players/'+me.uid).set(me.name);
+    const pl=(await db.ref(cp('players',C)).get()).val()||{};
+    pl[me.uid]=me.name; db.ref(cp('players/'+me.uid,C)).set(me.name);
     const allNames=[...new Set(Object.values(pl))];
     const state=JSON.parse(sS.val()||'{}');
     const canonTxt=Object.values(cS.val()||{}).map(d=>'### '+d.title+'\n'+d.text).join('\n\n');
     const recent=[];mS.forEach(c=>{recent.push(c.val())});
     const hist=recent.slice(-30).filter(m=>m.type!=='system').map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
     const logs=[];lS.forEach(c=>{logs.push(c.val())});
+    const npcNames=Object.values(npcs).filter(n=>!n.forPlayer).map(n=>n.name);
     const user=
-`# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# LOGBOEK (laatste 60)\n${logs.slice(-60).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
+`# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# LOGBOEK (laatste 60)\n${logs.slice(-60).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
     let out,usage,note=null;
     for(let i=0;i<2;i++){
       const r=await callGemini(SYSTEM,user,note);usage=r.usage;
@@ -350,31 +537,36 @@ async function resolve(retry){
     }
     const newState=deepMerge(state,out.statePatch);
     const up={};const now=Date.now();
-    pend.forEach((p,i)=>{const k=db.ref('dnd/messages').push().key;up['dnd/messages/'+k]={type:p.pass?'pass':'action',author:p.name,text:p.text,round,t:now+i}});
-    const nk=db.ref('dnd/messages').push().key;
-    up['dnd/messages/'+nk]={type:'narration',author:'dm',text:out.narration,round:round+1,t:now+pend.length+1};
-    out.logEntries.forEach(l=>{if(l&&l.fact){const k=db.ref('dnd/log').push().key;up['dnd/log/'+k]={fact:String(l.fact),inGameDate:String(l.inGameDate||''),round:round+1,t:now}}});
-    const sj=JSON.stringify(newState);
-    up['dnd/state']=sj;
-    up['dnd/stands/'+String(round+1).padStart(5,'0')]={json:sj,round:round+1,t:now};
-    up['dnd/usage/'+String(round+1).padStart(5,'0')]={prompt:usage.promptTokenCount||0,out:usage.candidatesTokenCount||0,model:cfg.model||'gemini-2.5-flash'};
-    up['dnd/pending']=null;
+    pend.forEach((p,i)=>{const k=db.ref(cp('messages',C)).push().key;up[cp('messages/'+k,C)]={type:p.pass?'pass':'action',author:p.name,text:p.text,round,t:now+i}});
+    const nk=db.ref(cp('messages',C)).push().key;
+    const nm={type:'narration',author:'dm',text:out.narration,round:round+1,t:now+pend.length+1};
+    if(out.speakers.length) nm.speakers=out.speakers;
+    up[cp('messages/'+nk,C)]=nm;
+    out.logEntries.forEach(l=>{if(l&&l.fact){const k=db.ref(cp('log',C)).push().key;up[cp('log/'+k,C)]={fact:String(l.fact),inGameDate:String(l.inGameDate||''),round:round+1,t:now}}});
+    out.newNpcs.forEach(n=>{const k=slug(n.name); if(!npcs[k]) up['dnd/npcs/'+k]={name:n.name.trim(),visual:String(n.visual||'').slice(0,1500),t:now,from:C}});
+    const sj=JSON.stringify(newState), rk=String(round+1).padStart(5,'0');
+    up[cp('state',C)]=sj;
+    up[cp('stands/'+rk,C)]={json:sj,round:round+1,t:now};
+    up[cp('usage/'+rk,C)]={prompt:usage.promptTokenCount||0,out:usage.candidatesTokenCount||0,model:cfg.model||'gemini-2.5-flash'};
+    up[cp('pending',C)]=null;
+    up['dnd/campaignIndex/'+C+'/lastPlayed']=now;
+    up['dnd/campaignIndex/'+C+'/round']=round+1;
     const aw={};out.nextTurn.awaiting.forEach(n=>aw[n]=true);
-    up['dnd/turn']={round:round+1,status:'waiting',awaiting:aw,prompt:out.nextTurn.prompt,blind:out.nextTurn.blind,checks:out.nextTurn.checks||null,mode:out.nextTurn.awaiting.length>1?'all':'single'};
+    up[cp('turn',C)]={round:round+1,status:'waiting',awaiting:aw,prompt:out.nextTurn.prompt,blind:out.nextTurn.blind,checks:out.nextTurn.checks||null,mode:out.nextTurn.awaiting.length>1?'all':'single'};
     await db.ref().update(up);
   }catch(e){
     console.error(e);
-    await db.ref('dnd/turn').update({status:'error',lastError:String(e.message||e),resolvingSince:null});
+    await db.ref(cp('turn',C)).update({status:'error',lastError:String(e.message||e),resolvingSince:null});
   }finally{ resolving=false; }
 }
 
 /* ---------- OOC ---------- */
 function sendOoc(){
   const i=$('#oocin'),v=i.value.trim(); if(!v) return; i.value='';
-  db.ref('dnd/ooc').push({author:me.name,text:v,t:Date.now()});
+  db.ref(cp('ooc')).push({author:me.name,text:v,t:Date.now()});
 }
 function renderOoc(){
-  if(!me||tab!=='ooc') return;
+  if(!me||screen!=='camp'||tab!=='ooc') return;
   const th=$('#oocthread');
   th.innerHTML=oocs.map(m=>'<div class="msg ooc"><div class="who">'+esc(m.author)+'</div>'+esc(m.text)+'</div>').join('')||'<div class="msg system">Nog geen berichten.</div>';
   th.scrollTop=th.scrollHeight;
@@ -382,7 +574,8 @@ function renderOoc(){
 
 /* ---------- Stand ---------- */
 async function renderStand(){
-  const box=$('#standbox');
+  if(screen!=='camp') return;
+  const box=$('#standbox'), C=cid;
   let pretty=stateStr; try{pretty=JSON.stringify(JSON.parse(stateStr),null,1)}catch(e){}
   box.innerHTML=`<h2>Huidige Stand</h2><textarea id="stedit" style="min-height:260px;font-family:monospace;font-size:13px"></textarea>
   <div class="row" style="margin-top:6px"><button class="b" id="stsave">Stand opslaan</button></div>
@@ -390,57 +583,59 @@ async function renderStand(){
   <h2>Logboek</h2><div id="logs">Laden…</div>`;
   $('#stedit').value=pretty;
   $('#stsave').onclick=async()=>{
-    try{const o=JSON.parse($('#stedit').value);await db.ref('dnd/state').set(JSON.stringify(o));
-      await db.ref('dnd/messages').push(sysMsg(me.name+' heeft de Stand handmatig aangepast.'));alert('Opgeslagen.')}catch(e){alert('Ongeldige JSON: '+e.message)}
+    try{const o=JSON.parse($('#stedit').value);await db.ref(cp('state',C)).set(JSON.stringify(o));
+      await db.ref(cp('messages',C)).push(sysMsg(me.name+' heeft de Stand handmatig aangepast.'));alert('Opgeslagen.')}catch(e){alert('Ongeldige JSON: '+e.message)}
   };
-  const vs=await db.ref('dnd/stands').orderByKey().limitToLast(15).get();
+  const vs=await db.ref(cp('stands',C)).orderByKey().limitToLast(15).get();
   const arr=[];vs.forEach(c=>{arr.push({k:c.key,...c.val()})});arr.reverse();
-  $('#vers').innerHTML=arr.map(v=>'<div class="card"><b>Na ronde '+v.round+'</b> · '+new Date(v.t).toLocaleString('nl-NL')+' <button class="b alt" data-k="'+v.k+'" style="padding:4px 10px;margin-left:6px">Herstel</button></div>').join('')||'—';
+  if(screen!=='camp'||cid!==C||!$('#vers')) return;
+  $('#vers').innerHTML=arr.map(v=>'<div class="card"><b>Na ronde '+v.round+'</b> · '+new Date(v.t).toLocaleString('nl-NL')+' <button class="b alt sm" data-k="'+v.k+'" style="margin-left:6px">Herstel</button></div>').join('')||'—';
   $('#vers').querySelectorAll('button').forEach(b=>b.onclick=async()=>{
     const v=arr.find(x=>x.k===b.dataset.k); if(!confirm('Stand terugzetten naar na ronde '+v.round+'?'))return;
-    await db.ref('dnd/state').set(v.json);
-    await db.ref('dnd/messages').push(sysMsg(me.name+' zette de Stand terug naar na ronde '+v.round+'.'));
+    await db.ref(cp('state',C)).set(v.json);
+    await db.ref(cp('messages',C)).push(sysMsg(me.name+' zette de Stand terug naar na ronde '+v.round+'.'));
   });
-  const ls=await db.ref('dnd/log').limitToLast(80).get();const la=[];ls.forEach(c=>{la.push(c.val())});la.reverse();
-  $('#logs').innerHTML=la.map(l=>'<div class="card"><small>'+esc(l.inGameDate||'')+'</small><br>'+esc(l.fact)+'</div>').join('')||'—';
+  const ls=await db.ref(cp('log',C)).limitToLast(80).get();const la=[];ls.forEach(c=>{la.push(c.val())});la.reverse();
+  if($('#logs')) $('#logs').innerHTML=la.map(l=>'<div class="card"><small>'+esc(l.inGameDate||'')+'</small><br>'+esc(l.fact)+'</div>').join('')||'—';
 }
 
 /* ---------- Canon ---------- */
-function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,60)||'doc'}
 function renderCanon(){
+  if(screen!=='camp') return;
   const box=$('#canonbox');
   const ids=Object.keys(canon);
   box.innerHTML=`<p><small>Canon = spelregels, personages, wereld. Je maakt dit met ChatGPT/Claude; hier plak of upload je het. Gemini krijgt alle documenten bij elke beurt.</small></p>`+
-  ids.map(id=>'<div class="card"><h3>'+esc(canon[id].title)+'</h3><small>'+canon[id].text.length+' tekens</small><div class="row" style="margin-top:6px"><button class="b alt" data-e="'+id+'">Bewerk</button><button class="b red" data-d="'+id+'">Wis</button></div></div>').join('')+
+  ids.map(id=>'<div class="card"><h3>'+esc(canon[id].title)+'</h3><small>'+canon[id].text.length+' tekens</small><div class="row" style="margin-top:6px"><button class="b alt sm" data-e="'+id+'">Bewerk</button><button class="b red sm" data-d="'+id+'">Wis</button></div></div>').join('')+
   `<h2>Nieuw / overschrijven</h2><input type="text" id="ctitle" placeholder="Titel (zelfde titel = overschrijven)"><br><br>
   <textarea id="ctext" style="min-height:140px" placeholder="Plak hier de tekst (Markdown)"></textarea>
-  <div class="row" style="margin-top:6px"><label class="b alt" for="cfile">Kies bestand (.md/.txt)</label><input type="file" id="cfile" accept=".md,.txt,.json,text/*" style="max-width:200px"><button class="b" id="csave">Opslaan</button></div>`;
+  <div class="row" style="margin-top:6px"><label class="b alt" for="cfile">Kies bestand (.md/.txt)</label><input type="file" id="cfile" accept=".md,.txt,.json,text/*"><button class="b" id="csave">Opslaan</button></div>`;
   box.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{$('#ctitle').value=canon[b.dataset.e].title;$('#ctext').value=canon[b.dataset.e].text;$('#ctext').scrollIntoView()});
-  box.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{if(confirm('Document wissen?'))db.ref('dnd/canon/'+b.dataset.d).remove()});
+  box.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{if(confirm('Document wissen?'))db.ref(cp('canon/'+b.dataset.d)).remove()});
   $('#cfile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$('#ctext').value=r.result;if(!$('#ctitle').value)$('#ctitle').value=f.name.replace(/\.[^.]+$/,'')};r.readAsText(f)};
   $('#csave').onclick=async()=>{
     const t=$('#ctitle').value.trim(),x=$('#ctext').value;
     if(!t||!x.trim()){alert('Titel en tekst invullen.');return}
-    await db.ref('dnd/canon/'+slug(t)).set({title:t,text:x,t:Date.now()});
+    await db.ref(cp('canon/'+slug(t))).set({title:t,text:x,t:Date.now()});
   };
 }
 
-/* ---------- Instellingen ---------- */
+/* ---------- Instellingen (globaal) ---------- */
 function renderSet(){
-  const box=$('#setbox');
+  const box=$('#setbox'); if(!box) return;
+  if(box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT') return;
   box.innerHTML=`<div class="card"><h3>Gemini (de DM)</h3>
   <label>Model</label><input type="text" id="smodel"><br><br>
   <label>Temperatuur</label><input type="number" id="stemp" step="0.1" min="0" max="2"><br><br>
   <label>API-sleutel (gedeeld in de database; alleen jullie twee kunnen lezen)</label><input type="password" id="skey" placeholder="${cfg.geminiKey?'(ingesteld — leeg laten = ongewijzigd)':'plak hier'}"><br><br>
   <button class="b" id="ssave">Opslaan</button></div>
-  <div class="card"><h3>Verbruik</h3><div id="usage">…</div></div>`;
+  ${screen==='camp'?'<div class="card"><h3>Verbruik (dit verhaal)</h3><div id="usage">…</div></div>':''}`;
   $('#smodel').value=cfg.model||'gemini-2.5-flash';$('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
   $('#ssave').onclick=async()=>{
     const u={model:$('#smodel').value.trim()||'gemini-2.5-flash',temperature:Number($('#stemp').value)||0.9};
     if($('#skey').value.trim()) u.geminiKey=$('#skey').value.trim();
     await db.ref('dnd/config').update(u);alert('Opgeslagen.');
   };
-  db.ref('dnd/usage').limitToLast(10).get().then(s=>{let h='';s.forEach(c=>{const v=c.val();h='<div><small>Ronde '+Number(c.key)+': '+v.prompt+' in / '+v.out+' uit</small></div>'+h});$('#usage').innerHTML=h||'—'});
+  if(screen==='camp'){const C=cid;db.ref(cp('usage',C)).limitToLast(10).get().then(s=>{let h='';s.forEach(c=>{const v=c.val();h='<div><small>Ronde '+Number(c.key)+': '+v.prompt+' in / '+v.out+' uit</small></div>'+h});if($('#usage'))$('#usage').innerHTML=h||'—'})}
 }
 </script>
 </body>
