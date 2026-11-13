@@ -23,7 +23,7 @@ body::before{content:"";position:fixed;left:0;right:0;bottom:0;height:46vh;z-ind
   background:
    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'><path fill='%2310161c' d='M0 300V190l70-60 50 40 90-120 80 100 60-50 110 130 70-80 90 90 120-160 90 120 70-60 100 90 70-70 100 110V300z'/><path fill='%230a0e13' d='M0 300V240l90-50 70 45 110-80 90 70 80-40 120 80 90-60 130 70 110-90 100 80 90-40 120 70V300z'/><path fill='%23fff' fill-opacity='.35' d='M210 50l-22 40 22-10 22 10zM770 40l-24 44 24-12 24 12zM490 130l-18 30 18-8 18 8z'/></svg>") bottom/100% 100% no-repeat}
 body>*{position:relative;z-index:1}
-.portal-back{position:fixed!important;top:8px;left:8px;z-index:9999;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--gold);border-radius:50%;color:var(--gold)}
+.portal-back{cursor:pointer;position:fixed!important;top:8px;left:8px;z-index:9999;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--gold);border-radius:50%;color:var(--gold)}
 header{padding:10px 12px 8px 52px;border-bottom:1px solid rgba(200,162,74,.45);background:linear-gradient(180deg,rgba(11,18,32,.85),rgba(11,18,32,.4));display:flex;justify-content:space-between;align-items:center;gap:8px}
 header h1{font-size:20px;margin:0;letter-spacing:.14em;text-transform:uppercase;font-weight:normal;background:linear-gradient(180deg,#f3df9c,#b8892f);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 2px #000)}
 header small{color:var(--mute);white-space:nowrap}
@@ -102,13 +102,22 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .ic{flex:none;font-size:13px;padding:3px 9px;border-radius:12px;background:#2a231d;border:1px solid #4a3d30;white-space:nowrap}
 .ic.foe{background:#3d2420;border-color:#7a3426}
 .ic.act{outline:2px solid var(--gold);font-weight:bold}
+.acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.acts button{background:rgba(0,0,0,.15);border:1px solid rgba(0,0,0,.3);border-radius:6px;padding:2px 9px;font:inherit;font-size:12px;cursor:pointer;color:inherit}
+.locimg{width:100%;border-radius:8px;border:1px solid #4a3d30;margin:6px 0;cursor:pointer;display:block}
+.msg.loc{background:rgba(24,34,48,.85);display:flex;gap:10px;align-items:center;font-style:normal;text-align:left}
+.msg.loc img{width:84px;height:84px;object-fit:cover;border-radius:6px;flex:none;cursor:pointer}
+#gamewrap{display:flex;flex:1;min-height:0}
+#gamemain{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
+#side{display:none}
+@media(min-width:1000px){#side{display:block;width:340px;flex:none;overflow-y:auto;padding:10px 12px;border-left:1px solid rgba(200,162,74,.35);background:rgba(20,17,15,.6)}}
 input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 .vh{position:absolute!important;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
 </style>
 </head>
 <body>
-<a class="portal-back" href="../" aria-label="Terug naar portaal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
-<header><h1>⚔ Midden-aarde</h1><span><button id="menubtn">☰ Menu</button> <small id="who"></small></span></header>
+<button class="portal-back" id="topback" aria-label="Terug" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+<header><h1>⚔ Midden-aarde</h1><span><small id="who"></small></span></header>
 <main id="main"><div class="center" id="boot">Laden…</div></main>
 <footer>Midden-aarde D&amp;D · &copy; Gerben de Jong · 2026</footer>
 
@@ -131,7 +140,7 @@ const main=$('#main');
 /* ---------- toestand ---------- */
 let me=null;                 // {uid,name}
 let screen='menu', cid=null; // menu of campagne
-let cfg={}, npcs={}, index={};              // globaal
+let cfg={}, npcs={}, locs={}, index={}; let sceneKey='', editKey=null, editDraft='', lastSide='';              // globaal
 let turn=null, canon={}, msgs=[], oocs=[], pending={}, stateStr="{}"; // per campagne
 let tab='game', draft="", rollDraft="";
 let listeners=[];
@@ -178,7 +187,7 @@ function zoom(src,name){
   o.onclick=()=>o.remove();document.body.appendChild(o);
 }
 document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-zoom]'); if(t){const n=npcs[t.dataset.zoom]; if(n&&n.img) zoom(n.img,n.name)}
+  const t=e.target.closest('[data-zoom]'); if(t){const z=t.dataset.zoom, n=z.startsWith('loc:')?locs[z.slice(4)]:npcs[z]; if(n&&n.img) zoom(n.img,n.name)}
 });
 
 /* ---------- login ---------- */
@@ -222,8 +231,12 @@ function startApp(){
   if(started) return; started=true;
   db.ref('dnd/config').on('value',s=>{cfg=s.val()||{};if(screen==='menu'||tab==='set')renderSet()});
   db.ref('dnd/npcs').on('value',s=>{npcs=s.val()||{};renderNpcs();if(screen==='camp')renderGame()});
+  db.ref('dnd/locations').on('value',s=>{locs=s.val()||{};renderNpcs();if(screen==='camp')renderGame()});
   db.ref('dnd/campaignIndex').on('value',s=>{index=s.val()||{};renderIndex()});
-  $('#menubtn').onclick=showMenu;
+  $('#topback').onclick=()=>showMenu('home');
+  // browser-/telefoon-terugknop: blijf binnen de app (nooit terug naar de website)
+  history.replaceState({dnd:1},''); history.pushState({dnd:2},'');
+  window.addEventListener('popstate',()=>{ history.pushState({dnd:2},''); if(screen==='camp'||menuView!=='home') showMenu('home'); });
   setInterval(()=>{if(screen==='camp'&&turn&&turn.status==='resolving')renderGame()},15000);
   showMenu();
 }
@@ -235,12 +248,13 @@ function latestId(){
 }
 function leaveCampaign(){
   listeners.forEach(([r,e,f])=>r.off(e,f));listeners=[];
-  cid=null;turn=null;canon={};msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
+  cid=null;turn=null;canon={};sceneKey='';editKey=null;msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
 }
 let menuView='home';
+function updateBack(){const b=$('#topback'); if(b) b.style.display=(screen==='camp'||menuView!=='home')?'flex':'none';}
 function showMenu(view){
   view=(typeof view==='string')?view:'home';   // de menuknop geeft een click-event mee
-  leaveCampaign(); screen='menu'; menuView=view; $('#menubtn').style.display='none';
+  leaveCampaign(); screen='menu'; menuView=view; updateBack();
   if(view==='npcs') return menuNpcs();
   if(view==='set') return menuSet();
   main.innerHTML=`<div class="scroll">
@@ -266,7 +280,7 @@ function menuSet(){
   renderSet();
 }
 function menuNpcs(){
-  main.innerHTML=`<div class="scroll">${backBar("Portretten &amp; NPC's")}
+  main.innerHTML=`<div class="scroll">${backBar("Portretten &amp; locaties")}
   <div class="row" style="margin-bottom:8px"><button class="b" id="copyall">Kopieer alle ontbrekende prompts</button></div>
   <details class="card"><summary>＋ Nieuwe NPC / speler toevoegen</summary>
     <input type="text" id="nname" placeholder="Naam (exact zoals in het verhaal)"><br><br>
@@ -275,26 +289,34 @@ function menuNpcs(){
     <label class="b alt sm" for="nfile">Plaatje kiezen</label><input type="file" id="nfile" class="vh" accept="image/*"><span id="nfileinfo" style="font-size:13px;color:var(--mute)"></span></div>
     <div class="row" style="margin-top:6px"><button class="b" id="nsave">Opslaan</button></div>
   </details>
-  <div id="npcbox"></div></div>`;
+  <h2>NPC's &amp; spelers</h2><div id="npcbox"></div>
+  <h2>Locaties</h2><div id="locbox"></div></div>`;
   $('#back').onclick=()=>showMenu('home');
   $('#nfile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{window._nimg=await resizeImage(f);$('#nfileinfo').textContent='✓ '+f.name}catch(err){alert(err.message)}};
   $('#nsave').onclick=saveNewNpc;
   $('#copyall').onclick=e=>{
-    const miss=Object.entries(npcs).filter(([k,n])=>!n.img&&n.visual);
-    if(!miss.length){alert("Geen NPC's zonder plaatje.");return}
-    copyText(miss.map(([k,n])=>'===== '+n.name+' =====\n'+makePrompt(n)).join('\n\n'),e.target);
+    const miss=[...Object.values(npcs).filter(n=>!n.img&&n.visual).map(n=>'===== '+n.name+' =====\n'+makePrompt(n)),
+                ...Object.values(locs).filter(n=>!n.img&&n.visual).map(n=>'===== LOCATIE: '+n.name+' =====\n'+makeLocPrompt(n))];
+    if(!miss.length){alert('Niets zonder plaatje.');return}
+    copyText(miss.join('\n\n'),e.target);
   };
-  $('#npcbox').addEventListener('change',async e=>{
-    const inp=e.target.closest('input[type=file][data-k]'); if(!inp||!inp.files[0]) return;
-    try{const img=await resizeImage(inp.files[0]); await db.ref('dnd/npcs/'+inp.dataset.k+'/img').set(img)}catch(err){alert(err.message)}
-  });
-  $('#npcbox').addEventListener('click',e=>{
-    const b=e.target.closest('button[data-a]'); if(!b) return;
-    const k=b.dataset.k,n=npcs[k]; if(!n) return;
-    if(b.dataset.a==='copy') copyText(makePrompt(n),b);
-    if(b.dataset.a==='edit'){const v=prompt('Uiterlijk (Engels, concreet) voor '+n.name+':',n.visual||'');if(v!==null)db.ref('dnd/npcs/'+k+'/visual').set(v)}
-    if(b.dataset.a==='del'&&confirm(n.name+' definitief wissen (ook het plaatje)?'))db.ref('dnd/npcs/'+k).remove();
-    if(b.dataset.a==='delimg'&&confirm('Plaatje van '+n.name+' wissen?'))db.ref('dnd/npcs/'+k+'/img').remove();
+  ['#npcbox','#locbox'].forEach(sel=>{
+    $(sel).addEventListener('change',async e=>{
+      const inp=e.target.closest('input[type=file][data-k]'); if(!inp||!inp.files[0]) return;
+      const base=inp.dataset.kind==='loc'?'dnd/locations/':'dnd/npcs/';
+      try{const img=await resizeImage(inp.files[0]); await db.ref(base+inp.dataset.k+'/img').set(img)}catch(err){alert(err.message)}
+    });
+    $(sel).addEventListener('click',e=>{
+      const b=e.target.closest('button[data-a]'); if(!b) return;
+      const loc=b.dataset.kind==='loc', k=b.dataset.k, n=(loc?locs:npcs)[k], base=loc?'dnd/locations/':'dnd/npcs/'; if(!n) return;
+      if(b.dataset.a==='copy') copyText(loc?makeLocPrompt(n):makePrompt(n),b);
+      if(b.dataset.a==='edit'){
+        const v=prompt('Uiterlijk (Engels, concreet) voor '+n.name+':',n.visual||''); if(v!==null) db.ref(base+k+'/visual').set(v);
+        if(loc){const d=prompt('Korte Nederlandse beschrijving:',n.desc||''); if(d!==null) db.ref(base+k+'/desc').set(d);}
+      }
+      if(b.dataset.a==='del'&&confirm(n.name+' definitief wissen (ook het plaatje)?')) db.ref(base+k).remove();
+      if(b.dataset.a==='delimg'&&confirm('Plaatje van '+n.name+' wissen?')) db.ref(base+k+'/img').remove();
+    });
   });
   renderNpcs();
 }
@@ -341,19 +363,24 @@ function makePrompt(n){
   "If this is a character from Tolkien's books, follow the written descriptions in the books, not the likeness of any film actor.\n"+
   "Avoid: photorealism, cartoon or anime look, 3D game render, modern clothing or objects, text, captions, watermarks, logos, borders, extra people, extra fingers, deformed hands.";
 }
+function libCard(kind,n){
+  const loc=kind==='loc', k=n.k, z=loc?'loc:'+k:k;
+  return '<div class="card npc">'+
+    (n.img?'<img class="th" src="'+n.img+'" data-zoom="'+z+'" alt="">':'<div class="th">geen plaatje</div>')+
+    '<div class="info"><h3 style="margin-bottom:2px">'+esc(n.name)+(n.forPlayer?' <small>· speler '+esc(n.forPlayer)+'</small>':'')+'</h3>'+
+    '<small>'+esc(((loc&&n.desc)?n.desc+' — ':'')+(n.visual||'(geen uiterlijk)').slice(0,150))+'</small>'+
+    '<details><summary>Prompt voor ChatGPT</summary><textarea readonly rows="7" onclick="this.select()">'+esc(loc?makeLocPrompt(n):makePrompt(n))+'</textarea></details>'+
+    '<div class="row"><button class="b sm" data-a="copy" data-kind="'+kind+'" data-k="'+k+'">Kopieer prompt</button>'+
+    '<label class="b alt sm" for="up_'+kind+'_'+k+'">'+(n.img?'Vervang plaatje':'Upload plaatje')+'</label><input type="file" id="up_'+kind+'_'+k+'" class="vh" data-kind="'+kind+'" data-k="'+k+'" accept="image/*">'+
+    '<button class="b alt sm" data-a="edit" data-kind="'+kind+'" data-k="'+k+'">Bewerk</button>'+
+    (n.img?'<button class="b alt sm" data-a="delimg" data-kind="'+kind+'" data-k="'+k+'">Plaatje wis</button>':'')+
+    '<button class="b red sm" data-a="del" data-kind="'+kind+'" data-k="'+k+'">Wis</button></div></div></div>';
+}
 function renderNpcs(){
   const box=$('#npcbox'); if(screen!=='menu'||!box) return;
-  const arr=Object.entries(npcs).map(([k,v])=>({k,...v})).sort((a,b)=>(!!a.img-!!b.img)||String(a.name).localeCompare(b.name));
-  box.innerHTML=arr.map(n=>'<div class="card npc">'+
-    (n.img?'<img class="th" src="'+n.img+'" data-zoom="'+n.k+'" alt="">':'<div class="th">geen plaatje</div>')+
-    '<div class="info"><h3 style="margin-bottom:2px">'+esc(n.name)+(n.forPlayer?' <small>· speler '+esc(n.forPlayer)+'</small>':'')+'</h3>'+
-    '<small>'+esc((n.visual||'(geen uiterlijk)').slice(0,160))+'</small>'+
-    '<details><summary>Prompt voor ChatGPT</summary><textarea readonly rows="7" onclick="this.select()">'+esc(makePrompt(n))+'</textarea></details>'+
-    '<div class="row"><button class="b sm" data-a="copy" data-k="'+n.k+'">Kopieer prompt</button>'+
-    '<label class="b alt sm" for="up_'+n.k+'">'+(n.img?'Vervang plaatje':'Upload plaatje')+'</label><input type="file" id="up_'+n.k+'" class="vh" data-k="'+n.k+'" accept="image/*">'+
-    '<button class="b alt sm" data-a="edit" data-k="'+n.k+'">Uiterlijk</button>'+
-    (n.img?'<button class="b alt sm" data-a="delimg" data-k="'+n.k+'">Plaatje wis</button>':'')+
-    '<button class="b red sm" data-a="del" data-k="'+n.k+'">Wis</button></div></div></div>').join('')||'<small>Nog geen NPC\'s. De DM voegt ze vanzelf toe zodra ze in het verhaal verschijnen.</small>';
+  const arr=o=>Object.entries(o).map(([k,v])=>({k,...v})).sort((a,b)=>(!!a.img-!!b.img)||String(a.name).localeCompare(b.name));
+  box.innerHTML=arr(npcs).map(n=>libCard('npc',n)).join('')||"<small>Nog geen NPC's. De DM voegt ze vanzelf toe zodra ze in het verhaal verschijnen.</small>";
+  const lb=$('#locbox'); if(lb) lb.innerHTML=arr(locs).map(n=>libCard('loc',n)).join('')||'<small>Nog geen locaties. De DM voegt ze toe bij een nieuwe plek.</small>';
 }
 async function saveNewNpc(){
   const name=$('#nname').value.trim(); if(!name){alert('Naam invullen.');return}
@@ -367,9 +394,9 @@ async function saveNewNpc(){
 
 /* ============================ CAMPAGNE ============================ */
 function enterCampaign(id){
-  leaveCampaign(); cid=id; screen='camp'; tab='game'; $('#menubtn').style.display='';
+  leaveCampaign(); cid=id; screen='camp'; tab='game'; updateBack();
   main.innerHTML=`
-  <section class="tab" id="t-game"><div id="scenebar"></div><div id="partybar"></div><div id="initbar"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></section>
+  <section class="tab" id="t-game"><div id="gamewrap"><div id="gamemain"><div id="scenebar"></div><div id="partybar"></div><div id="initbar"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></div><aside id="side"></aside></div></section>
   <section class="tab" id="t-ooc"><div class="scroll" id="oocthread"></div><div class="compose"><div class="row"><input type="text" id="oocin" placeholder="Praat met je broer (de DM leest dit niet)" style="flex:1"><button class="b" id="oocsend">Stuur</button></div></div></section>
   <section class="tab" id="t-diary"><div class="scroll" id="diarybox"></div></section>
   <section class="tab" id="t-more"><div class="scroll" id="morebox"></div></section>
@@ -379,13 +406,15 @@ function enterCampaign(id){
   <nav><button data-t="game">Spel</button><button data-t="ooc">Chat</button><button data-t="diary">Dagboek</button><button data-t="more">Meer</button></nav>`;
   document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
   $('#oocsend').onclick=sendOoc;
+  $('#thread').addEventListener('click',threadClick);
   $('#oocin').onkeydown=e=>{if(e.key==='Enter')sendOoc()};
   on(db.ref(cp('turn')),'value',s=>{turn=s.val();renderGame()});
   on(db.ref(cp('state')),'value',s=>{stateStr=s.val()||"{}";if(tab==='stand')renderStand();if(tab==='diary')renderDiary();renderGame()});
   on(db.ref(cp('canon')),'value',s=>{canon=s.val()||{};if(tab==='canon')renderCanon()});
   on(db.ref(cp('pending')),'value',s=>{pending=s.val()||{};renderGame()});
+  on(db.ref(cp('scene')),'value',s=>{sceneKey=s.val()||'';renderGame()});
   const mq=db.ref(cp('messages')).limitToLast(300);
-  on(mq,'value',s=>{msgs=[];s.forEach(c=>{msgs.push(c.val())});renderGame()});
+  on(mq,'value',s=>{msgs=[];s.forEach(c=>{msgs.push({...c.val(),_k:c.key})});renderGame()});
   const oq=db.ref(cp('ooc')).limitToLast(200);
   on(oq,'value',s=>{oocs=[];s.forEach(c=>{oocs.push(c.val())});renderOoc()});
   setTab('game');
@@ -416,9 +445,11 @@ function portraitsFor(m){
 }
 function renderGame(){
   if(!me||screen!=='camp'||tab!=='game') return;
-  renderParty(); renderInit();
+  renderParty(); renderInit(); renderSide();
   const th=$('#thread');
   const atBottom=th.scrollHeight-th.scrollTop-th.clientHeight<80;
+  let lastNarr=null; for(let i=msgs.length-1;i>=0;i--) if(msgs[i].type==='narration'){lastNarr=msgs[i]._k;break;}
+  const canAct=turn&&(turn.status==='waiting'||turn.status==='error');
   th.innerHTML=msgs.map(m=>{
     const cls=m.type==='narration'?'dm':m.type==='action'||m.type==='pass'?'action':m.type==='system'?'system':'';
     const pts=portraitsFor(m);
@@ -428,9 +459,17 @@ function renderGame(){
     if(m.type==='action') txt=txt.replace(/\s*\[worp:\s*([^\]]*)\]/gi,(x,y)=>{wm.push(y.trim());return ''});
     const chips=(m.rolls||[]).map(rollChip).concat(wm.map(w=>'<span class="rc">🎲 '+esc(w)+'</span>')).join('');
     const body=md(txt)+(chips?'<div class="rolls">'+chips+'</div>':'');
-    const inner=pts.length?'<div class="mrow"><div class="pts">'+pts.map(p=>'<img class="pt" src="'+npcs[p[0]].img+'" data-zoom="'+p[0]+'" alt="'+esc(p[1])+'">').join('')+'</div><div class="mtxt">'+body+'</div></div>':body;
-    return '<div class="msg '+cls+'">'+(who?'<div class="who">'+who+'</div>':'')+inner+'</div>';
+    let inner=pts.length?'<div class="mrow"><div class="pts">'+pts.map(p=>'<img class="pt" src="'+npcs[p[0]].img+'" data-zoom="'+p[0]+'" alt="'+esc(p[1])+'">').join('')+'</div><div class="mtxt">'+body+'</div></div>':body;
+    let acts='';
+    if(m.type==='narration'&&m._k){
+      if(editKey===m._k) inner='<textarea id="editta" style="min-height:160px;color:#2b2012;background:#fff8e6">'+esc(editDraft)+'</textarea><div class="acts"><button data-act="editsave" data-k="'+m._k+'">Opslaan</button><button data-act="editcancel">Annuleer</button></div>';
+      else acts='<div class="acts"><button data-act="edit" data-k="'+m._k+'">✎ Bewerk</button>'+(m._k===lastNarr&&canAct?'<button data-act="regen">↻ Opnieuw</button><button data-act="undo">↶ Terug</button>':'')+'</div>';
+    }
+    let out='<div class="msg '+cls+'">'+(who?'<div class="who">'+who+'</div>':'')+inner+acts+'</div>';
+    if(m.newLoc&&locs[m.newLoc]){const l=locs[m.newLoc]; out+='<div class="msg loc">'+(l.img?'<img src="'+l.img+'" data-zoom="loc:'+m.newLoc+'" alt="">':'')+'<div><b>📍 Nieuw gebied: '+esc(l.name)+'</b><br><small>'+esc(l.desc||'')+'</small></div></div>';}
+    return out;
   }).join('')||'<div class="msg system">Nog geen verhaal.</div>';
+  const eta=$('#editta'); if(eta) eta.oninput=e=>{editDraft=e.target.value};
   if(atBottom) th.scrollTop=th.scrollHeight;
 
   const sb=$('#statusbar'), cpz=$('#compose');
@@ -471,6 +510,7 @@ function renderGame(){
     <div class="row"><button class="b" id="send">${mine?'Actie aanpassen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button>
     ${others.length?'<button class="b alt" id="skip">Zonder '+esc(others.join(', '))+' verder</button>':''}</div>
     ${mine?'<small>Ingediend: '+esc(mine.text)+'</small>':''}`;
+    if(!draft&&mine) draft=mine.text.replace(/\s*\[worp:[^\]]*\]/i,'');
     $('#act').value=draft;$('#roll').value=rollDraft;
     $('#act').oninput=e=>draft=e.target.value;$('#roll').oninput=e=>rollDraft=e.target.value;
     $('#send').onclick=()=>submit(false);
@@ -547,9 +587,11 @@ Regels:
 - Portretten: "speakers" = de namen van maximaal 2 NPC's die in deze beurt spreken of centraal staan. Gebruik EXACT de naam uit de lijst BEKENDE NPC'S als de NPC daar al in staat. "newNpcs" = elke NPC die in deze beurt voor het eerst optreedt en NIET in die lijst staat, met "visual": een concrete Engelse beschrijving voor een portret (soort/leeftijd, postuur, gezicht, huid, haar en baard, ogen, littekens, elk kledingstuk met kleur en materiaal, zichtbare uitrusting, uitdrukking). Voor figuren uit Tolkiens boeken: beschrijf zoals in de boeken. Geen geheimen in "visual".
 - Worpen: zet ALLE worpen die je zelf doet of verwerkt (NPC's, vijanden, companions en de worpen die de spelers meldden) in "rolls" ({"who":"Orc 1","what":"Attack Roll","natural":14,"mod":5,"total":19,"result":"Hit"}; bij schade {"who","what":"Damage","dice":"1d8+3","total":9}). De app toont ze als chips: schrijf ze dus NIET ook nog eens als haakjes in de vertelling, en toon nooit de DC. Vertel alleen het gevolg. Verwerk een nat 20 of nat 1 als klein extra gevolg in de vertelling.
 - Gevecht: zet "initiative" in de Stand met "active" = wie nu aan de beurt is en "order" met naam, init en enemy:true voor vijanden; werk "active" bij elke beurt bij en zet initiative op null zodra het gevecht voorbij is.
+- Locatie: geef "location" (name, description = 1-2 Nederlandse zinnen, visual = Engelse beschrijving voor een landschaps- of interieurillustratie) zodra de PC's op een andere plek zijn of een plek voor het eerst beschreven wordt; laat het anders weg. Houd inGame.location gelijk aan location.name.
+- HERINNERINGEN van de spelers zijn bindend en gaan voor op je eigen aannames.
 - logEntries: korte feiten van wat NU echt gebeurd is.
 Antwoord ALLEEN met JSON in dit formaat:
-{"narration":"markdown-tekst","speakers":["Naam"],"rolls":[{"who":"","what":"","natural":0,"mod":0,"total":0,"result":""}],"newNpcs":[{"name":"Naam","visual":"English description"}],"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."}}}`;
+{"narration":"markdown-tekst","speakers":["Naam"],"rolls":[{"who":"","what":"","natural":0,"mod":0,"total":0,"result":""}],"newNpcs":[{"name":"Naam","visual":"English description"}],"location":{"name":"","description":"","visual":""},"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."}}}`;
 
 function rollDice(){
   const r=(s,n)=>Array.from({length:n},()=>1+crypto.getRandomValues(new Uint32Array(1))[0]%s);
@@ -577,6 +619,7 @@ function parseDM(txt,names){
   o.statePatch=o.statePatch&&typeof o.statePatch==='object'?o.statePatch:{};
   o.logEntries=Array.isArray(o.logEntries)?o.logEntries:[];
   o.rolls=Array.isArray(o.rolls)?o.rolls.filter(r=>r&&typeof r.who==='string'&&typeof r.what==='string'&&r.total!=null&&isFinite(Number(r.total))).slice(0,12).map(r=>({who:r.who.slice(0,40),what:r.what.slice(0,40),natural:(r.natural!=null&&isFinite(Number(r.natural)))?Number(r.natural):null,mod:isFinite(Number(r.mod))?Number(r.mod):0,total:Number(r.total),dice:r.dice?String(r.dice).slice(0,20):'',result:r.result?String(r.result).slice(0,30):''})):[];
+  { const lc=o.location; o.location=(lc&&typeof lc.name==='string'&&lc.name.trim())?{name:lc.name.trim().slice(0,80),description:String(lc.description||'').slice(0,400),visual:String(lc.visual||'').slice(0,1500)}:null; }
   o.speakers=Array.isArray(o.speakers)?o.speakers.filter(s=>typeof s==='string').slice(0,2):[];
   o.newNpcs=Array.isArray(o.newNpcs)?o.newNpcs.filter(n=>n&&typeof n.name==='string'&&n.name.trim()):[];
   const nt=o.nextTurn||{};
@@ -593,10 +636,11 @@ async function resolve(retry){
     if(retry) await db.ref(cp('turn',C)).update({status:'resolving',resolvingSince:Date.now(),lastError:null});
     const t=(await db.ref(cp('turn',C)).get()).val();
     const round=t.round;
-    const [pS,sS,cS,mS,lS,smS,cfS]=await Promise.all(['pending','state','canon','messages','log','summaries'].map(k=>db.ref(cp(k,C)).get()).concat([db.ref('dnd/config').get()]));
+    const [pS,sS,cS,mS,lS,smS,meS,cfS]=await Promise.all(['pending','state','canon','messages','log','summaries','memories'].map(k=>db.ref(cp(k,C)).get()).concat([db.ref('dnd/config').get()]));
     cfg=cfS.val()||cfg;
     if(!cfg.geminiKey) throw new Error('Geen Gemini-sleutel ingesteld (⚙ in het menu).');
-    const pend=Object.values(pS.val()||{}).filter(p=>p.round===round).sort((a,b)=>a.t-b.t);
+    const pendE=Object.entries(pS.val()||{}).filter(([k,p])=>p.round===round);
+    const pend=pendE.map(e=>e[1]).sort((a,b)=>a.t-b.t);
     const pl=(await db.ref(cp('players',C)).get()).val()||{};
     pl[me.uid]=me.name; db.ref(cp('players/'+me.uid,C)).set(me.name);
     const allNames=[...new Set(Object.values(pl))];
@@ -606,27 +650,31 @@ async function resolve(retry){
     const hist=recent.slice(-30).filter(m=>m.type!=='system').map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
     const logs=[];lS.forEach(c=>{logs.push(c.val())});
     const sums=[]; smS.forEach(c=>{sums.push(c.val().text)});
+    const mems=[]; meS.forEach(c=>{mems.push('- '+c.val().text)});
     const npcNames=Object.values(npcs).filter(n=>!n.forPlayer).map(n=>n.name);
     const user=
-`# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# LOGBOEK (laatste 60)\n${logs.slice(-60).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
+`# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# LOGBOEK (laatste 60)\n${logs.slice(-60).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
     let out,usage,note=null;
     for(let i=0;i<2;i++){
       const r=await callGemini(SYSTEM,user,note);usage=r.usage;
       try{out=parseDM(r.txt,allNames);break}catch(e){note=e.message;if(i===1)throw new Error('Ongeldige DM-uitvoer: '+note)}
     }
     const newState=deepMerge(state,out.statePatch);
-    const up={};const now=Date.now();
-    pend.forEach((p,i)=>{const k=db.ref(cp('messages',C)).push().key;up[cp('messages/'+k,C)]={type:p.pass?'pass':'action',author:p.name,text:p.text,round,t:now+i}});
+    const up={};const now=Date.now();const msgKeys=[],logKeys=[];
+    const lastS=await db.ref(cp('stands',C)).orderByKey().limitToLast(1).get(); let lastKey=null; lastS.forEach(c=>{lastKey=c.key});
+    if(lastKey) up[cp('stands/'+lastKey+'/undo',C)]=null;
+    pend.forEach((p,i)=>{const k=db.ref(cp('messages',C)).push().key;msgKeys.push(k);up[cp('messages/'+k,C)]={type:p.pass?'pass':'action',author:p.name,text:p.text,round,t:now+i}});
     const nk=db.ref(cp('messages',C)).push().key;
     const nm={type:'narration',author:'dm',text:out.narration,round:round+1,t:now+pend.length+1};
     if(out.speakers.length) nm.speakers=out.speakers;
     if(out.rolls.length) nm.rolls=out.rolls;
-    up[cp('messages/'+nk,C)]=nm;
-    out.logEntries.forEach(l=>{if(l&&l.fact){const k=db.ref(cp('log',C)).push().key;up[cp('log/'+k,C)]={fact:String(l.fact),inGameDate:String(l.inGameDate||''),round:round+1,t:now}}});
+    msgKeys.push(nk); up[cp('messages/'+nk,C)]=nm;
+    out.logEntries.forEach(l=>{if(l&&l.fact){const k=db.ref(cp('log',C)).push().key;logKeys.push(k);up[cp('log/'+k,C)]={fact:String(l.fact),inGameDate:String(l.inGameDate||''),round:round+1,t:now}}});
     out.newNpcs.forEach(n=>{const k=slug(n.name); if(!npcs[k]) up['dnd/npcs/'+k]={name:n.name.trim(),visual:String(n.visual||'').slice(0,1500),t:now,from:C}});
+    if(out.location){const lk=slug(out.location.name); if(!locs[lk]){up['dnd/locations/'+lk]={name:out.location.name,desc:out.location.description,visual:out.location.visual,t:now,from:C}; nm.newLoc=lk;} up[cp('scene',C)]=lk;}
     const sj=JSON.stringify(newState), rk=String(round+1).padStart(5,'0');
     up[cp('state',C)]=sj;
-    up[cp('stands/'+rk,C)]={json:sj,round:round+1,t:now};
+    up[cp('stands/'+rk,C)]={json:sj,round:round+1,t:now,undo:{prevState:sS.val()||'{}',turn:t,pend:pendE.map(([k,p])=>({uid:k,...p})),msgs:msgKeys,logs:logKeys}};
     up[cp('usage/'+rk,C)]={prompt:usage.promptTokenCount||0,out:usage.candidatesTokenCount||0,model:cfg.model||'gemini-2.5-flash'};
     up[cp('pending',C)]=null;
     up['dnd/campaignIndex/'+C+'/lastPlayed']=now;
@@ -706,6 +754,67 @@ function renderInit(){
     return '<span class="ic'+(foe?' foe':'')+(act?' act':'')+'">'+(o.init!=null?esc(o.init)+' · ':'')+esc(o.name)+(act?' ◀':'')+'</span>';
   }).join('');
 }
+function threadClick(e){
+  const b=e.target.closest('[data-act]'); if(!b) return;
+  const a=b.dataset.act, k=b.dataset.k;
+  if(a==='edit'){const m=msgs.find(x=>x._k===k); if(!m)return; editKey=k; editDraft=m.text||''; renderGame();}
+  else if(a==='editcancel'){editKey=null; renderGame();}
+  else if(a==='editsave'){const C=cid; db.ref(cp('messages/'+editKey+'/text',C)).set(editDraft); editKey=null;}
+  else if(a==='regen'){ if(confirm('De laatste DM-beurt verwijderen en opnieuw laten schrijven (met dezelfde acties)?')) undoLast('regen'); }
+  else if(a==='undo'){ if(confirm('De laatste DM-beurt terugdraaien? De acties komen terug zodat jullie ze kunnen aanpassen.')) undoLast('back'); }
+}
+async function undoLast(mode){
+  const C=cid, now=Date.now();
+  const ss=await db.ref(cp('stands',C)).orderByKey().limitToLast(1).get(); let rec=null,key=null;
+  ss.forEach(c=>{rec=c.val();key=c.key});
+  if(!rec||!rec.undo){alert('Er is niets om terug te draaien (alleen de laatste beurt kan terug).');return}
+  const u=rec.undo, up={};
+  (u.msgs||[]).forEach(k=>{up[cp('messages/'+k,C)]=null});
+  (u.logs||[]).forEach(k=>{up[cp('log/'+k,C)]=null});
+  up[cp('stands/'+key,C)]=null; up[cp('usage/'+key,C)]=null;
+  up[cp('state',C)]=u.prevState||'{}';
+  up['dnd/campaignIndex/'+C+'/round']=Math.max(0,(rec.round||1)-1);
+  const pend=u.pend||[], authors={};
+  pend.forEach(p=>{const {uid,...rest}=p; up[cp('pending/'+uid,C)]=rest; authors[p.name]=true});
+  const t=u.turn||{round:0};
+  if(!pend.length&&(t.round||0)===0&&mode==='back'){ up[cp('turn',C)]=null; }
+  else if(mode==='regen'){ up[cp('turn',C)]={...t,status:'resolving',resolvingSince:now,awaiting:null,lastError:null}; }
+  else { up[cp('turn',C)]={...t,status:'waiting',awaiting:Object.keys(authors).length?authors:null,resolvingSince:null,lastError:null}; }
+  await db.ref().update(up);
+  if(mode==='regen') resolve(false);
+}
+const LOCSTYLE_END="Avoid: photorealism, cartoon or anime look, 3D game render, modern objects, text, captions, watermarks, logos, borders.";
+function makeLocPrompt(n){
+  return STYLE+"\nWide landscape illustration (3:2) of the location "+n.name+": "+(n.visual||'(no description yet)')+"\nNo prominent characters unless described. If this is a place from Tolkien's books, follow the written descriptions in the books.\n"+LOCSTYLE_END;
+}
+function sceneSlug(){const S=getState(); return sceneKey||(S.inGame&&S.inGame.location?slug(S.inGame.location):'');}
+function locationCard(){
+  const S=getState(), k=sceneSlug(), l=locs[k], name=l?l.name:((S.inGame&&S.inGame.location)||'');
+  if(!name) return '';
+  return '<div class="card"><h3>📍 '+esc(name)+'</h3>'+(l&&l.img?'<img class="locimg" src="'+l.img+'" data-zoom="loc:'+k+'" alt="">':'')+(l&&l.desc?'<div style="font-size:14px">'+esc(l.desc)+'</div>':'')+'</div>';
+}
+function peopleHtml(S){
+  return Object.entries(S.npcs||{}).map(([k,v])=>{
+    const o=(v&&typeof v==='object')?v:{status:v};
+    const lines=[o.location,o.status,o.attitude].filter(x=>x&&typeof x!=='object').map(esc).join(' · ');
+    return '<div class="card ppl">'+avatar((o&&o.name)||k)+'<div><b>'+esc((o&&o.name)||k)+'</b><br><small style="color:var(--mute)">'+(lines||'—')+'</small></div></div>';
+  }).join('')||'<small style="color:var(--mute)">Niemand in de Stand.</small>';
+}
+function renderSide(){
+  const el=$('#side'); if(!el) return;
+  const S=getState(), q=listOf((S.quests||{}).open).map(t=>'<div class="q">'+esc(t)+'</div>').join('')||'<small style="color:var(--mute)">Geen open opdrachten.</small>';
+  const html=locationCard()+'<h2>Personen</h2>'+peopleHtml(S)+'<h2>Opdrachten</h2>'+q;
+  if(html!==lastSide){lastSide=html; el.innerHTML=html;}
+}
+async function loadMemories(C){
+  const ms=await db.ref(cp('memories',C)).get(); const arr=[]; ms.forEach(c=>{arr.push({k:c.key,...c.val()})});
+  if(screen!=='camp'||cid!==C||!$('#mem')) return;
+  $('#mem').innerHTML='<h2>🧠 Herinneringen</h2><small style="color:var(--mute)">Feiten of correcties die de DM elke beurt als bindend meeneemt.</small>'+
+    arr.map(a=>'<div class="q">'+esc(a.text)+' <button class="b alt sm" data-mdel="'+a.k+'">✕</button></div>').join('')+
+    '<div class="row"><input type="text" id="memin" placeholder="bv. Rivendell ligt in Eriador, niet bij de Ered Luin" style="flex:1"><button class="b sm" id="memadd">Voeg toe</button></div>';
+  $('#memadd').onclick=async()=>{const v=$('#memin').value.trim(); if(!v) return; await db.ref(cp('memories',C)).push({text:v,by:me.name,t:Date.now()}); loadMemories(C);};
+  $('#mem').querySelectorAll('[data-mdel]').forEach(b=>b.onclick=async()=>{await db.ref(cp('memories/'+b.dataset.mdel,C)).remove(); loadMemories(C);});
+}
 async function renderDiary(){
   if(screen!=='camp') return;
   const box=$('#diarybox'), C=cid, S=getState(), q=S.quests||{};
@@ -716,10 +825,11 @@ async function renderDiary(){
     const lines=[o.location,o.status,o.attitude].filter(x=>x&&typeof x!=='object').map(esc).join(' · ');
     return '<div class="card ppl">'+avatar((o&&o.name)||k)+'<div><b>'+esc((o&&o.name)||k)+'</b><br><small style="color:var(--mute)">'+(lines||'—')+'</small></div></div>';
   }).join('');
-  box.innerHTML='<div id="recap"></div><h2>Opdrachten</h2>'+(open||'<small style="color:var(--mute)">Nog geen open opdrachten.</small>')+
+  box.innerHTML=locationCard()+'<div id="recap"></div><div id="mem"></div><h2>Opdrachten</h2>'+(open||'<small style="color:var(--mute)">Nog geen open opdrachten.</small>')+
     (cons?'<h2>Gevolgen</h2>'+cons:'')+(done?'<h2>Afgerond</h2>'+done:'')+
     '<h2>Personen</h2>'+(ppl||'<small style="color:var(--mute)">Nog geen personen in de Stand.</small>')+
     '<h2>Logboek</h2><div id="logs">Laden…</div>';
+  loadMemories(C);
   db.ref(cp('summaries',C)).get().then(ss=>{
     const arr=[]; ss.forEach(c=>{arr.push(c.val())}); arr.reverse();
     if(screen!=='camp'||cid!==C||!$('#recap')) return;

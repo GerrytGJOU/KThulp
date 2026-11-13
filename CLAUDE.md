@@ -60,6 +60,10 @@ spelregels, features of het datamodel raakt:
   `<a class="portal-back" href="../" aria-label="Terug naar portaal">` met
   pijl-SVG, position:fixed top-left, z-index 9999. Zie frequentie/ of certamen/
   voor de exacte markup en CSS.
+  Uitzondering: `dnd/` (verborgen Midden-aarde-D&D-app voor twee spelers, Firebase-pad
+  `dnd/…`, toegang via `dndAccess`/`dndAccessEmail`) heeft bewust GEEN link naar het
+  portaal; de knop linksboven gaat alleen binnen de app terug, en de browser-terugknop
+  blijft in de app. Voeg daar nooit een portal-back-link aan toe.
 - iPad-veilig: zichtbare <label>-bestandskiezers (nooit display:none + .click()),
   viewport met maximum-scale.
 - Na elke wijziging aan een scriptblok: `node --check` draaien voordat je oplevert.
