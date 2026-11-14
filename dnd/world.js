@@ -28,10 +28,10 @@
   /* Job-wachtrij (Bible 15.5/15.7): asynchroon, idempotent, blokkeert het verhaal nooit en wijzigt nooit spelstatus.
      Jobs ontstaan automatisch bij NPC-promotie (validateDelta); de DM kan ze niet aanmaken of wijzigen. Een runner
      (dnd/tools/jobs.js) claimt ze met een lease en rondt ze af. */
-  const JOB_TYPES = ["portrait", "profile", "statblock"];
+  const JOB_TYPES = ["portrait", "profile", "statblock", "location"];
   const JOB_STATUS = ["queued", "claimed", "done", "failed", "blocked", "cancelled"];
   const JOB_NEXT = { queued: ["claimed", "blocked", "cancelled"], claimed: ["done", "failed", "queued", "cancelled"], failed: ["queued", "cancelled"], blocked: ["queued", "cancelled"], done: [], cancelled: [] };
-  const JOB_TAG = { portrait: "PORT", profile: "PROF", statblock: "STAT" };
+  const JOB_TAG = { portrait: "PORT", profile: "PROF", statblock: "STAT", location: "LOC" };
   const JOB_MAX_ATTEMPTS = 3;
   const jobId = (type, subject, version) => "JOB-" + JOB_TAG[type] + "-" + subject + (version > 1 ? "-V" + version : "");
   /* Factie-agenda's en NPC-acties buiten beeld (Bible 08/09): een agenda is een korte reeks stappen van een factie of NPC.
@@ -584,6 +584,16 @@
         }
       });
     }
+    /* grote momenten: de app kan de volgende beurt aan Claude Code overdragen (met alle informatie en geheimen) */
+    const major = [], base = world || {};
+    if (plan.scene) major.push("reis naar " + plan.scene.region + " (afsluiten van de vorige plek)");
+    Object.keys(plan.quests).forEach(id => { const b = (base.quests || {})[id], a = plan.quests[id]; if (!b || b.status === a.status) return;
+      if (a.kind === "main" && ["available", "active", "completed", "failed"].indexOf(a.status) >= 0) major.push("quest " + id + " is " + a.status);
+      else if (["big", "personal", "companion"].indexOf(a.kind) >= 0 && ["completed", "failed"].indexOf(a.status) >= 0) major.push("quest " + id + " is " + a.status); });
+    Object.keys(plan.backstories).forEach(id => { const b = (base.backstories || {})[id], a = plan.backstories[id]; Object.keys(a.revealed || {}).forEach(n => { if (Number(n) >= 3 && !((b && b.revealed) || {})[n]) major.push("diepste laag van " + id + " onthuld"); }); });
+    Object.keys(plan.companions).forEach(id => { const b = (base.companions || {})[id], a = plan.companions[id]; if (b && b.stage !== a.stage) major.push("companion " + id + ": " + b.stage + " naar " + a.stage); });
+    Object.keys(plan.npcs).forEach(id => { const b = (base.npcs || {})[id], a = plan.npcs[id]; if (b && b.status !== "deceased" && a.status === "deceased" && ["recurring", "companion_candidate", "recruited"].indexOf(b.status) >= 0) major.push(a.name + " is overleden"); });
+    plan.major = major;
     return { ok: errors.length === 0, errors: errors, warnings: warnings, plan: plan };
   }
 
@@ -611,7 +621,7 @@
     opts = opts || {};
     const types = opts.types || JOB_TYPES, nowMs = opts.nowMs || 0, npcs = (world && world.npcs) || {};
     return Object.values((world && world.jobs) || {}).filter(j => types.indexOf(j.type) >= 0 && (j.status === "queued" || (j.status === "claimed" && j.leaseUntil && j.leaseUntil < nowMs)) && (j.attempts || 0) < JOB_MAX_ATTEMPTS)
-      .filter(j => npcs[j.subject] && npcs[j.subject].status !== "ambient")
+      .filter(j => j.type === "location" ? ((world.locations || {})[j.subject]) : (npcs[j.subject] && npcs[j.subject].status !== "ambient"))
       .sort((a, b) => (b.required ? 1 : 0) - (a.required ? 1 : 0) || (a.createdRound || 0) - (b.createdRound || 0) || (a.id < b.id ? -1 : 1));
   }
 
@@ -691,6 +701,8 @@
     if (off.length) out.push("Recent buiten beeld (de PC's weten dit pas als nieuws hen bereikt; nooit alwetend laten reageren):\n" + off.map(e => "- " + (e.ingame && dateOk(e.ingame) ? fmt(e.ingame) + ": " : "") + e.summary).join("\n"));
     const act4 = ["MAIN-A4", "MAIN-A4-MSG", "MAIN-A4-CORRIDOR", "MAIN-A4-DISINFO"].some(id => world.quests && world.quests[id] && (world.quests[id].status === "available" || world.quests[id].status === "active" || world.quests[id].status === "completed" || world.quests[id].status === "failed"));
     if (act4) { const ev = evaluateEndings(world); out.push("Afloop-kandidaten (richtsnoer, jij beslist): " + (ev.pending ? "nog niet beslist (doelen " + Object.keys(ev.goals).map(k => k + "=" + (ev.goals[k] || "-")).join(", ") + ")" : ev.candidates.map(c => c.label + " (" + c.why + ")").join("; "))); }
+    const nextNum = (obj, re) => Object.keys(obj || {}).reduce((m, k) => { const x = re.exec(k); return x ? Math.max(m, Number(x[1])) : m; }, 0) + 1;
+    out.push("Vrije ID's voor nieuwe records (bestaande ID's nooit hergebruiken): NPC-E" + String(nextNum(world.npcs, /^NPC-E(\d+)$/)).padStart(2, "0") + ", DQ-" + String(nextNum(world.quests, /^DQ-(\d+)$/)).padStart(4, "0") + ", AG-D" + nextNum(world.agendas, /^AG-D(\d+)$/));
     const dead = Object.values(world.npcs || {}).filter(n => n.status === "deceased").map(n => n.name);
     if (dead.length) out.push("Overleden (niet laten terugkomen): " + dead.join(", "));
     return out.join("\n").slice(0, max);
@@ -777,7 +789,7 @@
       if (!ID_RE.test(id) || j.id !== id) bad("job", id, "id komt niet overeen of ongeldig formaat");
       if (JOB_TYPES.indexOf(j.type) < 0) bad("job", id, "onbekend type " + j.type);
       if (JOB_STATUS.indexOf(j.status) < 0) bad("job", id, "onbekende status " + j.status);
-      if (!npcs[j.subject]) note("job", id, "verwijst naar onbekende NPC " + j.subject + " (wordt bij het claimen geannuleerd)");
+      if (j.type === "location" ? !locs[j.subject] : !npcs[j.subject]) note("job", id, "verwijst naar onbekende " + (j.type === "location" ? "locatie " : "NPC ") + j.subject + " (wordt bij het claimen geannuleerd)");
       if (j.status === "done" && !(j.result && j.result.notes)) bad("job", id, "klaar zonder resultaat");
       if (j.status === "claimed" && !j.claimedBy) bad("job", id, "geclaimd zonder claimedBy");
       if (j.type === "statblock" && j.status === "done" && !comps[j.subject]) bad("job", id, "statblock-job klaar maar geen companion-record voor " + j.subject);

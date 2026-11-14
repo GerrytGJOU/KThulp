@@ -357,6 +357,15 @@ t("pendingJobs: volgorde, verlopen lease, wees- en ambient-jobs", () => {
   eq(W.pendingJobs(w, { nowMs: 60 }).map(j => j.id).join(","), "JOB-STAT-NPC-E21,JOB-PORT-NPC-E20,JOB-PORT-NPC-E21");
   eq(W.pendingJobs(w, { nowMs: 60, types: ["portrait"] }).length, 2);
 });
+t("locatie-jobs: pendingJobs kijkt naar locaties, audit meldt onbekende locatie", () => {
+  const w = world(); w.locations = { "LOC-X1": { id: "LOC-X1", name: "Bree", region: "REG-ERIADOR", canon: "C" } };
+  w.jobs = {
+    "JOB-LOC-LOC-X1": { id: "JOB-LOC-LOC-X1", type: "location", subject: "LOC-X1", status: "queued", attempts: 0 },
+    "JOB-LOC-LOC-X2": { id: "JOB-LOC-LOC-X2", type: "location", subject: "LOC-X2", status: "queued", attempts: 0 }
+  };
+  eq(W.pendingJobs(w, { nowMs: 1, types: ["location"] }).map(j => j.id).join(","), "JOB-LOC-LOC-X1");
+  yes(W.auditWorld(w).some(i => i.kind === "job" && /onbekende locatie LOC-X2/.test(i.msg)));
+});
 t("audit: jobs", () => {
   const w = world(); w.jobs = { "JOB-PROF-NPC-E01": { id: "JOB-PROF-NPC-E01", type: "profile", subject: "NPC-E01", status: "done", attempts: 1 }, "JOB-X": { id: "JOB-X", type: "foto", subject: "NPC-E01", status: "queued" } };
   const a = W.auditWorld(w).filter(i => i.kind === "job"); yes(a.some(i => /zonder resultaat/.test(i.msg)) && a.some(i => /onbekend type/.test(i.msg)));
@@ -586,6 +595,23 @@ t("agenda van een overleden eigenaar stopt bij de volgende tijdsprong", () => {
 });
 t("reistijd: ontbrekende paren volgen de kortste route over bekende verbindingen", () => {
   eq(W.travelDays("REG-ERIADOR", "REG-ANDUIN"), 8); eq(W.travelDays("REG-MISTY", "REG-GONDOR"), 18); eq(W.travelDays("REG-ANDUIN", "REG-ANDUIN"), 0); eq(W.travelDays("REG-ERIADOR", "REG-NERGENS"), null);
+});
+
+/* ---------- grote momenten (overdracht aan Claude Code) en vrije ID's ---------- */
+t("plan.major: reis, Act-quest, laatste laag, companion-wissel en dood van een belangrijke NPC", () => {
+  let w = cworld(); w.sceneSince = { y: 3018, m: 10, d: 24 };
+  const r1 = run(w, { time: { to: { y: 3018, m: 10, d: 27 }, reason: "reis naar Eriador" }, region: "REG-ERIADOR" }); yes(r1.plan.major.some(m => /reis naar REG-ERIADOR/.test(m)));
+  const r2 = run(w, { companions: [rec3] }); yes(r2.plan.major.some(m => /CMP-R03/.test(m)));
+  w.quests["MAIN-A2"] = { id: "MAIN-A2", title: "Act II", kind: "main", status: "dormant", region: "REG-ERIADOR", open: true, canon: "B", history: [] };
+  const r3 = run(w, { quests: [{ id: "MAIN-A2", op: "update", set: { status: "available" }, reason: "De winter breekt aan" }] }); yes(r3.plan.major.some(m => /MAIN-A2/.test(m)));
+  const r4 = run(w, { npcs: [{ id: "CMP-R03", op: "update", set: { status: "deceased" }, reason: "Gesneuveld bij de brug" }] }); yes(r4.plan.major.some(m => /overleden/.test(m)));
+});
+t("plan.major is leeg bij gewone beurten", () => {
+  const w = cworld(); const r = run(w, { clocks: [{ id: "CLK-A", delta: 1, reason: "Een koerier verdween" }], npcs: [{ id: "NPC-E01", op: "update", set: { goal: "voedsel verdelen" } }] }); eq(r.plan.major.length, 0);
+});
+t("context noemt vrije ID's zodat de DM geen bestaand ID hergebruikt", () => {
+  const w = cworld(); w.npcs["NPC-E05"] = mk("NPC-E05", "De Kaartmaker", "ambient"); w.quests["DQ-0003"] = { id: "DQ-0003", title: "x", kind: "dynamic", status: "active", region: "REG-ERIADOR", open: true, canon: "N", history: [] };
+  const c = W.worldContext(w, { hay: "" }); yes(c.indexOf("NPC-E06") >= 0 && c.indexOf("DQ-0004") >= 0 && c.indexOf("AG-D1") >= 0, c);
 });
 
 console.log(pass + " geslaagd, " + fail + " mislukt");

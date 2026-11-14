@@ -7,6 +7,8 @@
      next <cid> [types|all] --by=<naam> [--lease=45]   claimt de eerstvolgende job (lease in minuten) en toont de opdracht
      brief <cid> <jobId>                          toont de opdracht van een geclaimde job opnieuw
      set-visual <cid> <jobId> <bestand.txt>       bewaar een VOORGESTELDE uiterlijkbeschrijving (Engels) als npcs/{sleutel}/visual
+     set-visual <cid> <jobId> <bestand>           (locatie-job: bestand = JSON {"visual":"English...","desc":"1-2 Nederlandse zinnen"})
+     import-location <cid> <jobId> <afbeelding>   verklein (max 640 px, 3:2-landschap), sla op als locations/{sleutel}/img en rond de job af
      import-portrait <cid> <jobId> <afbeelding>   verklein (max 360 px), sla op als npcs/{sleutel}/img en rond de job af
      submit-statblock <cid> <jobId> <bestand.json>  valideer en bewaar een companion-statblock (voorstel) en rond af
      submit-profile <cid> <jobId> <bestand.md>    bewaar een voorgesteld NPC-dossier (world/profiles) en rond af
@@ -15,7 +17,8 @@
      release <cid> <jobId>                        geef een geclaimde job terug aan de wachtrij
      retry <cid> <jobId>                          mislukte of geblokkeerde job opnieuw in de wachtrij
      cancel <cid> <jobId> <reden>
-     enqueue <cid> <portrait|profile|statblock> <npcId> [--reason=...]   handmatig een job aanmaken (idempotent; bij een afgeronde job: nieuwe versie)
+     enqueue <cid> <portrait|profile|statblock> <npcId> [--reason=...]
+     enqueue <cid> location <LOC-id> [--name="naam zoals de DM hem schrijft"] [--reason=...]   (de app zoekt de locatie op slug(naam) = inGame.location)   handmatig een job aanmaken (idempotent; bij een afgeronde job: nieuwe versie)
    Een job wijzigt nooit spelstatus; alleen npcs/{sleutel} (portret), world/companions (statblock, als voorstel), world/profiles en de job zelf.
    Geen geheimen in dit bestand. */
 "use strict";
@@ -62,6 +65,12 @@ function portraitPrompt(name, visual) {
     "Avoid: photorealism, cartoon or anime look, 3D game render, modern clothing or objects, text, captions, watermarks, logos, borders, extra people, extra fingers, deformed hands.";
 }
 
+function locPrompt(name, visual) {
+  return STYLE + "\nWide landscape illustration (3:2) of the location " + name + ": " + (visual || "(no description yet)") + "\nNo prominent characters unless described. If this is a place from Tolkien's books, follow the written descriptions in the books.\n" +
+    "Avoid: photorealism, cartoon or anime look, 3D game render, modern objects, text, captions, watermarks, logos, borders.";
+}
+const locKeyOf = (job, loc) => slug(job.appName || (loc && loc.name) || job.subject);
+
 function load(cid) {
   const world = get("/dnd/" + wp(cid, "")) || null;
   if (!world) throw new Error("Verhaal " + cid + " heeft geen wereldregister");
@@ -82,13 +91,24 @@ function transition(cid, world, job, to, patch, extra) {
   const up = Object.assign({}, extra || {});
   up[wp(cid, "jobs/" + job.id)] = r.job;
   if (to === "done" || to === "failed" || to === "blocked" || to === "cancelled") {
-    up[wp(cid, "events/" + pushId())] = eventOf(world, "job_" + to, "Job " + job.id + " " + to + (patch && (patch.reason || (patch.result && patch.result.notes)) ? ": " + (patch.reason || patch.result.notes) : ""), { npcs: [job.subject] });
+    up[wp(cid, "events/" + pushId())] = eventOf(world, "job_" + to, "Job " + job.id + " " + to + (patch && (patch.reason || (patch.result && patch.result.notes)) ? ": " + (patch.reason || patch.result.notes) : ""), (job.type === "location" ? {} : { npcs: [job.subject] }));
   }
   update(up);
   return r.job;
 }
 
+function briefLocation(cid, world, job) {
+  const loc = (world.locations || {})[job.subject] || {}, key = locKeyOf(job, loc), g = get("/dnd/locations/" + key) || {};
+  const out = { job: job.id, type: job.type, status: job.status, locationId: job.subject, locationName: loc.name, appName: job.appName || loc.name, region: loc.region, canonTag: loc.canon, locKey: key, hasImageAlready: !!g.img };
+  out.visual = g.visual || null; out.visualStatus = g.visualStatus || (g.visual ? "approved-or-legacy" : "missing");
+  out.chatgptPrompt = g.visual ? locPrompt(job.appName || loc.name, g.visual) : null;
+  out.instructions = g.visual
+    ? "1) Plak ALLEEN chatgptPrompt in ChatGPT. 2) Download het resultaat. 3) node dnd/tools/jobs.js import-location " + cid + " " + job.id + " <bestand>. Controleer eerst of het beeld klopt met 'visual' (landschap/interieur, geen personen, geen tekst)."
+    : "Er is nog geen beschrijving. Maak een JSON-bestand {\"visual\": \"<Engelse beschrijving voor een landschaps- of interieurillustratie, 2-4 zinnen: ligging, bouwstijl, materialen, vegetatie, licht, sfeer>\", \"desc\": \"<1-2 Nederlandse zinnen voor de spelers>\"} uit speler-zichtbare bronnen (voor Tolkien-plaatsen de boeken, niet de films; verder wat in de verhaalberichten en canon B1/B2/E3 staat). Gebruik NOOIT DM-geheime canon (C1, C2, M-documenten, CMP, dmnotes) en onthul niets wat de spelers nog niet weten (Stille Net, Kaartmaker, e.d.). Is er geen bron, verzin dan een neutrale, geloofwaardige invulling die het verhaal niet vastlegt (ligging van open plekken blijft vaag). Bewaar met set-visual (status 'proposed') en lees de opdracht daarna opnieuw met brief. Meld in je eindrapport dat de beschrijving een voorstel is.";
+  return out;
+}
 function brief(cid, world, job) {
+  if (job.type === "location") return briefLocation(cid, world, job);
   const npc = (world.npcs || {})[job.subject] || {}, key = slug(npc.name || job.subject);
   const g = get("/dnd/npcs/" + key) || {};
   const out = { job: job.id, type: job.type, status: job.status, npcId: job.subject, npcName: npc.name, npcStatus: npc.status, canonTag: npc.canon, npcKey: key, required: !!job.required, trigger: job.trigger };
@@ -138,10 +158,12 @@ function main() {
     const lease = (Number(flags.lease) || 45) * 60000;
     for (const j of World.pendingJobs(world, { types: types, nowMs: Date.now() })) {
       const npc = (world.npcs || {})[j.subject];
+      const isLoc = j.type === "location", locRec = (world.locations || {})[j.subject];
       /* verlopen lease: eerst terug naar queued */
       let cur = j;
       if (cur.status === "claimed") { const rel = World.jobTransition(cur, "queued", {}, Date.now()); cur = rel.job; }
-      if (!npc) { transition(cid, world, cur, "cancelled", { reason: "NPC bestaat niet meer (wees-job)" }); continue; }
+      if (isLoc ? !locRec : !npc) { transition(cid, world, cur, "cancelled", { reason: (isLoc ? "Locatie" : "NPC") + " bestaat niet meer (wees-job)" }); continue; }
+      if (isLoc) { const gi = get("/dnd/locations/" + locKeyOf(cur, locRec) + "/img"); if (gi) { const c3 = World.jobTransition(cur, "claimed", { by: flags.by, leaseUntil: Date.now() + lease }, Date.now()).job; transition(cid, world, c3, "done", { result: { notes: "Locatieafbeelding bestond al; niets gedaan" } }); console.log("(" + cur.id + " overgeslagen: afbeelding bestaat al)"); continue; } }
       if (cur.type === "portrait") {
         const g = get("/dnd/npcs/" + slug(npc.name) + "/img");
         if (g) { const c2 = World.jobTransition(cur, "claimed", { by: flags.by, leaseUntil: Date.now() + lease }, Date.now()).job; transition(cid, world, c2, "done", { result: { notes: "Portret bestond al; niets gedaan" } }); console.log("(" + cur.id + " overgeslagen: portret bestaat al)"); continue; }
@@ -157,12 +179,13 @@ function main() {
   if (cmd === "enqueue") {
     const type = pos[2], npcId = pos[3];
     if (World.JOB_TYPES.indexOf(type) < 0) throw new Error("type moet " + World.JOB_TYPES.join("|") + " zijn");
-    if (!(world.npcs || {})[npcId]) throw new Error("NPC " + npcId + " bestaat niet");
+    if (type === "location" ? !(world.locations || {})[npcId] : !(world.npcs || {})[npcId]) throw new Error((type === "location" ? "Locatie " : "NPC ") + npcId + " bestaat niet");
     let v = 1; while (jobs[World.jobId(type, npcId, v)] && ["done", "cancelled"].indexOf(jobs[World.jobId(type, npcId, v)].status) >= 0) v++;
     const id = World.jobId(type, npcId, v);
     if (jobs[id]) { console.log("Job " + id + " staat al in de wachtrij (" + jobs[id].status + ")."); return; }
     const rec = { id: id, type: type, subject: npcId, status: "queued", required: type === "statblock", attempts: 0, trigger: "handmatig" + (typeof flags.reason === "string" ? ": " + flags.reason : ""), createdAt: world.calendar || null, createdRound: null };
-    update({ [wp(cid, "jobs/" + id)]: rec, [wp(cid, "events/" + pushId())]: eventOf(world, "job_queued", "Job " + id + " handmatig in de wachtrij", { npcs: [npcId] }) });
+    if (type === "location" && typeof flags.name === "string") rec.appName = flags.name;
+    update({ [wp(cid, "jobs/" + id)]: rec, [wp(cid, "events/" + pushId())]: eventOf(world, "job_queued", "Job " + id + " handmatig in de wachtrij", type === "location" ? {} : { npcs: [npcId] }) });
     console.log("Job " + id + " aangemaakt."); return;
   }
   const jid = pos[2]; if (!jid) throw new Error("Geef een job-id");
@@ -173,6 +196,34 @@ function main() {
   if (cmd === "cancel") { transition(cid, world, job, "cancelled", { reason: pos.slice(3).join(" ") }); console.log("Job " + jid + " geannuleerd."); return; }
   if (cmd === "release" || cmd === "retry") { transition(cid, world, job, "queued", {}); console.log("Job " + jid + " staat weer in de wachtrij."); return; }
   if (job.status !== "claimed") throw new Error("Job " + jid + " is niet geclaimd (status " + job.status + "); gebruik eerst 'next'");
+  if (job.type === "location") {
+    const loc = (world.locations || {})[job.subject]; if (!loc) throw new Error("Locatie " + job.subject + " bestaat niet meer");
+    const lkey = locKeyOf(job, loc), lname = job.appName || loc.name, lfile = pos[3];
+    if (!lfile || !fs.existsSync(lfile)) throw new Error("Bestand niet gevonden: " + lfile);
+    if (cmd === "set-visual") {
+      let o; try { o = JSON.parse(fs.readFileSync(lfile, "utf8")); } catch (e) { throw new Error("Bestand moet JSON zijn: {\"visual\":\"...\",\"desc\":\"...\"}"); }
+      const v = String(o.visual || "").trim(), d = String(o.desc || "").trim();
+      if (v.length < 40 || v.length > 1500) throw new Error("visual moet 40-1500 tekens zijn");
+      if (d.length < 10 || d.length > 400) throw new Error("desc moet 10-400 tekens zijn");
+      update({ ["locations/" + lkey + "/name"]: lname, ["locations/" + lkey + "/visual"]: v, ["locations/" + lkey + "/desc"]: d, ["locations/" + lkey + "/visualStatus"]: "proposed", ["locations/" + lkey + "/t"]: Date.now(), ["locations/" + lkey + "/from"]: "job " + jid });
+      console.log("Voorgestelde beschrijving opgeslagen voor " + lname + " (sleutel " + lkey + ", visualStatus proposed). Maak nu de afbeelding."); return;
+    }
+    if (cmd === "import-location") {
+      const tmp = path.join(os.tmpdir(), "dnd-loc-" + Date.now() + ".txt");
+      let ok = false, msg = "";
+      for (const py of ["python3", "python", "py"]) {
+        const r = spawnSync(py, ["-I", path.join(__dirname, "portrait-resize.py"), lfile, tmp, "640"], { encoding: "utf8" });
+        if (r.status === 0) { ok = true; msg = r.stdout.trim(); break; } else msg = (r.stderr || r.stdout || String(r.error || "")).trim().slice(0, 300);
+      }
+      if (!ok) throw new Error("Verkleinen mislukt: " + msg);
+      const data = fs.readFileSync(tmp, "utf8"); fs.unlinkSync(tmp);
+      const g = get("/dnd/locations/" + lkey) || {};
+      const extra = { ["locations/" + lkey + "/img"]: data, ["locations/" + lkey + "/name"]: g.name || lname, ["locations/" + lkey + "/t"]: Date.now(), ["locations/" + lkey + "/from"]: "job " + jid };
+      transition(cid, world, job, "done", { result: { notes: "Afbeelding opgeslagen als locations/" + lkey + " (" + msg + ")", ref: "locations/" + lkey } }, extra);
+      console.log("Afbeelding van " + lname + " opgeslagen (" + msg + "); job afgerond."); return;
+    }
+    throw new Error("Opdracht " + cmd + " hoort niet bij een locatie-job");
+  }
   const npc = (world.npcs || {})[job.subject]; if (!npc) throw new Error("NPC " + job.subject + " bestaat niet meer");
   const key = slug(npc.name), file = pos[3];
   if (!file || !fs.existsSync(file)) throw new Error("Bestand niet gevonden: " + file);
