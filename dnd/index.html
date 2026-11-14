@@ -178,6 +178,7 @@ const main=$('#main');
 let me=null;                 // {uid,name}
 let screen='menu', cid=null; // menu of campagne
 let cfg={}, npcs={}, locs={}, chars={}, index={}; let sceneKey='', editKey=null, editDraft='', lastSide='';              // globaal
+let wQuests={}, wCal=null;
 let turn=null, canon={}, msgs=[], oocs=[], pending={}, stateStr="{}"; // per campagne
 let tab='game', draft="", rollDraft="";
 let listeners=[];
@@ -466,6 +467,8 @@ function enterCampaign(id){
   $('#oocin').onkeydown=e=>{if(e.key==='Enter')sendOoc()};
   on(db.ref(cp('turn')),'value',s=>{turn=s.val();renderGame()});
   on(db.ref(cp('state')),'value',s=>{stateStr=s.val()||"{}";if(tab==='stand')renderStand();if(tab==='diary')renderDiary();renderGame()});
+  on(db.ref(cp('world/quests')),'value',s=>{wQuests=s.val()||{};if(tab==='diary')renderDiary()});
+  on(db.ref(cp('world/calendar')),'value',s=>{wCal=s.val()||null;if(tab==='diary')renderDiary()});
   on(db.ref(cp('canon')),'value',s=>{canon=s.val()||{};if(tab==='canon')renderCanon()});
   on(db.ref(cp('pending')),'value',s=>{pending=s.val()||{};renderGame()});
   on(db.ref(cp('scene')),'value',s=>{sceneKey=s.val()||'';renderGame()});
@@ -947,7 +950,13 @@ async function renderDiary(){
     const lines=[o.location,o.status,o.attitude].filter(x=>x&&typeof x!=='object').map(esc).join(' · ');
     return '<div class="card ppl">'+avatar((o&&o.name)||k)+'<div><b>'+esc((o&&o.name)||k)+'</b><br><small style="color:var(--mute)">'+(lines||'—')+'</small></div></div>';
   }).join('');
-  box.innerHTML=locationCard()+'<div id="recap"></div><div id="mem"></div><h2>Opdrachten</h2>'+(open||'<small style="color:var(--mute)">Nog geen open opdrachten.</small>')+
+  /* Opdrachten uit het wereldregister: alleen wat de spelers al kennen (actief of afgesloten); nooit dormant/available, haakjes of 'ifIgnored' */
+  const MOPN=['Maanden','jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+  const wl=Object.values(wQuests||{}).filter(x=>x&&x.title&&['active','completed','failed','expired','changed'].indexOf(x.status)>=0);
+  const wlab={active:'',completed:'done',failed:'done',expired:'done',changed:''}, wtxt={completed:' (afgerond)',failed:' (mislukt)',expired:' (verlopen)',changed:' (veranderd)'};
+  const wq=wl.map(x=>'<div class="q '+(wlab[x.status]||'')+'">'+esc(x.title)+esc(wtxt[x.status]||'')+'</div>').join('');
+  const wdate=(wCal&&wCal.y)?'<div class="card"><small style="color:var(--mute)">Datum in het verhaal</small><br>'+wCal.d+' '+MOPN[wCal.m]+' '+wCal.y+' (Derde Era)'+(wCal.tod?' · '+esc(wCal.tod):'')+'</div>':'';
+  box.innerHTML=locationCard()+wdate+'<div id="recap"></div><div id="mem"></div><h2>Opdrachten</h2>'+wq+(open||'<small style="color:var(--mute)">Nog geen open opdrachten.</small>')+
     (cons?'<h2>Gevolgen</h2>'+cons:'')+(done?'<h2>Afgerond</h2>'+done:'')+
     '<h2>Personen</h2>'+(ppl||'<small style="color:var(--mute)">Nog geen personen in de Stand.</small>')+
     '<h2>Logboek</h2><div id="logs">Laden…</div>';
