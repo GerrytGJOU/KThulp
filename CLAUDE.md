@@ -107,10 +107,12 @@ spelregels, features of het datamodel raakt:
   CLI — `.firebaserc`/`firebase.json` in de repo-root wijzen al naar dit
   bestand, sinds 2026-09-08. Dit repo deployt nog steeds niet automatisch
   (geen CI-hook); publiceren is en blijft een bewuste, losse actie).
-- D&D-regels (voorstel, nog NIET live): `certamen/database.rules.proposed.json` is het volledige regelsbestand met een
-  strengere `dnd`-tak (structuurcontrole van `world/*`; de browser mag het wereldregister niet wissen of overschrijven).
-  Gegenereerd door `dnd/tools/build-dnd-rules.js`, getest met `dnd/tools/test-rules.js` (regelsimulator zonder emulator).
-  `database.rules.json` blijft de live-versie; pas na akkoord het voorstel erover kopiëren en publiceren.
+- D&D-regels (live sinds 2026-11-14): de `dnd`-tak in `certamen/database.rules.json` heeft een strengere structuurcontrole
+  van `world/*` (de browser mag het wereldregister niet wissen of overschrijven; `worldTemplate`, factions, locations en
+  profiles zijn alleen via de Firebase CLI te wijzigen, die de regels omzeilt). Gegenereerd door `dnd/tools/build-dnd-rules.js`
+  (schrijft `certamen/database.rules.proposed.json`, eerst daar wijzigen en testen), getest met `dnd/tools/test-rules.js`
+  (regelsimulator zonder emulator). Doorlopende regels (dode NPC's blijven dood, tijd gaat niet terug) staan bewust alleen in
+  `dnd/world.js`, omdat ze "Terug" zouden blokkeren.
 - Bij elke wijziging aan Firebase-rules: geef altijd het volledige nieuwe
   regelsbestand (oude + nieuwe regels samen), zodat het in één keer te
   kopiëren is. Nooit alleen het toegevoegde fragment losstaand tonen.

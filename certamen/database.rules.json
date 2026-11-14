@@ -12,7 +12,160 @@
     },
     "dnd": {
       ".read": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
-      ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+      "config": {
+        ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+      },
+      "npcs": {
+        ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+      },
+      "locations": {
+        ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+      },
+      "characters": {
+        ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+      },
+      "campaignIndex": {
+        ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+      },
+      "worldTemplate": {},
+      "campaigns": {
+        "$cid": {
+          ".write": "(auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))) && (!newData.exists())",
+          "canon": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "state": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "stands": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "messages": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "ooc": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "log": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "summaries": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "memories": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "dmnotes": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "pending": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "turn": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "players": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "scene": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "usage": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "world": {
+            ".write": "(auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))) && (!data.exists())",
+            "$other": {
+              ".validate": false
+            },
+            "calendar": {
+              ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+              ".validate": "newData.hasChildren(['y','m','d']) && newData.child('y').isNumber() && newData.child('y').val() >= 3000 && newData.child('y').val() <= 3100 && newData.child('m').isNumber() && newData.child('m').val() >= 1 && newData.child('m').val() <= 12 && newData.child('d').isNumber() && newData.child('d').val() >= 1 && newData.child('d').val() <= 31 && newData.hasChildren(['y','m','d'])"
+            },
+            "sceneSince": {
+              ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+              ".validate": "newData.hasChildren(['y','m','d']) && newData.child('y').isNumber() && newData.child('y').val() >= 3000 && newData.child('y').val() <= 3100 && newData.child('m').isNumber() && newData.child('m').val() >= 1 && newData.child('m').val() <= 12 && newData.child('d').isNumber() && newData.child('d').val() >= 1 && newData.child('d').val() <= 31"
+            },
+            "sceneRegion": {
+              ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+              ".validate": "newData.isString() && newData.val().beginsWith('REG-') && newData.val().length <= 20"
+            },
+            "lastRound": {
+              ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000"
+            },
+            "npcs": {
+              "$id": {
+                ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+                ".validate": "(newData.hasChildren(['id','name','status'])) && (newData.child('id').isString() && newData.child('id').val() === $id) && (newData.child('name').isString() && newData.child('name').val().length <= 80) && (newData.child('status').val() === 'ambient' || newData.child('status').val() === 'named' || newData.child('status').val() === 'recurring' || newData.child('status').val() === 'companion_candidate' || newData.child('status').val() === 'recruited' || newData.child('status').val() === 'inactive' || newData.child('status').val() === 'departed' || newData.child('status').val() === 'deceased')"
+              }
+            },
+            "quests": {
+              "$id": {
+                ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+                ".validate": "(newData.hasChildren(['id','title','status'])) && (newData.child('id').isString() && newData.child('id').val() === $id) && (newData.child('title').isString()) && (newData.child('status').val() === 'dormant' || newData.child('status').val() === 'available' || newData.child('status').val() === 'active' || newData.child('status').val() === 'completed' || newData.child('status').val() === 'failed' || newData.child('status').val() === 'expired' || newData.child('status').val() === 'changed') && (!newData.child('stage').exists() || (newData.child('stage').isNumber() && newData.child('stage').val() >= 0 && newData.child('stage').val() <= 20))"
+              }
+            },
+            "clocks": {
+              "$id": {
+                ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+                ".validate": "(newData.hasChildren(['id','value'])) && (newData.child('id').isString() && newData.child('id').val() === $id) && (newData.child('value').isNumber() && newData.child('value').val() >= 0 && newData.child('value').val() <= 12) && (!newData.child('max').exists() || (newData.child('max').isNumber() && newData.child('max').val() >= 1 && newData.child('max').val() <= 12)) && (newData.child('value').val() <= (newData.child('max').exists() ? newData.child('max').val() : 6))"
+              }
+            },
+            "companions": {
+              "$id": {
+                ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+                ".validate": "(newData.hasChildren(['id','stage','hp'])) && (newData.child('id').isString() && newData.child('id').val() === $id) && (newData.child('stage').val() === 'candidate' || newData.child('stage').val() === 'active' || newData.child('stage').val() === 'departed' || newData.child('stage').val() === 'deceased') && (newData.child('hp').hasChildren(['cur','max'])) && (newData.child('hp/max').isNumber() && newData.child('hp/max').val() >= 1 && newData.child('hp/max').val() <= 300) && (newData.child('hp/cur').isNumber() && newData.child('hp/cur').val() >= 0 && newData.child('hp/cur').val() <= 300) && (newData.child('hp/cur').val() <= newData.child('hp/max').val())"
+              }
+            },
+            "agendas": {
+              "$id": {
+                ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+                ".validate": "(newData.hasChildren(['id','owner','status','steps'])) && (newData.child('id').isString() && newData.child('id').val() === $id) && (newData.child('status').val() === 'active' || newData.child('status').val() === 'paused' || newData.child('status').val() === 'completed' || newData.child('status').val() === 'thwarted' || newData.child('status').val() === 'cancelled') && (!newData.child('stepIdx').exists() || (newData.child('stepIdx').isNumber() && newData.child('stepIdx').val() >= 0 && newData.child('stepIdx').val() <= 6))"
+              }
+            },
+            "backstories": {
+              "$id": {
+                ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+                ".validate": "(newData.hasChildren(['id','npc','layers'])) && (newData.child('id').isString() && newData.child('id').val() === $id)"
+              }
+            },
+            "events": {
+              "$k": {
+                ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+                ".validate": "newData.hasChildren(['type','summary']) && newData.child('type').isString() && newData.child('summary').isString() && newData.child('summary').val().length <= 1000"
+              }
+            },
+            "divergences": {
+              "$k": {
+                ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+                ".validate": "newData.hasChildren(['summary'])"
+              }
+            },
+            "jobs": {
+              "$id": {
+                ".write": "(auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))) && (!data.exists())",
+                ".validate": "(newData.hasChildren(['id','type','subject','status'])) && (newData.child('id').isString() && newData.child('id').val() === $id) && (newData.child('type').val() === 'portrait' || newData.child('type').val() === 'profile' || newData.child('type').val() === 'statblock') && (newData.child('status').val() === 'queued') && (!newData.child('attempts').exists() || (newData.child('attempts').isNumber() && newData.child('attempts').val() >= 0 && newData.child('attempts').val() <= 3))"
+              }
+            },
+            "factions": {
+              "$id": {
+                ".validate": "newData.hasChildren(['id','name'])"
+              }
+            },
+            "locations": {
+              "$id": {
+                ".validate": "newData.hasChildren(['id','name','region'])"
+              }
+            },
+            "profiles": {
+              "$id": {
+                ".validate": "newData.hasChildren(['text','status'])"
+              }
+            }
+          }
+        }
+      }
     },
     "rooms": {
       "$code": {
@@ -27,20 +180,42 @@
           ".read": true,
           ".write": "!newData.child('admin').exists() || (data.child('admin').exists() && data.child('admin').val() === newData.child('admin').val())",
           ".validate": "newData.hasChildren(['name'])",
-          "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 60" },
-          "coins": { ".validate": "newData.isNumber() && newData.val() >= 0" },
-          "xp": { ".validate": "newData.isNumber() && newData.val() >= 0" },
-          "level": { ".validate": "newData.isNumber() && newData.val() >= 1" },
-          "battles": { ".validate": "newData.isNumber() && newData.val() >= 0" },
-          "lastActive": { ".validate": "newData.isNumber()" },
-          "pwHash": { ".validate": "newData.isString() && newData.val().length <= 200" },
-          "castra": { ".validate": "newData.isString() && newData.val().length <= 40000" },
+          "name": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 60"
+          },
+          "coins": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+          "xp": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+          "level": {
+            ".validate": "newData.isNumber() && newData.val() >= 1"
+          },
+          "battles": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+          "lastActive": {
+            ".validate": "newData.isNumber()"
+          },
+          "pwHash": {
+            ".validate": "newData.isString() && newData.val().length <= 200"
+          },
+          "castra": {
+            ".validate": "newData.isString() && newData.val().length <= 40000"
+          },
           "apps": {
             "$appId": {
               ".validate": "newData.hasChildren(['score']) && newData.child('score').isNumber()",
-              "score": { ".validate": "newData.isNumber()" },
-              "detail": { ".validate": "newData.isString() && newData.val().length <= 200" },
-              "updatedAt": { ".validate": "newData.isNumber()" }
+              "score": {
+                ".validate": "newData.isNumber()"
+              },
+              "detail": {
+                ".validate": "newData.isString() && newData.val().length <= 200"
+              },
+              "updatedAt": {
+                ".validate": "newData.isNumber()"
+              }
             }
           },
           "admin": {
@@ -73,12 +248,18 @@
       "$code": {
         ".write": "auth != null && (root.child('admins').child(auth.uid).exists() || root.child('teacherStatus').child(auth.uid).child('status').val() === 'approved' || (!root.child('teacherStatus').child(auth.uid).exists() && root.child('teachers').child(auth.uid).exists())) && (!data.exists() || !data.child('ownerUid').exists() || auth.uid === data.child('ownerUid').val())",
         ".validate": "newData.hasChildren(['created','ownerUid']) && newData.child('created').isNumber()",
-        "ownerUid": { ".validate": "newData.isString() && newData.val() === auth.uid" },
+        "ownerUid": {
+          ".validate": "newData.isString() && newData.val() === auth.uid"
+        },
         "wordlists": {
           "$listId": {
             ".validate": "newData.hasChildren(['name','lang','words'])",
-            "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80" },
-            "lang": { ".validate": "newData.val() === 'la' || newData.val() === 'el'" }
+            "name": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80"
+            },
+            "lang": {
+              ".validate": "newData.val() === 'la' || newData.val() === 'el'"
+            }
           }
         }
       }
@@ -90,11 +271,21 @@
         "wordlists": {
           "$listId": {
             ".validate": "newData.hasChildren(['name','lang','words'])",
-            "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80" },
-            "lang": { ".validate": "newData.val() === 'la' || newData.val() === 'el'" },
-            "shared": { ".validate": "newData.isBoolean()" },
-            "createdAt": { ".validate": "newData.isNumber()" },
-            "updatedAt": { ".validate": "newData.isNumber()" }
+            "name": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80"
+            },
+            "lang": {
+              ".validate": "newData.val() === 'la' || newData.val() === 'el'"
+            },
+            "shared": {
+              ".validate": "newData.isBoolean()"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber()"
+            },
+            "updatedAt": {
+              ".validate": "newData.isNumber()"
+            }
           }
         }
       }
@@ -112,16 +303,27 @@
         ".read": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())",
         ".write": "auth != null && (root.child('admins').child(auth.uid).exists() || (auth.uid === $uid && !data.exists() && newData.child('status').val() === 'pending'))",
         ".validate": "newData.hasChildren(['status','email','requestedAt'])",
-        "status": { ".validate": "newData.val() === 'pending' || newData.val() === 'approved' || newData.val() === 'revoked' || newData.val() === 'rejected'" },
-        "email": { ".validate": "newData.isString() && newData.val().length <= 200" },
-        "displayName": { ".validate": "newData.isString() && newData.val().length <= 80" },
-        "requestedAt": { ".validate": "newData.isNumber()" }
+        "status": {
+          ".validate": "newData.val() === 'pending' || newData.val() === 'approved' || newData.val() === 'revoked' || newData.val() === 'rejected'"
+        },
+        "email": {
+          ".validate": "newData.isString() && newData.val().length <= 200"
+        },
+        "displayName": {
+          ".validate": "newData.isString() && newData.val().length <= 80"
+        },
+        "requestedAt": {
+          ".validate": "newData.isNumber()"
+        }
       }
     },
     "klascodeMeta": {
       "$code": {
         ".read": true,
-        "lastActive": { ".write": true, ".validate": "newData.isNumber()" }
+        "lastActive": {
+          ".write": true,
+          ".validate": "newData.isNumber()"
+        }
       }
     },
     "googleLinks": {
@@ -129,10 +331,18 @@
         ".read": "auth != null && auth.uid === $uid",
         ".write": "auth != null && auth.uid === $uid",
         ".validate": "newData.hasChildren(['klas','lid'])",
-        "klas": { ".validate": "newData.isString() && newData.val().length > 0" },
-        "lid": { ".validate": "newData.isString() && newData.val().length > 0" },
-        "email": { ".validate": "newData.isString() && newData.val().length <= 200" },
-        "linkedAt": { ".validate": "newData.isNumber()" }
+        "klas": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "lid": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "email": {
+          ".validate": "newData.isString() && newData.val().length <= 200"
+        },
+        "linkedAt": {
+          ".validate": "newData.isNumber()"
+        }
       }
     },
     "bossHof": {
@@ -141,12 +351,24 @@
         "$entry": {
           ".write": "auth != null && auth.uid === $uid && (root.child('admins').child(auth.uid).exists() || root.child('teacherStatus').child(auth.uid).child('status').val() === 'approved' || (!root.child('teacherStatus').child(auth.uid).exists() && root.child('teachers').child(auth.uid).exists()))",
           ".validate": "newData.hasChildren(['bossId','diff','klas','ts','rounds'])",
-          "bossId": { ".validate": "newData.isString() && newData.val().length <= 20" },
-          "diff": { ".validate": "newData.isString() && newData.val().length <= 20" },
-          "klas": { ".validate": "newData.isString() && newData.val().length <= 40" },
-          "ts": { ".validate": "newData.isNumber()" },
-          "rounds": { ".validate": "newData.isNumber() && newData.val() >= 1" },
-          "topNm": { ".validate": "newData.isString() && newData.val().length <= 40" }
+          "bossId": {
+            ".validate": "newData.isString() && newData.val().length <= 20"
+          },
+          "diff": {
+            ".validate": "newData.isString() && newData.val().length <= 20"
+          },
+          "klas": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "ts": {
+            ".validate": "newData.isNumber()"
+          },
+          "rounds": {
+            ".validate": "newData.isNumber() && newData.val() >= 1"
+          },
+          "topNm": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          }
         }
       }
     },
@@ -167,7 +389,9 @@
             }
           },
           "civs": {
-            "$id": { ".write": true }
+            "$id": {
+              ".write": true
+            }
           },
           "klasSize": {
             "$klas": {
@@ -191,8 +415,14 @@
     },
     "usedKlascodes": {
       ".read": "auth != null",
-      "_seeded": { ".write": "auth != null", ".validate": "newData.isBoolean()" },
-      "$klas": { ".write": true, ".validate": "newData.isNumber() && newData.val() >= 0" }
+      "_seeded": {
+        ".write": "auth != null",
+        ".validate": "newData.isBoolean()"
+      },
+      "$klas": {
+        ".write": true,
+        ".validate": "newData.isNumber() && newData.val() >= 0"
+      }
     },
     "classAnalytics": {
       "$klas": {
@@ -202,9 +432,15 @@
           "$wordkey": {
             ".write": true,
             ".validate": "newData.hasChildren(['p','c']) && newData.child('c').isNumber() && newData.child('c').val() >= 0",
-            "p": { ".validate": "newData.isString() && newData.val().length <= 80" },
-            "a": { ".validate": "newData.isString() && newData.val().length <= 200" },
-            "c": { ".validate": "newData.isNumber() && newData.val() >= 0" }
+            "p": {
+              ".validate": "newData.isString() && newData.val().length <= 80"
+            },
+            "a": {
+              ".validate": "newData.isString() && newData.val().length <= 200"
+            },
+            "c": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            }
           }
         }
       }
@@ -222,36 +458,74 @@
         ".write": "auth != null && (root.child('admins').child(auth.uid).exists() || root.child('klascodes/'+$klas+'/ownerUid').val() === auth.uid)",
         "event": {
           ".validate": "newData.hasChildren(['id','mission','seed','status']) && (newData.child('status').val() === 'lobby' || newData.child('status').val() === 'running')",
-          "id": { ".validate": "newData.isNumber()" },
-          "mission": { ".validate": "newData.isString() && newData.val().length <= 20" },
-          "seed": { ".validate": "newData.isNumber()" },
-          "startAt": { ".validate": "newData.isNumber()" },
-          "players": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200" },
-          "name": { ".validate": "newData.isString() && newData.val().length <= 60" }
+          "id": {
+            ".validate": "newData.isNumber()"
+          },
+          "mission": {
+            ".validate": "newData.isString() && newData.val().length <= 20"
+          },
+          "seed": {
+            ".validate": "newData.isNumber()"
+          },
+          "startAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "players": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200"
+          },
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 60"
+          }
         },
         "players": {
           "$lid": {
             ".write": true,
             ".validate": "newData.hasChildren(['nm','ts'])",
-            "nm": { ".validate": "newData.isString() && newData.val().length <= 40" },
-            "ts": { ".validate": "newData.isNumber()" }
+            "nm": {
+              ".validate": "newData.isString() && newData.val().length <= 40"
+            },
+            "ts": {
+              ".validate": "newData.isNumber()"
+            }
           }
         },
         "actions": {
           "$aid": {
             ".write": "!data.exists()",
             ".validate": "newData.hasChildren(['t','k','x','y','lid','st'])",
-            "t": { ".validate": "newData.isNumber()" },
-            "k": { ".validate": "newData.val() === 'place'" },
-            "x": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 64" },
-            "y": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 64" },
-            "lid": { ".validate": "newData.isString() && newData.val().length <= 40" },
-            "sid": { ".validate": "newData.isString() && newData.val().length <= 30" },
-            "line": { ".validate": "newData.isString() && newData.val().length <= 20" },
-            "hid": { ".validate": "newData.isString() && newData.val().length <= 20" },
-            "type": { ".validate": "newData.isString() && newData.val().length <= 8" },
-            "st": { ".validate": "newData.isString() && newData.val().length <= 40" },
-            "nm": { ".validate": "newData.isString() && newData.val().length <= 30" }
+            "t": {
+              ".validate": "newData.isNumber()"
+            },
+            "k": {
+              ".validate": "newData.val() === 'place'"
+            },
+            "x": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 64"
+            },
+            "y": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 64"
+            },
+            "lid": {
+              ".validate": "newData.isString() && newData.val().length <= 40"
+            },
+            "sid": {
+              ".validate": "newData.isString() && newData.val().length <= 30"
+            },
+            "line": {
+              ".validate": "newData.isString() && newData.val().length <= 20"
+            },
+            "hid": {
+              ".validate": "newData.isString() && newData.val().length <= 20"
+            },
+            "type": {
+              ".validate": "newData.isString() && newData.val().length <= 8"
+            },
+            "st": {
+              ".validate": "newData.isString() && newData.val().length <= 40"
+            },
+            "nm": {
+              ".validate": "newData.isString() && newData.val().length <= 30"
+            }
           }
         }
       }
@@ -259,21 +533,38 @@
     "castraColosseum": {
       "$klas": {
         ".read": true,
-        ".indexOn": ["status", "createdAt"],
+        ".indexOn": [
+          "status",
+          "createdAt"
+        ],
         "$match": {
           ".write": "!data.exists()",
           ".validate": "newData.hasChildren(['mode','fee','divisie','seed','need','status','createdBy','createdAt']) && (data.exists() || (!newData.hasChild('runs') && !newData.hasChild('paid') && !newData.hasChild('live') && !newData.hasChild('startAt')))",
-          "mode": { ".validate": "newData.val() === 'duel' || newData.val() === 'quad'" },
-          "fee": { ".validate": "newData.val() === 100" },
-          "divisie": { ".validate": "newData.val() === 20 || newData.val() === 35 || newData.val() === 50" },
-          "seed": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4294967295" },
-          "need": { ".validate": "(newData.parent().child('mode').val() === 'duel' && newData.val() === 2) || (newData.parent().child('mode').val() === 'quad' && newData.val() === 4)" },
+          "mode": {
+            ".validate": "newData.val() === 'duel' || newData.val() === 'quad'"
+          },
+          "fee": {
+            ".validate": "newData.val() === 100"
+          },
+          "divisie": {
+            ".validate": "newData.val() === 20 || newData.val() === 35 || newData.val() === 50"
+          },
+          "seed": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4294967295"
+          },
+          "need": {
+            ".validate": "(newData.parent().child('mode').val() === 'duel' && newData.val() === 2) || (newData.parent().child('mode').val() === 'quad' && newData.val() === 4)"
+          },
           "ghosts": {
             ".write": "root.child('castraColosseum/'+$klas+'/'+$match+'/status').val() === 'lobby' && !data.exists()",
             ".validate": "newData.parent().child('mode').val() === 'quad' && ((newData.val() === 1 && !newData.parent().child('slots').hasChild('s3')) || (newData.val() === 2 && !newData.parent().child('slots').hasChild('s2') && !newData.parent().child('slots').hasChild('s3')))"
           },
-          "createdBy": { ".validate": "newData.isString() && newData.val().length <= 40" },
-          "createdAt": { ".validate": "newData.isNumber() && newData.val() <= now + 60000 && newData.val() >= now - 60000" },
+          "createdBy": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "createdAt": {
+            ".validate": "newData.isNumber() && newData.val() <= now + 60000 && newData.val() >= now - 60000"
+          },
           "status": {
             ".write": "data.val() === 'lobby'",
             ".validate": "newData.val() === 'lobby' || (data.val() === 'lobby' && newData.val() === 'running' && newData.parent().child('startAt').exists() && (newData.parent().child('mode').val() === 'duel' ? newData.parent().child('slots').hasChildren(['s0','s1']) : (newData.parent().child('ghosts').val() === 1 ? newData.parent().child('slots').hasChildren(['s0','s1','s2']) : (newData.parent().child('ghosts').val() === 2 ? newData.parent().child('slots').hasChildren(['s0','s1']) : newData.parent().child('slots').hasChildren(['s0','s1','s2','s3'])))))"
@@ -292,36 +583,66 @@
             "$lid": {
               ".write": "root.child('castraColosseum/'+$klas+'/'+$match+'/status').val() === 'lobby'",
               ".validate": "newData.hasChildren(['nm','ts']) && $lid.length <= 40 && (newData.parent().parent().child('slots').child('s0').val() === $lid || newData.parent().parent().child('slots').child('s1').val() === $lid || newData.parent().parent().child('slots').child('s2').val() === $lid || newData.parent().parent().child('slots').child('s3').val() === $lid)",
-              "nm": { ".validate": "newData.isString() && newData.val().length <= 40" },
-              "ts": { ".validate": "newData.isNumber()" }
+              "nm": {
+                ".validate": "newData.isString() && newData.val().length <= 40"
+              },
+              "ts": {
+                ".validate": "newData.isNumber()"
+              }
             }
           },
           "live": {
             "$lid": {
               ".write": "root.child('castraColosseum/'+$klas+'/'+$match+'/status').val() === 'running' && root.child('castraColosseum/'+$klas+'/'+$match+'/players/'+$lid).exists()",
               ".validate": "newData.hasChildren(['wave','lives','ts'])",
-              "wave": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 300" },
-              "lives": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100" },
-              "ts": { ".validate": "newData.isNumber()" }
+              "wave": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 300"
+              },
+              "lives": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+              },
+              "ts": {
+                ".validate": "newData.isNumber()"
+              }
             }
           },
           "runs": {
             "$lid": {
               ".write": "!data.exists() && root.child('castraColosseum/'+$klas+'/'+$match+'/status').val() === 'running' && root.child('castraColosseum/'+$klas+'/'+$match+'/players/'+$lid).exists() && now <= root.child('castraColosseum/'+$klas+'/'+$match+'/startAt').val() + 2200000",
               ".validate": "newData.hasChildren(['actions','res','ts'])",
-              "actions": { ".validate": "newData.isString() && newData.val().length <= 30000" },
+              "actions": {
+                ".validate": "newData.isString() && newData.val().length <= 30000"
+              },
               "res": {
                 ".validate": "newData.hasChildren(['tick','wave','lives','kills'])",
-                "tick": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 40000" },
-                "wave": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200" },
-                "lives": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100" },
-                "kills": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 5000" },
-                "win": { ".validate": "newData.val() === 0 || newData.val() === 1" },
-                "quit": { ".validate": "newData.val() === 0 || newData.val() === 1" },
-                "$other": { ".validate": false }
+                "tick": {
+                  ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 40000"
+                },
+                "wave": {
+                  ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200"
+                },
+                "lives": {
+                  ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+                },
+                "kills": {
+                  ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 5000"
+                },
+                "win": {
+                  ".validate": "newData.val() === 0 || newData.val() === 1"
+                },
+                "quit": {
+                  ".validate": "newData.val() === 0 || newData.val() === 1"
+                },
+                "$other": {
+                  ".validate": false
+                }
               },
-              "ts": { ".validate": "newData.isNumber() && newData.val() >= root.child('castraColosseum/'+$klas+'/'+$match+'/startAt').val() && newData.val() <= now + 10000" },
-              "$other": { ".validate": false }
+              "ts": {
+                ".validate": "newData.isNumber() && newData.val() >= root.child('castraColosseum/'+$klas+'/'+$match+'/startAt').val() && newData.val() <= now + 10000"
+              },
+              "$other": {
+                ".validate": false
+              }
             }
           },
           "paid": {
@@ -330,7 +651,9 @@
               ".validate": "newData.val() === true"
             }
           },
-          "$other": { ".validate": false }
+          "$other": {
+            ".validate": false
+          }
         }
       }
     },
@@ -340,14 +663,30 @@
         "$tid": {
           ".write": true,
           ".validate": "newData.hasChildren(['from','fn','give','status','ts'])",
-          "from": { ".validate": "newData.isString() && newData.val().length <= 40" },
-          "fn": { ".validate": "newData.isString() && newData.val().length <= 40" },
-          "give": { ".validate": "newData.isString() && newData.val().length <= 1500" },
-          "status": { ".validate": "newData.val() === 'open' || newData.val() === 'done'" },
-          "ts": { ".validate": "newData.isNumber()" },
-          "to": { ".validate": "newData.isString() && newData.val().length <= 40" },
-          "tn": { ".validate": "newData.isString() && newData.val().length <= 40" },
-          "get": { ".validate": "newData.isString() && newData.val().length <= 1500" }
+          "from": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "fn": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "give": {
+            ".validate": "newData.isString() && newData.val().length <= 1500"
+          },
+          "status": {
+            ".validate": "newData.val() === 'open' || newData.val() === 'done'"
+          },
+          "ts": {
+            ".validate": "newData.isNumber()"
+          },
+          "to": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "tn": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "get": {
+            ".validate": "newData.isString() && newData.val().length <= 1500"
+          }
         }
       }
     },
@@ -359,9 +698,15 @@
           "$key": {
             ".write": true,
             ".validate": "newData.hasChildren(['p','k','c'])",
-            "p": { ".validate": "newData.isString() && newData.val().length <= 80" },
-            "k": { ".validate": "newData.val() === 'w' || newData.val() === 's'" },
-            "c": { ".validate": "newData.isNumber() && newData.val() >= 0" }
+            "p": {
+              ".validate": "newData.isString() && newData.val().length <= 80"
+            },
+            "k": {
+              ".validate": "newData.val() === 'w' || newData.val() === 's'"
+            },
+            "c": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            }
           }
         }
       }
@@ -373,7 +718,9 @@
           ".validate": "$month.matches(/^[0-9]{4}-[0-9]{2}$/)",
           "$key": {
             ".write": true,
-            "$field": { ".validate": "newData.isNumber() && newData.val() >= 0" }
+            "$field": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            }
           }
         }
       }
@@ -386,11 +733,21 @@
           "$key": {
             ".write": true,
             ".validate": "newData.hasChild('p')",
-            "p": { ".validate": "newData.isString() && newData.val().length <= 80" },
-            "a": { ".validate": "newData.isString() && newData.val().length <= 200" },
-            "c": { ".validate": "newData.isNumber() && newData.val() >= 0" },
-            "goed": { ".validate": "newData.isNumber() && newData.val() >= 0" },
-            "fout": { ".validate": "newData.isNumber() && newData.val() >= 0" }
+            "p": {
+              ".validate": "newData.isString() && newData.val().length <= 80"
+            },
+            "a": {
+              ".validate": "newData.isString() && newData.val().length <= 200"
+            },
+            "c": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            },
+            "goed": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            },
+            "fout": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            }
           }
         }
       }
