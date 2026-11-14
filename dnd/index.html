@@ -80,6 +80,11 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 #scenebar{padding:4px 12px;font-size:13px;color:var(--gold);background:rgba(11,18,32,.7);border-bottom:1px solid rgba(200,162,74,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #partybar{display:flex;gap:8px;overflow-x:auto;padding:6px 12px;background:rgba(20,17,15,.75);border-bottom:1px solid rgba(200,162,74,.3)}
 #partybar:empty,#scenebar:empty{display:none}
+#sidemain{flex:1;min-height:0;overflow-y:auto}
+#partyside{flex:none;display:flex;flex-direction:column;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(200,162,74,.35)}
+#partyside:empty{display:none}
+#partyside .pc{min-width:0;max-width:none}
+.dmsel{flex:none;width:auto;max-width:190px}
 .pc{display:flex;gap:8px;align-items:center;flex:none;min-width:170px;max-width:240px;padding:5px 8px;border-radius:8px;background:rgba(42,35,29,.9);border:1px solid #4a3d30}
 .pc .av{width:44px;height:44px;border-radius:50%;flex:none;object-fit:cover;object-position:top;border:2px solid var(--gold);background:#0f0d0b;display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:bold}
 .pc .pi{min-width:0;flex:1}
@@ -115,7 +120,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 #gamewrap{display:flex;flex:1;min-height:0}
 #gamemain{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
 #side{display:none}
-@media(min-width:1000px){#side{display:block;width:340px;flex:none;overflow-y:auto;padding:10px 12px;border-left:1px solid rgba(200,162,74,.35);background:rgba(20,17,15,.6)}}
+@media(min-width:1000px){#partybar{display:none!important}#side{display:flex;flex-direction:column;overflow:hidden;width:340px;flex:none;padding:10px 12px;border-left:1px solid rgba(200,162,74,.35);background:rgba(20,17,15,.6)}}
 .sh-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:6px;margin-bottom:10px}
 .sh-strip>div{background:rgba(32,27,23,.88);border-radius:8px;padding:6px 8px;text-align:center}
 .sh-strip small{display:block;color:var(--mute);font-size:11px}
@@ -160,7 +165,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
-<script src="world.js?v=7"></script>
+<script src="world.js?v=8"></script>
 <script>
 "use strict";
 firebase.initializeApp({
@@ -460,7 +465,7 @@ async function saveNewNpc(){
 function enterCampaign(id){
   leaveCampaign(); cid=id; screen='camp'; tab='game'; updateBack();
   main.innerHTML=`
-  <section class="tab" id="t-game"><div id="gamewrap"><div id="gamemain"><div id="scenebar"></div><div id="partybar"></div><div id="initbar"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></div><aside id="side"></aside></div></section>
+  <section class="tab" id="t-game"><div id="gamewrap"><div id="gamemain"><div id="scenebar"></div><div id="partybar"></div><div id="initbar"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></div><aside id="side"><div id="sidemain"></div><div id="partyside"></div></aside></div></section>
   <section class="tab" id="t-ooc"><div class="scroll" id="oocthread"></div><div class="compose"><div class="row"><input type="text" id="oocin" placeholder="Praat met je broer (de DM leest dit niet)" style="flex:1"><button class="b" id="oocsend">Stuur</button></div></div></section>
   <section class="tab" id="t-diary"><div class="scroll" id="diarybox"></div></section>
   <section class="tab" id="t-sheet"><div class="scroll" id="sheetbox"></div></section>
@@ -580,7 +585,7 @@ function renderGame(){
   if(!keepDraft){
     cpz.innerHTML=`<textarea id="act" placeholder="Wat doe je?"></textarea>
     ${rollRowHtml()}
-    <div class="row"><button class="b" id="send">${mine?'Actie aanpassen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button>
+    <div class="row"><button class="b" id="send">${mine?'Actie aanpassen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button><select id="dmsel" class="dmsel" title="Wie speelt de volgende beurt als de DM?"></select>
     ${others.length?'<button class="b alt" id="skip">Zonder '+esc(others.join(', '))+' verder</button>':''}</div>
     ${mine?'<small>Ingediend: '+esc(mine.text)+'</small>':''}`;
     if(!draft&&mine) draft=mine.text.replace(/\s*\[worp:[^\]]*\]/i,'');
@@ -589,6 +594,12 @@ function renderGame(){
     $('#send').onclick=()=>submit(false);
     $('#pass').onclick=()=>submit(true);
     const sk=$('#skip'); if(sk) sk.onclick=skipOthers;
+    const ds=$('#dmsel'); if(ds){
+      const def=(dmSelRound===turn.round&&dmSelVal)?dmSelVal:dmDefault();
+      ds.innerHTML='<option value="gemini">DM: Gemini</option>'+(cfg.anthropicKey?'<option value="anthropic">DM: Claude (API)</option>':'')+'<option value="claude">DM: Claude Code</option>';
+      ds.value=def; if(!ds.value) ds.value='gemini';
+      ds.onchange=()=>{dmSelRound=turn.round;dmSelVal=ds.value; if(!(turn.handoff&&turn.handoff.to==='claude')){try{localStorage.setItem('dnd_dm_pref',ds.value)}catch(e){}}};
+    }
   }
 }
 async function submit(pass){
@@ -597,6 +608,7 @@ async function submit(pass){
   const round=turn.round, full=text+(rollDraft.trim()&&!pass?'  [worp: '+rollDraft.trim()+']':'');
   await db.ref(cp('pending/'+me.uid)).set({round,name:me.name,text:full,pass:!!pass,t:Date.now()});
   draft="";rollDraft="";rollKey=null;rollNat="";
+  await saveDmChoice();
   const ok=await removeAwaiting(me.name,round);
   if(ok==='resolve') resolve(false);
   else if(ok==='late') alert('Te laat: de ronde is al afgehandeld. Ververs de pagina.');
@@ -611,7 +623,7 @@ async function removeAwaiting(name,round){
       delete t.awaiting[name];
       if(!Object.keys(t.awaiting).length) t.awaiting=null;
     }
-    if(!t.awaiting){ if(t.handoff&&t.handoff.to==='claude'){t.status='claude';became=false;} else {t.status='resolving';t.resolvingSince=Date.now();became=true;} }
+    if(!t.awaiting){ const ch=t.dmChoice||(t.handoff&&t.handoff.to==='claude'?'claude':null); if(ch==='claude'){t.status='claude';became=false;} else {t.status='resolving';t.resolvingSince=Date.now();became=true;} }
     return t;
   });
   if(!r.committed) return 'late';
@@ -625,6 +637,7 @@ async function skipOthers(){
   }
   await db.ref(cp('messages')).push(sysMsg(others.join(', ')+' wordt overgeslagen deze ronde.'));
   let res='ok';
+  await saveDmChoice();
   for(const n of [...others,me.name]) res=await removeAwaiting(n,turn.round);
   if(res==='resolve') resolve(false);
 }
@@ -693,7 +706,17 @@ async function callGemini(sys,user,retryNote,json,modelOverride,maxOut){
   return {txt,model,usage:j.usageMetadata||{}};
 }
 let bigNext=false;
-function provider(){return cfg.dmMode==='anthropic'?'anthropic':'gemini'}
+let curDM=null;
+function provider(){if(curDM)return curDM;return cfg.dmMode==='anthropic'?'anthropic':'gemini'}
+let dmSelRound=null, dmSelVal=null;
+function dmDefault(){
+  if(turn&&turn.handoff&&turn.handoff.to==='claude') return 'claude';
+  let v=null; try{v=localStorage.getItem('dnd_dm_pref')}catch(e){}
+  if(v==='anthropic'&&!cfg.anthropicKey) v=null;
+  return v||(cfg.dmMode==='claude'?'claude':(cfg.dmMode==='anthropic'&&cfg.anthropicKey?'anthropic':'gemini'));
+}
+function dmChoiceVal(){const s=$('#dmsel'); if(s&&s.value) return s.value; if(dmSelRound===(turn&&turn.round)&&dmSelVal) return dmSelVal; return dmDefault();}
+async function saveDmChoice(){ if(turn) await db.ref(cp('turn/dmChoice')).set(dmChoiceVal()); }
 function keyOk(){return provider()==='anthropic'?!!cfg.anthropicKey:!!cfg.geminiKey}
 function bigModelName(){return cfg.dmMode==='claude'?'':(provider()==='anthropic'?cfg.anthropicBigModel:cfg.bigModel)||''}
 async function callAnthropic(sys,user,retryNote,json,modelOverride,maxOut){
@@ -737,12 +760,13 @@ async function resolve(retry,forceGemini){
   const C=cid; const big=bigNext; bigNext=false;
   try{
     if(!forceGemini){
-      const dm=(await db.ref('dnd/config/dmMode').get()).val();
-      if(dm==='claude'){ await db.ref(cp('turn',C)).update({status:'claude',resolvingSince:null,lastError:null}); return; }
+      const dm=(await db.ref('dnd/config/dmMode').get()).val(), tt0=(await db.ref(cp('turn',C)).get()).val()||{};
+      if(tt0.dmChoice==='claude'||(!tt0.dmChoice&&dm==='claude')){ await db.ref(cp('turn',C)).update({status:'claude',resolvingSince:null,lastError:null}); return; }
     }
     if(retry) await db.ref(cp('turn',C)).update({status:'resolving',resolvingSince:Date.now(),lastError:null});
     const t=(await db.ref(cp('turn',C)).get()).val();
     const round=t.round;
+    curDM=(t.dmChoice==='anthropic'||t.dmChoice==='gemini')?t.dmChoice:null;
     const [pS,sS,cS,mS,lS,smS,meS,dnS,woS,cfS]=await Promise.all(['pending','state','canon','messages','log','summaries','memories','dmnotes','world'].map(k=>{let r=db.ref(cp(k,C)); if(k==='messages'||k==='log') r=r.limitToLast(40); return r.get();}).concat([db.ref('dnd/config').get()]));
     cfg=cfS.val()||cfg;
     if(!keyOk()) throw new Error('Geen API-sleutel voor '+(provider()==='anthropic'?'Claude':'Gemini')+' ingesteld (⚙ in het menu).');
@@ -824,7 +848,7 @@ async function resolve(retry,forceGemini){
   }catch(e){
     console.error(e);
     await db.ref(cp('turn',C)).update({status:'error',lastError:String(e.message||e),resolvingSince:null});
-  }finally{ resolving=false; }
+  }finally{ resolving=false; curDM=null; }
 }
 
 /* ---------- Stand lezen: partybalk, scenekop, dagboek ---------- */
@@ -853,13 +877,13 @@ function avatar(name){
   return n&&n.img?'<img class="av" src="'+n.img+'" data-zoom="'+k+'" alt="">':'<div class="av">'+esc(String(name).charAt(0).toUpperCase())+'</div>';
 }
 function renderParty(){
-  const S=getState(), sb=$('#scenebar'), pb=$('#partybar'); if(!sb||!pb) return;
+  const S=getState(), sb=$('#scenebar'), pb=$('#partybar'), ps=$('#partyside'); if(!sb||!pb) return;
   const g=S.inGame||{}, pcs=Object.entries(S.pcs||{});
   const loc=g.location||g.plaats||(pcs[0]&&pcs[0][1]&&pcs[0][1].location)||'';
   const bits=[loc&&'📍 '+loc,g.date&&'📅 '+g.date,g.timeOfDay].filter(Boolean);
   sb.textContent=bits.join(' · ');
   const members=[...pcs.map(([k,v])=>({name:(v&&v.name)||k,c:v||{}})),...Object.entries(S.companions||{}).map(([k,v])=>({name:(v&&v.name)||k,c:v||{},comp:true}))];
-  pb.innerHTML=members.map(m=>{
+  const phtml=members.map(m=>{
     const c=m.c, hp=hpOf(c);
     const pct=hp?Math.max(0,Math.min(100,Math.round(hp.cur/hp.max*100))):0, cls=pct<=25?'low':pct<=60?'mid':'';
     const res=listOf(c.resources).slice(0,4).map(r=>'<span class="chip">'+esc(r)+'</span>').join('');
@@ -868,6 +892,7 @@ function renderParty(){
       (hp?'<div class="hpb"><i class="'+cls+'" style="width:'+pct+'%"></i></div><small>HP '+hp.cur+'/'+hp.max+(hp.temp?' (+'+hp.temp+')':'')+'</small>':'')+
       '<div class="chips">'+res+con+'</div></div></div>';
   }).join('');
+  pb.innerHTML=phtml; if(ps) ps.innerHTML=phtml;
 }
 function rollChip(r){
   const nat=r.natural!=null&&isFinite(Number(r.natural))?Number(r.natural):null, mod=Number(r.mod)||0;
@@ -942,7 +967,7 @@ function peopleHtml(S){
   }).join('')||'<small style="color:var(--mute)">Niemand in de Stand.</small>';
 }
 function renderSide(){
-  const el=$('#side'); if(!el) return;
+  const el=$('#sidemain'); if(!el) return;
   const S=getState(), q=listOf((S.quests||{}).open).map(t=>'<div class="q">'+esc(t)+'</div>').join('')||'<small style="color:var(--mute)">Geen open opdrachten.</small>';
   const html=locationCard()+'<h2>Personen</h2>'+peopleHtml(S)+'<h2>Opdrachten</h2>'+q;
   if(html!==lastSide){lastSide=html; el.innerHTML=html;}
