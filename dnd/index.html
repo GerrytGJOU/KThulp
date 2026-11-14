@@ -517,6 +517,11 @@ function renderGame(){
   }
   const aw=awaitingNames(), mine=pending[me.uid]&&pending[me.uid].round===turn.round?pending[me.uid]:null;
   const myTurn=aw.includes(me.name);
+  if(turn.status==='claude'){
+    sb.innerHTML='🤖 <b>De DM (Claude) is aan zet.</b><br><small>Vraag Gerben om de beurt te laten spelen in het Claude Code-gesprek.</small>';
+    cpz.innerHTML='<button class="b alt" id="usegem">Laat Gemini deze beurt toch spelen</button>';
+    $('#usegem').onclick=()=>resolve(true,true); return;
+  }
   if(turn.status==='resolving'){
     const stuck=turn.resolvingSince&&Date.now()-turn.resolvingSince>LEASE_MS;
     sb.innerHTML='De DM vertelt…'+(stuck?' (duurt lang)':'');
@@ -669,10 +674,14 @@ function parseDM(txt,names){
   return o;
 }
 let resolving=false;
-async function resolve(retry){
+async function resolve(retry,forceGemini){
   if(resolving) return; resolving=true;
   const C=cid;
   try{
+    if(!forceGemini){
+      const dm=(await db.ref('dnd/config/dmMode').get()).val();
+      if(dm==='claude'){ await db.ref(cp('turn',C)).update({status:'claude',resolvingSince:null,lastError:null}); return; }
+    }
     if(retry) await db.ref(cp('turn',C)).update({status:'resolving',resolvingSince:Date.now(),lastError:null});
     const t=(await db.ref(cp('turn',C)).get()).val();
     const round=t.round;
@@ -1176,15 +1185,16 @@ function renderSet(){
   const box=$('#setbox'); if(!box) return;
   if(box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT') return;
   box.innerHTML=(screen==='camp'?BACK:'')+`<div class="card"><h3>Gemini (de DM)</h3>
-  <label>Model (de DM)</label><input type="text" id="smodel"><br><br>
+  <label>Wie is de DM?</label><select id="sdm"><option value="gemini">Gemini (automatisch)</option><option value="claude">Claude (handmatig via Claude Code)</option></select><br><br>
+  <label>Model (Gemini)</label><input type="text" id="smodel"><br><br>
   <label>Model voor samenvattingen (goedkoper)</label><input type="text" id="ssum"><br><br>
   <label>Temperatuur</label><input type="number" id="stemp" step="0.1" min="0" max="2"><br><br>
   <label>API-sleutel (gedeeld in de database; alleen jullie twee kunnen lezen)</label><input type="password" id="skey" placeholder="${cfg.geminiKey?'(ingesteld — leeg laten = ongewijzigd)':'plak hier'}"><br><br>
   <button class="b" id="ssave">Opslaan</button></div>
   ${screen==='camp'?'<div class="card"><h3>Verbruik (dit verhaal)</h3><div id="usage">…</div></div>':''}`;
-  $('#smodel').value=cfg.model||'gemini-2.5-flash';$('#ssum').value=cfg.summaryModel||'gemini-2.5-flash-lite';$('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
+  $('#smodel').value=cfg.model||'gemini-2.5-flash';$('#sdm').value=cfg.dmMode||'gemini';$('#ssum').value=cfg.summaryModel||'gemini-2.5-flash-lite';$('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
   $('#ssave').onclick=async()=>{
-    const u={model:$('#smodel').value.trim()||'gemini-2.5-flash',summaryModel:$('#ssum').value.trim()||'gemini-2.5-flash-lite',temperature:Number($('#stemp').value)||0.9};
+    const u={dmMode:$('#sdm').value,model:$('#smodel').value.trim()||'gemini-2.5-flash',summaryModel:$('#ssum').value.trim()||'gemini-2.5-flash-lite',temperature:Number($('#stemp').value)||0.9};
     if($('#skey').value.trim()) u.geminiKey=$('#skey').value.trim();
     await db.ref('dnd/config').update(u);alert('Opgeslagen.');
   };
