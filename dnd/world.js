@@ -18,6 +18,13 @@
     active: ["completed", "failed", "expired", "changed"],
     completed: [], failed: [], expired: [], changed: []
   };
+  /* Companion-engine (Bible §15): npc.status blijft de levenscyclus (companion_candidate → recruited ⇄ departed, deceased);
+     world/companions/{CMP-id} bewaart het combat-statblock-gedeelte: hp, hulpbronnen, conditions, bewijslogboek (geen vertrouwensmeter),
+     vertrek/terugkeer, weigering en een verplichting die een vertrek kan afdwingen. */
+  const COMPANION_OPS = ["recruit", "decline", "depart", "return", "update", "rest"];
+  const COMPANION_MODES = ["permanent", "etappe", "temporary", "contact", "remote"];
+  const COMPANION_STAGES = ["candidate", "active", "departed", "deceased"];
+  const PARTY_SOFT_LIMIT = 5; // reizigers incl. 2 PC's: richtwaarde (Bible §15.2), geen harde limiet
   const CANON_TAGS = ["B", "C", "I", "N", "V"]; // B bestaand, C Tolkien-canon, I interpretatie, N nieuw (ingevoerd in spel), V voorstel
   const ID_RE = /^[A-Z]{2,5}-[A-Z0-9][A-Z0-9-]*$/;
 
@@ -51,14 +58,17 @@
     const k1 = a + "|" + b, k2 = b + "|" + a;
     return TRAVEL[k1] != null ? TRAVEL[k1] : (TRAVEL[k2] != null ? TRAVEL[k2] : null);
   }
+  const KNOWN_REGIONS = {}; Object.keys(TRAVEL).forEach(k => k.split("|").forEach(r => { KNOWN_REGIONS[r] = true; }));
+  const knownPlace = (world, loc) => !!loc && (KNOWN_REGIONS[loc] === true || !!(String(loc).indexOf("REG-") !== 0 && regionOf(world, loc)));
   const reasonOk = r => typeof r === "string" && r.trim().length >= 5;
 
   /* ---------- controle van een worldDelta ---------- */
   function validateDelta(world, delta, ctx) {
     ctx = ctx || {};
     const errors = [], warnings = [];
-    const plan = { calendar: null, npcs: {}, quests: {}, clocks: {}, events: [], divergences: [] };
+    const plan = { calendar: null, npcs: {}, quests: {}, clocks: {}, companions: {}, events: [], divergences: [] };
     const W = clone(world || {});
+    W.companions = W.companions || {};
     W.npcs = W.npcs || {}; W.quests = W.quests || {}; W.clocks = W.clocks || {}; W.locations = W.locations || {}; W.factions = W.factions || {};
     const touched = { npcs: {}, quests: {}, clocks: {} };
     const err = m => errors.push(m), warn = m => warnings.push(m);
@@ -119,6 +129,7 @@
       }
       if (set.status != null && set.status !== cur.status) {
         if (NPC_STATUS.indexOf(set.status) < 0) return err("NPC " + id + ": onbekende status " + set.status);
+        if ((/^CMP-/.test(id) || W.companions[id]) && (set.status === "recruited" || set.status === "departed")) return err("NPC " + id + ": gebruik companions op:'" + (set.status === "recruited" ? "recruit" : "depart") + "' voor " + set.status);
         const a = NPC_RANK[cur.status], b = NPC_RANK[set.status];
         if (a != null && b != null && b < a) err("NPC " + id + ": status mag niet terug van " + cur.status + " naar " + set.status);
         if (a != null && b != null && b > a + 1 && !reasonOk(op.reason)) err("NPC " + id + ": overslaan van promotiestappen (" + cur.status + " → " + set.status + ") vereist een reason");
@@ -141,9 +152,123 @@
           if (now) next.locationSince = clone(now);
         }
       }
-      ["goal", "availability", "attitude", "note", "name"].forEach(k => { if (set[k] != null && k !== "name") next[k] = set[k]; });
+      ["goal", "availability", "attitude", "note"].forEach(k => { if (set[k] != null) next[k] = set[k]; });
+      if (set.introduced === true) next.introduced = true;
       if (Array.isArray(set.knows)) next.knows = (cur.knows || []).concat(set.knows).filter((v, i, a) => a.indexOf(v) === i);
       W.npcs[id] = next; plan.npcs[id] = next; touched.npcs[id] = true;
+    });
+
+    /* companions */
+    const partyRegion = (typeof delta.region === "string" && /^REG-[A-Z]+$/.test(delta.region)) ? delta.region : (W.sceneRegion || null);
+    const activeCount = () => Object.values(W.companions).filter(r => r.stage === "active" && r.mode !== "remote" && r.mode !== "contact").length;
+    const resOk = (r, k) => isObj(r) && isObj(r[k]);
+    (Array.isArray(delta.companions) ? delta.companions : []).forEach(op => {
+      if (!isObj(op) || typeof op.id !== "string") return err("companions: elk item heeft een id nodig");
+      const id = op.id, npc = W.npcs[id], rec = W.companions[id];
+      if (COMPANION_OPS.indexOf(op.op) < 0) return err("Companion " + id + ": op moet " + COMPANION_OPS.join("/") + " zijn");
+      if (!npc) return err("Companion " + id + " bestaat niet als NPC");
+      if (npc.status === "deceased") return err("Companion " + id + " (" + npc.name + ") is overleden");
+      if (!rec) return err("Companion " + id + " (" + npc.name + ") heeft geen companion-record (statblock); een companion zonder statblock kan niet meedoen aan combat");
+      if (rec.stage === "deceased") return err("Companion " + id + " is overleden");
+      const nx = clone(rec), refs = { npcs: [id] };
+      const needReason = () => reasonOk(op.reason);
+      if (op.op === "decline") {
+        if (rec.stage !== "candidate") return err("Companion " + id + ": weigeren kan alleen bij een kandidaat (stage " + rec.stage + ")");
+        if (!needReason()) return err("Companion " + id + ": weigeren vereist een reason");
+        nx.declined = { at: now ? clone(now) : null, reason: op.reason, retryAfter: dateOk(op.retryAfter) ? clone(op.retryAfter) : null };
+        eventFor("companion_declined", npc.name + " weigert mee te gaan: " + op.reason, refs, "V");
+      } else if (op.op === "recruit") {
+        if (rec.stage !== "candidate") return err("Companion " + id + ": recruteren kan alleen bij een kandidaat (stage " + rec.stage + "); gebruik 'return' na een vertrek");
+        if (npc.status !== "companion_candidate") return err("Companion " + id + ": NPC-status is " + npc.status + "; promoveer eerst naar companion_candidate");
+        if (npc.introduced !== true) return err("Companion " + id + " (" + npc.name + ") is nog niet aan de spelers voorgesteld (npc.introduced)");
+        if (COMPANION_MODES.indexOf(op.mode) < 0) return err("Companion " + id + ": mode moet " + COMPANION_MODES.join("/") + " zijn");
+        if (!needReason()) return err("Companion " + id + ": recruteren vereist een reason (gedeeld belang, wederzijdse verwachtingen)");
+        if (rec.declined && rec.declined.retryAfter && now && dateCmp(now, rec.declined.retryAfter) < 0) return err("Companion " + id + " heeft geweigerd en vraagt pas weer na " + fmt(rec.declined.retryAfter));
+        if (!(rec.hp && rec.hp.max > 0)) return err("Companion " + id + ": statblock (hp.max) ontbreekt");
+        const live = op.mode !== "remote";
+        if (live && partyRegion && npc.location && regionOf(W, npc.location) !== partyRegion) return err("Companion " + id + " (" + npc.name + ") is niet bij de party (" + (regionOf(W, npc.location) || "?") + " ≠ " + partyRegion + ")");
+        nx.stage = "active"; nx.mode = op.mode; nx.joinedAt = now ? clone(now) : null; nx.departure = null; delete nx.declined;
+        nx.hp = { cur: rec.hp.max, max: rec.hp.max };
+        const nn = clone(npc); nn.status = "recruited"; if (live && partyRegion) { nn.location = partyRegion; if (now) nn.locationSince = clone(now); }
+        W.npcs[id] = nn; plan.npcs[id] = nn;
+        eventFor("companion_recruited", npc.name + " gaat mee (" + op.mode + "): " + op.reason, refs, "V");
+        W.companions[id] = nx;
+        const trav = activeCount() + 2;
+        if (live && trav > PARTY_SOFT_LIMIT) warn("Party telt nu " + trav + " reizigers (richtwaarde " + PARTY_SOFT_LIMIT + "): vraag een narratief/logistiek plan (voedsel, onderdak, opvallendheid)");
+      } else if (op.op === "depart") {
+        if (rec.stage !== "active") return err("Companion " + id + ": vertrekken kan alleen als actief (stage " + rec.stage + ")");
+        if (!needReason()) return err("Companion " + id + ": vertrek vereist een reason");
+        let dest = npc.location;
+        if (op.destination != null) { if (!knownPlace(W, op.destination)) return err("Companion " + id + ": onbekende bestemming " + op.destination); dest = op.destination; }
+        if (op.expectedReturn != null && !dateOk(op.expectedReturn)) return err("Companion " + id + ": expectedReturn is geen geldige datum");
+        nx.stage = "departed";
+        nx.departure = { at: now ? clone(now) : null, reason: op.reason, destination: dest || null, condition: op.condition || null, returnIf: op.returnIf || null, expectedReturn: op.expectedReturn ? clone(op.expectedReturn) : null };
+        const nn = clone(npc); nn.status = "departed"; nn.location = dest || null; if (now) nn.locationSince = clone(now);
+        W.npcs[id] = nn; plan.npcs[id] = nn;
+        eventFor("companion_departed", npc.name + " verlaat de party: " + op.reason, refs, "V");
+      } else if (op.op === "return") {
+        if (rec.stage !== "departed") return err("Companion " + id + ": terugkeren kan alleen na een vertrek (stage " + rec.stage + ")");
+        if (!needReason()) return err("Companion " + id + ": terugkeer vereist een reason");
+        const from = regionOf(W, npc.location);
+        if (from && partyRegion && from !== partyRegion && now && rec.departure && rec.departure.at) {
+          const need = travelDays(from, partyRegion), spent = dateCmp(now, rec.departure.at);
+          if (need == null) warn("Companion " + id + ": reistijd " + from + " → " + partyRegion + " onbekend");
+          else if (spent < need && !(isObj(op.travel) && reasonOk(op.travel.reason))) return err("Companion " + id + " (" + npc.name + ") kan niet in " + spent + " dag(en) van " + from + " naar " + partyRegion + " terugkeren (minimaal ~" + need + " dagen)");
+        }
+        nx.stage = "active"; nx.history = (rec.history || []).concat(rec.departure ? [rec.departure] : []); nx.departure = null;
+        const nn = clone(npc); nn.status = "recruited"; if (partyRegion) { nn.location = partyRegion; if (now) nn.locationSince = clone(now); }
+        W.npcs[id] = nn; plan.npcs[id] = nn;
+        eventFor("companion_returned", npc.name + " keert terug: " + op.reason, refs, "V");
+      } else if (op.op === "update") {
+        const live = rec.stage === "active";
+        if (rec.stage === "departed" && (op.hp || op.resources || op.conditions)) return err("Companion " + id + " is vertrokken: alleen evidence/nextAction/obligation kunnen veranderen");
+        if (rec.stage === "candidate" && (op.hp || op.resources || op.conditions)) return err("Companion " + id + " is nog kandidaat: geen combatstatus wijzigen");
+        if (op.hp != null) {
+          if (!isObj(op.hp)) return err("Companion " + id + ": hp moet {cur} of {delta} zijn");
+          const v = op.hp.cur != null ? op.hp.cur : (op.hp.delta != null ? nx.hp.cur + op.hp.delta : null);
+          if (!Number.isInteger(v) || v < 0 || v > nx.hp.max) return err("Companion " + id + ": hp valt buiten 0-" + nx.hp.max);
+          nx.hp.cur = v;
+          if (v === 0) warn("Companion " + id + " (" + npc.name + ") staat op 0 HP: bewusteloos; overlijden alleen via npcs status:'deceased' met reden");
+        }
+        if (op.resources != null) {
+          if (!isObj(op.resources)) return err("Companion " + id + ": resources moet een object zijn");
+          let bad = false;
+          Object.keys(op.resources).forEach(k => {
+            if (!resOk(nx.resources, k)) { bad = true; return err("Companion " + id + ": onbekende hulpbron '" + k + "'"); }
+            const r = op.resources[k], cur = r.cur != null ? r.cur : (r.delta != null ? nx.resources[k].cur + r.delta : null);
+            if (!Number.isInteger(cur) || cur < 0 || cur > nx.resources[k].max) { bad = true; return err("Companion " + id + ": hulpbron '" + k + "' valt buiten 0-" + nx.resources[k].max); }
+            nx.resources[k].cur = cur;
+          });
+          if (bad) return;
+        }
+        if (op.conditions != null) {
+          const c = isObj(op.conditions) ? op.conditions : {};
+          const add = Array.isArray(c.add) ? c.add.filter(x => typeof x === "string") : [], rm = Array.isArray(c.remove) ? c.remove : [];
+          nx.conditions = (nx.conditions || []).filter(x => rm.indexOf(x) < 0).concat(add).filter((v, i, a) => a.indexOf(v) === i);
+        }
+        if (op.evidence != null) {
+          if (typeof op.evidence !== "string" || op.evidence.trim().length < 5) return err("Companion " + id + ": evidence moet een concrete ervaring zijn (≥5 tekens)");
+          nx.evidence = (nx.evidence || []).concat([{ at: now ? clone(now) : null, text: op.evidence.trim() }]).slice(-30);
+        }
+        if (op.nextAction != null) nx.nextAction = String(op.nextAction);
+        if (op.obligation != null) {
+          if (!isObj(op.obligation) || typeof op.obligation.text !== "string" || op.obligation.text.trim().length < 5 || (op.obligation.due != null && !dateOk(op.obligation.due))) return err("Companion " + id + ": obligation vraagt {text, due?}");
+          nx.obligation = { text: op.obligation.text.trim(), due: op.obligation.due ? clone(op.obligation.due) : null };
+        }
+        if (!live && rec.stage !== "departed" && rec.stage !== "candidate") return err("Companion " + id + ": onbekende stage");
+      } else if (op.op === "rest") {
+        if (rec.stage !== "active") return err("Companion " + id + ": rusten kan alleen als actief");
+        if (op.kind !== "short" && op.kind !== "long") return err("Companion " + id + ": rest.kind moet short of long zijn");
+        Object.keys(nx.resources || {}).forEach(k => { const r = nx.resources[k]; if (r.rest === "short" || (op.kind === "long" && r.rest === "long")) r.cur = r.max; });
+        if (op.kind === "long") { nx.hp.cur = nx.hp.max; nx.conditions = []; }
+        eventFor("companion_rest", npc.name + " neemt een " + (op.kind === "long" ? "lange" : "korte") + " rust", refs, "V");
+      }
+      W.companions[id] = nx; plan.companions[id] = nx; touched.companions = touched.companions || {}; touched.companions[id] = true;
+    });
+    /* overlijden van een companion via npcs: record meenemen */
+    Object.keys(plan.npcs).forEach(id => {
+      const n = plan.npcs[id], r = W.companions[id];
+      if (n.status === "deceased" && r && r.stage !== "deceased") { const d = Object.assign({}, r, { stage: "deceased", hp: { cur: 0, max: r.hp ? r.hp.max : 0 }, departure: null }); W.companions[id] = d; plan.companions[id] = d; }
     });
 
     /* quests */
@@ -222,6 +347,7 @@
 
     /* verlopen quests bij tijdsverloop */
     if (now && plan.calendar) {
+      companionDue({ npcs: W.npcs, companions: W.companions }, now).forEach(m => warn("Companion aan de orde: " + m));
       Object.values(W.quests).forEach(q => {
         if ((q.status === "available" || q.status === "dormant") && q.expires && dateOk(q.expires) && dateCmp(now, q.expires) > 0 && !plan.quests[q.id]) {
           const n = Object.assign({}, q, { status: "expired", history: (q.history || []).concat([{ status: "expired", at: now, reason: "verlopen op " + fmt(q.expires) }]) });
@@ -232,6 +358,19 @@
       });
     }
     return { ok: errors.length === 0, errors: errors, warnings: warnings, plan: plan };
+  }
+
+  /* Wat is er bij een companion aan de orde? (autonomie: de DM krijgt dit te zien, het spel beslist niet zelf) */
+  function companionDue(world, now) {
+    const out = [];
+    if (!world || !now || !dateOk(now)) return out;
+    const npcs = world.npcs || {};
+    Object.values(world.companions || {}).forEach(r => {
+      const nm = (npcs[r.id] && npcs[r.id].name) || r.id;
+      if (r.stage === "departed" && r.departure && dateOk(r.departure.expectedReturn) && dateCmp(now, r.departure.expectedReturn) >= 0) out.push(r.id + " " + nm + ": verwachte terugkeer (" + fmt(r.departure.expectedReturn) + ") is bereikt" + (r.departure.returnIf ? "; voorwaarde: " + r.departure.returnIf : ""));
+      if (r.stage === "active" && r.obligation && dateOk(r.obligation.due) && dateCmp(now, r.obligation.due) >= 0) out.push(r.id + " " + nm + ": verplichting is aan de orde ('" + r.obligation.text + "')" + (r.departureConditions ? "; vertrekvoorwaarde: " + r.departureConditions : ""));
+    });
+    return out;
   }
 
   /* ---------- compacte wereldcontext voor de DM ---------- */
@@ -250,6 +389,16 @@
     const npcs = Object.values(world.npcs || {}).filter(n => n.status !== "deceased" || hay.indexOf(String(n.name).toLowerCase()) >= 0)
       .filter(n => n.status === "recruited" || hay.indexOf(String(n.name).toLowerCase()) >= 0 || hay.indexOf(n.id.toLowerCase()) >= 0 || (here && regionOf(world, n.location) === here && n.status !== "ambient" && !n.tolkien));
     if (npcs.length) out.push("NPC's (id, status, plek):\n" + npcs.slice(0, 24).map(n => "- " + n.id + " " + n.name + " [" + n.status + (n.status === "deceased" ? ", OVERLEDEN" : "") + "] @" + (n.location || "?")).join("\n"));
+    const comps = Object.values(world.companions || {}).filter(r => r.stage === "active" || r.stage === "departed");
+    if (comps.length) out.push("Companions:\n" + comps.slice(0, 8).map(r => {
+      const n = (world.npcs || {})[r.id] || {};
+      const res = Object.keys(r.resources || {}).map(k => k + " " + r.resources[k].cur + "/" + r.resources[k].max).join(", ");
+      const ev = (r.evidence || []).slice(-2).map(e => e.text).join(" | ");
+      if (r.stage === "departed") return "- " + r.id + " " + (n.name || "") + " [vertrokken " + (r.departure && r.departure.at ? fmt(r.departure.at) : "?") + " → " + (r.departure && r.departure.destination || "?") + "; reden: " + (r.departure && r.departure.reason || "?") + (r.departure && r.departure.returnIf ? "; keert terug als: " + r.departure.returnIf : "") + "]";
+      return "- " + r.id + " " + (n.name || "") + " [" + r.mode + "] HP " + r.hp.cur + "/" + r.hp.max + (res ? "; " + res : "") + ((r.conditions || []).length ? "; conditions: " + r.conditions.join(", ") : "") + (r.nextAction ? "; wil: " + r.nextAction : "") + (ev ? "; bewijs: " + ev : "");
+    }).join("\n"));
+    const due = companionDue(world, world.calendar);
+    if (due.length) out.push("Aan de orde (companions):\n" + due.map(d => "- " + d).join("\n"));
     const dead = Object.values(world.npcs || {}).filter(n => n.status === "deceased").map(n => n.name);
     if (dead.length) out.push("Overleden (niet laten terugkomen): " + dead.join(", "));
     return out.join("\n").slice(0, max);
@@ -283,6 +432,20 @@
       if (q.expires && dateOk(q.expires) && W.calendar && dateOk(W.calendar) && dateCmp(W.calendar, q.expires) > 0 && (q.status === "available" || q.status === "dormant")) bad("quest", id, "verlopen op " + fmt(q.expires) + " maar nog " + q.status);
       if (!q.ifIgnored && ["available", "active", "dormant"].indexOf(q.status) >= 0 && q.kind !== "main") note("quest", id, "geen ifIgnored: gevolg bij negeren ontbreekt");
     });
+    const comps = W.companions || {}, STAGE_NPC = { candidate: null, active: ["recruited"], departed: ["departed", "inactive"], deceased: ["deceased"] };
+    Object.keys(comps).forEach(id => {
+      const r = comps[id], n = npcs[id];
+      if (!n) return bad("companion", id, "geen bijbehorende NPC");
+      if (r.id !== id) bad("companion", id, "id komt niet overeen met de sleutel");
+      if (COMPANION_STAGES.indexOf(r.stage) < 0) return bad("companion", id, "onbekende stage " + r.stage);
+      if (STAGE_NPC[r.stage] && STAGE_NPC[r.stage].indexOf(n.status) < 0) bad("companion", id, "stage " + r.stage + " past niet bij NPC-status " + n.status);
+      if (r.stage === "candidate" && ["recruited", "departed"].indexOf(n.status) >= 0) bad("companion", id, "NPC is " + n.status + " maar record staat nog op candidate");
+      if (!(r.hp && Number.isInteger(r.hp.max) && r.hp.max > 0 && r.hp.cur >= 0 && r.hp.cur <= r.hp.max)) bad("companion", id, "hp ontbreekt of valt buiten bereik");
+      Object.keys(r.resources || {}).forEach(k => { const x = r.resources[k]; if (!(x.cur >= 0 && x.cur <= x.max)) bad("companion", id, "hulpbron " + k + " buiten bereik"); });
+      if (r.stage === "departed" && !r.departure) bad("companion", id, "vertrokken zonder departure-gegevens");
+      if (r.stage === "active" && (!r.mode || COMPANION_MODES.indexOf(r.mode) < 0)) bad("companion", id, "actief zonder geldige mode");
+    });
+    Object.keys(npcs).forEach(id => { if (npcs[id].status === "recruited" && !comps[id]) bad("companion", id, "NPC is recruited maar heeft geen companion-record (statblock)"); });
     Object.keys(clocks).forEach(id => { const c = clocks[id]; if (!(c.value >= 0 && c.value <= (c.max != null ? c.max : 6))) bad("klok", id, "waarde buiten bereik"); });
     Object.keys(locs).forEach(id => { if (!locs[id].region) bad("locatie", id, "regio ontbreekt"); });
     const ev = W.events || {};
@@ -304,6 +467,7 @@
     Object.keys(plan.npcs).forEach(id => put("world/npcs/" + id, plan.npcs[id]));
     Object.keys(plan.quests).forEach(id => put("world/quests/" + id, plan.quests[id]));
     Object.keys(plan.clocks).forEach(id => put("world/clocks/" + id, plan.clocks[id]));
+    Object.keys(plan.companions || {}).forEach(id => put("world/companions/" + id, plan.companions[id]));
     if (plan.calendar) put("world/calendar", plan.calendar);
     plan.divergences.forEach(d => { const k = opts.newKey(); prev.push({ p: "world/divergences/" + k, v: null }); set["world/divergences/" + k] = d; });
     plan.events.forEach(ev => { const k = opts.newKey(); prev.push({ p: "world/events/" + k, v: null }); set["world/events/" + k] = Object.assign({ t: opts.now || null }, ev); });
@@ -311,5 +475,5 @@
     return { set: set, prev: prev };
   }
 
-  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
+  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
 });

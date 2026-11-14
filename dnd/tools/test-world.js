@@ -34,6 +34,7 @@ function applyPlan(w, plan) {
   w = clone(w);
   if (plan.calendar) w.calendar = plan.calendar;
   ["npcs", "quests", "clocks"].forEach(k => Object.assign(w[k], plan[k]));
+  if (plan.companions) w.companions = Object.assign({}, w.companions || {}, plan.companions);
   if (plan.divergences.length) { w.divergences = w.divergences || {}; plan.divergences.forEach((d, i) => { w.divergences["D" + Object.keys(w.divergences).length + i] = d; }); }
   return w;
 }
@@ -68,7 +69,6 @@ t("Tolkien-figuur niet aanmaken", () => bad(run(world(), { npcs: [{ id: "TOL-X",
 t("ongeldig id-formaat", () => bad(run(world(), { npcs: [{ id: "mara", op: "update", set: {} }] }), "formaat"));
 t("promotie terug is verboden", () => bad(run(world(), { npcs: [{ id: "CMP-R03", op: "update", set: { status: "named" } }] }), "terug"));
 t("promotie overslaan vereist reason", () => bad(run(world(), { npcs: [{ id: "NPC-E01", op: "update", set: { status: "recruited" } }] }), "reason"));
-t("recruteren vanuit candidate mag", () => yes(run(world(), { npcs: [{ id: "CMP-R03", op: "update", set: { status: "recruited" }, reason: "De PCs hebben haar voorwaarden vervuld" }] }).ok));
 t("overlijden vereist reason", () => bad(run(world(), { npcs: [{ id: "NPC-E01", op: "update", set: { status: "deceased" } }] }), "reason"));
 
 /* --- quests --- */
@@ -162,6 +162,143 @@ t("simulatie van 400 beurten behoudt de invarianten", () => {
     Object.values(w.clocks).forEach(c => yes(c.value >= 0 && c.value <= (c.max || 6), "klok buiten bereik"));
   }
   yes(applied > 50 && rejected > 50, "te weinig variatie: " + applied + "/" + rejected);
+});
+
+/* ---------- companion-engine ---------- */
+function cworld() {
+  const w = world();
+  w.sceneRegion = "REG-RIVENDELL";
+  w.npcs["CMP-R03"].introduced = true;
+  w.npcs["CMP-R01"] = { id: "CMP-R01", name: "Lírien", status: "companion_candidate", canon: "V", introduced: true, location: "LOC-RIV", locationSince: { y: 3018, m: 10, d: 20 } };
+  w.npcs["CMP-R08"] = { id: "CMP-R08", name: "Tobin", status: "named", canon: "V", introduced: false, location: "LOC-RIV", locationSince: { y: 3018, m: 10, d: 20 } };
+  const rec = (id, hp, res) => ({ id: id, stage: "candidate", hp: { cur: hp, max: hp }, resources: res || {}, conditions: [], evidence: [] });
+  w.companions = { "CMP-R03": rec("CMP-R03", 33, { "Second Wind": { cur: 1, max: 1, rest: "short" }, "Shield Interpose": { cur: 2, max: 2, rest: "short" } }), "CMP-R01": rec("CMP-R01", 24, { "Field Dressing": { cur: 3, max: 3, rest: "long" } }), "CMP-R08": rec("CMP-R08", 22) };
+  return w;
+}
+function apply2(w, plan) { const n = applyPlan(w, plan); n.companions = Object.assign({}, w.companions, plan.companions || {}); return n; }
+const rec3 = { id: "CMP-R03", op: "recruit", mode: "permanent", reason: "Gedeeld belang: de weg naar het noorden bewaken" };
+t("recruteren via npcs-route is verboden (gebruik companions)", () => bad(run(cworld(), { npcs: [{ id: "CMP-R03", op: "update", set: { status: "recruited" }, reason: "De PCs hebben haar voorwaarden vervuld" }] }), "companions op"));
+t("companion recruteren: status, hp, locatie", () => {
+  const r = run(cworld(), { companions: [rec3] }); yes(r.ok, r.errors.join("|"));
+  eq(r.plan.npcs["CMP-R03"].status, "recruited"); eq(r.plan.companions["CMP-R03"].stage, "active"); eq(r.plan.companions["CMP-R03"].hp.cur, 33);
+  yes(r.plan.events.some(e => e.type === "companion_recruited"));
+});
+t("recruteren vereist introductie", () => {
+  const w = cworld(); w.npcs["CMP-R08"].status = "companion_candidate";
+  bad(run(w, { companions: [{ id: "CMP-R08", op: "recruit", mode: "etappe", reason: "Hij wil mee voor de reis" }] }), "voorgesteld");
+});
+t("recruteren vereist companion_candidate", () => { const w = cworld(); w.npcs["CMP-R03"].status = "named"; bad(run(w, { companions: [rec3] }), "companion_candidate"); });
+t("recruteren vereist reason en geldige mode", () => {
+  bad(run(cworld(), { companions: [{ id: "CMP-R03", op: "recruit", mode: "permanent" }] }), "reason");
+  bad(run(cworld(), { companions: [{ id: "CMP-R03", op: "recruit", mode: "vast", reason: "Gedeeld belang genoeg" }] }), "mode");
+});
+t("kandidaat elders is niet recruteerbaar", () => { const w = cworld(); w.sceneRegion = "REG-ERIADOR"; bad(run(w, { companions: [rec3] }), "niet bij de party"); });
+t("remote ally mag elders blijven", () => { const w = cworld(); w.sceneRegion = "REG-ERIADOR"; yes(run(w, { companions: [Object.assign({}, rec3, { mode: "remote" })] }).ok); });
+t("companion zonder record kan niet meedoen", () => { const w = cworld(); delete w.companions["CMP-R03"]; bad(run(w, { companions: [rec3] }), "statblock"); });
+t("weigeren en pas later opnieuw vragen", () => {
+  let w = cworld(); const d = run(w, { companions: [{ id: "CMP-R03", op: "decline", reason: "Haar familie heeft haar nodig", retryAfter: { y: 3018, m: 11, d: 10 } }] }); yes(d.ok, d.errors.join("|"));
+  w = apply2(w, d.plan); bad(run(w, { companions: [rec3] }), "pas weer na");
+  w.calendar = { y: 3018, m: 11, d: 11 }; yes(run(w, { companions: [rec3] }).ok);
+});
+t("party boven de richtwaarde geeft een waarschuwing", () => {
+  let cur = cworld();
+  ["CMP-R01", "CMP-R03"].forEach(id => { const r = run(cur, { companions: [{ id: id, op: "recruit", mode: "permanent", reason: "Gedeeld belang voor de reis" }] }); yes(r.ok, r.errors.join("|")); cur = apply2(cur, r.plan); });
+  ["CMP-R08", "CMP-R04"].forEach(id => { if (!cur.npcs[id]) { cur.npcs[id] = { id: id, name: "Extra " + id, status: "companion_candidate", canon: "V", introduced: true, location: "LOC-RIV", locationSince: { y: 3018, m: 10, d: 20 } }; cur.companions[id] = { id: id, stage: "candidate", hp: { cur: 20, max: 20 }, resources: {}, conditions: [], evidence: [] }; } cur.npcs[id].status = "companion_candidate"; cur.npcs[id].introduced = true; });
+  { const r1 = run(cur, { companions: [{ id: "CMP-R08", op: "recruit", mode: "permanent", reason: "Hij kan sloten openen" }] }); yes(r1.ok && r1.warnings.join(" ").toLowerCase().indexOf("reizigers") < 0, "5 reizigers is nog binnen de richtwaarde"); cur = apply2(cur, r1.plan); }
+  const r = run(cur, { companions: [{ id: "CMP-R04", op: "recruit", mode: "permanent", reason: "Hij kan ook goed schieten" }] }); yes(r.ok);
+  yes(r.warnings.join(" ").toLowerCase().indexOf("reizigers") >= 0, "geen party-waarschuwing: " + r.warnings.join("|"));
+});
+function active3() { let w = cworld(); const r = run(w, { companions: [rec3] }); w = apply2(w, r.plan); return w; }
+t("hp- en hulpbronbeheer met grenzen", () => {
+  const w = active3();
+  const a = run(w, { companions: [{ id: "CMP-R03", op: "update", hp: { delta: -10 }, resources: { "Second Wind": { delta: -1 } } }] }); yes(a.ok, a.errors.join("|")); eq(a.plan.companions["CMP-R03"].hp.cur, 23); eq(a.plan.companions["CMP-R03"].resources["Second Wind"].cur, 0);
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "update", hp: { delta: -34 } }] }), "buiten 0-33");
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "update", hp: { delta: 1 } }] }), "buiten 0-33");
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "update", resources: { "Second Wind": { delta: -2 } } }] }), "buiten 0-1");
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "update", resources: { Spreuk: { cur: 1 } } }] }), "onbekende hulpbron");
+});
+t("0 HP is geen dood; dood vereist een npcs-status met reden", () => {
+  let w = active3(); const r = run(w, { companions: [{ id: "CMP-R03", op: "update", hp: { cur: 0 } }] }); yes(r.ok && r.warnings.join(" ").indexOf("0 HP") >= 0); w = apply2(w, r.plan); eq(w.npcs["CMP-R03"].status, "recruited");
+  bad(run(w, { npcs: [{ id: "CMP-R03", op: "update", set: { status: "deceased" } }] }), "reason");
+  const d = run(w, { npcs: [{ id: "CMP-R03", op: "update", set: { status: "deceased" }, reason: "Gevallen bij de doorwaadbare plaats" }] }); yes(d.ok, d.errors.join("|")); eq(d.plan.companions["CMP-R03"].stage, "deceased");
+});
+t("overleden companion kan nergens meer aan meedoen", () => {
+  let w = active3(); const d = run(w, { npcs: [{ id: "CMP-R03", op: "update", set: { status: "deceased" }, reason: "Gevallen bij de doorwaadbare plaats" }] }); w = apply2(w, d.plan);
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "update", hp: { cur: 5 } }] }), "overleden");
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "return", reason: "Hij komt toch terug" }] }), "overleden");
+});
+t("rust herstelt hulpbronnen en hp", () => {
+  let w = active3(); w = apply2(w, run(w, { companions: [{ id: "CMP-R03", op: "update", hp: { cur: 5 }, resources: { "Second Wind": { cur: 0 }, "Shield Interpose": { cur: 0 } }, conditions: { add: ["poisoned"] } }] }).plan);
+  const s = run(w, { companions: [{ id: "CMP-R03", op: "rest", kind: "short" }] }); eq(s.plan.companions["CMP-R03"].hp.cur, 5); eq(s.plan.companions["CMP-R03"].resources["Second Wind"].cur, 1); yes(s.plan.companions["CMP-R03"].conditions.indexOf("poisoned") >= 0);
+  const l = run(w, { companions: [{ id: "CMP-R03", op: "rest", kind: "long" }] }); eq(l.plan.companions["CMP-R03"].hp.cur, 33); eq(l.plan.companions["CMP-R03"].conditions.length, 0);
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "rest", kind: "lang" }] }), "short of long");
+});
+t("bewijslogboek: concrete ervaringen, geen meter", () => {
+  const w = active3(); const r = run(w, { companions: [{ id: "CMP-R03", op: "update", evidence: "De PCs hielden hun belofte bij de brug" }] }); yes(r.ok); eq(r.plan.companions["CMP-R03"].evidence.length, 1);
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "update", evidence: "ok" }] }), "concrete");
+  yes(!("loyalty" in r.plan.companions["CMP-R03"]), "er mag geen cijfer-meter zijn");
+});
+t("vertrek: reden, bestemming, voorwaarden; npc wordt departed", () => {
+  const w = active3();
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "depart" }] }), "reason");
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "depart", reason: "Familieplicht roept haar", destination: "REG-NERGENS" }] }), "bestemming");
+  const r = run(w, { companions: [{ id: "CMP-R03", op: "depart", reason: "Familieplicht roept haar", destination: "REG-ERIADOR", returnIf: "haar clan is veilig", expectedReturn: { y: 3018, m: 12, d: 1 } }] }); yes(r.ok, r.errors.join("|"));
+  eq(r.plan.npcs["CMP-R03"].status, "departed"); eq(r.plan.companions["CMP-R03"].stage, "departed"); eq(r.plan.npcs["CMP-R03"].location, "REG-ERIADOR");
+  bad(run(w, { npcs: [{ id: "CMP-R03", op: "update", set: { status: "departed" }, reason: "ze gaat weg" }] }), "companions op");
+});
+t("terugkeer: reistijd, status en history", () => {
+  let w = active3(); w.calendar = { y: 3018, m: 10, d: 25 }; w = apply2(w, run(w, { companions: [{ id: "CMP-R03", op: "depart", reason: "Familieplicht roept haar", destination: "REG-ERIADOR" }] }).plan);
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "return", reason: "Ze is er zo weer" }] }), "kan niet in 0 dag");
+  w.calendar = { y: 3018, m: 10, d: 29 };
+  const r = run(w, { companions: [{ id: "CMP-R03", op: "return", reason: "Haar clan is veilig, ze komt terug" }] }); yes(r.ok, r.errors.join("|"));
+  eq(r.plan.npcs["CMP-R03"].status, "recruited"); eq(r.plan.companions["CMP-R03"].stage, "active"); eq(r.plan.companions["CMP-R03"].history.length, 1); eq(r.plan.companions["CMP-R03"].departure, null);
+  bad(run(active3(), { companions: [{ id: "CMP-R03", op: "return", reason: "Ze was niet weg" }] }), "na een vertrek");
+});
+t("vertrokken companion: geen combatstatus wijzigen", () => {
+  let w = active3(); w = apply2(w, run(w, { companions: [{ id: "CMP-R03", op: "depart", reason: "Familieplicht roept haar", destination: "REG-ERIADOR" }] }).plan);
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "update", hp: { cur: 5 } }] }), "vertrokken");
+  yes(run(w, { companions: [{ id: "CMP-R03", op: "update", evidence: "Stuurde een bericht via een koerier" }] }).ok);
+});
+t("autonomie: verplichting en verwachte terugkeer komen in de context", () => {
+  let w = active3(); w = apply2(w, run(w, { companions: [{ id: "CMP-R03", op: "update", obligation: { text: "Terug naar de familiehal voor het winterfeest", due: { y: 3018, m: 11, d: 5 } }, nextAction: "wil de brug bewaken" }] }).plan);
+  w.calendar = { y: 3018, m: 11, d: 6 };
+  const ctx = W.worldContext(w, { hay: "", maxChars: 4000 });
+  yes(ctx.indexOf("Companions:") >= 0 && ctx.indexOf("HP 33/33") >= 0 && ctx.indexOf("Aan de orde") >= 0 && ctx.indexOf("winterfeest") >= 0, ctx);
+  const r = run(w, { time: { to: { y: 3018, m: 11, d: 8 }, reason: "de reis duurt voort" } }); yes(r.ok && r.warnings.join(" ").indexOf("aan de orde") >= 0, r.warnings.join("|"));
+});
+t("audit: companion-consistentie", () => {
+  const w = active3(); eq(W.auditWorld(w).filter(i => i.level === "fout").length, 0, "schone wereld");
+  const a = clone(w); a.companions["CMP-R03"].hp.cur = 99; yes(W.auditWorld(a).some(i => /hp/.test(i.msg)));
+  const b = clone(w); b.npcs["CMP-R03"].status = "departed"; yes(W.auditWorld(b).some(i => /past niet/.test(i.msg)));
+  const c = clone(w); delete c.companions["CMP-R03"]; yes(W.auditWorld(c).some(i => /geen companion-record/.test(i.msg)));
+});
+t("commitPaths: companions met herstelgegevens (undo-roundtrip)", () => {
+  const w = cworld(); const r = run(w, { companions: [rec3] }); let n = 0; const c = W.commitPaths(w, r.plan, { newKey: () => "k" + (n++), now: 1 });
+  yes(c.set["world/companions/CMP-R03"] && c.set["world/npcs/CMP-R03"]);
+  const p = c.prev.find(x => x.p === "world/companions/CMP-R03"); eq(p.v.stage, "candidate");
+});
+t("simulatie: 300 beurten met companions: invarianten blijven waar", () => {
+  let seed = 7; const rnd = () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296;
+  let w = cworld(); w.npcs["CMP-R08"].status = "companion_candidate"; w.npcs["CMP-R08"].introduced = true;
+  const ids = ["CMP-R01", "CMP-R03", "CMP-R08"], dead = new Set(); let ok = 0, no = 0;
+  for (let i = 0; i < 300; i++) {
+    const id = ids[Math.floor(rnd() * 3)], k = Math.floor(rnd() * 8), d = {};
+    if (rnd() < 0.2) { const b = w.calendar, nd = new Date(Date.UTC(b.y, b.m - 1, b.d + Math.floor(rnd() * 6))); d.time = { to: { y: nd.getUTCFullYear(), m: nd.getUTCMonth() + 1, d: nd.getUTCDate() }, reason: "tijd verstrijkt", worldTick: true }; }
+    if (k === 0) d.companions = [{ id: id, op: "recruit", mode: ["permanent", "etappe", "remote"][Math.floor(rnd() * 3)], reason: "Gedeeld belang in de simulatie" }];
+    if (k === 1) d.companions = [{ id: id, op: "depart", reason: "Eigen verplichting in de simulatie", destination: ["REG-ERIADOR", "REG-MISTY"][Math.floor(rnd() * 2)] }];
+    if (k === 2) d.companions = [{ id: id, op: "return", reason: "Terug na de verplichting" }];
+    if (k === 3) d.companions = [{ id: id, op: "update", hp: { delta: Math.floor(rnd() * 20) - 12 } }];
+    if (k === 4) d.companions = [{ id: id, op: "rest", kind: rnd() < 0.5 ? "short" : "long" }];
+    if (k === 5) d.companions = [{ id: id, op: "decline", reason: "Niet nu, de simulatie weigert", retryAfter: { y: 3018, m: 11, d: 1 } }];
+    if (k === 6 && rnd() < 0.15) d.npcs = [{ id: id, op: "update", set: { status: "deceased" }, reason: "Gesneuveld in de simulatie" }];
+    if (k === 7) d.region = ["REG-RIVENDELL", "REG-ERIADOR"][Math.floor(rnd() * 2)];
+    const r = W.validateDelta(w, d, { round: i });
+    if (r.ok) { ok++; w = apply2(w, r.plan); if (d.region) w.sceneRegion = d.region; } else no++;
+    Object.values(w.npcs).forEach(n => { if (n.status === "deceased") dead.add(n.id); });
+    dead.forEach(x => { yes(w.npcs[x].status === "deceased", x + " keerde terug"); if (w.companions[x]) eq(w.companions[x].stage, "deceased"); });
+    const errs = W.auditWorld(w).filter(x => x.level === "fout" && x.kind === "companion"); yes(errs.length === 0, "audit beurt " + i + ": " + JSON.stringify(errs));
+  }
+  yes(ok > 40 && no > 40, "te weinig variatie " + ok + "/" + no);
 });
 
 console.log(pass + " geslaagd, " + fail + " mislukt");
