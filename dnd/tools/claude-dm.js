@@ -167,7 +167,7 @@ function cmdApply(cid, file, flags) {
   const world = get("/dnd/" + cp(cid, "world"));
   let wplan = null;
   if (world && out.worldDelta) {
-    const v = World.validateDelta(world, out.worldDelta, { round: round + 1 });
+    const v = World.validateDelta(world, out.worldDelta, { round: round + 1, hasPortrait: n => { try { return !!get("/dnd/npcs/" + slug(n.name) + "/img"); } catch (e) { return false; } } });
     if (!v.ok) throw new Error("worldDelta ongeldig:\n- " + v.errors.join("\n- ") + "\nCorrigeer het JSON-bestand en probeer opnieuw (niets is opgeslagen).");
     wplan = v.plan; v.warnings.forEach(w => console.log("let op:", w));
   }

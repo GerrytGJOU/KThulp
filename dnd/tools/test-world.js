@@ -111,6 +111,7 @@ t("commitPaths + terugdraaien herstelt de wereld exact", () => {
   const w1 = clone(w0); Object.keys(cm.set).forEach(p => setPath(w1, p.replace(/^world\//, ""), cm.set[p]));
   eq(w1.clocks["CLK-A"].value, 2); eq(w1.quests["MAIN-A1"].status, "completed"); eq(w1.sceneRegion, "REG-ERIADOR"); yes(w1.npcs["NPC-E10"] && Object.keys(w1.events).length >= 4, "events/NPC ontbreken");
   const w2 = clone(w1); cm.prev.forEach(x => setPath(w2, x.p.replace(/^world\//, ""), x.v));
+  yes(w2.jobs && w2.jobs["JOB-PORT-NPC-E10"], "jobs blijven bewust bestaan na Terug"); delete w2.jobs;
   eq(JSON.stringify(sortDeep(prune(w2))), JSON.stringify(sortDeep(prune(w0))), "wereld na undo");
 });
 function prune(x) { if (Array.isArray(x)) return x.map(prune); if (x && typeof x === "object") { const r = {}; Object.keys(x).forEach(k => { const v = prune(x[k]); if (!(v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).length === 0)) r[k] = v; }); return r; } return x; }
@@ -299,6 +300,66 @@ t("simulatie: 300 beurten met companions: invarianten blijven waar", () => {
     const errs = W.auditWorld(w).filter(x => x.level === "fout" && x.kind === "companion"); yes(errs.length === 0, "audit beurt " + i + ": " + JSON.stringify(errs));
   }
   yes(ok > 40 && no > 40, "te weinig variatie " + ok + "/" + no);
+});
+
+/* ---------- job-wachtrij ---------- */
+const mk = (id, name, status, extra) => Object.assign({ id: id, name: name, status: status, canon: "V", location: "LOC-BREE", locationSince: { y: 3018, m: 10, d: 20 } }, extra || {});
+t("NPC aanmaken als named zet portret- en profielJob klaar", () => {
+  const r = run(world(), { npcs: [{ id: "NPC-E20", op: "create", set: { name: "Sella", canon: "N", status: "named", location: "LOC-BREE" } }] }); yes(r.ok, r.errors.join("|"));
+  eq(Object.keys(r.plan.jobs).sort().join(","), "JOB-PORT-NPC-E20,JOB-PROF-NPC-E20"); eq(r.plan.jobs["JOB-PORT-NPC-E20"].status, "queued"); eq(r.plan.jobs["JOB-PORT-NPC-E20"].required, false);
+  yes(r.plan.events.some(e => e.type === "job_queued"));
+});
+t("ambient: geen jobs; promotie naar named: wel", () => {
+  let w = world(); const a = run(w, { npcs: [{ id: "NPC-E21", op: "create", set: { name: "Marktkraamster", canon: "N", status: "ambient" } }] }); yes(a.ok); eq(Object.keys(a.plan.jobs).length, 0);
+  w = applyPlan(w, a.plan); const b = run(w, { npcs: [{ id: "NPC-E21", op: "update", set: { status: "named" }, reason: "De PCs vroegen naar haar naam" }] }); yes(b.ok, b.errors.join("|")); eq(Object.keys(b.plan.jobs).length, 2);
+});
+t("bestaand portret: alleen profielJob", () => {
+  const r = run(world(), { npcs: [{ id: "NPC-E22", op: "create", set: { name: "Tavin", canon: "N", status: "named" } }] }, { round: 5, hasPortrait: n => n.name === "Tavin" }); yes(r.ok);
+  eq(Object.keys(r.plan.jobs).join(","), "JOB-PROF-NPC-E22");
+});
+t("Tolkien en overleden NPC's krijgen geen jobs; update zonder statuswijziging ook niet", () => {
+  const r = run(world(), { npcs: [{ id: "NPC-E01", op: "update", set: { goal: "voedsel verdelen" } }] }); yes(r.ok); eq(Object.keys(r.plan.jobs).length, 0);
+});
+t("companion_candidate zonder statblock zet een verplichte statblock-job klaar (en blokkeert recruit)", () => {
+  let w = world(); w.sceneRegion = "REG-ERIADOR"; w.npcs["NPC-E01"].status = "recurring";
+  const r = run(w, { npcs: [{ id: "NPC-E01", op: "update", set: { status: "companion_candidate", introduced: true }, reason: "Mara wil mee en de PCs vertrouwen haar" }] }); yes(r.ok, r.errors.join("|"));
+  const j = r.plan.jobs["JOB-STAT-NPC-E01"]; yes(j && j.required === true && j.type === "statblock");
+  w = applyPlan(w, r.plan); w.jobs = Object.assign({}, w.jobs, r.plan.jobs);
+  bad(run(w, { companions: [{ id: "NPC-E01", op: "recruit", mode: "etappe", reason: "Gedeeld belang in de regio" }] }), "statblock-job JOB-STAT-NPC-E01 staat queued");
+});
+t("idempotent: bestaande job wordt niet nogmaals aangemaakt", () => {
+  const w = world(); w.jobs = { "JOB-PROF-NPC-E23": { id: "JOB-PROF-NPC-E23", type: "profile", subject: "NPC-E23", status: "done", result: { notes: "klaar" }, attempts: 1 } };
+  const r = run(w, { npcs: [{ id: "NPC-E23", op: "create", set: { name: "Oren", canon: "N", status: "named" } }] }); eq(Object.keys(r.plan.jobs).join(","), "JOB-PORT-NPC-E23");
+});
+t("de DM mag geen jobs meegeven", () => bad(run(world(), { jobs: [{ id: "JOB-X" }] }), "jobs worden door de app beheerd"));
+t("job-levenscyclus: claim, lease, afronden, pogingen, verboden overgangen", () => {
+  const j0 = { id: "JOB-PORT-NPC-E20", type: "portrait", subject: "NPC-E20", status: "queued", attempts: 0 };
+  eq(W.jobTransition(j0, "done", { result: { notes: "klaar" } }, 1).ok, false);
+  eq(W.jobTransition(j0, "claimed", {}, 1).ok, false);
+  const c = W.jobTransition(j0, "claimed", { by: "runner-1", leaseUntil: 100 }, 10); yes(c.ok); eq(c.job.attempts, 1); eq(c.job.leaseUntil, 100);
+  bad2(W.jobTransition(c.job, "done", { result: {} }, 11), "result.notes");
+  const d = W.jobTransition(c.job, "done", { result: { notes: "portret opgeslagen" } }, 12); yes(d.ok); eq(d.job.leaseUntil, undefined);
+  bad2(W.jobTransition(d.job, "queued", {}, 13), "niet toegestaan");
+  const f = W.jobTransition(c.job, "failed", { reason: "ChatGPT gaf een afwijkend gezicht" }, 12); yes(f.ok); const q = W.jobTransition(f.job, "queued", {}, 13); yes(q.ok);
+  let j = q.job; j.attempts = 3; bad2(W.jobTransition(j, "claimed", { by: "x" }, 14), "pogingen");
+});
+function bad2(r, frag) { yes(!r.ok && r.error.indexOf(frag) >= 0, "verwacht fout met '" + frag + "', kreeg " + JSON.stringify(r)); }
+t("pendingJobs: volgorde, verlopen lease, wees- en ambient-jobs", () => {
+  const w = world(); w.npcs["NPC-E20"] = mk("NPC-E20", "A", "named"); w.npcs["NPC-E21"] = mk("NPC-E21", "B", "named"); w.npcs["NPC-E22"] = mk("NPC-E22", "C", "ambient");
+  w.jobs = {
+    "JOB-PORT-NPC-E20": { id: "JOB-PORT-NPC-E20", type: "portrait", subject: "NPC-E20", status: "queued", attempts: 0, required: false, createdRound: 1 },
+    "JOB-STAT-NPC-E21": { id: "JOB-STAT-NPC-E21", type: "statblock", subject: "NPC-E21", status: "queued", attempts: 0, required: true, createdRound: 9 },
+    "JOB-PORT-NPC-E21": { id: "JOB-PORT-NPC-E21", type: "portrait", subject: "NPC-E21", status: "claimed", claimedBy: "x", leaseUntil: 50, attempts: 1, createdRound: 2 },
+    "JOB-PORT-NPC-E22": { id: "JOB-PORT-NPC-E22", type: "portrait", subject: "NPC-E22", status: "queued", attempts: 0, createdRound: 1 },
+    "JOB-PORT-NPC-E99": { id: "JOB-PORT-NPC-E99", type: "portrait", subject: "NPC-E99", status: "queued", attempts: 0, createdRound: 1 }
+  };
+  eq(W.pendingJobs(w, { nowMs: 40 }).map(j => j.id).join(","), "JOB-STAT-NPC-E21,JOB-PORT-NPC-E20");
+  eq(W.pendingJobs(w, { nowMs: 60 }).map(j => j.id).join(","), "JOB-STAT-NPC-E21,JOB-PORT-NPC-E20,JOB-PORT-NPC-E21");
+  eq(W.pendingJobs(w, { nowMs: 60, types: ["portrait"] }).length, 2);
+});
+t("audit: jobs", () => {
+  const w = world(); w.jobs = { "JOB-PROF-NPC-E01": { id: "JOB-PROF-NPC-E01", type: "profile", subject: "NPC-E01", status: "done", attempts: 1 }, "JOB-X": { id: "JOB-X", type: "foto", subject: "NPC-E01", status: "queued" } };
+  const a = W.auditWorld(w).filter(i => i.kind === "job"); yes(a.some(i => /zonder resultaat/.test(i.msg)) && a.some(i => /onbekend type/.test(i.msg)));
 });
 
 console.log(pass + " geslaagd, " + fail + " mislukt");

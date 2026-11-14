@@ -25,6 +25,15 @@
   const COMPANION_MODES = ["permanent", "etappe", "temporary", "contact", "remote"];
   const COMPANION_STAGES = ["candidate", "active", "departed", "deceased"];
   const PARTY_SOFT_LIMIT = 5; // reizigers incl. 2 PC's: richtwaarde (Bible §15.2), geen harde limiet
+  /* Job-wachtrij (Bible 15.5/15.7): asynchroon, idempotent, blokkeert het verhaal nooit en wijzigt nooit spelstatus.
+     Jobs ontstaan automatisch bij NPC-promotie (validateDelta); de DM kan ze niet aanmaken of wijzigen. Een runner
+     (dnd/tools/jobs.js) claimt ze met een lease en rondt ze af. */
+  const JOB_TYPES = ["portrait", "profile", "statblock"];
+  const JOB_STATUS = ["queued", "claimed", "done", "failed", "blocked", "cancelled"];
+  const JOB_NEXT = { queued: ["claimed", "blocked", "cancelled"], claimed: ["done", "failed", "queued", "cancelled"], failed: ["queued", "cancelled"], blocked: ["queued", "cancelled"], done: [], cancelled: [] };
+  const JOB_TAG = { portrait: "PORT", profile: "PROF", statblock: "STAT" };
+  const JOB_MAX_ATTEMPTS = 3;
+  const jobId = (type, subject, version) => "JOB-" + JOB_TAG[type] + "-" + subject + (version > 1 ? "-V" + version : "");
   const CANON_TAGS = ["B", "C", "I", "N", "V"]; // B bestaand, C Tolkien-canon, I interpretatie, N nieuw (ingevoerd in spel), V voorstel
   const ID_RE = /^[A-Z]{2,5}-[A-Z0-9][A-Z0-9-]*$/;
 
@@ -66,13 +75,14 @@
   function validateDelta(world, delta, ctx) {
     ctx = ctx || {};
     const errors = [], warnings = [];
-    const plan = { calendar: null, npcs: {}, quests: {}, clocks: {}, companions: {}, events: [], divergences: [] };
+    const plan = { calendar: null, npcs: {}, quests: {}, clocks: {}, companions: {}, jobs: {}, events: [], divergences: [] };
     const W = clone(world || {});
-    W.companions = W.companions || {};
+    W.companions = W.companions || {}; W.jobs = W.jobs || {};
     W.npcs = W.npcs || {}; W.quests = W.quests || {}; W.clocks = W.clocks || {}; W.locations = W.locations || {}; W.factions = W.factions || {};
     const touched = { npcs: {}, quests: {}, clocks: {} };
     const err = m => errors.push(m), warn = m => warnings.push(m);
     delta = isObj(delta) ? delta : {};
+    if (delta.jobs != null) err("jobs worden door de app beheerd (geef geen jobs mee in de worldDelta)");
     let now = W.calendar && dateOk(W.calendar) ? clone(W.calendar) : null;
 
     /* tijd */
@@ -168,7 +178,7 @@
       if (COMPANION_OPS.indexOf(op.op) < 0) return err("Companion " + id + ": op moet " + COMPANION_OPS.join("/") + " zijn");
       if (!npc) return err("Companion " + id + " bestaat niet als NPC");
       if (npc.status === "deceased") return err("Companion " + id + " (" + npc.name + ") is overleden");
-      if (!rec) return err("Companion " + id + " (" + npc.name + ") heeft geen companion-record (statblock); een companion zonder statblock kan niet meedoen aan combat");
+      if (!rec) return err("Companion " + id + " (" + npc.name + ") heeft geen companion-record (statblock); een companion zonder statblock kan niet meedoen aan combat" + (W.jobs[jobId("statblock", id)] ? " (statblock-job " + jobId("statblock", id) + " staat " + W.jobs[jobId("statblock", id)].status + ")" : ""));
       if (rec.stage === "deceased") return err("Companion " + id + " is overleden");
       const nx = clone(rec), refs = { npcs: [id] };
       const needReason = () => reasonOk(op.reason);
@@ -185,6 +195,7 @@
         if (!needReason()) return err("Companion " + id + ": recruteren vereist een reason (gedeeld belang, wederzijdse verwachtingen)");
         if (rec.declined && rec.declined.retryAfter && now && dateCmp(now, rec.declined.retryAfter) < 0) return err("Companion " + id + " heeft geweigerd en vraagt pas weer na " + fmt(rec.declined.retryAfter));
         if (!(rec.hp && rec.hp.max > 0)) return err("Companion " + id + ": statblock (hp.max) ontbreekt");
+        if (rec.sheetStatus === "proposed") warn("Statblock van " + npc.name + " is nog een voorstel (niet goedgekeurd)");
         const live = op.mode !== "remote";
         if (live && partyRegion && npc.location && regionOf(W, npc.location) !== partyRegion) return err("Companion " + id + " (" + npc.name + ") is niet bij de party (" + (regionOf(W, npc.location) || "?") + " ≠ " + partyRegion + ")");
         nx.stage = "active"; nx.mode = op.mode; nx.joinedAt = now ? clone(now) : null; nx.departure = null; delete nx.declined;
@@ -269,6 +280,25 @@
     Object.keys(plan.npcs).forEach(id => {
       const n = plan.npcs[id], r = W.companions[id];
       if (n.status === "deceased" && r && r.stage !== "deceased") { const d = Object.assign({}, r, { stage: "deceased", hp: { cur: 0, max: r.hp ? r.hp.max : 0 }, departure: null }); W.companions[id] = d; plan.companions[id] = d; }
+    });
+
+    /* jobs bij NPC-promotie (idempotent; deterministische id's) */
+    Object.keys(plan.npcs).forEach(id => {
+      const n = plan.npcs[id], before = (world && world.npcs && world.npcs[id]) || null;
+      if (n.tolkien === true || NPC_RANK[n.status] == null) return;
+      const rb = before && NPC_RANK[before.status] != null ? NPC_RANK[before.status] : -1, ra = NPC_RANK[n.status];
+      const queue = (type, required, trigger) => {
+        const jid = jobId(type, id);
+        if (W.jobs[jid]) return;
+        const rec = { id: jid, type: type, subject: id, status: "queued", required: required, attempts: 0, trigger: trigger, createdAt: now ? clone(now) : null, createdRound: ctx.round || null };
+        W.jobs[jid] = rec; plan.jobs[jid] = rec;
+        eventFor("job_queued", "Job " + jid + " in de wachtrij (" + trigger + ")", { npcs: [id] }, "V");
+      };
+      if (rb < 1 && ra >= 1) {
+        if (!(typeof ctx.hasPortrait === "function" && ctx.hasPortrait(n))) queue("portrait", false, "npc_named");
+        queue("profile", false, "npc_named");
+      }
+      if (rb < 3 && ra >= 3 && !W.companions[id]) queue("statblock", true, "companion_candidate_zonder_statblock");
     });
 
     /* quests */
@@ -360,6 +390,34 @@
     return { ok: errors.length === 0, errors: errors, warnings: warnings, plan: plan };
   }
 
+  /* Een job-overgang controleren en toepassen (runner-kant). patch: {by, leaseUntil, result, reason}. */
+  function jobTransition(job, to, patch, nowMs) {
+    patch = patch || {};
+    if (!job || JOB_STATUS.indexOf(job.status) < 0) return { ok: false, error: "onbekende job of status" };
+    if (JOB_STATUS.indexOf(to) < 0) return { ok: false, error: "onbekende doelstatus " + to };
+    if (JOB_NEXT[job.status].indexOf(to) < 0) return { ok: false, error: "overgang " + job.status + " naar " + to + " is niet toegestaan" };
+    const j = clone(job); j.status = to; j.updatedAt = nowMs || null;
+    if (to === "claimed") {
+      if (!patch.by) return { ok: false, error: "claimen vereist by" };
+      if ((job.attempts || 0) >= JOB_MAX_ATTEMPTS) return { ok: false, error: "maximaal " + JOB_MAX_ATTEMPTS + " pogingen bereikt; zet de job handmatig op blocked of cancelled" };
+      j.attempts = (job.attempts || 0) + 1; j.claimedBy = patch.by; j.claimedAt = nowMs || null; j.leaseUntil = patch.leaseUntil || null;
+    } else {
+      delete j.leaseUntil;
+      if (to === "done") { if (!(isObj(patch.result) && typeof patch.result.notes === "string" && patch.result.notes.trim().length >= 5)) return { ok: false, error: "afronden vereist result.notes (minstens 5 tekens)" }; j.result = patch.result; delete j.error; }
+      if (to === "failed" || to === "blocked" || to === "cancelled") { if (!reasonOk(patch.reason)) return { ok: false, error: to + " vereist een reason" }; j.error = patch.reason; }
+      if (to === "queued") { delete j.claimedBy; delete j.claimedAt; }
+    }
+    return { ok: true, job: j };
+  }
+  /* Eerstvolgende jobs: eerst verplichte, dan oudste; verlopen leases tellen als queued. */
+  function pendingJobs(world, opts) {
+    opts = opts || {};
+    const types = opts.types || JOB_TYPES, nowMs = opts.nowMs || 0, npcs = (world && world.npcs) || {};
+    return Object.values((world && world.jobs) || {}).filter(j => types.indexOf(j.type) >= 0 && (j.status === "queued" || (j.status === "claimed" && j.leaseUntil && j.leaseUntil < nowMs)) && (j.attempts || 0) < JOB_MAX_ATTEMPTS)
+      .filter(j => npcs[j.subject] && npcs[j.subject].status !== "ambient")
+      .sort((a, b) => (b.required ? 1 : 0) - (a.required ? 1 : 0) || (a.createdRound || 0) - (b.createdRound || 0) || (a.id < b.id ? -1 : 1));
+  }
+
   /* Wat is er bij een companion aan de orde? (autonomie: de DM krijgt dit te zien, het spel beslist niet zelf) */
   function companionDue(world, now) {
     const out = [];
@@ -446,6 +504,17 @@
       if (r.stage === "active" && (!r.mode || COMPANION_MODES.indexOf(r.mode) < 0)) bad("companion", id, "actief zonder geldige mode");
     });
     Object.keys(npcs).forEach(id => { if (npcs[id].status === "recruited" && !comps[id]) bad("companion", id, "NPC is recruited maar heeft geen companion-record (statblock)"); });
+    const jobs = W.jobs || {};
+    Object.keys(jobs).forEach(id => {
+      const j = jobs[id];
+      if (!ID_RE.test(id) || j.id !== id) bad("job", id, "id komt niet overeen of ongeldig formaat");
+      if (JOB_TYPES.indexOf(j.type) < 0) bad("job", id, "onbekend type " + j.type);
+      if (JOB_STATUS.indexOf(j.status) < 0) bad("job", id, "onbekende status " + j.status);
+      if (!npcs[j.subject]) note("job", id, "verwijst naar onbekende NPC " + j.subject + " (wordt bij het claimen geannuleerd)");
+      if (j.status === "done" && !(j.result && j.result.notes)) bad("job", id, "klaar zonder resultaat");
+      if (j.status === "claimed" && !j.claimedBy) bad("job", id, "geclaimd zonder claimedBy");
+      if (j.type === "statblock" && j.status === "done" && !comps[j.subject]) bad("job", id, "statblock-job klaar maar geen companion-record voor " + j.subject);
+    });
     Object.keys(clocks).forEach(id => { const c = clocks[id]; if (!(c.value >= 0 && c.value <= (c.max != null ? c.max : 6))) bad("klok", id, "waarde buiten bereik"); });
     Object.keys(locs).forEach(id => { if (!locs[id].region) bad("locatie", id, "regio ontbreekt"); });
     const ev = W.events || {};
@@ -468,6 +537,8 @@
     Object.keys(plan.quests).forEach(id => put("world/quests/" + id, plan.quests[id]));
     Object.keys(plan.clocks).forEach(id => put("world/clocks/" + id, plan.clocks[id]));
     Object.keys(plan.companions || {}).forEach(id => put("world/companions/" + id, plan.companions[id]));
+    /* jobs: bewust zonder herstelgegevens; een job loopt asynchroon en mag niet door Terug verdwijnen (de runner annuleert wees-jobs) */
+    Object.keys(plan.jobs || {}).forEach(id => { set["world/jobs/" + id] = plan.jobs[id]; });
     if (plan.calendar) put("world/calendar", plan.calendar);
     plan.divergences.forEach(d => { const k = opts.newKey(); prev.push({ p: "world/divergences/" + k, v: null }); set["world/divergences/" + k] = d; });
     plan.events.forEach(ev => { const k = opts.newKey(); prev.push({ p: "world/events/" + k, v: null }); set["world/events/" + k] = Object.assign({ t: opts.now || null }, ev); });
@@ -475,5 +546,5 @@
     return { set: set, prev: prev };
   }
 
-  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
+  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
 });

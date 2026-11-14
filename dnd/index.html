@@ -160,7 +160,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
-<script src="world.js?v=2"></script>
+<script src="world.js?v=3"></script>
 <script>
 "use strict";
 firebase.initializeApp({
@@ -771,7 +771,7 @@ async function resolve(retry,forceGemini){
       let parsed;
       try{parsed=parseDM(r.txt,allNames)}catch(e){note=e.message;if(i===1)throw new Error('Ongeldige DM-uitvoer: '+note);continue}
       if(world&&window.DNDWorld&&parsed.worldDelta){
-        const v=DNDWorld.validateDelta(world,parsed.worldDelta,{round:round+1});
+        const v=DNDWorld.validateDelta(world,parsed.worldDelta,{round:round+1,hasPortrait:n=>!!(npcs[slug(n.name)]&&npcs[slug(n.name)].img)});
         if(!v.ok){ note='worldDelta ongeldig: '+v.errors.join('; '); if(i===1){ worldRejected=v.errors; parsed.worldDelta=null; } else continue; }
         else parsed._wp=v;
       }

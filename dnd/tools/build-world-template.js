@@ -8,6 +8,7 @@ if (!dump || !cid || !out) { console.error("Gebruik: build-world-template.js <du
 const c = JSON.parse(fs.readFileSync(dump, "utf8")).campaigns[cid];
 if (!c || !c.world) { console.error("Verhaal of wereldregister niet gevonden"); process.exit(1); }
 const w = JSON.parse(JSON.stringify(c.world));
+Object.keys(w.events || {}).forEach(k => { if (/^job_/.test(w.events[k].type)) delete w.events[k]; }); delete w.jobs; delete w.profiles;
 if (w.events && Object.keys(w.events).length || w.divergences && Object.keys(w.divergences).length) { console.error("Bron is al gespeeld (events/divergences); kies een onaangeroerd verhaal"); process.exit(1); }
 delete w.events; delete w.divergences;
 w.sceneRegion = "REG-RIVENDELL";
