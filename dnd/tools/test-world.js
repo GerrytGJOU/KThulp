@@ -555,5 +555,38 @@ t("reveal-undo: commitPaths bewaart herstelgegevens", () => {
   const p = c.prev.find(x => x.p === "world/backstories/CMP-R03"); yes(p && !p.v.revealed);
 });
 
+/* ---------- scene/party, idempotentie, reistijd-closure (uit de simulaties) ---------- */
+t("party teleporteert niet: regiowissel vraagt reistijd of een travel.reason", () => {
+  const w = cworld(); w.sceneSince = { y: 3018, m: 10, d: 24 };
+  bad(run(w, { region: "REG-ERIADOR" }), "kan niet in 0 dag");
+  const ok = run(w, { time: { to: { y: 3018, m: 10, d: 27 }, reason: "reis naar Eriador" }, region: "REG-ERIADOR" }); yes(ok.ok, ok.errors.join("|")); eq(ok.plan.scene.region, "REG-ERIADOR");
+  yes(run(w, { region: "REG-ERIADOR", travel: { reason: "een snel paard en een noodgeval" } }).ok);
+  bad(run(w, { region: "ERIADOR" }), "REG-id");
+});
+t("live companions reizen mee, remote niet, vertrokken niet", () => {
+  let w = cworld(); w.sceneSince = { y: 3018, m: 10, d: 24 }; ["CMP-R03", "CMP-R01"].forEach(id => { w = apply2(w, run(w, { companions: [{ id: id, op: "recruit", mode: id === "CMP-R03" ? "permanent" : "remote", reason: "Gedeeld belang voor de reis" }] }).plan); });
+  const r = run(w, { time: { to: { y: 3018, m: 10, d: 28 }, reason: "reis naar Eriador" }, region: "REG-ERIADOR" }); yes(r.ok);
+  eq(r.plan.npcs["CMP-R03"].location, "REG-ERIADOR"); yes(!r.plan.npcs["CMP-R01"], "remote ally blijft staan");
+});
+t("companion buiten de scene kan niet worden bijgewerkt of rusten", () => {
+  let w = active3(); w.sceneSince = { y: 3018, m: 10, d: 24 }; w.npcs["CMP-R03"].location = "REG-ERIADOR"; w.sceneRegion = "REG-RIVENDELL";
+  bad(run(w, { companions: [{ id: "CMP-R03", op: "update", hp: { delta: -2 } }] }), "niet bij de party"); bad(run(w, { companions: [{ id: "CMP-R03", op: "rest", kind: "short" }] }), "niet bij de party");
+  yes(run(w, { companions: [{ id: "CMP-R03", op: "update", evidence: "Stuurde nieuws via een koerier" }] }).ok);
+});
+t("idempotentie: een al verwerkte ronde wordt niet nogmaals toegepast; Terug maakt herhalen weer mogelijk", () => {
+  const w = world(); const d = { clocks: [{ id: "CLK-A", delta: 1, reason: "Een koerier verdween" }] };
+  const r = W.validateDelta(w, d, { round: 4 }); yes(r.ok); let n = 0; const c = W.commitPaths(w, r.plan, { now: 1, newKey: () => "k" + (n++) });
+  yes(c.set["world/lastRound"] === 4); const w2 = clone(w); Object.keys(c.set).forEach(p => setPath(w2, p.replace(/^world\//, ""), c.set[p]));
+  const again = W.validateDelta(w2, d, { round: 4 }); bad(again, "al verwerkt"); bad(W.validateDelta(w2, d, { round: 3 }), "al verwerkt"); yes(W.validateDelta(w2, d, { round: 5 }).ok);
+  c.prev.forEach(x => setPath(w2, x.p.replace(/^world\//, ""), x.v)); yes(W.validateDelta(w2, d, { round: 4 }).ok, "na Terug moet dezelfde ronde opnieuw kunnen");
+});
+t("agenda van een overleden eigenaar stopt bij de volgende tijdsprong", () => {
+  const w = aworld(); w.npcs["NPC-E02"].status = "deceased"; const r = tickTo(w, 3018, 10, 30); eq(r.plan.agendas["AG-ORE-1"].status, "cancelled"); yes(r.plan.events.some(e => e.type === "agenda_cancelled"));
+  eq(Object.keys(W.auditWorld(adv(w, r.plan)).filter(i => i.level === "fout")).length, 0);
+});
+t("reistijd: ontbrekende paren volgen de kortste route over bekende verbindingen", () => {
+  eq(W.travelDays("REG-ERIADOR", "REG-ANDUIN"), 8); eq(W.travelDays("REG-MISTY", "REG-GONDOR"), 18); eq(W.travelDays("REG-ANDUIN", "REG-ANDUIN"), 0); eq(W.travelDays("REG-ERIADOR", "REG-NERGENS"), null);
+});
+
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);

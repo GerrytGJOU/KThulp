@@ -11,7 +11,7 @@ const w = JSON.parse(JSON.stringify(c.world));
 Object.keys(w.events || {}).forEach(k => { if (/^job_/.test(w.events[k].type)) delete w.events[k]; }); delete w.jobs; delete w.profiles;
 if (w.events && Object.keys(w.events).length || w.divergences && Object.keys(w.divergences).length) { console.error("Bron is al gespeeld (events/divergences); kies een onaangeroerd verhaal"); process.exit(1); }
 delete w.events; delete w.divergences;
-w.sceneRegion = "REG-RIVENDELL";
+w.sceneRegion = "REG-RIVENDELL"; w.sceneSince = JSON.parse(JSON.stringify(w.calendar)); delete w.lastRound;
 const a = World.auditWorld(w);
 const errs = a.map(x => typeof x === "string" ? x : JSON.stringify(x));
 if (errs.length) { console.error("Audit faalt:\n" + errs.join("\n")); process.exit(1); }

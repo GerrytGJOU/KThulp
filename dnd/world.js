@@ -92,13 +92,25 @@
     const l = world.locations && world.locations[loc];
     return l ? l.region || null : null;
   }
+  /* Ontbrekende regioparen: kortste route over de bekende verbindingen (alleen een ondergrens als er geen directe schatting is). */
+  let CLOSURE = null;
+  function closure() {
+    if (CLOSURE) return CLOSURE;
+    const nodes = Object.keys(KNOWN_REGIONS), d = {};
+    nodes.forEach(x => { d[x] = {}; nodes.forEach(y => { d[x][y] = x === y ? 0 : Infinity; }); });
+    Object.keys(TRAVEL).forEach(k => { const p = k.split("|"); d[p[0]][p[1]] = d[p[1]][p[0]] = TRAVEL[k]; });
+    nodes.forEach(k => nodes.forEach(i => nodes.forEach(j => { if (d[i][k] + d[k][j] < d[i][j]) d[i][j] = d[i][k] + d[k][j]; })));
+    CLOSURE = d; return d;
+  }
   function travelDays(a, b) {
     if (!a || !b || a === b) return 0;
     const k1 = a + "|" + b, k2 = b + "|" + a;
-    return TRAVEL[k1] != null ? TRAVEL[k1] : (TRAVEL[k2] != null ? TRAVEL[k2] : null);
+    if (TRAVEL[k1] != null) return TRAVEL[k1];
+    if (TRAVEL[k2] != null) return TRAVEL[k2];
+    const c = closure(); return c[a] && c[a][b] != null && c[a][b] < Infinity ? c[a][b] : null;
   }
-  const KNOWN_REGIONS = {}; Object.keys(TRAVEL).forEach(k => k.split("|").forEach(r => { KNOWN_REGIONS[r] = true; }));
   const knownPlace = (world, loc) => !!loc && (KNOWN_REGIONS[loc] === true || !!(String(loc).indexOf("REG-") !== 0 && regionOf(world, loc)));
+  const KNOWN_REGIONS = {}; Object.keys(TRAVEL).forEach(k => k.split("|").forEach(r => { KNOWN_REGIONS[r] = true; }));
   const reasonOk = r => typeof r === "string" && r.trim().length >= 5;
 
   /* ---------- agenda-tick: voert alle stappen uit die tot en met 'now' aan de beurt zijn ---------- */
@@ -109,6 +121,7 @@
     Object.keys(world.agendas || {}).sort().forEach(aid => {
       let a = clone(world.agendas[aid]), changed = false, guard = 0;
       const ev = (type, summary, refs, at, extra) => out.events.push(Object.assign({ type: type, summary: summary, refs: refs || {}, canon: a.canon || "V", ingame: at, visibility: "dm_only", agenda: aid }, extra || {}));
+      if (a.status === "active" && npcs[a.owner] && npcs[a.owner].status === "deceased") { a.status = "cancelled"; a.history = (a.history || []).concat([{ at: clone(now), what: "eigenaar overleden" }]); ev("agenda_cancelled", "Agenda " + aid + " '" + a.title + "' stopt: de eigenaar is overleden", {}, clone(now)); out.agendas[aid] = a; return; }
       while (a.status === "active" && a.stepIdx < (a.steps || []).length && dateOk(a.nextAt) && dateCmp(a.nextAt, now) <= 0 && guard++ < AGENDA_TICK_GUARD) {
         const at = clone(a.nextAt), s = a.steps[a.stepIdx], q = id => quests[id] && quests[id].status;
         changed = true;
@@ -143,13 +156,15 @@
   function validateDelta(world, delta, ctx) {
     ctx = ctx || {};
     const errors = [], warnings = [];
-    const plan = { calendar: null, npcs: {}, quests: {}, clocks: {}, companions: {}, jobs: {}, agendas: {}, backstories: {}, events: [], divergences: [] };
+    const plan = { calendar: null, npcs: {}, quests: {}, clocks: {}, companions: {}, jobs: {}, agendas: {}, backstories: {}, scene: null, round: null, events: [], divergences: [] };
     const W = clone(world || {});
     W.companions = W.companions || {}; W.jobs = W.jobs || {}; W.agendas = W.agendas || {}; W.backstories = W.backstories || {};
     W.npcs = W.npcs || {}; W.quests = W.quests || {}; W.clocks = W.clocks || {}; W.locations = W.locations || {}; W.factions = W.factions || {};
     const touched = { npcs: {}, quests: {}, clocks: {} };
     const err = m => errors.push(m), warn = m => warnings.push(m);
     delta = isObj(delta) ? delta : {};
+    if (Number.isInteger(ctx.round) && Number.isInteger(W.lastRound) && ctx.round <= W.lastRound) err("Ronde " + ctx.round + " is al verwerkt (laatste verwerkte ronde: " + W.lastRound + "); een dubbele indiening wordt niet nogmaals toegepast");
+    plan.round = Number.isInteger(ctx.round) ? ctx.round : null;
     if (delta.jobs != null) err("jobs worden door de app beheerd (geef geen jobs mee in de worldDelta)");
     let now = W.calendar && dateOk(W.calendar) ? clone(W.calendar) : null;
 
@@ -236,8 +251,27 @@
       W.npcs[id] = next; plan.npcs[id] = next; touched.npcs[id] = true;
     });
 
+    /* scene/party: een regiowissel kost reistijd (de party teleporteert niet); live companions reizen mee */
+    if (delta.region != null) {
+      if (typeof delta.region !== "string" || !/^REG-[A-Z]+$/.test(delta.region)) err("region moet een REG-id zijn (bv. REG-ERIADOR)");
+      else if (!KNOWN_REGIONS[delta.region]) warn("Onbekende regio " + delta.region + ": reistijd kan niet worden gecontroleerd");
+      if (typeof delta.region === "string" && /^REG-[A-Z]+$/.test(delta.region) && delta.region !== W.sceneRegion) {
+        if (W.sceneRegion && W.sceneSince && dateOk(W.sceneSince) && now) {
+          const need = travelDays(W.sceneRegion, delta.region), spent = dateCmp(now, W.sceneSince);
+          if (need == null) warn("Reistijd " + W.sceneRegion + " naar " + delta.region + " onbekend");
+          else if (spent < need && !(isObj(delta.travel) && reasonOk(delta.travel.reason))) err("De party kan niet in " + spent + " dag(en) van " + W.sceneRegion + " naar " + delta.region + " reizen (minimaal ~" + need + " dagen): geef eerst tijd (time) of een travel.reason");
+        }
+        W.sceneRegion = delta.region; W.sceneSince = now ? clone(now) : null;
+        plan.scene = { region: W.sceneRegion, since: W.sceneSince };
+        Object.keys(W.companions).forEach(cid => {
+          const r = W.companions[cid], n = W.npcs[cid];
+          if (r.stage === "active" && r.mode !== "remote" && r.mode !== "contact" && n && n.status === "recruited") { const nn = clone(n); nn.location = W.sceneRegion; if (now) nn.locationSince = clone(now); W.npcs[cid] = nn; plan.npcs[cid] = nn; }
+        });
+      }
+    }
+
     /* companions */
-    const partyRegion = (typeof delta.region === "string" && /^REG-[A-Z]+$/.test(delta.region)) ? delta.region : (W.sceneRegion || null);
+    const partyRegion = W.sceneRegion || null;
     const activeCount = () => Object.values(W.companions).filter(r => r.stage === "active" && r.mode !== "remote" && r.mode !== "contact").length;
     const resOk = (r, k) => isObj(r) && isObj(r[k]);
     (Array.isArray(delta.companions) ? delta.companions : []).forEach(op => {
@@ -300,6 +334,7 @@
         eventFor("companion_returned", npc.name + " keert terug: " + op.reason, refs, "V");
       } else if (op.op === "update") {
         const live = rec.stage === "active";
+        if (live && (op.hp || op.resources || op.conditions) && rec.mode !== "remote" && rec.mode !== "contact" && partyRegion && regionOf(W, npc.location) !== partyRegion) return err("Companion " + id + " (" + npc.name + ") is niet bij de party (" + (regionOf(W, npc.location) || "?") + " ≠ " + partyRegion + ")");
         if (rec.stage === "departed" && (op.hp || op.resources || op.conditions)) return err("Companion " + id + " is vertrokken: alleen evidence/nextAction/obligation kunnen veranderen");
         if (rec.stage === "candidate" && (op.hp || op.resources || op.conditions)) return err("Companion " + id + " is nog kandidaat: geen combatstatus wijzigen");
         if (op.hp != null) {
@@ -337,6 +372,7 @@
         if (!live && rec.stage !== "departed" && rec.stage !== "candidate") return err("Companion " + id + ": onbekende stage");
       } else if (op.op === "rest") {
         if (rec.stage !== "active") return err("Companion " + id + ": rusten kan alleen als actief");
+        if (rec.mode !== "remote" && rec.mode !== "contact" && partyRegion && regionOf(W, npc.location) !== partyRegion) return err("Companion " + id + " (" + npc.name + ") is niet bij de party om te rusten");
         if (op.kind !== "short" && op.kind !== "long") return err("Companion " + id + ": rest.kind moet short of long zijn");
         Object.keys(nx.resources || {}).forEach(k => { const r = nx.resources[k]; if (r.rest === "short" || (op.kind === "long" && r.rest === "long")) r.cur = r.max; });
         if (op.kind === "long") { nx.hp.cur = nx.hp.max; nx.conditions = []; }
@@ -775,7 +811,9 @@
     if (plan.calendar) put("world/calendar", plan.calendar);
     plan.divergences.forEach(d => { const k = opts.newKey(); prev.push({ p: "world/divergences/" + k, v: null }); set["world/divergences/" + k] = d; });
     plan.events.forEach(ev => { const k = opts.newKey(); prev.push({ p: "world/events/" + k, v: null }); set["world/events/" + k] = Object.assign({ t: opts.now || null }, ev); });
-    if (typeof opts.region === "string" && /^REG-[A-Z]+$/.test(opts.region)) put("world/sceneRegion", opts.region);
+    if (Number.isInteger(plan.round)) put("world/lastRound", plan.round);
+    if (plan.scene) { put("world/sceneRegion", plan.scene.region); put("world/sceneSince", plan.scene.since); }
+    else if (typeof opts.region === "string" && /^REG-[A-Z]+$/.test(opts.region)) put("world/sceneRegion", opts.region);
     return { set: set, prev: prev };
   }
 
