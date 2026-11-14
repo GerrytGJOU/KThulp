@@ -473,7 +473,7 @@ function enterCampaign(id){
   <section class="tab" id="t-stand"><div class="scroll" id="standbox"></div></section>
   <section class="tab" id="t-canon"><div class="scroll" id="canonbox"></div></section>
   <section class="tab" id="t-set"><div class="scroll" id="setbox"></div></section>
-  <nav><button data-t="game">Spel</button><button data-t="ooc">Chat</button><button data-t="diary">Dagboek</button><button data-t="more">Meer</button></nav>`;
+  <nav><button data-t="game">Spel</button><button data-t="diary">Dagboek</button><button data-t="more">Meer</button></nav>`;
   document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
   $('#oocsend').onclick=sendOoc;
   $('#thread').addEventListener('click',threadClick);
