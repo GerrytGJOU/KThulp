@@ -63,7 +63,8 @@ function sheetText(c) {
   return "## " + c.name + " (speler: " + c.player + ") - Level " + c.level + " " + [c.species, c.class + (c.subclass ? " (" + c.subclass + ")" : ""), c.background].filter(Boolean).join(", ") + "\n" +
     "AC " + c.ac + ", max HP " + c.hpMax + ", Speed " + c.speed + " ft, Proficiency +" + pb + ". " + ABIL.map(a => a[2] + " " + ((c.abilities || {})[a[0]] || 10) + " (" + sgn(amod(c, a[0])) + ")").join(", ") + "\n" +
     "Saves: " + (sv || "-") + ". Skills: " + (sk || "-") + ".\n" +
-    ((c.attacks || []).length ? "Aanvallen: " + c.attacks.map(a => a.name + " " + sgn(amod(c, a.ability || "str") + (a.prof === false ? 0 : pb)) + (a.damage ? " (" + a.damage + ")" : "")).join("; ") + "\n" : "") +
+    ((c.attacks || []).length ? "Aanvallen: " + c.attacks.map(a => a.name + " " + sgn(amod(c, a.ability || "str") + (a.prof === false ? 0 : pb) + (Number(a.extra) || 0)) + (a.damage ? " (" + a.damage + ")" : "")).join("; ") + "\n" : "") +
+    (c.spellInfo || c.spells ? "Spellcasting: " + [c.spellInfo, c.spells].filter(Boolean).join(" ").replace(/\n+/g, " ") + "\n" : "") +
     (c.features ? "Features: " + c.features.replace(/\n+/g, " ") + "\n" : "") + (c.equipment ? "Uitrusting: " + c.equipment.replace(/\n+/g, " ") + "\n" : "");
 }
 const rollDice = () => { const r = (s, n) => Array.from({ length: n }, () => 1 + crypto.randomInt(s)); return { d20: r(20, 20), d12: r(12, 6), d10: r(10, 6), d8: r(8, 8), d6: r(6, 10), d4: r(4, 6) }; };

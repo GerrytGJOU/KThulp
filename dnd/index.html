@@ -1052,7 +1052,7 @@ function sheetHtml(c){
   if((c.attacks||[]).length) h+='<div class="card"><h3>Attacks</h3>'+c.attacks.map((a,i)=>rlRow(by('atk:'+i),'<b>'+esc(a.name)+'</b> <small>'+esc((a.damage?a.damage+' · ':'')+(a.notes||''))+'</small>')).join('')+'</div>';
   const txt=(t,v)=>v?'<details class="card"><summary>'+t+'</summary><div style="white-space:pre-wrap;font-size:14px">'+esc(v)+'</div></details>':'';
   const cur=c.currency||{};
-  h+=txt('Features &amp; Traits',c.features)+txt('Uitrusting',(c.equipment||'')+'\n\nGeld: '+['pp','gp','ep','sp','cp'].filter(x=>cur[x]).map(x=>cur[x]+' '+x.toUpperCase()).join(', '))+txt('Languages &amp; Proficiencies',[c.languages,c.proficiencies].filter(Boolean).join('\n\n'))+txt('Uiterlijk',c.appearance)+txt('Persoonlijkheid',c.personality)+txt('Backstory',c.backstory)+((me&&c.player===me.name)?txt('Geheimen &amp; DM-haken (alleen jij ziet dit)',[c.secrets&&'Geheimen:\n'+c.secrets,c.dmHooks].filter(Boolean).join('\n\n')):'');
+  h+=txt('Spellcasting',[c.spellInfo,c.spells].filter(Boolean).join('\n\n'))+txt('Features &amp; Traits',c.features)+txt('Uitrusting',(c.equipment||'')+'\n\nGeld: '+['pp','gp','ep','sp','cp'].filter(x=>cur[x]).map(x=>cur[x]+' '+x.toUpperCase()).join(', '))+txt('Languages &amp; Proficiencies',[c.languages,c.proficiencies].filter(Boolean).join('\n\n'))+txt('Uiterlijk',c.appearance)+txt('Persoonlijkheid',c.personality)+txt('Backstory',c.backstory)+((me&&c.player===me.name)?txt('Geheimen &amp; DM-haken (alleen jij ziet dit)',[c.secrets&&'Geheimen:\n'+c.secrets,c.dmHooks].filter(Boolean).join('\n\n')):'');
   h+='<div class="row" style="margin-bottom:8px"><button class="b alt sm" data-edit="1">✎ Bewerk blad</button>'+(c.k&&c.k!=='_preview'?'<button class="b alt sm" data-dead="1">'+(c.dead?'↩ Weer actief maken':'☠ Gesneuveld / gepensioneerd')+'</button>':'')+'</div>';
   h+='<div id="rollpanel" class="card rollpanel"></div>';
   return h;
@@ -1061,7 +1061,7 @@ function editorHtml(c,isNew){
   const inp=(id,l,v,t)=>'<label><small>'+l+'</small><input type="'+(t||'text')+'" id="'+id+'" value="'+esc(v==null?'':v)+'"></label>';
   const ta=(id,l,v)=>'<label><small>'+l+'</small><textarea id="'+id+'" style="min-height:90px">'+esc(v||'')+'</textarea></label>';
   const ab=c.abilities||{}, sv=c.saves||[], sk=c.skills||{}, cur=c.currency||{};
-  const atkLines=(c.attacks||[]).map(a=>[a.name,a.ability||'str',a.prof===false?'n':'y',a.damage||'',a.notes||''].join(' | ')).join('\n');
+  const atkLines=(c.attacks||[]).map(a=>[a.name,a.ability||'str',a.prof===false?'n':'y',a.damage||'',a.notes||'',a.extra||0].join(' | ')).join('\n');
   return '<div class="card"><h3>'+(isNew?'Nieuw personage':'Blad bewerken')+'</h3>'+
     inp('e_name','Naam',c.name)+
     '<label><small>Speler</small><select id="e_player"><option value="">—</option>'+['Gerben','Maurits'].map(p=>'<option'+(c.player===p?' selected':'')+'>'+p+'</option>').join('')+'</select></label>'+
@@ -1070,8 +1070,8 @@ function editorHtml(c,isNew){
     '<h3 style="margin-top:10px">Ability Scores &amp; Saving Throw-proficiency</h3><div class="sh-ed">'+ABIL.map(([k,n,s])=>'<label><small>'+s+'</small><input type="number" id="e_ab_'+k+'" value="'+(ab[k]||10)+'"><span><input type="checkbox" id="e_sv_'+k+'"'+(sv.includes(k)?' checked':'')+'> save</span></label>').join('')+'</div>'+
     '<h3 style="margin-top:10px">Skills (— / proficient / expertise)</h3><div class="sh-ed">'+SKILLS.map(([k,n],i)=>'<label><small>'+n+'</small><select id="e_sk_'+i+'"><option value="0">—</option><option value="1"'+(sk[k]===1?' selected':'')+'>●</option><option value="2"'+(sk[k]===2?' selected':'')+'>◎</option></select></label>').join('')+'</div>'+
     '<label style="display:block;margin-top:8px"><input type="checkbox" id="e_rage"'+((c.rageSkills&&c.rageSkills.length)?' checked':'')+'> Primal Knowledge (Barbarian 3): STR tijdens Rage voor Acrobatics, Intimidation, Perception, Stealth, Survival</label>'+
-    ta('e_atk','Aanvallen (één per regel: naam | ability (str/dex/…) | proficient (y/n) | schade | notities)',atkLines)+
-    ta('e_feat','Features &amp; Traits',c.features)+ta('e_eq','Uitrusting',c.equipment)+
+    ta('e_atk','Aanvallen (één per regel: naam | ability (str/dex/…) | proficient (y/n) | schade | notities | extra bonus)',atkLines)+
+    ta('e_feat','Features &amp; Traits',c.features)+inp('e_spi','Spellcasting (ability, DC, attack, slots)',c.spellInfo)+ta('e_spl','Spells',c.spells)+ta('e_eq','Uitrusting',c.equipment)+
     '<div class="sh-ed">'+inp('e_gp','GP',cur.gp||0,'number')+inp('e_sp','SP',cur.sp||0,'number')+inp('e_cp','CP',cur.cp||0,'number')+'</div>'+
     ta('e_lang','Languages',c.languages)+ta('e_prof','Proficiencies (wapens, armor, tools)',c.proficiencies)+ta('e_app','Uiterlijk',c.appearance)+ta('e_back','Backstory',c.backstory)+
     '<div class="row" style="margin-top:8px"><button class="b" data-save="1">Opslaan</button><button class="b alt" data-cancel="1">Annuleer</button>'+(isNew?'':'<button class="b red" data-delchar="1">Wis personage</button>')+'</div></div>';
@@ -1080,12 +1080,12 @@ function readEditor(el,old){
   const v=id=>el.querySelector('#'+id), n=(id,d)=>{const x=Number(v(id).value);return isFinite(x)?x:d};
   const c={name:v('e_name').value.trim(),player:v('e_player').value,level:n('e_level',1),ac:n('e_ac',10),hpMax:n('e_hp',10),speed:n('e_speed',30),initiativeBonus:n('e_init',0),hitDice:v('e_hd').value.trim(),
     class:v('e_class').value.trim(),subclass:v('e_sub').value.trim(),species:v('e_species').value.trim(),background:v('e_bg').value.trim(),alignment:v('e_align').value.trim(),
-    abilities:{},saves:[],skills:{},features:v('e_feat').value,equipment:v('e_eq').value,languages:v('e_lang').value,proficiencies:v('e_prof').value,appearance:v('e_app').value,backstory:v('e_back').value,
+    abilities:{},saves:[],skills:{},features:v('e_feat').value,spellInfo:v('e_spi').value.trim(),spells:v('e_spl').value,equipment:v('e_eq').value,languages:v('e_lang').value,proficiencies:v('e_prof').value,appearance:v('e_app').value,backstory:v('e_back').value,
     currency:{gp:n('e_gp',0),sp:n('e_sp',0),cp:n('e_cp',0)}};
   ABIL.forEach(([k])=>{c.abilities[k]=n('e_ab_'+k,10); if(v('e_sv_'+k).checked) c.saves.push(k);});
   SKILLS.forEach(([k],i)=>{const x=Number(v('e_sk_'+i).value); if(x) c.skills[k]=x;});
   c.rageSkills=v('e_rage').checked?['acrobatics','intimidation','perception','stealth','survival']:[];
-  c.attacks=v('e_atk').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const p=l.split('|').map(s=>s.trim()); return {name:p[0]||'Aanval',ability:(p[1]||'str').toLowerCase(),prof:!/^n/i.test(p[2]||'y'),damage:p[3]||'',notes:p[4]||''}});
+  c.attacks=v('e_atk').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const p=l.split('|').map(s=>s.trim()); return {name:p[0]||'Aanval',ability:(p[1]||'str').toLowerCase(),prof:!/^n/i.test(p[2]||'y'),damage:p[3]||'',notes:p[4]||'',extra:Number(p[5])||0}});
   if(old) Object.keys(old).forEach(k=>{ if(!(k in c)&&k!=='k') c[k]=old[k]; });
   c.t=Date.now();
   return c;
@@ -1122,7 +1122,7 @@ function renderSheet(el,prefix){
       if(q('[data-dead]')){ const cc0=chars[sheetKey]; if(cc0&&confirm(cc0.dead?cc0.name+' weer actief maken?':cc0.name+' markeren als gesneuveld/gepensioneerd? (Het blad blijft bewaard, maar de DM speelt dit personage niet meer mee.)')) await db.ref('dnd/characters/'+sheetKey+'/dead').set(cc0.dead?null:true); return; }
       if(q('[data-cancel]')){sheetEdit=false; return renderSheet(el,prefix);}
       if(q('[data-save]')){
-        const old=sheetEdit==='new'?null:chars[sheetKey]; const c=readEditor(el,old);
+        const old=sheetEdit==='new'?null:chars[sheetKey]; const c=Object.assign({},old||{},readEditor(el,old));
         if(!c.name){alert('Geef het personage een naam.');return}
         const k=slug(c.name), up={}; up['dnd/characters/'+k]=c;
         if(old&&k!==sheetKey) up['dnd/characters/'+sheetKey]=null;
@@ -1160,7 +1160,7 @@ function sheetText(c){
   return '## '+c.name+' (speler: '+c.player+') — Level '+c.level+' '+[c.species,c.class+(c.subclass?' ('+c.subclass+')':''),c.background].filter(Boolean).join(', ')+'\n'+
     'AC '+c.ac+', max HP '+c.hpMax+', Speed '+c.speed+' ft, Proficiency +'+pb+'. '+ABIL.map(a=>a[2]+' '+((c.abilities||{})[a[0]]||10)+' ('+sgn(amod(c,a[0]))+')').join(', ')+'\n'+
     'Saves: '+(sv||'—')+'. Skills: '+(sk||'—')+'.\n'+
-    ((c.attacks||[]).length?'Aanvallen: '+c.attacks.map(a=>a.name+' '+sgn(amod(c,a.ability||'str')+(a.prof===false?0:pb))+(a.damage?' ('+a.damage+')':'')).join('; ')+'\n':'')+
+    ((c.attacks||[]).length?'Aanvallen: '+c.attacks.map(a=>a.name+' '+sgn(amod(c,a.ability||'str')+(a.prof===false?0:pb)+(Number(a.extra)||0))+(a.damage?' ('+a.damage+')':'')).join('; ')+'\n':'')+(c.spellInfo||c.spells?'Spellcasting: '+[c.spellInfo,c.spells].filter(Boolean).join(' ').replace(/\n+/g,' ')+'\n':'')+
     (c.features?'Features: '+c.features.replace(/\n+/g,' ')+'\n':'')+(c.equipment?'Uitrusting: '+c.equipment.replace(/\n+/g,' ')+'\n':'')+(c.personality?'Persoonlijkheid: '+c.personality.replace(/\n+/g,' ').slice(0,400)+'\n':'')+(c.dmHooks?'Haken: '+c.dmHooks.replace(/\n+/g,' ').slice(0,500)+'\n':'');
 }
 
