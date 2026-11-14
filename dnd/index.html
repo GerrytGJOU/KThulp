@@ -132,6 +132,23 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .rollpanel{position:sticky;bottom:6px;border:1px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.6)}
 input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 .vh{position:absolute!important;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
+.ccsteps{display:flex;gap:4px;overflow-x:auto;margin-bottom:6px;padding-bottom:2px}
+.ccstep{flex:none;background:#2a231d;color:var(--mute);border:1px solid #4a3d30;border-radius:14px;padding:3px 10px;font:inherit;font-size:13px;cursor:pointer}
+.ccstep span{display:none}.ccstep.on span{display:inline}
+.ccstep.on{background:var(--gold);color:#1a140c;border-color:var(--gold);font-weight:bold}.ccstep.done{color:var(--gold)}
+.ccsum{font-size:13px;color:var(--mute);margin-bottom:6px}
+.ccbody h3{margin-top:4px}.ccbody label{display:block;margin-bottom:8px}.ccbody label small{display:block;color:var(--mute);margin-bottom:2px}
+.cctip{font-size:13px;color:var(--mute);margin:4px 0 8px}
+.ccgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-bottom:8px}
+.ccopt{background:#2a231d;color:var(--text);border:1px solid #4a3d30;border-radius:8px;padding:8px;text-align:left;font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.ccopt small{color:var(--mute);font-size:12px}.ccopt.on{border-color:var(--gold);background:rgba(200,162,74,.2)}
+.ccpicks{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.ccbody label.ccp{display:inline-block;margin:0;padding:4px 9px;border-radius:14px;background:#2a231d;border:1px solid #4a3d30;font-size:14px;cursor:pointer}
+.ccp.on{border-color:var(--gold);background:rgba(200,162,74,.2)}.ccp input{accent-color:var(--gold)}
+.ccab{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(200,162,74,.15)}
+.ccinsp div{font-size:13px;color:var(--mute);padding:2px 0}
+.ccnav{position:sticky;bottom:0;background:rgba(20,17,15,.95);padding:8px 0;flex-wrap:nowrap}
+.ccbody input[type=radio]{width:auto;accent-color:var(--gold)}
 </style>
 </head>
 <body>
@@ -278,6 +295,7 @@ function showMenu(view){
   if(view==='npcs') return menuNpcs();
   if(view==='set') return menuSet();
   if(view==='chars') return menuChars();
+  if(view==='create') return menuCreate();
   main.innerHTML=`<div class="scroll">
   <div class="card">
     <button class="b" id="goon" style="width:100%;font-size:19px;padding:14px">▶ Ga verder</button>
@@ -287,13 +305,14 @@ function showMenu(view){
   </div>
   <h2>Savegames</h2><div id="savelist"></div>
   <div class="row" style="margin-top:14px"><button class="b alt" id="tonpcs" style="flex:1">🖼 Portretten &amp; NPC's</button><button class="b alt" id="toset" style="flex:1">⚙ Instellingen</button></div>
-  <div class="row" style="margin-top:8px"><button class="b alt" id="tochars" style="flex:1">🧾 Karakterblad</button></div>
+  <div class="row" style="margin-top:8px"><button class="b alt" id="tochars" style="flex:1">🧾 Karakterblad</button><button class="b alt" id="tocreate" style="flex:1">🧙 Personage maken</button></div>
   </div>`;
   $('#goon').onclick=()=>{const id=latestId(); if(id) enterCampaign(id)};
   $('#newst').onclick=newStoryForm;
   $('#tonpcs').onclick=()=>showMenu('npcs');
   $('#toset').onclick=()=>showMenu('set');
   $('#tochars').onclick=()=>showMenu('chars');
+  $('#tocreate').onclick=()=>showMenu('create');
   renderIndex();
 }
 function backBar(title){return '<div class="row" style="margin-bottom:8px"><button class="b alt sm" id="back">‹ Menu</button><h2 style="margin:0">'+title+'</h2></div>'}
@@ -641,12 +660,12 @@ function rollDice(){
   const r=(s,n)=>Array.from({length:n},()=>1+crypto.getRandomValues(new Uint32Array(1))[0]%s);
   return {d20:r(20,20),d12:r(12,6),d10:r(10,6),d8:r(8,8),d6:r(6,10),d4:r(4,6)};
 }
-async function callGemini(sys,user,retryNote,json,modelOverride){
+async function callGemini(sys,user,retryNote,json,modelOverride,maxOut){
   const model=modelOverride||cfg.model||'gemini-2.5-flash';
   const body={
     systemInstruction:{parts:[{text:sys}]},
     contents:[{role:'user',parts:[{text:user+(retryNote?'\n\nLET OP: je vorige antwoord was ongeldig ('+retryNote+'). Antwoord nu met geldige JSON.':'')}]}],
-    generationConfig:Object.assign(json===false?{}:{responseMimeType:'application/json'},{temperature:cfg.temperature!=null?Number(cfg.temperature):0.9,maxOutputTokens:json===false?700:2500,thinkingConfig:{thinkingBudget:0}})
+    generationConfig:Object.assign(json===false?{}:{responseMimeType:'application/json'},{temperature:cfg.temperature!=null?Number(cfg.temperature):0.9,maxOutputTokens:json===false?(maxOut||700):2500,thinkingConfig:{thinkingBudget:0}})
   };
   const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',{
     method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':cfg.geminiKey},body:JSON.stringify(body)});
@@ -705,7 +724,7 @@ async function resolve(retry,forceGemini){
     const sums=[]; smS.forEach(c=>{sums.push(c.val().text)});
     const mems=[]; meS.forEach(c=>{mems.push('- '+c.val().text)});
     const notes=dnS.val()||{}; const notesTxt=Object.entries(notes).map(([k,v])=>'- '+k+': '+v).join('\n');
-    const sheets=allChars().filter(c=>c.player).map(sheetText).join('\n\n');
+    const sheets=allChars().filter(c=>c.player&&!c.dead).map(sheetText).join('\n\n');
     const npcNames=Object.values(npcs).filter(n=>!n.forPlayer).map(n=>n.name);
     const user=
 `# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# KARAKTERBLADEN (rekenkundig leidend; de Stand heeft de actuele HP)\n${sheets||'(geen)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# LOGBOEK (laatste 40)\n${logs.slice(-40).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# DM-NOTITIES (privé: nooit tonen of citeren)\n${notesTxt||'(nog geen)'}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
@@ -928,7 +947,7 @@ function skillBonus(c,key,rage){
   let ab=s[2]; if(rage&&(c.rageSkills||[]).includes(key)) ab='str';
   return amod(c,ab)+pbOf(c)*(((c.skills||{})[key])||0);
 }
-function myChar(){const l=allChars(); return l.find(c=>me&&c.player===me.name)||null}
+function myChar(){const l=allChars().filter(c=>!c.dead); return l.find(c=>me&&c.player===me.name)||null}
 function allChars(){return Object.entries(chars).map(([k,v])=>({k,...v}))}
 function rollList(c,rage){
   const pb=pbOf(c), out=[];
@@ -992,7 +1011,7 @@ function sheetHtml(c){
   const pb=pbOf(c), rage=sheetRage, list=rollList(c,rage), by=k=>list.find(r=>r.key===k);
   const live=liveHp(c), hpTxt=live?live.cur+' / '+live.max+(live.temp?' (+'+live.temp+')':''):(c.hpMax||'—');
   const pp=10+by('skill:perception').bonus;
-  let h='<div class="card sh"><div class="ppl">'+avatar(c.name)+'<div><h3 style="margin:0">'+esc(c.name)+'</h3><small style="color:var(--mute)">Level '+esc(c.level||1)+' · '+esc([c.species,c.class+(c.subclass?' ('+c.subclass+')':''),c.background].filter(Boolean).join(' · '))+'</small><br><small style="color:var(--mute)">'+esc((c.player?'Speler: '+c.player:'')+(c.alignment?' · '+c.alignment:''))+'</small></div></div></div>';
+  let h='<div class="card sh"'+(c.dead?' style="opacity:.7"':'')+'><div class="ppl">'+avatar(c.name)+'<div><h3 style="margin:0">'+(c.dead?'☠ ':'')+esc(c.name)+(c.dead?' <small style="color:var(--red)">(gesneuveld)</small>':'')+'</h3><small style="color:var(--mute)">Level '+esc(c.level||1)+' · '+esc([c.species,c.class+(c.subclass?' ('+c.subclass+')':''),c.background].filter(Boolean).join(' · '))+'</small><br><small style="color:var(--mute)">'+esc((c.player?'Speler: '+c.player:'')+(c.alignment?' · '+c.alignment:''))+'</small></div></div></div>';
   h+='<div class="sh-strip">'+
     '<div><small>Armor Class</small><b>'+esc(c.ac||'—')+'</b></div>'+
     '<div><small>Hit Points</small><b>'+esc(hpTxt)+'</b></div>'+
@@ -1009,8 +1028,8 @@ function sheetHtml(c){
   if((c.attacks||[]).length) h+='<div class="card"><h3>Attacks</h3>'+c.attacks.map((a,i)=>rlRow(by('atk:'+i),'<b>'+esc(a.name)+'</b> <small>'+esc((a.damage?a.damage+' · ':'')+(a.notes||''))+'</small>')).join('')+'</div>';
   const txt=(t,v)=>v?'<details class="card"><summary>'+t+'</summary><div style="white-space:pre-wrap;font-size:14px">'+esc(v)+'</div></details>':'';
   const cur=c.currency||{};
-  h+=txt('Features &amp; Traits',c.features)+txt('Uitrusting',(c.equipment||'')+'\n\nGeld: '+['pp','gp','ep','sp','cp'].filter(x=>cur[x]).map(x=>cur[x]+' '+x.toUpperCase()).join(', '))+txt('Languages &amp; Proficiencies',[c.languages,c.proficiencies].filter(Boolean).join('\n\n'))+txt('Uiterlijk',c.appearance)+txt('Backstory',c.backstory);
-  h+='<div class="row" style="margin-bottom:8px"><button class="b alt sm" data-edit="1">✎ Bewerk blad</button></div>';
+  h+=txt('Features &amp; Traits',c.features)+txt('Uitrusting',(c.equipment||'')+'\n\nGeld: '+['pp','gp','ep','sp','cp'].filter(x=>cur[x]).map(x=>cur[x]+' '+x.toUpperCase()).join(', '))+txt('Languages &amp; Proficiencies',[c.languages,c.proficiencies].filter(Boolean).join('\n\n'))+txt('Uiterlijk',c.appearance)+txt('Persoonlijkheid',c.personality)+txt('Backstory',c.backstory)+((me&&c.player===me.name)?txt('Geheimen &amp; DM-haken (alleen jij ziet dit)',[c.secrets&&'Geheimen:\n'+c.secrets,c.dmHooks].filter(Boolean).join('\n\n')):'');
+  h+='<div class="row" style="margin-bottom:8px"><button class="b alt sm" data-edit="1">✎ Bewerk blad</button>'+(c.k&&c.k!=='_preview'?'<button class="b alt sm" data-dead="1">'+(c.dead?'↩ Weer actief maken':'☠ Gesneuveld / gepensioneerd')+'</button>':'')+'</div>';
   h+='<div id="rollpanel" class="card rollpanel"></div>';
   return h;
 }
@@ -1043,6 +1062,7 @@ function readEditor(el,old){
   SKILLS.forEach(([k],i)=>{const x=Number(v('e_sk_'+i).value); if(x) c.skills[k]=x;});
   c.rageSkills=v('e_rage').checked?['acrobatics','intimidation','perception','stealth','survival']:[];
   c.attacks=v('e_atk').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const p=l.split('|').map(s=>s.trim()); return {name:p[0]||'Aanval',ability:(p[1]||'str').toLowerCase(),prof:!/^n/i.test(p[2]||'y'),damage:p[3]||'',notes:p[4]||''}});
+  if(old) Object.keys(old).forEach(k=>{ if(!(k in c)&&k!=='k') c[k]=old[k]; });
   c.t=Date.now();
   return c;
 }
@@ -1062,7 +1082,7 @@ function renderSheet(el,prefix){
   if(!el) return;
   const list=allChars();
   if(!sheetKey||!chars[sheetKey]){const m=myChar(); sheetKey=m?m.k:(list[0]?list[0].k:'');}
-  let h=(prefix||'')+'<div class="row" style="margin-bottom:8px">'+list.map(c=>'<button class="b sm'+(c.k===sheetKey&&sheetEdit!=='new'?'':' alt')+'" data-sk="'+c.k+'">'+esc(c.name)+'</button>').join('')+'<button class="b alt sm" data-newchar="1">＋ Nieuw personage</button></div>';
+  let h=(prefix||'')+'<div class="row" style="margin-bottom:8px">'+list.map(c=>'<button class="b sm'+(c.k===sheetKey&&sheetEdit!=='new'?'':' alt')+'" data-sk="'+c.k+'">'+(c.dead?'☠ ':'')+esc(c.name)+'</button>').join('')+'<button class="b alt sm" data-newchar="1">＋ Nieuw personage</button></div>';
   if(sheetEdit==='new') h+=editorHtml({player:me?me.name:''},true);
   else if(sheetEdit&&chars[sheetKey]) h+=editorHtml({k:sheetKey,...chars[sheetKey]},false);
   else if(sheetKey&&chars[sheetKey]) h+=sheetHtml({k:sheetKey,...chars[sheetKey]});
@@ -1075,6 +1095,7 @@ function renderSheet(el,prefix){
       if(q('[data-sk]')){sheetKey=q('[data-sk]').dataset.sk; sheetEdit=false; sheetRoll=''; return renderSheet(el,prefix);}
       if(q('[data-newchar]')){sheetEdit='new'; return renderSheet(el,prefix);}
       if(q('[data-edit]')){sheetEdit=true; return renderSheet(el,prefix);}
+      if(q('[data-dead]')){ const cc0=chars[sheetKey]; if(cc0&&confirm(cc0.dead?cc0.name+' weer actief maken?':cc0.name+' markeren als gesneuveld/gepensioneerd? (Het blad blijft bewaard, maar de DM speelt dit personage niet meer mee.)')) await db.ref('dnd/characters/'+sheetKey+'/dead').set(cc0.dead?null:true); return; }
       if(q('[data-cancel]')){sheetEdit=false; return renderSheet(el,prefix);}
       if(q('[data-save]')){
         const old=sheetEdit==='new'?null:chars[sheetKey]; const c=readEditor(el,old);
@@ -1116,7 +1137,597 @@ function sheetText(c){
     'AC '+c.ac+', max HP '+c.hpMax+', Speed '+c.speed+' ft, Proficiency +'+pb+'. '+ABIL.map(a=>a[2]+' '+((c.abilities||{})[a[0]]||10)+' ('+sgn(amod(c,a[0]))+')').join(', ')+'\n'+
     'Saves: '+(sv||'—')+'. Skills: '+(sk||'—')+'.\n'+
     ((c.attacks||[]).length?'Aanvallen: '+c.attacks.map(a=>a.name+' '+sgn(amod(c,a.ability||'str')+(a.prof===false?0:pb))+(a.damage?' ('+a.damage+')':'')).join('; ')+'\n':'')+
-    (c.features?'Features: '+c.features.replace(/\n+/g,' ')+'\n':'')+(c.equipment?'Uitrusting: '+c.equipment.replace(/\n+/g,' ')+'\n':'');
+    (c.features?'Features: '+c.features.replace(/\n+/g,' ')+'\n':'')+(c.equipment?'Uitrusting: '+c.equipment.replace(/\n+/g,' ')+'\n':'')+(c.personality?'Persoonlijkheid: '+c.personality.replace(/\n+/g,' ').slice(0,400)+'\n':'')+(c.dmHooks?'Haken: '+c.dmHooks.replace(/\n+/g,' ').slice(0,500)+'\n':'');
+}
+
+/* ---------- Character Creator: regeldata (D&D 2024, level 1-5) ---------- */
+const CC_LANGS=['Dwarvish','Elvish','Halfling (Hobbitish)','Orc','Goblin','Giant','Draconic','Gnomish','Common Sign Language'];
+const CC_FEATS={
+ 'Alert':'Initiative +Proficiency Bonus; je mag je Initiative ruilen met een bereidwillige bondgenoot.',
+ 'Crafter':'Proficiency met 3 Artisan\'s Tools; 20% korting op niet-magische items; snel iets in elkaar zetten na een Long Rest.',
+ 'Healer':'Met een Healer\'s Kit extra genezen (Battle Medic); 1en op genezingsdobbelstenen opnieuw gooien.',
+ 'Lucky':'Luck Points gelijk aan Proficiency Bonus; geef jezelf Advantage of geef een vijand Disadvantage op een d20.',
+ 'Magic Initiate (Cleric)':'2 cantrips + 1 level-1 spell uit de Cleric-lijst; de spell 1x per Long Rest gratis. DM-goedkeuring (magie).',
+ 'Magic Initiate (Druid)':'2 cantrips + 1 level-1 spell uit de Druid-lijst; de spell 1x per Long Rest gratis. DM-goedkeuring (magie).',
+ 'Magic Initiate (Wizard)':'2 cantrips + 1 level-1 spell uit de Wizard-lijst; de spell 1x per Long Rest gratis. DM-goedkeuring (magie).',
+ 'Musician':'Proficiency met 3 instrumenten; na een Short/Long Rest geef je bondgenoten Heroic Inspiration.',
+ 'Savage Attacker':'Eenmaal per beurt bij een wapentreffer: gooi de schadedobbelstenen twee keer en kies het hoogste.',
+ 'Skilled':'Proficiency in 3 extra skills of tools naar keuze.',
+ 'Tavern Brawler':'Unarmed Strike d4, 1en op die schade opnieuw gooien, duw 5 ft bij een treffer; proficiency met geïmproviseerde wapens.',
+ 'Tough':'+2 maximum HP per character level.'
+};
+const CC_STYLES={
+ 'Archery':'+2 op aanvalsworpen met ranged wapens.',
+ 'Blind Fighting':'Blindsight 10 ft.',
+ 'Defense':'+1 AC zolang je armor draagt.',
+ 'Dueling':'+2 schade met een melee-wapen in één hand (geen ander wapen).',
+ 'Great Weapon Fighting':'Tweehandig/versatile melee: dobbelsteen van 1 of 2 telt als 3.',
+ 'Interception':'Reactie: schade aan een bondgenoot naast je verminderen met 1d10 + PB.',
+ 'Protection':'Reactie met schild: Disadvantage geven op een aanval tegen een bondgenoot naast je.',
+ 'Thrown Weapon Fighting':'Gegooide wapens: +2 schade; wapen direct trekken.',
+ 'Two-Weapon Fighting':'Voeg je ability modifier toe aan de schade van de bijaanval.',
+ 'Unarmed Fighting':'Unarmed Strike d6 (d8 met lege handen); 1d4 grijpschade.'
+};
+const CC_SPECIES={
+ 'Human':{label:'Human',speed:30,size:'Medium of Small',tolk:'Dúnedain, Rohirrim, Gondorianen, Beornings, Mannen van Dale of Eriador.',
+  traits:[['Resourceful','Heroic Inspiration na elke Long Rest.'],['Skillful','Proficiency in één extra skill naar keuze.'],['Versatile','Een extra Origin Feat naar keuze.']]},
+ 'Elf':{label:'Elf',speed:30,size:'Medium',tolk:'Noldor, Sindar of Silvan (Rivendell, Lórien, Mirkwood, de Grijze Havens).',
+  traits:[['Darkvision','60 ft.'],['Fey Ancestry','Advantage op saves tegen Charmed.'],['Keen Senses','Proficiency in Insight, Perception of Survival.'],['Trance','Geen slaap; 4 uur trance telt als Long Rest.']]},
+ 'Dwarf':{label:'Dwarf',speed:30,size:'Medium',tolk:'Durins Volk (Erebor, IJzerheuvels, Blauwe Bergen); Khazad-dûm/Moria is verloren.',
+  traits:[['Darkvision','120 ft.'],['Dwarven Resilience','Resistance tegen Poison damage; Advantage op saves tegen Poisoned.'],['Dwarven Toughness','+1 maximum HP per level (al verwerkt).'],['Stonecunning','Bonus Action: tremorsense 60 ft op steen (PB keer per Long Rest).']]},
+ 'Halfling':{label:'Hobbit (Halfling)',speed:30,size:'Small',tolk:'Hobbits van de Shire, Bree of de Vales van Anduin (Stoors, Harfoots, Fallohides).',
+  traits:[['Brave','Advantage op saves tegen Frightened.'],['Halfling Nimbleness','Je mag door de ruimte van grotere wezens bewegen.'],['Luck','Gooi een natural 1 op een d20 opnieuw (moet het nieuwe resultaat gebruiken).'],['Naturally Stealthy','Je kunt je verbergen achter een groter wezen.']]}
+};
+const CC_LINEAGE={'High Elf':'Cantrip Prestidigitation (INT, WIS of CHA); level 3: Detect Magic; level 5: Misty Step. (Noldor/Sindar-achtig; magie = DM-check)','Wood Elf':'Speed 35 ft; cantrip Druidcraft; level 3: Longstrider; level 5: Pass without Trace. (Silvan/Mirkwood-achtig)'};
+const CC_BG={
+ 'Acolyte':{ab:['int','wis','cha'],sk:['insight','religion'],feat:'Magic Initiate (Cleric)',tool:"Calligrapher's Supplies",eq:["Calligrapher's Supplies",'Book (prayers)','Holy Symbol','Parchment (10 vel)','Robe'],gp:8},
+ 'Artisan':{ab:['str','dex','int'],sk:['investigation','persuasion'],feat:'Crafter',tool:"Artisan's Tools (kies)",eq:["Artisan's Tools",'2 Pouches',"Traveler's Clothes"],gp:32},
+ 'Charlatan':{ab:['dex','con','cha'],sk:['deception','sleight of hand'],feat:'Skilled',tool:'Forgery Kit',eq:['Forgery Kit','Costume','Fine Clothes'],gp:15},
+ 'Criminal':{ab:['dex','con','int'],sk:['sleight of hand','stealth'],feat:'Alert',tool:"Thieves' Tools",eq:['2 Daggers',"Thieves' Tools",'Crowbar','2 Pouches',"Traveler's Clothes"],gp:16},
+ 'Entertainer':{ab:['str','dex','cha'],sk:['acrobatics','performance'],feat:'Musician',tool:'Musical Instrument (kies)',eq:['Musical Instrument','2 Costumes','Mirror','Perfume',"Traveler's Clothes"],gp:11},
+ 'Farmer':{ab:['str','con','wis'],sk:['animal handling','nature'],feat:'Tough',tool:"Carpenter's Tools",eq:['Sickle',"Carpenter's Tools","Healer's Kit",'Iron Pot','Shovel',"Traveler's Clothes"],gp:30},
+ 'Guard':{ab:['str','int','wis'],sk:['athletics','perception'],feat:'Alert',tool:'Gaming Set (kies)',eq:['Spear','Light Crossbow','20 Bolts','Gaming Set','Hooded Lantern','Manacles','Quiver',"Traveler's Clothes"],gp:12},
+ 'Guide':{ab:['dex','con','wis'],sk:['stealth','survival'],feat:'Magic Initiate (Druid)',tool:"Cartographer's Tools",eq:['Shortbow','20 Arrows','Quiver',"Cartographer's Tools",'Bedroll','Tent',"Traveler's Clothes"],gp:3},
+ 'Hermit':{ab:['con','wis','cha'],sk:['medicine','religion'],feat:'Healer',tool:'Herbalism Kit',eq:['Quarterstaff','Herbalism Kit','Bedroll','Book (filosofie)','Lamp','3 Flasks of Oil',"Traveler's Clothes"],gp:16},
+ 'Merchant':{ab:['con','int','cha'],sk:['animal handling','persuasion'],feat:'Lucky',tool:"Navigator's Tools",eq:["Navigator's Tools",'2 Pouches',"Traveler's Clothes"],gp:22},
+ 'Noble':{ab:['str','int','cha'],sk:['history','persuasion'],feat:'Skilled',tool:'Gaming Set (kies)',eq:['Gaming Set','Fine Clothes','Perfume'],gp:29},
+ 'Sage':{ab:['con','int','wis'],sk:['arcana','history'],feat:'Magic Initiate (Wizard)',tool:"Calligrapher's Supplies",eq:['Quarterstaff',"Calligrapher's Supplies",'Book (geschiedenis)','Parchment (8 vel)','Robe'],gp:8},
+ 'Sailor':{ab:['str','dex','wis'],sk:['acrobatics','perception'],feat:'Tavern Brawler',tool:"Navigator's Tools",eq:['Dagger',"Navigator's Tools",'Rope',"Traveler's Clothes"],gp:20},
+ 'Scribe':{ab:['dex','int','wis'],sk:['investigation','perception'],feat:'Skilled',tool:"Calligrapher's Supplies",eq:["Calligrapher's Supplies",'Fine Clothes','Lamp','3 Flasks of Oil','Parchment (12 vel)'],gp:23},
+ 'Soldier':{ab:['str','dex','con'],sk:['athletics','intimidation'],feat:'Savage Attacker',tool:'Gaming Set (kies)',eq:['Spear','Shortbow','20 Arrows','Quiver',"Healer's Kit",'Gaming Set',"Traveler's Clothes"],gp:14},
+ 'Wayfarer':{ab:['dex','wis','cha'],sk:['insight','stealth'],feat:'Lucky',tool:"Thieves' Tools",eq:['Dagger',"Thieves' Tools",'Gaming Set','Bedroll','2 Pouches',"Traveler's Clothes"],gp:16}
+};
+/* naam, categorie (S/M), soort (m/r), schade, type, eigenschappen, mastery */
+const CC_W=[
+ ['Club','S','m','1d4','bludgeoning','Light','Slow'],['Dagger','S','m','1d4','piercing','Finesse, Light, Thrown (20/60)','Nick'],
+ ['Greatclub','S','m','1d8','bludgeoning','Two-Handed','Push'],['Handaxe','S','m','1d6','slashing','Light, Thrown (20/60)','Vex'],
+ ['Javelin','S','m','1d6','piercing','Thrown (30/120)','Slow'],['Light Hammer','S','m','1d4','bludgeoning','Light, Thrown (20/60)','Nick'],
+ ['Mace','S','m','1d6','bludgeoning','','Sap'],['Quarterstaff','S','m','1d6','bludgeoning','Versatile (1d8)','Topple'],
+ ['Sickle','S','m','1d4','slashing','Light','Nick'],['Spear','S','m','1d6','piercing','Thrown (20/60), Versatile (1d8)','Sap'],
+ ['Dart','S','r','1d4','piercing','Finesse, Thrown (20/60)','Vex'],['Light Crossbow','S','r','1d8','piercing','Ammunition (80/320), Loading, Two-Handed','Slow'],
+ ['Shortbow','S','r','1d6','piercing','Ammunition (80/320), Two-Handed','Vex'],['Sling','S','r','1d4','bludgeoning','Ammunition (30/120)','Slow'],
+ ['Battleaxe','M','m','1d8','slashing','Versatile (1d10)','Topple'],['Flail','M','m','1d8','bludgeoning','','Sap'],
+ ['Glaive','M','m','1d10','slashing','Heavy, Reach, Two-Handed','Graze'],['Greataxe','M','m','1d12','slashing','Heavy, Two-Handed','Cleave'],
+ ['Greatsword','M','m','2d6','slashing','Heavy, Two-Handed','Graze'],['Halberd','M','m','1d10','slashing','Heavy, Reach, Two-Handed','Cleave'],
+ ['Lance','M','m','1d10','piercing','Heavy, Reach','Topple'],['Longsword','M','m','1d8','slashing','Versatile (1d10)','Sap'],
+ ['Maul','M','m','2d6','bludgeoning','Heavy, Two-Handed','Topple'],['Morningstar','M','m','1d8','piercing','','Sap'],
+ ['Pike','M','m','1d10','piercing','Heavy, Reach, Two-Handed','Push'],['Rapier','M','m','1d8','piercing','Finesse','Vex'],
+ ['Scimitar','M','m','1d6','slashing','Finesse, Light','Nick'],['Shortsword','M','m','1d6','piercing','Finesse, Light','Vex'],
+ ['Trident','M','m','1d8','piercing','Thrown (20/60), Versatile (1d10)','Topple'],['Warhammer','M','m','1d8','bludgeoning','Versatile (1d10)','Push'],
+ ['War Pick','M','m','1d8','piercing','Versatile (1d10)','Sap'],['Whip','M','m','1d4','slashing','Finesse, Reach','Slow'],
+ ['Hand Crossbow','M','r','1d6','piercing','Ammunition (30/120), Light, Loading','Vex'],['Heavy Crossbow','M','r','1d10','piercing','Ammunition (100/400), Heavy, Loading, Two-Handed','Push'],
+ ['Longbow','M','r','1d8','piercing','Ammunition (150/600), Heavy, Two-Handed','Slow']
+];
+/* naam, regex op de itemregel, basis-AC, max DEX-bonus (null = onbeperkt), soort */
+const CC_ARMOR=[
+ ['Padded Armor',/padded/i,11,null,'light'],['Leather Armor',/^(?!.*studded).*leather armor/i,11,null,'light'],['Studded Leather Armor',/studded leather/i,12,null,'light'],
+ ['Hide Armor',/hide armor/i,12,2,'medium'],['Chain Shirt',/chain shirt/i,13,2,'medium'],['Scale Mail',/scale mail/i,14,2,'medium'],
+ ['Breastplate',/breastplate/i,14,2,'medium'],['Half Plate Armor',/half plate/i,15,2,'medium'],
+ ['Ring Mail',/ring mail/i,14,0,'heavy'],['Chain Mail',/chain mail/i,16,0,'heavy'],['Splint Armor',/splint/i,17,0,'heavy'],['Plate Armor',/^(?!.*half).*\bplate\b/i,18,0,'heavy']
+];
+const CC_SLOTS={full:[[2],[3],[4,2],[4,3],[4,3,2]],half:[[2],[2],[3],[3],[4,2]],pact:[[1,1],[2,1],[2,2],[2,2],[2,3]]};
+const CC_ORD=['1st','2nd','3rd','4th','5th'];
+const CCF=(n,d)=>[n,d];
+const CC_CLASSES={
+ 'Barbarian':{hd:12,saves:['str','con'],skillN:2,skills:['animal handling','athletics','intimidation','nature','perception','survival'],armor:['light','medium','shield'],wp:'SM',
+  tools:'—',tolk:'Past eenvoudig bij Midden-aarde (Beornings, Rohirrim, Dwergen).',appr:0,
+  eqA:{items:['Greataxe','4 Handaxes',"Explorer's Pack"],gp:15},eqB:75,
+  feats:{1:[CCF('Rage','Bonus Action, max 10 min: Resistance tegen bludgeoning/piercing/slashing, +Rage Damage op Strength-aanvallen, Advantage op STR checks en saves; geen spells.'),CCF('Unarmored Defense','Zonder armor: AC = 10 + DEX + CON (schild mag).'),CCF('Weapon Mastery','Gebruik de mastery-eigenschap van gekozen wapens.')],
+   2:[CCF('Danger Sense','Advantage op DEX saves (niet Incapacitated).'),CCF('Reckless Attack','Advantage op Strength-aanvallen deze beurt; aanvallen tegen jou krijgen Advantage tot je volgende beurt.')],
+   3:[CCF('Primal Knowledge','Extra skill; tijdens Rage kun je STR gebruiken voor Acrobatics, Intimidation, Perception, Stealth en Survival.')],
+   5:[CCF('Extra Attack','Twee aanvallen per Attack-actie.'),CCF('Fast Movement','+10 ft Speed zonder zware armor.')]},
+  subs:[['Path of the Berserker','Frenzy: extra schade bij Reckless Attack (d6 × Rage Damage).'],['Path of the Wild Heart','Rage of the Wilds (Bear/Eagle/Wolf) en Animal Speaker (Speak with Animals, Beast Sense als ritueel). Past bij Beornings; echte gedaanteverandering vraagt DM-goedkeuring.'],['Path of the World Tree','Vitality of the Tree: Temp HP bij Rage en genezing van bondgenoten.'],['Path of the Zealot','Divine Fury: extra radiant/necrotic schade; Warrior of the Gods. (Godsdienstige kleur: DM-check)']]},
+ 'Bard':{hd:8,saves:['dex','cha'],skillN:3,skills:null,armor:['light'],wp:'S',tools:'3 muziekinstrumenten',tolk:'Vraagt een aangepaste interpretatie: zang en verhalen als "magie" (Lúthien, Tom Bombadil, Daeron) — overleg met de DM.',appr:1,
+  sab:'cha',caster:'full',cant:[2,2,2,3,3],prep:[4,5,6,7,9],
+  eqA:{items:['Leather Armor','2 Daggers','Musical Instrument (kies)',"Entertainer's Pack"],gp:19},eqB:90,
+  feats:{1:[CCF('Bardic Inspiration','Bonus Action: bondgenoot krijgt een d6 (CHA-mod keer per Long Rest).'),CCF('Spellcasting','Spellcasting met Charisma.')],
+   2:[CCF('Expertise','Dubbele proficiency in 2 skills.'),CCF('Jack of All Trades','Halve PB bij checks zonder proficiency.')],3:[],5:[CCF('Font of Inspiration','Bardic Inspiration (d8) terug na Short of Long Rest.')]},
+  subs:[['College of Dance','Dance-features (Unarmored Defense, Agile Strikes).'],['College of Glamour','Beguiling Magic, Mantle of Inspiration (elfen-achtig; magie = DM-check).'],['College of Lore','Bonus Proficiencies, Cutting Words.'],['College of Valor','Combat Inspiration; Martial Training (medium armor, shields, martial weapons).']]},
+ 'Cleric':{hd:8,saves:['wis','cha'],skillN:2,skills:['history','insight','medicine','persuasion','religion'],armor:['light','medium','shield'],wp:'S',tools:'—',tolk:'Vraagt een aangepaste interpretatie: geen vaste goden; denk aan gebed, de Valar en de Éa/Eru — overleg met de DM.',appr:1,
+  sab:'wis',caster:'full',cant:[3,3,3,4,4],prep:[4,5,6,7,9],
+  eqA:{items:['Chain Shirt','Shield','Mace','Holy Symbol',"Priest's Pack"],gp:7},eqB:110,
+  choice:{label:'Divine Order',opts:[['Protector','Proficiency met martial weapons en zware armor.'],['Thaumaturge','Extra cantrip; bonus op Arcana/Religion (WIS-mod, min. +1).']]},
+  feats:{1:[CCF('Spellcasting','Spellcasting met Wisdom.'),CCF('Divine Order','Protector of Thaumaturge (zie keuze).')],2:[CCF('Channel Divinity','2 gebruiken: Divine Spark en Turn Undead.')],3:[],5:[CCF('Sear Undead','Turn Undead doet ook Radiant schade.')]},
+  subs:[['Life Domain','Disciple of Life, Preserve Life; Heavy armor.'],['Light Domain','Radiance of the Dawn, Warding Flare.'],['Trickery Domain','Blessing of the Trickster, Invoke Duplicity.'],['War Domain','War Priest; Martial weapons, Heavy armor.']]},
+ 'Druid':{hd:8,saves:['int','wis'],skillN:2,skills:['arcana','animal handling','insight','medicine','nature','perception','religion','survival'],armor:['light','shield'],wp:'S',tools:'Herbalism Kit',tolk:'Vraagt een aangepaste interpretatie: Radagast-achtige natuurkenner; Wild Shape alleen na DM-overleg.',appr:1,
+  sab:'wis',caster:'full',cant:[2,2,2,3,3],prep:[4,5,6,7,9],
+  eqA:{items:['Leather Armor','Shield','Sickle','Druidic Focus (Quarterstaff)',"Explorer's Pack",'Herbalism Kit'],gp:9},eqB:50,
+  choice:{label:'Primal Order',opts:[['Magician','Extra cantrip; bonus op Arcana/Nature (WIS-mod, min. +1).'],['Warden','Proficiency met martial weapons en medium armor.']]},
+  feats:{1:[CCF('Spellcasting','Spellcasting met Wisdom.'),CCF('Druidic','Geheime taal; Speak with Animals altijd voorbereid.'),CCF('Primal Order','Magician of Warden (zie keuze).')],2:[CCF('Wild Shape','2 gebruiken; beastform. DM-goedkeuring voor Midden-aarde.'),CCF('Wild Companion','Gebruik Wild Shape om Find Familiar te casten.')],3:[],5:[CCF('Wild Resurgence','Wild Shape en spell slots omwisselen.')]},
+  subs:[['Circle of the Land','Land\'s Aid, extra spells per terrein.'],['Circle of the Moon','Circle Forms (Wild Shape-krijger). DM-check.'],['Circle of the Sea','Wrath of the Sea, water-magie.'],['Circle of the Stars','Star Map, Starry Form (Valar-/sterrenmotief; DM-check).']]},
+ 'Fighter':{hd:10,saves:['str','con'],skillN:2,skills:['acrobatics','animal handling','athletics','history','insight','intimidation','persuasion','perception','survival'],armor:['light','medium','heavy','shield'],wp:'SM',tools:'—',tolk:'Past zeer eenvoudig: Gondor, Rohan, Dúnedain, Dwergen, Elfen.',appr:0,
+  eqA:{items:['Chain Mail','Greatsword','Flail','8 Javelins',"Dungeoneer's Pack"],gp:4},eqB:155,
+  choice:{label:'Fighting Style',styles:true},
+  feats:{1:[CCF('Fighting Style','Kies een Fighting Style (zie keuze).'),CCF('Second Wind','Bonus Action: genees 1d10 + level; 2 gebruiken.'),CCF('Weapon Mastery','Mastery van 3 wapens.')],2:[CCF('Action Surge','Eén extra actie per Short/Long Rest.'),CCF('Tactical Mind','Voeg 1d10 toe aan een mislukte skill check (gebruikt Second Wind).')],3:[],5:[CCF('Extra Attack','Twee aanvallen per Attack-actie.'),CCF('Tactical Shift','Beweeg half Speed zonder Opportunity Attacks na Second Wind.')]},
+  subs:[['Battle Master','Combat Superiority (manoeuvres, d8 dice).'],['Champion','Improved Critical (crit op 19-20); Remarkable Athlete.'],['Eldritch Knight','Spellcasting (Wizard-lijst) en War Bond. Magie = DM-check.'],['Psi Warrior','Psionic Power (psi-dobbelstenen). Psionica = DM-check.']]},
+ 'Monk':{hd:8,saves:['str','dex'],skillN:2,skills:['acrobatics','athletics','history','insight','religion','stealth'],armor:[],wp:'SMl',tools:"1 Artisan's Tools of instrument",tolk:'Vraagt een aangepaste interpretatie: geen kloosters in Midden-aarde; denk aan tuchtvolle, ascetische krijgers — overleg met de DM.',appr:1,
+  eqA:{items:['Spear','5 Daggers',"Artisan's Tools of Musical Instrument (kies)","Explorer's Pack"],gp:11},eqB:50,
+  feats:{1:[CCF('Martial Arts','Unarmed Strike met DEX en Martial Arts die (d6, d8 vanaf level 5); Bonus Action Unarmed Strike.'),CCF('Unarmored Defense','Zonder armor/schild: AC = 10 + DEX + WIS.')],2:[CCF("Monk's Focus",'Focus Points = Monk level: Flurry of Blows, Patient Defense, Step of the Wind.'),CCF('Unarmored Movement','+10 ft Speed zonder armor/schild.'),CCF('Uncanny Metabolism','Eenmaal per Long Rest: Focus Points herstellen en genezen.')],3:[CCF('Deflect Attacks','Reactie: schade van een aanval verminderen met 1d10 + DEX + level.')],5:[CCF('Extra Attack','Twee aanvallen per Attack-actie.'),CCF('Stunning Strike','Besteed 1 Focus Point: doelwit CON save of Stunned.')]},
+  subs:[['Warrior of Mercy','Hand of Harm/Healing (genezer-krijger).'],['Warrior of Shadow','Shadow Arts (donkerte, sluipen). DM-check.'],['Warrior of the Elements','Elemental Attunement (elementaire kracht). DM-check.'],['Warrior of the Open Hand','Open Hand Technique (duwen/vellen/betwisten).']]},
+ 'Paladin':{hd:10,saves:['wis','cha'],skillN:2,skills:['athletics','insight','intimidation','medicine','persuasion','religion'],armor:['light','medium','heavy','shield'],wp:'SM',tools:'—',tolk:'Vraagt een aangepaste interpretatie: eed en eer i.p.v. goddelijke kracht (Gondoriaanse ridders, Dol Amroth) — overleg met de DM.',appr:1,
+  sab:'cha',caster:'half',prep:[2,3,4,5,6],
+  eqA:{items:['Chain Mail','Shield','Longsword','6 Javelins','Holy Symbol',"Priest's Pack"],gp:9},eqB:150,
+  choice:{label:'Fighting Style (vanaf level 2)',styles:true,minLevel:2},
+  feats:{1:[CCF('Lay On Hands','Genezingspool van 5 × level HP.'),CCF('Spellcasting','Spellcasting met Charisma.'),CCF('Weapon Mastery','Mastery van 2 wapens.')],2:[CCF('Fighting Style','Zie keuze.'),CCF("Paladin's Smite",'Divine Smite: Radiant schade bij een treffer (spell slot).')],3:[CCF('Channel Divinity','Divine Sense.')],5:[CCF('Extra Attack','Twee aanvallen per Attack-actie.'),CCF('Faithful Steed','Find Steed 1x per Long Rest zonder slot.')]},
+  subs:[['Oath of Devotion','Sacred Weapon, Peerless Athlete (klassieke ridder).'],['Oath of Glory','Inspiring Smite; atleet/held.'],['Oath of the Ancients','Nature\'s Wrath; groene eed (Elfen-/natuurmotief).'],['Oath of Vengeance','Vow of Enmity; wraakzuchtige eed.']]},
+ 'Ranger':{hd:10,saves:['str','dex'],skillN:3,skills:['animal handling','athletics','insight','investigation','nature','perception','stealth','survival'],armor:['light','medium','shield'],wp:'SM',tools:'—',tolk:'Past zeer eenvoudig (Dúnedain Rangers van het Noorden, Gondoriaanse Rangers, Elfen).',appr:0,
+  sab:'wis',caster:'half',prep:[2,3,4,5,6],
+  eqA:{items:['Studded Leather Armor','Scimitar','Shortsword','Longbow','20 Arrows','Quiver','Druidic Focus',"Explorer's Pack"],gp:7},eqB:150,
+  choice:{label:'Fighting Style (vanaf level 2)',styles:true,minLevel:2},
+  feats:{1:[CCF('Spellcasting','Spellcasting met Wisdom.'),CCF('Favored Enemy','Hunter\'s Mark altijd voorbereid; vaker gratis.'),CCF('Weapon Mastery','Mastery van 2 wapens.')],2:[CCF('Deft Explorer','Expertise in 1 skill + 2 talen.'),CCF('Fighting Style','Zie keuze.')],3:[],5:[CCF('Extra Attack','Twee aanvallen per Attack-actie.')]},
+  subs:[['Beast Master','Primal Companion (dierengezel).'],['Fey Wanderer','Dreadful Strikes, Otherworldly Glamour. DM-check.'],['Gloom Stalker','Dread Ambusher, Umbral Sight (nachtjager).'],['Hunter','Hunter\'s Lore, Hunter\'s Prey (klassieke jager).']]},
+ 'Rogue':{hd:8,saves:['dex','int'],skillN:4,skills:['acrobatics','athletics','deception','insight','intimidation','investigation','perception','persuasion','sleight of hand','stealth'],armor:['light'],wp:'SMf',tools:"Thieves' Tools",tolk:'Past eenvoudig (Bree, Dale, Esgaroth, spionnen en verkenners).',appr:0,
+  eqA:{items:['Leather Armor','2 Daggers','Shortsword','Shortbow','20 Arrows','Quiver',"Thieves' Tools","Burglar's Pack"],gp:8},eqB:100,
+  feats:{1:[CCF('Expertise','Dubbele proficiency in 2 skills (of Thieves\' Tools).'),CCF('Sneak Attack','Extra schade (1d6 per 2 levels) 1x per beurt met Advantage of een bondgenoot naast het doelwit; Finesse of ranged.'),CCF("Thieves' Cant",'Geheime taal van dieven.'),CCF('Weapon Mastery','Mastery van 2 wapens.')],2:[CCF('Cunning Action','Bonus Action: Dash, Disengage of Hide.')],3:[CCF('Steady Aim','Bonus Action: Advantage op je volgende aanval (niet bewogen).')],5:[CCF('Cunning Strike','Offer Sneak Attack-dice voor extra effecten.'),CCF('Uncanny Dodge','Reactie: schade van een aanval halveren.')]},
+  subs:[['Arcane Trickster','Spellcasting (Wizard-lijst), Mage Hand Legerdemain. Magie = DM-check.'],['Assassin','Assassinate, Assassin\'s Tools.'],['Soulknife','Psychic Blades. Psionica = DM-check.'],['Thief','Fast Hands, Second-Story Work.']]},
+ 'Sorcerer':{hd:6,saves:['con','cha'],skillN:2,skills:['arcana','deception','insight','intimidation','persuasion','religion'],armor:[],wp:'S',tools:'—',tolk:'Vraagt zorgvuldige Tolkien-interpretatie en DM-goedkeuring (aangeboren magie bestaat nauwelijks; denk aan Maiar-bloed of een erfenis).',appr:2,
+  sab:'cha',caster:'full',cant:[4,4,4,5,5],prep:[2,4,6,7,9],
+  eqA:{items:['Spear','2 Daggers','Arcane Focus',"Dungeoneer's Pack"],gp:28},eqB:50,
+  feats:{1:[CCF('Spellcasting','Spellcasting met Charisma (bekende spells).'),CCF('Innate Sorcery','Bonus Action: 1 minuut verhoogde spell-DC en Advantage op sorcerer-spell-aanvallen (2 gebruiken).')],2:[CCF('Font of Magic','Sorcery Points = level; slots omzetten.'),CCF('Metamagic','2 Metamagic-opties.')],3:[],5:[CCF('Sorcerous Restoration','Herstel 4 Sorcery Points bij een Short Rest.')]},
+  subs:[['Aberrant Sorcery','Psionic Spells (psionica). DM-check.'],['Clockwork Sorcery','Restore Balance (orde-magie). DM-check.'],['Draconic Sorcery','Draconic Resilience (+1 HP/level, AC 10+DEX+CHA); drakenvoorouder = DM-goedkeuring.'],['Wild Magic Sorcery','Wild Magic Surge. DM-check.']]},
+ 'Warlock':{hd:8,saves:['wis','cha'],skillN:2,skills:['arcana','deception','history','intimidation','investigation','nature','religion'],armor:['light'],wp:'S',tools:'—',tolk:'Vraagt zorgvuldige Tolkien-interpretatie en DM-goedkeuring (een pact met een duistere macht is riskant in Midden-aarde).',appr:2,
+  sab:'cha',caster:'pact',cant:[2,2,2,3,3],prep:[2,3,4,5,6],
+  eqA:{items:['Leather Armor','Sickle','2 Daggers','Arcane Focus',"Scholar's Pack",'Book (occulte kennis)'],gp:15},eqB:100,
+  feats:{1:[CCF('Eldritch Invocations','1 invocation (3 op level 2, 5 op level 5).'),CCF('Pact Magic','Spell slots herstellen na een Short Rest.')],2:[CCF('Magical Cunning','Eén keer per Long Rest: de helft van je slots herstellen.')],3:[CCF('Pact Boon','Via een invocation (Pact of the Blade/Chain/Tome).')],5:[]},
+  subs:[['Archfey Patron','Steps of the Fey. DM-check.'],['Celestial Patron','Healing Light.'],['Fiend Patron','Dark One\'s Blessing. Zeer riskant in Midden-aarde.'],['Great Old One Patron','Awakened Mind (psionica). DM-check.']]},
+ 'Wizard':{hd:6,saves:['int','wis'],skillN:2,skills:['arcana','history','insight','investigation','medicine','nature','religion'],armor:[],wp:'S',tools:'—',tolk:'Vraagt zorgvuldige Tolkien-interpretatie en DM-goedkeuring (denk aan Istari-leerlingen, Dúnedain-geleerden of Elfen-loremasters; weinig vuurballen).',appr:2,
+  sab:'int',caster:'full',cant:[3,3,3,4,4],prep:[4,5,6,7,9],
+  eqA:{items:['2 Daggers','Arcane Focus (Quarterstaff)','Robe','Spellbook',"Scholar's Pack"],gp:5},eqB:55,
+  feats:{1:[CCF('Spellcasting','Spellcasting met Intelligence; spellbook met 6 spells (+2 per level).'),CCF('Ritual Adept','Rituelen casten uit je spellbook.'),CCF('Arcane Recovery','Eén keer per dag spell slots herstellen na een Short Rest.')],2:[CCF('Scholar','Expertise in 1 van Arcana, History, Investigation, Medicine, Nature of Religion.')],3:[],5:[CCF('Memorize Spell','Wissel een voorbereide spell na een Short Rest.')]},
+  subs:[['Abjurer','Arcane Ward.'],['Diviner','Portent (2 d20 vooraf gooien).'],['Evoker','Potent Cantrip, Sculpt Spells.'],['Illusionist','Improved Illusions, Phantasmal Creatures.']]}
+};
+const CC_APPR=['Standaard-class: past doorgaans eenvoudig.','Aangepaste interpretatie nodig: overleg met de DM.','Vraagt expliciete DM-goedkeuring (magie in Midden-aarde).'];
+const CC_STEPS=['Concept','Species','Class','Background','Ability Scores','Uitrusting','Persoonlijkheid & backstory','Controle & opslaan'];
+const CC_PB={8:0,9:1,10:2,11:3,12:4,13:5,14:7,15:9};
+const CC_ARRAY=[15,14,13,12,10,8];
+
+/* ---------- Character Creator: berekening ---------- */
+let cc=null, ccStep=0, ccBusy='';
+const CC_DRAFT='dnd_cc_draft_v1';
+function ccDefault(){
+  const z=v=>{const o={};ABIL.forEach(([k])=>o[k]=v);return o};
+  return {name:'',player:me?me.name:'',level:3,concept:'',species:'',lineage:'High Elf',elfSkill:'perception',humanSkill:'',versFeat:'',langs:['',''],extraLangs:'',
+   cls:'',sub:'',skills:[],expertise:[],choice:'',style:'',masteries:[],
+   bg:'',bgMode:'21',bgP2:'',bgP1:'',bgTool:'',skilledPicks:[],miNote:'',
+   abMethod:'pb',pb:z(8),arr:z(''),man:z(10),asiMode:'asi',asi1:'',asi2:'',asiFeat:'',
+   eqClass:'A',eqBg:'A',extra:'',worn:'auto',shield:'auto',alignment:'',cantrips:'',spells:'',
+   traits:'',ideal:'',bond:'',flaw:'',appearance:'',family:'',aanleiding:'',secrets:'',backstory:'',notes:'',hooks:'',openDM:''};
+}
+function ccLoad(){try{const t=localStorage.getItem(CC_DRAFT); if(t){const o=JSON.parse(t); return Object.assign(ccDefault(),o.s||{})}}catch(e){} return ccDefault()}
+function ccSave(){try{localStorage.setItem(CC_DRAFT,JSON.stringify({s:cc,t:Date.now()}))}catch(e){}}
+const ccMod=v=>Math.floor((Number(v)||10)/2-5);
+const ccSk=k=>(SKILLS.find(s=>s[0]===k)||[k,k])[1];
+const ccWeaponRe=w=>new RegExp('\\b'+w[0].replace(/ /g,'[ -]')+'(s|es)?\\b','i');
+function ccFeatsOf(s){
+  const bg=CC_BG[s.bg], out=[]; if(bg) out.push(bg.feat);
+  if(s.species==='Human'&&s.versFeat) out.push(s.versFeat);
+  return out;
+}
+function ccWeaponProf(cls,s,w){
+  const c=CC_CLASSES[cls]; if(!c) return false;
+  let wp=c.wp;
+  if(cls==='Cleric'&&s.choice==='Protector') wp='SM';
+  if(cls==='Druid'&&s.choice==='Warden') wp='SM';
+  if(w[1]==='S') return true;
+  if(wp==='SM') return true;
+  if(wp==='SMl') return /Light/.test(w[5]);
+  if(wp==='SMf') return /Finesse|Light/.test(w[5]);
+  return false;
+}
+function ccArmorProf(cls,s){
+  const c=CC_CLASSES[cls]; if(!c) return [];
+  let a=c.armor.slice();
+  if(cls==='Cleric'&&s.choice==='Protector') a=['light','medium','heavy','shield'];
+  if(cls==='Druid'&&s.choice==='Warden') a=['light','medium','shield'];
+  return a;
+}
+function ccMasteryN(cls,L){return ({Barbarian:L>=4?3:2,Fighter:L>=4?4:3,Paladin:2,Ranger:2,Rogue:2})[cls]||0}
+function ccSkillN(s,L){const c=CC_CLASSES[s.cls]; return c?c.skillN+(s.cls==='Barbarian'&&L>=3?1:0):0}
+function ccExpN(cls,L){return cls==='Rogue'?2:(cls==='Bard'&&L>=2)?2:(cls==='Ranger'&&L>=2)?1:(cls==='Wizard'&&L>=2)?1:0}
+function ccChoiceOn(s,L){const c=CC_CLASSES[s.cls]; if(!c||!c.choice) return false; return L>=(c.choice.minLevel||1)}
+function ccInventory(s){
+  const c=CC_CLASSES[s.cls], bg=CC_BG[s.bg], items=[];
+  if(c&&s.eqClass==='A') c.eqA.items.forEach(x=>items.push(x));
+  if(bg&&s.eqBg==='A') bg.eq.forEach(x=>items.push(x));
+  String(s.extra||'').split('\n').map(x=>x.trim()).filter(Boolean).forEach(x=>items.push(x));
+  return items;
+}
+function ccCalc(s){
+  const R={issues:[],warn:[]}, L=Math.max(1,Math.min(5,Number(s.level)||1)), pb=Math.floor((L-1)/4)+2;
+  const cls=CC_CLASSES[s.cls], bg=CC_BG[s.bg], sp=CC_SPECIES[s.species];
+  R.L=L; R.pb=pb;
+  /* ability scores */
+  const base={}, fin={};
+  ABIL.forEach(([k])=>{base[k]=s.abMethod==='pb'?Number(s.pb[k])||8:s.abMethod==='array'?(Number(s.arr[k])||0):(Number(s.man[k])||10); fin[k]=base[k]});
+  if(bg){ if(s.bgMode==='21'){ if(s.bgP2) fin[s.bgP2]+=2; if(s.bgP1) fin[s.bgP1]+=1; } else bg.ab.forEach(k=>fin[k]+=1); }
+  if(L>=4&&s.asiMode==='asi'){ if(s.asi1) fin[s.asi1]+=1; if(s.asi2) fin[s.asi2]+=1; }
+  ABIL.forEach(([k])=>{ if(fin[k]>20){fin[k]=20;} });
+  R.base=base; R.fin=fin;
+  const m=k=>ccMod(fin[k]); R.m=m;
+  /* ability-validatie */
+  if(s.abMethod==='pb'){ let used=0; ABIL.forEach(([k])=>used+=CC_PB[s.pb[k]]||0); R.pbUsed=used; if(used>27) R.issues.push('Point Buy: je gebruikt '+used+' punten (max 27).'); }
+  if(s.abMethod==='array'){ const v=ABIL.map(([k])=>Number(s.arr[k])||0); if(v.some(x=>!x)) R.warn.push('Standard Array: nog niet alle waarden toegewezen.'); else if([...v].sort((a,b)=>b-a).join()!==CC_ARRAY.join()) R.issues.push('Standard Array: gebruik elke waarde (15, 14, 13, 12, 10, 8) precies één keer.'); }
+  if(bg&&s.bgMode==='21'){ if(!s.bgP2||!s.bgP1) R.warn.push('Background: kies waar de +2 en +1 naartoe gaan.'); else if(s.bgP2===s.bgP1) R.issues.push('Background: +2 en +1 moeten naar verschillende ability scores.'); }
+  if(L>=4&&s.asiMode==='asi'&&(!s.asi1||!s.asi2)) R.warn.push('Level 4: kies je Ability Score Improvement (of kies een feat).');
+  /* feats */
+  const feats=ccFeatsOf(s); R.feats=feats;
+  const has=f=>feats.some(x=>x===f);
+  /* skills */
+  const src=[];
+  if(bg) bg.sk.forEach(k=>src.push([k,'Background']));
+  s.skills.forEach(k=>src.push([k,'Class']));
+  if(s.species==='Human'&&s.humanSkill) src.push([s.humanSkill,'Human Skillful']);
+  if(s.species==='Elf'&&s.elfSkill) src.push([s.elfSkill,'Elf Keen Senses']);
+  if(has('Skilled')) s.skilledPicks.forEach(k=>src.push([k,'Skilled']));
+  const skills={}, seen={}; src.forEach(([k,b])=>{ if(seen[k]) R.issues.push(ccSk(k)+' is dubbel gekozen ('+seen[k]+' én '+b+'): kies een andere skill.'); else seen[k]=b; skills[k]=1; });
+  s.expertise.forEach(k=>{ if(skills[k]) skills[k]=2; });
+  R.skills=skills;
+  if(cls){ if(s.skills.length<ccSkillN(s,L)) R.warn.push('Class: nog '+(ccSkillN(s,L)-s.skills.length)+' skill(s) te kiezen.'); if(s.expertise.length<ccExpN(s.cls,L)) R.warn.push('Expertise: nog '+(ccExpN(s.cls,L)-s.expertise.length)+' skill(s) te kiezen.'); }
+  if(s.species==='Human'&&!s.humanSkill) R.warn.push('Human Skillful: kies een extra skill.');
+  if(s.species==='Human'&&!s.versFeat) R.warn.push('Human Versatile: kies een extra Origin Feat.');
+  if(has('Skilled')&&s.skilledPicks.length<3) R.warn.push('Feat Skilled: kies 3 skills (of werk dit in je uitrusting/tools uit).');
+  if(cls&&ccChoiceOn(s,L)&&!(cls&&CC_CLASSES[s.cls].choice.styles?s.style:s.choice)) R.warn.push(CC_CLASSES[s.cls].choice.label+': nog te kiezen.');
+  if(cls&&ccMasteryN(s.cls,L)>s.masteries.length) R.warn.push('Weapon Mastery: nog '+(ccMasteryN(s.cls,L)-s.masteries.length)+' wapen(s) kiezen.');
+  if(cls&&L>=3&&!s.sub) R.warn.push('Subclass: kies een subclass (vanaf level 3).');
+  /* HP */
+  if(cls){
+    const hd=cls.hd, c=m('con'), avg=hd/2+1;
+    let hp=hd+c+(L-1)*(avg+c);
+    if(has('Tough')) hp+=2*L;
+    if(s.species==='Dwarf') hp+=L;
+    if(s.sub==='Draconic Sorcery') hp+=L;
+    R.hp=Math.max(1,Math.round(hp)); R.hitDice=L+'d'+hd;
+  }
+  /* speed */
+  let speed=sp?sp.speed:30;
+  if(s.species==='Elf'&&s.lineage==='Wood Elf') speed=35;
+  R.speed=speed;
+  /* inventory, armor, AC */
+  const inv=ccInventory(s); R.inv=inv;
+  const armors=[]; let shield=false;
+  inv.forEach(line=>{ CC_ARMOR.forEach(a=>{ if(a[1].test(line)&&!armors.some(x=>x[0]===a[0])) armors.push(a); }); if(/\bshield\b/i.test(line)&&!/crossbow|bolt/i.test(line)) shield=true; });
+  R.armors=armors;
+  const dex=m('dex'), wearShield=(s.shield==='auto'||s.shield==='')?shield:s.shield==='yes';
+  R.shieldOwned=shield; R.wearShield=wearShield;
+  const opts=[]; let unarm=10+dex, unLabel='Zonder armor';
+  if(s.cls==='Barbarian'){unarm=10+dex+m('con');unLabel='Unarmored Defense (DEX+CON)'}
+  if(s.cls==='Monk'&&!wearShield){unarm=10+dex+m('wis');unLabel='Unarmored Defense (DEX+WIS)'}
+  if(s.sub==='Draconic Sorcery'){unarm=Math.max(unarm,10+dex+m('cha'));}
+  opts.push({k:'none',label:unLabel,ac:unarm,type:'none'});
+  armors.forEach(a=>opts.push({k:a[0],label:a[0],ac:a[2]+(a[3]===null?dex:Math.min(dex,a[3])),type:a[4]}));
+  R.acOpts=opts;
+  let w=opts.find(o=>o.k===s.worn); if(!w) w=opts.reduce((b,o)=>o.ac>b.ac?o:b,opts[0]);
+  R.worn=w;
+  let ac=w.ac+(wearShield?2:0);
+  if(s.style==='Defense'&&w.type!=='none') ac+=1;
+  R.ac=ac;
+  if(cls&&w.type!=='none'&&!ccArmorProf(s.cls,s).includes(w.type)) R.warn.push('Je draagt '+w.label+' maar de class heeft geen proficiency met '+w.type+' armor.');
+  if(cls&&wearShield&&!ccArmorProf(s.cls,s).includes('shield')) R.warn.push('Je draagt een Shield maar de class heeft geen shield-proficiency.');
+  if(s.cls==='Barbarian'&&L>=5&&w.type!=='heavy') R.speed=speed+10;
+  if(s.cls==='Monk'&&L>=2&&w.type==='none'&&!wearShield) R.speed=speed+10;
+  /* initiative */
+  R.initBonus=has('Alert')?pb:0;
+  /* aanvallen */
+  const atk=[]; const maxMod=Math.max(m('str'),m('dex'));
+  const martialDie=s.cls==='Monk'?(L>=5?'1d8':'1d6'):null;
+  CC_W.forEach(wp=>{
+    const re=ccWeaponRe(wp), line=inv.find(x=>re.test(x)&&!/bolt|arrow|bullet|needle|dart quiver/i.test(x)&&!(wp[0]==='Dart'&&/dartboard/i.test(x)));
+    if(!line) return;
+    const ranged=wp[2]==='r', fin_=/Finesse/.test(wp[5]);
+    let ab=ranged?'dex':(fin_&&m('dex')>m('str')?'dex':'str');
+    const monkW=s.cls==='Monk'&&(wp[1]==='S'&&wp[2]==='m'||/Light/.test(wp[5])&&wp[1]==='M'&&wp[2]==='m');
+    let die=wp[3]; if(monkW){ if(m('dex')>m('str')) ab='dex'; if(martialDie&&parseInt(die)===1&&parseInt(die.split('d')[1])<parseInt(martialDie.split('d')[1])) die=martialDie; }
+    const prof=ccWeaponProf(s.cls,s,wp), mod=m(ab);
+    const ms=s.masteries.includes(wp[0]);
+    atk.push({name:wp[0],ability:ab,prof:prof,extra:(s.style==='Archery'&&ranged?2:0),damage:die+(mod?(mod>0?'+':'−')+Math.abs(mod):'')+' '+wp[4],
+      notes:[wp[5],ms?'Mastery: '+wp[6]:'',monkW?'Martial Arts mogelijk':'',(s.cls==='Barbarian'&&ab==='str'&&!ranged)?'Rage: +2':''].filter(Boolean).join(' · ')});
+  });
+  atk.push({name:s.cls==='Monk'?'Unarmed Strike (Martial Arts)':'Unarmed Strike',ability:(s.cls==='Monk'&&m('dex')>m('str'))?'dex':'str',prof:true,extra:0,
+    damage:s.cls==='Monk'?(martialDie+(Math.max(m('str'),m('dex'))?'+'+Math.max(m('str'),m('dex')):'')+' bludgeoning'):('1'+(m('str')?(m('str')>0?'+':'−')+Math.abs(m('str')):'')+' bludgeoning'),notes:''});
+  R.attacks=atk;
+  /* spellcasting */
+  if(cls&&cls.caster){
+    const ab=cls.sab, mod=m(ab), tbl=CC_SLOTS[cls.caster], sl=tbl[L-1]||[];
+    R.spell={ab,dc:8+pb+mod,atk:pb+mod,slots:sl.map((n,i)=>cls.caster==='pact'?(n+' slot(s) van level '+sl[1]):(n+'× '+CC_ORD[i])),cant:cls.cant?cls.cant[L-1]+((s.cls==='Cleric'&&s.choice==='Thaumaturge'||s.cls==='Druid'&&s.choice==='Magician')?1:0):0,prep:cls.prep[L-1]};
+    if(cls.caster==='pact') R.spell.slots=[sl[0]+'× slots van level '+sl[1]];
+    if(cls.caster==='half'&&s.cls!=='Paladin'&&s.cls!=='Ranger') R.spell.slots=[];
+  }
+  R.ready=!!(s.name.trim()&&s.species&&s.cls&&s.bg);
+  if(!s.name.trim()) R.issues.push('Geef je personage een naam.');
+  if(!s.species) R.issues.push('Kies een species.');
+  if(!s.cls) R.issues.push('Kies een class.');
+  if(!s.bg) R.issues.push('Kies een background.');
+  if(cls&&cls.appr>0) R.dmflags=(R.dmflags||[]).concat([s.cls+': '+CC_APPR[cls.appr]]);
+  if(s.cls&&s.sub){ const sb=(cls.subs.find(x=>x[0]===s.sub)||[])[1]||''; if(/DM-check|DM-goedkeuring|riskant/i.test(sb)) R.dmflags=(R.dmflags||[]).concat([s.sub+': '+sb.match(/(DM-check|DM-goedkeuring|Zeer riskant[^.]*)/i)[0]]); }
+  feats.forEach(f=>{ if(/Magic Initiate/.test(f)) R.dmflags=(R.dmflags||[]).concat([f+': magie in Midden-aarde = DM-goedkeuring']); });
+  if(/Wild Heart/.test(s.sub)) R.dmflags=(R.dmflags||[]).concat(['Wild Heart (Bear/Eagle/Wolf): echte gedaanteverandering naar een dier vraagt DM-goedkeuring.']);
+  return R;
+}
+function ccFeaturesText(s,R){
+  const cls=CC_CLASSES[s.cls], sp=CC_SPECIES[s.species], L=R.L, out=[];
+  if(sp){
+    out.push('— Species: '+sp.label+(s.species==='Elf'?' ('+s.lineage+')':'')+' —');
+    sp.traits.forEach(t=>out.push('• '+t[0]+': '+t[1]));
+    if(s.species==='Elf') out.push('• Elven Lineage ('+s.lineage+'): '+CC_LINEAGE[s.lineage]);
+  }
+  if(cls){
+    out.push('— Class: '+s.cls+' '+L+(s.sub?' ('+s.sub+')':'')+' —');
+    for(let l=1;l<=L;l++) (cls.feats[l]||[]).forEach(f=>out.push('• '+f[0]+(l>1?' [lvl '+l+']':'')+': '+f[1]));
+    if(s.cls==='Barbarian'){ out.push('• Rages per Long Rest: '+(L>=3?3:2)+' · Rage Damage +2'); }
+    if(s.cls==='Rogue') out.push('• Sneak Attack: '+Math.ceil(L/2)+'d6');
+    if(s.cls==='Monk') out.push('• Martial Arts: '+(L>=5?'d8':'d6')+' · Focus Points: '+(L>=2?L:0));
+    if(s.cls==='Paladin') out.push('• Lay On Hands pool: '+(5*L)+' HP');
+    if(s.cls==='Sorcerer'&&L>=2) out.push('• Sorcery Points: '+L);
+    if(cls.choice&&ccChoiceOn(s,L)){ if(cls.choice.styles&&s.style) out.push('• Fighting Style — '+s.style+': '+CC_STYLES[s.style]); else if(!cls.choice.styles&&s.choice){ const o=cls.choice.opts.find(x=>x[0]===s.choice); out.push('• '+cls.choice.label+' — '+s.choice+(o?': '+o[1]:'')); } }
+    if(s.sub){ const sb=cls.subs.find(x=>x[0]===s.sub); out.push('• Subclass — '+s.sub+(sb?': '+sb[1]:'')); }
+    if(s.masteries.length) out.push('• Weapon Mastery: '+s.masteries.join(', '));
+    if(s.expertise.length) out.push('• Expertise: '+s.expertise.map(ccSk).join(', '));
+    if(s.cls==='Barbarian'&&L>=3) out.push('• Primal Knowledge: tijdens Rage STR voor Acrobatics, Intimidation, Perception, Stealth, Survival');
+    if(L>=4) out.push('• Level 4: '+(s.asiMode==='feat'?'Feat — '+(s.asiFeat||'(nog kiezen)'):'Ability Score Improvement'));
+  }
+  if(R.feats&&R.feats.length){ out.push('— Feats —'); R.feats.forEach(f=>out.push('• '+f+': '+(CC_FEATS[f]||''))); if(s.miNote.trim()) out.push('• Magic Initiate-keuzes: '+s.miNote.trim()); }
+  if(R.spell){ const sp2=R.spell; out.push('— Spellcasting —'); out.push('• Ability: '+sp2.ab.toUpperCase()+' · Spell Save DC '+sp2.dc+' · Spell Attack '+sgn(sp2.atk)); if(sp2.slots.length) out.push('• Slots: '+sp2.slots.join(', ')); out.push('• Cantrips: '+sp2.cant+' · Voorbereide spells: '+sp2.prep); if(s.cantrips.trim()) out.push('• Cantrips: '+s.cantrips.trim()); if(s.spells.trim()) out.push('• Spells: '+s.spells.trim()); }
+  return out.join('\n');
+}
+function ccRecord(s,R){
+  const cls=CC_CLASSES[s.cls], bg=CC_BG[s.bg], c={};
+  const gp=(cls?(s.eqClass==='A'?cls.eqA.gp:cls.eqB):0)+(bg?(s.eqBg==='A'?bg.gp:50):0);
+  const langs=['Common (Westron)'].concat((s.langs||[]).filter(Boolean)).concat(String(s.extraLangs||'').split(',').map(x=>x.trim()).filter(Boolean));
+  const armorP=ccArmorProf(s.cls,s), wpTxt=cls?({SM:'Simple + Martial weapons',S:'Simple weapons',SMl:'Simple weapons + Martial weapons met Light',SMf:'Simple weapons + Martial weapons met Finesse of Light'})[(s.cls==='Cleric'&&s.choice==='Protector')||(s.cls==='Druid'&&s.choice==='Warden')?'SM':cls.wp]:'';
+  const tools=[cls&&cls.tools!=='—'?cls.tools:'',bg?(s.bgTool.trim()||bg.tool):''].filter(Boolean).join('; ');
+  const inv=R.inv.slice();
+  const eq=inv.concat(R.worn&&R.worn.type!=='none'?['(draagt: '+R.worn.label+(R.wearShield?' + Shield':'')+')']:R.wearShield?['(draagt: Shield)']:[]);
+  Object.assign(c,{name:s.name.trim(),player:s.player,level:R.L,ac:R.ac,hpMax:R.hp||10,speed:R.speed,initiativeBonus:R.initBonus,hitDice:R.hitDice||'',
+    class:s.cls,subclass:s.sub,species:s.species==='Halfling'?'Halfling (Hobbit)':(s.species+(s.species==='Elf'?' ('+s.lineage+')':'')),background:s.bg,alignment:s.alignment,
+    abilities:R.fin,saves:cls?cls.saves.slice():[],skills:R.skills,
+    rageSkills:(s.cls==='Barbarian'&&R.L>=3)?['acrobatics','intimidation','perception','stealth','survival']:[],
+    attacks:R.attacks,features:ccFeaturesText(s,R),equipment:eq.join('\n'),currency:{gp:gp,sp:0,cp:0},
+    languages:'Languages: '+langs.join(', '),
+    proficiencies:'Armor: '+(armorP.length?armorP.join(', '):'geen')+'\nWeapons: '+wpTxt+(tools?'\nTools: '+tools:''),
+    appearance:s.appearance,
+    personality:[s.traits&&'Eigenschappen: '+s.traits,s.ideal&&'Ideaal: '+s.ideal,s.bond&&'Band: '+s.bond,s.flaw&&'Zwakte: '+s.flaw].filter(Boolean).join('\n'),
+    backstory:[s.backstory,s.family&&'Familie & relaties:\n'+s.family,s.aanleiding&&'Aanleiding / startsituatie:\n'+s.aanleiding].filter(Boolean).join('\n\n'),
+    secrets:s.secrets,dmHooks:[s.hooks&&s.hooks,s.openDM&&'Nog open / DM-goedkeuring:\n'+s.openDM,(R.dmflags||[]).length&&'Automatisch gesignaleerd:\n• '+R.dmflags.join('\n• ')].filter(Boolean).join('\n\n'),
+    concept:s.concept,createdBy:'creator',t:Date.now()});
+  return c;
+}
+
+/* ---------- Character Creator: scherm ---------- */
+const ccIn=(f,l,v,t,ph)=>'<label><small>'+l+'</small><input type="'+(t||'text')+'" data-f="'+f+'" value="'+esc(v==null?'':v)+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+'></label>';
+const ccTa=(f,l,v,h,ph)=>'<label><small>'+l+'</small><textarea data-f="'+f+'" style="min-height:'+(h||80)+'px"'+(ph?' placeholder="'+esc(ph)+'"':'')+'>'+esc(v||'')+'</textarea></label>';
+const ccSel=(f,l,v,opts,ph)=>'<label><small>'+l+'</small><select data-f="'+f+'" data-r="1"><option value="">'+esc(ph||'— kies —')+'</option>'+opts.map(o=>'<option value="'+esc(o[0])+'"'+(o[0]===v?' selected':'')+'>'+esc(o[1])+'</option>').join('')+'</select></label>';
+const ccPick=(grp,list,sel,max,lab)=>'<div class="ccpicks">'+list.map(k=>'<label class="ccp'+(sel.includes(k)?' on':'')+'"><input type="checkbox" data-pick="'+grp+'" data-max="'+max+'" value="'+esc(k)+'"'+(sel.includes(k)?' checked':'')+'> '+esc(lab?lab(k):k)+'</label>').join('')+'</div>';
+const ccGet=(p)=>p.split('.').reduce((o,k)=>o&&o[k],cc);
+function ccSet(p,v){const a=p.split('.'),l=a.pop(); const o=a.reduce((x,k)=>x[k],cc); o[l]=v;}
+const abOpts=()=>ABIL.map(([k,n,s])=>[k,n+' ('+s+')']);
+
+function ccStepHtml(R){
+  const s=cc, cls=CC_CLASSES[s.cls], bg=CC_BG[s.bg], sp=CC_SPECIES[s.species], L=R.L;
+  const tip=t=>'<p class="cctip">'+t+'</p>';
+  if(ccStep===0){
+    return '<h3>Wie wil je spelen?</h3>'+tip('Begin bij het verhaal, niet bij de cijfers. Dit is een nieuw personage in Midden-aarde (Third Age 3018): Tolkien met speelruimte, D&amp;D 2024 als regelsysteem. Geen vuurwapens, geen willekeurige magische voorwerpen.')+
+    ccIn('name','Naam van het personage',s.name,'text','bv. Wulfgrim')+
+    '<label><small>Speler</small><select data-f="player" data-r="1">'+['Gerben','Maurits'].map(p=>'<option'+(s.player===p?' selected':'')+'>'+p+'</option>').join('')+'</select></label>'+
+    ccSel('level','Startlevel',String(s.level),[1,2,3,4,5].map(n=>[String(n),'Level '+n+(n===3?' (standaard voor deze campagne)':'')]),'')+
+    ccTa('concept','Concept in je eigen woorden',s.concept,110,'Bv. een charismatische zwaardvechter met een duister verleden; een jongere zoon in de schaduw van zijn broer; een Elf met een boog die een oude belofte draagt…')+
+    '<div class="row"><button class="b alt" data-ai="concept"'+(ccBusy?' disabled':'')+'>'+(ccBusy==='concept'?'Gemini denkt…':'✨ Geef conceptideeën (Gemini)')+'</button></div>'+
+    '<div id="ccout" class="cctip" style="white-space:pre-wrap"></div>'+
+    '<h3 style="margin-top:12px">Inspiratie</h3><div class="ccinsp">'+
+    ['A · Dúnedain-wachter — Human · Ranger/Fighter: zwervende beschermer van Eriador','B · Elf met een lang verleden — Fighter/Ranger/Bard','C · Dwarf op een persoonlijke missie — Fighter/Barbarian/Paladin','D · Krijger uit Rohan of Gondor — Fighter/Paladin/Barbarian','E · Zoeker naar verboden kennis — Wizard/Warlock/Sorcerer (vraagt DM-goedkeuring)','F · Buitenstaander met een geheim — Human/Hobbit · Rogue/Bard/Monk'].map(x=>'<div>'+esc(x)+'</div>').join('')+'</div>';
+  }
+  if(ccStep===1){
+    let h='<h3>Species</h3>'+tip('Standaard toegestaan: Human, Elf, Dwarf en Hobbit (Halfling-mechanieken). Andere species alleen als voorstel via de DM.')+
+      '<div class="ccgrid">'+Object.entries(CC_SPECIES).map(([k,v])=>'<button class="ccopt'+(s.species===k?' on':'')+'" data-set="species" data-v="'+k+'"><b>'+esc(v.label)+'</b><small>'+esc(v.tolk)+'</small></button>').join('')+'</div>';
+    if(sp){
+      h+='<div class="card"><b>'+esc(sp.label)+'</b> · Speed '+sp.speed+' ft · '+sp.size+'<br>'+sp.traits.map(t=>'<small><b>'+esc(t[0])+':</b> '+esc(t[1])+'</small>').join('<br>')+'</div>';
+      if(s.species==='Elf') h+=ccSel('lineage','Elven Lineage',s.lineage,Object.keys(CC_LINEAGE).map(k=>[k,k]),'')+tip(esc(CC_LINEAGE[s.lineage]))+ccSel('elfSkill','Keen Senses: kies een proficiency',s.elfSkill,[['insight','Insight'],['perception','Perception'],['survival','Survival']],'');
+      if(s.species==='Human') h+=ccSel('humanSkill','Skillful: extra skill',s.humanSkill,SKILLS.map(x=>[x[0],x[1]]))+ccSel('versFeat','Versatile: extra Origin Feat',s.versFeat,Object.keys(CC_FEATS).map(k=>[k,k]))+(s.versFeat?tip(esc(CC_FEATS[s.versFeat])):'');
+    }
+    h+='<h3 style="margin-top:12px">Talen</h3>'+tip('Je spreekt Common (Westron) plus twee Standard Languages naar keuze. Midden-aarde-vertaling: Dwarvish = Khuzdul/Zwergentaal, Elvish = Sindarin/Quenya, Orc = Zwarte Spraak (beperkt), Halfling = Hobbitish.')+
+      '<div class="row">'+[0,1].map(i=>'<div style="flex:1;min-width:150px">'+ccSel('langs.'+i,'Taal '+(i+1),s.langs[i],CC_LANGS.map(x=>[x,x]))+'</div>').join('')+'</div>';
+    return h;
+  }
+  if(ccStep===2){
+    let h='<h3>Class</h3>'+tip('Alle twaalf PHB-classes mogen worden voorgesteld. Fighter, Rogue, Ranger en Barbarian passen het eenvoudigst; Bard, Cleric, Druid, Monk en Paladin vragen een aangepaste interpretatie; Sorcerer, Warlock en Wizard vragen DM-goedkeuring.')+
+      '<div class="ccgrid">'+Object.entries(CC_CLASSES).map(([k,v])=>'<button class="ccopt'+(s.cls===k?' on':'')+'" data-set="cls" data-v="'+k+'"><b>'+k+'</b><small>d'+v.hd+' · '+['✓','◐','⚠'][v.appr]+' '+['past','aanpassing','goedkeuring'][v.appr]+'</small></button>').join('')+'</div>';
+    if(cls){
+      h+='<div class="card"><b>'+s.cls+'</b> · Hit Die d'+cls.hd+' · Saves: '+cls.saves.map(x=>x.toUpperCase()).join(', ')+'<br><small>'+esc(cls.tolk)+'</small></div>';
+      const list=cls.skills||SKILLS.map(x=>x[0]), n=ccSkillN(s,L);
+      h+='<h3>Skill-proficiencies ('+s.skills.length+'/'+n+')</h3>'+(s.cls==='Barbarian'&&L>=3?tip('Inclusief 1 extra skill van Primal Knowledge.'):'')+ccPick('skills',list,s.skills,n,ccSk);
+      const en=ccExpN(s.cls,L);
+      if(en){ let cand=Object.keys(R.skills); if(s.cls==='Wizard') cand=cand.filter(k=>['arcana','history','investigation','medicine','nature','religion'].includes(k)); h+='<h3>Expertise ('+s.expertise.length+'/'+en+')</h3>'+tip(s.cls==='Rogue'?'Kies 2 skills waarin je proficient bent.':'Kies een skill waarin je proficient bent.')+(cand.length?ccPick('expertise',cand,s.expertise,en,ccSk):'<small>Kies eerst je skills.</small>'); }
+      if(cls.choice&&ccChoiceOn(s,L)){
+        if(cls.choice.styles) h+=ccSel('style',cls.choice.label,s.style,Object.keys(CC_STYLES).map(k=>[k,k]))+(s.style?tip(esc(CC_STYLES[s.style])):'');
+        else h+=ccSel('choice',cls.choice.label,s.choice,cls.choice.opts.map(o=>[o[0],o[0]+' — '+o[1]]));
+      }
+      const mn=ccMasteryN(s.cls,L);
+      if(mn){ const ws=CC_W.filter(w=>ccWeaponProf(s.cls,s,w)&&(s.cls!=='Barbarian'||w[2]==='m')); h+='<h3>Weapon Mastery ('+s.masteries.length+'/'+mn+')</h3>'+ccPick('masteries',ws.map(w=>w[0]),s.masteries,mn,k=>k+' ('+CC_W.find(w=>w[0]===k)[6]+')'); }
+      if(L>=3) h+=ccSel('sub','Subclass (level 3)',s.sub,cls.subs.map(x=>[x[0],x[0]]))+(s.sub?tip(esc((cls.subs.find(x=>x[0]===s.sub)||[])[1]||'')):'');
+      if(L>=4) h+='<h3>Level 4</h3>'+ccSel('asiMode','Keuze',s.asiMode,[['asi','Ability Score Improvement (+2 totaal)'],['feat','Feat']],'')+(s.asiMode==='feat'?ccIn('asiFeat','Feat (naam; bespreek met de DM)',s.asiFeat):'<div class="row"><div style="flex:1;min-width:130px">'+ccSel('asi1','+1 op',s.asi1,abOpts())+'</div><div style="flex:1;min-width:130px">'+ccSel('asi2','+1 op',s.asi2,abOpts())+'</div></div>'+tip('Kies je twee keer dezelfde ability voor +2.'));
+      h+='<details class="card"><summary>Features tot level '+L+'</summary>'+[...Array(L)].map((_,i)=>(cls.feats[i+1]||[]).map(f=>'<small><b>'+esc(f[0])+'</b> (lvl '+(i+1)+'): '+esc(f[1])+'</small>').join('<br>')).filter(Boolean).join('<br>')+'</details>';
+      if(cls.caster){ h+='<div class="card"><b>Spellcasting</b> ('+cls.sab.toUpperCase()+')<br><small>Cantrips: '+R.spell.cant+' · voorbereide/bekende spells: '+R.spell.prep+(R.spell.slots.length?' · Slots: '+R.spell.slots.join(', '):'')+'</small></div>'+ccTa('cantrips','Gekozen cantrips (vrije tekst)',s.cantrips,50)+ccTa('spells','Gekozen spells (vrije tekst)',s.spells,70)+tip('Beschrijf spells met een passende Tolkien-uitleg en bespreek twijfelgevallen met de DM.'); }
+    }
+    return h;
+  }
+  if(ccStep===3){
+    let h='<h3>Background</h3>'+tip('D&amp;D 2024: de background geeft ability-bonussen, 2 skills, een Origin Feat, een tool en startuitrusting. Kies wat geloofwaardig is in Midden-aarde 3018.')+
+      '<div class="ccgrid">'+Object.entries(CC_BG).map(([k,v])=>'<button class="ccopt'+(s.bg===k?' on':'')+'" data-set="bg" data-v="'+k+'"><b>'+k+'</b><small>'+v.sk.map(ccSk).join(', ')+' · '+esc(v.feat)+'</small></button>').join('')+'</div>';
+    if(bg){
+      h+='<div class="card"><b>'+s.bg+'</b><br><small>Ability-scores: '+bg.ab.map(x=>x.toUpperCase()).join(', ')+' · Skills: '+bg.sk.map(ccSk).join(', ')+' · Origin Feat: '+esc(bg.feat)+' · Tool: '+esc(bg.tool)+'</small><br><small>'+esc(CC_FEATS[bg.feat]||'')+'</small></div>'+
+        ccSel('bgMode','Ability-bonus verdelen',s.bgMode,[['21','+2 en +1'],['111','+1 / +1 / +1']],'')+
+        (s.bgMode==='21'?'<div class="row"><div style="flex:1;min-width:130px">'+ccSel('bgP2','+2 op',s.bgP2,bg.ab.map(k=>[k,k.toUpperCase()]))+'</div><div style="flex:1;min-width:130px">'+ccSel('bgP1','+1 op',s.bgP1,bg.ab.map(k=>[k,k.toUpperCase()]))+'</div></div>':'')+
+        ccIn('bgTool','Tool proficiency (pas aan als er een keuze is)',s.bgTool||bg.tool);
+      if(R.feats.includes('Skilled')) h+='<h3>Skilled: kies 3 skills ('+s.skilledPicks.length+'/3)</h3>'+ccPick('skilledPicks',SKILLS.map(x=>x[0]),s.skilledPicks,3,ccSk);
+      if(R.feats.some(f=>/Magic Initiate/.test(f))) h+=ccTa('miNote','Magic Initiate: gekozen cantrips/spell en ability (INT, WIS of CHA)',s.miNote,60)+tip('Magie vraagt DM-goedkeuring; denk aan een Tolkien-passende verklaring.');
+    }
+    return h;
+  }
+  if(ccStep===4){
+    const sel=ccSel('abMethod','Methode',s.abMethod,[['pb','Point Buy (27 punten)'],['array','Standard Array (15, 14, 13, 12, 10, 8)'],['man','Gerold / zelf invullen']],'');
+    let rows='';
+    ABIL.forEach(([k,n,sh])=>{
+      let ctl='';
+      if(s.abMethod==='pb') ctl='<button class="b alt sm" data-pbadj="'+k+':-1">−</button><b style="min-width:26px;text-align:center">'+s.pb[k]+'</b><button class="b alt sm" data-pbadj="'+k+':1">+</button>';
+      else if(s.abMethod==='array') ctl='<select data-f="arr.'+k+'" data-r="1" style="width:80px"><option value="">—</option>'+CC_ARRAY.map(v=>'<option'+(String(s.arr[k])===String(v)?' selected':'')+'>'+v+'</option>').join('')+'</select>';
+      else ctl='<input type="number" data-f="man.'+k+'" min="3" max="20" value="'+esc(s.man[k])+'" style="width:80px">';
+      const d=R.fin[k]-R.base[k];
+      rows+='<div class="ccab"><span><b>'+sh+'</b> <small>'+n+'</small></span><span class="row" style="flex-wrap:nowrap">'+ctl+'</span><span>'+(d?'<small style="color:var(--ok)">+'+d+'</small> ':'')+'<b style="color:var(--gold)">'+R.fin[k]+'</b> <small>('+sgn(R.m(k))+')</small></span></div>';
+    });
+    return '<h3>Ability Scores</h3>'+tip('Linkskolom: je basisscore. Rechts: eindscore inclusief background-bonus (en level 4).')+sel+
+      (s.abMethod==='pb'?'<p><b>Punten over: '+(27-(R.pbUsed||0))+'</b> <small>(score 8–15; kosten 8=0, 9=1, 10=2, 11=3, 12=4, 13=5, 14=7, 15=9)</small></p>':'')+
+      (s.abMethod==='man'?tip('Gooi met fysieke dobbelstenen als de DM dat toestaat (4d6, laagste weg) en vul de waarden hier in.'):'')+rows;
+  }
+  if(ccStep===5){
+    const inv=R.inv;
+    let h='<h3>Uitrusting</h3>'+tip('Class en background geven allebei een keuze: pakket A (uitrusting + goud) of pakket B (alleen goud). Geen vuurwapens of magische voorwerpen.');
+    if(cls) h+='<div class="card"><b>Class: '+s.cls+'</b><br><label><input type="radio" name="eqc" data-f="eqClass" data-v="A" '+(s.eqClass==='A'?'checked':'')+'> <b>A</b>: '+esc(cls.eqA.items.join(', '))+' + '+cls.eqA.gp+' GP</label><br><label><input type="radio" name="eqc" data-f="eqClass" data-v="B" '+(s.eqClass==='B'?'checked':'')+'> <b>B</b>: '+cls.eqB+' GP</label></div>';
+    else h+='<p class="cctip">Kies eerst een class.</p>';
+    if(bg) h+='<div class="card"><b>Background: '+s.bg+'</b><br><label><input type="radio" name="eqb" data-f="eqBg" data-v="A" '+(s.eqBg==='A'?'checked':'')+'> <b>A</b>: '+esc(bg.eq.join(', '))+' + '+bg.gp+' GP</label><br><label><input type="radio" name="eqb" data-f="eqBg" data-v="B" '+(s.eqBg==='B'?'checked':'')+'> <b>B</b>: 50 GP</label></div>';
+    h+=ccTa('extra','Extra items (één per regel, bv. "Longsword", "Shield", of een erfstuk)',s.extra,90,'Aldrics ring (erfstuk, niet-magisch)');
+    if(R.acOpts.length>1||R.shieldOwned){
+      h+='<h3>Armor</h3><div class="row"><div style="flex:2;min-width:160px">'+ccSel('worn','Draagt',(R.worn&&R.worn.k)||'',R.acOpts.map(o=>[o.k,o.label+' (AC '+o.ac+')']),'automatisch')+'</div>'+(R.shieldOwned||s.shield==='yes'?'<div style="flex:1;min-width:120px">'+ccSel('shield','Shield',s.shield,[['yes','Gedragen'],['no','Niet gedragen']],'automatisch')+'</div>':'')+'</div>';
+    }
+    h+='<div class="card"><b>Resultaat</b><br><small>AC <b>'+R.ac+'</b> ('+esc(R.worn.label)+(R.wearShield?' + Shield':'')+') · Speed '+R.speed+' ft · Startgoud '+((cls?(s.eqClass==='A'?cls.eqA.gp:cls.eqB):0)+(bg?(s.eqBg==='A'?bg.gp:50):0))+' GP</small><br><small>Items: '+esc(inv.join(', ')||'—')+'</small></div>'+
+      '<div class="card"><b>Aanvallen (automatisch)</b>'+R.attacks.map(a=>'<br><small><b>'+esc(a.name)+'</b> '+sgn(R.m(a.ability)+(a.prof?R.pb:0)+(a.extra||0))+' · '+esc(a.damage)+(a.prof?'':' <span class="err">(geen proficiency)</span>')+(a.notes?' · '+esc(a.notes):'')+'</small>').join('')+'</div>';
+    return h;
+  }
+  if(ccStep===6){
+    return '<h3>Persoonlijkheid</h3>'+tip('Maak je personage driedimensionaal: wat maakt hem/haar bijzonder, waar is hij/zij bang voor, wat wil hij/zij bereiken?')+
+      ccTa('traits','Karaktereigenschappen',s.traits,60,'Levenslustig, luidruchtig, moedig, loyaal…')+ccTa('ideal','Ideaal',s.ideal,50)+ccTa('bond','Band',s.bond,50)+ccTa('flaw','Zwakte / angst',s.flaw,50)+
+      ccIn('alignment','Alignment',s.alignment,'text','bv. Neutral Good')+ccTa('appearance','Uiterlijk',s.appearance,70,'Lengte, bouw, haar, gezicht, littekens, kleding, bijzondere voorwerpen…')+
+      '<h3 style="margin-top:12px">Backstory</h3>'+tip('Je backstory mag geen vrijblijvende achtergrondtekst zijn: familie, vrienden en vijanden, plekken, open conflicten en doelen kunnen later in de campagne terugkomen. Wat je hier vastlegt, wijzigt de DM niet zonder jouw toestemming.')+
+      ccTa('notes','Ruwe notities (jeugd, afkomst, belangrijke gebeurtenissen…)',s.notes,110,'Typ hier in steekwoorden wat je zeker weet; Gemini kan het uitwerken.')+
+      '<div class="row"><button class="b alt" data-ai="story"'+(ccBusy?' disabled':'')+'>'+(ccBusy==='story'?'Gemini denkt…':'✨ Werk notities uit tot backstory')+'</button></div>'+
+      ccTa('backstory','Backstory (jeugd, afkomst, belangrijke gebeurtenissen)',s.backstory,200)+ccTa('family','Familie, vrienden, rivalen en vijanden',s.family,100)+
+      ccTa('aanleiding','Aanleiding / startsituatie (bv. waarom ben je in Rivendell voor de Council?)',s.aanleiding,90)+ccTa('secrets','Geheimen die alleen jouw personage kent (alleen jij en de DM zien dit)',s.secrets,70)+
+      '<h3 style="margin-top:12px">Haken voor de DM</h3>'+tip('Open verhaallijnen, onopgeloste conflicten en NPC\'s die de DM kan uitwerken. Maak onderscheid tussen wat jij vaststelt en wat de DM mag invullen.')+
+      '<div class="row"><button class="b alt" data-ai="hooks"'+(ccBusy?' disabled':'')+'>'+(ccBusy==='hooks'?'Gemini denkt…':'✨ Stel DM-haken voor uit mijn backstory')+'</button></div>'+
+      ccTa('hooks','DM-haken',s.hooks,120)+ccTa('openDM','Nog open / ter goedkeuring door de DM',s.openDM,60,'Bv. de Beorn-afstamming en een eventuele beertransformatie.');
+  }
+  /* stap 7: controle */
+  const rec=ccRecord(s,R);
+  let h='<h3>Controle</h3>';
+  if(R.issues.length) h+='<div class="card" style="border:1px solid var(--red)"><b class="err">Opgelost moet worden</b><br>'+R.issues.map(x=>'<small>• '+esc(x)+'</small>').join('<br>')+'</div>';
+  if(R.warn.length) h+='<div class="card" style="border:1px solid #6a5a44"><b>Nog te doen</b><br>'+R.warn.map(x=>'<small>• '+esc(x)+'</small>').join('<br>')+'</div>';
+  if((R.dmflags||[]).length) h+='<div class="card"><b>Voor DM-goedkeuring</b><br>'+R.dmflags.map(x=>'<small>• '+esc(x)+'</small>').join('<br>')+'</div>';
+  h+=sheetHtml(Object.assign({k:'_preview'},rec)).replace(/<button class="b alt sm" data-edit="1">[^<]*<\/button>/,'').replace(/<div id="rollpanel"[^>]*><\/div>/,'');
+  h+='<div class="row" style="margin:8px 0"><button class="b" data-ccsave="1"'+(R.ready?'':' disabled')+'>✔ Personage opslaan</button><button class="b alt" data-cccopy="1">Kopieer overdracht voor de DM</button></div>'+
+     '<p class="cctip">Opslaan zet het personage in het Karakterblad (zichtbaar voor jullie allebei). Daar kun je alles nog handmatig bijwerken. Wanneer dit je nieuwe personage is, wordt je vorige personage gemarkeerd als gesneuveld.</p>';
+  return h;
+}
+function ccRender(){
+  const box=$('#ccbox'); if(!box) return;
+  const st=box.scrollTop, R=ccCalc(cc);
+  const chips='<div class="ccsteps">'+CC_STEPS.map((t,i)=>'<button class="ccstep'+(i===ccStep?' on':'')+(i<ccStep?' done':'')+'" data-ccgo="'+i+'">'+(i+1)+'<span> '+esc(t)+'</span></button>').join('')+'</div>';
+  const nav='<div class="row ccnav"><button class="b alt" data-ccnav="-1"'+(ccStep===0?' disabled':'')+'>‹ Vorige</button><span style="flex:1;text-align:center;color:var(--mute);font-size:13px">'+(ccStep+1)+' / '+CC_STEPS.length+' · '+esc(CC_STEPS[ccStep])+'</span><button class="b" data-ccnav="1"'+(ccStep===CC_STEPS.length-1?' disabled':'')+'>Volgende ›</button></div>';
+  const summary='<div class="ccsum">'+esc((cc.name||'Naamloos')+' · '+[cc.species&&CC_SPECIES[cc.species].label,cc.cls&&(cc.cls+(cc.sub?' ('+cc.sub+')':'')),cc.bg].filter(Boolean).join(' · '))+(R.hp?' · HP '+R.hp+' · AC '+R.ac:'')+'</div>';
+  box.innerHTML=chips+summary+'<div class="card ccbody">'+ccStepHtml(R)+'</div>'+nav;
+  box.scrollTop=st;
+}
+function menuCreate(){
+  if(!cc) cc=ccLoad();
+  if(!cc.player&&me) cc.player=me.name;
+  main.innerHTML='<div class="scroll" id="ccscroll">'+backBar('Personage maken')+'<div id="ccbox"></div></div>';
+  $('#back').onclick=()=>showMenu('home');
+  const box=$('#ccbox');
+  box.addEventListener('input',e=>{const t=e.target; if(t.dataset.f&&!t.dataset.r&&t.type!=='radio'){ccSet(t.dataset.f,t.value); ccSave(); if(/^man\./.test(t.dataset.f)) ccRefreshSums();}});
+  box.addEventListener('change',e=>{
+    const t=e.target;
+    if(t.dataset.pick){
+      const arr=cc[t.dataset.pick], max=Number(t.dataset.max), i=arr.indexOf(t.value);
+      if(t.checked){ if(arr.length>=max){t.checked=false; return;} if(i<0) arr.push(t.value); } else if(i>=0) arr.splice(i,1);
+      ccSave(); return ccRender();
+    }
+    if(t.dataset.f&&t.type==='radio'){ ccSet(t.dataset.f,t.dataset.v); ccSave(); return ccRender(); }
+    if(t.dataset.f&&t.dataset.r){
+      ccSet(t.dataset.f,t.value);
+      if(t.dataset.f==='level'){ cc.level=Number(t.value)||3; if(cc.level<3) cc.sub=''; }
+      ccSave(); ccRender();
+    }
+  });
+  box.addEventListener('click',async e=>{
+    const q=s=>e.target.closest(s);
+    if(q('[data-set]')){const b=q('[data-set]'); const f=b.dataset.set, v=b.dataset.v; cc[f]=v;
+      if(f==='cls'){cc.sub='';cc.skills=[];cc.expertise=[];cc.choice='';cc.style='';cc.masteries=[];cc.eqClass='A';cc.worn='auto';cc.shield='auto';}
+      if(f==='bg'){cc.bgP2='';cc.bgP1='';cc.bgTool='';cc.skilledPicks=[];cc.eqBg='A';cc.worn='auto';}
+      if(f==='species'){cc.humanSkill='';cc.versFeat='';}
+      ccSave(); return ccRender();}
+    if(q('[data-ccgo]')){ccStep=Number(q('[data-ccgo]').dataset.ccgo); ccRender(); $('#ccscroll').scrollTop=0; return;}
+    if(q('[data-ccnav]')){ccStep=Math.max(0,Math.min(CC_STEPS.length-1,ccStep+Number(q('[data-ccnav]').dataset.ccnav))); ccRender(); $('#ccscroll').scrollTop=0; return;}
+    if(q('[data-pbadj]')){const [k,d]=q('[data-pbadj]').dataset.pbadj.split(':'), nv=cc.pb[k]+Number(d); if(nv>=8&&nv<=15){const R=ccCalc(cc); if(Number(d)<0||(R.pbUsed||0)-(CC_PB[cc.pb[k]]||0)+(CC_PB[nv]||0)<=27){cc.pb[k]=nv; ccSave();}} return ccRender();}
+    if(q('[data-ai]')) return ccAI(q('[data-ai]').dataset.ai);
+    if(q('[data-cccopy]')) return copyText(ccHandover(),q('[data-cccopy]'));
+    if(q('[data-ccsave]')) return ccFinish();
+  });
+  ccRender();
+}
+function ccRefreshSums(){ /* manual ability scores: update only the summary line and finals without losing focus */
+  const R=ccCalc(cc); document.querySelectorAll('.ccab').forEach((row,i)=>{const k=ABIL[i][0]; const b=row.querySelector('b[style*="gold"]'); if(b) b.textContent=R.fin[k]; const sm=row.querySelectorAll('small'); if(sm.length) sm[sm.length-1].textContent='('+sgn(R.m(k))+')';});
+  const sum=document.querySelector('.ccsum'); if(sum&&R.hp) sum.textContent=sum.textContent.replace(/ · HP .*$/,'')+' · HP '+R.hp+' · AC '+R.ac;
+}
+function ccHandover(){
+  const R=ccCalc(cc), rec=ccRecord(cc,R);
+  return '# OVERDRACHT NIEUW PERSONAGE — '+rec.name+'\n'+sheetText(Object.assign({k:'_'},rec))+'\n'+
+    (rec.personality?'\nPERSOONLIJKHEID\n'+rec.personality+'\n':'')+(rec.appearance?'\nUITERLIJK\n'+rec.appearance+'\n':'')+(rec.backstory?'\nBACKSTORY\n'+rec.backstory+'\n':'')+
+    (rec.secrets?'\nGEHEIMEN (alleen DM)\n'+rec.secrets+'\n':'')+(rec.dmHooks?'\nDM-HAKEN\n'+rec.dmHooks+'\n':'');
+}
+async function ccFinish(){
+  const R=ccCalc(cc);
+  if(R.issues.length){alert('Los eerst op:\n• '+R.issues.join('\n• ')); return;}
+  if(R.warn.length&&!confirm('Er zijn nog open punten:\n• '+R.warn.join('\n• ')+'\n\nToch opslaan? (Je kunt het later in het Karakterblad aanpassen.)')) return;
+  const rec=ccRecord(cc,R), k=slug(rec.name);
+  if(chars[k]&&!confirm('Er bestaat al een personage "'+chars[k].name+'". Overschrijven?')) return;
+  const up={}; up['dnd/characters/'+k]=rec;
+  const mine=allChars().filter(c=>c.player===rec.player&&!c.dead&&c.k!==k);
+  if(mine.length&&confirm('Je hebt nog een actief personage ('+mine.map(c=>c.name).join(', ')+').\n\nMarkeren als gesneuveld / gepensioneerd, zodat het nieuwe personage je actieve personage wordt?\n\nOK = markeren, Annuleren = beide actief laten')) mine.forEach(c=>{up['dnd/characters/'+c.k+'/dead']=true});
+  try{ await db.ref().update(up); }catch(e){alert('Opslaan mislukt: '+e.message); return;}
+  try{localStorage.removeItem(CC_DRAFT)}catch(e){}
+  cc=null; ccStep=0; sheetKey=k; sheetEdit=false;
+  alert('Opgeslagen! "'+rec.name+'" staat nu in het Karakterblad.');
+  showMenu('chars');
+}
+/* ---- Gemini-hulp ---- */
+async function ccAI(kind){
+  if(ccBusy) return;
+  if(!cfg.geminiKey){alert('Zet eerst je Gemini-sleutel bij ⚙ Instellingen.');return}
+  const s=cc, R=ccCalc(s);
+  const ctx='Personage: '+(s.name||'(naamloos)')+'. Level '+s.level+' '+[s.species,s.cls,s.sub,s.bg&&('background '+s.bg)].filter(Boolean).join(', ')+'.'+(s.concept?'\nConcept van de speler: '+s.concept:'')+(s.alignment?'\nAlignment: '+s.alignment:'')+(s.traits?'\nEigenschappen: '+s.traits:'')+(s.flaw?'\nZwakte: '+s.flaw:'')+(s.appearance?'\nUiterlijk: '+s.appearance:'');
+  const SYS='Je bent een schrijfhulp voor een D&D 5e (2024)-personage in een campagne in Midden-aarde (Tolkien, Third Age 3018, rond de Council of Elrond). Schrijf in het Nederlands, gebruik Engelse D&D-termen. Wees trouw aan Tolkien-canon, maar met speelruimte; geen vuurwapens, geen willekeurige magie. Verzin geen spelregels. Wat de speler zelf heeft vastgesteld mag je niet veranderen; eigen aanvullingen markeer je met "(voorstel)".';
+  let user='';
+  if(kind==='concept') user=ctx+'\n\nGeef 4 uiteenlopende, korte conceptideeën (elk 2-3 zinnen: wie, afkomst, drijfveer, speelstijl) passend bij de wensen van de speler. Nummer ze 1-4.';
+  if(kind==='story'){ if(!s.notes.trim()&&!s.backstory.trim()){alert('Vul eerst ruwe notities in.');return} user=ctx+'\n\nRUWE NOTITIES VAN DE SPELER:\n'+(s.notes||'')+(s.backstory?'\n\nBESTAANDE BACKSTORY:\n'+s.backstory:'')+'\n\nWerk dit uit tot een backstory van ongeveer 300 woorden met korte kopjes (Jeugd & afkomst, Familie, Keerpunt, Waarom nu op pad). Houd alle feiten van de speler intact; markeer aanvullingen met "(voorstel)". Sluit af met één regel over de startsituatie.'; }
+  if(kind==='hooks'){ if(!(s.backstory.trim()||s.notes.trim())){alert('Schrijf eerst een backstory.');return} user=ctx+'\n\nBACKSTORY:\n'+(s.backstory||s.notes)+(s.family?'\n\nFAMILIE:\n'+s.family:'')+(s.secrets?'\n\nGEHEIMEN (alleen voor de DM):\n'+s.secrets:'')+'\n\nMaak 5 tot 7 korte DM-haken als opsomming (•): open verhaallijnen, NPC\'s, vijanden, mysteries en dilemma\'s die de DM later kan uitwerken. Eén regel per haak.'; }
+  ccBusy=kind; ccRender();
+  try{
+    const r=await callGemini(SYS,user,null,false,cfg.model,1800);
+    const t=r.txt.trim();
+    if(kind==='concept'){ ccRender(); const o=$('#ccout'); if(o) o.textContent=t; }
+    else if(kind==='story'){ if(!s.backstory.trim()||confirm('Je backstory-veld bevat al tekst. Vervangen door het Gemini-voorstel?\n(Annuleren = eronder toevoegen)')) s.backstory=t; else s.backstory=s.backstory.trim()+'\n\n'+t; }
+    else { s.hooks=(s.hooks.trim()?s.hooks.trim()+'\n':'')+t; }
+    ccSave();
+  }catch(e){ alert('Gemini: '+e.message); }
+  const keep=(kind==='concept')?(($('#ccout')||{}).textContent||''):'';
+  ccBusy=''; ccRender(); if(kind==='concept'){const o=$('#ccout'); if(o) o.textContent=keep;}
 }
 
 /* ---------- OOC ---------- */
