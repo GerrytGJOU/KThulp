@@ -25,3 +25,6 @@ certamen/assets/sprites-forms/*_preview_*.png
 
 # Python-cache van de scripts in certamen/tools/
 __pycache__/
+
+# D&D: privé werkbestanden (DM-geheimen, audits, zaai-scripts)
+dnd/_prive/
