@@ -362,5 +362,111 @@ t("audit: jobs", () => {
   const a = W.auditWorld(w).filter(i => i.kind === "job"); yes(a.some(i => /zonder resultaat/.test(i.msg)) && a.some(i => /onbekend type/.test(i.msg)));
 });
 
+/* ---------- factie-agenda's en acties buiten beeld ---------- */
+function aworld() {
+  const w = world();
+  w.factions = { "FAC-SILENT-NET": { id: "FAC-SILENT-NET", name: "Het Stille Net" }, "FAC-LOCAL": { id: "FAC-LOCAL", name: "Lokale gemeenschappen" } };
+  w.npcs["NPC-E02"] = { id: "NPC-E02", name: "Oren", status: "named", canon: "V", location: "REG-ERIADOR", locationSince: { y: 3018, m: 10, d: 24 } };
+  w.clocks["CLK-B"] = { id: "CLK-B", value: 0, max: 6, label: "Vertrouwen" };
+  w.quests["SQ-06"] = { id: "SQ-06", title: "Het spoor van de terugtocht", kind: "side", status: "dormant", region: "REG-ERIADOR", open: true, ifIgnored: "Herinneringen vervagen", canon: "V", history: [] };
+  w.quests["SQ-05"] = { id: "SQ-05", title: "De stille wachttoren", kind: "side", status: "dormant", region: "REG-ERIADOR", open: true, ifIgnored: "Waarschuwingen komen te laat", canon: "V", history: [] };
+  w.agendas = {
+    "AG-NET-1": { id: "AG-NET-1", owner: "FAC-SILENT-NET", title: "Het Stille Net verstoort de berichten", status: "active", canon: "V", stepIdx: 0, nextAt: { y: 3018, m: 11, d: 3 }, history: [], ifUnopposed: "Verzendingen vallen stil", thwartedBy: ["SQ-06"],
+      steps: [
+        { text: "Een koerier wordt onderschept", afterDays: 10, clock: [{ id: "CLK-A", delta: 1 }] },
+        { text: "Een tweede cel zaait wantrouwen", afterDays: 14, clock: [{ id: "CLK-A", delta: 1 }], quest: { id: "SQ-05", to: "available" } },
+        { text: "Het contactpunt valt uit", afterDays: 21, clock: [{ id: "CLK-A", delta: 2 }] }] },
+    "AG-ORE-1": { id: "AG-ORE-1", owner: "NPC-E02", title: "Oren brengt zijn bericht naar Rivendell", status: "active", canon: "V", stepIdx: 0, nextAt: { y: 3018, m: 10, d: 27 }, history: [], steps: [{ text: "Oren bereikt Rivendell met een verkeerd begrepen bericht", afterDays: 3, moves: [{ id: "NPC-E02", to: "REG-RIVENDELL" }] }] }
+  };
+  return w;
+}
+const adv = (w, plan) => { const n = apply2(w, plan); n.agendas = Object.assign({}, w.agendas, plan.agendas || {}); n.events = n.events || {}; (plan.events || []).forEach((e, i) => { n.events["E" + Object.keys(n.events).length + i] = Object.assign({ t: Object.keys(n.events).length }, e); }); if (plan.calendar) n.calendar = plan.calendar; return n; };
+const tickTo = (w, y, m, d, ctx) => run(w, { time: { to: { y: y, m: m, d: d }, reason: "de dagen verstrijken", worldTick: true } }, ctx);
+t("geen tijdsprong, geen tick", () => { const r = run(aworld(), { clocks: [] }); eq(Object.keys(r.plan.agendas).length, 0); eq(r.plan.events.length, 0); });
+t("tick voert alleen stappen uit die aan de beurt zijn", () => {
+  const r = tickTo(aworld(), 3018, 10, 30); yes(r.ok, r.errors.join("|"));
+  const a = r.plan.agendas["AG-ORE-1"]; eq(a.status, "completed"); eq(r.plan.npcs["NPC-E02"].location, "REG-RIVENDELL");
+  yes(!r.plan.agendas["AG-NET-1"], "net-agenda hoort nog niet aan de beurt te zijn");
+  const ev = r.plan.events.filter(e => e.type === "offscreen"); eq(ev.length, 1); eq(ev[0].visibility, "dm_only"); eq(ev[0].ingame.d, 27);
+});
+t("reistijd wordt gerespecteerd: Oren is te vroeg", () => {
+  const w = aworld(); w.npcs["NPC-E02"].locationSince = { y: 3018, m: 10, d: 26 };
+  const r = tickTo(w, 3018, 10, 30); yes(r.ok); yes(!r.plan.npcs["NPC-E02"] || r.plan.npcs["NPC-E02"].location !== "REG-RIVENDELL"); yes(r.warnings.join(" ").indexOf("kan niet in") >= 0, r.warnings.join("|"));
+});
+t("inhalen: meerdere stappen in één sprong, klokken binnen de grenzen", () => {
+  const r = tickTo(aworld(), 3018, 12, 20); yes(r.ok, r.errors.join("|"));
+  const a = r.plan.agendas["AG-NET-1"]; eq(a.status, "completed"); eq(a.stepIdx, 3); eq(r.plan.clocks["CLK-A"].value, 4);
+  eq(r.plan.quests["SQ-05"].status, "available"); eq(r.plan.events.filter(e => e.agenda === "AG-NET-1" && e.type === "offscreen").length, 3);
+  eq(r.plan.events.filter(e => e.ingame && e.agenda === "AG-NET-1" && e.type === "offscreen").map(e => e.ingame.m + "-" + e.ingame.d).join(","), "11-3,11-17,12-8");
+});
+t("klok loopt nooit over de grens", () => {
+  const w = aworld(); w.clocks["CLK-A"].value = 5; const r = tickTo(w, 3018, 12, 20); yes(r.ok); eq(r.plan.clocks["CLK-A"].value, 6); yes(r.warnings.join(" ").indexOf("begrensd") >= 0);
+});
+t("spelers dwarsbomen een agenda door de aanleiding op te lossen", () => {
+  const w = aworld(); w.quests["SQ-06"].status = "completed";
+  const r = tickTo(w, 3018, 12, 20); eq(r.plan.agendas["AG-NET-1"].status, "thwarted"); yes(!r.plan.clocks["CLK-A"]); yes(r.plan.events.some(e => e.type === "agenda_thwarted" && /anders: Verzendingen/.test(e.summary)));
+});
+t("holdIfActive: de agenda wacht zolang de spelers ermee bezig zijn", () => {
+  const w = aworld(); w.agendas["AG-NET-1"].holdIfActive = ["MAIN-A1"]; const r = tickTo(w, 3018, 11, 5); yes(r.ok);
+  eq(r.plan.agendas["AG-NET-1"].stepIdx, 0); yes(W.dateCmp(r.plan.agendas["AG-NET-1"].nextAt, { y: 3018, m: 11, d: 5 }) > 0);
+  yes(!r.plan.clocks["CLK-A"]);
+});
+t("requires: stap wordt overgeslagen als de voorwaarde niet klopt", () => {
+  const w = aworld(); w.agendas["AG-NET-1"].steps[0].requires = { id: "SQ-05", status: "active" };
+  const r = tickTo(w, 3018, 11, 4); yes(r.ok); eq(r.plan.agendas["AG-NET-1"].stepIdx, 1); yes(!r.plan.clocks["CLK-A"]); yes(r.plan.events.some(e => /overgeslagen/.test(e.summary)));
+});
+t("overleden of gerecruteerde NPC's en Tolkien-figuren worden niet verplaatst", () => {
+  const w = aworld(); w.npcs["NPC-E02"].status = "deceased"; let r = tickTo(w, 3018, 10, 30); yes(r.ok); yes(!r.plan.npcs["NPC-E02"]);
+  const w2 = aworld(); w2.npcs["NPC-E02"].tolkien = true; r = tickTo(w2, 3018, 10, 30); yes(!r.plan.npcs["NPC-E02"]);
+});
+t("DM-ops: dwarsbomen, pauzeren, vertragen, hervatten (met reden en statusregels)", () => {
+  const w = aworld();
+  bad(run(w, { agendas: [{ id: "AG-NET-1", op: "pause" }] }), "reason");
+  const p = run(w, { agendas: [{ id: "AG-NET-1", op: "pause", reason: "De spelers hebben de koeriers gewaarschuwd" }] }); yes(p.ok); eq(p.plan.agendas["AG-NET-1"].status, "paused");
+  const w2 = adv(w, p.plan); const tk = tickTo(w2, 3018, 12, 20); yes(!tk.plan.agendas["AG-NET-1"], "gepauzeerd mag niet tikken");
+  bad(run(w2, { agendas: [{ id: "AG-NET-1", op: "pause", reason: "nog een keer pauzeren" }] }), "alleen bij active");
+  const rs = run(w2, { time: { to: { y: 3018, m: 11, d: 10 }, reason: "tijd verstrijkt" }, agendas: [{ id: "AG-NET-1", op: "resume", reason: "De waarschuwing hielp niet" }] }); yes(rs.ok, rs.errors.join("|"));
+  const d = run(w, { agendas: [{ id: "AG-NET-1", op: "delay", days: 5, reason: "Slecht weer op de weg" }] }); eq(d.plan.agendas["AG-NET-1"].nextAt.d, 8);
+  bad(run(w, { agendas: [{ id: "AG-NET-1", op: "delay", days: 99, reason: "te lang uitstellen" }] }), "days");
+  const th = run(w, { agendas: [{ id: "AG-NET-1", op: "thwart", reason: "De cel is opgerold door de spelers" }] }); yes(th.ok); bad(run(adv(w, th.plan), { agendas: [{ id: "AG-NET-1", op: "resume", reason: "toch maar weer" }] }), "paused");
+});
+t("DM-op create: validatie van eigenaar, stappen en effecten", () => {
+  const w = aworld(), mk2 = s => ({ id: "AG-NEW-1", op: "create", reason: "Lokale boeren sparen voor de winter", set: Object.assign({ owner: "FAC-LOCAL", title: "De winterpacht", canon: "N", steps: [{ text: "De boeren verzamelen het graan", afterDays: 7, clock: [{ id: "CLK-B", delta: 1 }] }] }, s) });
+  const ok = run(w, { agendas: [mk2({})] }); yes(ok.ok, ok.errors.join("|")); eq(ok.plan.agendas["AG-NEW-1"].nextAt.d, 31);
+  bad(run(w, { agendas: [mk2({ owner: "FAC-NIETS" })] }), "owner");
+  bad(run(w, { agendas: [mk2({ steps: [{ text: "Iets gebeurt vandaag", afterDays: 0 }] })] }), "afterDays");
+  bad(run(w, { agendas: [mk2({ steps: [{ text: "Een klok die niet bestaat", afterDays: 3, clock: [{ id: "CLK-Z", delta: 1 }] }] })] }), "onbekende klok");
+  bad(run(w, { agendas: [mk2({ steps: [{ text: "Een enorme klokstap", afterDays: 3, clock: [{ id: "CLK-A", delta: 5 }] }] })] }), "klok-delta");
+  bad(run(w, { agendas: [mk2({ title: "Het Stille Net verstoort de berichten" })] }), "bestaat al");
+  const dead = aworld(); dead.npcs["NPC-E02"].status = "deceased"; bad(run(dead, { agendas: [mk2({ owner: "NPC-E02" })] }), "owner");
+});
+t("agenda-undo en context", () => {
+  const w = aworld(); const r = tickTo(w, 3018, 11, 5); let n = 0; const c = W.commitPaths(w, r.plan, { now: 1, newKey: () => "k" + (n++) });
+  yes(c.set["world/agendas/AG-NET-1"]); const prev = c.prev.find(x => x.p === "world/agendas/AG-NET-1"); eq(prev.v.stepIdx, 0);
+  const ctx = W.worldContext(adv(w, r.plan), { hay: "", maxChars: 6000 }); yes(ctx.indexOf("Agenda's") >= 0 && ctx.indexOf("Recent buiten beeld") >= 0 && ctx.indexOf("koerier wordt onderschept") >= 0, ctx);
+});
+t("audit: agenda's", () => {
+  const w = aworld(); eq(W.auditWorld(w).filter(i => i.level === "fout").length, 0);
+  const a = clone(w); a.agendas["AG-NET-1"].steps[0].clock[0].id = "CLK-Q"; yes(W.auditWorld(a).some(i => /onbekende klok/.test(i.msg)));
+  const b = clone(w); b.agendas["AG-NET-1"].owner = "FAC-WEG"; yes(W.auditWorld(b).some(i => /owner/.test(i.msg)));
+  const c = clone(w); c.agendas["AG-NET-1"].nextAt = null; yes(W.auditWorld(c).some(i => /nextAt/.test(i.msg)));
+  const d = clone(w); d.agendas["AG-NET-1"].status = "completed"; yes(W.auditWorld(d).some(i => /afgerond maar/.test(i.msg)));
+});
+t("simulatie: 200 tijdsprongen met agenda's: invarianten blijven waar", () => {
+  let seed = 11; const rnd = () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296;
+  let w = aworld(); let applied = 0, off = 0, done = new Set();
+  for (let i = 0; i < 200; i++) {
+    const b = w.calendar, nd = addD(b, Math.floor(rnd() * 9)); const d = { time: { to: nd, reason: "tijd verstrijkt", worldTick: true } };
+    if (rnd() < 0.15) d.agendas = [{ id: "AG-NET-1", op: ["pause", "resume", "delay", "thwart"][Math.floor(rnd() * 4)], days: 3, reason: "willekeurige test" }];
+    if (rnd() < 0.1) d.quests = [{ id: "SQ-06", op: "update", set: { status: rnd() < 0.5 ? "active" : "completed" }, reason: "De spelers losten het op" }];
+    const r = W.validateDelta(w, d, { round: i });
+    if (r.ok) { applied++; off += r.plan.events.filter(e => e.type === "offscreen").length; const wasDone = Object.keys(w.agendas).filter(k => ["completed", "thwarted"].indexOf(w.agendas[k].status) >= 0); w = adv(w, r.plan); wasDone.forEach(k => yes(["completed", "thwarted"].indexOf(w.agendas[k].status) >= 0, k + " werd heropend")); }
+    Object.values(w.clocks).forEach(c => yes(c.value >= 0 && c.value <= (c.max || 6), "klok buiten bereik"));
+    yes(W.auditWorld(w).filter(x => x.level === "fout" && x.kind === "agenda").length === 0, "agenda-audit beurt " + i);
+  }
+  yes(applied > 80 && off >= 1, "te weinig variatie " + applied + "/" + off);
+});
+function addD(d, n) { const x = new Date(Date.UTC(d.y, d.m - 1, d.d + n)); return { y: x.getUTCFullYear(), m: x.getUTCMonth() + 1, d: x.getUTCDate() }; }
+
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);

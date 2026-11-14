@@ -34,6 +34,14 @@
   const JOB_TAG = { portrait: "PORT", profile: "PROF", statblock: "STAT" };
   const JOB_MAX_ATTEMPTS = 3;
   const jobId = (type, subject, version) => "JOB-" + JOB_TAG[type] + "-" + subject + (version > 1 ? "-V" + version : "");
+  /* Factie-agenda's en NPC-acties buiten beeld (Bible 08/09): een agenda is een korte reeks stappen van een factie of NPC.
+     Bij een tijdsprong voert de engine alle stappen uit die inmiddels aan de beurt zijn (deterministisch, begrensd, nooit alwetend):
+     klokken, NPC-verplaatsingen (met reistijd), quests die beschikbaar worden en een DM-only event. Spelers kunnen een agenda
+     dwarsbomen (thwartedBy / DM-op thwart), pauzeren of vertragen. Geen stap zonder reden, geen teleport, geen overleden actoren. */
+  const AGENDA_STATUS = ["active", "paused", "completed", "thwarted", "cancelled"];
+  const AGENDA_OPS = ["create", "thwart", "pause", "resume", "delay"];
+  const AGENDA_MAX_STEPS = 6, AGENDA_TICK_GUARD = 8;
+  const addDays = (d, n) => { const x = new Date(Date.UTC(d.y, d.m - 1, d.d + n)); return { y: x.getUTCFullYear(), m: x.getUTCMonth() + 1, d: x.getUTCDate() }; };
   const CANON_TAGS = ["B", "C", "I", "N", "V"]; // B bestaand, C Tolkien-canon, I interpretatie, N nieuw (ingevoerd in spel), V voorstel
   const ID_RE = /^[A-Z]{2,5}-[A-Z0-9][A-Z0-9-]*$/;
 
@@ -71,13 +79,51 @@
   const knownPlace = (world, loc) => !!loc && (KNOWN_REGIONS[loc] === true || !!(String(loc).indexOf("REG-") !== 0 && regionOf(world, loc)));
   const reasonOk = r => typeof r === "string" && r.trim().length >= 5;
 
+  /* ---------- agenda-tick: voert alle stappen uit die tot en met 'now' aan de beurt zijn ---------- */
+  function tickAgendas(world, now) {
+    const out = { agendas: {}, clocks: {}, npcs: {}, quests: {}, events: [], warnings: [] };
+    if (!world || !now || !dateOk(now)) return out;
+    const npcs = clone(world.npcs || {}), quests = clone(world.quests || {}), clocks = clone(world.clocks || {});
+    Object.keys(world.agendas || {}).sort().forEach(aid => {
+      let a = clone(world.agendas[aid]), changed = false, guard = 0;
+      const ev = (type, summary, refs, at, extra) => out.events.push(Object.assign({ type: type, summary: summary, refs: refs || {}, canon: a.canon || "V", ingame: at, visibility: "dm_only", agenda: aid }, extra || {}));
+      while (a.status === "active" && a.stepIdx < (a.steps || []).length && dateOk(a.nextAt) && dateCmp(a.nextAt, now) <= 0 && guard++ < AGENDA_TICK_GUARD) {
+        const at = clone(a.nextAt), s = a.steps[a.stepIdx], q = id => quests[id] && quests[id].status;
+        changed = true;
+        if ((a.thwartedBy || []).some(id => q(id) === "completed")) { a.status = "thwarted"; a.history = (a.history || []).concat([{ at: at, what: "dwarsgebomd door afgeronde quest" }]); ev("agenda_thwarted", "Agenda " + aid + " '" + a.title + "' is dwarsgebomd doordat de spelers de aanleiding oplosten" + (a.ifUnopposed ? " (anders: " + a.ifUnopposed + ")" : ""), {}, at); break; }
+        if ((a.holdIfActive || []).some(id => q(id) === "active")) { a.nextAt = addDays(a.nextAt, 7); a.history = (a.history || []).concat([{ at: at, what: "uitgesteld: spelers zijn ermee bezig" }]); continue; }
+        const refs = { npcs: [], quests: [] }, parts = [];
+        if (s.requires && q(s.requires.id) !== s.requires.status) {
+          parts.push("overgeslagen: voorwaarde " + s.requires.id + "=" + s.requires.status + " niet vervuld");
+        } else {
+          (s.clock || []).forEach(c => { const cl = clocks[c.id]; if (!cl) return; const max = cl.max != null ? cl.max : 6, v = Math.max(0, Math.min(max, cl.value + c.delta)); if (v !== cl.value + c.delta) out.warnings.push("Agenda " + aid + ": klok " + c.id + " begrensd op " + v); if (v !== cl.value) { clocks[c.id] = Object.assign({}, cl, { value: v }); out.clocks[c.id] = clocks[c.id]; parts.push(c.id + " " + (c.delta > 0 ? "+" : "") + c.delta + " naar " + v); } });
+          (s.moves || []).forEach(m => {
+            const n = npcs[m.id]; if (!n) return;
+            if (n.status === "deceased" || n.status === "recruited" || n.tolkien === true) { out.warnings.push("Agenda " + aid + ": " + n.name + " (" + (n.tolkien === true ? "Tolkien-figuur, vaste tijdlijn" : n.status) + ") wordt niet verplaatst"); return; }
+            const from = regionOf({ locations: world.locations }, n.location), to = regionOf({ locations: world.locations }, m.to);
+            if (from && to && from !== to && n.locationSince && dateOk(n.locationSince)) { const need = travelDays(from, to), spent = dateCmp(at, n.locationSince); if (need != null && spent < need) { out.warnings.push("Agenda " + aid + ": " + n.name + " kan niet in " + spent + " dag(en) naar " + to + " (minimaal ~" + need + ")"); parts.push(n.name + " blijft nog onderweg"); return; } }
+            npcs[m.id] = Object.assign({}, n, { location: m.to, locationSince: clone(at) }); out.npcs[m.id] = npcs[m.id]; refs.npcs.push(m.id); parts.push(n.name + " naar " + m.to);
+          });
+          if (s.quest) { const qq = quests[s.quest.id]; if (qq && qq.status === "dormant" && !(dateOk(qq.expires) && dateCmp(at, qq.expires) > 0)) { quests[qq.id] = Object.assign({}, qq, { status: "available", history: (qq.history || []).concat([{ status: "available", at: at, reason: "agenda " + aid }]) }); out.quests[qq.id] = quests[qq.id]; refs.quests.push(qq.id); parts.push("quest " + qq.id + " wordt beschikbaar"); } else out.warnings.push("Agenda " + aid + ": quest " + s.quest.id + " kon niet beschikbaar worden"); }
+        }
+        a.history = (a.history || []).concat([{ at: at, step: a.stepIdx + 1, what: s.text }]).slice(-12);
+        ev("offscreen", "[" + aid + "] " + s.text + (parts.length ? " (" + parts.join("; ") + ")" : ""), refs, at, { step: a.stepIdx + 1, of: a.steps.length });
+        a.stepIdx++;
+        if (a.stepIdx >= a.steps.length) { a.status = "completed"; ev("agenda_completed", "Agenda " + aid + " '" + a.title + "' is afgerond", {}, at); }
+        else a.nextAt = addDays(at, a.steps[a.stepIdx].afterDays);
+      }
+      if (changed) out.agendas[aid] = a;
+    });
+    return out;
+  }
+
   /* ---------- controle van een worldDelta ---------- */
   function validateDelta(world, delta, ctx) {
     ctx = ctx || {};
     const errors = [], warnings = [];
-    const plan = { calendar: null, npcs: {}, quests: {}, clocks: {}, companions: {}, jobs: {}, events: [], divergences: [] };
+    const plan = { calendar: null, npcs: {}, quests: {}, clocks: {}, companions: {}, jobs: {}, agendas: {}, events: [], divergences: [] };
     const W = clone(world || {});
-    W.companions = W.companions || {}; W.jobs = W.jobs || {};
+    W.companions = W.companions || {}; W.jobs = W.jobs || {}; W.agendas = W.agendas || {};
     W.npcs = W.npcs || {}; W.quests = W.quests || {}; W.clocks = W.clocks || {}; W.locations = W.locations || {}; W.factions = W.factions || {};
     const touched = { npcs: {}, quests: {}, clocks: {} };
     const err = m => errors.push(m), warn = m => warnings.push(m);
@@ -375,6 +421,74 @@
       });
     }
 
+    /* agenda's: DM-ops */
+    const stepErr = (aid, s, i) => {
+      if (!isObj(s) || typeof s.text !== "string" || s.text.trim().length < 5) return "Agenda " + aid + " stap " + (i + 1) + ": text (minstens 5 tekens) ontbreekt";
+      if (!(Number.isInteger(s.afterDays) && s.afterDays >= 1 && s.afterDays <= 60)) return "Agenda " + aid + " stap " + (i + 1) + ": afterDays moet 1-60 zijn";
+      for (const c of (Array.isArray(s.clock) ? s.clock : [])) { if (!isObj(c) || !W.clocks[c.id]) return "Agenda " + aid + " stap " + (i + 1) + ": onbekende klok " + (c && c.id); if (!Number.isInteger(c.delta) || c.delta === 0 || Math.abs(c.delta) > 2) return "Agenda " + aid + " stap " + (i + 1) + ": klok-delta moet 1 of 2 (of -1, -2) zijn"; }
+      for (const m of (Array.isArray(s.moves) ? s.moves : [])) { if (!isObj(m) || !W.npcs[m.id]) return "Agenda " + aid + " stap " + (i + 1) + ": onbekende NPC " + (m && m.id); if (!knownPlace(W, m.to) && !regionOf(W, m.to)) return "Agenda " + aid + " stap " + (i + 1) + ": onbekende bestemming " + m.to; }
+      if (s.quest != null && !(isObj(s.quest) && W.quests[s.quest.id] && s.quest.to === "available")) return "Agenda " + aid + " stap " + (i + 1) + ": quest moet {id, to:'available'} zijn met een bestaande quest";
+      if (s.requires != null && !(isObj(s.requires) && W.quests[s.requires.id] && QUEST_STATUS.indexOf(s.requires.status) >= 0)) return "Agenda " + aid + " stap " + (i + 1) + ": requires moet {quest-id, status} zijn";
+      return null;
+    };
+    (Array.isArray(delta.agendas) ? delta.agendas : []).forEach(op => {
+      if (!isObj(op) || typeof op.id !== "string") return err("agendas: elk item heeft een id nodig");
+      const id = op.id, cur = W.agendas[id];
+      if (!ID_RE.test(id)) return err("agenda-id '" + id + "' heeft geen geldig formaat (bv. AG-ORC-2)");
+      if (AGENDA_OPS.indexOf(op.op) < 0) return err("Agenda " + id + ": op moet " + AGENDA_OPS.join("/") + " zijn");
+      if (op.op === "create") {
+        if (cur) return err("Agenda " + id + " bestaat al");
+        const set = isObj(op.set) ? op.set : {};
+        const owner = set.owner, ownerOk = typeof owner === "string" && ((W.factions && W.factions[owner]) || (W.npcs[owner] && W.npcs[owner].status !== "deceased"));
+        if (!ownerOk) return err("Agenda " + id + ": owner moet een bestaande factie of een levende NPC zijn");
+        if (typeof set.title !== "string" || !set.title.trim()) return err("Agenda " + id + ": title ontbreekt");
+        if (CANON_TAGS.indexOf(set.canon) < 0) return err("Agenda " + id + ": canon moet B/C/I/N/V zijn");
+        if (!Array.isArray(set.steps) || set.steps.length < 1 || set.steps.length > AGENDA_MAX_STEPS) return err("Agenda " + id + ": 1-" + AGENDA_MAX_STEPS + " steps vereist");
+        if (!now) return err("Agenda " + id + ": een agenda starten vereist een kalender");
+        if (!reasonOk(op.reason)) return err("Agenda " + id + ": aanmaken vereist een reason (welk motief en welke middelen)");
+        for (let i = 0; i < set.steps.length; i++) { const e = stepErr(id, set.steps[i], i); if (e) return err(e); }
+        const dup = Object.values(W.agendas).find(a => String(a.title).toLowerCase() === set.title.trim().toLowerCase());
+        if (dup) return err("Agenda-titel bestaat al als " + dup.id);
+        const rec = { id: id, owner: owner, title: set.title.trim(), status: "active", canon: set.canon, steps: clone(set.steps), stepIdx: 0, nextAt: addDays(now, set.steps[0].afterDays), history: [], created: clone(now) };
+        ["thwartedBy", "holdIfActive"].forEach(k => { if (Array.isArray(set[k])) { set[k].forEach(q => { if (!W.quests[q]) err("Agenda " + id + ": " + k + " verwijst naar onbekende quest " + q); }); rec[k] = set[k].slice(); } });
+        if (typeof set.ifUnopposed === "string") rec.ifUnopposed = set.ifUnopposed;
+        W.agendas[id] = rec; plan.agendas[id] = rec;
+        eventFor("agenda_created", "Agenda " + id + " '" + rec.title + "' gestart (" + owner + "): " + op.reason, { npcs: W.npcs[owner] ? [owner] : [] }, set.canon, { visibility: "dm_only" });
+        return;
+      }
+      if (!cur) return err("Agenda " + id + " bestaat niet");
+      if (!reasonOk(op.reason)) return err("Agenda " + id + ": " + op.op + " vereist een reason");
+      const nx = clone(cur);
+      if (op.op === "thwart") {
+        if (cur.status !== "active" && cur.status !== "paused") return err("Agenda " + id + ": dwarsbomen kan alleen bij active of paused (nu " + cur.status + ")");
+        nx.status = "thwarted"; nx.history = (cur.history || []).concat([{ at: now ? clone(now) : null, what: "dwarsgebomd: " + op.reason }]);
+        eventFor("agenda_thwarted", "Agenda " + id + " dwarsgebomd: " + op.reason + (cur.ifUnopposed ? " (anders: " + cur.ifUnopposed + ")" : ""), {}, "V", { visibility: "dm_only" });
+      } else if (op.op === "pause") {
+        if (cur.status !== "active") return err("Agenda " + id + ": pauzeren kan alleen bij active (nu " + cur.status + ")");
+        nx.status = "paused"; eventFor("agenda_paused", "Agenda " + id + " gepauzeerd: " + op.reason, {}, "V", { visibility: "dm_only" });
+      } else if (op.op === "resume") {
+        if (cur.status !== "paused") return err("Agenda " + id + ": hervatten kan alleen bij paused (nu " + cur.status + ")");
+        nx.status = "active"; if (now && dateCmp(nx.nextAt, now) < 0) nx.nextAt = clone(now);
+        eventFor("agenda_resumed", "Agenda " + id + " hervat: " + op.reason, {}, "V", { visibility: "dm_only" });
+      } else if (op.op === "delay") {
+        if (cur.status !== "active") return err("Agenda " + id + ": vertragen kan alleen bij active (nu " + cur.status + ")");
+        if (!(Number.isInteger(op.days) && op.days >= 1 && op.days <= 30)) return err("Agenda " + id + ": days moet 1-30 zijn");
+        nx.nextAt = addDays(cur.nextAt, op.days); eventFor("agenda_delayed", "Agenda " + id + " " + op.days + " dagen vertraagd: " + op.reason, {}, "V", { visibility: "dm_only" });
+      }
+      W.agendas[id] = nx; plan.agendas[id] = nx;
+    });
+
+    /* agenda's: automatische tick bij tijdsverloop (alleen bij een echte tijdsprong; Bible 09) */
+    if (now && plan.calendar && !errors.length) {
+      const tk = tickAgendas(W, now);
+      Object.keys(tk.agendas).forEach(id => { W.agendas[id] = tk.agendas[id]; plan.agendas[id] = tk.agendas[id]; });
+      Object.keys(tk.clocks).forEach(id => { W.clocks[id] = tk.clocks[id]; plan.clocks[id] = tk.clocks[id]; });
+      Object.keys(tk.npcs).forEach(id => { W.npcs[id] = tk.npcs[id]; plan.npcs[id] = tk.npcs[id]; });
+      Object.keys(tk.quests).forEach(id => { W.quests[id] = tk.quests[id]; plan.quests[id] = tk.quests[id]; });
+      tk.events.forEach(e => plan.events.push(Object.assign({ round: ctx.round || null, auto: true }, e)));
+      tk.warnings.forEach(w => warn(w));
+    }
+
     /* verlopen quests bij tijdsverloop */
     if (now && plan.calendar) {
       companionDue({ npcs: W.npcs, companions: W.companions }, now).forEach(m => warn("Companion aan de orde: " + m));
@@ -457,6 +571,10 @@
     }).join("\n"));
     const due = companionDue(world, world.calendar);
     if (due.length) out.push("Aan de orde (companions):\n" + due.map(d => "- " + d).join("\n"));
+    const ags = Object.values(world.agendas || {}).filter(a => a.status === "active" || a.status === "paused").sort((a, b) => (dateOk(a.nextAt) && dateOk(b.nextAt) ? dateCmp(a.nextAt, b.nextAt) : 0));
+    if (ags.length) out.push("Agenda's (alleen DM; voer niet zelf uit, de app tikt ze bij tijdsprongen):\n" + ags.slice(0, 7).map(a => "- " + a.id + " [" + a.owner + (a.status === "paused" ? ", gepauzeerd" : "") + "] " + a.title + ": stap " + (a.stepIdx + 1) + "/" + a.steps.length + (dateOk(a.nextAt) ? " op " + fmt(a.nextAt) : "") + " - " + (a.steps[a.stepIdx] ? a.steps[a.stepIdx].text : "klaar")).join("\n"));
+    const off = Object.values(world.events || {}).filter(e => e.type === "offscreen").sort((a, b) => (a.t || 0) - (b.t || 0)).slice(-4);
+    if (off.length) out.push("Recent buiten beeld (de PC's weten dit pas als nieuws hen bereikt; nooit alwetend laten reageren):\n" + off.map(e => "- " + (e.ingame && dateOk(e.ingame) ? fmt(e.ingame) + ": " : "") + e.summary).join("\n"));
     const dead = Object.values(world.npcs || {}).filter(n => n.status === "deceased").map(n => n.name);
     if (dead.length) out.push("Overleden (niet laten terugkomen): " + dead.join(", "));
     return out.join("\n").slice(0, max);
@@ -504,6 +622,27 @@
       if (r.stage === "active" && (!r.mode || COMPANION_MODES.indexOf(r.mode) < 0)) bad("companion", id, "actief zonder geldige mode");
     });
     Object.keys(npcs).forEach(id => { if (npcs[id].status === "recruited" && !comps[id]) bad("companion", id, "NPC is recruited maar heeft geen companion-record (statblock)"); });
+    const ags = W.agendas || {};
+    Object.keys(ags).forEach(id => {
+      const a = ags[id];
+      if (!ID_RE.test(id) || a.id !== id) bad("agenda", id, "id komt niet overeen of ongeldig formaat");
+      if (AGENDA_STATUS.indexOf(a.status) < 0) return bad("agenda", id, "onbekende status " + a.status);
+      if (!(npcs[a.owner] || facs[a.owner])) bad("agenda", id, "owner " + a.owner + " bestaat niet");
+      if (!Array.isArray(a.steps) || !a.steps.length || a.steps.length > AGENDA_MAX_STEPS) bad("agenda", id, "steps ontbreken of zijn te veel");
+      else {
+        if (!(Number.isInteger(a.stepIdx) && a.stepIdx >= 0 && a.stepIdx <= a.steps.length)) bad("agenda", id, "stepIdx buiten bereik");
+        if (a.status === "active" && a.stepIdx < a.steps.length && !dateOk(a.nextAt)) bad("agenda", id, "actief zonder geldige nextAt");
+        if (a.status === "completed" && a.stepIdx !== a.steps.length) bad("agenda", id, "afgerond maar niet alle stappen uitgevoerd");
+        a.steps.forEach((s, i) => {
+          (s.clock || []).forEach(c => { if (!clocks[c.id]) bad("agenda", id, "stap " + (i + 1) + ": onbekende klok " + c.id); else if (!Number.isInteger(c.delta) || Math.abs(c.delta) > 2 || c.delta === 0) bad("agenda", id, "stap " + (i + 1) + ": klok-delta ongeldig"); });
+          (s.moves || []).forEach(m => { if (!npcs[m.id]) bad("agenda", id, "stap " + (i + 1) + ": onbekende NPC " + m.id); });
+          if (s.quest && !quests[s.quest.id]) bad("agenda", id, "stap " + (i + 1) + ": onbekende quest " + s.quest.id);
+          if (s.requires && !quests[s.requires.id]) bad("agenda", id, "stap " + (i + 1) + ": requires verwijst naar onbekende quest");
+        });
+      }
+      (a.thwartedBy || []).concat(a.holdIfActive || []).forEach(q => { if (!quests[q]) bad("agenda", id, "verwijst naar onbekende quest " + q); });
+      if (npcs[a.owner] && npcs[a.owner].status === "deceased" && a.status === "active") note("agenda", id, "eigenaar is overleden maar de agenda is nog actief");
+    });
     const jobs = W.jobs || {};
     Object.keys(jobs).forEach(id => {
       const j = jobs[id];
@@ -537,6 +676,7 @@
     Object.keys(plan.quests).forEach(id => put("world/quests/" + id, plan.quests[id]));
     Object.keys(plan.clocks).forEach(id => put("world/clocks/" + id, plan.clocks[id]));
     Object.keys(plan.companions || {}).forEach(id => put("world/companions/" + id, plan.companions[id]));
+    Object.keys(plan.agendas || {}).forEach(id => put("world/agendas/" + id, plan.agendas[id]));
     /* jobs: bewust zonder herstelgegevens; een job loopt asynchroon en mag niet door Terug verdwijnen (de runner annuleert wees-jobs) */
     Object.keys(plan.jobs || {}).forEach(id => { set["world/jobs/" + id] = plan.jobs[id]; });
     if (plan.calendar) put("world/calendar", plan.calendar);
@@ -546,5 +686,5 @@
     return { set: set, prev: prev };
   }
 
-  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
+  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
 });
