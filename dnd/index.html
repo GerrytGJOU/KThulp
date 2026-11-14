@@ -392,18 +392,19 @@ function newStoryForm(){
   const f=$('#newform'); if(f.innerHTML){f.innerHTML='';return}
   const ids=Object.keys(index).sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0));
   f.innerHTML='<br><input type="text" id="ntitle" placeholder="Naam van het nieuwe verhaal">'+
-   (ids.length?'<br><br><label><small>Canon overnemen van:</small></label><select id="ncopy"><option value="">— geen (leeg beginnen) —</option>'+ids.map(i=>'<option value="'+i+'">'+esc(index[i].title)+'</option>').join('')+'</select>':'')+
+   (ids.length?'<br><br><label><small>Canon overnemen van:</small></label><select id="ncopy"><option value="__tpl__">Sjabloon (aanbevolen: de actuele canon, los van je savegames)</option><option value="">— geen (leeg beginnen) —</option>'+ids.map(i=>'<option value="'+i+'">'+esc(index[i].title)+'</option>').join('')+'</select>':'')+
    '<br><br><label><small><input type="checkbox" id="nclaude" checked> Opening door Claude Code (aanbevolen: die heeft alle informatie voor een thematisch sterke start; Gemini speelt daarna verder)</small></label>'+
    '<br><br><label><small><input type="checkbox" id="nworld" checked> Wereldregister uit het sjabloon (proloog in Rivendell, 24 okt 3018: personen, quests, klokken, DM-notities)</small></label>'+
    '<br><br><button class="b" id="ncreate">Verhaal aanmaken</button>';
-  if(ids.length) $('#ncopy').value=ids[0];
+  if(ids.length) $('#ncopy').value='__tpl__';
   $('#ncreate').onclick=async()=>{
     const t=$('#ntitle').value.trim(); if(!t){alert('Geef het verhaal een naam.');return}
     const copy=$('#ncopy')?$('#ncopy').value:'';
     const id=db.ref('dnd/campaignIndex').push().key, now=Date.now(), up={};
     up['dnd/campaignIndex/'+id]={title:t,created:now,lastPlayed:now,round:0};
     if($('#nclaude')&&$('#nclaude').checked){ up['dnd/campaignIndex/'+id].openingBy='claude'; up[cp('turn',id)]={round:0,status:'claude',awaiting:null,handoff:{to:'claude',reason:'Openingsbeurt van het verhaal'}}; }
-    if(copy){const s=await db.ref(cp('canon',copy)).get(); if(s.exists()) up[cp('canon',id)]=s.val();}
+    if(copy==='__tpl__'){const s=await db.ref('dnd/worldTemplate/canon').get(); if(s.exists()) up[cp('canon',id)]=s.val(); else if(!confirm('Het canon-sjabloon ontbreekt. Toch zonder canon beginnen?')) return;}
+    else if(copy){const s=await db.ref(cp('canon',copy)).get(); if(s.exists()) up[cp('canon',id)]=s.val();}
     if($('#nworld')&&$('#nworld').checked){
       const ts=await db.ref('dnd/worldTemplate').get();
       if(ts.exists()&&ts.val().world){ up[cp('world',id)]=ts.val().world; if(ts.val().dmnotes) up[cp('dmnotes',id)]=ts.val().dmnotes; }

@@ -8,7 +8,7 @@
      summary <cid> <totRonde> <bestand>  bewaar een samenvatting
      canon-put <cid> <id> <titel> <bestand> [--opening] [--keywords=a,b]
      memory-add <cid> <tekst>            voeg een Herinnering toe
-     new <titel> [--from=c1]             maak een nieuw verhaal (canon van --from, wereldsjabloon, DM-notities) waarvan Claude de opening speelt
+     new <titel> [--from=<verhaal>]      maak een nieuw verhaal (standaard het canon-sjabloon, of de canon van --from; wereldsjabloon, DM-notities) waarvan Claude de opening speelt
    Geen geheimen in dit bestand: alleen het (openbare) projectnummer. */
 "use strict";
 const { spawnSync } = require("child_process");
@@ -212,8 +212,8 @@ function cmdCanonPut(cid, id, title, file, flags) {
 }
 function cmdNew(title, flags) {
   if (!title) throw new Error("Geef een titel: new \"Titel\" [--from=c1]");
-  const src = typeof flags.from === "string" ? flags.from : "c1", canon = get("/dnd/" + cp(src, "canon")), tpl = get("/dnd/worldTemplate");
-  if (!canon) throw new Error("Geen canon gevonden in verhaal " + src);
+  const tpl = get("/dnd/worldTemplate"), src = typeof flags.from === "string" ? flags.from : "sjabloon", canon = src === "sjabloon" ? (tpl && tpl.canon) : get("/dnd/" + cp(src, "canon"));
+  if (!canon) throw new Error("Geen canon gevonden (" + src + "); draai build-world-template.js of gebruik --from=<verhaal>");
   if (!tpl || !tpl.world) throw new Error("Wereldsjabloon ontbreekt (draai build-world-template.js)");
   const id = pushId(), now = Date.now(), up = {};
   up["campaignIndex/" + id] = { title: title, created: now, lastPlayed: now, round: 0, openingBy: "claude" };
