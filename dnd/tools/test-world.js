@@ -614,5 +614,12 @@ t("context noemt vrije ID's zodat de DM geen bestaand ID hergebruikt", () => {
   const c = W.worldContext(w, { hay: "" }); yes(c.indexOf("NPC-E06") >= 0 && c.indexOf("DQ-0004") >= 0 && c.indexOf("AG-D1") >= 0, c);
 });
 
+t("sprekers moeten in de scène zijn", () => {
+  const w = world(); w.sceneRegion = "REG-RIVENDELL";
+  const a = W.checkSpeakers(w, ["Mara", "Elrond", "Onbekende"], null); eq(a.bad.join(","), "Mara"); yes(/staat in REG-ERIADOR/.test(a.errors[0]));
+  eq(W.checkSpeakers(w, ["Mara"], "REG-ERIADOR").errors.length, 0, "scène verplaatst naar Eriador");
+  eq(W.checkSpeakers(w, ["Oude veerman"], "REG-ERIADOR").bad.join(","), "Oude veerman");
+});
+
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);

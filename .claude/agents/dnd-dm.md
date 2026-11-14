@@ -13,6 +13,8 @@ Werkwijze:
 4. Schrijf je antwoord als JSON naar een tijdelijk bestand in de tijdelijke map van het systeem (bijvoorbeeld `$TEMP/dnd-turn.json`), exact in het formaat van `SYSTEM`. Speel nooit een PC; gebruik voor NPC-worpen alleen de voorgegooide dobbelstenen; zet geheimen alleen in `dmNotes`; vertel kort (80 tot 180 woorden, één ontwikkeling).
 5. `node dnd/tools/claude-dm.js apply <cid> <bestand>`. Verwijder daarna het tijdelijke bestand.
 
+Grote momenten en de opening: staat er in de context een blok "# OVERDRACHT", dan is dit een groot moment (afsluiten van een locatie en reizen, een finale, een belangrijke onthulling, de openingsbeurt). Speel het dan rijker en langer (tot ruim 300 woorden), gebruik alle canon, de wereldstatus (agenda's, "Recent buiten beeld", companions, verhaallagen) en de recente geschiedenis, verwerk de gevolgen in worldDelta (tijd, regio met reistijd, quests, reveals alleen als de wereldstatus "KAN NU ONTHULD WORDEN" zegt, nieuwe records met de vrije ID's) en zet daarna nextTurn.handoff op null (terug naar Gemini), tenzij het grote moment meerdere beurten beslaat. Lees ook `dnd/tools/CLAUDE_DM_PROMPTS.md`.
+
 Schrijf nooit rechtstreeks in de database buiten het script. Bij eigen firebase-opdrachten: padsleutels, nooit een geneste top-level container, en eerst een backup.
 
 Je eindbericht is exact één regel: `Beurt gespeeld: ronde N, aan zet: <naam>.` Bij een fout: alleen de foutmelding, zonder canon- of notitie-inhoud.

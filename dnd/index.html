@@ -160,7 +160,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
-<script src="world.js?v=6"></script>
+<script src="world.js?v=7"></script>
 <script>
 "use strict";
 firebase.initializeApp({
@@ -387,6 +387,7 @@ function newStoryForm(){
   const ids=Object.keys(index).sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0));
   f.innerHTML='<br><input type="text" id="ntitle" placeholder="Naam van het nieuwe verhaal">'+
    (ids.length?'<br><br><label><small>Canon overnemen van:</small></label><select id="ncopy"><option value="">— geen (leeg beginnen) —</option>'+ids.map(i=>'<option value="'+i+'">'+esc(index[i].title)+'</option>').join('')+'</select>':'')+
+   '<br><br><label><small><input type="checkbox" id="nclaude" checked> Opening door Claude Code (aanbevolen: die heeft alle informatie voor een thematisch sterke start; Gemini speelt daarna verder)</small></label>'+
    '<br><br><label><small><input type="checkbox" id="nworld" checked> Wereldregister uit het sjabloon (proloog in Rivendell, 24 okt 3018: personen, quests, klokken, DM-notities)</small></label>'+
    '<br><br><button class="b" id="ncreate">Verhaal aanmaken</button>';
   if(ids.length) $('#ncopy').value=ids[0];
@@ -395,6 +396,7 @@ function newStoryForm(){
     const copy=$('#ncopy')?$('#ncopy').value:'';
     const id=db.ref('dnd/campaignIndex').push().key, now=Date.now(), up={};
     up['dnd/campaignIndex/'+id]={title:t,created:now,lastPlayed:now,round:0};
+    if($('#nclaude')&&$('#nclaude').checked){ up['dnd/campaignIndex/'+id].openingBy='claude'; up[cp('turn',id)]={round:0,status:'claude',awaiting:null,handoff:{to:'claude',reason:'Openingsbeurt van het verhaal'}}; }
     if(copy){const s=await db.ref(cp('canon',copy)).get(); if(s.exists()) up[cp('canon',id)]=s.val();}
     if($('#nworld')&&$('#nworld').checked){
       const ts=await db.ref('dnd/worldTemplate').get();
@@ -548,7 +550,7 @@ function renderGame(){
   const aw=awaitingNames(), mine=pending[me.uid]&&pending[me.uid].round===turn.round?pending[me.uid]:null;
   const myTurn=aw.includes(me.name);
   if(turn.status==='claude'){
-    sb.innerHTML='🤖 <b>De DM (Claude) is aan zet.</b><br><small>Vraag Gerben om de beurt te laten spelen in het Claude Code-gesprek.</small>';
+    sb.innerHTML='🤖 <b>De DM (Claude) is aan zet.</b>'+(turn.handoff&&turn.handoff.reason?'<br><small>Groot moment: '+esc(turn.handoff.reason)+'</small>':'')+'<br><small>Vraag Gerben om de beurt te laten spelen in het Claude Code-gesprek.</small>';
     cpz.innerHTML='<button class="b alt" id="usegem">Laat Gemini deze beurt toch spelen</button>';
     $('#usegem').onclick=()=>resolve(true,true); return;
   }
@@ -609,7 +611,7 @@ async function removeAwaiting(name,round){
       delete t.awaiting[name];
       if(!Object.keys(t.awaiting).length) t.awaiting=null;
     }
-    if(!t.awaiting){t.status='resolving';t.resolvingSince=Date.now();became=true;}
+    if(!t.awaiting){ if(t.handoff&&t.handoff.to==='claude'){t.status='claude';became=false;} else {t.status='resolving';t.resolvingSince=Date.now();became=true;} }
     return t;
   });
   if(!r.committed) return 'late';
@@ -643,6 +645,7 @@ Regels:
 - Tolkien-personages overschaduwen de PC's niet.
 - Spelers rollen zelf fysiek; hun worp staat in hun actie ("[worp: ...]"). Vraag een check via nextTurn.checks (naam → welke check en waarom); verklap DC's niet.
 - Voor worpen van NPC's/vijanden gebruik je UITSLUITEND de meegegeven voorgegooide dobbelstenen, in volgorde (d20 voor aanvallen/checks/saves, d6/d8/d10/d12 voor schade). Noem de worp kort in de vertelling.
+- Grote momenten laat je aan Claude Code over (die heeft alle informatie): zet nextTurn.handoff {"to":"claude","reason":"..."} wanneer de VOLGENDE scène groot is: een locatie afsluiten en naar een nieuwe reizen, een finale of belangrijke onthulling, een ontmoeting met een Tolkien-hoofdfiguur, een Act-overgang of een groot gevecht. Doe het bij twijfel liever wel dan niet, maar niet voor gewone scènes (gesprekken, verkennen, kleine ontmoetingen); laat anders handoff op null. Na een groot moment in de wereldstatus (reis, Act, laatste laag, dood van een belangrijke NPC) draagt de app de volgende beurt zelf over.
 - Als beide spelers moeten reageren zet je beide namen in awaiting; bij combat de volgende speler; bij een enkele speler alleen die naam.
 - Houd de STAND bij via statePatch (deep merge; null verwijdert een sleutel; lijsten worden vervangen). Gebruik EXACT dit schema, met de naam van het personage als sleutel:
   {"inGame":{"date":"24 oktober 3018","timeOfDay":"ochtend","location":"Rivendell, Last Homely House"},
@@ -667,7 +670,7 @@ Regels:
 - HERINNERINGEN van de spelers zijn bindend en gaan voor op je eigen aannames.
 - logEntries: korte feiten van wat NU echt gebeurd is.
 Antwoord ALLEEN met JSON in dit formaat:
-{"narration":"markdown-tekst","speakers":["Naam"],"rolls":[{"who":"","what":"","natural":0,"mod":0,"total":0,"result":""}],"newNpcs":[{"name":"Naam","visual":"English description"}],"location":{"name":"","description":"","visual":""},"dmNotes":{"klok_a":"1/6: reden"},"worldDelta":{"region":"REG-ERIADOR","time":null,"npcs":[],"quests":[],"clocks":[],"events":[]},"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."}}}`;
+{"narration":"markdown-tekst","speakers":["Naam"],"rolls":[{"who":"","what":"","natural":0,"mod":0,"total":0,"result":""}],"newNpcs":[{"name":"Naam","visual":"English description"}],"location":{"name":"","description":"","visual":""},"dmNotes":{"klok_a":"1/6: reden"},"worldDelta":{"region":"REG-ERIADOR","time":null,"npcs":[],"quests":[],"clocks":[],"events":[]},"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."},"handoff":null}}`;
 
 function rollDice(){
   const r=(s,n)=>Array.from({length:n},()=>1+crypto.getRandomValues(new Uint32Array(1))[0]%s);
@@ -695,7 +698,7 @@ function keyOk(){return provider()==='anthropic'?!!cfg.anthropicKey:!!cfg.gemini
 function bigModelName(){return cfg.dmMode==='claude'?'':(provider()==='anthropic'?cfg.anthropicBigModel:cfg.bigModel)||''}
 async function callAnthropic(sys,user,retryNote,json,modelOverride,maxOut){
   const model=modelOverride||cfg.anthropicModel||'claude-haiku-5-5';
-  const body={model,max_tokens:json===false?(maxOut||700):2500,temperature:cfg.temperature!=null?Number(cfg.temperature):0.9,system:sys,
+  const body={model,max_tokens:json===false?(maxOut||700):2500,thinking:{type:'disabled'},system:sys,
     messages:[{role:'user',content:user+(retryNote?'\n\nLET OP: je vorige antwoord was ongeldig ('+retryNote+'). Antwoord nu met geldige JSON.':'')}]};
   const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)});
   const j=await res.json();
@@ -725,7 +728,7 @@ function parseDM(txt,names){
   const nt=o.nextTurn||{};
   let aw=Array.isArray(nt.awaiting)?nt.awaiting.filter(n=>names.includes(n)):[];
   if(!aw.length) aw=names.slice();
-  o.nextTurn={awaiting:aw,blind:!!nt.blind,prompt:String(nt.prompt||'Wat doen jullie?'),checks:nt.checks&&typeof nt.checks==='object'?nt.checks:null};
+  o.nextTurn={awaiting:aw,blind:!!nt.blind,prompt:String(nt.prompt||'Wat doen jullie?'),checks:nt.checks&&typeof nt.checks==='object'?nt.checks:null,handoff:(nt.handoff&&nt.handoff.to==='claude')?{to:'claude',reason:String(nt.handoff.reason||'groot moment').slice(0,200)}:null};
   return o;
 }
 let resolving=false;
@@ -771,6 +774,10 @@ async function resolve(retry,forceGemini){
       const r=await callLLM(SYSTEM,user,note,true,{big});usage=r.usage;usedModel=r.model;
       let parsed;
       try{parsed=parseDM(r.txt,allNames)}catch(e){note=e.message;if(i===1)throw new Error('Ongeldige DM-uitvoer: '+note);continue}
+      if(world&&window.DNDWorld){
+        const sp=DNDWorld.checkSpeakers(world,parsed.speakers,parsed.worldDelta&&parsed.worldDelta.region);
+        if(sp.errors.length){ note='sprekers ongeldig: '+sp.errors.join('; '); if(i===1){ worldRejected=(worldRejected||[]).concat(sp.errors); parsed.speakers=parsed.speakers.filter(s=>sp.bad.indexOf(s)<0); } else continue; }
+      }
       if(world&&window.DNDWorld&&parsed.worldDelta){
         const v=DNDWorld.validateDelta(world,parsed.worldDelta,{round:round+1,hasPortrait:n=>!!(npcs[slug(n.name)]&&npcs[slug(n.name)].img)});
         if(!v.ok){ note='worldDelta ongeldig: '+v.errors.join('; '); if(i===1){ worldRejected=v.errors; parsed.worldDelta=null; } else continue; }
@@ -809,7 +816,9 @@ async function resolve(retry,forceGemini){
     up['dnd/campaignIndex/'+C+'/lastPlayed']=now;
     up['dnd/campaignIndex/'+C+'/round']=round+1;
     const aw={};out.nextTurn.awaiting.forEach(n=>aw[n]=true);
-    up[cp('turn',C)]={round:round+1,status:'waiting',awaiting:aw,prompt:out.nextTurn.prompt,blind:out.nextTurn.blind,checks:out.nextTurn.checks||null,mode:out.nextTurn.awaiting.length>1?'all':'single'};
+    const mj=(out._wp&&out._wp.plan&&out._wp.plan.major)||[];
+    const hand=out.nextTurn.handoff||(mj.length?{to:'claude',reason:'Na een groot moment: '+mj.slice(0,3).join('; '),auto:true}:null);
+    up[cp('turn',C)]={round:round+1,status:'waiting',awaiting:aw,prompt:out.nextTurn.prompt,blind:out.nextTurn.blind,checks:out.nextTurn.checks||null,mode:out.nextTurn.awaiting.length>1?'all':'single',handoff:hand};
     await db.ref().update(up);
     summarize(C,round+1,false).catch(e=>console.warn('samenvatting mislukt',e));
   }catch(e){

@@ -13,6 +13,10 @@ Werkwijze voor een Claude Code-sessie die de Dungeon Master speelt in plaats van
 4. Schrijf het antwoord als JSON in een tijdelijk bestand (bijvoorbeeld in de scratchpad), exact in het formaat van `SYSTEM`.
 5. `node dnd/tools/claude-dm.js apply <cid> <bestand.json>`: schrijft in één keer vertelling, acties, Stand, logboek, DM-notities, NPC's, locatie, nieuwe Stand-versie (met undo) en de volgende beurt naar de database. Daarna ziet iedereen het live in de app.
 
+## Nieuw verhaal en grote momenten
+- `node dnd/tools/claude-dm.js new "<titel>"` maakt een verhaal waarvan Claude de opening speelt (canon, wereldsjabloon en DM-notities worden meegekopieerd). In de app kan dat ook: vinkje "Opening door Claude Code" bij Nieuw verhaal.
+- Grote momenten (afsluiten van een locatie en reizen, finales, Act-overgangen) draagt de app over: de beurt krijgt de status "claude" en de context toont "# OVERDRACHT". Kant-en-klare prompts staan in `dnd/tools/CLAUDE_DM_PROMPTS.md`.
+
 ## Andere opdrachten
 - `summary <cid> <totRonde> <bestand>`: bewaar een samenvatting (maak er een na ongeveer 15 rondes).
 - `canon-put <cid> <id> "<titel>" <bestand> [--opening] [--keywords=a,b]`: canon-document toevoegen of vervangen.

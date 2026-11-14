@@ -8,6 +8,7 @@
      summary <cid> <totRonde> <bestand>  bewaar een samenvatting
      canon-put <cid> <id> <titel> <bestand> [--opening] [--keywords=a,b]
      memory-add <cid> <tekst>            voeg een Herinnering toe
+     new <titel> [--from=c1]             maak een nieuw verhaal (canon van --from, wereldsjabloon, DM-notities) waarvan Claude de opening speelt
    Geen geheimen in dit bestand: alleen het (openbare) projectnummer. */
 "use strict";
 const { spawnSync } = require("child_process");
@@ -94,6 +95,7 @@ function cmdContext(cid, flags) {
   const chars = get("/dnd/characters") || {}, npcs = get("/dnd/npcs") || {};
   const first = !Object.keys(state).length;
   const out = [];
+  if (turn.handoff && turn.handoff.to === "claude") out.push("# OVERDRACHT (jij speelt deze beurt omdat het een groot moment is)\n" + turn.handoff.reason + ". Neem de tijd voor een thematisch sterke, rijke scène (mag langer dan 180 woorden), gebruik alle canon en de wereldstatus, en zet daarna met nextTurn.handoff:null de volgende beurt terug naar Gemini, tenzij het grote moment meerdere beurten duurt.");
   out.push("# TURN\nronde " + turn.round + ", status " + turn.status + (turn.prompt ? ", laatste vraag: " + turn.prompt : "") + (turn.checks ? ", gevraagde checks: " + JSON.stringify(turn.checks) : "") + (first ? "\n(LET OP: Stand is leeg: dit is de openingsbeurt; neem de beginsituatie uit D1/Stand #1 over)" : ""));
   out.push("# SPELERS\n" + [...new Set([...vals(get("/dnd/" + cp(cid, "players"))), ...vals(chars).map(c => c.player).filter(Boolean)])].join(", "));
   const want = typeof flags.canon === "string" && flags.canon !== "true" ? flags.canon.split(",") : null;
@@ -134,7 +136,7 @@ function parseDM(o, names) {
   const nt = o.nextTurn || {};
   let aw = Array.isArray(nt.awaiting) ? nt.awaiting.filter(n => names.includes(n)) : [];
   if (!aw.length) aw = names.slice();
-  o.nextTurn = { awaiting: aw, blind: !!nt.blind, prompt: String(nt.prompt || "Wat doen jullie?"), checks: nt.checks && typeof nt.checks === "object" ? nt.checks : null };
+  o.nextTurn = { awaiting: aw, blind: !!nt.blind, prompt: String(nt.prompt || "Wat doen jullie?"), checks: nt.checks && typeof nt.checks === "object" ? nt.checks : null, handoff: (nt.handoff && nt.handoff.to === "claude") ? { to: "claude", reason: String(nt.handoff.reason || "groot moment").slice(0, 200) } : null };
   return o;
 }
 function cmdApply(cid, file, flags) {
@@ -166,6 +168,7 @@ function cmdApply(cid, file, flags) {
   up[cp(cid, "messages/" + nk)] = nm;
   const world = get("/dnd/" + cp(cid, "world"));
   let wplan = null;
+  if (world) { const sp = World.checkSpeakers(world, out.speakers, out.worldDelta && out.worldDelta.region); if (sp.errors.length) throw new Error("sprekers ongeldig:\n- " + sp.errors.join("\n- ") + "\nCorrigeer het JSON-bestand en probeer opnieuw (niets is opgeslagen)."); }
   if (world && out.worldDelta) {
     const v = World.validateDelta(world, out.worldDelta, { round: round + 1, hasPortrait: n => { try { return !!get("/dnd/npcs/" + slug(n.name) + "/img"); } catch (e) { return false; } } });
     if (!v.ok) throw new Error("worldDelta ongeldig:\n- " + v.errors.join("\n- ") + "\nCorrigeer het JSON-bestand en probeer opnieuw (niets is opgeslagen).");
@@ -187,7 +190,9 @@ function cmdApply(cid, file, flags) {
   up[cp(cid, "pending")] = null;
   up["campaignIndex/" + cid + "/lastPlayed"] = now; up["campaignIndex/" + cid + "/round"] = round + 1;
   const aw = {}; out.nextTurn.awaiting.forEach(n => { aw[n] = true; });
-  up[cp(cid, "turn")] = { round: round + 1, status: "waiting", awaiting: aw, prompt: out.nextTurn.prompt, blind: out.nextTurn.blind, checks: out.nextTurn.checks || null, mode: out.nextTurn.awaiting.length > 1 ? "all" : "single" };
+  const major = (wplan && wplan.major) || [];
+  const hand = out.nextTurn.handoff || (major.length ? { to: "claude", reason: "Na een groot moment: " + major.slice(0, 3).join("; "), auto: true } : null);
+  up[cp(cid, "turn")] = { handoff: hand, round: round + 1, status: "waiting", awaiting: aw, prompt: out.nextTurn.prompt, blind: out.nextTurn.blind, checks: out.nextTurn.checks || null, mode: out.nextTurn.awaiting.length > 1 ? "all" : "single" };
   update(up);
   console.log("Beurt geschreven: ronde " + (round + 1) + ", aan zet: " + out.nextTurn.awaiting.join(", ") + " (" + out.nextTurn.prompt + ")");
   if ((round + 1) % 15 === 0) console.log("Tip: maak nu een samenvatting (summary-opdracht); er zijn 15 rondes sinds de vorige.");
@@ -205,6 +210,18 @@ function cmdCanonPut(cid, id, title, file, flags) {
   update({ [cp(cid, "canon/" + id)]: rec });
   console.log("Canon-document '" + id + "' opgeslagen (" + rec.text.length + " tekens)");
 }
+function cmdNew(title, flags) {
+  if (!title) throw new Error("Geef een titel: new \"Titel\" [--from=c1]");
+  const src = typeof flags.from === "string" ? flags.from : "c1", canon = get("/dnd/" + cp(src, "canon")), tpl = get("/dnd/worldTemplate");
+  if (!canon) throw new Error("Geen canon gevonden in verhaal " + src);
+  if (!tpl || !tpl.world) throw new Error("Wereldsjabloon ontbreekt (draai build-world-template.js)");
+  const id = pushId(), now = Date.now(), up = {};
+  up["campaignIndex/" + id] = { title: title, created: now, lastPlayed: now, round: 0, openingBy: "claude" };
+  up[cp(id, "canon")] = canon; up[cp(id, "world")] = tpl.world; if (tpl.dmnotes) up[cp(id, "dmnotes")] = tpl.dmnotes;
+  up[cp(id, "turn")] = { round: 0, status: "claude", awaiting: null, handoff: { to: "claude", reason: "Openingsbeurt van het verhaal" } };
+  update(up);
+  console.log("Verhaal aangemaakt: " + id + " (" + title + "). Speel de opening: node dnd/tools/claude-dm.js context " + id + " --canon");
+}
 function cmdMemory(cid, text) { update({ [cp(cid, "memories/" + pushId())]: { text, by: "Claude", t: Date.now() } }); console.log("Herinnering toegevoegd."); }
 
 /* ---------- main ---------- */
@@ -218,5 +235,6 @@ try {
   else if (cmd === "summary") cmdSummary(pos[1], pos[2], pos[3]);
   else if (cmd === "canon-put") cmdCanonPut(pos[1], pos[2], pos[3], pos[4], flags);
   else if (cmd === "memory-add") cmdMemory(pos[1], pos[2]);
+  else if (cmd === "new") cmdNew(pos[1], flags);
   else console.log("Gebruik: status | context <cid> [--canon] | apply <cid> <json> [--force] | summary <cid> <totRonde> <bestand> | canon-put <cid> <id> <titel> <bestand> | memory-add <cid> <tekst>");
 } catch (e) { console.error("FOUT:", e.message); process.exit(1); }

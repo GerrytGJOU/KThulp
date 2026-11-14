@@ -662,6 +662,18 @@
     return res;
   }
 
+  /* Sprekers moeten in de scène zijn: een bekende NPC die elders staat (of overleden is) kan niet spreken of een portret krijgen. */
+  function checkSpeakers(world, speakers, region) {
+    const res = { errors: [], bad: [] }, reg = region || (world && world.sceneRegion) || null;
+    (Array.isArray(speakers) ? speakers : []).forEach(name => {
+      const n = Object.values((world && world.npcs) || {}).find(x => String(x.name).toLowerCase() === String(name).toLowerCase()); if (!n) return;
+      const r = regionOf(world, n.location);
+      if (n.status === "deceased") { res.errors.push(n.name + " (" + n.id + ") is overleden en kan niet spreken"); res.bad.push(name); }
+      else if (reg && r && r !== reg) { res.errors.push(n.name + " (" + n.id + ") staat in " + r + ", niet in de scène (" + reg + "): laat " + n.name + " niet spreken of verplaats de scène/NPC met reistijd"); res.bad.push(name); }
+    });
+    return res;
+  }
+
   /* ---------- compacte wereldcontext voor de DM ---------- */
   function worldContext(world, opts) {
     opts = opts || {};
@@ -829,5 +841,5 @@
     return { set: set, prev: prev };
   }
 
-  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
+  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, checkSpeakers: checkSpeakers, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
 });
