@@ -24,3 +24,8 @@ Werkwijze voor een Claude Code-sessie die de Dungeon Master speelt in plaats van
 - Zet geheimen alleen in `dmNotes`, nooit in de Stand, het logboek of de vertelling vooruit.
 - Houd de vertelling kort (80 tot 180 woorden), één ontwikkeling per beurt, stop op een reactiemoment.
 - Geen spoilers in het gesprek zelf: beperk wat je in je chattekst zegt tot "beurt gespeeld" en de publieke vertelling.
+
+## Spoilers voorkomen (de sessie-eigenaar is ook speler)
+- Laat de beurt altijd spelen door de subagent `dnd-dm` (`.claude/agents/dnd-dm.md`): die leest de canon en de DM-notities en schrijft het resultaat terug, en geeft in het hoofdgesprek alleen één regel terug ("Beurt gespeeld: ronde N, aan zet: X"). Het hoofdgesprek leest zelf nooit `context`.
+- De canon-documenten C1 en C2 staan in de app als "🔒 DM-geheim": de tekst is verborgen tot iemand bewust op "Toon tekst (spoiler!)" tikt. De DM-notities (klokken, plannen) staan in geen enkel scherm.
+- Dit is een voorkomen-van-ongelukken-maatregel, geen beveiliging: wie in de database kijkt, kan alles lezen.

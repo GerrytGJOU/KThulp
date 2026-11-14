@@ -1767,6 +1767,7 @@ async function renderStand(){
 }
 
 /* ---------- Canon ---------- */
+const canonReveal={};
 function renderCanon(){
   if(screen!=='camp') return;
   const box=$('#canonbox');
@@ -1781,6 +1782,23 @@ function renderCanon(){
   box.querySelectorAll('[data-cf]').forEach(c=>c.onchange=()=>db.ref(cp('canon/'+c.dataset.cf+'/off')).set(c.checked?null:true));
   box.querySelectorAll('[data-co]').forEach(c=>c.onchange=()=>db.ref(cp('canon/'+c.dataset.co+'/opening')).set(c.checked?true:null));
   box.querySelectorAll('[data-ck]').forEach(i=>i.onchange=()=>db.ref(cp('canon/'+i.dataset.ck+'/keywords')).set(i.value.trim()||null));
+  ids.forEach(id=>{
+    const eb=box.querySelector('[data-e="'+id+'"]'); if(!eb) return;
+    const card=eb.closest('.card'), d=canon[id], row=card.querySelector('.row');
+    const lab=document.createElement('label'); lab.style.fontSize='13px';
+    lab.innerHTML='<input type="checkbox"'+(d.secret?' checked':'')+'> 🔒 DM-geheim';
+    lab.firstChild.onchange=e=>db.ref(cp('canon/'+id+'/secret')).set(e.target.checked?true:null);
+    row.appendChild(lab);
+    if(d.secret){
+      card.querySelector('h3').textContent='🔒 '+d.title;
+      if(!canonReveal[id]){
+        eb.style.display='none';
+        const b=document.createElement('button'); b.className='b alt sm'; b.textContent='Toon tekst (spoiler!)';
+        b.onclick=()=>{ if(confirm('Dit is DM-geheim: spoilers voor de spelers. Toch tonen?')){canonReveal[id]=true; renderCanon();} };
+        eb.parentNode.insertBefore(b,eb);
+      }
+    }
+  });
   box.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{$('#ctitle').value=canon[b.dataset.e].title;$('#ctext').value=canon[b.dataset.e].text;$('#ctext').scrollIntoView()});
   box.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{if(confirm('Document wissen?'))db.ref(cp('canon/'+b.dataset.d)).remove()});
   $('#cfile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$('#ctext').value=r.result;if(!$('#ctitle').value)$('#ctitle').value=f.name.replace(/\.[^.]+$/,'')};r.readAsText(f)};
