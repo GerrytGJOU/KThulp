@@ -518,7 +518,7 @@ function renderGame(){
     let acts='';
     if(m.type==='narration'&&m._k){
       if(editKey===m._k) inner='<textarea id="editta" style="min-height:160px;color:#2b2012;background:#fff8e6">'+esc(editDraft)+'</textarea><div class="acts"><button data-act="editsave" data-k="'+m._k+'">Opslaan</button><button data-act="editcancel">Annuleer</button></div>';
-      else acts='<div class="acts"><button data-act="edit" data-k="'+m._k+'">✎ Bewerk</button>'+(m._k===lastNarr&&canAct?'<button data-act="regen">↻ Opnieuw</button><button data-act="undo">↶ Terug</button>':'')+'</div>';
+      else acts='<div class="acts"><button data-act="edit" data-k="'+m._k+'">✎ Bewerk</button>'+(m._k===lastNarr&&canAct?'<button data-act="regen">↻ Opnieuw</button>'+(bigModelName()?'<button data-act="regenbig">↻ Sterker model</button>':'')+'<button data-act="undo">↶ Terug</button>':'')+'</div>';
     }
     let out='<div class="msg '+cls+'">'+(who?'<div class="who">'+who+'</div>':'')+inner+acts+'</div>';
     if(m.newLoc&&locs[m.newLoc]){const l=locs[m.newLoc]; out+='<div class="msg loc">'+(l.img?'<img src="'+l.img+'" data-zoom="loc:'+m.newLoc+'" alt="">':'')+'<div><b>📍 Nieuw gebied: '+esc(l.name)+'</b><br><small>'+esc(l.desc||'')+'</small></div></div>';}
@@ -616,7 +616,7 @@ async function skipOthers(){
   if(res==='resolve') resolve(false);
 }
 async function startCampaign(){
-  if(!cfg.geminiKey){alert('Zet eerst je Gemini-sleutel bij ⚙.');setTab('set');return}
+  if(cfg.dmMode!=='claude'&&!keyOk()){alert('Zet eerst je API-sleutel bij ⚙.');setTab('set');return}
   if(!Object.keys(canon).length&&!confirm('Er is nog geen canon. Toch starten?'))return;
   await db.ref(cp('turn')).set({round:0,status:'resolving',resolvingSince:Date.now(),awaiting:null});
   resolve(false);
@@ -674,10 +674,32 @@ async function callGemini(sys,user,retryNote,json,modelOverride,maxOut){
   const c=j.candidates&&j.candidates[0];
   const txt=c&&c.content&&c.content.parts&&c.content.parts.map(p=>p.text||'').join('');
   if(!txt) throw new Error('Leeg antwoord ('+(c&&c.finishReason||'geen kandidaat')+')');
-  return {txt,usage:j.usageMetadata||{}};
+  return {txt,model,usage:j.usageMetadata||{}};
+}
+let bigNext=false;
+function provider(){return cfg.dmMode==='anthropic'?'anthropic':'gemini'}
+function keyOk(){return provider()==='anthropic'?!!cfg.anthropicKey:!!cfg.geminiKey}
+function bigModelName(){return cfg.dmMode==='claude'?'':(provider()==='anthropic'?cfg.anthropicBigModel:cfg.bigModel)||''}
+async function callAnthropic(sys,user,retryNote,json,modelOverride,maxOut){
+  const model=modelOverride||cfg.anthropicModel||'claude-haiku-5-5';
+  const body={model,max_tokens:json===false?(maxOut||700):2500,temperature:cfg.temperature!=null?Number(cfg.temperature):0.9,system:sys,
+    messages:[{role:'user',content:user+(retryNote?'\n\nLET OP: je vorige antwoord was ongeldig ('+retryNote+'). Antwoord nu met geldige JSON.':'')}]};
+  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':cfg.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)});
+  const j=await res.json();
+  if(!res.ok) throw new Error('Claude '+res.status+': '+((j.error&&j.error.message)||'fout'));
+  const txt=(j.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+  if(!txt) throw new Error('Leeg antwoord ('+(j.stop_reason||'onbekend')+')');
+  const u=j.usage||{};
+  return {txt,model,usage:{promptTokenCount:(u.input_tokens||0)+(u.cache_read_input_tokens||0)+(u.cache_creation_input_tokens||0),cachedContentTokenCount:u.cache_read_input_tokens||0,candidatesTokenCount:u.output_tokens||0}};
+}
+async function callLLM(sys,user,retryNote,json,opts){
+  opts=opts||{};
+  if(provider()==='anthropic') return callAnthropic(sys,user,retryNote,json,opts.model||(opts.big?cfg.anthropicBigModel:null),opts.maxOut);
+  return callGemini(sys,user,retryNote,json,opts.model||(opts.big?cfg.bigModel:null),opts.maxOut);
 }
 function parseDM(txt,names){
-  const o=JSON.parse(txt.replace(/^```(?:json)?\s*/,'').replace(/```\s*$/,''));
+  let s=txt.replace(/^```(?:json)?\s*/,'').replace(/```\s*$/,'').trim(); const ja=s.indexOf('{'), jb=s.lastIndexOf('}'); if(ja>=0&&jb>ja) s=s.slice(ja,jb+1);
+  const o=JSON.parse(s);
   if(typeof o.narration!=='string'||!o.narration) throw new Error('narration ontbreekt');
   o.statePatch=o.statePatch&&typeof o.statePatch==='object'?o.statePatch:{};
   o.logEntries=Array.isArray(o.logEntries)?o.logEntries:[];
@@ -695,7 +717,7 @@ function parseDM(txt,names){
 let resolving=false;
 async function resolve(retry,forceGemini){
   if(resolving) return; resolving=true;
-  const C=cid;
+  const C=cid; const big=bigNext; bigNext=false;
   try{
     if(!forceGemini){
       const dm=(await db.ref('dnd/config/dmMode').get()).val();
@@ -706,7 +728,7 @@ async function resolve(retry,forceGemini){
     const round=t.round;
     const [pS,sS,cS,mS,lS,smS,meS,dnS,cfS]=await Promise.all(['pending','state','canon','messages','log','summaries','memories','dmnotes'].map(k=>{let r=db.ref(cp(k,C)); if(k==='messages'||k==='log') r=r.limitToLast(40); return r.get();}).concat([db.ref('dnd/config').get()]));
     cfg=cfS.val()||cfg;
-    if(!cfg.geminiKey) throw new Error('Geen Gemini-sleutel ingesteld (⚙ in het menu).');
+    if(!keyOk()) throw new Error('Geen API-sleutel voor '+(provider()==='anthropic'?'Claude':'Gemini')+' ingesteld (⚙ in het menu).');
     const pendE=Object.entries(pS.val()||{}).filter(([k,p])=>p.round===round);
     const pend=pendE.map(e=>e[1]).sort((a,b)=>a.t-b.t);
     const pl=(await db.ref(cp('players',C)).get()).val()||{};
@@ -719,7 +741,7 @@ async function resolve(retry,forceGemini){
     const wanted=d=>{ if(d.off) return false; if(d.opening&&!first) return false; const kw=String(d.keywords||'').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean); return !kw.length||kw.some(k=>hay.includes(k)); };
     const canonTxt=Object.values(cS.val()||{}).filter(wanted).map(d=>'### '+d.title+'\n'+d.text).join('\n\n');
     const recent=[];mS.forEach(c=>{recent.push(c.val())});
-    const hist=recent.slice(-20).filter(m=>m.type!=='system').map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
+    const hist=recent.slice(-10).filter(m=>m.type!=='system').map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
     const logs=[];lS.forEach(c=>{logs.push(c.val())});
     const sums=[]; smS.forEach(c=>{sums.push(c.val().text)});
     const mems=[]; meS.forEach(c=>{mems.push('- '+c.val().text)});
@@ -728,9 +750,9 @@ async function resolve(retry,forceGemini){
     const npcNames=Object.values(npcs).filter(n=>!n.forPlayer).map(n=>n.name);
     const user=
 `# SPELERS\n${allNames.join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# KARAKTERBLADEN (rekenkundig leidend; de Stand heeft de actuele HP)\n${sheets||'(geen)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# LOGBOEK (laatste 40)\n${logs.slice(-40).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# DM-NOTITIES (privé: nooit tonen of citeren)\n${notesTxt||'(nog geen)'}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
-    let out,usage,note=null;
+    let out,usage,usedModel,note=null;
     for(let i=0;i<2;i++){
-      const r=await callGemini(SYSTEM,user,note);usage=r.usage;
+      const r=await callLLM(SYSTEM,user,note,true,{big});usage=r.usage;usedModel=r.model;
       try{out=parseDM(r.txt,allNames);break}catch(e){note=e.message;if(i===1)throw new Error('Ongeldige DM-uitvoer: '+note)}
     }
     const newState=deepMerge(state,out.statePatch);
@@ -751,7 +773,7 @@ async function resolve(retry,forceGemini){
     const sj=JSON.stringify(newState), rk=String(round+1).padStart(5,'0');
     up[cp('state',C)]=sj;
     up[cp('stands/'+rk,C)]={json:sj,round:round+1,t:now,undo:{prevNotes:Object.keys(notes).length?notes:null,prevState:sS.val()||'{}',turn:t,pend:pendE.map(([k,p])=>({uid:k,...p})),msgs:msgKeys,logs:logKeys}};
-    up[cp('usage/'+rk,C)]={prompt:usage.promptTokenCount||0,cached:usage.cachedContentTokenCount||0,out:usage.candidatesTokenCount||0,model:cfg.model||'gemini-2.5-flash'};
+    up[cp('usage/'+rk,C)]={prompt:usage.promptTokenCount||0,cached:usage.cachedContentTokenCount||0,out:usage.candidatesTokenCount||0,model:usedModel||'?'};
     up[cp('pending',C)]=null;
     up['dnd/campaignIndex/'+C+'/lastPlayed']=now;
     up['dnd/campaignIndex/'+C+'/round']=round+1;
@@ -837,9 +859,10 @@ function threadClick(e){
   else if(a==='editcancel'){editKey=null; renderGame();}
   else if(a==='editsave'){const C=cid; db.ref(cp('messages/'+editKey+'/text',C)).set(editDraft); editKey=null;}
   else if(a==='regen'){ if(confirm('De laatste DM-beurt verwijderen en opnieuw laten schrijven (met dezelfde acties)?')) undoLast('regen'); }
+  else if(a==='regenbig'){ if(confirm('De laatste DM-beurt opnieuw laten schrijven met het sterkere model ('+bigModelName()+')?')) undoLast('regen',true); }
   else if(a==='undo'){ if(confirm('De laatste DM-beurt terugdraaien? De acties komen terug zodat jullie ze kunnen aanpassen.')) undoLast('back'); }
 }
-async function undoLast(mode){
+async function undoLast(mode,big){
   const C=cid, now=Date.now();
   const ss=await db.ref(cp('stands',C)).orderByKey().limitToLast(1).get(); let rec=null,key=null;
   ss.forEach(c=>{rec=c.val();key=c.key});
@@ -858,7 +881,7 @@ async function undoLast(mode){
   else if(mode==='regen'){ up[cp('turn',C)]={...t,status:'resolving',resolvingSince:now,awaiting:null,lastError:null}; }
   else { up[cp('turn',C)]={...t,status:'waiting',awaiting:Object.keys(authors).length?authors:null,resolvingSince:null,lastError:null}; }
   await db.ref().update(up);
-  if(mode==='regen') resolve(false);
+  if(mode==='regen'){ bigNext=!!big; resolve(false); }
 }
 const LOCSTYLE_END="Avoid: photorealism, cartoon or anime look, 3D game render, modern objects, text, captions, watermarks, logos, borders.";
 function makeLocPrompt(n){
@@ -926,7 +949,7 @@ async function summarize(C,upTo,force){
   ms.forEach(c=>{const m=c.val(); if(m.type!=='system'&&m.round>covered&&m.round<=upTo) list.push(m)});
   if(list.length<4) return false;
   const text=list.map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
-  const r=await callGemini(SUMSYS,'# EERDERE SAMENVATTING\n'+(prev.join('\n')||'(geen)')+'\n\n# NIEUWE BERICHTEN\n'+text,null,false,cfg.summaryModel||'gemini-2.5-flash-lite');
+  const r=await callLLM(SUMSYS,'# EERDERE SAMENVATTING\n'+(prev.join('\n')||'(geen)')+'\n\n# NIEUWE BERICHTEN\n'+text,null,false,{model:provider()==='anthropic'?(cfg.anthropicModel||'claude-haiku-5-5'):(cfg.summaryModel||'gemini-2.5-flash-lite')});
   await db.ref(cp('summaries/'+String(upTo).padStart(5,'0'),C)).set({fromRound:covered+1,toRound:upTo,text:r.txt.trim(),t:Date.now()});
   return true;
 }
@@ -1709,7 +1732,7 @@ async function ccFinish(){
 /* ---- Gemini-hulp ---- */
 async function ccAI(kind){
   if(ccBusy) return;
-  if(!cfg.geminiKey){alert('Zet eerst je Gemini-sleutel bij ⚙ Instellingen.');return}
+  if(!keyOk()){alert('Zet eerst je API-sleutel bij ⚙ Instellingen.');return}
   const s=cc, R=ccCalc(s);
   const ctx='Personage: '+(s.name||'(naamloos)')+'. Level '+s.level+' '+[s.species,s.cls,s.sub,s.bg&&('background '+s.bg)].filter(Boolean).join(', ')+'.'+(s.concept?'\nConcept van de speler: '+s.concept:'')+(s.alignment?'\nAlignment: '+s.alignment:'')+(s.traits?'\nEigenschappen: '+s.traits:'')+(s.flaw?'\nZwakte: '+s.flaw:'')+(s.appearance?'\nUiterlijk: '+s.appearance:'');
   const SYS='Je bent een schrijfhulp voor een D&D 5e (2024)-personage in een campagne in Midden-aarde (Tolkien, Third Age 3018, rond de Council of Elrond). Schrijf in het Nederlands, gebruik Engelse D&D-termen. Wees trouw aan Tolkien-canon, maar met speelruimte; geen vuurwapens, geen willekeurige magie. Verzin geen spelregels. Wat de speler zelf heeft vastgesteld mag je niet veranderen; eigen aanvullingen markeer je met "(voorstel)".';
@@ -1719,13 +1742,13 @@ async function ccAI(kind){
   if(kind==='hooks'){ if(!(s.backstory.trim()||s.notes.trim())){alert('Schrijf eerst een backstory.');return} user=ctx+'\n\nBACKSTORY:\n'+(s.backstory||s.notes)+(s.family?'\n\nFAMILIE:\n'+s.family:'')+(s.secrets?'\n\nGEHEIMEN (alleen voor de DM):\n'+s.secrets:'')+'\n\nMaak 5 tot 7 korte DM-haken als opsomming (•): open verhaallijnen, NPC\'s, vijanden, mysteries en dilemma\'s die de DM later kan uitwerken. Eén regel per haak.'; }
   ccBusy=kind; ccRender();
   try{
-    const r=await callGemini(SYS,user,null,false,cfg.model,1800);
+    const r=await callLLM(SYS,user,null,false,{maxOut:1800});
     const t=r.txt.trim();
     if(kind==='concept'){ ccRender(); const o=$('#ccout'); if(o) o.textContent=t; }
     else if(kind==='story'){ if(!s.backstory.trim()||confirm('Je backstory-veld bevat al tekst. Vervangen door het Gemini-voorstel?\n(Annuleren = eronder toevoegen)')) s.backstory=t; else s.backstory=s.backstory.trim()+'\n\n'+t; }
     else { s.hooks=(s.hooks.trim()?s.hooks.trim()+'\n':'')+t; }
     ccSave();
-  }catch(e){ alert('Gemini: '+e.message); }
+  }catch(e){ alert('DM-model: '+e.message); }
   const keep=(kind==='concept')?(($('#ccout')||{}).textContent||''):'';
   ccBusy=''; ccRender(); if(kind==='concept'){const o=$('#ccout'); if(o) o.textContent=keep;}
 }
@@ -1813,18 +1836,28 @@ function renderCanon(){
 function renderSet(){
   const box=$('#setbox'); if(!box) return;
   if(box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT') return;
-  box.innerHTML=(screen==='camp'?BACK:'')+`<div class="card"><h3>Gemini (de DM)</h3>
-  <label>Wie is de DM?</label><select id="sdm"><option value="gemini">Gemini (automatisch)</option><option value="claude">Claude (handmatig via Claude Code)</option></select><br><br>
-  <label>Model (Gemini)</label><input type="text" id="smodel"><br><br>
+  const ph=k=>cfg[k]?'(ingesteld; leeg laten = ongewijzigd)':'plak hier';
+  box.innerHTML=(screen==='camp'?BACK:'')+`<div class="card"><h3>Wie is de DM?</h3>
+  <select id="sdm"><option value="gemini">Gemini (API, automatisch)</option><option value="anthropic">Claude (API, automatisch)</option><option value="claude">Claude Code (handmatig, geen API)</option></select><br><br>
+  <label>Temperatuur</label><input type="number" id="stemp" step="0.1" min="0" max="2"></div>
+  <div class="card"><h3>Gemini</h3>
+  <label>API-sleutel (gedeeld in de database; alleen jullie twee kunnen lezen)</label><input type="password" id="skey" placeholder="${ph('geminiKey')}"><br><br>
+  <label>Model</label><input type="text" id="smodel"><br><br>
   <label>Model voor samenvattingen (goedkoper)</label><input type="text" id="ssum"><br><br>
-  <label>Temperatuur</label><input type="number" id="stemp" step="0.1" min="0" max="2"><br><br>
-  <label>API-sleutel (gedeeld in de database; alleen jullie twee kunnen lezen)</label><input type="password" id="skey" placeholder="${cfg.geminiKey?'(ingesteld — leeg laten = ongewijzigd)':'plak hier'}"><br><br>
-  <button class="b" id="ssave">Opslaan</button></div>
+  <label>Sterker model voor "↻ Sterker model" (optioneel)</label><input type="text" id="sgbig"></div>
+  <div class="card"><h3>Claude (Anthropic)</h3>
+  <label>API-sleutel (stel in het Anthropic-dashboard een bestedingslimiet in)</label><input type="password" id="sakey" placeholder="${ph('anthropicKey')}"><br><br>
+  <label>Model (gewone beurten en samenvattingen)</label><input type="text" id="samodel"><br><br>
+  <label>Sterker model voor "↻ Sterker model" (belangrijke scènes)</label><input type="text" id="sabig"></div>
+  <div class="card"><button class="b" id="ssave">Opslaan</button></div>
   ${screen==='camp'?'<div class="card"><h3>Verbruik (dit verhaal)</h3><div id="usage">…</div></div>':''}`;
-  $('#smodel').value=cfg.model||'gemini-2.5-flash';$('#sdm').value=cfg.dmMode||'gemini';$('#ssum').value=cfg.summaryModel||'gemini-2.5-flash-lite';$('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
+  $('#sdm').value=cfg.dmMode||'gemini'; $('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
+  $('#smodel').value=cfg.model||'gemini-2.5-flash'; $('#ssum').value=cfg.summaryModel||'gemini-2.5-flash-lite'; $('#sgbig').value=cfg.bigModel||'';
+  $('#samodel').value=cfg.anthropicModel||'claude-haiku-5-5'; $('#sabig').value=cfg.anthropicBigModel||'claude-sonnet-5-5';
   $('#ssave').onclick=async()=>{
-    const u={dmMode:$('#sdm').value,model:$('#smodel').value.trim()||'gemini-2.5-flash',summaryModel:$('#ssum').value.trim()||'gemini-2.5-flash-lite',temperature:Number($('#stemp').value)||0.9};
+    const u={dmMode:$('#sdm').value,temperature:Number($('#stemp').value)||0.9,model:$('#smodel').value.trim()||'gemini-2.5-flash',summaryModel:$('#ssum').value.trim()||'gemini-2.5-flash-lite',bigModel:$('#sgbig').value.trim()||null,anthropicModel:$('#samodel').value.trim()||'claude-haiku-5-5',anthropicBigModel:$('#sabig').value.trim()||null};
     if($('#skey').value.trim()) u.geminiKey=$('#skey').value.trim();
+    if($('#sakey').value.trim()) u.anthropicKey=$('#sakey').value.trim();
     await db.ref('dnd/config').update(u);alert('Opgeslagen.');
   };
   if(screen==='camp'){const C=cid;db.ref(cp('usage',C)).limitToLast(10).get().then(s=>{let h='';s.forEach(c=>{const v=c.val();h='<div><small>Ronde '+Number(c.key)+': '+v.prompt+' in'+(v.cached?' ('+v.cached+' uit cache)':'')+' / '+v.out+' uit</small></div>'+h});if($('#usage'))$('#usage').innerHTML=h||'—'})}
