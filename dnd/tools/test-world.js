@@ -468,5 +468,92 @@ t("simulatie: 200 tijdsprongen met agenda's: invarianten blijven waar", () => {
 });
 function addD(d, n) { const x = new Date(Date.UTC(d.y, d.m - 1, d.d + n)); return { y: x.getUTCFullYear(), m: x.getUTCMonth() + 1, d: x.getUTCDate() }; }
 
+/* ---------- afloop-evaluator en Act-verloop ---------- */
+function eworld(goals, clocks) {
+  const w = world(); w.clocks["CLK-A"].value = clocks[0]; w.clocks["CLK-B"] = { id: "CLK-B", value: clocks[1], max: 6 }; w.clocks["CLK-C"].value = clocks[2];
+  [["msg", "MAIN-A4-MSG"], ["cor", "MAIN-A4-CORRIDOR"], ["dis", "MAIN-A4-DISINFO"]].forEach(([k, id]) => { if (goals[k]) w.quests[id] = { id: id, title: id, kind: "main", status: goals[k], region: "REG-ERIADOR", open: true, canon: "B", history: [] }; });
+  return w;
+}
+const endIds = w => W.evaluateEndings(w).candidates.map(c => c.id).join(",");
+t("afloop: sterk netwerk bij drie doelen en gezonde klokken", () => eq(endIds(eworld({ msg: "completed", cor: "completed", dis: "completed" }, [2, 4, 3])), "sterk_netwerk"));
+t("afloop: drie doelen maar zware schade is sterk netwerk met littekens", () => eq(endIds(eworld({ msg: "completed", cor: "completed", dis: "completed" }, [5, 1, 5])), "sterk_netwerk_met_littekens"));
+t("afloop: versplinterde overwinning", () => eq(endIds(eworld({ msg: "completed", cor: "failed", dis: "failed" }, [3, 3, 3])), "versplinterde_overwinning"));
+t("afloop: kostbaar behoud", () => eq(endIds(eworld({ msg: "failed", cor: "completed", dis: "failed" }, [3, 3, 3])), "kostbaar_behoud"));
+t("afloop: mislukte missie", () => eq(endIds(eworld({ msg: "failed", cor: "failed", dis: "expired" }, [5, 1, 5])), "mislukte_missie"));
+t("afloop: onverwacht als niets past", () => eq(endIds(eworld({ msg: "failed", cor: "failed", dis: "completed" }, [3, 3, 3])), "speleroplossing"));
+t("afloop: nog niet beslist zolang een doel openstaat; zonder doelen niets", () => {
+  const p = W.evaluateEndings(eworld({ msg: "completed", cor: "active", dis: "failed" }, [3, 3, 3])); yes(p.pending && p.candidates.length === 0);
+  yes(W.evaluateEndings(world()).candidates.length === 0);
+});
+t("afloop: context toont kandidaten pas in Act IV", () => {
+  const w = eworld({ msg: "completed", cor: "failed", dis: "failed" }, [3, 3, 3]); yes(W.worldContext(w, { hay: "" }).indexOf("Versplinterde overwinning") >= 0);
+  yes(W.worldContext(world(), { hay: "" }).indexOf("Afloop-kandidaten") < 0);
+});
+t("Act-agenda: Fellowship-vertrek, voorjaar en eindspel maken de Acts beschikbaar op de canondata", () => {
+  const w = world(); w.factions = { "FAC-RIVENDELL": { id: "FAC-RIVENDELL", name: "Rivendell" } };
+  ["MAIN-A2", "MAIN-A3", "MAIN-A4"].forEach(id => { w.quests[id] = { id: id, title: id, kind: "main", status: "dormant", region: "REG-ERIADOR", open: true, canon: "B", history: [] }; });
+  w.agendas = { "AG-ACT-1": { id: "AG-ACT-1", owner: "FAC-RIVENDELL", title: "Acts", status: "active", canon: "I", stepIdx: 0, nextAt: { y: 3018, m: 12, d: 26 }, history: [], steps: [
+    { text: "Act II begint", afterDays: 1, quest: { id: "MAIN-A2", to: "available" } }, { text: "Winter", afterDays: 40 }, { text: "Act III begint", afterDays: 25, quest: { id: "MAIN-A3", to: "available" } }, { text: "Act IV begint", afterDays: 13, quest: { id: "MAIN-A4", to: "available" } }, { text: "Nieuws van het einde", afterDays: 11 }] } };
+  const a = run(w, { time: { to: { y: 3018, m: 12, d: 27 }, reason: "de feestdagen verstrijken", worldTick: true } }); eq(a.plan.quests["MAIN-A2"].status, "available"); yes(!a.plan.quests["MAIN-A3"]);
+  const b = run(w, { time: { to: { y: 3019, m: 3, d: 2 }, reason: "de winter gaat voorbij", worldTick: true } }); eq(b.plan.quests["MAIN-A3"].status, "available"); yes(!b.plan.quests["MAIN-A4"]);
+  const c = run(w, { time: { to: { y: 3019, m: 3, d: 20 }, reason: "de oorlogsweken", worldTick: true } }); eq(c.plan.quests["MAIN-A4"].status, "available"); eq(c.plan.agendas["AG-ACT-1"].stepIdx, 4);
+  const d = run(w, { time: { to: { y: 3019, m: 4, d: 1 }, reason: "de nasleep", worldTick: true } }); eq(d.plan.agendas["AG-ACT-1"].status, "completed");
+});
+
+/* ---------- verhaalrol, eigen quest en gelaagde achtergrond per NPC ---------- */
+function sworld() {
+  const w = cworld();
+  w.quests["CQ-R03"] = { id: "CQ-R03", title: "De schuld van Brynja's huis", kind: "companion", status: "dormant", region: "REG-RIVENDELL", open: true, ifIgnored: "Ze gaat alleen terug", canon: "V", history: [], stages: ["Het bericht openen", "De schuld begrijpen", "Een antwoord geven"], npcs: ["CMP-R03"] };
+  w.backstories = { "CMP-R03": { id: "CMP-R03", npc: "CMP-R03", role: "Dwergse verdediger", quest: "CQ-R03", canon: "V", revealed: null, layers: [
+    { n: 1, title: "Het schild", text: "Ze beschermt anderen instinctief.", know: "Brynja stapt tussen bedreiging en zwakkeren.", gate: { t: "met" } },
+    { n: 2, title: "Het bericht", text: "Haar familie verwacht haar thuis.", know: "Brynja heeft een bericht van haar familie.", gate: { t: "evidence", min: 2 } },
+    { n: 3, title: "Het antwoord", text: "Ze moet kiezen.", know: "Brynja moet kiezen.", gate: { t: "stage", quest: "CQ-R03", min: 2 } }] } };
+  return w;
+}
+const rv = (n, reason) => ({ reveals: [{ npc: "CMP-R03", layer: n, reason: reason || "De spelers vroegen er rustig naar" }] });
+t("laag 1 kan zodra de spelers de persoon kennen; laag 2 pas na bewijs; volgorde verplicht", () => {
+  let w = sworld(); w.npcs["CMP-R03"].introduced = false;
+  bad(run(w, rv(1)), "kennen"); w.npcs["CMP-R03"].introduced = true;
+  const a = run(w, rv(1)); yes(a.ok, a.errors.join("|")); eq(a.plan.backstories["CMP-R03"].revealed[1].reason, "De spelers vroegen er rustig naar");
+  bad(run(w, rv(2)), "eerst worden onthuld");
+  w = apply2(w, run(w, { companions: [rec3] }).plan); w.backstories = Object.assign({}, w.backstories, a.plan.backstories);
+  bad(run(w, rv(2)), "bewijslogboek");
+  w = apply2(w, run(w, { companions: [{ id: "CMP-R03", op: "update", evidence: "De PC's hielden hun belofte bij de brug" }, { id: "CMP-R03", op: "update", evidence: "Brynja werd door de PC's gedekt" }] }).plan);
+  const b = run(w, rv(2)); yes(b.ok, b.errors.join("|"));
+});
+t("onthullen vereist reden; dubbel onthullen en onbekende lagen worden geweigerd", () => {
+  const w = sworld(); w.npcs["CMP-R03"].introduced = true;
+  bad(run(w, rv(1, "kort")), "reason"); bad(run(w, rv(9)), "geen laag 9");
+  w.backstories["CMP-R03"].revealed = { 1: { reason: "eerder" } }; bad(run(w, rv(1)), "al onthuld");
+  bad(run(w, { reveals: [{ npc: "NPC-NERGENS", layer: 1, reason: "bestaat niet echt" }] }), "bestaat niet");
+});
+t("quest-stage: alleen vooruit, alleen bij een actieve quest, met reden; opent laag 3", () => {
+  let w = sworld(); w.npcs["CMP-R03"].introduced = true; w.backstories["CMP-R03"].revealed = { 1: { reason: "x" }, 2: { reason: "y" } };
+  bad(run(w, { quests: [{ id: "CQ-R03", op: "update", set: { stage: 1 }, reason: "stap bereikt" }] }), "active");
+  const act = run(w, { quests: [{ id: "CQ-R03", op: "update", set: { status: "active" }, reason: "De spelers helpen Brynja" }] }); yes(act.ok); w = applyPlan(w, act.plan);
+  bad(run(w, { quests: [{ id: "CQ-R03", op: "update", set: { stage: 7 }, reason: "te ver vooruit" }] }), "stage moet");
+  bad(run(w, { reveals: [{ npc: "CMP-R03", layer: 3, reason: "te vroeg onthuld" }] }), "stap 2");
+  const s = run(w, { quests: [{ id: "CQ-R03", op: "update", set: { stage: 2 }, reason: "Het bericht is geopend" }], reveals: [{ npc: "CMP-R03", layer: 3, reason: "Het bericht is geopend" }] }); yes(s.ok, s.errors.join("|"));
+  w = applyPlan(w, s.plan); bad(run(w, { quests: [{ id: "CQ-R03", op: "update", set: { stage: 1 }, reason: "terugzetten kan niet" }] }), "stage moet");
+});
+t("overleden NPC onthult geen lagen meer", () => { const w = sworld(); w.npcs["CMP-R03"].introduced = true; w.npcs["CMP-R03"].status = "deceased"; bad(run(w, rv(1)), "overleden"); });
+t("context: verborgen laag blijft verborgen tot de gate klopt (geen vooruit lopen)", () => {
+  const w = sworld(); w.npcs["CMP-R03"].introduced = true; w.backstories["CMP-R03"].revealed = { 1: { reason: "x" } };
+  let c = W.worldContext(w, { hay: "brynja" }); yes(c.indexOf("Verhaallagen") >= 0 && c.indexOf("nog niet") >= 0 && c.indexOf("Haar familie verwacht haar thuis") < 0, c);
+  w.companions["CMP-R03"].stage = "active"; w.companions["CMP-R03"].evidence = [{ text: "a ervaring" }, { text: "b ervaring" }];
+  c = W.worldContext(w, { hay: "brynja" }); yes(c.indexOf("KAN NU ONTHULD WORDEN") >= 0 && c.indexOf("Haar familie verwacht haar thuis") >= 0, c);
+});
+t("audit: achtergronden", () => {
+  const w = sworld(); eq(W.auditWorld(w).filter(i => i.level === "fout").length, 0);
+  const a = clone(w); a.backstories["CMP-R03"].quest = "CQ-X"; yes(W.auditWorld(a).some(i => /bestaat niet/.test(i.msg)));
+  const b = clone(w); b.backstories["CMP-R03"].revealed = { 2: {} }; yes(W.auditWorld(b).some(i => /aaneengesloten/.test(i.msg)));
+  const c = clone(w); c.backstories["CMP-R03"].layers[1].gate = { t: "stage", quest: "CQ-NOPE", min: 1 }; yes(W.auditWorld(c).some(i => /onbekende quest/.test(i.msg)));
+  const d = clone(w); d.quests["CQ-R03"].stage = 9; yes(W.auditWorld(d).some(i => /stage valt buiten/.test(i.msg)));
+});
+t("reveal-undo: commitPaths bewaart herstelgegevens", () => {
+  const w = sworld(); w.npcs["CMP-R03"].introduced = true; const r = run(w, rv(1)); let n = 0; const c = W.commitPaths(w, r.plan, { now: 1, newKey: () => "k" + (n++) });
+  const p = c.prev.find(x => x.p === "world/backstories/CMP-R03"); yes(p && !p.v.revealed);
+});
+
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);

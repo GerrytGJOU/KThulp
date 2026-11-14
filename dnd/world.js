@@ -42,6 +42,28 @@
   const AGENDA_OPS = ["create", "thwart", "pause", "resume", "delay"];
   const AGENDA_MAX_STEPS = 6, AGENDA_TICK_GUARD = 8;
   const addDays = (d, n) => { const x = new Date(Date.UTC(d.y, d.m - 1, d.d + n)); return { y: x.getUTCFullYear(), m: x.getUTCMonth() + 1, d: x.getUTCDate() }; };
+  /* Gelaagde achtergronden (Baldur's Gate-stijl): elke NPC heeft een verhaalrol, een eigen quest en lagen die pas worden onthuld
+     als de voorwaarde (gate) klopt. De DM ziet de tekst van een volgende laag pas als de gate vervuld is; lagen gaan op volgorde. */
+  const GATE_TYPES = ["met", "evidence", "quest", "stage", "date", "free"];
+  function gateOk(W, npcId, gate, now) {
+    if (!isObj(gate)) return false;
+    const npc = (W.npcs || {})[npcId] || {};
+    if (gate.t === "met") return npc.introduced === true || npc.status === "recruited";
+    if (gate.t === "evidence") { const r = (W.companions || {})[npcId]; return !!(r && r.stage === "active" && (r.evidence || []).length >= (gate.min || 1)); }
+    if (gate.t === "quest") { const q = (W.quests || {})[gate.id]; return !!(q && q.status === gate.status); }
+    if (gate.t === "stage") { const q = (W.quests || {})[gate.quest]; return !!(q && (q.stage || 0) >= (gate.min || 1)); }
+    if (gate.t === "date") return !!(now && dateOk(gate) && dateCmp(now, gate) >= 0);
+    return gate.t === "free";
+  }
+  function gateText(g) {
+    if (!isObj(g)) return "onbekend";
+    if (g.t === "met") return "de spelers moeten de persoon eerst kennen";
+    if (g.t === "evidence") return "minstens " + (g.min || 1) + " concrete ervaring(en) in het bewijslogboek van de actieve companion";
+    if (g.t === "quest") return "quest " + g.id + " moet " + g.status + " zijn";
+    if (g.t === "stage") return "quest " + g.quest + " moet minstens stap " + (g.min || 1) + " bereikt hebben";
+    if (g.t === "date") return "niet vóór " + g.d + "-" + g.m + "-" + g.y;
+    return "naar eigen inzicht van de DM, met reden";
+  }
   const CANON_TAGS = ["B", "C", "I", "N", "V"]; // B bestaand, C Tolkien-canon, I interpretatie, N nieuw (ingevoerd in spel), V voorstel
   const ID_RE = /^[A-Z]{2,5}-[A-Z0-9][A-Z0-9-]*$/;
 
@@ -121,9 +143,9 @@
   function validateDelta(world, delta, ctx) {
     ctx = ctx || {};
     const errors = [], warnings = [];
-    const plan = { calendar: null, npcs: {}, quests: {}, clocks: {}, companions: {}, jobs: {}, agendas: {}, events: [], divergences: [] };
+    const plan = { calendar: null, npcs: {}, quests: {}, clocks: {}, companions: {}, jobs: {}, agendas: {}, backstories: {}, events: [], divergences: [] };
     const W = clone(world || {});
-    W.companions = W.companions || {}; W.jobs = W.jobs || {}; W.agendas = W.agendas || {};
+    W.companions = W.companions || {}; W.jobs = W.jobs || {}; W.agendas = W.agendas || {}; W.backstories = W.backstories || {};
     W.npcs = W.npcs || {}; W.quests = W.quests || {}; W.clocks = W.clocks || {}; W.locations = W.locations || {}; W.factions = W.factions || {};
     const touched = { npcs: {}, quests: {}, clocks: {} };
     const err = m => errors.push(m), warn = m => warnings.push(m);
@@ -381,6 +403,13 @@
         next.history = (cur.history || []).concat([{ status: set.status, at: now, reason: op.reason }]);
         eventFor("quest_status", "Quest " + id + ": " + cur.status + " → " + set.status + " (" + op.reason + ")", { quests: [id] }, "V");
       }
+      if (set.stage != null) {
+        const stages = Array.isArray(cur.stages) ? cur.stages : [];
+        if (!Number.isInteger(set.stage) || set.stage <= (cur.stage || 0) || set.stage > stages.length) return err("Quest " + id + ": stage moet een geheel getal boven " + (cur.stage || 0) + " en hoogstens " + stages.length + " zijn");
+        if (next.status !== "active") return err("Quest " + id + ": een stap vooruit kan alleen als de quest active is");
+        if (!reasonOk(op.reason)) return err("Quest " + id + ": een stap vooruit vereist een reason");
+        next.stage = set.stage; eventFor("quest_stage", "Quest " + id + " stap " + set.stage + "/" + stages.length + ": " + stages[set.stage - 1] + " (" + op.reason + ")", { quests: [id] }, "V");
+      }
       ["hook", "ifIgnored", "region"].forEach(k => { if (set[k] != null) next[k] = set[k]; });
       if (Array.isArray(set.clues)) next.clues = (cur.clues || []).concat(set.clues).filter((v, i, a) => a.indexOf(v) === i);
       W.quests[id] = next; plan.quests[id] = next; touched.quests[id] = true;
@@ -398,6 +427,24 @@
       const next = Object.assign({}, c, { value: v });
       W.clocks[op.id] = next; plan.clocks[op.id] = next; touched.clocks[op.id] = true;
       eventFor("clock", "Klok " + op.id + " " + (op.delta > 0 ? "+" : "") + op.delta + " → " + v + " (" + op.reason + ")", {}, "V", { clock: op.id });
+    });
+
+    /* achtergrondlagen onthullen */
+    (Array.isArray(delta.reveals) ? delta.reveals : []).forEach(op => {
+      if (!isObj(op) || typeof op.npc !== "string" || !Number.isInteger(op.layer)) return err("reveals: elk item heeft npc en layer (geheel getal) nodig");
+      const bs = W.backstories[op.npc], npc = W.npcs[op.npc];
+      if (!bs || !npc) return err("Achtergrond van " + op.npc + " bestaat niet");
+      if (npc.status === "deceased") return err("NPC " + op.npc + " is overleden: geen nieuwe lagen onthullen");
+      if (!reasonOk(op.reason)) return err("Onthulling " + op.npc + " laag " + op.layer + ": een reason (wat gebeurde in het verhaal) is verplicht");
+      const layer = (bs.layers || []).find(l => l.n === op.layer);
+      if (!layer) return err("Achtergrond " + op.npc + " heeft geen laag " + op.layer);
+      const rv = bs.revealed || {};
+      if (rv[op.layer]) return err("Laag " + op.layer + " van " + op.npc + " is al onthuld");
+      for (let i = 1; i < op.layer; i++) if (!rv[i]) return err("Laag " + i + " van " + op.npc + " moet eerst worden onthuld (de lagen gaan op volgorde)");
+      if (!gateOk(W, op.npc, layer.gate, now)) return err("Laag " + op.layer + " van " + op.npc + " kan nog niet: " + gateText(layer.gate));
+      const nb = clone(bs); nb.revealed = Object.assign({}, rv); nb.revealed[op.layer] = { at: now ? clone(now) : null, reason: op.reason };
+      W.backstories[op.npc] = nb; plan.backstories[op.npc] = nb;
+      eventFor("backstory_revealed", npc.name + ": laag " + op.layer + " '" + layer.title + "' onthuld (" + op.reason + ")", { npcs: [op.npc] }, "V");
     });
 
     /* vrije events (bv. afwijkingen van de canon) */
@@ -545,6 +592,30 @@
     return out;
   }
 
+  /* ---------- afloop-evaluator (Bible 03, Act IV): geeft KANDIDAAT-eindes met redenen; de DM beslist ---------- */
+  const END_GOALS = { msg: "MAIN-A4-MSG", cor: "MAIN-A4-CORRIDOR", dis: "MAIN-A4-DISINFO" };
+  function evaluateEndings(world) {
+    const W = world || {}, qs = W.quests || {}, cl = W.clocks || {};
+    const st = id => (qs[id] ? qs[id].status : null), val = id => (cl[id] ? cl[id].value : null);
+    const goals = {}; Object.keys(END_GOALS).forEach(k => { goals[k] = st(END_GOALS[k]); });
+    const terminal = s => ["completed", "failed", "expired", "changed"].indexOf(s) >= 0;
+    const vals = Object.keys(goals).map(k => goals[k]);
+    const done = vals.filter(s => s === "completed").length, lost = vals.filter(s => s === "failed" || s === "expired").length;
+    const A = val("CLK-A"), B = val("CLK-B"), C = val("CLK-C");
+    const res = { goals: goals, completed: done, lost: lost, clocks: { A: A, B: B, C: C }, pending: vals.some(s => s != null && !terminal(s)), candidates: [] };
+    const add = (id, label, why) => res.candidates.push({ id: id, label: label, why: why });
+    if (vals.every(s => s == null)) { res.pending = true; return res; }
+    if (res.pending) return res;
+    const bad = (A != null && A >= 5) || (C != null && C >= 6);
+    if (done === 3 && !(A != null && A > 3) && !(B != null && B < 3) && !(C != null && C > 4)) add("sterk_netwerk", "Sterk netwerk", "alle drie doelen gehaald en de klokken blijven gezond");
+    if (goals.msg === "completed" && done < 3) add("versplinterde_overwinning", "Versplinterde overwinning", "de boodschap kwam aan, maar " + (3 - done) + " doel(en) niet");
+    if (goals.cor === "completed" && goals.msg !== "completed") add("kostbaar_behoud", "Kostbaar behoud", "de corridor bleef open, de kernboodschap kwam niet aan" + (goals.dis !== "completed" ? " en de desinformatie bestaat nog" : ""));
+    if (done === 0 && (lost >= 2 || bad)) add("mislukte_missie", "Mislukte missie", "geen enkel doel gehaald; verbindingen blijvend beschadigd");
+    if (done === 3 && res.candidates.length === 0) add("sterk_netwerk_met_littekens", "Sterk netwerk met littekens", "alle doelen gehaald, maar de klokken tonen blijvende schade");
+    if (res.candidates.length === 0) add("speleroplossing", "Onverwachte speleroplossing", "geen standaardeinde past; laat de fictie en de regels beslissen");
+    return res;
+  }
+
   /* ---------- compacte wereldcontext voor de DM ---------- */
   function worldContext(world, opts) {
     opts = opts || {};
@@ -571,10 +642,19 @@
     }).join("\n"));
     const due = companionDue(world, world.calendar);
     if (due.length) out.push("Aan de orde (companions):\n" + due.map(d => "- " + d).join("\n"));
+    const bsl = Object.values(world.backstories || {}).filter(b => { const n = (world.npcs || {})[b.npc]; return n && n.status !== "deceased" && (n.status === "recruited" || hay.indexOf(String(n.name).toLowerCase()) >= 0 || hay.indexOf(b.npc.toLowerCase()) >= 0 || (here && regionOf(world, n.location) === here && n.introduced === true)); });
+    if (bsl.length) out.push("Verhaallagen (laag voor laag, nooit vooruit lopen; onthul via reveals met reden):\n" + bsl.slice(0, 6).map(b => {
+      const n = world.npcs[b.npc], rv = b.revealed || {}, total = (b.layers || []).length, nxt = (b.layers || []).find(l => !rv[l.n]), q = world.quests && b.quest ? world.quests[b.quest] : null;
+      const head = "- " + b.npc + " " + n.name + ": rol: " + b.role + " | quest " + (b.quest || "-") + (q ? " [" + q.status + (q.stages ? ", stap " + (q.stage || 0) + "/" + q.stages.length : "") + "]" : "") + " | onthuld " + Object.keys(rv).length + "/" + total;
+      if (!nxt) return head + " (alles onthuld)";
+      return head + " | " + (gateOk(world, b.npc, nxt.gate, world.calendar) ? "KAN NU ONTHULD WORDEN: laag " + nxt.n + " '" + nxt.title + "': " + nxt.text : "volgende laag " + nxt.n + " nog niet (" + gateText(nxt.gate) + ")");
+    }).join("\n"));
     const ags = Object.values(world.agendas || {}).filter(a => a.status === "active" || a.status === "paused").sort((a, b) => (dateOk(a.nextAt) && dateOk(b.nextAt) ? dateCmp(a.nextAt, b.nextAt) : 0));
     if (ags.length) out.push("Agenda's (alleen DM; voer niet zelf uit, de app tikt ze bij tijdsprongen):\n" + ags.slice(0, 7).map(a => "- " + a.id + " [" + a.owner + (a.status === "paused" ? ", gepauzeerd" : "") + "] " + a.title + ": stap " + (a.stepIdx + 1) + "/" + a.steps.length + (dateOk(a.nextAt) ? " op " + fmt(a.nextAt) : "") + " - " + (a.steps[a.stepIdx] ? a.steps[a.stepIdx].text : "klaar")).join("\n"));
     const off = Object.values(world.events || {}).filter(e => e.type === "offscreen").sort((a, b) => (a.t || 0) - (b.t || 0)).slice(-4);
     if (off.length) out.push("Recent buiten beeld (de PC's weten dit pas als nieuws hen bereikt; nooit alwetend laten reageren):\n" + off.map(e => "- " + (e.ingame && dateOk(e.ingame) ? fmt(e.ingame) + ": " : "") + e.summary).join("\n"));
+    const act4 = ["MAIN-A4", "MAIN-A4-MSG", "MAIN-A4-CORRIDOR", "MAIN-A4-DISINFO"].some(id => world.quests && world.quests[id] && (world.quests[id].status === "available" || world.quests[id].status === "active" || world.quests[id].status === "completed" || world.quests[id].status === "failed"));
+    if (act4) { const ev = evaluateEndings(world); out.push("Afloop-kandidaten (richtsnoer, jij beslist): " + (ev.pending ? "nog niet beslist (doelen " + Object.keys(ev.goals).map(k => k + "=" + (ev.goals[k] || "-")).join(", ") + ")" : ev.candidates.map(c => c.label + " (" + c.why + ")").join("; "))); }
     const dead = Object.values(world.npcs || {}).filter(n => n.status === "deceased").map(n => n.name);
     if (dead.length) out.push("Overleden (niet laten terugkomen): " + dead.join(", "));
     return out.join("\n").slice(0, max);
@@ -622,6 +702,18 @@
       if (r.stage === "active" && (!r.mode || COMPANION_MODES.indexOf(r.mode) < 0)) bad("companion", id, "actief zonder geldige mode");
     });
     Object.keys(npcs).forEach(id => { if (npcs[id].status === "recruited" && !comps[id]) bad("companion", id, "NPC is recruited maar heeft geen companion-record (statblock)"); });
+    const bsx = W.backstories || {};
+    Object.keys(bsx).forEach(id => {
+      const b = bsx[id];
+      if (!npcs[id] || b.npc !== id) return bad("achtergrond", id, "geen bijbehorende NPC of npc-veld klopt niet");
+      if (b.quest && !quests[b.quest]) bad("achtergrond", id, "quest " + b.quest + " bestaat niet");
+      const L = Array.isArray(b.layers) ? b.layers : [];
+      if (!L.length) return bad("achtergrond", id, "geen lagen");
+      L.forEach((l, i) => { if (l.n !== i + 1) bad("achtergrond", id, "lagen moeten 1..N genummerd zijn"); if (!isObj(l.gate) || GATE_TYPES.indexOf(l.gate.t) < 0) bad("achtergrond", id, "laag " + l.n + ": onbekende gate"); else { if (l.gate.t === "quest" && !quests[l.gate.id]) bad("achtergrond", id, "laag " + l.n + ": gate verwijst naar onbekende quest"); if (l.gate.t === "stage" && !quests[l.gate.quest]) bad("achtergrond", id, "laag " + l.n + ": gate verwijst naar onbekende quest"); } if (!l.text || !l.know) bad("achtergrond", id, "laag " + l.n + ": text en know zijn verplicht"); });
+      const rv = Object.keys(b.revealed || {}).map(Number).sort((a, c) => a - c);
+      rv.forEach((n, i) => { if (n !== i + 1) bad("achtergrond", id, "onthulde lagen moeten een aaneengesloten reeks vanaf 1 zijn"); });
+    });
+    Object.keys(quests).forEach(id => { const q = quests[id]; if (q.stage != null && !(Array.isArray(q.stages) && q.stage >= 0 && q.stage <= q.stages.length)) bad("quest", id, "stage valt buiten stages"); });
     const ags = W.agendas || {};
     Object.keys(ags).forEach(id => {
       const a = ags[id];
@@ -677,6 +769,7 @@
     Object.keys(plan.clocks).forEach(id => put("world/clocks/" + id, plan.clocks[id]));
     Object.keys(plan.companions || {}).forEach(id => put("world/companions/" + id, plan.companions[id]));
     Object.keys(plan.agendas || {}).forEach(id => put("world/agendas/" + id, plan.agendas[id]));
+    Object.keys(plan.backstories || {}).forEach(id => put("world/backstories/" + id, plan.backstories[id]));
     /* jobs: bewust zonder herstelgegevens; een job loopt asynchroon en mag niet door Terug verdwijnen (de runner annuleert wees-jobs) */
     Object.keys(plan.jobs || {}).forEach(id => { set["world/jobs/" + id] = plan.jobs[id]; });
     if (plan.calendar) put("world/calendar", plan.calendar);
@@ -686,5 +779,5 @@
     return { set: set, prev: prev };
   }
 
-  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
+  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
 });
