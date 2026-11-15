@@ -97,7 +97,7 @@ function cmdContext(cid, flags) {
   const out = [];
   if (turn.handoff && turn.handoff.to === "claude") out.push("# OVERDRACHT (jij speelt deze beurt omdat het een groot moment is)\n" + turn.handoff.reason + ". Neem de tijd voor een thematisch sterke, rijke scène (mag langer dan 180 woorden), gebruik alle canon en de wereldstatus, en zet daarna met nextTurn.handoff:null de volgende beurt terug naar Gemini, tenzij het grote moment meerdere beurten duurt.");
   out.push("# TURN\nronde " + turn.round + ", status " + turn.status + (turn.prompt ? ", laatste vraag: " + turn.prompt : "") + (turn.checks ? ", gevraagde checks: " + JSON.stringify(turn.checks) : "") + (first ? "\n(LET OP: Stand is leeg: dit is de openingsbeurt; neem de beginsituatie uit D1/Stand #1 over)" : ""));
-  out.push("# SPELERS\n" + [...new Set([...vals(get("/dnd/" + cp(cid, "players"))), ...vals(chars).map(c => c.player).filter(Boolean)])].join(", "));
+  out.push("# SPELERS (nextTurn.awaiting bevat altijd de SPELERNAAM, nooit de naam van het personage; de vraag in nextTurn.prompt richt je aan dezelfde speler)\n" + [...new Set([...vals(get("/dnd/" + cp(cid, "players"))), ...vals(chars).map(c => c.player).filter(Boolean)])].map(n => { const c = vals(chars).find(x => x.player === n); return n + (c ? " (speelt " + c.name + ")" : ""); }).join(", "));
   const want = typeof flags.canon === "string" && flags.canon !== "true" ? flags.canon.split(",") : null;
   out.push("# CANON" + (flags.canon ? "" : " (alleen index; gebruik --canon of --canon=id,id om de tekst te lezen)"));
   const cparts = [];
@@ -121,7 +121,7 @@ function cmdContext(cid, flags) {
   out.push("# ACTIES DEZE RONDE\n" + (pend.length ? pend.map(p => p.name + ": " + p.text).join("\n") : "(geen: open het verhaal)"));
   console.log(out.join("\n\n"));
 }
-function parseDM(o, names) {
+function parseDM(o, names, chars) {
   if (typeof o.narration !== "string" || !o.narration) throw new Error("narration ontbreekt");
   o.statePatch = o.statePatch && typeof o.statePatch === "object" ? o.statePatch : {};
   o.logEntries = Array.isArray(o.logEntries) ? o.logEntries : [];
@@ -134,8 +134,11 @@ function parseDM(o, names) {
   if (dn && typeof dn === "object" && !Array.isArray(dn)) for (const [k, v] of Object.entries(dn).slice(0, 30)) { const kk = String(k).toLowerCase().replace(/[^a-z0-9_]+/g, "_").slice(0, 40); if (!kk) continue; if (v === null || v === "") res[kk] = null; else if (typeof v === "string" || typeof v === "number") res[kk] = String(v).slice(0, 500); }
   o.dmNotes = res;
   const nt = o.nextTurn || {};
-  let aw = Array.isArray(nt.awaiting) ? nt.awaiting.filter(n => names.includes(n)) : [];
+  const pcs = {}; Object.values(chars || {}).forEach(c => { if (c && c.player && c.name) pcs[c.name] = c.player; });
+  const fa = World.fixAwaiting(nt, names, pcs);
+  let aw = fa.awaiting;
   if (!aw.length) aw = names.slice();
+  if (fa.note) console.log("let op: " + fa.note);
   o.nextTurn = { awaiting: aw, blind: !!nt.blind, prompt: String(nt.prompt || "Wat doen jullie?"), checks: nt.checks && typeof nt.checks === "object" ? nt.checks : null, handoff: (nt.handoff && nt.handoff.to === "claude") ? { to: "claude", reason: String(nt.handoff.reason || "groot moment").slice(0, 200) } : null };
   return o;
 }
@@ -146,7 +149,7 @@ function cmdApply(cid, file, flags) {
   const round = turn.round, now = Date.now();
   const chars = get("/dnd/characters") || {};
   const names = [...new Set([...vals(get("/dnd/" + cp(cid, "players"))), ...vals(chars).map(c => c.player).filter(Boolean)])];
-  const out = parseDM(JSON.parse(fs.readFileSync(file, "utf8")), names);
+  const out = parseDM(JSON.parse(fs.readFileSync(file, "utf8")), names, chars);
   const pendE = Object.entries(get("/dnd/" + cp(cid, "pending")) || {}).filter(([k, p]) => p.round === round);
   const pend = pendE.map(e => e[1]).sort((a, b) => a.t - b.t);
   const stateStr = get("/dnd/" + cp(cid, "state")) || "{}";

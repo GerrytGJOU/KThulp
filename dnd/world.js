@@ -662,6 +662,23 @@
     return res;
   }
 
+  /* Wie moet reageren? De DM geeft awaiting (spelers) en een vraag (prompt); die twee moeten bij elkaar passen.
+     Namen van personages worden naar hun speler vertaald; richt de vraag zich aan iemand die niet in awaiting staat
+     (bv. "Wat antwoordt Wulfgrim?" met awaiting ["Maurits"]), dan wint de vraag. Geen geldige awaiting: alle spelers. */
+  function fixAwaiting(nt, players, pcs) {
+    nt = nt || {}; const plist = (players || []).slice(), pc = pcs || {}, lc = s => String(s).toLowerCase();
+    const mapOne = x => { const s = lc(x), p = plist.find(n => lc(n) === s); if (p) return p; const k = Object.keys(pc).find(n => lc(n) === s); return k ? pc[k] : null; };
+    let aw = (Array.isArray(nt.awaiting) ? nt.awaiting : []).map(mapOne).filter(Boolean).filter((v, i, a) => a.indexOf(v) === i);
+    const prompt = String(nt.prompt || ""), mentions = [];
+    const has = name => new RegExp("(^|[^\\p{L}])" + String(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "($|[^\\p{L}])", "iu").test(prompt);
+    plist.forEach(n => { if (has(n) && mentions.indexOf(n) < 0) mentions.push(n); });
+    Object.keys(pc).forEach(c => { if (has(c) && mentions.indexOf(pc[c]) < 0) mentions.push(pc[c]); });
+    let note = null;
+    if (!aw.length) { aw = plist.slice(); note = "geen geldige awaiting: alle spelers"; }
+    else if (mentions.length && !mentions.some(m => aw.indexOf(m) >= 0)) { note = "de vraag richt zich aan " + mentions.join(" en ") + ", niet aan " + aw.join(" en ") + ": awaiting aangepast"; aw = mentions.slice(); }
+    return { awaiting: aw, note: note };
+  }
+
   /* Sprekers moeten in de scène zijn: een bekende NPC die elders staat (of overleden is) kan niet spreken of een portret krijgen. */
   function checkSpeakers(world, speakers, region) {
     const res = { errors: [], bad: [] }, reg = region || (world && world.sceneRegion) || null;
@@ -841,5 +858,5 @@
     return { set: set, prev: prev };
   }
 
-  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, checkSpeakers: checkSpeakers, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
+  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, fixAwaiting: fixAwaiting, checkSpeakers: checkSpeakers, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
 });

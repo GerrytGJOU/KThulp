@@ -621,5 +621,27 @@ t("sprekers moeten in de scène zijn", () => {
   eq(W.checkSpeakers(w, ["Oude veerman"], "REG-ERIADOR").bad.join(","), "Oude veerman");
 });
 
+/* ---------- wie moet reageren: awaiting en vraag blijven consistent ---------- */
+const PL = ["Gerben", "Maurits"], PCS = { Wulfgrim: "Gerben", Tharon: "Maurits" };
+t("awaiting: vraag aan Wulfgrim maar awaiting Maurits (de fout uit het spel) wordt hersteld naar Gerben", () => {
+  const r = W.fixAwaiting({ awaiting: ["Maurits"], prompt: "Wat antwoordt Wulfgrim aan Tobin over de situatie in de Vales of Anduin?" }, PL, PCS);
+  eq(r.awaiting.join(","), "Gerben"); yes(/aangepast/.test(r.note));
+});
+t("awaiting: namen van personages worden naar hun speler vertaald", () => eq(W.fixAwaiting({ awaiting: ["Wulfgrim"], prompt: "Wat doe je?" }, PL, PCS).awaiting.join(","), "Gerben"));
+t("awaiting: een goede combinatie blijft ongemoeid", () => {
+  eq(W.fixAwaiting({ awaiting: ["Gerben"], prompt: "Wulfgrim, wat doe je?" }, PL, PCS).awaiting.join(","), "Gerben");
+  eq(W.fixAwaiting({ awaiting: ["Maurits"], prompt: "Tobin vraagt Tharon iets terwijl Wulfgrim luistert. Wat antwoordt Tharon?" }, PL, PCS).awaiting.join(","), "Maurits");
+  eq(W.fixAwaiting({ awaiting: ["Gerben", "Maurits"], prompt: "Wat doen jullie?" }, PL, PCS).awaiting.join(","), "Gerben,Maurits");
+});
+t("awaiting: leeg of ongeldig wordt iedereen; vraag aan beiden zonder overlap wordt beiden", () => {
+  eq(W.fixAwaiting({ awaiting: [], prompt: "Wat nu?" }, PL, PCS).awaiting.join(","), "Gerben,Maurits");
+  eq(W.fixAwaiting({ awaiting: ["Niemand"], prompt: "Wat nu?" }, PL, PCS).awaiting.join(","), "Gerben,Maurits");
+  yes(W.fixAwaiting({ awaiting: ["Gerben"], prompt: "Wulfgrim en Tharon, wat doen jullie?" }, PL, PCS).awaiting.indexOf("Gerben") >= 0);
+});
+t("awaiting: namen met accent en hoofdletters worden herkend; geen deelwoord-treffers", () => {
+  eq(W.fixAwaiting({ awaiting: ["maurits"], prompt: "Wat doet WULFGRIM?" }, PL, PCS).awaiting.join(","), "Gerben");
+  eq(W.fixAwaiting({ awaiting: ["Maurits"], prompt: "Wat doet Gerbenson?" }, PL, PCS).awaiting.join(","), "Maurits");
+});
+
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);
