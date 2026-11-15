@@ -679,6 +679,15 @@
     return { awaiting: aw, note: note };
   }
 
+  /* De DM herhaalt de woorden van een speler: geef de eerste letterlijke herhaling van 5 woorden of meer terug (of null). */
+  function echoCheck(narration, actions) {
+    const words = s => String(s || "").toLowerCase().replace(/\[worp:[^\]]*\]/g, " ").split(/[^\p{L}\p{N}']+/u).filter(Boolean);
+    const nw = words(narration), grams = new Set();
+    for (let i = 0; i + 5 <= nw.length; i++) grams.add(nw.slice(i, i + 5).join(" "));
+    for (const a of (actions || [])) { const aw = words(a); for (let i = 0; i + 5 <= aw.length; i++) { const g = aw.slice(i, i + 5).join(" "); if (grams.has(g)) return g; } }
+    return null;
+  }
+
   /* Sprekers moeten in de scène zijn: een bekende NPC die elders staat (of overleden is) kan niet spreken of een portret krijgen. */
   function checkSpeakers(world, speakers, region) {
     const res = { errors: [], bad: [] }, reg = region || (world && world.sceneRegion) || null;
@@ -698,6 +707,7 @@
     if (!world) return "";
     const out = [];
     if (world.calendar && dateOk(world.calendar)) out.push("Datum: " + fmt(world.calendar) + (world.calendar.tod ? " (" + world.calendar.tod + ")" : ""));
+    if (world.sceneRegion) out.push("Party-regio (waar de scène nu speelt): " + world.sceneRegion + (world.sceneSince && dateOk(world.sceneSince) ? " sinds " + fmt(world.sceneSince) : "") + ". Zet worldDelta.region alleen op een andere regio als de party echt reist, en dan met time.");
     const clocks = Object.values(world.clocks || {});
     if (clocks.length) out.push("Klokken: " + clocks.map(c => c.id + "=" + c.value + "/" + (c.max != null ? c.max : 6) + " " + (c.label || "")).join("; "));
     const here = opts.region ? String(opts.region) : null;
@@ -858,5 +868,5 @@
     return { set: set, prev: prev };
   }
 
-  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, fixAwaiting: fixAwaiting, checkSpeakers: checkSpeakers, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
+  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, echoCheck: echoCheck, fixAwaiting: fixAwaiting, checkSpeakers: checkSpeakers, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
 });

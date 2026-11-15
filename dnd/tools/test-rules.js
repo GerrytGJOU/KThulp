@@ -95,7 +95,7 @@ const world = dump.campaigns[C].world, tpl = dump.worldTemplate;
 /* ---------- toegang ---------- */
 t("niet-toegestane gebruiker mag niets schrijven in dnd", () => { denied({ "dnd/campaigns/c1/turn/status": "waiting" }, "niet toegestaan", NOPE); denied({ "dnd/config/geminiModel": "x" }, "niet toegestaan", NOPE); });
 t("speler schrijft gewone verhaaldata zoals voorheen", () => {
-  allowed({ "dnd/campaigns/c1/messages/k1": { type: "action", text: "x" }, "dnd/campaigns/c1/turn": { round: 2, status: "waiting" }, "dnd/campaigns/c1/state": "{}", "dnd/campaigns/c1/canon/a1/text": "t", "dnd/campaignIndex/c1/round": 2, "dnd/npcs/aragorn/img": "data:x", "dnd/characters/wulfgrim/hp": 40, "dnd/config/dmMode": "gemini", "dnd/campaigns/c1/dmnotes/k": "v", "dnd/campaigns/c1/stands/r1/json": "{}" });
+  allowed({ "dnd/campaigns/c1/messages/k1": { type: "action", text: "x" }, "dnd/campaigns/c1/turn": { round: 2, status: "waiting" }, "dnd/campaigns/c1/state": "{}", "dnd/campaigns/c1/canon/a1/text": "t", "dnd/campaignIndex/c1/round": 2, "dnd/npcs/aragorn/img": "data:x", "dnd/characters/wulfgrim/hp": 40, "dnd/config/dmMode": "gemini", "dnd/campaigns/c1/dmnotes/k": "v", "dnd/campaigns/c1/map/current": { id: "rivendell" }, "dnd/campaigns/c1/map/visited/rivendell/n": 1, "dnd/campaigns/c1/stands/r1/json": "{}" });
 });
 t("een heel verhaal verwijderen mag (savegame wissen)", () => allowed({ "dnd/campaigns/c1": null, "dnd/campaignIndex/c1": null }));
 t("een heel verhaal overschrijven met nieuwe data mag niet", () => denied({ "dnd/campaigns/c1": { turn: {} } }, "niet toegestaan"));

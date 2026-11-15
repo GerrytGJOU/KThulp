@@ -15,6 +15,7 @@ const { spawnSync } = require("child_process");
 const fs = require("fs"), os = require("os"), path = require("path"), crypto = require("crypto");
 const PROJECT = "kthulp-certamen";
 const World = require("../world.js");
+const MapData = require("../map-data.js");
 
 /* ---------- Firebase CLI ---------- */
 function fb(args) {
@@ -115,6 +116,7 @@ function cmdContext(cid, flags) {
   out.push("# ACTUELE STAND\n" + JSON.stringify(state));
   const world = get("/dnd/" + cp(cid, "world"));
   out.push("# WERELDSTATUS (stabiele IDs; wijzig alleen via worldDelta)\n" + (world ? World.worldContext(world, { hay: (sortedVals(msgs).slice(-6).map(m => m.text).join(" ") + " " + pend.map(p => p.text).join(" ")).toLowerCase(), region: world.sceneRegion, maxChars: 6000 }) : "(niet actief)"));
+  out.push("# KAARTPLAATSEN (kies hieruit het id voor \"place\")\n" + MapData.ids.join(", "));
   out.push("# DM-NOTITIES (privé)\n" + (Object.entries(notes).map(([k, v]) => "- " + k + ": " + v).join("\n") || "(nog geen)"));
   out.push("# RECENTE GESCHIEDENIS\n" + (sortedVals(msgs).filter(m => m.type !== "system").slice(-10).map(m => (m.type === "narration" ? "DM" : m.author) + ": " + m.text).join("\n\n") || "(begin van het verhaal)"));
   out.push("# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n" + JSON.stringify(rollDice()));
@@ -125,6 +127,7 @@ function parseDM(o, names, chars) {
   if (typeof o.narration !== "string" || !o.narration) throw new Error("narration ontbreekt");
   o.statePatch = o.statePatch && typeof o.statePatch === "object" ? o.statePatch : {};
   o.logEntries = Array.isArray(o.logEntries) ? o.logEntries : [];
+  o.place = (typeof o.place === "string" && MapData.byId[o.place]) ? o.place : null;
   o.worldDelta = (o.worldDelta && typeof o.worldDelta === "object" && !Array.isArray(o.worldDelta)) ? o.worldDelta : null;
   o.speakers = Array.isArray(o.speakers) ? o.speakers.filter(s => typeof s === "string").slice(0, 2) : [];
   o.newNpcs = Array.isArray(o.newNpcs) ? o.newNpcs.filter(n => n && typeof n.name === "string" && n.name.trim()) : [];
@@ -152,6 +155,7 @@ function cmdApply(cid, file, flags) {
   const out = parseDM(JSON.parse(fs.readFileSync(file, "utf8")), names, chars);
   const pendE = Object.entries(get("/dnd/" + cp(cid, "pending")) || {}).filter(([k, p]) => p.round === round);
   const pend = pendE.map(e => e[1]).sort((a, b) => a.t - b.t);
+  { const ec = World.echoCheck(out.narration, pend.map(p => p.text)); if (ec && !flags.force) throw new Error("De vertelling herhaalt letterlijk wat een speler zei of deed (\"" + ec + "\"). Laat de wereld reageren met nieuwe informatie; niets is opgeslagen."); }
   const stateStr = get("/dnd/" + cp(cid, "state")) || "{}";
   const state = JSON.parse(typeof stateStr === "string" ? stateStr : JSON.stringify(stateStr));
   const notes = get("/dnd/" + cp(cid, "dmnotes")) || {};
@@ -180,7 +184,14 @@ function cmdApply(cid, file, flags) {
   const newState = deepMerge(state, out.statePatch);
   const newNotes = { ...notes }; for (const [k, v] of Object.entries(out.dmNotes)) { if (v === null) delete newNotes[k]; else newNotes[k] = v; }
   up[cp(cid, "dmnotes")] = Object.keys(newNotes).length ? newNotes : null;
-  const worldPrev = [];
+  const worldPrev = []; let mapPrev = [];
+  try {
+    const mapNow = get("/dnd/" + cp(cid, "map")), nc = (wplan && wplan.calendar) || (world && world.calendar) || null;
+    const sc = (out.statePatch && out.statePatch.inGame && out.statePatch.inGame.location) || (state.inGame && state.inGame.location) || "";
+    const pl = MapData.determinePlace({ id: out.place, locName: out.location && out.location.name, sceneText: sc, region: (out.worldDelta && out.worldDelta.region) || (world && world.sceneRegion) || null });
+    const vis = MapData.planVisit(mapNow, pl, nc && nc.y ? { y: nc.y, m: nc.m, d: nc.d } : null, out.location ? slug(out.location.name) : null, now);
+    Object.keys(vis.set).forEach(p => { up[cp(cid, p)] = vis.set[p]; }); mapPrev = vis.prev;
+  } catch (e) { console.log("let op: kaart niet bijgewerkt (" + e.message + ")"); }
   if (world && (wplan || (out.worldDelta && out.worldDelta.region))) {
     const cm = World.commitPaths(world, wplan || { npcs: {}, quests: {}, clocks: {}, calendar: null, divergences: [], events: [] }, { now: now, region: out.worldDelta && out.worldDelta.region, newKey: pushId });
     Object.keys(cm.set).forEach(pth => { up[cp(cid, pth)] = cm.set[pth]; });
@@ -188,7 +199,7 @@ function cmdApply(cid, file, flags) {
   }
   const sj = JSON.stringify(newState), rk = String(round + 1).padStart(5, "0");
   up[cp(cid, "state")] = sj;
-  up[cp(cid, "stands/" + rk)] = { json: sj, round: round + 1, t: now, undo: { worldPrev: worldPrev, prevNotes: Object.keys(notes).length ? notes : null, prevState: typeof stateStr === "string" ? stateStr : "{}", turn, pend: pendE.map(([k, p]) => ({ uid: k, ...p })), msgs: msgKeys, logs: logKeys } };
+  up[cp(cid, "stands/" + rk)] = { json: sj, round: round + 1, t: now, undo: { mapPrev: mapPrev, worldPrev: worldPrev, prevNotes: Object.keys(notes).length ? notes : null, prevState: typeof stateStr === "string" ? stateStr : "{}", turn, pend: pendE.map(([k, p]) => ({ uid: k, ...p })), msgs: msgKeys, logs: logKeys } };
   up[cp(cid, "usage/" + rk)] = { prompt: 0, cached: 0, out: 0, model: "claude-code" };
   up[cp(cid, "pending")] = null;
   up["campaignIndex/" + cid + "/lastPlayed"] = now; up["campaignIndex/" + cid + "/round"] = round + 1;

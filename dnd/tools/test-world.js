@@ -643,5 +643,44 @@ t("awaiting: namen met accent en hoofdletters worden herkend; geen deelwoord-tre
   eq(W.fixAwaiting({ awaiting: ["Maurits"], prompt: "Wat doet Gerbenson?" }, PL, PCS).awaiting.join(","), "Maurits");
 });
 
+/* ---------- Kaart: plaatsen, koppeling en bezoeken ---------- */
+const MAPD = require("../map-data.js");
+t("kaart: alle plaatsen liggen binnen de afbeelding, ids zijn uniek en elke regio heeft een primaire plaats", () => {
+  const ids = new Set(); MAPD.PLACES.forEach(p => { yes(!ids.has(p.id), "dubbel id " + p.id); ids.add(p.id); yes(p.x > 0 && p.x < MAPD.MAP.w && p.y > 0 && p.y < MAPD.MAP.h, p.id + " buiten de kaart"); yes(/^[a-z_]+$/.test(p.id), "id-vorm " + p.id); });
+  Object.keys(MAPD.REGIONS).forEach(r => yes(MAPD.byId[MAPD.REGIONS[r].primary], "primaire plaats van " + r));
+  MAPD.PLACES.forEach(p => yes(MAPD.REGIONS[p.region], p.id + ": onbekende regio " + p.region));
+});
+t("kaart: locatienamen uit het spel worden gekoppeld", () => {
+  eq(MAPD.resolvePlace({ name: "Rivendell, Last Homely House (galerijterras)" }).id, "rivendell");
+  eq(MAPD.resolvePlace({ text: "Op weg naar Rivendell, Eriador" }).id, "rivendell");
+  eq(MAPD.resolvePlace({ name: "Het Dansende Pony in Bree" }).id, "bree");
+  eq(MAPD.resolvePlace({ name: "Een verlaten buitenpost nabij Dol Guldur" }).id, "dol_guldur");
+  eq(MAPD.resolvePlace({ id: "moria", name: "Rivendell" }).id, "moria", "expliciete id wint");
+  eq(MAPD.determinePlace({ id: "onzin", locName: "Eryn Thurin", region: "REG-MIRKWOOD" }).id, "eryn_thurin");
+  const r = MAPD.determinePlace({ region: "REG-ROHAN" }); yes(r.regionOnly && r.id === "regio:REG-ROHAN");
+  eq(MAPD.determinePlace({ sceneText: "een nacht onder de sterren" }), null);
+});
+t("kaart: bezoeken worden vastgelegd met herstelgegevens en tellen alleen aankomsten", () => {
+  const d1 = { y: 3018, m: 10, d: 24 }, riv = MAPD.byId.rivendell, bree = MAPD.byId.bree;
+  const a = MAPD.planVisit(null, riv, d1, "rivendell_gastvrije_huis", 100);
+  eq(a.set["map/current"].id, "rivendell"); eq(a.set["map/visited/rivendell/n"], 1); eq(a.set["map/visited/rivendell/first"].d, 24); eq(a.set["map/visited/rivendell/locs/rivendell_gastvrije_huis"], true); yes(a.prev.every(x => x.v === null));
+  const m1 = { current: a.set["map/current"], visited: { rivendell: { name: riv.name, first: d1, last: d1, n: 1, locs: { rivendell_gastvrije_huis: true } } } };
+  const b = MAPD.planVisit(m1, riv, { y: 3018, m: 10, d: 25 }, "rivendell_gastvrije_huis", 200);
+  eq(b.set["map/visited/rivendell/n"], undefined, "zelfde plaats telt niet als nieuwe aankomst"); eq(b.set["map/visited/rivendell/last"].d, 25);
+  const c = MAPD.planVisit(m1, bree, { y: 3018, m: 10, d: 28 }, null, 300); eq(c.set["map/current"].id, "bree"); eq(c.set["map/visited/bree/n"], 1);
+  const m2 = { current: c.set["map/current"], visited: Object.assign({}, m1.visited, { bree: { n: 1 } }) };
+  const e = MAPD.planVisit(m2, riv, { y: 3018, m: 11, d: 2 }, null, 400); eq(e.set["map/visited/rivendell/n"], 2, "terugkeer telt als tweede bezoek");
+  eq(e.prev.find(x => x.p === "map/visited/rivendell/n").v, 1);
+  const reg = MAPD.planVisit({ current: { id: "rivendell", region: "REG-RIVENDELL" }, visited: {} }, { id: "regio:REG-RIVENDELL", name: "Rivendell", region: "REG-RIVENDELL", regionOnly: true }, d1, null, 1); eq(Object.keys(reg.set).length, 0, "regio-terugval verandert de huidige plaats niet");
+});
+
+t("echoCheck: letterlijke herhaling van een speler wordt gevonden, een eigen reactie niet", () => {
+  const act = "Helaas is dit soort gevaar de Vales of Anduin niet bespaard gebleven. Onlangs heeft een orc-raid het leven van mijn broer gekost.";
+  yes(W.echoCheck("Wulfgrim zegt: 'Helaas is dit soort gevaar de Vales of Anduin niet bespaard gebleven,' en kijkt Tobin aan.", [act]));
+  eq(W.echoCheck("Tobin knikt langzaam. 'Een orc-raid? Dan moet je Glorfindel spreken; hij is gisteren teruggekeerd van de Furt.'", [act]), null);
+  eq(W.echoCheck("Het regent.", []), null); eq(W.echoCheck("kort", ["ook kort"]), null);
+});
+t("party-regio staat in de wereldcontext", () => { const w = cworld(); w.sceneSince = { y: 3018, m: 10, d: 24 }; const c = W.worldContext(w, { hay: "" }); yes(c.indexOf("Party-regio") >= 0 && c.indexOf("REG-RIVENDELL") >= 0, c); });
+
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);

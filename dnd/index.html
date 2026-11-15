@@ -86,6 +86,26 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 #partyside:empty{display:none}
 #partyside .pc{min-width:0;max-width:none}
 .dmsel{flex:none;width:auto;max-width:190px}
+#mapwrap{flex:1;display:flex;min-height:0;position:relative}
+#mapview{position:relative;flex:1;min-width:0;overflow:hidden;background:#14100d;touch-action:none;cursor:grab;user-select:none}
+#mapview.drag{cursor:grabbing}
+#mapstage{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+#mapimg{display:block;width:100%;height:auto;pointer-events:none;-webkit-user-drag:none}
+.mapctl{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:5}
+.mapctl button{width:42px;height:42px;border-radius:8px;border:1px solid rgba(200,162,74,.6);background:rgba(20,17,15,.88);color:var(--gold);font-size:20px;line-height:1;padding:0}
+.maphint{position:absolute;left:10px;bottom:8px;right:70px;font-size:12px;color:#f3e9d2;text-shadow:0 1px 3px #000;pointer-events:none}
+.pin{position:absolute;transform:translate(-50%,-100%) scale(var(--inv,1));transform-origin:50% 100%;background:none;border:0;padding:0;cursor:pointer;z-index:2}
+.pin i{display:block;width:22px;height:22px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--gold);border:2px solid #2b2012;box-shadow:0 2px 5px rgba(0,0,0,.6)}
+.pin.cur i{background:var(--red);border-color:#fff3d6}
+.pin.sel i{outline:3px solid #fff3d6}
+.pin b{position:absolute;left:50%;top:-4px;transform:translate(-50%,-100%);white-space:nowrap;font-size:12px;font-weight:normal;color:#2b2012;background:rgba(243,233,210,.95);border:1px solid #6a5a44;border-radius:4px;padding:1px 6px;display:none}
+#mapstage.lab .pin b,.pin.sel b,.pin.cur b{display:block}
+.pin.cur:after{content:'';position:absolute;left:50%;bottom:-2px;width:26px;height:26px;margin-left:-13px;border-radius:50%;border:2px solid var(--red);animation:pinp 1.8s ease-out infinite;pointer-events:none}
+@keyframes pinp{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.8);opacity:0}}
+#mapinfo{width:340px;flex:none;overflow-y:auto;padding:10px 12px;border-left:1px solid rgba(200,162,74,.35);background:rgba(20,17,15,.92)}
+#mapinfo h3{color:var(--gold);margin:0 0 4px}
+#mapinfo .locimg{width:100%;border-radius:8px;margin:6px 0;cursor:zoom-in}
+@media(max-width:899px){#mapwrap{flex-direction:column}#mapview{flex:1}#mapinfo{width:auto;max-height:42%;border-left:0;border-top:1px solid rgba(200,162,74,.35)}}
 .pc{display:flex;gap:8px;align-items:center;flex:none;min-width:170px;max-width:240px;padding:5px 8px;border-radius:8px;background:rgba(42,35,29,.9);border:1px solid #4a3d30}
 .pc .av{width:44px;height:44px;border-radius:50%;flex:none;object-fit:cover;object-position:top;border:2px solid var(--gold);background:#0f0d0b;display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:bold}
 .pc .pi{min-width:0;flex:1}
@@ -166,7 +186,8 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
-<script src="world.js?v=10"></script>
+<script src="world.js?v=11"></script>
+<script src="map-data.js?v=1"></script>
 <script>
 "use strict";
 firebase.initializeApp({
@@ -184,7 +205,7 @@ const main=$('#main');
 let me=null;                 // {uid,name}
 let screen='menu', cid=null; // menu of campagne
 let cfg={}, npcs={}, locs={}, chars={}, index={}; let sceneKey='', editKey=null, editDraft='', lastSide='';              // globaal
-let wQuests={}, wCal=null, wBack={};
+let wQuests={}, wCal=null, wBack={}, wNpcs={}, wLocs={}, mapData=null, mapSel=null, mapView={s:1,x:0,y:0,init:false};
 let turn=null, canon={}, msgs=[], oocs=[], pending={}, stateStr="{}"; // per campagne
 let tab='game', draft="", rollDraft="";
 let listeners=[];
@@ -198,6 +219,27 @@ function md(s){
     .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>').replace(/\n/g,'<br>');
 }
 function slug(s){return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,60)||'x'}
+/* ---------- melding als je aan de beurt bent ---------- */
+let turnSeen=false, titleBase=document.title, pingTimer=null;
+function notifyOn(){try{return localStorage.getItem('dnd_notify')!=='0'}catch(e){return true}}
+function beep(){
+  try{const A=window.AudioContext||window.webkitAudioContext; if(!A) return; const c=new A(), o=c.createOscillator(), g=c.createGain(); o.type='sine'; o.frequency.value=880; g.gain.setValueAtTime(0.0001,c.currentTime); g.gain.exponentialRampToValueAtTime(0.25,c.currentTime+0.02); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+0.5); o.connect(g); g.connect(c.destination); o.start(); o.frequency.setValueAtTime(1175,c.currentTime+0.18); o.stop(c.currentTime+0.55); setTimeout(()=>c.close(),900)}catch(e){}
+}
+function stopPing(){ if(pingTimer){clearInterval(pingTimer);pingTimer=null} document.title=titleBase }
+function ping(t){
+  if(!notifyOn()) return; beep(); try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){}
+  if(document.hidden){
+    let on=false; stopPing(); pingTimer=setInterval(()=>{on=!on; document.title=on?'🔔 Jouw beurt · Midden-aarde':titleBase},1000);
+    if('Notification' in window&&Notification.permission==='granted'){try{new Notification('Midden-aarde: jouw beurt',{body:String((t&&t.prompt)||'Je bent aan de beurt'),tag:'dnd-turn'})}catch(e){}}
+  }
+}
+function maybePing(oldT,newT){
+  if(!me||!newT||newT.status!=='waiting'||!newT.awaiting||!newT.awaiting[me.name]) return;
+  const was=oldT&&oldT.round===newT.round&&oldT.status==='waiting'&&oldT.awaiting&&oldT.awaiting[me.name]; if(was) return;
+  const mine=pending[me.uid]; if(mine&&mine.round===newT.round) return;
+  ping(newT);
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden) stopPing()}); window.addEventListener('focus',stopPing);
 function awaitingNames(){return turn&&turn.awaiting?Object.keys(turn.awaiting):[]}
 function deepMerge(t,p){
   if(p===null||typeof p!=='object'||Array.isArray(p)) return p;
@@ -293,7 +335,7 @@ function latestId(){
 }
 function leaveCampaign(){
   listeners.forEach(([r,e,f])=>r.off(e,f));listeners=[];
-  cid=null;turn=null;canon={};sceneKey='';editKey=null;msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
+  cid=null;turn=null;canon={};mapData=null;mapSel=null;mapView={s:1,x:0,y:0,init:false};sceneKey='';editKey=null;msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
 }
 let menuView='home';
 function updateBack(){const b=$('#topback'); if(b) b.style.display=(screen==='camp'||menuView!=='home')?'flex':'none';}
@@ -470,20 +512,24 @@ function enterCampaign(id){
   <section class="tab" id="t-game"><div id="gamewrap"><div id="gamemain"><div id="scenebar"></div><div id="partybar"></div><div id="initbar"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></div><aside id="side"><div id="sidemain"></div><div id="partyside"></div></aside></div></section>
   <section class="tab" id="t-ooc"><div class="scroll" id="oocthread"></div><div class="compose"><div class="row"><input type="text" id="oocin" placeholder="Praat met je broer (de DM leest dit niet)" style="flex:1"><button class="b" id="oocsend">Stuur</button></div></div></section>
   <section class="tab" id="t-diary"><div class="scroll" id="diarybox"></div></section>
+  <section class="tab" id="t-map"><div id="mapwrap"></div></section>
   <section class="tab" id="t-sheet"><div class="scroll" id="sheetbox"></div></section>
   <section class="tab" id="t-more"><div class="scroll" id="morebox"></div></section>
   <section class="tab" id="t-stand"><div class="scroll" id="standbox"></div></section>
   <section class="tab" id="t-canon"><div class="scroll" id="canonbox"></div></section>
   <section class="tab" id="t-set"><div class="scroll" id="setbox"></div></section>
-  <nav><button data-t="game">Spel</button><button data-t="diary">Dagboek</button><button data-t="more">Meer</button></nav>`;
+  <nav><button data-t="game">Spel</button><button data-t="diary">Dagboek</button><button data-t="map">Kaart</button><button data-t="more">Meer</button></nav>`;
   document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
   $('#oocsend').onclick=sendOoc;
   $('#thread').addEventListener('click',threadClick);
   $('#oocin').onkeydown=e=>{if(e.key==='Enter')sendOoc()};
-  on(db.ref(cp('turn')),'value',s=>{turn=s.val();renderGame()});
+  on(db.ref(cp('turn')),'value',s=>{const old=turn; turn=s.val(); if(turnSeen) maybePing(old,turn); turnSeen=true; renderGame()});
   on(db.ref(cp('state')),'value',s=>{stateStr=s.val()||"{}";if(tab==='stand')renderStand();if(tab==='diary')renderDiary();renderGame()});
   on(db.ref(cp('world/quests')),'value',s=>{wQuests=s.val()||{};if(tab==='diary')renderDiary()});
   on(db.ref(cp('world/backstories')),'value',s=>{wBack=s.val()||{};if(tab==='diary')renderDiary()});
+  on(db.ref(cp('map')),'value',s=>{mapData=s.val()||null;if(tab==='map')renderMap(true)});
+  on(db.ref(cp('world/npcs')),'value',s=>{wNpcs=s.val()||{};if(tab==='map')renderMap(true)});
+  on(db.ref(cp('world/locations')),'value',s=>{wLocs=s.val()||{};if(tab==='map')renderMap(true)});
   on(db.ref(cp('world/calendar')),'value',s=>{wCal=s.val()||null;if(tab==='diary')renderDiary()});
   on(db.ref(cp('canon')),'value',s=>{canon=s.val()||{};if(tab==='canon')renderCanon()});
   on(db.ref(cp('pending')),'value',s=>{pending=s.val()||{};renderGame()});
@@ -499,7 +545,7 @@ function setTab(t){
   document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id==='t-'+t));
   const navT=(t==='stand'||t==='canon'||t==='set'||t==='sheet')?'more':t;
   document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.t===navT));
-  ({game:renderGame,ooc:renderOoc,diary:renderDiary,more:renderMore,sheet:renderSheetTab,stand:renderStand,canon:renderCanon,set:renderSet})[t]();
+  ({game:renderGame,ooc:renderOoc,diary:renderDiary,map:renderMap,more:renderMore,sheet:renderSheetTab,stand:renderStand,canon:renderCanon,set:renderSet})[t]();
 }
 document.addEventListener('click',e=>{const g=e.target.closest('[data-goto]'); if(g&&screen==='camp') setTab(g.dataset.goto)});
 const BACK='<button class="b alt sm" data-goto="more" style="margin-bottom:8px">‹ Meer</button>';
@@ -659,6 +705,8 @@ async function startCampaign(){
 const SYSTEM=`Je bent de Dungeon Master van een doorlopende D&D 5e (2024)-campagne in Midden-aarde met twee spelers (PC's). Schrijf in het Nederlands, met Engelse 2024-spelregeltermen. Gebruik voor alle Tolkien-namen (plaatsen, volken, personen, voorwerpen, titels) altijd de Engelse benaming uit het origineel, nooit een Nederlandse vertaling: the Shire (niet de Gouw), Rivendell, Bree, Mirkwood, the Misty Mountains, Hobbit, Dwarves, Elves, Wizard, Ranger, enzovoort. Dat geldt ook voor namen in worldDelta, location en newNpcs.
 Regels:
 - Bronnenhiërarchie: (1) CANON (spelregels en personages) (2) LOGBOEK (3) de actuele STAND (4) rest. Verzin geen feiten over het verleden die hiermee botsen.
+- Zet in "place" het id van de kaartplaats waar de scène speelt (uit KAARTPLAATSEN; ook zonder nieuwe locatie), zodat de Kaart-tab de bezochte plekken kan tonen; past geen plaats, laat het null.
+- Herhaal of parafraseer NOOIT wat een speler zegt of doet: de spelers hebben hun eigen woorden al gelezen. Begin bij wat de WERELD terugdoet: een NPC antwoordt met inhoud (nieuwe informatie, een wedervraag, een reactie), een nieuwe waarneming, een gevolg of een complicatie. Elke beurt voegt minstens één nieuw feit of een nieuwe ontwikkeling toe. Wordt een NPC aangesproken, laat die dan antwoorden.
 - Houd je aan het scene-pacing uit A1: kort vertellen, één betekenisvolle ontwikkeling per beurt, doorgaans 80-180 woorden (alleen bij reizen, omgevingsintroducties of een expliciete wens langer). Stop op een natuurlijk reactiemoment. Geen openingsgroet of meta-uitleg ("Welkom in…"); begin direct in de scène.
 - Schrijf niets over wat een PC denkt, voelt of besluit; beschrijf alleen de wereld, NPC's en de zintuiglijke waarneming van de PC's.
 - Speel NOOIT een PC.
@@ -681,7 +729,7 @@ Regels:
 - Is de ACTUELE STAND nog leeg ({}), begin dan met een statePatch die de beginsituatie uit D1 Wereldstatus / STAND #1 in canon overneemt. Een PC zonder uitgewerkt personage (zoals PC2 zolang B2 ontbreekt) speel je niet; vraag die speler eerst zijn personage te beschrijven.
 - Portretten: "speakers" = de namen van maximaal 2 NPC's die in deze beurt spreken of centraal staan. Gebruik EXACT de naam uit de lijst BEKENDE NPC'S als de NPC daar al in staat. "newNpcs" = elke NPC die in deze beurt voor het eerst optreedt en NIET in die lijst staat, met "visual": een concrete Engelse beschrijving voor een portret (soort/leeftijd, postuur, gezicht, huid, haar en baard, ogen, littekens, elk kledingstuk met kleur en materiaal, zichtbare uitrusting, uitdrukking). Voor figuren uit Tolkiens boeken: beschrijf zoals in de boeken. Geen geheimen in "visual".
 - Passages en documenten met [V] zijn voorstellen: gebruik ze als ontwerp, maar presenteer ze niet als bestaande feiten of vaststaande personen zolang ze niet in het spel zijn geïntroduceerd; [B] is bestaand, [O] is open (niet invullen).
-- Wereldstatus: de app houdt een register met stabiele IDs (TOL- Tolkien-figuren, NPC-, CMP- companions, MAIN-, SQ-, MQ-, PQ-, DQ- quests, CLK- klokken, FAC- facties, LOC- plaatsen, REG- regio's). Gebruik exact die IDs uit WERELDSTATUS. Wijzigingen in de wereld geef je in "worldDelta" (weglaten als er niets verandert): {"region":"REG-ERIADOR" (waar de scène speelt),"time":{"to":{"y":3018,"m":10,"d":26},"reason":"...","worldTick":false},"npcs":[{"id":"NPC-E05","op":"create|update","set":{"name":"","status":"named","location":"LOC-...","canon":"N"},"reason":""}],"quests":[{"id":"DQ-0001","op":"create|update","set":{"status":"active"},"reason":""}],"clocks":[{"id":"CLK-A","delta":1,"reason":""}],"agendas":[{"id":"AG-NET-1","op":"create|thwart|pause|resume|delay","reason":"","days":5,"set":{"owner":"FAC-LOCAL","title":"","canon":"N","steps":[{"text":"","afterDays":7,"clock":[{"id":"CLK-B","delta":1}],"moves":[{"id":"NPC-E02","to":"REG-RIVENDELL"}],"quest":{"id":"SQ-02","to":"available"},"requires":{"id":"SQ-01","status":"completed"}}],"thwartedBy":[],"holdIfActive":[],"ifUnopposed":""}}],"reveals":[{"npc":"CMP-R01","layer":1,"reason":"wat er in het verhaal gebeurde"}],"companions":[{"id":"CMP-R03","op":"recruit|decline|depart|return|update|rest","mode":"permanent|etappe|temporary|contact|remote","reason":"","hp":{"delta":-5},"resources":{"Second Wind":{"delta":-1}},"conditions":{"add":[],"remove":[]},"evidence":"concrete ervaring","nextAction":"","obligation":{"text":"","due":{"y":3018,"m":11,"d":5}},"destination":"REG-ERIADOR","returnIf":"","expectedReturn":{"y":3018,"m":12,"d":1},"kind":"short|long"}],"events":[{"type":"","summary":"","refs":{"npcs":[],"quests":[]},"divergence":false,"cause":""}]}. Regels: de tijd gaat nooit terug en sprongen van meer dan 21 dagen vereisen worldTick:true; NPC's reizen niet sneller dan de afstand tussen regio's toelaat; overleden NPC's keren niet terug; quests gaan dormant→available→active→completed|failed|expired|changed en een beëindigde quest start nooit opnieuw; klokken veranderen alleen met een reden en hoogstens ±2; een nieuwe quest (DQ-0001, DQ-0002, ...) heeft title, hook, region, ifIgnored, canon:"N" en expires {y,m,d} of open:true; Tolkien-figuren (TOL-) maak je niet aan; promoveer NPC's gefaseerd (ambient → named → recurring → companion_candidate → recruited) en geef elke terugkerende NPC een ID; een afwijking van de Tolkien-canon registreer je als event met divergence:true en een cause. Companions (CMP-): promoveer eerst tot companion_candidate en stel ze voor met npcs-update {introduced:true}; daarna gaat alles via "companions", nooit via npcs-status. recruit (alleen als de kandidaat bij de party is, met mode en reden: een geloofwaardig verzoek en gedeeld belang, geen verplichte quest), decline (weigering, eventueel retryAfter), depart (reden, bestemming, returnIf, expectedReturn), return (na reistijd; reden), update (hp/resources/conditions na gevechten en rust, evidence = een concrete ervaring zoals 'PCs redden een gewonde': géén vertrouwensgetal, nextAction, obligation met due), rest (short|long). Je rolt NPC-dobbelstenen zelf; 0 HP is bewusteloos, overlijden alleen via npcs status:'deceased' met reden. Boven 5 reizigers (incl. beide PC's) vraag je een logistiek plan. Regels onder 'Aan de orde (companions)' in WERELDSTATUS verwerk je in het verhaal: een companion handelt autonoom, ook buiten beeld. Factie-agenda's en NPC-acties buiten beeld (AG-): onder "Agenda's" in WERELDSTATUS staan de plannen van facties en NPC's; de app voert stappen zelf uit bij elke tijdsprong (klokken, verplaatsingen met reistijd, quests die beschikbaar worden) en toont het resultaat onder "Recent buiten beeld". Laat de wereld daarop reageren, maar nooit alwetend: de PC's weten het pas als nieuws, een bode of eigen onderzoek hen bereikt. Dwarsbomen de spelers een plan, gebruik dan agendas op:"thwart" (of "pause"/"delay") met een reden; start een nieuwe agenda met op:"create" (1-6 stappen, ID AG-...) alleen als een factie of NPC daar een geloofwaardig motief en middelen voor heeft. Voer stappen nooit zelf uit en wijzig klokken niet dubbel. Zodra de spelers een NPC echt ontmoeten zet je npcs-update {introduced:true} (zonder dat opent geen enkele laag). Verhaallagen (Baldur's Gate-stijl): elke NPC met een regel onder "Verhaallagen" in WERELDSTATUS heeft een eigen rol, een eigen quest (CQ-/NQ-/PQ-) en een gelaagde achtergrond die langzaam aan het licht komt. Laat een NPC door gedrag, bijzaken en dialoog voelbaar meer hebben dan hij zegt; onthul een laag pas als de WERELDSTATUS aangeeft KAN NU ONTHULD WORDEN en de scène erom vraagt (vertrouwen, een stille moment, het juiste gesprek), en dan met reveals [{npc,layer,reason}] (lagen gaan op volgorde, nooit vooruit lopen of dumpen). Activeer de eigen quest van een NPC (dormant naar active) zodra de spelers erop ingaan en ga stap voor stap vooruit met quests set:{stage:n}. Een onvoorbereide NPC zonder verhaallaag krijgt geen verzonnen diepe geheimen. Een ongeldige worldDelta wordt geweigerd en je moet hem corrigeren.
+- Wereldstatus: de app houdt een register met stabiele IDs (TOL- Tolkien-figuren, NPC-, CMP- companions, MAIN-, SQ-, MQ-, PQ-, DQ- quests, CLK- klokken, FAC- facties, LOC- plaatsen, REG- regio's). Gebruik exact die IDs uit WERELDSTATUS. Wijzigingen in de wereld geef je in "worldDelta" (weglaten als er niets verandert): {"region":null (alleen een REG-id als de party echt naar een andere regio reist, en dan met time; de huidige regio staat in WERELDSTATUS),"time":{"to":{"y":3018,"m":10,"d":26},"reason":"...","worldTick":false},"npcs":[{"id":"NPC-E05","op":"create|update","set":{"name":"","status":"named","location":"LOC-...","canon":"N"},"reason":""}],"quests":[{"id":"DQ-0001","op":"create|update","set":{"status":"active"},"reason":""}],"clocks":[{"id":"CLK-A","delta":1,"reason":""}],"agendas":[{"id":"AG-NET-1","op":"create|thwart|pause|resume|delay","reason":"","days":5,"set":{"owner":"FAC-LOCAL","title":"","canon":"N","steps":[{"text":"","afterDays":7,"clock":[{"id":"CLK-B","delta":1}],"moves":[{"id":"NPC-E02","to":"REG-RIVENDELL"}],"quest":{"id":"SQ-02","to":"available"},"requires":{"id":"SQ-01","status":"completed"}}],"thwartedBy":[],"holdIfActive":[],"ifUnopposed":""}}],"reveals":[{"npc":"CMP-R01","layer":1,"reason":"wat er in het verhaal gebeurde"}],"companions":[{"id":"CMP-R03","op":"recruit|decline|depart|return|update|rest","mode":"permanent|etappe|temporary|contact|remote","reason":"","hp":{"delta":-5},"resources":{"Second Wind":{"delta":-1}},"conditions":{"add":[],"remove":[]},"evidence":"concrete ervaring","nextAction":"","obligation":{"text":"","due":{"y":3018,"m":11,"d":5}},"destination":"REG-ERIADOR","returnIf":"","expectedReturn":{"y":3018,"m":12,"d":1},"kind":"short|long"}],"events":[{"type":"","summary":"","refs":{"npcs":[],"quests":[]},"divergence":false,"cause":""}]}. Regels: de tijd gaat nooit terug en sprongen van meer dan 21 dagen vereisen worldTick:true; NPC's reizen niet sneller dan de afstand tussen regio's toelaat; overleden NPC's keren niet terug; quests gaan dormant→available→active→completed|failed|expired|changed en een beëindigde quest start nooit opnieuw; klokken veranderen alleen met een reden en hoogstens ±2; een nieuwe quest (DQ-0001, DQ-0002, ...) heeft title, hook, region, ifIgnored, canon:"N" en expires {y,m,d} of open:true; Tolkien-figuren (TOL-) maak je niet aan; promoveer NPC's gefaseerd (ambient → named → recurring → companion_candidate → recruited) en geef elke terugkerende NPC een ID; een afwijking van de Tolkien-canon registreer je als event met divergence:true en een cause. Companions (CMP-): promoveer eerst tot companion_candidate en stel ze voor met npcs-update {introduced:true}; daarna gaat alles via "companions", nooit via npcs-status. recruit (alleen als de kandidaat bij de party is, met mode en reden: een geloofwaardig verzoek en gedeeld belang, geen verplichte quest), decline (weigering, eventueel retryAfter), depart (reden, bestemming, returnIf, expectedReturn), return (na reistijd; reden), update (hp/resources/conditions na gevechten en rust, evidence = een concrete ervaring zoals 'PCs redden een gewonde': géén vertrouwensgetal, nextAction, obligation met due), rest (short|long). Je rolt NPC-dobbelstenen zelf; 0 HP is bewusteloos, overlijden alleen via npcs status:'deceased' met reden. Boven 5 reizigers (incl. beide PC's) vraag je een logistiek plan. Regels onder 'Aan de orde (companions)' in WERELDSTATUS verwerk je in het verhaal: een companion handelt autonoom, ook buiten beeld. Factie-agenda's en NPC-acties buiten beeld (AG-): onder "Agenda's" in WERELDSTATUS staan de plannen van facties en NPC's; de app voert stappen zelf uit bij elke tijdsprong (klokken, verplaatsingen met reistijd, quests die beschikbaar worden) en toont het resultaat onder "Recent buiten beeld". Laat de wereld daarop reageren, maar nooit alwetend: de PC's weten het pas als nieuws, een bode of eigen onderzoek hen bereikt. Dwarsbomen de spelers een plan, gebruik dan agendas op:"thwart" (of "pause"/"delay") met een reden; start een nieuwe agenda met op:"create" (1-6 stappen, ID AG-...) alleen als een factie of NPC daar een geloofwaardig motief en middelen voor heeft. Voer stappen nooit zelf uit en wijzig klokken niet dubbel. Zodra de spelers een NPC echt ontmoeten zet je npcs-update {introduced:true} (zonder dat opent geen enkele laag). Verhaallagen (Baldur's Gate-stijl): elke NPC met een regel onder "Verhaallagen" in WERELDSTATUS heeft een eigen rol, een eigen quest (CQ-/NQ-/PQ-) en een gelaagde achtergrond die langzaam aan het licht komt. Laat een NPC door gedrag, bijzaken en dialoog voelbaar meer hebben dan hij zegt; onthul een laag pas als de WERELDSTATUS aangeeft KAN NU ONTHULD WORDEN en de scène erom vraagt (vertrouwen, een stille moment, het juiste gesprek), en dan met reveals [{npc,layer,reason}] (lagen gaan op volgorde, nooit vooruit lopen of dumpen). Activeer de eigen quest van een NPC (dormant naar active) zodra de spelers erop ingaan en ga stap voor stap vooruit met quests set:{stage:n}. Een onvoorbereide NPC zonder verhaallaag krijgt geen verzonnen diepe geheimen. Een ongeldige worldDelta wordt geweigerd en je moet hem corrigeren.
 - DM-notities: gebruik "dmNotes" (sleutel naar korte tekst; null verwijdert) voor alles wat de spelers niet mogen zien: de klokken A-D uit C1 (bv. "klok_a":"2/6: koerier onderschept"), geheime plannen, wat NPC's echt weten, nog niet onthulde aanwijzingen. Zet zulke geheimen NOOIT in de Stand, het logboek of vooruitlopend in de vertelling. Houd het compact en ruim afgehandelde notities op.
 - Houd de Stand compact: korte zinnen, geen herhaling van canon, verwijder afgehandelde opdrachten en vertrokken NPC's (null), hoogstens ongeveer 3 kennispunten per PC.
 - Worpen: zet ALLE worpen die je zelf doet of verwerkt (NPC's, vijanden, companions en de worpen die de spelers meldden) in "rolls" ({"who":"Orc 1","what":"Attack Roll","natural":14,"mod":5,"total":19,"result":"Hit"}; bij schade {"who","what":"Damage","dice":"1d8+3","total":9}). De app toont ze als chips: schrijf ze dus NIET ook nog eens als haakjes in de vertelling, en toon nooit de DC. Vertel alleen het gevolg. Verwerk een nat 20 of nat 1 als klein extra gevolg in de vertelling.
@@ -691,7 +739,7 @@ Regels:
 - HERINNERINGEN van de spelers zijn bindend en gaan voor op je eigen aannames.
 - logEntries: korte feiten van wat NU echt gebeurd is.
 Antwoord ALLEEN met JSON in dit formaat:
-{"narration":"markdown-tekst","speakers":["Naam"],"rolls":[{"who":"","what":"","natural":0,"mod":0,"total":0,"result":""}],"newNpcs":[{"name":"Naam","visual":"English description"}],"location":{"name":"","description":"","visual":""},"dmNotes":{"klok_a":"1/6: reden"},"worldDelta":{"region":"REG-ERIADOR","time":null,"npcs":[],"quests":[],"clocks":[],"events":[]},"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."},"handoff":null}}`;
+{"narration":"markdown-tekst","speakers":["Naam"],"rolls":[{"who":"","what":"","natural":0,"mod":0,"total":0,"result":""}],"newNpcs":[{"name":"Naam","visual":"English description"}],"location":{"name":"","description":"","visual":""},"place":"id uit KAARTPLAATSEN waar de scène speelt, of null","dmNotes":{"klok_a":"1/6: reden"},"worldDelta":{"region":null,"time":null,"npcs":[],"quests":[],"clocks":[],"events":[]},"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."},"handoff":null}}`;
 
 function rollDice(){
   const r=(s,n)=>Array.from({length:n},()=>1+crypto.getRandomValues(new Uint32Array(1))[0]%s);
@@ -755,6 +803,7 @@ function parseDM(txt,names){
   { const dn=o.dmNotes, res={}; if(dn&&typeof dn==='object'&&!Array.isArray(dn)) for(const [k,v] of Object.entries(dn).slice(0,30)){ const kk=String(k).toLowerCase().replace(/[^a-z0-9_]+/g,'_').slice(0,40); if(!kk) continue; if(v===null||v==='') res[kk]=null; else if(typeof v==='string'||typeof v==='number') res[kk]=String(v).slice(0,500); } o.dmNotes=res; }
   { const lc=o.location; o.location=(lc&&typeof lc.name==='string'&&lc.name.trim())?{name:lc.name.trim().slice(0,80),description:String(lc.description||'').slice(0,400),visual:String(lc.visual||'').slice(0,1500)}:null; }
   o.worldDelta=(o.worldDelta&&typeof o.worldDelta==='object'&&!Array.isArray(o.worldDelta))?o.worldDelta:null;
+  o.place=(typeof o.place==='string'&&window.DNDMap&&DNDMap.byId[o.place])?o.place:null;
   o.speakers=Array.isArray(o.speakers)?o.speakers.filter(s=>typeof s==='string').slice(0,2):[];
   o.newNpcs=Array.isArray(o.newNpcs)?o.newNpcs.filter(n=>n&&typeof n.name==='string'&&n.name.trim()):[];
   const nt=o.nextTurn||{};
@@ -802,7 +851,10 @@ async function resolve(retry,forceGemini){
     const sheets=allChars().filter(c=>c.player&&!c.dead).map(sheetText).join('\n\n');
     const npcNames=Object.values(npcs).filter(n=>!n.forPlayer).map(n=>n.name);
     const user=
-`# SPELERS (awaiting bevat altijd de SPELERNAAM, nooit de naam van het personage)\n${allNames.map(n=>{const c=Object.values(chars||{}).find(x=>x&&x.player===n);return n+(c?' (speelt '+c.name+')':'')}).join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# KARAKTERBLADEN (rekenkundig leidend; de Stand heeft de actuele HP)\n${sheets||'(geen)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# LOGBOEK (laatste 40)\n${logs.slice(-40).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# WERELDSTATUS (stabiele IDs; wijzig alleen via worldDelta)\n${worldTxt||'(niet actief)'}\n\n# DM-NOTITIES (privé: nooit tonen of citeren)\n${notesTxt||'(nog geen)'}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
+`# SPELERS (awaiting bevat altijd de SPELERNAAM, nooit de naam van het personage)\n${allNames.map(n=>{const c=Object.values(chars||{}).find(x=>x&&x.player===n);return n+(c?' (speelt '+c.name+')':'')}).join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# KARAKTERBLADEN (rekenkundig leidend; de Stand heeft de actuele HP)\n${sheets||'(geen)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# LOGBOEK (laatste 40)\n${logs.slice(-40).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# WERELDSTATUS (stabiele IDs; wijzig alleen via worldDelta)\n${worldTxt||'(niet actief)'}\n\n# KAARTPLAATSEN (kies hieruit het id voor "place")
+${window.DNDMap?DNDMap.ids.join(', '):''}
+
+# DM-NOTITIES (privé: nooit tonen of citeren)\n${notesTxt||'(nog geen)'}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
     let out,usage,usedModel,note=null;
     let worldRejected=null;
     for(let i=0;i<2;i++){
@@ -813,8 +865,14 @@ async function resolve(retry,forceGemini){
         const sp=DNDWorld.checkSpeakers(world,parsed.speakers,parsed.worldDelta&&parsed.worldDelta.region);
         if(sp.errors.length){ note='sprekers ongeldig: '+sp.errors.join('; '); if(i===1){ worldRejected=(worldRejected||[]).concat(sp.errors); parsed.speakers=parsed.speakers.filter(s=>sp.bad.indexOf(s)<0); } else continue; }
       }
+      if(window.DNDWorld){
+        const ec=DNDWorld.echoCheck(parsed.narration,pend.map(p=>p.text));
+        if(ec){ if(i===0){ note='je herhaalde letterlijk de woorden van een speler ("'+ec+'"). Herhaal of parafraseer nooit wat een speler zegt of doet; laat de WERELD reageren (NPC-antwoorden met inhoud, nieuwe waarneming, een gevolg) en voeg nieuwe informatie toe.'; continue; } else console.warn('echo in vertelling',ec); }
+      }
       if(world&&window.DNDWorld&&parsed.worldDelta){
-        const v=DNDWorld.validateDelta(world,parsed.worldDelta,{round:round+1,hasPortrait:n=>!!(npcs[slug(n.name)]&&npcs[slug(n.name)].img)});
+        const ctxV={round:round+1,hasPortrait:n=>!!(npcs[slug(n.name)]&&npcs[slug(n.name)].img)};
+        let v=DNDWorld.validateDelta(world,parsed.worldDelta,ctxV);
+        if(!v.ok&&parsed.worldDelta.region&&v.errors.some(e=>/^De party kan niet/.test(e))){ const d2={...parsed.worldDelta}; delete d2.region; delete d2.travel; const v2=DNDWorld.validateDelta(world,d2,ctxV); if(v2.ok){ parsed.worldDelta=d2; v=v2; console.warn('region genegeerd: de party reist niet zonder tijd'); } }
         if(!v.ok){ note='worldDelta ongeldig: '+v.errors.join('; '); if(i===1){ worldRejected=v.errors; parsed.worldDelta=null; } else continue; }
         else parsed._wp=v;
       }
@@ -833,19 +891,29 @@ async function resolve(retry,forceGemini){
     out.logEntries.forEach(l=>{if(l&&l.fact){const k=db.ref(cp('log',C)).push().key;logKeys.push(k);up[cp('log/'+k,C)]={fact:String(l.fact),inGameDate:String(l.inGameDate||''),round:round+1,t:now}}});
     out.newNpcs.forEach(n=>{const k=slug(n.name); if(!npcs[k]) up['dnd/npcs/'+k]={name:n.name.trim(),visual:String(n.visual||'').slice(0,1500),t:now,from:C}});
     if(out.location){const lk=slug(out.location.name); if(!locs[lk]){up['dnd/locations/'+lk]={name:out.location.name,desc:out.location.description,visual:out.location.visual,t:now,from:C}; nm.newLoc=lk;} up[cp('scene',C)]=lk;}
+    if(window.DNDMap){
+      try{
+        const mapS=(await db.ref(cp('map',C)).get()).val()||null, nc=(out._wp&&out._wp.plan&&out._wp.plan.calendar)||(world&&world.calendar)||null;
+        const sc=(out.statePatch&&out.statePatch.inGame&&out.statePatch.inGame.location)||(state.inGame&&state.inGame.location)||'';
+        const pl=DNDMap.determinePlace({id:out.place,locName:out.location&&out.location.name,sceneText:sc,region:(out.worldDelta&&out.worldDelta.region)||(world&&world.sceneRegion)||null});
+        const vis=DNDMap.planVisit(mapS,pl,nc&&nc.y?{y:nc.y,m:nc.m,d:nc.d}:null,out.location?slug(out.location.name):(sceneKey||null),now);
+        Object.keys(vis.set).forEach(pth=>{mapUp[cp(pth,C)]=vis.set[pth]}); mapPrev=vis.prev;
+      }catch(e){console.warn('kaart bijwerken mislukt',e)}
+    }
     const newNotes={...notes}; for(const [k,v] of Object.entries(out.dmNotes)){ if(v===null) delete newNotes[k]; else newNotes[k]=v; }
+    if(worldRejected) newNotes.wereldcontrole='De vorige beurt is deels geweigerd door de wereldcontrole: '+worldRejected.join('; ')+' Pas je voorstel aan (de spelers zien dit niet).'; else delete newNotes.wereldcontrole;
     up[cp('dmnotes',C)]=Object.keys(newNotes).length?newNotes:null;
-    const worldPrev=[];
+    const worldPrev=[]; let mapPrev=[]; const mapUp={};
     if(world&&window.DNDWorld&&(out._wp||(out.worldDelta&&out.worldDelta.region))){
       const emptyPlan={npcs:{},quests:{},clocks:{},companions:{},calendar:null,divergences:[],events:[]};
       const cm=DNDWorld.commitPaths(world,out._wp?out._wp.plan:emptyPlan,{now:now,region:out.worldDelta&&out.worldDelta.region,newKey:()=>db.ref(cp('world/events',C)).push().key});
       Object.keys(cm.set).forEach(pth=>{up[cp(pth,C)]=cm.set[pth]});
       cm.prev.forEach(x=>worldPrev.push(x));
     }
-    if(worldRejected){ const wk=db.ref(cp('messages',C)).push().key; msgKeys.push(wk); up[cp('messages/'+wk,C)]={type:'system',author:'systeem',text:'⚠ De DM stelde een wereldwijziging voor die de wereldregels schendt; die is niet toegepast: '+worldRejected.join('; '),round:round+1,t:now+pend.length+2}; }
+    if(worldRejected) console.warn('wereldcontrole:',worldRejected);
     const sj=JSON.stringify(newState), rk=String(round+1).padStart(5,'0');
     up[cp('state',C)]=sj;
-    up[cp('stands/'+rk,C)]={json:sj,round:round+1,t:now,undo:{worldPrev:worldPrev,prevNotes:Object.keys(notes).length?notes:null,prevState:sS.val()||'{}',turn:t,pend:pendE.map(([k,p])=>({uid:k,...p})),msgs:msgKeys,logs:logKeys}};
+    up[cp('stands/'+rk,C)]={json:sj,round:round+1,t:now,undo:{mapPrev:mapPrev,worldPrev:worldPrev,prevNotes:Object.keys(notes).length?notes:null,prevState:sS.val()||'{}',turn:t,pend:pendE.map(([k,p])=>({uid:k,...p})),msgs:msgKeys,logs:logKeys}};
     up[cp('usage/'+rk,C)]={prompt:usage.promptTokenCount||0,cached:usage.cachedContentTokenCount||0,out:usage.candidatesTokenCount||0,model:usedModel||'?'};
     up[cp('pending',C)]=null;
     up['dnd/campaignIndex/'+C+'/lastPlayed']=now;
@@ -855,6 +923,7 @@ async function resolve(retry,forceGemini){
     const hand=out.nextTurn.handoff||(mj.length?{to:'claude',reason:'Na een groot moment: '+mj.slice(0,3).join('; '),auto:true}:null);
     up[cp('turn',C)]={round:round+1,status:'waiting',awaiting:aw,prompt:out.nextTurn.prompt,blind:out.nextTurn.blind,checks:out.nextTurn.checks||null,mode:out.nextTurn.awaiting.length>1?'all':'single',handoff:hand};
     await db.ref().update(up);
+    if(Object.keys(mapUp).length){ try{ await db.ref().update(mapUp) }catch(e){ console.warn('kaart niet opgeslagen (regels?)',e) } }
     summarize(C,round+1,false).catch(e=>console.warn('samenvatting mislukt',e));
   }catch(e){
     console.error(e);
@@ -950,6 +1019,7 @@ async function undoLast(mode,big){
   up[cp('state',C)]=u.prevState||'{}';
   up[cp('dmnotes',C)]=u.prevNotes||null;
   (u.worldPrev||[]).forEach(x=>{up[cp(x.p,C)]=(x.v===undefined?null:x.v)});
+  const mapUndo={}; (u.mapPrev||[]).forEach(x=>{mapUndo[cp(x.p,C)]=(x.v===undefined?null:x.v)});
   up['dnd/campaignIndex/'+C+'/round']=Math.max(0,(rec.round||1)-1);
   const pend=u.pend||[], authors={};
   pend.forEach(p=>{const {uid,...rest}=p; up[cp('pending/'+uid,C)]=rest; authors[p.name]=true});
@@ -958,6 +1028,7 @@ async function undoLast(mode,big){
   else if(mode==='regen'){ up[cp('turn',C)]={...t,status:'resolving',resolvingSince:now,awaiting:null,lastError:null}; }
   else { up[cp('turn',C)]={...t,status:'waiting',awaiting:Object.keys(authors).length?authors:null,resolvingSince:null,lastError:null}; }
   await db.ref().update(up);
+  if(Object.keys(mapUndo).length){ try{ await db.ref().update(mapUndo) }catch(e){ console.warn('kaart niet teruggezet (regels?)',e) } }
   if(mode==='regen'){ bigNext=!!big; resolve(false); }
 }
 const LOCSTYLE_END="Avoid: photorealism, cartoon or anime look, 3D game render, modern objects, text, captions, watermarks, logos, borders.";
@@ -991,6 +1062,98 @@ async function loadMemories(C){
     '<div class="row"><input type="text" id="memin" placeholder="bv. Rivendell ligt in Eriador, niet bij de Ered Luin" style="flex:1"><button class="b sm" id="memadd">Voeg toe</button></div>';
   $('#memadd').onclick=async()=>{const v=$('#memin').value.trim(); if(!v) return; await db.ref(cp('memories',C)).push({text:v,by:me.name,t:Date.now()}); loadMemories(C);};
   $('#mem').querySelectorAll('[data-mdel]').forEach(b=>b.onclick=async()=>{await db.ref(cp('memories/'+b.dataset.mdel,C)).remove(); loadMemories(C);});
+}
+/* ---------- Kaart ---------- */
+const MAPMON=['','jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+function fmtD(d){return d&&d.d?d.d+' '+MAPMON[d.m]+' '+d.y:''}
+function mapPlaceOf(id){
+  if(!window.DNDMap||!id) return null; if(DNDMap.byId[id]) return DNDMap.byId[id];
+  if(String(id).indexOf('regio:')===0){const r=String(id).slice(6), R=DNDMap.REGIONS[r]; return R?{id:id,name:R.name,x:R.x,y:R.y,region:r,regionOnly:true,alias:[]}:null}
+  return null;
+}
+function mapNpcPlace(n){
+  const L=n&&n.location; if(!L) return null;
+  if(String(L).indexOf('LOC-')===0){const lo=wLocs[L]; return lo?DNDMap.determinePlace({id:lo.place,locName:lo.name,region:lo.region}):null}
+  const R=DNDMap.REGIONS[L]; return R?DNDMap.byId[R.primary]:null;
+}
+function mapInfoHtml(id){
+  const pl=mapPlaceOf(id); if(!pl) return '<small style="color:var(--mute)">Tik op een pin voor details. Nog geen bezochte plekken: ze verschijnen op de kaart zodra jullie ergens aankomen.</small>';
+  const vis=(mapData&&mapData.visited&&mapData.visited[id])||null;
+  let h='<h3>📍 '+esc(pl.name)+'</h3><small style="color:var(--mute)">'+(vis?'bezocht'+(vis.n>1?' ('+vis.n+'×)':'')+(vis.first?' · eerste keer '+esc(fmtD(vis.first)):''):'nog niet bezocht')+'</small>';
+  const here=Object.entries(locs).filter(([k,l])=>l&&((vis&&vis.locs&&vis.locs[k])||((DNDMap.resolvePlace({name:l.name})||{}).id===id))).slice(0,6);
+  here.forEach(([k,l])=>{h+=(l.img?'<img class="locimg" src="'+l.img+'" data-zoom="loc:'+k+'" alt="">':'')+'<div style="font-size:14px"><b>'+esc(l.name)+'</b>'+(l.desc?'<br>'+esc(l.desc):'')+'</div>'});
+  const ppl=Object.values(wNpcs).filter(n=>n&&n.introduced===true&&n.status!=='deceased'&&((mapNpcPlace(n)||{}).id===id));
+  if(ppl.length) h+='<h2>Personen hier</h2>'+ppl.map(n=>'<div class="card ppl">'+avatar(n.name)+'<div><b>'+esc(n.name)+'</b></div></div>').join('');
+  const qs=Object.values(wQuests).filter(q=>q&&q.title&&['active','completed','failed','expired','changed'].indexOf(q.status)>=0&&q.region&&q.region===pl.region);
+  if(qs.length) h+='<h2>Opdrachten in deze streek</h2>'+qs.map(q=>'<div class="q '+(q.status==='active'?'':'done')+'">'+esc(q.title)+(q.status==='completed'?' (afgerond)':q.status==='failed'?' (mislukt)':q.status==='expired'?' (verlopen)':'')+'</div>').join('');
+  if(!here.length&&!ppl.length&&!qs.length) h+='<p><small style="color:var(--mute)">Nog niets bijzonders vastgelegd op deze plek.</small></p>';
+  return h;
+}
+function mapClamp(){
+  const v=$('#mapview'); if(!v) return; const cw=v.clientWidth, ch=v.clientHeight, ratio=DNDMap.MAP.h/DNDMap.MAP.w, sw=cw*mapView.s, sh=cw*ratio*mapView.s;
+  mapView.x=sw<=cw?(cw-sw)/2:Math.min(0,Math.max(cw-sw,mapView.x));
+  mapView.y=sh<=ch?(ch-sh)/2:Math.min(0,Math.max(ch-sh,mapView.y));
+}
+function mapApply(){
+  const v=$('#mapview'), st=$('#mapstage'); if(!v||!st||!v.clientWidth) return; mapClamp();
+  st.style.width=v.clientWidth+'px'; st.style.transform='translate('+mapView.x+'px,'+mapView.y+'px) scale('+mapView.s+')';
+  st.style.setProperty('--inv',(1/mapView.s).toFixed(4)); st.classList.toggle('lab',mapView.s>=1.8);
+}
+function mapZoomAt(px,py,f){const ns=Math.max(1,Math.min(8,mapView.s*f)), k=ns/mapView.s; mapView.x=px-(px-mapView.x)*k; mapView.y=py-(py-mapView.y)*k; mapView.s=ns; mapApply()}
+function mapCenter(id,s){
+  const pl=mapPlaceOf(id), v=$('#mapview'); if(!pl||!v) return; const cw=v.clientWidth, ch=v.clientHeight, ratio=DNDMap.MAP.h/DNDMap.MAP.w;
+  mapView.s=s||3; const sw=cw*mapView.s, sh=cw*ratio*mapView.s; mapView.x=cw/2-(pl.x/DNDMap.MAP.w)*sw; mapView.y=ch/2-(pl.y/DNDMap.MAP.h)*sh; mapApply();
+}
+function mapDrawPins(){
+  const el=$('#mappins'); if(!el) return; const vis=(mapData&&mapData.visited)||{}, cur=mapData&&mapData.current&&mapData.current.id;
+  if(!mapSel||(!vis[mapSel]&&mapSel!==cur)) mapSel=cur||Object.keys(vis)[0]||null;
+  el.innerHTML=Object.keys(vis).concat(cur&&!vis[cur]?[cur]:[]).map(id=>{
+    const pl=mapPlaceOf(id); if(!pl) return '';
+    return '<button class="pin'+(id===cur?' cur':'')+(id===mapSel?' sel':'')+'" data-pid="'+esc(id)+'" style="left:'+(pl.x/DNDMap.MAP.w*100)+'%;top:'+(pl.y/DNDMap.MAP.h*100)+'%" title="'+esc(pl.name)+'"><i></i><b>'+esc(pl.name)+'</b></button>';
+  }).join('');
+  const inf=$('#mapinfo'); if(inf) inf.innerHTML=mapInfoHtml(mapSel);
+}
+let mapWired=false;
+function wireMap(){
+  const v=$('#mapview'); if(!v) return; const ptrs=new Map(); let drag=null, last=null, downPin=null, moved=0;
+  v.addEventListener('pointerdown',e=>{
+    if(e.target.closest('.mapctl')) return;
+    v.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); v.classList.add('drag');
+    if(ptrs.size===1){drag={x:e.clientX,y:e.clientY,vx:mapView.x,vy:mapView.y}; downPin=e.target.closest('.pin'); moved=0}
+    if(ptrs.size===2){const a=[...ptrs.values()]; last={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),cx:(a[0].x+a[1].x)/2,cy:(a[0].y+a[1].y)/2}; drag=null; downPin=null}
+  });
+  v.addEventListener('pointermove',e=>{
+    if(!ptrs.has(e.pointerId)) return; ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(ptrs.size===2&&last){const a=[...ptrs.values()], d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y), cx=(a[0].x+a[1].x)/2, cy=(a[0].y+a[1].y)/2, r=v.getBoundingClientRect(); mapView.x+=cx-last.cx; mapView.y+=cy-last.cy; if(last.d>0) mapZoomAt(cx-r.left,cy-r.top,d/last.d); else mapApply(); last={d:d,cx:cx,cy:cy}; return}
+    if(drag){moved=Math.max(moved,Math.hypot(e.clientX-drag.x,e.clientY-drag.y)); if(moved>5){mapView.x=drag.vx+(e.clientX-drag.x); mapView.y=drag.vy+(e.clientY-drag.y); mapApply()}}
+  });
+  const up=e=>{
+    if(!ptrs.has(e.pointerId)) return; ptrs.delete(e.pointerId);
+    if(ptrs.size===0){v.classList.remove('drag'); if(e.type==='pointerup'&&downPin&&moved<=5){mapSel=downPin.dataset.pid; mapDrawPins()} drag=null; last=null; downPin=null}
+    else if(ptrs.size===1){const p=[...ptrs.values()][0]; drag={x:p.x,y:p.y,vx:mapView.x,vy:mapView.y}; last=null; moved=99}
+  };
+  v.addEventListener('pointerup',up); v.addEventListener('pointercancel',up);
+  v.addEventListener('wheel',e=>{e.preventDefault(); const r=v.getBoundingClientRect(); mapZoomAt(e.clientX-r.left,e.clientY-r.top,e.deltaY<0?1.2:1/1.2)},{passive:false});
+  $('#mzin').onclick=()=>mapZoomAt(v.clientWidth/2,v.clientHeight/2,1.5);
+  $('#mzout').onclick=()=>mapZoomAt(v.clientWidth/2,v.clientHeight/2,1/1.5);
+  $('#mfit').onclick=()=>{mapView.s=1; mapApply()};
+  $('#mhere').onclick=()=>{const c=mapData&&mapData.current&&mapData.current.id; if(c){mapSel=c; mapDrawPins(); mapCenter(c,3)} else {mapView.s=1; mapApply()}};
+  if(!mapWired){mapWired=true; window.addEventListener('resize',()=>{if(screen==='camp'&&tab==='map') mapApply()})}
+}
+function renderMap(soft){
+  if(screen!=='camp'||tab!=='map'||!window.DNDMap) return; const box=$('#mapwrap'); if(!box) return;
+  if(!$('#mapview')){
+    box.innerHTML='<div id="mapview"><div id="mapstage"><img id="mapimg" src="'+DNDMap.MAP.file+'" alt="Kaart van Midden-aarde" draggable="false"><div id="mappins"></div></div>'+
+      '<div class="mapctl"><button id="mzin" title="Inzoomen">＋</button><button id="mzout" title="Uitzoomen">−</button><button id="mfit" title="Hele kaart">⤢</button><button id="mhere" title="Naar de huidige plek">⌖</button></div>'+
+      '<div class="maphint">Sleep om te verschuiven, knijp of scrol om te zoomen, tik op een pin.</div></div><aside id="mapinfo"></aside>';
+    wireMap(); mapView.init=false;
+  }
+  mapDrawPins();
+  if(!mapView.init){
+    const img=$('#mapimg'), go=()=>{const c=mapData&&mapData.current&&mapData.current.id; mapApply(); if(c&&mapPlaceOf(c)) mapCenter(c,2.2); mapView.init=true};
+    if(img.complete) go(); else img.onload=go;
+    requestAnimationFrame(()=>{if(!mapView.init&&img.complete) go()});
+  } else mapApply();
 }
 async function renderDiary(){
   if(screen!=='camp') return;
@@ -1921,7 +2084,12 @@ function renderSet(){
   const box=$('#setbox'); if(!box) return;
   if(box.contains(document.activeElement)&&document.activeElement.tagName==='INPUT') return;
   const ph=k=>cfg[k]?'(ingesteld; leeg laten = ongewijzigd)':'plak hier';
-  box.innerHTML=(screen==='camp'?BACK:'')+`<div class="card"><h3>Wie is de DM?</h3>
+  const nperm=('Notification' in window)?Notification.permission:'niet ondersteund';
+  box.innerHTML=(screen==='camp'?BACK:'')+`<div class="card"><h3>🔔 Melding als je aan de beurt bent</h3>
+  <label><input type="checkbox" id="snotify" ${notifyOn()?'checked':''}> Geluid, trilling en een titel-melding wanneer het jouw beurt is</label><br>
+  <small style="color:var(--mute)">Systeemmelding (ook als dit tabblad op de achtergrond staat): <b>${esc(nperm)}</b>. Een melding komt alleen zolang deze pagina open staat; een echte push naar je telefoon bij een gesloten pagina kan niet zonder server.</small><br><br>
+  <button class="b alt sm" id="snperm">Systeemmeldingen toestaan</button> <button class="b alt sm" id="sntest">Test de melding</button></div>
+  <div class="card"><h3>Wie is de DM?</h3>
   <select id="sdm"><option value="gemini">Gemini (API, automatisch)</option><option value="anthropic">Claude (API, automatisch)</option><option value="claude">Claude Code (handmatig, geen API)</option></select><br><br>
   <label>Temperatuur</label><input type="number" id="stemp" step="0.1" min="0" max="2"></div>
   <div class="card"><h3>Gemini</h3>
@@ -1936,6 +2104,9 @@ function renderSet(){
   <div class="card"><button class="b" id="ssave">Opslaan</button></div>
   ${screen==='camp'?'<div class="card"><h3>Verbruik (dit verhaal)</h3><div id="usage">…</div></div>':''}`;
   $('#sdm').value=cfg.dmMode||'gemini'; $('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
+  $('#snotify').onchange=e=>{try{localStorage.setItem('dnd_notify',e.target.checked?'1':'0')}catch(x){}};
+  $('#snperm').onclick=async()=>{ if(!('Notification' in window)){alert('Dit apparaat of deze browser ondersteunt geen systeemmeldingen (op iPhone alleen vanuit een aan het beginscherm toegevoegde app).');return} try{const r=await Notification.requestPermission(); alert('Systeemmeldingen: '+r)}catch(x){alert('Toestemming vragen mislukt')} renderSet(); };
+  $('#sntest').onclick=()=>{ beep(); try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(x){} if('Notification' in window&&Notification.permission==='granted'){try{new Notification('Midden-aarde: jouw beurt',{body:'Dit is een test.',tag:'dnd-test'})}catch(x){}} };
   $('#smodel').value=cfg.model||'gemini-2.5-flash'; $('#ssum').value=cfg.summaryModel||'gemini-2.5-flash-lite'; $('#sgbig').value=cfg.bigModel||'';
   $('#samodel').value=cfg.anthropicModel||'claude-haiku-5-5'; $('#sabig').value=cfg.anthropicBigModel||'claude-sonnet-5-5';
   $('#ssave').onclick=async()=>{
