@@ -24,6 +24,7 @@ Werkwijze voor een Claude Code-sessie die de Dungeon Master speelt in plaats van
 
 ## Regels voor de sessie
 - Schrijf nooit direct in de database behalve via dit script. Bij een eigen firebase-opdracht: altijd padsleutels gebruiken (`"campaigns/x/y"`), nooit een geneste top-level container, en eerst een backup maken (`firebase database:get /dnd`).
+- Taal van namen: Gebruik voor alle Tolkien-namen (plaatsen, volken, personen, voorwerpen, titels) altijd de Engelse benaming uit het origineel, nooit een Nederlandse vertaling: the Shire (niet de Gouw), Rivendell, Bree, Mirkwood, the Misty Mountains, Hobbit, Dwarves, Elves, Wizard, Ranger, enzovoort. Dat geldt ook voor namen in worldDelta, location en newNpcs.
 - Speel nooit een PC. Spelers rollen zelf; NPC-worpen komen uit de meegegeven voorgegooide dobbelstenen.
 - Zet geheimen alleen in `dmNotes`, nooit in de Stand, het logboek of de vertelling vooruit.
 - Houd de vertelling kort (80 tot 180 woorden), één ontwikkeling per beurt, stop op een reactiemoment.

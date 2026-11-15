@@ -26,7 +26,7 @@ STAP 3: LAAT DE OPENING SPELEN door de subagent dnd-dm met deze eisen:
 - Lees alle canon (--canon) en de wereldstatus, de Bible-delen M0 (proloog-agenda), M1a (Act I), de karakterbladen en achtergronden van Wulfgrim en Tharon, en de verhaallagen.
 - Datum 24 oktober 3018, Rivendell. Beide PC's zijn er; begin met een thematisch sterke, sfeervolle scène (200-300 woorden toegestaan) met de wereld, het huis van Elrond, het weer en een eerste ontmoeting of gebeurtenis die de Act I-lijn (twee tegenstrijdige berichten) voorbereidt zonder die te verklappen.
 - Houd je aan de proloog-agenda: de acht kandidaat-companions worden in de loop van de proloog voorgesteld (minstens drie afzonderlijke gelegenheden); in de opening hooguit één of twee, nooit in een rij.
-- Gebruik worldDelta voor wat de scène vastlegt (npcs introduced:true bij een echte ontmoeting, tijd, regio); gebruik de vrije ID's uit de wereldstatus; verzin geen NPC die al bestaat. Schrijf nooit wat een PC denkt of doet; speel geen PC.
+- Gebruik worldDelta voor wat de scène vastlegt (npcs introduced:true bij een echte ontmoeting, tijd, regio); gebruik de vrije ID's uit de wereldstatus; verzin geen NPC die al bestaat. Schrijf nooit wat een PC denkt of doet; speel geen PC. Gebruik overal de Engelse Tolkien-namen (the Shire, niet de Gouw).
 - Zet geheimen alleen in dmNotes. Geef beide spelers een duidelijke, open aanleiding (nextTurn.awaiting = beide), nextTurn.handoff op null.
 - Pas toe met node dnd/tools/claude-dm.js apply <cid> <bestand>.
 Je eindbericht aan mij: alleen "Opening gespeeld voor verhaal <cid>" plus eventuele technische problemen, zonder inhoud.
