@@ -186,7 +186,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
-<script src="world.js?v=11"></script>
+<script src="world.js?v=12"></script>
 <script src="map-data.js?v=1"></script>
 <script>
 "use strict";
@@ -207,7 +207,7 @@ let screen='menu', cid=null; // menu of campagne
 let cfg={}, npcs={}, locs={}, chars={}, index={}; let sceneKey='', editKey=null, editDraft='', lastSide='';              // globaal
 let wQuests={}, wCal=null, wBack={}, wNpcs={}, wLocs={}, mapData=null, mapSel=null, mapView={s:1,x:0,y:0,init:false};
 let turn=null, canon={}, msgs=[], oocs=[], pending={}, stateStr="{}"; // per campagne
-let tab='game', draft="", rollDraft="";
+let tab='game', draft="", rollDraft="", composeRound=null;
 let listeners=[];
 const LEASE_MS=3*60*1000;
 const cp=(p,C)=>'dnd/campaigns/'+(C||cid)+'/'+p;
@@ -594,7 +594,8 @@ function renderGame(){
   if(atBottom) th.scrollTop=th.scrollHeight;
 
   const sb=$('#statusbar'), cpz=$('#compose');
-  const cEl=$('#compose'); const keepDraft=!!(cEl&&document.activeElement&&cEl!==document.activeElement&&cEl.contains(document.activeElement));
+  const roundChanged=!!(turn&&composeRound!==turn.round); if(roundChanged){draft='';rollDraft='';rollKey=null;rollNat=''}
+  const cEl=$('#compose'); const keepDraft=!roundChanged&&!!(cEl&&document.activeElement&&cEl!==document.activeElement&&cEl.contains(document.activeElement));
   if(!turn){
     sb.innerHTML='Nog geen campagne gestart.';
     cpz.innerHTML='<button class="b" id="startc">Start campagne (DM opent het verhaal)</button>';
@@ -636,12 +637,13 @@ function renderGame(){
     const jm=$('#joinme'); if(jm) jm.onclick=async()=>{ const r=turn.round; await db.ref(cp('turn')).transaction(t=>{ if(!t||t.round!==r||t.status!=='waiting') return; t.awaiting=t.awaiting||{}; t.awaiting[me.name]=true; return t; }); };
     return; }
   if(!keepDraft){
-    cpz.innerHTML=`<textarea id="act" placeholder="Wat doe je?"></textarea>
+    composeRound=turn.round;
+    cpz.innerHTML=`<textarea id="act" placeholder="${mine?'Je actie is ingediend. Typ hier om hem te vervangen.':'Wat doe je?'}"></textarea>
     ${rollRowHtml()}
-    <div class="row"><button class="b" id="send">${mine?'Actie aanpassen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button><select id="dmsel" class="dmsel" title="Wie speelt de volgende beurt als de DM?"></select>
+    <div class="row"><button class="b" id="send">${mine?'Actie vervangen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button><select id="dmsel" class="dmsel" title="Wie speelt de volgende beurt als de DM?"></select>
     ${others.length?'<button class="b alt" id="skip">Zonder '+esc(others.join(', '))+' verder</button>':''}</div>
-    ${mine?'<small>Ingediend: '+esc(mine.text)+'</small>':''}`;
-    if(!draft&&mine) draft=mine.text.replace(/\s*\[worp:[^\]]*\]/i,'');
+    ${mine?'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a></small>':''}`;
+    const em=$('#editmine'); if(em) em.onclick=e=>{e.preventDefault(); draft=mine.text.replace(/\s*\[worp:[^\]]*\]/i,''); $('#act').value=draft; $('#act').focus()};
     $('#act').value=draft;
     $('#act').oninput=e=>draft=e.target.value; wireRoll();
     $('#send').onclick=()=>submit(false);
@@ -660,7 +662,7 @@ async function submit(pass){
   if(!text){alert('Typ eerst een actie.');return}
   const round=turn.round, full=text+(rollDraft.trim()&&!pass?'  [worp: '+rollDraft.trim()+']':'');
   await db.ref(cp('pending/'+me.uid)).set({round,name:me.name,text:full,pass:!!pass,t:Date.now()});
-  draft="";rollDraft="";rollKey=null;rollNat="";
+  draft="";rollDraft="";rollKey=null;rollNat=""; { const ta=$('#act'); if(ta) ta.value=''; }
   await saveDmChoice();
   const ok=await removeAwaiting(me.name,round);
   if(ok==='resolve') resolve(false);
