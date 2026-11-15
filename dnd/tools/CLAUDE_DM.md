@@ -34,3 +34,7 @@ Werkwijze voor een Claude Code-sessie die de Dungeon Master speelt in plaats van
 - Laat de beurt altijd spelen door de subagent `dnd-dm` (`.claude/agents/dnd-dm.md`): die leest de canon en de DM-notities en schrijft het resultaat terug, en geeft in het hoofdgesprek alleen één regel terug ("Beurt gespeeld: ronde N, aan zet: X"). Het hoofdgesprek leest zelf nooit `context`.
 - De canon-documenten C1 en C2 staan in de app als "🔒 DM-geheim": de tekst is verborgen tot iemand bewust op "Toon tekst (spoiler!)" tikt. De DM-notities (klokken, plannen) staan in geen enkel scherm.
 - Dit is een voorkomen-van-ongelukken-maatregel, geen beveiliging: wie in de database kijkt, kan alles lezen.
+
+## Melding op de laptop
+
+`node dnd/tools/wacht-op-claude.js` laten draaien in een terminal: het controleert elke 30 s (alleen lezen) en geeft een piep + Windows-melding zodra een beurt wacht op Claude Code. Daarna in Claude Code: "speel de beurt". `--eenmalig` controleert één keer (exitcode 10 = er wacht een beurt).
