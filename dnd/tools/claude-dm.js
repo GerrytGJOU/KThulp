@@ -171,7 +171,7 @@ function cmdApply(cid, file, flags) {
   const nk = pushId(); msgKeys.push(nk);
   out.logEntries.forEach(l => { if (l && l.fact) { const k = pushId(); logKeys.push(k); up[cp(cid, "log/" + k)] = { fact: String(l.fact), inGameDate: String(l.inGameDate || ""), round: round + 1, t: now }; } });
   out.newNpcs.forEach(n => { const k = slug(n.name); if (!npcs[k]) up["npcs/" + k] = { name: n.name.trim(), visual: String(n.visual || "").slice(0, 1500), t: now, from: cid }; });
-  if (out.location) { const lk = slug(out.location.name); if (!locs[lk]) { up["locations/" + lk] = { name: out.location.name, desc: out.location.description, visual: out.location.visual, t: now, from: cid }; nm.newLoc = lk; } up[cp(cid, "scene")] = lk; }
+  if (out.location) { const lk = slug(out.location.name); if (!locs[lk]) { up["locations/" + lk] = { name: out.location.name, desc: out.location.description, visual: out.location.visual, t: now, from: cid }; nm.newLoc = lk; } else nm.loc = lk; up[cp(cid, "scene")] = lk; }
   up[cp(cid, "messages/" + nk)] = nm;
   const world = get("/dnd/" + cp(cid, "world"));
   let wplan = null;

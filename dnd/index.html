@@ -51,6 +51,7 @@ nav button.on{color:var(--gold);border-top:2px solid var(--gold);margin-top:-1px
 .pts{display:flex;flex-direction:column;gap:6px;flex:none}
 .pt{width:64px;height:64px;object-fit:cover;object-position:top;border-radius:50%;border:2px solid var(--gold);box-shadow:0 2px 6px rgba(0,0,0,.6);cursor:pointer;background:#000}
 .mtxt{flex:1;min-width:0}
+.locpic{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:6px;margin:0 0 10px;cursor:pointer;border:1px solid #9c7f3c}
 .mrow{margin:8px 0}.mpar{margin:8px 0}.msg .mrow:first-child,.msg .mpar:first-child{margin-top:0}
 .pts{align-items:center;width:64px}.ptn{font-size:11px;line-height:1.1;color:#6a4a12;text-align:center;word-break:break-word}
 .status{padding:8px 12px;background:rgba(32,27,23,.9);border-top:1px solid rgba(200,162,74,.45);font-size:14px}
@@ -608,6 +609,7 @@ function renderGame(){
       inner=narrBlocks(txt,pts).map(x=>{const bd=md(x.b); return x.pt?'<div class="mrow">'+ptHtml(x.pt)+'<div class="mtxt">'+bd+'</div></div>':'<div class="mpar">'+bd+'</div>'}).join('')+(chips?'<div class="rolls">'+chips+'</div>':'');
     } else if(pts.length) inner='<div class="mrow"><div class="pts"><img class="pt" src="'+npcs[pts[0][0]].img+'" data-zoom="'+pts[0][0]+'" alt="'+esc(pts[0][1])+'"></div><div class="mtxt">'+body+'</div></div>';
     else inner=body;
+    if(m.type==='narration'&&m.loc&&locs[m.loc]&&locs[m.loc].img) inner='<img class="locpic" src="'+locs[m.loc].img+'" data-zoom="loc:'+m.loc+'" alt="'+esc(locs[m.loc].name||'')+'" title="'+esc(locs[m.loc].name||'')+'">'+inner;
     let acts='';
     if(m.type==='narration'&&m._k){
       if(editKey===m._k) inner='<textarea id="editta" style="min-height:160px;color:#2b2012;background:#fff8e6">'+esc(editDraft)+'</textarea><div class="acts"><button data-act="editsave" data-k="'+m._k+'">Opslaan</button><button data-act="editcancel">Annuleer</button></div>';
@@ -768,7 +770,7 @@ Regels:
 - Doet een PC iets waarbij een check hoort (waarnemen, sluipen, overtuigen, ...) maar staat er geen [worp: ...] in zijn actie, dan: (a) vraag de check via nextTurn.checks als er spanning of risico is, of (b) gebruik bij een kleine waarneming zijn passieve score (10 + modifier uit het karakterblad) en noem die in de tekst, bv. \"(passieve Perception 13)\". Negeer zo'n actie nooit en geef niet stilzwijgend alleen de uitkomst van de speler die wel rolde.
 - INFORMATIE PER UITKOMST: bij een waarnemings-, kennis- of onderzoekscheck hangt de hoeveelheid informatie af van het totaal, in lagen: een lage uitkomst geeft het oppervlakkige (wat iedereen ziet), een gemiddelde uitkomst een bruikbaar detail, een hoge uitkomst het verborgen of veelzeggende detail (een wapen, een insigne, een accent, een verborgen gebaar). Bedenk de lagen vooraf en geef elke speler precies de lagen die zijn totaal verdient; verklap de DC's niet.
 - Gevecht: zet "initiative" in de Stand met "active" = wie nu aan de beurt is en "order" met naam, init en enemy:true voor vijanden; werk "active" bij elke beurt bij en zet initiative op null zodra het gevecht voorbij is.
-- Locatie: geef "location" (name, description = 1-2 Nederlandse zinnen, visual = Engelse beschrijving voor een landschaps- of interieurillustratie) zodra de PC's op een andere plek zijn of een plek voor het eerst beschreven wordt; laat het anders weg. Houd inGame.location gelijk aan location.name.
+- Locatie: geef "location" (name, description = 1-2 Nederlandse zinnen, visual = Engelse beschrijving voor een landschaps- of interieurillustratie) zodra de PC's op een andere plek zijn, een plek voor het eerst beschreven wordt, of je een bekende plek weer uitgebreid beschrijft (gebruik dan exact dezelfde naam als eerder, dan verschijnt de bestaande afbeelding bij je bericht); laat het anders weg. Houd inGame.location gelijk aan location.name.
 - HERINNERINGEN van de spelers zijn bindend en gaan voor op je eigen aannames.
 - logEntries: korte feiten van wat NU echt gebeurd is.
 Antwoord ALLEEN met JSON in dit formaat:
@@ -923,7 +925,7 @@ ${window.DNDMap?DNDMap.ids.join(', '):''}
     msgKeys.push(nk); up[cp('messages/'+nk,C)]=nm;
     out.logEntries.forEach(l=>{if(l&&l.fact){const k=db.ref(cp('log',C)).push().key;logKeys.push(k);up[cp('log/'+k,C)]={fact:String(l.fact),inGameDate:String(l.inGameDate||''),round:round+1,t:now}}});
     out.newNpcs.forEach(n=>{const k=slug(n.name); if(!npcs[k]) up['dnd/npcs/'+k]={name:n.name.trim(),visual:String(n.visual||'').slice(0,1500),t:now,from:C}});
-    if(out.location){const lk=slug(out.location.name); if(!locs[lk]){up['dnd/locations/'+lk]={name:out.location.name,desc:out.location.description,visual:out.location.visual,t:now,from:C}; nm.newLoc=lk;} up[cp('scene',C)]=lk;}
+    if(out.location){const lk=slug(out.location.name); if(!locs[lk]){up['dnd/locations/'+lk]={name:out.location.name,desc:out.location.description,visual:out.location.visual,t:now,from:C}; nm.newLoc=lk;} else nm.loc=lk; up[cp('scene',C)]=lk;}
     if(window.DNDMap){
       try{
         const mapS=(await db.ref(cp('map',C)).get()).val()||null, nc=(out._wp&&out._wp.plan&&out._wp.plan.calendar)||(world&&world.calendar)||null;
