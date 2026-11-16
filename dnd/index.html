@@ -52,6 +52,7 @@ nav button.on{color:var(--gold);border-top:2px solid var(--gold);margin-top:-1px
 .pt{width:64px;height:64px;object-fit:cover;object-position:top;border-radius:50%;border:2px solid var(--gold);box-shadow:0 2px 6px rgba(0,0,0,.6);cursor:pointer;background:#000}
 .mtxt{flex:1;min-width:0}
 .locpic{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:6px;margin:0 0 10px;cursor:pointer;border:1px solid #9c7f3c}
+.dtabs{display:flex;gap:6px;overflow-x:auto;margin:0 0 12px;padding-bottom:2px;position:sticky;top:0;z-index:2;background:linear-gradient(180deg,rgba(15,13,11,.95) 80%,transparent)}.dtabs button{flex:none;background:rgba(32,27,23,.82);color:var(--mute);border:1px solid #4a3d30;border-radius:16px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer}.dtabs button.on{color:#1b1307;background:var(--gold);border-color:var(--gold)}
 .mrow{margin:8px 0}.mpar{margin:8px 0}.msg .mrow:first-child,.msg .mpar:first-child{margin-top:0}
 .pts{align-items:center;width:64px}.ptn{font-size:11px;line-height:1.1;color:#6a4a12;text-align:center;word-break:break-word}
 .status{padding:8px 12px;background:rgba(32,27,23,.9);border-top:1px solid rgba(200,162,74,.45);font-size:14px}
@@ -207,6 +208,7 @@ const main=$('#main');
 /* ---------- toestand ---------- */
 let me=null;                 // {uid,name}
 let screen='menu', cid=null; // menu of campagne
+let diaryTab=(function(){try{return localStorage.getItem('dnd_diarytab')||'sum'}catch(e){return 'sum'}})();
 let cfg={}, npcs={}, locs={}, chars={}, index={}; let sceneKey='', editKey=null, editDraft='', lastSide='';              // globaal
 let wQuests={}, wCal=null, wBack={}, wNpcs={}, wLocs={}, mapData=null, mapSel=null, mapView={s:1,x:0,y:0,init:false};
 let turn=null, canon={}, msgs=[], oocs=[], pending={}, stateStr="{}"; // per campagne
@@ -1242,19 +1244,32 @@ async function renderDiary(){
   const wq=wl.map(x=>'<div class="q '+(wlab[x.status]||'')+'">'+esc(x.title)+esc(wtxt[x.status]||'')+'</div>').join('');
   const known=Object.values(wBack||{}).map(b=>{const rv=b.revealed||{};const ls=(b.layers||[]).filter(l=>rv[l.n]).map(l=>'<div class="q">'+esc(l.know||'')+'</div>').join('');if(!ls)return '';const nm=(S.npcs&&S.npcs[b.npc]&&S.npcs[b.npc].name)||b.npc;return '<div class="card"><b>'+esc(nm)+'</b>'+ls+'</div>'}).join('');
   const wdate=(wCal&&wCal.y)?'<div class="card"><small style="color:var(--mute)">Datum in het verhaal</small><br>'+wCal.d+' '+MOPN[wCal.m]+' '+wCal.y+' (Derde Era)'+(wCal.tod?' · '+esc(wCal.tod):'')+'</div>':'';
-  box.innerHTML=locationCard()+wdate+'<div id="recap"></div><div id="mem"></div><h2>Opdrachten</h2>'+wq+(open||'<small style="color:var(--mute)">Nog geen open opdrachten.</small>')+
-    (cons?'<h2>Gevolgen</h2>'+cons:'')+(done?'<h2>Afgerond</h2>'+done:'')+
-    (known?'<h2>Wat je weet</h2>'+known:'')+'<h2>Personen</h2>'+(ppl||'<small style="color:var(--mute)">Nog geen personen in de Stand.</small>')+
-    '<h2>Logboek</h2><div id="logs">Laden…</div>';
-  loadMemories(C);
-  db.ref(cp('summaries',C)).get().then(ss=>{
+  const tabs=[['sum','Samenvatting'],['opd','Opdrachten'],['weet','Wat je weet'],['pers','Personen'],['log','Logboek']];
+  const dt=tabs.some(t=>t[0]===diaryTab)?diaryTab:'sum';
+  const bar='<div class="dtabs">'+tabs.map(t=>'<button data-dt="'+t[0]+'"'+(t[0]===dt?' class="on"':'')+'>'+t[1]+'</button>').join('')+'</div>';
+  const none=t=>'<small style="color:var(--mute)">'+t+'</small>';
+  let body='';
+  if(dt==='sum') body=locationCard()+wdate+'<div id="recap"></div>';
+  else if(dt==='opd') body=wq+(open||(wq?'':none('Nog geen open opdrachten.')))+(cons?'<h2>Gevolgen</h2>'+cons:'')+(done?'<h2>Afgerond</h2>'+done:'');
+  else if(dt==='weet') body=(known||none('Nog niets ontdekt dat hier past; aanwijzingen en onthullingen verschijnen hier vanzelf.'))+'<div id="mem"></div>';
+  else if(dt==='pers') body=ppl||none('Nog geen personen in de Stand.');
+  else body='<div id="logs">Laden…</div>';
+  const keep=box.querySelector('.dtabs')?box.scrollTop:0;
+  box.innerHTML=bar+body;
+  box.scrollTop=keep;
+  box.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>{diaryTab=b.dataset.dt; try{localStorage.setItem('dnd_diarytab',diaryTab)}catch(e){} box.scrollTop=0; renderDiary()});
+  if(dt==='weet') loadMemories(C);
+  if(dt==='sum') db.ref(cp('summaries',C)).get().then(ss=>{
     const arr=[]; ss.forEach(c=>{arr.push(c.val())}); arr.reverse();
-    if(screen!=='camp'||cid!==C||!$('#recap')) return;
-    $('#recap').innerHTML='<details'+(arr.length?' open':'')+'><summary>📖 Voorheen (samenvatting)</summary>'+(arr.map(a=>'<div class="card"><small style="color:var(--mute)">ronde '+a.fromRound+' t/m '+a.toRound+'</small><br>'+md(a.text)+'</div>').join('')||'<small style="color:var(--mute)">Nog geen samenvatting; die komt automatisch na 15 rondes.</small>')+'<div class="row"><button class="b alt sm" id="sumnow">Vat samen tot nu</button></div></details>';
-    $('#sumnow').onclick=async e=>{if(cfg.summaryBy==='claude'){alert('De samenvattingen worden door Claude Code gemaakt (zie Instellingen). Vraag Gerben om ze bij te werken.');return} e.target.disabled=true;e.target.textContent='Bezig…';try{const ok=await summarize(C,turn?turn.round:0,true);if(!ok)alert('Te weinig nieuwe berichten om samen te vatten.')}catch(err){alert(err.message)}renderDiary()};
+    if(screen!=='camp'||cid!==C||diaryTab!=='sum'||!$('#recap')) return;
+    const leeg=cfg.summaryBy==='claude'?'Nog geen samenvatting; Claude Code maakt die na ongeveer 15 rondes.':'Nog geen samenvatting; die komt automatisch na 15 rondes.';
+    $('#recap').innerHTML='<h2>📖 Voorheen</h2>'+(arr.map(a=>'<div class="card"><small style="color:var(--mute)">ronde '+a.fromRound+' t/m '+a.toRound+'</small><br>'+md(a.text)+'</div>').join('')||none(leeg))+(cfg.summaryBy==='claude'?'':'<div class="row"><button class="b alt sm" id="sumnow">Vat samen tot nu</button></div>');
+    if($('#sumnow')) $('#sumnow').onclick=async e=>{e.target.disabled=true;e.target.textContent='Bezig…';try{const ok=await summarize(C,turn?turn.round:0,true);if(!ok)alert('Te weinig nieuwe berichten om samen te vatten.')}catch(err){alert(err.message)}renderDiary()};
   });
-  const ls=await db.ref(cp('log',C)).limitToLast(80).get(); const la=[]; ls.forEach(c=>{la.push(c.val())}); la.reverse();
-  if(screen==='camp'&&cid===C&&$('#logs')) $('#logs').innerHTML=la.map(l=>'<div class="card"><small style="color:var(--mute)">'+esc(l.inGameDate||'')+'</small><br>'+esc(l.fact)+'</div>').join('')||'<small style="color:var(--mute)">Nog geen feiten vastgelegd.</small>';
+  if(dt==='log'){
+    const ls=await db.ref(cp('log',C)).limitToLast(80).get(); const la=[]; ls.forEach(c=>{la.push(c.val())}); la.reverse();
+    if(screen==='camp'&&cid===C&&diaryTab==='log'&&$('#logs')) $('#logs').innerHTML=la.map(l=>'<div class="card"><small style="color:var(--mute)">'+esc(l.inGameDate||'')+'</small><br>'+esc(l.fact)+'</div>').join('')||none('Nog geen feiten vastgelegd.');
+  }
 }
 
 const SUMSYS='Je vat voor een D&D-campagne in Midden-aarde de nieuwe berichten samen als feitelijke recap in helder, vlot lopend Nederlands, in maximaal 180 woorden. Schrijf in chronologische volgorde, in korte, volledige zinnen met één gebeurtenis per zin, en verdeel de tekst in 2 tot 4 korte paragrafen (gescheiden door een lege regel). Noem wie wat deed en wat het gevolg was; zeg welke vragen nog openstaan. Vermijd opsommingen met puntkomma’s, lange samengestelde zinnen en stijve ambtelijke of vertaalde formuleringen; schrijf zoals je het een vriend zou navertellen. Gebruik alleen gewone Nederlandse woorden (geen losse Engelse spelregeltermen, behalve eigennamen en officiële termen als Perception). Neem de eerdere samenvatting over waar die nog relevant is, maar herhaal niet wat al is afgehandeld. Gebruik alleen wat in de berichten staat; voeg geen geheimen of verzinsels toe. Geen kopjes en geen opsommingstekens.';
