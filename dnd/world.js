@@ -713,7 +713,9 @@
     const here = opts.region ? String(opts.region) : null;
     const quests = Object.values(world.quests || {}).filter(q => q.status === "active" || q.status === "available" || hay.indexOf(q.id.toLowerCase()) >= 0 || (q.title && hay.indexOf(String(q.title).toLowerCase()) >= 0))
       .filter(q => q.status === "active" || !here || !q.region || q.region === here || hay.indexOf(q.id.toLowerCase()) >= 0 || q.kind === "main");
-    if (quests.length) out.push("Quests:\n" + quests.slice(0, 14).map(q => "- " + q.id + " [" + q.status + "] " + q.title + (q.region ? " @" + q.region : "") + (q.expires && dateOk(q.expires) ? " tot " + fmt(q.expires) : "")).join("\n"));
+    const hookQ = Object.values(world.quests || {}).filter(q => q.status === "dormant" && ["side", "minor", "personal", "npc", "big"].indexOf(q.kind) >= 0 && here && q.region === here);
+    if (hookQ.length) out.push("Slapende haken in deze regio (geen verplichting; speel hoogstens één per locatiebezoek in en kies wat bij de scène past; zet hem via worldDelta quests op available of active zodra de spelers erop ingaan):\n" + hookQ.slice(0, 6).map(q => "- " + q.id + " " + q.title + (q.hook ? ": " + q.hook : "")).join("\n"));
+    if (quests.length) out.push("Quests:\n" + quests.slice(0, 14).map(q => "- " + q.id + " [" + q.status + "] " + q.title + (q.region ? " @" + q.region : "") + (q.expires && dateOk(q.expires) ? " tot " + fmt(q.expires) : "") + (q.status === "available" && q.kind !== "main" && q.hook ? ": " + q.hook : "")).join("\n"));
     const npcs = Object.values(world.npcs || {}).filter(n => n.status !== "deceased" || hay.indexOf(String(n.name).toLowerCase()) >= 0)
       .filter(n => n.status === "recruited" || hay.indexOf(String(n.name).toLowerCase()) >= 0 || hay.indexOf(n.id.toLowerCase()) >= 0 || (here && regionOf(world, n.location) === here && n.status !== "ambient" && !n.tolkien));
     if (npcs.length) out.push("NPC's (id, status, plek):\n" + npcs.slice(0, 24).map(n => "- " + n.id + " " + n.name + " [" + n.status + (n.status === "deceased" ? ", OVERLEDEN" : "") + "] @" + (n.location || "?")).join("\n"));
