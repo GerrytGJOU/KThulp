@@ -55,7 +55,7 @@ nav button.on{color:var(--gold);border-top:2px solid var(--gold);margin-top:-1px
 .dtabs{display:flex;gap:6px;overflow-x:auto;margin:0 0 12px;padding-bottom:2px;position:sticky;top:0;z-index:2;background:linear-gradient(180deg,rgba(15,13,11,.95) 80%,transparent)}.dtabs button{flex:none;background:rgba(32,27,23,.82);color:var(--mute);border:1px solid #4a3d30;border-radius:16px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer}.dtabs button.on{color:#1b1307;background:var(--gold);border-color:var(--gold)}
 .mrow{margin:8px 0}.mpar{margin:8px 0}.msg .mrow:first-child,.msg .mpar:first-child{margin-top:0}
 .pts{align-items:center;width:64px}.ptn{font-size:11px;line-height:1.1;color:#6a4a12;text-align:center;word-break:break-word}
-.status{padding:8px 12px;background:rgba(32,27,23,.9);border-top:1px solid rgba(200,162,74,.45);font-size:14px}
+.status{padding:8px 12px;background:rgba(32,27,23,.9);border-top:1px solid rgba(200,162,74,.45);font-size:14px;max-height:34vh;overflow-y:auto}.otheract{margin-top:4px;font-size:13px;color:var(--mute)}.otheract summary{cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.otheract[open] summary{white-space:normal}
 .status b{color:var(--gold)}
 .compose{padding:8px 12px 10px;background:rgba(32,27,23,.9);display:flex;flex-direction:column;gap:6px}
 textarea,input[type=text],input[type=password],input[type=number],select{width:100%;background:#0f0d0b;color:var(--text);border:1px solid #4a3d30;border-radius:6px;padding:9px;font:inherit;font-size:16px}
@@ -691,7 +691,7 @@ function renderGame(){
   const checks=turn.checks&&turn.checks[me.name];
   if(checks) st+='<br>🎲 <b>Worp gevraagd:</b> '+esc(checks);
   if(!turn.blind){
-    Object.values(pending).filter(p=>p.round===turn.round&&p.name!==me.name).forEach(p=>{st+='<br><small>'+esc(p.name)+': '+esc(p.text)+'</small>'});
+    Object.values(pending).filter(p=>p.round===turn.round&&p.name!==me.name).forEach(p=>{const tx=String(p.text||''), pv=tx.length>70?tx.slice(0,70).trim()+'…':tx; st+=tx.length>70?'<details class="otheract"><summary>'+esc(p.name)+': '+esc(pv)+'</summary>'+esc(tx)+'</details>':'<br><small>'+esc(p.name)+': '+esc(tx)+'</small>'});
   } else if(Object.values(pending).some(p=>p.round===turn.round&&p.name!==me.name)){
     st+='<br><small>(blind) De ander heeft ingediend.</small>';
   }
