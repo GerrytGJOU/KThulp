@@ -643,7 +643,7 @@ function renderGame(){
     ${rollRowHtml()}
     <div class="row"><button class="b" id="send">${mine?'Actie vervangen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button><select id="dmsel" class="dmsel" title="Wie speelt de volgende beurt als de DM?"></select>
     ${others.length?'<button class="b alt" id="skip">Zonder '+esc(others.join(', '))+' verder</button>':''}</div>
-    ${mine?'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a>'+(/\[worp:/i.test(mine.text)?' · je ingediende worp blijft bij de actie, tenzij je hierboven een nieuwe worp kiest':'')+'</small>':''}`;
+    ${mine?'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a></small>':''}`;
     const em=$('#editmine'); if(em) em.onclick=e=>{e.preventDefault(); draft=mine.text.replace(/\s*\[worp:[^\]]*\]/i,''); $('#act').value=draft; $('#act').focus()};
     $('#act').value=draft;
     $('#act').oninput=e=>draft=e.target.value; wireRoll();
@@ -662,8 +662,7 @@ async function submit(pass){
   const text=pass?'(past / wacht af)':draft.trim();
   if(!text){alert('Typ eerst een actie.');return}
   if(!pass&&$('#rsel')&&!rollDraft.trim()&&(rollKey||String(rollNat).trim())&&!confirm('Je worp is nog niet compleet ('+(rollKey?'je d20 ontbreekt':'je hebt geen worp gekozen')+'), dus hij wordt NIET meegestuurd. Toch versturen zonder worp?')) return;
-  const prevP=pending[me.uid], oldW=(!pass&&prevP&&prevP.round===turn.round&&!rollDraft.trim()&&!rollKey&&!String(rollNat).trim())?((String(prevP.text||'').match(/\[worp:[^\]]*\]/i)||[''])[0]):'';
-  const round=turn.round, full=text+(rollDraft.trim()&&!pass?'  [worp: '+rollDraft.trim()+']':oldW?'  '+oldW:'');
+  const round=turn.round, full=text+(rollDraft.trim()&&!pass?'  [worp: '+rollDraft.trim()+']':'');
   await db.ref(cp('pending/'+me.uid)).set({round,name:me.name,text:full,pass:!!pass,t:Date.now()});
   draft="";rollDraft="";rollKey=null;rollNat=""; { const ta=$('#act'); if(ta) ta.value=''; }
   await saveDmChoice();
