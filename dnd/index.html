@@ -791,10 +791,10 @@ Regels:
    "companions":{"Naam":{"location":"","hp":{"current":0,"max":0,"temp":0},"status":"","attitude":""}},
    "npcs":{"Naam":{"location":"","status":"","attitude":"","knows":[]}},
    "factions":{"Naam":{"stance":"","currentAction":""}},
-   "quests":{"open":[{"title":"","detail":""}],"completed":[],"consequences":[]},
+   "quests":{"open":[{"title":"","detail":"","kind":"main|side|personal|companion","for":"personagenaam (alleen bij personal)","npc":"NPC-naam (alleen bij companion)"}],"completed":[],"consequences":[]},
    "initiative":{"active":"Naam","order":[{"name":"Naam","init":15,"enemy":false}]}  (alleen tijdens een gevecht; anders null)}
   Vul bij het begin hp, resources en inventory van elke PC in uit zijn B-document. Werk hp, resources, conditions, location, inGame en quests bij zodra ze veranderen. Controleer geografie met Tolkiens kaart (Rivendell ligt in Eriador aan de westzijde van de Misty Mountains, ver van de Ered Luin).
-  HET DAGBOEK VAN DE SPELERS wordt uitsluitend gevuld door jouw uitvoer, dus houd het elke beurt bij: Opdrachten = statePatch.quests (open/completed/consequences; zet er direct een regel bij zodra een NPC of gebeurtenis een nieuwe opdracht, belofte of doel geeft, verplaats hem naar completed als hij klaar is) plus worldDelta-quests die active worden; Wat je weet = pcs.<personagenaam>.knowledge (korte, feitelijke regels over wat dat personage heeft ontdekt, gehoord of gezien: aanwijzingen, namen, plekken, beloftes; nooit DM-geheimen of wat het personage niet kan weten) en onthulde backstorylagen (worldDelta reveals); Personen = statePatch.npcs; Logboek = logEntries. Lijsten in statePatch worden VERVANGEN: geef bij quests.open en knowledge altijd de volledige actuele lijst (oude regels behouden, korte regels, samenvoegen boven ongeveer 15 regels), anders verdwijnt eerder werk.
+  HET DAGBOEK VAN DE SPELERS wordt uitsluitend gevuld door jouw uitvoer, dus houd het elke beurt bij: Opdrachten = statePatch.quests (open/completed/consequences; zet er direct een regel bij zodra een NPC of gebeurtenis een nieuwe opdracht, belofte of doel geeft, verplaats hem naar completed als hij klaar is) plus worldDelta-quests die active worden. Het Dagboek sorteert opdrachten in Main quest (voor alle PC's), Side quests (voor alle PC's), Personal quests (per personage) en Companion quests (per NPC of companion): geef daarom elke opdracht in quests.open een kind (main, side, personal of companion), bij personal ook for (de personagenaam) en bij companion ook npc (de naam van de NPC); bij een nieuwe worldDelta-quest zet je set.kind op dezelfde manier, plus set.owner (personagenaam) bij personal en set.npcs bij companion;  Wat je weet = pcs.<personagenaam>.knowledge (korte, feitelijke regels over wat dat personage heeft ontdekt, gehoord of gezien: aanwijzingen, namen, plekken, beloftes; nooit DM-geheimen of wat het personage niet kan weten) en onthulde backstorylagen (worldDelta reveals); Personen = statePatch.npcs; Logboek = logEntries. Lijsten in statePatch worden VERVANGEN: geef bij quests.open en knowledge altijd de volledige actuele lijst (oude regels behouden, korte regels, samenvoegen boven ongeveer 15 regels), anders verdwijnt eerder werk.
   OPDRACHTEN ZIJN DE RUGGENGRAAT VAN HET VERHAAL, maar dwing niets af: niet elke beurt hoeft een opdracht vooruit te brengen. Een gesprek, een rustig moment of een kleine tussenscène mag gewoon zijn eigen ding doen, en je mag af en toe zelf een nieuwe opdracht pitchen (via een NPC, een gebeurtenis of een vondst). Alleen een echt NIEUWE SCÈNE (een andere plek, een groot nieuw gevecht of een nieuwe hoofdontwikkeling, dus niet zomaar een volgende beurt) sluit aan op minstens één open opdracht, een NPC-agenda of een backstory (aanhaken, verdiepen, verstoren of omkeren); verzin geen losstaande hoofdlijnen. Raakt een open opdracht heel lang niets, dan mag je op een natuurlijk moment een aanleiding, gevolg of tijdsdruk geven, maar forceer geen vervolg. Zet voltooide of vervallen opdrachten om naar completed of consequences. Wat een PC weet (knowledge) mag je terugspelen en belonen met logische vervolgstappen. 
 - Documenten in CANON die als DM-geheim of "NIET LEZEN ALS SPELER" gemarkeerd zijn, gebruik je voor planning, maar je onthult of citeert ze nooit letterlijk; laat geheimen alleen via het spel zelf blijken.
 - Is de ACTUELE STAND nog leeg ({}), begin dan met een statePatch die de beginsituatie uit D1 Wereldstatus / STAND #1 in canon overneemt. Een PC zonder uitgewerkt personage (zoals PC2 zolang B2 ontbreekt) speel je niet; vraag die speler eerst zijn personage te beschrijven.
@@ -1229,6 +1229,47 @@ function renderMap(soft){
     requestAnimationFrame(()=>{if(!mapView.init&&img.complete) go()});
   } else mapApply();
 }
+/* Opdrachten in het Dagboek, per soort: Main quest, Side quest, Personal quest (per personage), Companion quests (per NPC). Bron: wereldregister (kind) en de Stand (quests.open met kind/for/npc). */
+function diaryQuestsHtml(S){
+  const q=S.quests||{}, mine=myChar()&&myChar().name;
+  const pcNames=(function(){const n=campChars().filter(c=>c.player&&!c.dead).map(c=>c.name); return n.length?n:Object.keys(S.pcs||{})})();
+  const npcName=id=>{const n=(wNpcs&&wNpcs[id])||(S.npcs&&S.npcs[id]); return (n&&n.name)||id};
+  const ownerOf=(txt,explicit)=>{
+    const hay=String(explicit||'')+' '+String(txt||''), low=hay.toLowerCase(), toks=low.split(/[^a-zà-ž]+/).filter(t=>t.length>=4);
+    return pcNames.find(n=>low.indexOf(n.toLowerCase())>=0)||pcNames.find(n=>toks.some(t=>n.toLowerCase().indexOf(t)===0))||null;
+  };
+  const catOf=k=>k==='main'?'main':k==='personal'?'personal':(k==='companion'||k==='npc')?'comp':'side';
+  const items=[];
+  const WT={completed:' (afgerond)',failed:' (mislukt)',expired:' (verlopen)',changed:' (veranderd)'};
+  Object.values(wQuests||{}).forEach(x=>{
+    if(!x||!x.title||['active','completed','failed','expired','changed'].indexOf(x.status)<0) return;
+    let cat=catOf(x.kind), who=null;
+    if(cat==='personal'){ who=ownerOf(x.id+' '+x.title+' '+(x.hook||''),x.owner); if(!who) cat='side'; }
+    if(cat==='comp') who=(Array.isArray(x.npcs)?x.npcs.map(npcName).join(', '):'')||'Overig';
+    items.push({cat,who,title:x.title,detail:'',done:['completed','failed','expired'].indexOf(x.status)>=0,label:WT[x.status]||''});
+  });
+  const rawOpen=Array.isArray(q.open)?q.open:Object.values(q.open||{});
+  rawOpen.forEach(o=>{
+    const it=(typeof o==='string')?{title:o}:(o&&typeof o==='object'?o:null); if(!it) return;
+    const title=String(it.title||it.name||it.quest||it.titel||'').trim(), detail=String(it.detail||it.description||it.beschrijving||'').trim();
+    if(!title&&!detail) return;
+    const kind=String(it.kind||'').toLowerCase(); let cat, who=null;
+    if(kind){ cat=catOf(kind); if(cat==='personal'){ who=ownerOf(title+' '+detail,it.for||it.owner); if(!who) cat='side'; } if(cat==='comp') who=it.npc?npcName(it.npc):'Overig'; }
+    else { const pre=detail.match(/^([^:]{2,30}):/); who=pre?ownerOf('',pre[1]):null; cat=who?'personal':'side'; }
+    items.push({cat,who,title:title||detail,detail:title?detail:'',done:false,label:''});
+  });
+  const row=it=>'<div class="q'+(it.done?' done':'')+'"><b>'+esc(it.title)+'</b>'+esc(it.label)+(it.detail?'<br><small>'+esc(it.detail)+'</small>':'')+'</div>';
+  const order=l=>l.slice().sort((a,b)=>(a.done?1:0)-(b.done?1:0));
+  const none=t=>'<small style="color:var(--mute)">'+t+'</small>';
+  const list=l=>l.length?order(l).map(row).join(''):none('Nog geen.');
+  const of=c=>items.filter(i=>i.cat===c);
+  let h='<h2>⚔️ Main quest</h2>'+list(of('main'))+'<h2>🧭 Side quests</h2>'+list(of('side'));
+  h+='<h2>👤 Personal quests</h2>'+(pcNames.length?pcNames.map(n=>{const l=of('personal').filter(i=>i.who===n); return '<details class="card"'+(n===mine||pcNames.length===1?' open':'')+'><summary><b>'+esc(n)+'</b> ('+l.filter(i=>!i.done).length+')</summary>'+list(l)+'</details>'}).join(''):none('Nog geen personages.'));
+  const comp=of('comp'), whos=[...new Set(comp.map(i=>i.who))];
+  h+='<h2>🤝 Companion quests</h2>'+(whos.length?whos.map(w=>'<div style="margin:8px 0 2px;color:var(--gold)">'+esc(w)+'</div>'+list(comp.filter(i=>i.who===w))).join(''):none('Nog geen.'));
+  const done=listOf(q.completed).map(t=>'<div class="q done">'+esc(t)+'</div>').join(''), cons=listOf(q.consequences).map(t=>'<div class="q">'+esc(t)+'</div>').join('');
+  return h+(cons?'<h2>Gevolgen</h2>'+cons:'')+(done?'<h2>Afgerond</h2>'+done:'');
+}
 async function renderDiary(){
   if(screen!=='camp') return;
   const box=$('#diarybox'), C=cid, S=getState(), q=S.quests||{};
@@ -1252,7 +1293,7 @@ async function renderDiary(){
   const none=t=>'<small style="color:var(--mute)">'+t+'</small>';
   let body='';
   if(dt==='sum') body=locationCard()+wdate+'<div id="recap"></div>';
-  else if(dt==='opd') body=wq+(open||(wq?'':none('Nog geen open opdrachten.')))+(cons?'<h2>Gevolgen</h2>'+cons:'')+(done?'<h2>Afgerond</h2>'+done:'');
+  else if(dt==='opd') body=diaryQuestsHtml(S);
   else if(dt==='weet'){ const pk=Object.entries(S.pcs||{}).map(([n,v])=>({n,player:v&&v.player,l:listOf(v&&v.knowledge)})).filter(x=>x.l.length), mineN=myChar()&&myChar().name; pk.sort((a,b)=>(b.n===mineN)-(a.n===mineN)); const kn=pk.map((x,i)=>{const h='<b>'+esc(x.n)+(x.n===mineN?' (jij)':'')+'</b>'+x.l.map(t=>'<div class="q">'+esc(t)+'</div>').join(''); return x.n===mineN||(!mineN&&i===0)?'<div class="card">'+h+'</div>':'<details class="card"><summary>'+esc(x.n)+' weet ook...</summary>'+x.l.map(t=>'<div class="q">'+esc(t)+'</div>').join('')+'</details>'}).join(''); body=((kn+known)||none('Nog niets ontdekt; aanwijzingen en onthullingen verschijnen hier vanzelf.'))+'<div id="mem"></div>'; }
   else if(dt==='pers') body=ppl||none('Nog geen personen in de Stand.');
   else body='<div id="logs">Laden…</div>';
