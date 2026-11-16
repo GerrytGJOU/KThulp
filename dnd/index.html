@@ -299,7 +299,7 @@ auth.onAuthStateChanged(async u=>{
   }catch(e){ showNoAccess(u,e.message); }
 });
 function showLogin(){
-  main.innerHTML='<div class="center"><p>Alleen voor Gerben en Maurits.</p><button class="b" id="gl">Inloggen met Google</button><p class="err">'+esc(window._loginErr||'')+'</p></div>';
+  main.innerHTML='<div class="center"><p>Alleen voor uitgenodigde spelers.</p><button class="b" id="gl">Inloggen met Google</button><p class="err">'+esc(window._loginErr||'')+'</p></div>';
   $('#gl').onclick=async()=>{
     const p=new firebase.auth.GoogleAuthProvider();
     try{ await auth.signInWithPopup(p); }   // popup werkt ook als de browser opslag van derden blokkeert
@@ -380,7 +380,7 @@ function menuNpcs(){
   <details class="card"><summary>＋ Nieuwe NPC / speler toevoegen</summary>
     <input type="text" id="nname" placeholder="Naam (exact zoals in het verhaal)"><br><br>
     <textarea id="nvis" placeholder="Uiterlijk (Engels, concreet: leeftijd, postuur, gezicht, haar, kleding, uitrusting)"></textarea>
-    <div class="row" style="margin-top:6px"><select id="nplayer" style="width:auto"><option value="">NPC</option><option>Gerben</option><option>Maurits</option></select>
+    <div class="row" style="margin-top:6px"><select id="nplayer" style="width:auto"><option value="">NPC</option>${playerNames().map(n=>'<option>'+esc(n)+'</option>').join('')}</select>
     <label class="b alt sm" for="nfile">Plaatje kiezen</label><input type="file" id="nfile" class="vh" accept="image/*"><span id="nfileinfo" style="font-size:13px;color:var(--mute)"></span></div>
     <div class="row" style="margin-top:6px"><button class="b" id="nsave">Opslaan</button></div>
   </details>
@@ -416,14 +416,19 @@ function menuNpcs(){
   });
   renderNpcs();
 }
+function partyLine(x){
+  if(!x||!x.party) return '';
+  const l=Object.entries(x.party).map(([n,k])=>'<b>'+esc(n)+'</b> '+(k&&chars[k]?'('+esc(chars[k].name)+')':'<span style="color:#d9a441">(nog geen personage)</span>'));
+  return l.length?'<br><small>🎭 '+l.join(' · ')+'</small>':'';
+}
 function renderIndex(){
   if(screen!=='menu'||!$('#savelist')) return;
   const id=latestId(), g=$('#goon');
   g.disabled=!id;
-  $('#goonsub').textContent=id?(index[id].title+' · ronde '+(index[id].round||0)+' · '+new Date(index[id].lastPlayed||index[id].created||0).toLocaleDateString('nl-NL')):'Nog geen verhaal: begin met "Nieuw verhaal".';
+  $('#goonsub').innerHTML=id?(esc(index[id].title)+' · ronde '+(index[id].round||0)+' · '+new Date(index[id].lastPlayed||index[id].created||0).toLocaleDateString('nl-NL')+partyLine(index[id])):'Nog geen verhaal: begin met "Nieuw verhaal".';
   const ids=Object.keys(index).sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0));
   $('#savelist').innerHTML=ids.map(i=>{const x=index[i];
-    return '<div class="card"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><div style="min-width:0"><b>'+esc(x.title)+'</b><br><small style="color:var(--mute)">ronde '+(x.round||0)+' · '+new Date(x.lastPlayed||0).toLocaleDateString('nl-NL')+'</small></div><button class="b sm" data-open="'+i+'">Open</button></div>'+
+    return '<div class="card"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><div style="min-width:0"><b>'+esc(x.title)+'</b><br><small style="color:var(--mute)">ronde '+(x.round||0)+' · '+new Date(x.lastPlayed||0).toLocaleDateString('nl-NL')+'</small>'+partyLine(x)+'</div><button class="b sm" data-open="'+i+'">Open</button></div>'+
     '<details><summary>Beheer</summary><div class="row"><button class="b alt sm" data-ren="'+i+'">Hernoem</button><button class="b red sm" data-del="'+i+'">Wis</button></div></details></div>'}).join('')||'<small>Geen savegames.</small>';
   $('#savelist').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>enterCampaign(b.dataset.open));
   $('#savelist').querySelectorAll('[data-ren]').forEach(b=>b.onclick=()=>{const v=prompt('Nieuwe naam:',index[b.dataset.ren].title);if(v&&v.trim())db.ref('dnd/campaignIndex/'+b.dataset.ren+'/title').set(v.trim())});
@@ -436,24 +441,49 @@ function renderIndex(){
 function newStoryForm(){
   const f=$('#newform'); if(f.innerHTML){f.innerHTML='';return}
   const ids=Object.keys(index).sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0));
+  const pl=playerNames();
+  const opt=n=>{const cs=allChars().filter(c=>c.player===n), first=cs.find(c=>!c.dead); return '<option value="">➕ nog te maken</option>'+cs.map(c=>'<option value="'+esc(c.k)+'"'+(first&&first.k===c.k?' selected':'')+'>'+esc(c.name)+(c.dead?' (inactief)':'')+'</option>').join('')};
   f.innerHTML='<br><input type="text" id="ntitle" placeholder="Naam van het nieuwe verhaal">'+
-   (ids.length?'<br><br><label><small>Canon overnemen van:</small></label><select id="ncopy"><option value="__tpl__">Sjabloon (aanbevolen: de actuele canon, los van je savegames)</option><option value="">— geen (leeg beginnen) —</option>'+ids.map(i=>'<option value="'+i+'">'+esc(index[i].title)+'</option>').join('')+'</select>':'')+
+   '<br><br><label><small><b>Spelers in dit verhaal</b> (kies per speler een bestaand personage, of laat die zelf een nieuw personage maken)</small></label><div id="nparty">'+
+   pl.map(n=>'<div class="row" style="margin:4px 0;flex-wrap:nowrap"><label style="flex:none;min-width:90px"><input type="checkbox" data-pn="'+esc(n)+'"'+(me&&n===me.name?' checked':'')+'> '+esc(n)+'</label><select data-pc="'+esc(n)+'" style="flex:1;min-width:0">'+opt(n)+'</select></div>').join('')+'</div>'+
+   '<button class="b alt sm" id="naddpl" type="button">＋ Speler toevoegen</button>'+
+   '<br><br><label><small><b>Wereld</b></small></label><select id="nwm"><option value="stillewegen">De Stille Wegen (volledig sjabloon: Rivendell, vaste NPC\'s en verhaallijn)</option><option value="nieuw">Nieuwe start: alleen spelregels en setting (eigen premisse; Claude Code schrijft die bij de opening)</option></select>'+
+   '<div id="nold">'+
+   (ids.length?'<br><label><small>Canon overnemen van:</small></label><select id="ncopy"><option value="__tpl__">Sjabloon (aanbevolen: de actuele canon, los van je savegames)</option><option value="">— geen (leeg beginnen) —</option>'+ids.map(i=>'<option value="'+i+'">'+esc(index[i].title)+'</option>').join('')+'</select>':'')+
+   '<br><br><label><small><input type="checkbox" id="nworld" checked> Wereldregister uit het sjabloon (proloog in Rivendell, 24 okt 3018: personen, quests, klokken, DM-notities)</small></label></div>'+
    '<br><br><label><small><input type="checkbox" id="nclaude" checked> Opening door Claude Code (aanbevolen: die heeft alle informatie voor een thematisch sterke start; Gemini speelt daarna verder)</small></label>'+
-   '<br><br><label><small><input type="checkbox" id="nworld" checked> Wereldregister uit het sjabloon (proloog in Rivendell, 24 okt 3018: personen, quests, klokken, DM-notities)</small></label>'+
    '<br><br><button class="b" id="ncreate">Verhaal aanmaken</button>';
   if(ids.length) $('#ncopy').value='__tpl__';
+  $('#nwm').onchange=()=>{$('#nold').style.display=$('#nwm').value==='nieuw'?'none':''; if($('#nwm').value==='nieuw') $('#nclaude').checked=true};
+  $('#naddpl').onclick=()=>{
+    const v=(prompt('Naam van de nieuwe speler (zoals hij in de toegangslijst staat):')||'').trim(); if(!v) return;
+    const l=playerNames(); if(l.some(x=>x.toLowerCase()===v.toLowerCase())){alert('Die speler staat er al.');return}
+    l.push(v); cfg.players=l; db.ref('dnd/config/players').set(l);
+    alert('"'+v+'" is aan de lijst toegevoegd. Let op: om in te loggen heeft '+v+' ook toegang nodig; geef Gerben het Google-mailadres.');
+    f.innerHTML=''; newStoryForm();
+  };
   $('#ncreate').onclick=async()=>{
     const t=$('#ntitle').value.trim(); if(!t){alert('Geef het verhaal een naam.');return}
-    const copy=$('#ncopy')?$('#ncopy').value:'';
+    const party={}; f.querySelectorAll('[data-pn]').forEach(c=>{ if(c.checked){ const n=c.dataset.pn, sel=[...f.querySelectorAll('[data-pc]')].find(x=>x.dataset.pc===n); party[n]=sel?sel.value:''; } });
+    if(!Object.keys(party).length){alert('Kies minstens één speler.');return}
+    const open=Object.entries(party).filter(([n,k])=>!k).map(([n])=>n);
+    if(open.length&&!confirm('Nog geen personage voor: '+open.join(', ')+'.\n\nZij maken dat zelf via Menu → Personage maken; het verhaal kan daarna beginnen. Doorgaan?')) return;
+    const nieuw=$('#nwm').value==='nieuw';
+    const copy=(!nieuw&&$('#ncopy'))?$('#ncopy').value:'';
     const id=db.ref('dnd/campaignIndex').push().key, now=Date.now(), up={};
-    up['dnd/campaignIndex/'+id]={title:t,created:now,lastPlayed:now,round:0};
-    if($('#nclaude')&&$('#nclaude').checked){ up['dnd/campaignIndex/'+id].openingBy='claude'; up[cp('turn',id)]={round:0,status:'claude',awaiting:null,handoff:{to:'claude',reason:'Openingsbeurt van het verhaal'}}; }
-    if(copy==='__tpl__'){const s=await db.ref('dnd/worldTemplate/canon').get(); if(s.exists()) up[cp('canon',id)]=s.val(); else if(!confirm('Het canon-sjabloon ontbreekt. Toch zonder canon beginnen?')) return;}
-    else if(copy){const s=await db.ref(cp('canon',copy)).get(); if(s.exists()) up[cp('canon',id)]=s.val();}
-    if($('#nworld')&&$('#nworld').checked){
-      const ts=await db.ref('dnd/worldTemplate').get();
-      if(ts.exists()&&ts.val().world){ up[cp('world',id)]=ts.val().world; if(ts.val().dmnotes) up[cp('dmnotes',id)]=ts.val().dmnotes; }
-      else if(!confirm('Het wereldsjabloon is niet gevonden. Toch zonder wereldregister beginnen?')) return;
+    up['dnd/campaignIndex/'+id]={title:t,created:now,lastPlayed:now,round:0,party:party};
+    if(nieuw||($('#nclaude')&&$('#nclaude').checked)){ up['dnd/campaignIndex/'+id].openingBy='claude'; up[cp('turn',id)]={round:0,status:'claude',awaiting:null,handoff:{to:'claude',reason:'Openingsbeurt van het verhaal'}}; }
+    if(nieuw){
+      const s=await db.ref('dnd/worldTemplateBijbel/canon').get();
+      if(s.exists()) up[cp('canon',id)]=s.val(); else if(!confirm('Het bijbel-sjabloon ontbreekt. Toch zonder canon beginnen?')) return;
+    } else {
+      if(copy==='__tpl__'){const s=await db.ref('dnd/worldTemplate/canon').get(); if(s.exists()) up[cp('canon',id)]=s.val(); else if(!confirm('Het canon-sjabloon ontbreekt. Toch zonder canon beginnen?')) return;}
+      else if(copy){const s=await db.ref(cp('canon',copy)).get(); if(s.exists()) up[cp('canon',id)]=s.val();}
+      if($('#nworld')&&$('#nworld').checked){
+        const ts=await db.ref('dnd/worldTemplate').get();
+        if(ts.exists()&&ts.val().world){ up[cp('world',id)]=ts.val().world; if(ts.val().dmnotes) up[cp('dmnotes',id)]=ts.val().dmnotes; }
+        else if(!confirm('Het wereldsjabloon is niet gevonden. Toch zonder wereldregister beginnen?')) return;
+      }
     }
     await db.ref().update(up);
     enterCampaign(id);
@@ -734,7 +764,7 @@ async function startCampaign(){
 }
 
 /* ---------- DM-motor ---------- */
-const SYSTEM=`Je bent de Dungeon Master van een doorlopende D&D 5e (2024)-campagne in Midden-aarde met twee spelers (PC's). Schrijf in het Nederlands, met Engelse 2024-spelregeltermen. Gebruik voor alle Tolkien-namen (plaatsen, volken, personen, voorwerpen, titels) altijd de Engelse benaming uit het origineel, nooit een Nederlandse vertaling: the Shire (niet de Gouw), Rivendell, Bree, Mirkwood, the Misty Mountains, Hobbit, Dwarves, Elves, Wizard, Ranger, enzovoort. Dat geldt ook voor namen in worldDelta, location en newNpcs.
+const SYSTEM=`Je bent de Dungeon Master van een doorlopende D&D 5e (2024)-campagne in Midden-aarde met meerdere spelers (PC's; zie SPELERS en KARAKTERBLADEN). Schrijf in het Nederlands, met Engelse 2024-spelregeltermen. Gebruik voor alle Tolkien-namen (plaatsen, volken, personen, voorwerpen, titels) altijd de Engelse benaming uit het origineel, nooit een Nederlandse vertaling: the Shire (niet de Gouw), Rivendell, Bree, Mirkwood, the Misty Mountains, Hobbit, Dwarves, Elves, Wizard, Ranger, enzovoort. Dat geldt ook voor namen in worldDelta, location en newNpcs.
 Regels:
 - Bronnenhiërarchie: (1) CANON (spelregels en personages) (2) LOGBOEK (3) de actuele STAND (4) rest. Verzin geen feiten over het verleden die hiermee botsen.
 - Zet in "place" het id van de kaartplaats waar de scène speelt (uit KAARTPLAATSEN; ook zonder nieuwe locatie), zodat de Kaart-tab de bezochte plekken kan tonen; past geen plaats, laat het null.
@@ -746,11 +776,11 @@ Regels:
 - Spelers rollen zelf fysiek; hun worp staat in hun actie ("[worp: ...]"). Vraag een check via nextTurn.checks (naam → welke check en waarom); verklap DC's niet.
 - Voor worpen van NPC's/vijanden gebruik je UITSLUITEND de meegegeven voorgegooide dobbelstenen, in volgorde (d20 voor aanvallen/checks/saves, d6/d8/d10/d12 voor schade). Noem de worp kort in de vertelling.
 - Grote momenten laat je aan Claude Code over (die heeft alle informatie): zet nextTurn.handoff {"to":"claude","reason":"..."} wanneer de VOLGENDE scène groot is: een locatie afsluiten en naar een nieuwe reizen, een finale of belangrijke onthulling, een ontmoeting met een Tolkien-hoofdfiguur, een Act-overgang of een groot gevecht. Doe het bij twijfel liever wel dan niet, maar niet voor gewone scènes (gesprekken, verkennen, kleine ontmoetingen); laat anders handoff op null. Na een groot moment in de wereldstatus (reis, Act, laatste laag, dood van een belangrijke NPC) draagt de app de volgende beurt zelf over.
-- nextTurn.awaiting bevat SPELERNAMEN (bv. Gerben, Maurits), nooit de naam van een personage; de vraag in nextTurn.prompt moet gericht zijn aan precies de speler(s) in awaiting (noem daarin hun personage). Stel je een vraag aan Wulfgrim, dan staat de speler van Wulfgrim in awaiting, niet de ander.
-- Als beide spelers moeten reageren zet je beide namen in awaiting; bij combat de volgende speler; bij een enkele speler alleen die naam.
+- nextTurn.awaiting bevat SPELERNAMEN (zoals in SPELERS), nooit de naam van een personage; de vraag in nextTurn.prompt moet gericht zijn aan precies de speler(s) in awaiting (noem daarin hun personage). Stel je een vraag aan een bepaald personage, dan staat de speler van dat personage in awaiting, niet de anderen.
+- Als meerdere of alle spelers moeten reageren zet je al hun namen in awaiting; bij combat de volgende speler; bij een enkele speler alleen die naam. Geef elke speler aandacht: laat in een gezamenlijke scène elk personage iets te doen of te kiezen krijgen.
 - Houd de STAND bij via statePatch (deep merge; null verwijdert een sleutel; lijsten worden vervangen). Gebruik EXACT dit schema, met de naam van het personage als sleutel:
   {"inGame":{"date":"24 oktober 3018","timeOfDay":"ochtend","location":"Rivendell, Last Homely House"},
-   "pcs":{"Wulfgrim":{"player":"Gerben","location":"","hp":{"current":41,"max":41,"temp":0},"resources":{"Rage":"3/3","Hit Dice":"3d12"},"conditions":[],"inventory":[],"knowledge":[]}},
+   "pcs":{"Personagenaam":{"player":"Spelernaam","location":"","hp":{"current":41,"max":41,"temp":0},"resources":{"Hit Dice":"3d10"},"conditions":[],"inventory":[],"knowledge":[]}},
    "companions":{"Naam":{"location":"","hp":{"current":0,"max":0,"temp":0},"status":"","attitude":""}},
    "npcs":{"Naam":{"location":"","status":"","attitude":"","knows":[]}},
    "factions":{"Naam":{"stance":"","currentAction":""}},
@@ -827,7 +857,7 @@ async function callLLM(sys,user,retryNote,json,opts){
   if(provider()==='anthropic') return callAnthropic(sys,user,retryNote,json,opts.model||(opts.big?cfg.anthropicBigModel:null),opts.maxOut);
   return callGemini(sys,user,retryNote,json,opts.model||(opts.big?cfg.bigModel:null),opts.maxOut);
 }
-function pcMap(){const m={};Object.values(chars||{}).forEach(c=>{if(c&&c.player&&c.name)m[c.name]=c.player});return m}
+function pcMap(){const m={};campChars().forEach(c=>{if(c&&c.player&&c.name)m[c.name]=c.player});return m}
 function parseDM(txt,names){
   let s=txt.replace(/^```(?:json)?\s*/,'').replace(/```\s*$/,'').trim(); const ja=s.indexOf('{'), jb=s.lastIndexOf('}'); if(ja>=0&&jb>ja) s=s.slice(ja,jb+1);
   const o=JSON.parse(s);
@@ -869,7 +899,7 @@ async function resolve(retry,forceGemini){
     const pend=pendE.map(e=>e[1]).sort((a,b)=>a.t-b.t);
     const pl=(await db.ref(cp('players',C)).get()).val()||{};
     pl[me.uid]=me.name; db.ref(cp('players/'+me.uid,C)).set(me.name);
-    const allNames=[...new Set(Object.values(pl))];
+    const party=partyOf(C); const allNames=party?Object.keys(party):[...new Set(Object.values(pl))];
     const state=JSON.parse(sS.val()||'{}');
     const first=!Object.keys(state).length;
     const hayArr=[]; mS.forEach(c=>{hayArr.push(c.val().text||'')});
@@ -883,10 +913,10 @@ async function resolve(retry,forceGemini){
     const mems=[]; meS.forEach(c=>{mems.push('- '+c.val().text)});
     const world=woS.val()||null; const worldTxt=(world&&window.DNDWorld)?DNDWorld.worldContext(world,{hay:hay,region:world.sceneRegion,maxChars:4500}):'';
     const notes=dnS.val()||{}; const notesTxt=Object.entries(notes).map(([k,v])=>'- '+k+': '+v).join('\n');
-    const sheets=allChars().filter(c=>c.player&&!c.dead).map(sheetText).join('\n\n');
+    const sheets=campChars(C).filter(c=>c.player&&!c.dead).map(sheetText).join('\n\n');
     const npcNames=Object.values(npcs).filter(n=>!n.forPlayer).map(n=>n.name);
     const user=
-`# SPELERS (awaiting bevat altijd de SPELERNAAM, nooit de naam van het personage)\n${allNames.map(n=>{const c=Object.values(chars||{}).find(x=>x&&x.player===n);return n+(c?' (speelt '+c.name+')':'')}).join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# KARAKTERBLADEN (rekenkundig leidend; de Stand heeft de actuele HP)\n${sheets||'(geen)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# LOGBOEK (laatste 40)\n${logs.slice(-40).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# WERELDSTATUS (stabiele IDs; wijzig alleen via worldDelta)\n${worldTxt||'(niet actief)'}\n\n# KAARTPLAATSEN (kies hieruit het id voor "place")
+`# SPELERS (awaiting bevat altijd de SPELERNAAM, nooit de naam van het personage)\n${allNames.map(n=>{const pk=party&&party[n]; const c=pk?chars[pk]:Object.values(chars||{}).find(x=>x&&x.player===n);return n+(c?' (speelt '+c.name+')':'')}).join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# KARAKTERBLADEN (rekenkundig leidend; de Stand heeft de actuele HP)\n${sheets||'(geen)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# LOGBOEK (laatste 40)\n${logs.slice(-40).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# WERELDSTATUS (stabiele IDs; wijzig alleen via worldDelta)\n${worldTxt||'(niet actief)'}\n\n# KAARTPLAATSEN (kies hieruit het id voor "place")
 ${window.DNDMap?DNDMap.ids.join(', '):''}
 
 # DM-NOTITIES (privé: nooit tonen of citeren)\n${notesTxt||'(nog geen)'}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
@@ -1252,8 +1282,14 @@ function skillBonus(c,key,rage){
   let ab=s[2]; if(rage&&(c.rageSkills||[]).includes(key)) ab='str';
   return amod(c,ab)+pbOf(c)*(((c.skills||{})[key])||0);
 }
-function myChar(){const l=allChars().filter(c=>!c.dead); return l.find(c=>me&&c.player===me.name)||null}
 function allChars(){return Object.entries(chars).map(([k,v])=>({k,...v}))}
+/* spelers en groep per campagne: campaignIndex/{id}/party = {spelernaam: personage-sleutel}; zonder party (oud verhaal) telt elk personage met een speler */
+function partyOf(id){const x=index[id||cid]; return x&&x.party&&typeof x.party==='object'?x.party:null}
+function campChars(id){const p=partyOf(id); const l=allChars(); if(!p) return l; const keys=Object.values(p); return l.filter(c=>keys.includes(c.k))}
+function playerNames(){const l=Array.isArray(cfg.players)?cfg.players.slice():['Gerben','Maurits']; if(me&&me.name&&!l.includes(me.name)) l.push(me.name); return l}
+function myChar(){
+  if(screen==='camp'){const p=partyOf(); if(p){const k=p[me&&me.name]; return k&&chars[k]&&!chars[k].dead?{k,...chars[k]}:null}}
+  const l=allChars().filter(c=>!c.dead); return l.find(c=>me&&c.player===me.name)||null}
 function rollList(c,rage){
   const pb=pbOf(c), out=[];
   out.push({key:'init',group:'Initiative',label:'Initiative',bonus:amod(c,'dex')+(Number(c.initiativeBonus)||0)});
@@ -1345,7 +1381,7 @@ function editorHtml(c,isNew){
   const atkLines=(c.attacks||[]).map(a=>[a.name,a.ability||'str',a.prof===false?'n':'y',a.damage||'',a.notes||'',a.extra||0].join(' | ')).join('\n');
   return '<div class="card"><h3>'+(isNew?'Nieuw personage':'Blad bewerken')+'</h3>'+
     inp('e_name','Naam',c.name)+
-    '<label><small>Speler</small><select id="e_player"><option value="">—</option>'+['Gerben','Maurits'].map(p=>'<option'+(c.player===p?' selected':'')+'>'+p+'</option>').join('')+'</select></label>'+
+    '<label><small>Speler</small><select id="e_player"><option value="">—</option>'+playerNames().map(p=>'<option'+(c.player===p?' selected':'')+'>'+p+'</option>').join('')+'</select></label>'+
     '<div class="sh-ed">'+inp('e_level','Level',c.level||3,'number')+inp('e_ac','Armor Class',c.ac||10,'number')+inp('e_hp','Max HP',c.hpMax||10,'number')+inp('e_speed','Speed (ft)',c.speed||30,'number')+inp('e_init','Initiative-extra',c.initiativeBonus||0,'number')+inp('e_hd','Hit Dice',c.hitDice||'')+'</div>'+
     inp('e_class','Class',c.class)+inp('e_sub','Subclass',c.subclass)+inp('e_species','Species',c.species)+inp('e_bg','Background',c.background)+inp('e_align','Alignment',c.alignment)+
     '<h3 style="margin-top:10px">Ability Scores &amp; Saving Throw-proficiency</h3><div class="sh-ed">'+ABIL.map(([k,n,s])=>'<label><small>'+s+'</small><input type="number" id="e_ab_'+k+'" value="'+(ab[k]||10)+'"><span><input type="checkbox" id="e_sv_'+k+'"'+(sv.includes(k)?' checked':'')+'> save</span></label>').join('')+'</div>'+
@@ -1832,7 +1868,7 @@ function ccStepHtml(R){
   if(ccStep===0){
     return '<h3>Wie wil je spelen?</h3>'+tip('Begin bij het verhaal, niet bij de cijfers. Dit is een nieuw personage in Midden-aarde (Third Age 3018): Tolkien met speelruimte, D&amp;D 2024 als regelsysteem. Geen vuurwapens, geen willekeurige magische voorwerpen.')+
     ccIn('name','Naam van het personage',s.name,'text','bv. Wulfgrim')+
-    '<label><small>Speler</small><select data-f="player" data-r="1">'+['Gerben','Maurits'].map(p=>'<option'+(s.player===p?' selected':'')+'>'+p+'</option>').join('')+'</select></label>'+
+    '<label><small>Speler</small><select data-f="player" data-r="1">'+playerNames().map(p=>'<option'+(s.player===p?' selected':'')+'>'+p+'</option>').join('')+'</select></label>'+
     ccSel('level','Startlevel',String(s.level),[1,2,3,4,5].map(n=>[String(n),'Level '+n+(n===3?' (standaard voor deze campagne)':'')]),'')+
     ccTa('concept','Concept in je eigen woorden',s.concept,110,'Bv. een charismatische zwaardvechter met een duister verleden; een jongere zoon in de schaduw van zijn broer; een Elf met een boog die een oude belofte draagt…')+
     '<div class="row"><button class="b alt" data-ai="concept"'+(ccBusy?' disabled':'')+'>'+(ccBusy==='concept'?'Gemini denkt…':'✨ Geef conceptideeën (Gemini)')+'</button></div>'+
@@ -2003,8 +2039,8 @@ async function ccFinish(){
   const rec=ccRecord(cc,R), k=slug(rec.name);
   if(chars[k]&&!confirm('Er bestaat al een personage "'+chars[k].name+'". Overschrijven?')) return;
   const up={}; up['dnd/characters/'+k]=rec;
-  const mine=allChars().filter(c=>c.player===rec.player&&!c.dead&&c.k!==k);
-  if(mine.length&&confirm('Je hebt nog een actief personage ('+mine.map(c=>c.name).join(', ')+').\n\nMarkeren als gesneuveld / gepensioneerd, zodat het nieuwe personage je actieve personage wordt?\n\nOK = markeren, Annuleren = beide actief laten')) mine.forEach(c=>{up['dnd/characters/'+c.k+'/dead']=true});
+  /* verhalen waarin deze speler nog op een personage wacht: dit personage wordt zijn personage in dat verhaal */
+  Object.entries(index).forEach(([id,x])=>{ if(x&&x.party&&x.party[rec.player]==='') up['dnd/campaignIndex/'+id+'/party/'+rec.player]=k; });
   try{ await db.ref().update(up); }catch(e){alert('Opslaan mislukt: '+e.message); return;}
   try{localStorage.removeItem(CC_DRAFT)}catch(e){}
   cc=null; ccStep=0; sheetKey=k; sheetEdit=false;

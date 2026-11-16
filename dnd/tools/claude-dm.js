@@ -93,12 +93,14 @@ function cmdContext(cid, flags) {
   const mem = get("/dnd/" + cp(cid, "memories")), sums = get("/dnd/" + cp(cid, "summaries"));
   const logs = get("/dnd/" + cp(cid, "log"), "--order-by-key --limit-to-last 40");
   const msgs = get("/dnd/" + cp(cid, "messages"), "--order-by-key --limit-to-last 24");
-  const chars = get("/dnd/characters") || {}, npcs = get("/dnd/npcs") || {};
+  const allChars = get("/dnd/characters") || {}, npcs = get("/dnd/npcs") || {};
+  const party = (get("/dnd/campaignIndex/" + cid) || {}).party || null, chars = partyFilter(allChars, party);
+  const wacht = party ? Object.entries(party).filter(([n, k]) => !k || !allChars[k]).map(([n]) => n) : [];
   const first = !Object.keys(state).length;
   const out = [];
   if (turn.handoff && turn.handoff.to === "claude") out.push("# OVERDRACHT (jij speelt deze beurt omdat het een groot moment is)\n" + turn.handoff.reason + ". Neem de tijd voor een thematisch sterke, rijke scène (mag langer dan 180 woorden), gebruik alle canon en de wereldstatus, en zet daarna met nextTurn.handoff:null de volgende beurt terug naar Gemini, tenzij het grote moment meerdere beurten duurt.");
   out.push("# TURN\nronde " + turn.round + ", status " + turn.status + (turn.prompt ? ", laatste vraag: " + turn.prompt : "") + (turn.checks ? ", gevraagde checks: " + JSON.stringify(turn.checks) : "") + (first ? "\n(LET OP: Stand is leeg: dit is de openingsbeurt; neem de beginsituatie uit D1/Stand #1 over)" : ""));
-  out.push("# SPELERS (nextTurn.awaiting bevat altijd de SPELERNAAM, nooit de naam van het personage; de vraag in nextTurn.prompt richt je aan dezelfde speler)\n" + [...new Set([...vals(get("/dnd/" + cp(cid, "players"))), ...vals(chars).map(c => c.player).filter(Boolean)])].map(n => { const c = vals(chars).find(x => x.player === n); return n + (c ? " (speelt " + c.name + ")" : ""); }).join(", "));
+  out.push("# SPELERS (nextTurn.awaiting bevat altijd de SPELERNAAM, nooit de naam van het personage; de vraag in nextTurn.prompt richt je aan dezelfde speler)\n" + (party ? Object.entries(party).map(([n, k]) => n + (k && allChars[k] ? " (speelt " + allChars[k].name + ")" : " (heeft nog geen personage)")) : [...new Set([...vals(get("/dnd/" + cp(cid, "players"))), ...vals(chars).map(c => c.player).filter(Boolean)])].map(n => { const c = vals(chars).find(x => x.player === n); return n + (c ? " (speelt " + c.name + ")" : ""); })).join(", ") + (wacht.length ? "\n(LET OP: " + wacht.join(", ") + " heeft nog geen personage; speel de opening pas als alle spelers een personage hebben, en zeg dat tegen Gerben)" : ""));
   const want = typeof flags.canon === "string" && flags.canon !== "true" ? flags.canon.split(",") : null;
   out.push("# CANON" + (flags.canon ? "" : " (alleen index; gebruik --canon of --canon=id,id om de tekst te lezen)"));
   const cparts = [];
@@ -145,13 +147,16 @@ function parseDM(o, names, chars) {
   o.nextTurn = { awaiting: aw, blind: !!nt.blind, prompt: String(nt.prompt || "Wat doen jullie?"), checks: nt.checks && typeof nt.checks === "object" ? nt.checks : null, handoff: (nt.handoff && nt.handoff.to === "claude") ? { to: "claude", reason: String(nt.handoff.reason || "groot moment").slice(0, 200) } : null };
   return o;
 }
+/* alleen de personages van deze campagne (campaignIndex/{id}/party = {speler: sleutel}); zonder party (oud verhaal): alles */
+function partyFilter(chars, party) { if (!party) return chars; const keys = Object.values(party); return Object.fromEntries(Object.entries(chars).filter(([k]) => keys.includes(k))); }
 function cmdApply(cid, file, flags) {
   const turn = get("/dnd/" + cp(cid, "turn"));
   if (!turn) throw new Error("Verhaal niet gestart.");
   if (turn.status !== "claude" && !flags.force) throw new Error("Status is '" + turn.status + "', niet 'claude'. Gebruik --force om toch te schrijven.");
   const round = turn.round, now = Date.now();
-  const chars = get("/dnd/characters") || {};
-  const names = [...new Set([...vals(get("/dnd/" + cp(cid, "players"))), ...vals(chars).map(c => c.player).filter(Boolean)])];
+  const party = (get("/dnd/campaignIndex/" + cid) || {}).party || null;
+  const chars = partyFilter(get("/dnd/characters") || {}, party);
+  const names = party ? Object.keys(party) : [...new Set([...vals(get("/dnd/" + cp(cid, "players"))), ...vals(chars).map(c => c.player).filter(Boolean)])];
   const out = parseDM(JSON.parse(fs.readFileSync(file, "utf8")), names, chars);
   const pendE = Object.entries(get("/dnd/" + cp(cid, "pending")) || {}).filter(([k, p]) => p.round === round);
   const pend = pendE.map(e => e[1]).sort((a, b) => a.t - b.t);
