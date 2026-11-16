@@ -476,6 +476,11 @@ function newStoryForm(){
     if(nieuw){
       const s=await db.ref('dnd/worldTemplateBijbel/canon').get();
       if(s.exists()) up[cp('canon',id)]=s.val(); else if(!confirm('Het bijbel-sjabloon ontbreekt. Toch zonder canon beginnen?')) return;
+      /* leeg wereldregister: geen NPC's, quests, klokken of kalender (de DM zet die bij de opening via worldDelta); alleen de canonieke Tolkien-plaatsen en facties uit het sjabloon */
+      const ts=await db.ref('dnd/worldTemplate/world').get(), tw=ts.exists()?ts.val():{}, keepC=o=>Object.fromEntries(Object.entries(o||{}).filter(([k,v])=>v&&v.canon==='C'));
+      const w0={lastRound:0}, lc=keepC(tw.locations), fc=keepC(tw.factions);
+      if(Object.keys(lc).length) w0.locations=lc; if(Object.keys(fc).length) w0.factions=fc;
+      up[cp('world',id)]=w0;
     } else {
       if(copy==='__tpl__'){const s=await db.ref('dnd/worldTemplate/canon').get(); if(s.exists()) up[cp('canon',id)]=s.val(); else if(!confirm('Het canon-sjabloon ontbreekt. Toch zonder canon beginnen?')) return;}
       else if(copy){const s=await db.ref(cp('canon',copy)).get(); if(s.exists()) up[cp('canon',id)]=s.val();}
