@@ -69,7 +69,7 @@ function sheetText(c) {
     "Saves: " + (sv || "-") + ". Skills: " + (sk || "-") + ".\n" +
     ((c.attacks || []).length ? "Aanvallen: " + c.attacks.map(a => a.name + " " + sgn(amod(c, a.ability || "str") + (a.prof === false ? 0 : pb) + (Number(a.extra) || 0)) + (a.damage ? " (" + a.damage + ")" : "")).join("; ") + "\n" : "") +
     (c.spellInfo || c.spells ? "Spellcasting: " + [c.spellInfo, c.spells].filter(Boolean).join(" ").replace(/\n+/g, " ") + "\n" : "") +
-    (c.features ? "Features: " + c.features.replace(/\n+/g, " ") + "\n" : "") + (c.equipment ? "Uitrusting: " + c.equipment.replace(/\n+/g, " ") + "\n" : "");
+    (c.appearance ? "Uiterlijk: " + String(c.appearance).replace(/\n+/g, " ").slice(0, 400) + "\n" : "") + (c.features ? "Features: " + c.features.replace(/\n+/g, " ") + "\n" : "") + (c.equipment ? "Uitrusting: " + c.equipment.replace(/\n+/g, " ") + "\n" : "");
 }
 const rollDice = () => { const r = (s, n) => Array.from({ length: n }, () => 1 + crypto.randomInt(s)); return { d20: r(20, 20), d12: r(12, 6), d10: r(10, 6), d8: r(8, 8), d6: r(6, 10), d4: r(4, 6) }; };
 const vals = o => o ? Object.values(o) : [];
@@ -115,6 +115,9 @@ function cmdContext(cid, flags) {
   out.push("# SAMENVATTINGEN\n" + (sortedVals(sums).map(s => "(ronde " + s.fromRound + "-" + s.toRound + ") " + s.text).join("\n") || "(geen)"));
   out.push("# HERINNERINGEN VAN DE SPELERS (bindend)\n" + (sortedVals(mem).map(m => "- " + m.text).join("\n") || "(geen)"));
   out.push("# BEKENDE NPC'S (exacte namen voor speakers)\n" + (vals(npcs).filter(n => !n.forPlayer).map(n => n.name).join(", ") || "(geen)"));
+  const hayV = (JSON.stringify(state) + " " + sortedVals(msgs).slice(-10).map(m => m.text).join(" ") + " " + pend.map(p => p.text).join(" ") + " " + Object.values(notes).join(" ")).toLowerCase();
+  const visN = vals(npcs).filter(n => !n.forPlayer && n.visual && n.name && hayV.includes(String(n.name).toLowerCase()));
+  out.push("# UITERLIJK VAN NPC'S IN BEELD (veld visual; beschrijf uiterlijk altijd hiernaar, verzin geen kleur, leeftijd of kleding die ermee botst; bij twijfel niets noemen)\n" + (visN.map(n => "- " + n.name + ": " + String(n.visual).replace(/\n+/g, " ").slice(0, 320)).join("\n") || "(geen)"));
   out.push("# LOGBOEK (laatste 40)\n" + (sortedVals(logs).map(l => "- [" + (l.inGameDate || "") + "] " + l.fact).join("\n") || "(leeg)"));
   out.push("# ACTUELE STAND\n" + JSON.stringify(state));
   out.push("# OPEN OPDRACHTEN (een echt nieuwe scène sluit hierop aan; gewone beurten en dialoog hoeven dat niet)\n" + (((state.quests || {}).open || []).map(x => "- " + (typeof x === "string" ? x : (x.title || "") + (x.detail ? ": " + x.detail : ""))).join("\n") || "(geen)"));
