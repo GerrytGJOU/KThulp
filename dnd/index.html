@@ -994,7 +994,7 @@ ${window.DNDMap?DNDMap.ids.join(', '):''}
     up[cp('turn',C)]={round:round+1,status:'waiting',awaiting:aw,prompt:out.nextTurn.prompt,blind:out.nextTurn.blind,checks:out.nextTurn.checks||null,mode:out.nextTurn.awaiting.length>1?'all':'single',handoff:hand};
     await db.ref().update(up);
     if(Object.keys(mapUp).length){ try{ await db.ref().update(mapUp) }catch(e){ console.warn('kaart niet opgeslagen (regels?)',e) } }
-    summarize(C,round+1,false).catch(e=>console.warn('samenvatting mislukt',e));
+    if(cfg.summaryBy!=='claude') summarize(C,round+1,false).catch(e=>console.warn('samenvatting mislukt',e));
   }catch(e){
     console.error(e);
     await db.ref(cp('turn',C)).update({status:'error',lastError:String(e.message||e),resolvingSince:null});
@@ -1251,7 +1251,7 @@ async function renderDiary(){
     const arr=[]; ss.forEach(c=>{arr.push(c.val())}); arr.reverse();
     if(screen!=='camp'||cid!==C||!$('#recap')) return;
     $('#recap').innerHTML='<details'+(arr.length?' open':'')+'><summary>📖 Voorheen (samenvatting)</summary>'+(arr.map(a=>'<div class="card"><small style="color:var(--mute)">ronde '+a.fromRound+' t/m '+a.toRound+'</small><br>'+md(a.text)+'</div>').join('')||'<small style="color:var(--mute)">Nog geen samenvatting; die komt automatisch na 15 rondes.</small>')+'<div class="row"><button class="b alt sm" id="sumnow">Vat samen tot nu</button></div></details>';
-    $('#sumnow').onclick=async e=>{e.target.disabled=true;e.target.textContent='Bezig…';try{const ok=await summarize(C,turn?turn.round:0,true);if(!ok)alert('Te weinig nieuwe berichten om samen te vatten.')}catch(err){alert(err.message)}renderDiary()};
+    $('#sumnow').onclick=async e=>{if(cfg.summaryBy==='claude'){alert('De samenvattingen worden door Claude Code gemaakt (zie Instellingen). Vraag Gerben om ze bij te werken.');return} e.target.disabled=true;e.target.textContent='Bezig…';try{const ok=await summarize(C,turn?turn.round:0,true);if(!ok)alert('Te weinig nieuwe berichten om samen te vatten.')}catch(err){alert(err.message)}renderDiary()};
   });
   const ls=await db.ref(cp('log',C)).limitToLast(80).get(); const la=[]; ls.forEach(c=>{la.push(c.val())}); la.reverse();
   if(screen==='camp'&&cid===C&&$('#logs')) $('#logs').innerHTML=la.map(l=>'<div class="card"><small style="color:var(--mute)">'+esc(l.inGameDate||'')+'</small><br>'+esc(l.fact)+'</div>').join('')||'<small style="color:var(--mute)">Nog geen feiten vastgelegd.</small>';
@@ -2167,7 +2167,8 @@ function renderSet(){
   <button class="b alt sm" id="snperm">Systeemmeldingen toestaan</button> <button class="b alt sm" id="sntest">Test de melding</button></div>
   <div class="card"><h3>Wie is de DM?</h3>
   <select id="sdm"><option value="gemini">Gemini (API, automatisch)</option><option value="anthropic">Claude (API, automatisch)</option><option value="claude">Claude Code (handmatig, geen API)</option></select><br><br>
-  <label>Temperatuur</label><input type="number" id="stemp" step="0.1" min="0" max="2"></div>
+  <label>Temperatuur</label><input type="number" id="stemp" step="0.1" min="0" max="2"><br><br>
+  <label>Wie maakt de samenvattingen ("Voorheen")?</label><select id="ssumby"><option value="claude">Claude Code (handmatig, beste Nederlands, geen API)</option><option value="app">De app (automatisch, via het samenvattingsmodel)</option></select></div>
   <div class="card"><h3>Gemini</h3>
   <label>API-sleutel (gedeeld in de database; alleen jullie twee kunnen lezen)</label><input type="password" id="skey" placeholder="${ph('geminiKey')}"><br><br>
   <label>Model</label><input type="text" id="smodel"><br><br>
@@ -2179,14 +2180,14 @@ function renderSet(){
   <label>Sterker model voor "↻ Sterker model" (belangrijke scènes)</label><input type="text" id="sabig"></div>
   <div class="card"><button class="b" id="ssave">Opslaan</button></div>
   ${screen==='camp'?'<div class="card"><h3>Verbruik (dit verhaal)</h3><div id="usage">…</div></div>':''}`;
-  $('#sdm').value=cfg.dmMode||'gemini'; $('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
+  $('#sdm').value=cfg.dmMode||'gemini'; $('#ssumby').value=cfg.summaryBy||'app'; $('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
   $('#snotify').onchange=e=>{try{localStorage.setItem('dnd_notify',e.target.checked?'1':'0')}catch(x){}};
   $('#snperm').onclick=async()=>{ if(!('Notification' in window)){alert('Dit apparaat of deze browser ondersteunt geen systeemmeldingen (op iPhone alleen vanuit een aan het beginscherm toegevoegde app).');return} try{const r=await Notification.requestPermission(); alert('Systeemmeldingen: '+r)}catch(x){alert('Toestemming vragen mislukt')} renderSet(); };
   $('#sntest').onclick=()=>{ beep(); try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(x){} if('Notification' in window&&Notification.permission==='granted'){try{new Notification('Midden-aarde: jouw beurt',{body:'Dit is een test.',tag:'dnd-test'})}catch(x){}} };
   $('#smodel').value=cfg.model||'gemini-2.5-flash'; $('#ssum').value=cfg.summaryModel||'gemini-2.5-flash-lite'; $('#sgbig').value=cfg.bigModel||'';
   $('#samodel').value=cfg.anthropicModel||'claude-haiku-5-5'; $('#sabig').value=cfg.anthropicBigModel||'claude-sonnet-5-5';
   $('#ssave').onclick=async()=>{
-    const u={dmMode:$('#sdm').value,temperature:Number($('#stemp').value)||0.9,model:$('#smodel').value.trim()||'gemini-2.5-flash',summaryModel:$('#ssum').value.trim()||'gemini-2.5-flash-lite',bigModel:$('#sgbig').value.trim()||null,anthropicModel:$('#samodel').value.trim()||'claude-haiku-5-5',anthropicBigModel:$('#sabig').value.trim()||null};
+    const u={dmMode:$('#sdm').value,summaryBy:$('#ssumby').value,temperature:Number($('#stemp').value)||0.9,model:$('#smodel').value.trim()||'gemini-2.5-flash',summaryModel:$('#ssum').value.trim()||'gemini-2.5-flash-lite',bigModel:$('#sgbig').value.trim()||null,anthropicModel:$('#samodel').value.trim()||'claude-haiku-5-5',anthropicBigModel:$('#sabig').value.trim()||null};
     if($('#skey').value.trim()) u.geminiKey=$('#skey').value.trim();
     if($('#sakey').value.trim()) u.anthropicKey=$('#sakey').value.trim();
     await db.ref('dnd/config').update(u);alert('Opgeslagen.');

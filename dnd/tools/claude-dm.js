@@ -6,6 +6,7 @@
      context <cid> [--canon[=id,id]]     alles wat de DM moet weten (canon alleen als index, tenzij --canon)
      apply <cid> <bestand.json> [--force]  schrijf de beurt terug naar de database
      summary <cid> <totRonde> <bestand>  bewaar een samenvatting
+     summary-todo [cid] [--force]        welke samenvattingen zijn nodig (eerdere samenvatting, nieuwe berichten, schrijfregels)
      canon-put <cid> <id> <titel> <bestand> [--opening] [--keywords=a,b]
      memory-add <cid> <tekst>            voeg een Herinnering toe
      new <titel> [--from=<verhaal>]      maak een nieuw verhaal (standaard het canon-sjabloon, of de canon van --from; wereldsjabloon, DM-notities) waarvan Claude de opening speelt
@@ -221,6 +222,24 @@ function cmdSummary(cid, upTo, file) {
   update({ [cp(cid, "summaries/" + String(upTo).padStart(5, "0"))]: { fromRound: covered + 1, toRound: Number(upTo), text: fs.readFileSync(file, "utf8").trim(), t: Date.now() } });
   console.log("Samenvatting opgeslagen t/m ronde " + upTo);
 }
+/* Welke samenvattingen moeten nog gemaakt worden? Toont per verhaal de eerdere samenvatting en de nieuwe berichten, plus de schrijfregels uit de app. */
+function cmdSummaryTodo(cid, flags) {
+  const idx = get("/dnd/campaignIndex") || {};
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+  const i0 = html.indexOf("const SUMSYS='"), i1 = i0 < 0 ? -1 : html.indexOf("';", i0);
+  const rules = i1 > i0 ? html.slice(i0 + 14, i1).split("\\'").join("'") : "Vat de nieuwe berichten samen in helder Nederlands, maximaal 180 woorden.";
+  const min = flags.force ? 4 : 15; let n = 0;
+  for (const [id, v] of Object.entries(idx)) {
+    if (cid && cid !== id) continue;
+    const ss = get("/dnd/" + cp(id, "summaries")) || {}; let covered = 0; vals(ss).forEach(s => { covered = Math.max(covered, s.toRound || 0); });
+    const msgs = sortedVals(get("/dnd/" + cp(id, "messages"), "--order-by-key --limit-to-last 500")).filter(x => x.type !== "system" && x.round > covered);
+    const upTo = msgs.reduce((a, x) => Math.max(a, x.round || 0), 0);
+    if (upTo - covered < min || msgs.length < 4) { console.log("- " + id + " | " + v.title + ": nog niets te doen (gedekt t/m ronde " + covered + ", laatste ronde " + upTo + ")"); continue; }
+    n++;
+    console.log(["", "===== " + id + " | " + v.title + " | samenvatting nodig voor ronde " + (covered + 1) + " t/m " + upTo + " =====", "# SCHRIJFREGELS", rules, "", "# EERDERE SAMENVATTING", sortedVals(ss).map(s => s.text).join("\n\n") || "(geen)", "", "# NIEUWE BERICHTEN", msgs.map(x => (x.type === "narration" ? "DM" : x.author) + ": " + x.text).join("\n\n"), "", "# OPSLAAN", "Schrijf de samenvatting (zonder kopjes) naar een tijdelijk bestand en draai: node dnd/tools/claude-dm.js summary " + id + " " + upTo + " <bestand>"].join("\n"));
+  }
+  if (!n) console.log("Geen samenvattingen nodig (gebruik --force om vanaf 4 berichten toch samen te vatten).");
+}
 function cmdCanonPut(cid, id, title, file, flags) {
   const old = get("/dnd/" + cp(cid, "canon/" + id)) || {};
   const rec = { ...old, title, text: fs.readFileSync(file, "utf8"), t: Date.now() };
@@ -252,6 +271,7 @@ try {
   else if (cmd === "context") cmdContext(pos[1], flags);
   else if (cmd === "apply") cmdApply(pos[1], pos[2], flags);
   else if (cmd === "summary") cmdSummary(pos[1], pos[2], pos[3]);
+  else if (cmd === "summary-todo") cmdSummaryTodo(pos[1], flags);
   else if (cmd === "canon-put") cmdCanonPut(pos[1], pos[2], pos[3], pos[4], flags);
   else if (cmd === "memory-add") cmdMemory(pos[1], pos[2]);
   else if (cmd === "new") cmdNew(pos[1], flags);
