@@ -340,7 +340,7 @@ function latestId(){
 }
 function leaveCampaign(){
   listeners.forEach(([r,e,f])=>r.off(e,f));listeners=[];
-  cid=null;turn=null;canon={};mapData=null;mapSel=null;mapView={s:1,x:0,y:0,init:false};sceneKey='';editKey=null;msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
+  cid=null;turn=null;canon={};mapData=null;mapSel=null;mapView={s:1,x:0,y:0,init:false};sceneKey='';editKey=null;threadShow=10;msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
 }
 let menuView='home';
 function updateBack(){const b=$('#topback'); if(b) b.style.display=(screen==='camp'||menuView!=='home')?'flex':'none';}
@@ -624,6 +624,7 @@ function narrBlocks(txt,pts){
   if(pts.length&&!used&&out.length) out[0].pt=pts[0]; /* sprekers opgegeven maar geen dialoog herkend: toch het eerste portret tonen */
   return out;
 }
+let threadShow=10;
 function renderGame(){
   if(!me||screen!=='camp'||tab!=='game') return;
   renderParty(); renderInit(); renderSide();
@@ -631,7 +632,8 @@ function renderGame(){
   const atBottom=th.scrollHeight-th.scrollTop-th.clientHeight<80;
   let lastNarr=null; for(let i=msgs.length-1;i>=0;i--) if(msgs[i].type==='narration'){lastNarr=msgs[i]._k;break;}
   const canAct=turn&&(turn.status==='waiting'||turn.status==='error');
-  th.innerHTML=msgs.map(m=>{
+  const shown=Math.min(msgs.length,threadShow), hidden=msgs.length-shown;
+  th.innerHTML=(hidden>0?'<div style="text-align:center;margin:6px 0"><button class="b alt" data-act="older">↑ Toon eerdere berichten ('+hidden+' verborgen)</button><div><small style="color:var(--mute)">De DM kent de oudere beurten wel: via de samenvatting, het logboek en de stand.</small></div></div>':'')+msgs.slice(msgs.length-shown).map(m=>{
     const cls=m.type==='narration'?'dm':m.type==='action'||m.type==='pass'?'action':m.type==='system'?'system':'';
     const pts=portraitsFor(m);
     let who=m.type==='narration'?'De DM':m.type==='system'?'':esc(m.author||'');
@@ -1074,7 +1076,8 @@ function renderInit(){
 function threadClick(e){
   const b=e.target.closest('[data-act]'); if(!b) return;
   const a=b.dataset.act, k=b.dataset.k;
-  if(a==='edit'){const m=msgs.find(x=>x._k===k); if(!m)return; editKey=k; editDraft=m.text||''; renderGame();}
+  if(a==='older'){const th=$('#thread'), h0=th.scrollHeight, t0=th.scrollTop; threadShow+=20; renderGame(); th.scrollTop=t0+(th.scrollHeight-h0);}
+  else if(a==='edit'){const m=msgs.find(x=>x._k===k); if(!m)return; editKey=k; editDraft=m.text||''; renderGame();}
   else if(a==='editcancel'){editKey=null; renderGame();}
   else if(a==='editsave'){const C=cid; db.ref(cp('messages/'+editKey+'/text',C)).set(editDraft); editKey=null;}
   else if(a==='regen'){ if(confirm('De laatste DM-beurt verwijderen en opnieuw laten schrijven (met dezelfde acties)?')) undoLast('regen'); }
