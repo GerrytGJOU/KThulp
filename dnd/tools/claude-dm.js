@@ -215,7 +215,7 @@ function cmdApply(cid, file, flags) {
   up[cp(cid, "turn")] = { handoff: hand, round: round + 1, status: "waiting", awaiting: aw, prompt: out.nextTurn.prompt, blind: out.nextTurn.blind, checks: out.nextTurn.checks || null, mode: out.nextTurn.awaiting.length > 1 ? "all" : "single" };
   update(up);
   console.log("Beurt geschreven: ronde " + (round + 1) + ", aan zet: " + out.nextTurn.awaiting.join(", ") + " (" + out.nextTurn.prompt + ")");
-  if ((round + 1) % 15 === 0) console.log("Tip: maak nu een samenvatting (summary-opdracht); er zijn 15 rondes sinds de vorige.");
+  if ((round + 1) % 10 === 0) console.log("Tip: maak nu een samenvatting (summary-opdracht); er zijn 10 tot 15 rondes sinds de vorige.");
 }
 function cmdSummary(cid, upTo, file) {
   const ss = get("/dnd/" + cp(cid, "summaries")) || {}; let covered = 0; vals(ss).forEach(s => { covered = Math.max(covered, s.toRound || 0); });
@@ -228,11 +228,13 @@ function cmdSummaryTodo(cid, flags) {
   const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
   const i0 = html.indexOf("const SUMSYS='"), i1 = i0 < 0 ? -1 : html.indexOf("';", i0);
   const rules = i1 > i0 ? html.slice(i0 + 14, i1).split("\\'").join("'") : "Vat de nieuwe berichten samen in helder Nederlands, maximaal 180 woorden.";
-  const min = flags.force ? 4 : 15; let n = 0;
+  const min = flags.force ? 4 : 10, max = 15; /* per 10 tot 15 rondes; nooit losse kleine stukjes */ let n = 0;
   for (const [id, v] of Object.entries(idx)) {
     if (cid && cid !== id) continue;
     const ss = get("/dnd/" + cp(id, "summaries")) || {}; let covered = 0; vals(ss).forEach(s => { covered = Math.max(covered, s.toRound || 0); });
-    const msgs = sortedVals(get("/dnd/" + cp(id, "messages"), "--order-by-key --limit-to-last 500")).filter(x => x.type !== "system" && x.round > covered);
+    let msgs = sortedVals(get("/dnd/" + cp(id, "messages"), "--order-by-key --limit-to-last 500")).filter(x => x.type !== "system" && x.round > covered);
+    const latest = msgs.reduce((a, x) => Math.max(a, x.round || 0), 0);
+    if (!flags.force && latest - covered >= min) msgs = msgs.filter(x => x.round <= covered + max);
     const upTo = msgs.reduce((a, x) => Math.max(a, x.round || 0), 0);
     if (upTo - covered < min || msgs.length < 4) { console.log("- " + id + " | " + v.title + ": nog niets te doen (gedekt t/m ronde " + covered + ", laatste ronde " + upTo + ")"); continue; }
     n++;

@@ -46,13 +46,13 @@ Controleer met node dnd/tools/claude-dm.js status of een verhaal "WACHT OP CLAUD
 - Wereld "Nieuwe start" gebruikt `dnd/worldTemplateBijbel/canon` (algemene spelregels A1/R1 en een lege C1, gebouwd door `node dnd/tools/build-bijbel-sjabloon.js --schrijf`): leeg wereldregister, geen verhaallijn, geen personage-backstories. Bij de openingsbeurt kies jij een startsituatie die past bij de backstories van de personages en schrijf je die vast: de DM-bijbel (canon c1), een eigen canon-document per backstory. Een nieuwe start krijgt een LEEG wereldregister (`world` met alleen `lastRound:0`, de canonieke Tolkien-plaatsen en facties uit het sjabloon): geen kalender, regio, NPC's, quests of klokken. Zet in de openingsbeurt in worldDelta `time.to` (de startdatum, bij voorkeur 3018-3019, de kalender kan daarna alleen vooruit), `region`, en de eerste NPC's, quests, klokken, agenda's en backstories met stabiele IDs; zo wordt het register tijdens de opening opgebouwd.
 
 ## Prompt 3: samenvattingen maken (agent of apart gesprek)
-De instelling "Wie maakt de samenvattingen?" staat op "Claude Code": de app maakt dan zelf geen samenvattingen meer (`dnd/config/summaryBy`). Draai deze opdracht af en toe (bijvoorbeeld elke 15 rondes, of na een speelavond).
+De instelling "Wie maakt de samenvattingen?" staat op "Claude Code": de app maakt dan zelf geen samenvattingen meer (`dnd/config/summaryBy`). Draai deze opdracht af en toe (bijvoorbeeld per 10 tot 15 rondes, of na een speelavond).
 
 ```
 Je maakt de samenvattingen ("Voorheen") voor de Midden-aarde D&D-campagne in deze repo. Werk vanuit de repo-root.
 
 1. Draai: node dnd/tools/claude-dm.js summary-todo
-   Dit toont per verhaal waarvoor een samenvatting nodig is: de SCHRIJFREGELS, de EERDERE SAMENVATTING en de NIEUWE BERICHTEN. Staat er "nog niets te doen" bij alle verhalen, meld dat dan kort en stop. (Met --force maak je er ook een bij minder dan 15 nieuwe rondes.)
+   Dit toont per verhaal waarvoor een samenvatting nodig is: de SCHRIJFREGELS, de EERDERE SAMENVATTING en de NIEUWE BERICHTEN. Staat er "nog niets te doen" bij alle verhalen, meld dat dan kort en stop. (Met --force maak je er ook een bij minder dan 10 nieuwe rondes.)
 2. Schrijf per verhaal een samenvatting van alleen de NIEUWE BERICHTEN, volgens de SCHRIJFREGELS: helder, vlot Nederlands, chronologisch, korte volledige zinnen, 2 tot 4 korte paragrafen gescheiden door een lege regel, maximaal 180 woorden, geen kopjes of opsommingen. Neem uit de eerdere samenvatting alleen over wat nog relevant is en herhaal niets wat is afgehandeld. Gebruik uitsluitend wat de spelers in de berichten konden lezen: nooit DM-geheimen, dmNotes of canon die nog niet in het spel naar voren kwam. Verzin niets.
 3. Schrijf de tekst naar een tijdelijk bestand (in de scratchpad of tmp-map, niet in de repo) en sla op met: node dnd/tools/claude-dm.js summary <cid> <totRonde> <bestand> (het exacte commando staat onder OPSLAAN in de uitvoer).
 4. Meld per verhaal in één regel welke rondes zijn samengevat. Commit niets: de samenvattingen staan alleen in de database.

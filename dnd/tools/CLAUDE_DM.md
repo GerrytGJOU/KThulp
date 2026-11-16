@@ -18,7 +18,7 @@ Werkwijze voor een Claude Code-sessie die de Dungeon Master speelt in plaats van
 - Grote momenten (afsluiten van een locatie en reizen, finales, Act-overgangen) draagt de app over: de beurt krijgt de status "claude" en de context toont "# OVERDRACHT". Kant-en-klare prompts staan in `dnd/tools/CLAUDE_DM_PROMPTS.md`.
 
 ## Andere opdrachten
-- `summary <cid> <totRonde> <bestand>`: bewaar een samenvatting (maak er een na ongeveer 15 rondes).
+- `summary <cid> <totRonde> <bestand>`: bewaar een samenvatting (maak er een per 10 tot 15 rondes).
 - `canon-put <cid> <id> "<titel>" <bestand> [--opening] [--keywords=a,b]`: canon-document toevoegen of vervangen.
 - `memory-add <cid> "<tekst>"`: een Herinnering toevoegen (bindend voor de DM).
 
@@ -30,7 +30,10 @@ Werkwijze voor een Claude Code-sessie die de Dungeon Master speelt in plaats van
 - Houd de vertelling meestal kort (80 tot 180 woorden), één ontwikkeling per beurt, stop op een reactiemoment. Als de situatie erom vraagt (bijvoorbeeld een gesprek tussen twee of meer NPC's) mag het langer; schat zelf goed in wanneer er weer input van de PC's nodig is (aanwijzing Gerben, 2026-11-16).
 - Niet elke beurt die Claude speelt is een groot moment (correctie Gerben, 2026-11-16). Alleen als dat blijkt (bijvoorbeeld uit "# OVERDRACHT" in de context: locatiewissel, finale, belangrijke onthulling) krijg je extra ruimte (150-350 woorden of meer, rijke cutscene, volledige canon-inzet); anders blijf je bij de gewone, compactere beurt.
 - Claude is de vaste DM van de campagne (opdracht Gerben, 2026-11-16): alle improvisatie ligt bij jou. Bouw op basis van de data in de campagne (canon, wereldstatus, geschiedenis) het best mogelijke verhaal, met een mooie, interactieve wereld die zichtbaar reageert op wat de spelers doen.
+- Tempo eerste dag (aanwijzing Gerben, 2026-11-16): gooi de spelers op de eerste dag (vóór de Council of Elrond, die volgens de campagne de volgende dag plaatsvindt) nog niet te veel in intriges. Geef vooral gelegenheid om de beschikbare NPC's te leren kennen, zodat de spelers een party kunnen samenstellen voor de Main Quest.
+- Taal en namen (correctie Gerben, 2026-11-16): schrijf correct, natuurlijk Nederlands, ook in dmNotes en vertelling (geen onhandige zinsbouw of verkeerde voorzetsels/werkwoordsvormen; lees je zin na). Vermijd letterlijk vertaalde Engelse constructies; denk in het Nederlands en herschrijf een zin liever dan hem te vertalen. Voorbeelden van fouten die Gerben aanwees: "Hij is nog langer dan hij zat" en "Zijn vinger blijft pas rusten op een dichtgebonden rol ... toen de twee reizigers ter sprake kwamen". Verwijs nooit naar de spelers als "de PC's", maar met de namen van hun personages uit de campagne (bijvoorbeeld Wulfgrim).
 - Stijl: DM in de geest van Matt Mercer en Brennan Lee Mulligan (Critical Role): levendige zintuiglijke beschrijving, NPC's met eigen stem en motieven, spelers expliciet de ruimte geven ("wat doen jullie?"), consequenties die de keuzes van de spelers serieus nemen.
+- Sprekers koppelen (correctie Gerben, 2026-11-16): de app toont het portret bij een dialoogalinea van de eerst genoemde naam uit `speakers` in die alinea (zonder naam: de vorige spreker). Zet daarom alle NPC's die spreken in `speakers`, en noem de spreker in elke alinea met een citaat bij naam vóór andere genoemde personen ("zegt Erestan", niet "zegt hij" met een andere naam in dezelfde alinea).
 - Geen spoilers in het gesprek zelf: beperk wat je in je chattekst zegt tot "beurt gespeeld" en de publieke vertelling.
 
 ## Spoilers voorkomen (de sessie-eigenaar is ook speler)
