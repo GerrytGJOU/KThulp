@@ -117,6 +117,7 @@ function cmdContext(cid, flags) {
   out.push("# BEKENDE NPC'S (exacte namen voor speakers)\n" + (vals(npcs).filter(n => !n.forPlayer).map(n => n.name).join(", ") || "(geen)"));
   out.push("# LOGBOEK (laatste 40)\n" + (sortedVals(logs).map(l => "- [" + (l.inGameDate || "") + "] " + l.fact).join("\n") || "(leeg)"));
   out.push("# ACTUELE STAND\n" + JSON.stringify(state));
+  out.push("# OPEN OPDRACHTEN (een echt nieuwe scène sluit hierop aan; gewone beurten en dialoog hoeven dat niet)\n" + (((state.quests || {}).open || []).map(x => "- " + (typeof x === "string" ? x : (x.title || "") + (x.detail ? ": " + x.detail : ""))).join("\n") || "(geen)"));
   const world = get("/dnd/" + cp(cid, "world"));
   out.push("# WERELDSTATUS (stabiele IDs; wijzig alleen via worldDelta)\n" + (world ? World.worldContext(world, { hay: (sortedVals(msgs).slice(-6).map(m => m.text).join(" ") + " " + pend.map(p => p.text).join(" ")).toLowerCase(), region: world.sceneRegion, maxChars: 6000 }) : "(niet actief)"));
   out.push("# KAARTPLAATSEN (kies hieruit het id voor \"place\")\n" + MapData.ids.join(", "));
@@ -262,6 +263,19 @@ function cmdNew(title, flags) {
   update(up);
   console.log("Verhaal aangemaakt: " + id + " (" + title + "). Speel de opening: node dnd/tools/claude-dm.js context " + id + " --canon");
 }
+/* Losse statePatch (bijv. dagboek aanvullen) zonder beurt: deep merge in de Stand en in de laatste Stand-versie; ronde, status en aan-zet blijven onaangeroerd. */
+function cmdStatePatch(cid, file) {
+  const patch = JSON.parse(fs.readFileSync(file, "utf8"));
+  if (!patch || typeof patch !== "object" || Array.isArray(patch)) throw new Error("Patch moet een JSON-object zijn.");
+  const stateStr = get("/dnd/" + cp(cid, "state")) || "{}";
+  const merged = JSON.stringify(deepMerge(JSON.parse(typeof stateStr === "string" ? stateStr : JSON.stringify(stateStr)), patch));
+  const up = { [cp(cid, "state")]: merged };
+  const lastS = get("/dnd/" + cp(cid, "stands"), "--order-by-key --limit-to-last 1");
+  const lastKey = lastS ? Object.keys(lastS)[0] : null;
+  if (lastKey) up[cp(cid, "stands/" + lastKey + "/json")] = merged;
+  update(up);
+  console.log("Stand bijgewerkt (ronde, status en aan-zet ongewijzigd).");
+}
 function cmdMemory(cid, text) { update({ [cp(cid, "memories/" + pushId())]: { text, by: "Claude", t: Date.now() } }); console.log("Herinnering toegevoegd."); }
 
 /* ---------- main ---------- */
@@ -275,6 +289,7 @@ try {
   else if (cmd === "summary") cmdSummary(pos[1], pos[2], pos[3]);
   else if (cmd === "summary-todo") cmdSummaryTodo(pos[1], flags);
   else if (cmd === "canon-put") cmdCanonPut(pos[1], pos[2], pos[3], pos[4], flags);
+  else if (cmd === "state-patch") cmdStatePatch(pos[1], pos[2]);
   else if (cmd === "memory-add") cmdMemory(pos[1], pos[2]);
   else if (cmd === "new") cmdNew(pos[1], flags);
   else console.log("Gebruik: status | context <cid> [--canon] | apply <cid> <json> [--force] | summary <cid> <totRonde> <bestand> | canon-put <cid> <id> <titel> <bestand> | memory-add <cid> <tekst>");
