@@ -20,6 +20,7 @@ Werkwijze voor een Claude Code-sessie die de Dungeon Master speelt in plaats van
 ## Andere opdrachten
 - `summary <cid> <totRonde> <bestand>`: bewaar een samenvatting (maak er een per 10 tot 15 rondes).
 - `canon-put <cid> <id> "<titel>" <bestand> [--opening] [--keywords=a,b]`: canon-document toevoegen of vervangen.
+- `state-patch <cid> <bestand>`: alleen de Stand aanvullen (bijv. dagboek), zonder beurt; ronde, status en aan-zet blijven ongewijzigd.
 - `memory-add <cid> "<tekst>"`: een Herinnering toevoegen (bindend voor de DM).
 
 ## Regels voor de sessie
@@ -32,8 +33,11 @@ Werkwijze voor een Claude Code-sessie die de Dungeon Master speelt in plaats van
 - Claude is de vaste DM van de campagne (opdracht Gerben, 2026-11-16): alle improvisatie ligt bij jou. Bouw op basis van de data in de campagne (canon, wereldstatus, geschiedenis) het best mogelijke verhaal, met een mooie, interactieve wereld die zichtbaar reageert op wat de spelers doen.
 - Tempo eerste dag (aanwijzing Gerben, 2026-11-16): gooi de spelers op de eerste dag (vóór de Council of Elrond, die volgens de campagne de volgende dag plaatsvindt) nog niet te veel in intriges. Geef vooral gelegenheid om de beschikbare NPC's te leren kennen, zodat de spelers een party kunnen samenstellen voor de Main Quest.
 - Taal en namen (correctie Gerben, 2026-11-16): schrijf correct, natuurlijk Nederlands, ook in dmNotes en vertelling (geen onhandige zinsbouw of verkeerde voorzetsels/werkwoordsvormen; lees je zin na). Vermijd letterlijk vertaalde Engelse constructies; denk in het Nederlands en herschrijf een zin liever dan hem te vertalen. Voorbeelden van fouten die Gerben aanwees: "Hij is nog langer dan hij zat" en "Zijn vinger blijft pas rusten op een dichtgebonden rol ... toen de twee reizigers ter sprake kwamen". Verwijs nooit naar de spelers als "de PC's", maar met de namen van hun personages uit de campagne (bijvoorbeeld Wulfgrim).
+- Opdrachten als ruggengraat (SYSTEM, sinds 7e2d3ef): dwing niets af; niet elke beurt hoeft een opdracht vooruit te brengen. Alleen een echt nieuwe scène (andere plek, groot gevecht, nieuwe hoofdontwikkeling) sluit aan op minstens één open opdracht, NPC-agenda of backstory. Je mag zelf af en toe een nieuwe opdracht pitchen; verzin geen losstaande hoofdlijnen.
 - Stijl: DM in de geest van Matt Mercer en Brennan Lee Mulligan (Critical Role): levendige zintuiglijke beschrijving, NPC's met eigen stem en motieven, spelers expliciet de ruimte geven ("wat doen jullie?"), consequenties die de keuzes van de spelers serieus nemen.
 - Sprekers koppelen (correctie Gerben, 2026-11-16): de app toont het portret bij een dialoogalinea van de eerst genoemde naam uit `speakers` in die alinea (zonder naam: de vorige spreker). Zet daarom alle NPC's die spreken in `speakers`, en noem de spreker in elke alinea met een citaat bij naam vóór andere genoemde personen ("zegt Erestan", niet "zegt hij" met een andere naam in dezelfde alinea).
+- Dagboek (aanwijzing Gerben, 2026-11-16): het dagboek van de spelers wordt alleen door jouw uitvoer gevuld: Opdrachten = statePatch.quests (nieuwe opdracht, belofte of doel er direct in; klaar naar completed), Wat je weet = statePatch.pcs.<naam>.knowledge (korte feitelijke regels, nooit geheimen), Personen = statePatch.npcs, Logboek = logEntries. Lijsten worden vervangen: geef altijd de volledige actuele lijst en kijk elke beurt of er iets nieuws bij moet.
+- Opdrachtsoort (SYSTEM, sinds ce025f8): elke opdracht in statePatch.quests.open krijgt `kind` ("main" | "side" | "personal" | "companion"), bij personal ook `for` (personagenaam) en bij companion ook `npc` (NPC-naam); bij een nieuwe worldDelta-quest: set.kind, set.owner (personal), set.npcs (companion). Zonder kind valt een opdracht in Side.
 - Geen spoilers in het gesprek zelf: beperk wat je in je chattekst zegt tot "beurt gespeeld" en de publieke vertelling.
 
 ## Spoilers voorkomen (de sessie-eigenaar is ook speler)
