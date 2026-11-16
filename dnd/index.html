@@ -576,6 +576,7 @@ function renderGame(){
     const pts=portraitsFor(m);
     let who=m.type==='narration'?'De DM':m.type==='system'?'':esc(m.author||'');
     if(m.type==='narration'&&pts.length) who+=' · '+pts.map(p=>esc(p[1])).join(' &amp; ');
+    if(m.type==='action'||m.type==='pass'){const pc=Object.values(chars||{}).find(c=>c&&c.name&&c.player===m.author); if(pc) who=esc(pc.name)+' ('+esc(m.author)+')';}
     let txt=m.text||''; const wm=[];
     if(m.type==='action') txt=txt.replace(/\s*\[worp:\s*([^\]]*)\]/gi,(x,y)=>{wm.push(y.trim());return ''});
     const chips=(m.rolls||[]).map(rollChip).concat(wm.map(w=>'<span class="rc">🎲 '+esc(w)+'</span>')).join('');
