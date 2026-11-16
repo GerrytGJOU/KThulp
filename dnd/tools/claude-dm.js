@@ -136,7 +136,7 @@ function parseDM(o, names, chars) {
   o.logEntries = Array.isArray(o.logEntries) ? o.logEntries : [];
   o.place = (typeof o.place === "string" && MapData.byId[o.place]) ? o.place : null;
   o.worldDelta = (o.worldDelta && typeof o.worldDelta === "object" && !Array.isArray(o.worldDelta)) ? o.worldDelta : null;
-  o.speakers = Array.isArray(o.speakers) ? o.speakers.filter(s => typeof s === "string").slice(0, 2) : [];
+  o.speakers = Array.isArray(o.speakers) ? o.speakers.filter(s => typeof s === "string").slice(0, 4) : [];
   o.newNpcs = Array.isArray(o.newNpcs) ? o.newNpcs.filter(n => n && typeof n.name === "string" && n.name.trim()) : [];
   o.rolls = Array.isArray(o.rolls) ? o.rolls.filter(r => r && typeof r.who === "string" && typeof r.what === "string" && r.total != null && isFinite(Number(r.total))).slice(0, 12).map(r => ({ who: r.who.slice(0, 40), what: r.what.slice(0, 40), natural: (r.natural != null && isFinite(Number(r.natural))) ? Number(r.natural) : null, mod: isFinite(Number(r.mod)) ? Number(r.mod) : 0, total: Number(r.total), dice: r.dice ? String(r.dice).slice(0, 20) : "", result: r.result ? String(r.result).slice(0, 30) : "" })) : [];
   const lc = o.location; o.location = (lc && typeof lc.name === "string" && lc.name.trim()) ? { name: lc.name.trim().slice(0, 80), description: String(lc.description || "").slice(0, 400), visual: String(lc.visual || "").slice(0, 1500) } : null;
