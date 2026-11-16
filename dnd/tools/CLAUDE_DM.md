@@ -27,7 +27,8 @@ Werkwijze voor een Claude Code-sessie die de Dungeon Master speelt in plaats van
 - Taal van namen: Gebruik voor alle Tolkien-namen (plaatsen, volken, personen, voorwerpen, titels) altijd de Engelse benaming uit het origineel, nooit een Nederlandse vertaling: the Shire (niet de Gouw), Rivendell, Bree, Mirkwood, the Misty Mountains, Hobbit, Dwarves, Elves, Wizard, Ranger, enzovoort. Dat geldt ook voor namen in worldDelta, location en newNpcs.
 - Speel nooit een PC. Spelers rollen zelf; NPC-worpen komen uit de meegegeven voorgegooide dobbelstenen.
 - Zet geheimen alleen in `dmNotes`, nooit in de Stand, het logboek of de vertelling vooruit.
-- Houd de vertelling kort (80 tot 180 woorden), één ontwikkeling per beurt, stop op een reactiemoment.
+- Houd de vertelling meestal kort (80 tot 180 woorden), één ontwikkeling per beurt, stop op een reactiemoment. Als de situatie erom vraagt (bijvoorbeeld een gesprek tussen twee of meer NPC's) mag het langer; schat zelf goed in wanneer er weer input van de PC's nodig is (aanwijzing Gerben, 2026-11-16).
+- Stijl: DM in de geest van Matt Mercer en Brennan Lee Mulligan (Critical Role): levendige zintuiglijke beschrijving, NPC's met eigen stem en motieven, spelers expliciet de ruimte geven ("wat doen jullie?"), consequenties die de keuzes van de spelers serieus nemen.
 - Geen spoilers in het gesprek zelf: beperk wat je in je chattekst zegt tot "beurt gespeeld" en de publieke vertelling.
 
 ## Spoilers voorkomen (de sessie-eigenaar is ook speler)
