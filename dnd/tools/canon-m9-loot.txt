@@ -1,0 +1,34 @@
+LOOT EN VOORWERPEN (DM-geheim; goedgekeurd door Gerben op 17 november 2026; geldt voor deze campagne en vervangt de beperking "geen magische voorwerpen" uit M2 en A1)
+
+PRINCIPES
+- Midden-aarde is geen D&D-winkelwereld. Gewone buit is ruim; magie is zeldzaam, heeft een naam, een maker en een geschiedenis, en is altijd verdiend of gegeven, nooit toevallig gevonden in een willekeurig monster.
+- Gewone buit (altijd toegestaan): goud en zilver (kleine bedragen, 5 tot 50 GP per opdracht of vondst), goed gereedschap, voorraden, kruiden en geneesmiddelen, kaarten en brieven, vakwerk zonder magie (Dwarf-smeedwerk, Elven-kleding, goede touwen en boogpezen), dieren en paarden, gunsten, introducties en informatie.
+- Magische voorwerpen: hoogstens één nieuw magisch voorwerp per personage per Act, en het eerste pas als beloning voor een echte opdracht of een persoonlijk moment (een persoonlijke opdracht, een belofte, een offer). Maximaal 3 voorwerpen tegelijk met attunement per personage. Geen magische winkel en geen verkoop van magie; gewone koopwaar kan wel verhandeld worden.
+- Herkomst, in volgorde van voorkeur: (1) schenking of bruikleen van een NPC, vaak met een plicht of prijs ("gebruik het voor X, geef het terug als Y"); (2) beloning voor een opdracht; (3) een vondst op een plaats met verhaal (grafheuvel, ruïne, oude wachttoren, verlaten smidse), nooit uit anonieme Orc- of beestbuit; (4) een erfstuk dat een eigen geschiedenis onthult (backstory-laag).
+- Geen Ringen van Macht, geen Silmarillen, geen Palantír, geen Evenstar, geen Narsil of andere unieke Tolkien-artefacten. Aldrics ring blijft een niet-magisch aandenken. Geen vuurwapens, geen willekeurige potions of scrolls in de D&D-stijl.
+- Kracht: houd het binnen "uncommon" tot "rare" van de 2024 DMG (hoogstens +1 op wapens en schilden voor level 3 tot 8, geen +2 voor level 9). Een voorwerp lost één verhaalprobleem op of voegt één eigenschap toe; geen optelsom van bonussen.
+- Onthulling: laat eigenschappen vanzelf blijken door gebruik of de omstandigheid (een klinge die oplicht bij Orcs, een mantel die schaduw lijkt te kiezen). Detect Magic van Tharon laat alleen zien dát er magie is en van welke school, niet wat het doet.
+- Boekhouding: elk nieuw voorwerp en elke betekenisvolle geldsom wordt direct vastgelegd in statePatch.pcs.<naam>.inventory (magische voorwerpen als "Naam [magisch: kort effect]"; goud als één regel "N GP", geen losse regels) en in logEntries met het voorvoegsel "Buit:" (voorwerp, aan wie, van wie of waar, waarom). De lijst is volledig: eerdere regels altijd behouden.
+- Tempo en spanning: een voorwerp mag een prijs of verantwoordelijkheid hebben (iemand wil het terug, iemand herkent het, het trekt aandacht van de Vijand), maar nooit als straf om de spelers te pesten.
+
+KORT OVERZICHT VAN HERKOMSTEN EN VOORBEELDEN [V]
+- Lichtlemmet van Elven-makelij (uncommon): +1 op aanvallen met dolk of kort zwaard; geeft zwak licht (10 ft) als Orcs of Goblins binnen ongeveer 120 ft zijn. Geschikt als bruikleen van een Elf of als vondst in een oude wachtpost.
+- Boog van de oude oever (uncommon): +1 shortbow of longbow, gemaakt door Vandil (SQ-10) uit hout van de oever; pezen van Elven-haar die zelden breken. Voor Tharon.
+- Runenbijl van Erebor-vakwerk (uncommon): +1 bijl; één keer per Long Rest mag de drager na een treffer de schadedobbelstenen opnieuw rollen en het hoogste nemen; runen zijn zichtbaar maar doen niets op zichzelf. Door Thorvi (SQ-09), als Glóin en de Elven-smeden het toestaan. Voor Wulfgrim.
+- Mithril-hemd (rare): Medium armor, AC 13 + Dex (max +2), geen Stealth-nadeel. Alleen als erfstuk, schenking van een hoge Elf of Dwarf, of aan het einde van een grote opdracht; nooit eerder dan Act II.
+- Lórien-mantel (uncommon): advantage op Stealth-checks buiten in bos of heuvelland; alleen als schenking van Elven-volk.
+- Miruvor-flesje (uncommon, verbruikt): herstelt 2d4+2 HP en verwijdert één niveau Exhaustion; geschenk van Elven-genezers.
+- Hithlain-touw (uncommon): 60 ft touw dat zichzelf op commando opwindt of losmaakt; dun, sterk, licht.
+- Hoorn van de wachters (uncommon): wie erop blaast kan door een mijl heen gehoord worden en kan een boodschap in enkele blazen coderen; herkend door wachters van Eriador en Rivendell.
+- Kaart met maanletters (uncommon, informatie): toont een verborgen pad of deur alleen onder maanlicht van een bepaalde maand; leidt naar een plaats met verhaal.
+- Zalven en kruiden (gewoon): Athelas-bundel (kalmeert pijn, hulp bij een gif- of Morgul-wond), herbalism-set uitbreidingen.
+
+BEWUSTE KOPPELINGEN [V]
+- SQ-09 (Thorvi): vakwerk of de Runenbijl voor Wulfgrim, afhankelijk van de uitkomst.
+- SQ-10 (Vandil): de Boog van de oude oever voor Tharon.
+- SQ-13 (Gwathren): bij een goede uitkomst een Hoorn van de wachters.
+- PQ-WULF- en PQ-THARON-opdrachten: eigen persoonlijke erfstukken (geen +2).
+- Companion-opdrachten (CQ): een persoonlijk voorwerp van de companion, vaak symbolisch.
+
+GOUD [V]
+- Wulfgrim heeft 29 GP. Tharon heeft nog geen goudregel: 150 GP startbudget min 103 GP uitgaven = 47 GP; neem dat op in zijn inventory bij de eerstvolgende statePatch.
