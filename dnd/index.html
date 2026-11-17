@@ -139,7 +139,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .ic.act{outline:2px solid var(--gold);font-weight:bold}
 .acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .acts button{background:rgba(0,0,0,.15);border:1px solid rgba(0,0,0,.3);border-radius:6px;padding:2px 9px;font:inherit;font-size:12px;cursor:pointer;color:inherit}
-.locimg{width:100%;border-radius:8px;border:1px solid #4a3d30;margin:6px 0;cursor:pointer;display:block}
+.locimg{width:100%;max-height:240px;object-fit:cover;border-radius:8px;border:1px solid #4a3d30;margin:6px 0;cursor:pointer;display:block}
 .msg.loc{background:rgba(24,34,48,.85);display:flex;gap:10px;align-items:center;font-style:normal;text-align:left}
 .msg.loc img{width:84px;height:84px;object-fit:cover;border-radius:6px;flex:none;cursor:pointer}
 #gamewrap{display:flex;flex:1;min-height:0}
@@ -152,7 +152,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .sh-strip b{font-size:18px;color:var(--gold)}
 .sh-two{display:grid;grid-template-columns:1fr;gap:10px}
 .inv{background:radial-gradient(ellipse at 30% 20%,#efd9a4,#d9b878 70%,#c79f5c);color:#2b2012;border:2px solid #7a5a2a;box-shadow:inset 0 0 40px rgba(110,70,20,.45)}.inv h3{color:#2b2012;font-variant:small-caps;letter-spacing:.08em;text-align:center;margin:0 0 8px;font-size:22px}
-.invtop{display:grid;grid-template-columns:1fr 84px 1fr;gap:8px;align-items:start}.invfig svg{width:100%;height:auto;opacity:.85}
+.invtop{display:grid;grid-template-columns:1fr 150px 1fr;gap:8px;align-items:start}.invfig img{width:100%;height:auto;display:block;mix-blend-mode:multiply}
 .invcol{display:flex;flex-direction:column;gap:6px}.invbot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;align-items:start}
 .invsl{border:2px solid #2b2012;border-radius:3px;padding:3px 7px;background:rgba(255,248,225,.55);min-height:44px}.invsl small{display:block;font-variant:small-caps;font-weight:bold;letter-spacing:.05em;color:#2b2012;font-size:12px}.invsl span{font-size:14px;display:block;line-height:1.25}.invsl em{font-size:12px;opacity:.75}.invsl.mg{background:rgba(255,226,140,.75);box-shadow:0 0 8px rgba(160,100,0,.55)}.invsl.mg span{font-weight:bold}
 .invbag{border:2px solid #2b2012;border-radius:3px;background:rgba(255,248,225,.45);padding:6px 8px}.invbag>b{display:block;font-variant:small-caps;letter-spacing:.05em;font-size:13px;margin-bottom:2px}.invbag table{width:100%;border-collapse:collapse;font-size:13px}.invbag th{text-align:left;font-weight:bold;font-size:11px;border-bottom:2px solid #2b2012;padding:2px 3px}.invbag td{padding:3px;border-bottom:1px solid rgba(43,32,18,.35)}.invbag td:last-child{opacity:.75;font-size:12px}.invbag tr.mg td{font-weight:bold;background:rgba(255,226,140,.6)}.invnone{opacity:.7;font-size:13px}
@@ -1466,7 +1466,7 @@ function invHtml(c){
     if(it.parts){ it.parts.forEach(p=>bag.push({name:p,note:'uit '+it.name,magic:false,pack:true})); return; }
     place(it);});
   const sl=(label,key,n)=>{const l=slots[key]; let o=''; for(let i=0;i<n;i++){const it=l[i]; o+='<div class="invsl'+(it?'':' empty')+(it&&it.magic?' mg':'')+'"><small>'+label+(n>1?' #'+(i+1):'')+'</small><span>'+(it?(it.magic?'✨ ':'')+esc(it.name)+(it.note?' <em>('+esc(it.note)+')</em>':''):'&nbsp;')+'</span></div>';} return o;};
-  const fig='<svg viewBox="0 0 100 250" aria-hidden="true"><g fill="none" stroke="#2b2012" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><circle cx="50" cy="22" r="14"/><path d="M42 36v8c-14 3-24 8-27 20l-6 52 9 3 8-40 3 22-2 50 6 66h14l4-62h6l4 62h14l6-66-2-50 3-22 8 40 9-3-6-52c-3-12-13-17-27-20v-8"/></g></svg>';
+  const fig='<img src="assets/inventory-figuur.jpg" alt="">';
   const left=sl('Head','head',1)+sl('Neck','neck',1)+sl('Back','back',1)+sl('Waist','waist',1)+sl('Hands','hands',1)+sl('Ring','ring',1).replace(/<small>Ring<\/small>/,'<small>Ring #1</small>');
   const rightRing=(function(){const it=slots.ring[1]; return '<div class="invsl'+(it?'':' empty')+(it&&it.magic?' mg':'')+'"><small>Ring #2</small><span>'+(it?(it.magic?'✨ ':'')+esc(it.name):'&nbsp;')+'</span></div>';})();
   const right=sl('Eyes','eyes',1)+sl('Shoulders','shoulders',1)+sl('Torso','torso',1)+sl('Arms / Wrists','arms',1)+rightRing+sl('Feet','feet',1);
