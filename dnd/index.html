@@ -151,10 +151,13 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .sh-strip small{display:block;color:var(--mute);font-size:11px}
 .sh-strip b{font-size:18px;color:var(--gold)}
 .sh-two{display:grid;grid-template-columns:1fr;gap:10px}
-.inv .invgrid{display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:10px}@media(min-width:560px){.inv .invgrid{grid-template-columns:1fr 1fr}}
-.invsl{display:flex;gap:8px;align-items:baseline;border:1px solid rgba(200,162,74,.4);border-radius:6px;padding:6px 10px;background:rgba(32,27,23,.7)}.invsl small{flex:none;min-width:58px;color:var(--gold);font-variant:small-caps;letter-spacing:.04em}.invsl span{font-size:14px}.invsl.empty span{color:var(--mute)}.invsl.mg{border-color:var(--gold);box-shadow:0 0 6px rgba(200,162,74,.35)}.invsl em{color:var(--mute);font-size:12px}
-.invbag table{width:100%;border-collapse:collapse;margin-top:4px;font-size:14px}.invbag th{text-align:left;color:var(--gold);font-weight:normal;font-size:12px;border-bottom:1px solid rgba(200,162,74,.5);padding:3px 4px}.invbag td{padding:4px;border-bottom:1px solid rgba(200,162,74,.18)}.invbag tr.mg td{color:var(--gold)}
-.invgold{margin-top:10px;padding-top:8px;border-top:1px solid rgba(200,162,74,.35)}
+.inv{background:radial-gradient(ellipse at 30% 20%,#efd9a4,#d9b878 70%,#c79f5c);color:#2b2012;border:2px solid #7a5a2a;box-shadow:inset 0 0 40px rgba(110,70,20,.45)}.inv h3{color:#2b2012;font-variant:small-caps;letter-spacing:.08em;text-align:center;margin:0 0 8px;font-size:22px}
+.invtop{display:grid;grid-template-columns:1fr 84px 1fr;gap:8px;align-items:start}.invfig svg{width:100%;height:auto;opacity:.85}
+.invcol{display:flex;flex-direction:column;gap:6px}.invbot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;align-items:start}
+.invsl{border:2px solid #2b2012;border-radius:3px;padding:3px 7px;background:rgba(255,248,225,.55);min-height:44px}.invsl small{display:block;font-variant:small-caps;font-weight:bold;letter-spacing:.05em;color:#2b2012;font-size:12px}.invsl span{font-size:14px;display:block;line-height:1.25}.invsl em{font-size:12px;opacity:.75}.invsl.mg{background:rgba(255,226,140,.75);box-shadow:0 0 8px rgba(160,100,0,.55)}.invsl.mg span{font-weight:bold}
+.invbag{border:2px solid #2b2012;border-radius:3px;background:rgba(255,248,225,.45);padding:6px 8px}.invbag>b{display:block;font-variant:small-caps;letter-spacing:.05em;font-size:13px;margin-bottom:2px}.invbag table{width:100%;border-collapse:collapse;font-size:13px}.invbag th{text-align:left;font-weight:bold;font-size:11px;border-bottom:2px solid #2b2012;padding:2px 3px}.invbag td{padding:3px;border-bottom:1px solid rgba(43,32,18,.35)}.invbag td:last-child{opacity:.75;font-size:12px}.invbag tr.mg td{font-weight:bold;background:rgba(255,226,140,.6)}.invnone{opacity:.7;font-size:13px}
+.invgold{margin-top:10px;padding-top:6px;border-top:2px solid #2b2012}.invgold small{opacity:.7}
+@media(max-width:620px){.invtop{grid-template-columns:1fr 1fr}.invfig{display:none}.invbot{grid-template-columns:1fr}}
 @media(min-width:700px){.sh-two{grid-template-columns:1fr 1fr}}
 .rl{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:15px}
 .rl:hover,.rl.on{background:rgba(200,162,74,.18)}
@@ -1439,26 +1442,39 @@ function rlRow(r,extra){return '<div class="rl'+(sheetRoll===r.key?' on':'')+'" 
 /* Uitrusting als overzicht: vakken op het lijf (Armor, Shield, wapens, Head, Neck, Back, Hands, Feet, Rings) en een tabel voor de rest. Bron: de levende inventory in de Stand (door de DM bijgehouden), anders de tekst van het blad. Magische voorwerpen ("Naam [magisch: effect]") worden uitgelicht. */
 function invHtml(c){
   const st=getState(), pc=(st.pcs||{})[c.name]||null;
-  let items=pc&&Array.isArray(pc.inventory)&&pc.inventory.length?pc.inventory.map(itemText):String(c.equipment||'').split(/[;\n]+/);
+  let items=pc&&Array.isArray(pc.inventory)&&pc.inventory.length?pc.inventory.map(itemText):String(c.equipment||'').split(/;|\n+(?![^(]*\))/);
   items=items.map(s=>String(s).trim()).filter(Boolean);
-  const cur=c.currency||{}; let gold=items.filter(s=>/^\d+\s*(gp|sp|cp|pp|ep)\b/i.test(s)||/\b\d+\s*gp\b/i.test(s));
+  const cur=c.currency||{}, gold=items.filter(s=>/^\d+\s*(gp|sp|cp|pp|ep)\b/i.test(s)||/\b\d+\s*gp\b/i.test(s));
   items=items.filter(s=>gold.indexOf(s)<0);
   const goldTxt=gold.length?gold.join(', '):['pp','gp','ep','sp','cp'].filter(x=>cur[x]).map(x=>cur[x]+' '+x.toUpperCase()).join(', ');
-  const parse=s=>{const m=s.match(/^(.*?)\s*\[(?:magisch:?\s*)?([^\]]*)\]\s*$/i); const magic=/\[\s*magisch/i.test(s); return m?{name:m[1].trim(),note:m[2].trim(),magic:magic}:{name:s,note:'',magic:false}};
-  const slots={armor:[],shield:[],melee:[],ranged:[],head:[],neck:[],back:[],hands:[],feet:[],ring:[]}, bag=[];
-  const R={armor:/\b(armou?r|mail|hauberk|mithril|chain shirt|breastplate|hemd|brigandine)\b/i,shield:/\b(shield|schild|buckler)\b/i,ranged:/(bow|boog|sling)/i,melee:/(axe|bijl|sword|zwaard|spear|speer|dagger|dolk|adarion|mace|hammer|blade|lemmet|rapier|club|knots|lance|javelin|staff|scimitar|flail|pike|glaive|halberd)/i,head:/\b(helm|helmet|hood|capuchon|circlet|diadeem)\b/i,neck:/\b(amulet|pendant|necklace|ketting|hanger)\b/i,back:/\b(cloak|mantel|cape)\b/i,hands:/\b(gloves?|handschoenen|gauntlets?)\b/i,feet:/\b(boots?|laarzen|shoes)\b/i,ring:/\bring\b/i};
-  const ammo=/\b(arrows?|pijlen|bolts?|quiver|koker)\b/i, pack=/\b(pack|backpack|rations?|bedroll|tinderbox|torches|waterskin|rope|kit|clothes|dice|lembas|oil flask)\b/i;
-  items.forEach(raw=>{const it=parse(raw), n=it.name;
-    let k=null;
-    if(ammo.test(n)||pack.test(n)) k=null;
-    else for(const key of ['shield','armor','ranged','melee','head','neck','back','hands','feet','ring']) if(R[key].test(n)){k=key;break;}
-    const cap={armor:1,shield:1,melee:2,ranged:1,head:1,neck:1,back:1,hands:1,feet:1,ring:2}[k];
-    if(k&&slots[k].length<cap) slots[k].push(it); else bag.push(it);});
-  const sl=(label,key,n)=>{const l=slots[key]; let o=''; for(let i=0;i<n;i++){const it=l[i]; o+='<div class="invsl'+(it?'':' empty')+(it&&it.magic?' mg':'')+'"><small>'+label+(n>1?' '+(i+1):'')+'</small><span>'+(it?(it.magic?'✨ ':'')+esc(it.name)+(it.note?' <em>('+esc(it.note)+')</em>':''):'—')+'</span></div>';} return o;};
-  let h='<div class="card inv"><h3>Uitrusting</h3><div class="invgrid">'+sl('Armor','armor',1)+sl('Shield','shield',1)+sl('Melee','melee',2)+sl('Ranged','ranged',1)+sl('Head','head',1)+sl('Neck','neck',1)+sl('Back','back',1)+sl('Hands','hands',1)+sl('Feet','feet',1)+sl('Ring','ring',2)+'</div>';
-  h+='<div class="invbag"><b>Draagtas en voorraad</b>'+(bag.length?'<table><thead><tr><th>Voorwerp</th><th>Opmerking</th></tr></thead><tbody>'+bag.map(it=>'<tr'+(it.magic?' class="mg"':'')+'><td>'+(it.magic?'✨ ':'')+esc(it.name)+'</td><td>'+esc(it.note)+'</td></tr>').join('')+'</tbody></table>':'<div style="color:var(--mute);font-size:13px">Niets extra.</div>')+'</div>';
-  h+='<div class="invgold">💰 Geld: <b>'+esc(goldTxt||'—')+'</b>'+(pc&&pc.inventory&&pc.inventory.length?' <small style="color:var(--mute)">(levende inventory, bijgehouden door de DM)</small>':'')+'</div></div>';
-  return h;
+  const parse=s=>{const mg=s.match(/^(.*?)\s*\[\s*(magisch)?:?\s*([^\]]*)\]\s*$/i); if(mg) return {name:mg[1].trim(),note:mg[3].trim(),magic:!!mg[2]}; const pr=s.match(/^(.*?)\s*\(([^)]*)\)\s*$/); if(pr&&/,/.test(pr[2])) return {name:pr[1].trim(),note:'',parts:pr[2].split(',').map(x=>x.trim()).filter(Boolean),magic:false}; return {name:s,note:'',magic:false}};
+  /* Explorer's Pack e.d.: uitsplitsen in de losse onderdelen (eerst uit het blad, anders de standaardinhoud van de 2024-regels). */
+  const sheetPack=(String(c.equipment||'').match(/pack\s*\(([^)]*)\)/i)||[])[1];
+  const DEF={explorer:['Backpack','Bedroll','2 Oil Flasks','10 dagen Rations','50 ft Rope','Tinderbox','10 Torches','Waterskin']};
+  const bag=[], slots={armor:[],shield:[],melee:[],ranged:[],head:[],eyes:[],neck:[],shoulders:[],back:[],torso:[],arms:[],hands:[],waist:[],ring:[],feet:[]};
+  const R={shield:/(shield|schild|buckler)/i,armor:/\b(armou?r|hauberk|mithril|chain shirt|breastplate|hemd|brigandine)\b|\bmail\b/i,ranged:/(bow|boog|sling)/i,melee:/(axe|bijl|sword|zwaard|spear|speer|dagger|dolk|adarion|mace|hammer|blade|lemmet|rapier|club|knots|lance|javelin|staff|scimitar|flail|pike|glaive|halberd)/i,head:/\b(helm|helmet|hood|capuchon|circlet|diadeem|hat|hoed)\b/i,eyes:/\b(spectacles|lens|bril|goggles)\b/i,neck:/\b(amulet|pendant|necklace|ketting|hanger)\b/i,shoulders:/\b(pauldrons?|schoudersieraad|epaulettes?)\b/i,back:/\b(cloak|mantel|cape)\b/i,torso:/\b(clothes|clothing|kleding|tunic|tuniek|robe|gewaad|jerkin|vest|shirt)\b/i,arms:/\b(bracers?|vambraces?|armband|polsband)\b/i,hands:/\b(gloves?|handschoenen|gauntlets?)\b/i,waist:/\b(belt|gordel|riem|sash)\b/i,ring:/\bring\b/i,feet:/\b(boots?|laarzen|shoes|sandals)\b/i};
+  const ammo=/\b(arrows?|pijlen|bolts?|quiver|koker)\b/i;
+  const cap={armor:1,shield:1,melee:2,ranged:1,head:1,eyes:1,neck:1,shoulders:1,back:1,torso:1,arms:1,hands:1,waist:1,ring:2,feet:1};
+  const place=it=>{const n=it.name; let k=null;
+    if(!ammo.test(n)&&!/\b(pack|kit)\b/i.test(n)) for(const key of ['shield','armor','ranged','melee','head','eyes','neck','shoulders','back','torso','arms','hands','waist','ring','feet']) if(R[key].test(n)){k=key;break;}
+    if(k&&slots[k].length<cap[k]) slots[k].push(it); else bag.push(it);};
+  items.forEach(raw=>{const it=parse(raw);
+    if(/explorer'?s pack|pack$/i.test(it.name)){
+      const parts=it.parts||(sheetPack?sheetPack.split(',').map(x=>x.trim()).filter(Boolean):(/explorer/i.test(it.name)?DEF.explorer:null));
+      if(parts){ parts.forEach(p=>bag.push({name:p,note:'uit '+it.name,magic:false,pack:true})); return; }
+    }
+    if(it.parts){ it.parts.forEach(p=>bag.push({name:p,note:'uit '+it.name,magic:false,pack:true})); return; }
+    place(it);});
+  const sl=(label,key,n)=>{const l=slots[key]; let o=''; for(let i=0;i<n;i++){const it=l[i]; o+='<div class="invsl'+(it?'':' empty')+(it&&it.magic?' mg':'')+'"><small>'+label+(n>1?' #'+(i+1):'')+'</small><span>'+(it?(it.magic?'✨ ':'')+esc(it.name)+(it.note?' <em>('+esc(it.note)+')</em>':''):'&nbsp;')+'</span></div>';} return o;};
+  const fig='<svg viewBox="0 0 100 250" aria-hidden="true"><g fill="none" stroke="#2b2012" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><circle cx="50" cy="22" r="14"/><path d="M42 36v8c-14 3-24 8-27 20l-6 52 9 3 8-40 3 22-2 50 6 66h14l4-62h6l4 62h14l6-66-2-50 3-22 8 40 9-3-6-52c-3-12-13-17-27-20v-8"/></g></svg>';
+  const left=sl('Head','head',1)+sl('Neck','neck',1)+sl('Back','back',1)+sl('Waist','waist',1)+sl('Hands','hands',1)+sl('Ring','ring',1).replace(/<small>Ring<\/small>/,'<small>Ring #1</small>');
+  const rightRing=(function(){const it=slots.ring[1]; return '<div class="invsl'+(it?'':' empty')+(it&&it.magic?' mg':'')+'"><small>Ring #2</small><span>'+(it?(it.magic?'✨ ':'')+esc(it.name):'&nbsp;')+'</span></div>';})();
+  const right=sl('Eyes','eyes',1)+sl('Shoulders','shoulders',1)+sl('Torso','torso',1)+sl('Arms / Wrists','arms',1)+rightRing+sl('Feet','feet',1);
+  const gear=sl('Armor','armor',1)+sl('Shield','shield',1)+sl('Melee Weapon','melee',2)+sl('Ranged Weapon','ranged',1);
+  const bagHtml=bag.length?'<table><thead><tr><th>Voorwerp</th><th>Opmerking</th></tr></thead><tbody>'+bag.map(it=>'<tr'+(it.magic?' class="mg"':'')+'><td>'+(it.magic?'✨ ':'')+esc(it.name)+'</td><td>'+esc(it.note)+'</td></tr>').join('')+'</tbody></table>':'<div class="invnone">Niets extra.</div>';
+  return '<div class="card inv"><h3>Inventory</h3><div class="invtop"><div class="invcol">'+left+'</div><div class="invfig">'+fig+'</div><div class="invcol">'+right+'</div></div>'+
+    '<div class="invbot"><div class="invcol">'+gear+'</div><div class="invbag"><b>Draagtas en voorraad</b>'+bagHtml+'</div></div>'+
+    '<div class="invgold">💰 Geld: <b>'+esc(goldTxt||'—')+'</b>'+(pc&&pc.inventory&&pc.inventory.length?' <small>(levende inventory, bijgehouden door de DM)</small>':'')+'</div></div>';
 }
 function sheetHtml(c){
   const pb=pbOf(c), rage=sheetRage, list=rollList(c,rage), by=k=>list.find(r=>r.key===k);
