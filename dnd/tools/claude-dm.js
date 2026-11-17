@@ -8,6 +8,9 @@
      summary <cid> <totRonde> <bestand>  bewaar een samenvatting
      summary-todo [cid] [--force]        welke samenvattingen zijn nodig (eerdere samenvatting, nieuwe berichten, schrijfregels)
      canon-put <cid> <id> <titel> <bestand> [--opening] [--keywords=a,b]
+     log <cid> [--van=N] [--tot=M]       toon logboekregels met sleutel (voor opschonen)
+     log-edit <cid> <bestand.json>        verwijder/vervang oude logregels: {"delete":[sleutels],"replace":[{"keys":[..],"fact":"..","inGameDate":".."}]}
+     state-patch <cid> <bestand.json>    deep-merge in de Stand (lijsten vervangen, null verwijdert)
      memory-add <cid> <tekst>            voeg een Herinnering toe
      new <titel> [--from=<verhaal>]      maak een nieuw verhaal (standaard het canon-sjabloon, of de canon van --from; wereldsjabloon, DM-notities) waarvan Claude de opening speelt
    Geen geheimen in dit bestand: alleen het (openbare) projectnummer. */
@@ -281,6 +284,30 @@ function cmdStatePatch(cid, file) {
 }
 function cmdMemory(cid, text) { update({ [cp(cid, "memories/" + pushId())]: { text, by: "Claude", t: Date.now() } }); console.log("Herinnering toegevoegd."); }
 
+/* Logboek bekijken en opschonen (Dagboek, tabblad Logboek). Alleen voor oudere rondes; verwijder of vervang nooit regels van de lopende ronde (Terug verwijdert die op sleutel). */
+function cmdLog(cid, flags) {
+  const L = get("/dnd/" + cp(cid, "log")) || {};
+  const van = flags.van ? Number(flags.van) : 0, tot = flags.tot ? Number(flags.tot) : 1e9;
+  Object.keys(L).sort().filter(k => (L[k].round || 0) >= van && (L[k].round || 0) <= tot).forEach(k => console.log(k + " | r" + (L[k].round || "?") + " | " + (L[k].inGameDate || "") + " | " + (L[k].fact || "")));
+}
+function cmdLogEdit(cid, file) {
+  const ed = JSON.parse(fs.readFileSync(file, "utf8"));
+  const L = get("/dnd/" + cp(cid, "log")) || {};
+  const bak = path.join(os.tmpdir(), "dnd-log-backup-" + Date.now() + ".json"); fs.writeFileSync(bak, JSON.stringify(L));
+  const up = {}; let del = 0, rep = 0;
+  (ed.delete || []).forEach(k => { if (!L[k]) throw new Error("onbekende sleutel " + k); up[cp(cid, "log/" + k)] = null; del++; });
+  (ed.replace || []).forEach(r => {
+    const ks = r.keys || []; if (!ks.length || !r.fact) throw new Error("replace heeft keys en fact nodig");
+    ks.forEach(k => { if (!L[k]) throw new Error("onbekende sleutel " + k); });
+    up[cp(cid, "log/" + ks[0] + "/fact")] = String(r.fact);
+    if (r.inGameDate) up[cp(cid, "log/" + ks[0] + "/inGameDate")] = String(r.inGameDate);
+    ks.slice(1).forEach(k => { up[cp(cid, "log/" + k)] = null; del++; }); rep++;
+  });
+  if (!Object.keys(up).length) { console.log("Niets te doen."); return; }
+  update(up);
+  console.log("Logboek bijgewerkt: " + rep + " samengevoegd/vervangen, " + del + " verwijderd. Back-up van de oude log: " + bak);
+}
+
 /* ---------- main ---------- */
 const argv = process.argv.slice(2), flags = {}, pos = [];
 for (const a of argv) { if (a.startsWith("--")) { const [k, v] = a.slice(2).split("="); flags[k] = v === undefined ? true : v; } else pos.push(a); }
@@ -293,6 +320,8 @@ try {
   else if (cmd === "summary-todo") cmdSummaryTodo(pos[1], flags);
   else if (cmd === "canon-put") cmdCanonPut(pos[1], pos[2], pos[3], pos[4], flags);
   else if (cmd === "state-patch") cmdStatePatch(pos[1], pos[2]);
+  else if (cmd === "log") cmdLog(pos[1], flags);
+  else if (cmd === "log-edit") cmdLogEdit(pos[1], pos[2]);
   else if (cmd === "memory-add") cmdMemory(pos[1], pos[2]);
   else if (cmd === "new") cmdNew(pos[1], flags);
   else console.log("Gebruik: status | context <cid> [--canon] | apply <cid> <json> [--force] | summary <cid> <totRonde> <bestand> | canon-put <cid> <id> <titel> <bestand> | memory-add <cid> <tekst>");
