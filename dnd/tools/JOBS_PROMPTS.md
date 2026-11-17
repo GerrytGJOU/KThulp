@@ -81,3 +81,43 @@ Schrijf dnd/_prive/jobrapport-<datum>.md met per job: id, naam, uitkomst, de bel
 - Een job heeft maximaal 3 pogingen. Daarna zet je hem handmatig op `blocked` of `cancelled`.
 - Handmatig een job aanmaken: `node dnd/tools/jobs.js enqueue c1 portrait NPC-E01 --reason=...`.
 - Alles wat een runner maakt is een voorstel: portretten met een voorgestelde beschrijving hebben `npcs/{sleutel}/visualStatus = "proposed"`, statblocks `sheetStatus = "proposed"`, dossiers `world/profiles/{id}/status = "proposed"`.
+
+---
+
+## Prompt C: iconen voor alle voorwerpen (eenmalige bouw, daarna bijhouden)
+
+Voor een **nieuw Claude Code-gesprek** (werkmap: de KThulp-repo). Bouwt de itemiconen voor de Inventory in het Karakter-tabblad en een manier om nieuwe voorwerpen bij te houden. Ontwerpkeuzes: iconen zijn kleine bestanden in de repo (`dnd/assets/items/`, geen database); veel voorwerpen delen één icoon; elk voorwerp krijgt altijd minstens een categorie-icoon, zodat er nooit iets kapot gaat.
+
+```
+Je bouwt de itemiconen voor de Midden-aarde D&D-app in de KThulp-repo (map dnd/). Communiceer in het Nederlands. Lees eerst CLAUDE.md (repo-root), dnd/tools/CLAUDE_DM.md, dnd/tools/JOBS_PROMPTS.md (Prompt A: werkwijze met ChatGPT via de Chrome-plugin) en bekijk invHtml() in dnd/index.html (de Inventory met vakken en draagtas-tabel; de figuur in dnd/assets/inventory-figuur.jpg is door ChatGPT gemaakt en geeft de stijl aan).
+
+DOEL
+In de Inventory (Karakter-tabblad) toont elk voorwerp een klein icoon (ongeveer 40 px) naast de naam: in de vakken (Armor, Melee, Back, Torso enz.) en in de draagtas-tabel. Dat moet gelden voor ALLE voorwerpen in het spel, ook voor nieuwe die later komen. Voorwerpen mogen een icoon delen (verschillende flessen wijn of bier, verschillende simpele zwaarden, verschillende gewone dolken enz.); alleen echt unieke of magische voorwerpen met een eigen naam (zoals een Runenbijl, een Lórien-mantel, de Boog van de oude oever) krijgen een eigen icoon.
+
+STAP 1: INVENTARISEER ALLE VOORWERPEN
+- Lees alles wat voorwerpen noemt: karakterbladen (dnd/characters in Firebase, veld equipment en attacks), de levende inventories in de Stand (campaigns/<cid>/state, pcs.<naam>.inventory), de canon-documenten (vooral M9 Loot en voorwerpen, B1, B2 en de M-documenten; gebruik node dnd/tools/claude-dm.js context <cid> --canon=m9_loot,...), quest-beloningen in het wereldregister (world/quests/*/reward) en de 2024-lijsten van wapens, armor, adventuring gear, tools en voedsel en drank die in een Midden-aarde-campagne passen. Voeg Tolkien-passende dingen toe die waarschijnlijk komen (pijpen, vaatjes bier, wijnflessen, honingkoeken, lembas, miruvor, athelas, kaarsen, kaarten, sleutels, hoorns, harpen enz.).
+- Maak er één catalogus van: dnd/items.js (UMD, werkt in de browser en in node, geen frameworks), met per icoon-groep: id, categorie, een lijst trefwoorden of reguliere expressies op Engelse én Nederlandse namen (houd rekening met enkelvoud en meervoud, zoals "Handaxes"), en het pad naar het icoon. Voorbeeldgroepen: sword-simple, sword-long, dagger, spear, axe-great, axe-hand, bow-short, bow-long, crossbow, shield-round, armor-leather, armor-mail, armor-mithril, helm, cloak, boots, gloves, belt, ring, amulet, backpack, bedroll, rope, torch, lantern, oil-flask, tinderbox, waterskin, mess-kit, rations, lembas, bread, wine-bottle, beer-barrel, tankard, potion-flask (miruvor), herb-bundle (athelas), healers-kit, herbalism-kit, dice, quiver-arrows, horn, map-scroll, book, key, coin-purse, gem, pipe, lute, plus per categorie een fallback (weapon, armor, clothing, food, drink, tool, container, magic, misc).
+- Er moet altijd een match komen: eerst de specifieke groep, anders het categorie-icoon, anders "misc".
+
+STAP 2: MAAK DE ICONEN MET CHATGPT (Chrome-plugin)
+- Werkwijze als Prompt A in dnd/tools/JOBS_PROMPTS.md: Chrome-tools in één ToolSearch laden, een eigen nieuwe tab, chatgpt.com; bij login, CAPTCHA of betaalmuur STOPPEN en mij vragen. Typ nooit wachtwoorden. Je hebt mijn nadrukkelijke toestemming om uitsluitend de door ChatGPT gegenereerde afbeeldingen te downloaden (blob-link met anchor als er geen downloadknop is). Let op het dagelijkse beeldlimiet van ChatGPT: stop dan en meld wanneer het weer kan.
+- Stijl (zet dit in elke prompt, in het Engels en maximaal expliciet): fine dark-brown ink line art with a light watercolour wash, in the style of a Tolkien / Lord of the Rings manuscript illustration, matching the existing inventory figure; one single object per cell, centred, seen straight from the front or in a clear three-quarter view, no hands or people, no shadows on the ground, pure flat white background (#FFFFFF), no text, no letters, no frames, no parchment texture. Avoid: gaming-icon glow, cartoon or anime style, photorealism, neon, text.
+- Werk met bladen van 4 x 4 cellen (16 iconen per afbeelding) met witte tussenruimte; noem in de prompt per cel letterlijk welk voorwerp erin moet (rij voor rij, van links naar rechts). Controleer per blad op anatomie en ontbrekende onderdelen (aantal pijlen, vorm van het wapen), tekst in het beeld en consistente stijl; vraag zo nodig een blad opnieuw (maximaal 2 herkansingen).
+- Verwerk de bladen met Python (draai altijd python -I): snij de cellen, haal de witte randruimte weg, schaal naar 128 x 128 px (behoud de verhoudingen op een witte achtergrond), sla op als dnd/assets/items/<id>.webp of .png (houd elk bestand onder ongeveer 15 KB). De iconen worden in de app met mix-blend-mode multiply op het perkament gezet, dus ze hebben een witte achtergrond nodig, geen transparantie. Bronbladen blijven buiten de repo (scratchpad of dnd/_prive/, git-genegeerd).
+
+STAP 3: BOUW HET IN DE APP
+- Laad dnd/items.js in dnd/index.html (met een cachebuster ?v= zoals de andere scripts) en voeg een functie itemIcon(naam) toe die de catalogus raadpleegt. Toon het icoon in invHtml(): in de vakken (klein, links van de naam) en in de draagtas-tabel (eigen kolom). Een magisch voorwerp ("[magisch: ...]") houdt zijn gouden uitlichting; een eigen icoon voor een uniek voorwerp vervangt het categorie-icoon. Iconen laden lui (loading="lazy"), hebben een lege alt-tekst, breken op een smal scherm de regel niet, en een ontbrekend bestand mag de Inventory niet laten falen (onerror verbergt het).
+- Pas ook de uitsplitsing aan: onderdelen uit een pakket (zoals de Explorer's Pack) krijgen hun eigen icoon.
+- Controleer in de browser (breed en op telefoonbreedte via resize_window) met de echte inventories van Wulfgrim en Tharon. Je kunt invHtml in een tijdelijk testbestand met stub-data uitvoeren; ruim dat bestand daarna op. node --check op het script is verplicht.
+
+STAP 4: NIEUWE VOORWERPEN BIJHOUDEN
+- Maak dnd/tools/items.js met opdrachten: todo [cid] (toont alle voorwerpen uit de inventories, canon en quest-beloningen die alleen een categorie-icoon hebben, gegroepeerd en gesorteerd op hoe vaak ze voorkomen), check (controleert dat elk icoonbestand in de catalogus bestaat, geen duplicaten, geen verweesde bestanden), add <id> <categorie> <trefwoorden> <bestand> (voegt een groep toe) en sheet-prompt [n] (schrijft een kant-en-klare ChatGPT-prompt voor een volgend blad van n iconen uit de todo-lijst, in de stijl hierboven). Een volgend gesprek kan dan met één opdracht nieuwe iconen maken.
+- Voeg een korte regel toe aan de DM-prompt (SYSTEM in dnd/index.html) en aan dnd/tools/CLAUDE_DM.md: noem elk nieuw voorwerp met een herkenbare naam (Engels of Nederlands, bijvoorbeeld "Shortsword", "Wine (bottle)", "Honingkoeken") zodat het icoon gevonden wordt; geef een uniek of magisch voorwerp een eigen naam; een nieuw uniek voorwerp krijgt later via items.js todo een icoon.
+- Werk dnd/tools/JOBS_PROMPTS.md bij met een korte Prompt D: "nieuwe itemiconen bijhouden" (items.js todo, sheet-prompt, ChatGPT, snijden, add, check).
+
+REGELS
+- Eén enkel HTML-bestand blijft de app; alleen de iconen en dnd/items.js zijn extra bestanden. Offline-first: geen externe iconensets of CDN's.
+- Wijzig geen canon en geen spelstatus; schrijf niets naar Firebase (dit is statisch). Commit of push NIETS zonder mijn expliciete akkoord; toon eerst een overzicht (aantal groepen, totale bestandsgrootte, een screenshot van de Inventory in de browser).
+- Het gesprek wordt na afloop gearchiveerd: leg alles wat bewaard moet blijven vast in de repo (catalogus, tools, JOBS_PROMPTS.md) en sluit af met een korte eindrapportage: aantal groepen en iconen, welke voorwerpen nog alleen een categorie-icoon hebben, wat nog open staat.
+- Ruim je eigen ChatGPT-gesprekken en Chrome-tabs op (archiveren, niet verwijderen) en laat geen testbestanden in de repo achter.
+```

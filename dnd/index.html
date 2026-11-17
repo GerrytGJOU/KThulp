@@ -156,6 +156,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .invcol{display:flex;flex-direction:column;gap:6px}.invbot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;align-items:start}
 .invsl{border:2px solid #2b2012;border-radius:3px;padding:3px 7px;background:rgba(255,248,225,.55);min-height:44px}.invsl small{display:block;font-variant:small-caps;font-weight:bold;letter-spacing:.05em;color:#2b2012;font-size:12px}.invsl span{font-size:14px;display:block;line-height:1.25}.invsl em{font-size:12px;opacity:.75}.invsl.mg{background:rgba(255,226,140,.75);box-shadow:0 0 8px rgba(160,100,0,.55)}.invsl.mg span{font-weight:bold}
 .invbag{border:2px solid #2b2012;border-radius:3px;background:rgba(255,248,225,.45);padding:6px 8px}.invbag>b{display:block;font-variant:small-caps;letter-spacing:.05em;font-size:13px;margin-bottom:2px}.invbag table{width:100%;border-collapse:collapse;font-size:13px}.invbag th{text-align:left;font-weight:bold;font-size:11px;border-bottom:2px solid #2b2012;padding:2px 3px}.invbag td{padding:3px;border-bottom:1px solid rgba(43,32,18,.35)}.invbag td:last-child{opacity:.75;font-size:12px}.invbag tr.mg td{font-weight:bold;background:rgba(255,226,140,.6)}.invnone{opacity:.7;font-size:13px}
+.feat summary{cursor:pointer;font-variant:small-caps;letter-spacing:.06em;font-size:20px;font-weight:bold;color:#2b2012}.feat[open] summary{margin-bottom:8px;border-bottom:2px solid #2b2012;padding-bottom:4px}.feat .fh{font-variant:small-caps;letter-spacing:.06em;font-weight:bold;margin-top:12px;padding-bottom:2px;border-bottom:1px solid rgba(43,32,18,.55)}.feat .frow{display:grid;grid-template-columns:minmax(130px,26%) 1fr;gap:4px 16px;padding:6px 0;border-bottom:1px solid rgba(43,32,18,.25)}.feat .fn{font-weight:bold}.feat .fd{font-size:14px;line-height:1.45}@media(max-width:620px){.feat .frow{grid-template-columns:1fr;gap:1px}}
 .invgold{margin-top:10px;padding-top:6px;border-top:2px solid #2b2012}.invgold small{opacity:.7}
 @media(max-width:620px){.invtop{grid-template-columns:1fr 1fr}.invfig{display:none}.invbot{grid-template-columns:1fr}}
 @media(min-width:700px){.sh-two{grid-template-columns:1fr 1fr}}
@@ -1476,6 +1477,22 @@ function invHtml(c){
     '<div class="invbot"><div class="invcol">'+gear+'</div><div class="invbag"><b>Draagtas en voorraad</b>'+bagHtml+'</div></div>'+
     '<div class="invgold">💰 Geld: <b>'+esc(goldTxt||'—')+'</b>'+(pc&&pc.inventory&&pc.inventory.length?' <small>(levende inventory, bijgehouden door de DM)</small>':'')+'</div></div>';
 }
+/* Features & Traits als overzicht: links de naam van de trait, rechts de uitleg; kopjes (zoals een class of species) als scheidingsregel. Klapt dicht, in perkament-stijl zoals de Inventory. */
+function featHtml(c){
+  const raw=String(c.features||'').trim(); if(!raw) return '';
+  const rows=[];
+  raw.split(/\n/).forEach(line0=>{
+    const line=line0.trim(); if(!line) return;
+    const m=line.match(/^([^:]{2,80}):\s+(.+)$/);
+    if(m) rows.push({n:m[1].trim(),d:m[2].trim()});
+    else if(line.length<=42&&!/[.;]$/.test(line)) rows.push({h:line});
+    else if(/\.$/.test(line)&&line.length<=70) rows.push({n:line.replace(/\.$/,''),d:''});
+    else if(rows.length&&rows[rows.length-1].d!==undefined&&!rows[rows.length-1].h) rows[rows.length-1].d+=(rows[rows.length-1].d?' ':'')+line;
+    else rows.push({n:'',d:line});
+  });
+  const body=rows.map(r=>r.h?'<div class="fh">'+esc(r.h)+'</div>':'<div class="frow"><div class="fn">'+esc(r.n)+'</div><div class="fd">'+esc(r.d)+'</div></div>').join('');
+  return '<details class="card inv feat"><summary>Features &amp; Traits</summary><div class="fbody">'+body+'</div></details>';
+}
 function sheetHtml(c){
   const pb=pbOf(c), rage=sheetRage, list=rollList(c,rage), by=k=>list.find(r=>r.key===k);
   const live=liveHp(c), hpTxt=live?live.cur+' / '+live.max+(live.temp?' (+'+live.temp+')':''):(c.hpMax||'—');
@@ -1497,7 +1514,7 @@ function sheetHtml(c){
   if((c.attacks||[]).length) h+='<div class="card"><h3>Attacks</h3>'+c.attacks.map((a,i)=>rlRow(by('atk:'+i),'<b>'+esc(a.name)+'</b> <small>'+esc((a.damage?a.damage+' · ':'')+(a.notes||''))+'</small>')).join('')+'</div>';
   const txt=(t,v)=>v?'<details class="card"><summary>'+t+'</summary><div style="white-space:pre-wrap;font-size:14px">'+esc(v)+'</div></details>':'';
   const cur=c.currency||{};
-  h+=txt('Spellcasting',[c.spellInfo,c.spells].filter(Boolean).join('\n\n'))+txt('Features &amp; Traits',c.features)+invHtml(c)+txt('Languages &amp; Proficiencies',[c.languages,c.proficiencies].filter(Boolean).join('\n\n'))+txt('Uiterlijk',c.appearance)+txt('Persoonlijkheid',c.personality)+txt('Backstory',c.backstory)+((me&&c.player===me.name)?txt('Geheimen &amp; DM-haken (alleen jij ziet dit)',[c.secrets&&'Geheimen:\n'+c.secrets,c.dmHooks].filter(Boolean).join('\n\n')):'');
+  h+=txt('Spellcasting',[c.spellInfo,c.spells].filter(Boolean).join('\n\n'))+invHtml(c)+featHtml(c)+txt('Languages &amp; Proficiencies',[c.languages,c.proficiencies].filter(Boolean).join('\n\n'))+txt('Uiterlijk',c.appearance)+txt('Persoonlijkheid',c.personality)+txt('Backstory',c.backstory)+((me&&c.player===me.name)?txt('Geheimen &amp; DM-haken (alleen jij ziet dit)',[c.secrets&&'Geheimen:\n'+c.secrets,c.dmHooks].filter(Boolean).join('\n\n')):'');
   h+='<div class="row" style="margin-bottom:8px"><button class="b alt sm" data-edit="1">✎ Bewerk blad</button>'+(c.k&&c.k!=='_preview'?'<button class="b alt sm" data-dead="1">'+(c.dead?'↩ Weer actief maken':'☠ Gesneuveld / gepensioneerd')+'</button>':'')+'</div>';
   h+='<div id="rollpanel" class="card rollpanel"></div>';
   return h;
