@@ -151,6 +151,10 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .sh-strip small{display:block;color:var(--mute);font-size:11px}
 .sh-strip b{font-size:18px;color:var(--gold)}
 .sh-two{display:grid;grid-template-columns:1fr;gap:10px}
+.inv .invgrid{display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:10px}@media(min-width:560px){.inv .invgrid{grid-template-columns:1fr 1fr}}
+.invsl{display:flex;gap:8px;align-items:baseline;border:1px solid rgba(200,162,74,.4);border-radius:6px;padding:6px 10px;background:rgba(32,27,23,.7)}.invsl small{flex:none;min-width:58px;color:var(--gold);font-variant:small-caps;letter-spacing:.04em}.invsl span{font-size:14px}.invsl.empty span{color:var(--mute)}.invsl.mg{border-color:var(--gold);box-shadow:0 0 6px rgba(200,162,74,.35)}.invsl em{color:var(--mute);font-size:12px}
+.invbag table{width:100%;border-collapse:collapse;margin-top:4px;font-size:14px}.invbag th{text-align:left;color:var(--gold);font-weight:normal;font-size:12px;border-bottom:1px solid rgba(200,162,74,.5);padding:3px 4px}.invbag td{padding:4px;border-bottom:1px solid rgba(200,162,74,.18)}.invbag tr.mg td{color:var(--gold)}
+.invgold{margin-top:10px;padding-top:8px;border-top:1px solid rgba(200,162,74,.35)}
 @media(min-width:700px){.sh-two{grid-template-columns:1fr 1fr}}
 .rl{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:15px}
 .rl:hover,.rl.on{background:rgba(200,162,74,.18)}
@@ -558,7 +562,7 @@ function enterCampaign(id){
   <section class="tab" id="t-stand"><div class="scroll" id="standbox"></div></section>
   <section class="tab" id="t-canon"><div class="scroll" id="canonbox"></div></section>
   <section class="tab" id="t-set"><div class="scroll" id="setbox"></div></section>
-  <nav><button data-t="game">Spel</button><button data-t="diary">Dagboek</button><button data-t="map">Kaart</button><button data-t="more">Meer</button></nav>`;
+  <nav><button data-t="game">Spel</button><button data-t="diary">Dagboek</button><button data-t="sheet">Karakter</button><button data-t="map">Kaart</button><button data-t="more">Meer</button></nav>`;
   document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
   $('#oocsend').onclick=sendOoc;
   $('#thread').addEventListener('click',threadClick);
@@ -583,7 +587,7 @@ function enterCampaign(id){
 function setTab(t){
   tab=t;
   document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id==='t-'+t));
-  const navT=(t==='stand'||t==='canon'||t==='set'||t==='sheet')?'more':t;
+  const navT=(t==='stand'||t==='canon'||t==='set')?'more':t;
   document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.t===navT));
   ({game:renderGame,ooc:renderOoc,diary:renderDiary,map:renderMap,more:renderMore,sheet:renderSheetTab,stand:renderStand,canon:renderCanon,set:renderSet})[t]();
 }
@@ -591,7 +595,7 @@ document.addEventListener('click',e=>{const g=e.target.closest('[data-goto]'); i
 const BACK='<button class="b alt sm" data-goto="more" style="margin-bottom:8px">‹ Meer</button>';
 function renderMore(){
   if(screen!=='camp') return;
-  $('#morebox').innerHTML='<button class="b alt more-btn" data-goto="sheet">🧾 Karakterblad (en je worp uitrekenen)</button><button class="b alt more-btn" data-goto="stand">📜 Stand en versies</button><button class="b alt more-btn" data-goto="canon">📚 Canon (documenten)</button><button class="b alt more-btn" data-goto="set">⚙ Instellingen en verbruik</button>';
+  $('#morebox').innerHTML='<button class="b alt more-btn" data-goto="stand">📜 Stand en versies</button><button class="b alt more-btn" data-goto="canon">📚 Canon (documenten)</button><button class="b alt more-btn" data-goto="set">⚙ Instellingen en verbruik</button>';
 }
 
 /* ---------- spel ---------- */
@@ -1432,6 +1436,30 @@ function liveHp(c){
 }
 function dot(p){return p===2?'◎':p===1?'●':'○'}
 function rlRow(r,extra){return '<div class="rl'+(sheetRoll===r.key?' on':'')+'" data-roll="'+r.key+'"><span>'+extra+'</span><b>'+sgn(r.bonus)+'</b></div>';}
+/* Uitrusting als overzicht: vakken op het lijf (Armor, Shield, wapens, Head, Neck, Back, Hands, Feet, Rings) en een tabel voor de rest. Bron: de levende inventory in de Stand (door de DM bijgehouden), anders de tekst van het blad. Magische voorwerpen ("Naam [magisch: effect]") worden uitgelicht. */
+function invHtml(c){
+  const st=getState(), pc=(st.pcs||{})[c.name]||null;
+  let items=pc&&Array.isArray(pc.inventory)&&pc.inventory.length?pc.inventory.map(itemText):String(c.equipment||'').split(/[;\n]+/);
+  items=items.map(s=>String(s).trim()).filter(Boolean);
+  const cur=c.currency||{}; let gold=items.filter(s=>/^\d+\s*(gp|sp|cp|pp|ep)\b/i.test(s)||/\b\d+\s*gp\b/i.test(s));
+  items=items.filter(s=>gold.indexOf(s)<0);
+  const goldTxt=gold.length?gold.join(', '):['pp','gp','ep','sp','cp'].filter(x=>cur[x]).map(x=>cur[x]+' '+x.toUpperCase()).join(', ');
+  const parse=s=>{const m=s.match(/^(.*?)\s*\[(?:magisch:?\s*)?([^\]]*)\]\s*$/i); const magic=/\[\s*magisch/i.test(s); return m?{name:m[1].trim(),note:m[2].trim(),magic:magic}:{name:s,note:'',magic:false}};
+  const slots={armor:[],shield:[],melee:[],ranged:[],head:[],neck:[],back:[],hands:[],feet:[],ring:[]}, bag=[];
+  const R={armor:/\b(armou?r|mail|hauberk|mithril|chain shirt|breastplate|hemd|brigandine)\b/i,shield:/\b(shield|schild|buckler)\b/i,ranged:/(bow|boog|sling)/i,melee:/(axe|bijl|sword|zwaard|spear|speer|dagger|dolk|adarion|mace|hammer|blade|lemmet|rapier|club|knots|lance|javelin|staff|scimitar|flail|pike|glaive|halberd)/i,head:/\b(helm|helmet|hood|capuchon|circlet|diadeem)\b/i,neck:/\b(amulet|pendant|necklace|ketting|hanger)\b/i,back:/\b(cloak|mantel|cape)\b/i,hands:/\b(gloves?|handschoenen|gauntlets?)\b/i,feet:/\b(boots?|laarzen|shoes)\b/i,ring:/\bring\b/i};
+  const ammo=/\b(arrows?|pijlen|bolts?|quiver|koker)\b/i, pack=/\b(pack|backpack|rations?|bedroll|tinderbox|torches|waterskin|rope|kit|clothes|dice|lembas|oil flask)\b/i;
+  items.forEach(raw=>{const it=parse(raw), n=it.name;
+    let k=null;
+    if(ammo.test(n)||pack.test(n)) k=null;
+    else for(const key of ['shield','armor','ranged','melee','head','neck','back','hands','feet','ring']) if(R[key].test(n)){k=key;break;}
+    const cap={armor:1,shield:1,melee:2,ranged:1,head:1,neck:1,back:1,hands:1,feet:1,ring:2}[k];
+    if(k&&slots[k].length<cap) slots[k].push(it); else bag.push(it);});
+  const sl=(label,key,n)=>{const l=slots[key]; let o=''; for(let i=0;i<n;i++){const it=l[i]; o+='<div class="invsl'+(it?'':' empty')+(it&&it.magic?' mg':'')+'"><small>'+label+(n>1?' '+(i+1):'')+'</small><span>'+(it?(it.magic?'✨ ':'')+esc(it.name)+(it.note?' <em>('+esc(it.note)+')</em>':''):'—')+'</span></div>';} return o;};
+  let h='<div class="card inv"><h3>Uitrusting</h3><div class="invgrid">'+sl('Armor','armor',1)+sl('Shield','shield',1)+sl('Melee','melee',2)+sl('Ranged','ranged',1)+sl('Head','head',1)+sl('Neck','neck',1)+sl('Back','back',1)+sl('Hands','hands',1)+sl('Feet','feet',1)+sl('Ring','ring',2)+'</div>';
+  h+='<div class="invbag"><b>Draagtas en voorraad</b>'+(bag.length?'<table><thead><tr><th>Voorwerp</th><th>Opmerking</th></tr></thead><tbody>'+bag.map(it=>'<tr'+(it.magic?' class="mg"':'')+'><td>'+(it.magic?'✨ ':'')+esc(it.name)+'</td><td>'+esc(it.note)+'</td></tr>').join('')+'</tbody></table>':'<div style="color:var(--mute);font-size:13px">Niets extra.</div>')+'</div>';
+  h+='<div class="invgold">💰 Geld: <b>'+esc(goldTxt||'—')+'</b>'+(pc&&pc.inventory&&pc.inventory.length?' <small style="color:var(--mute)">(levende inventory, bijgehouden door de DM)</small>':'')+'</div></div>';
+  return h;
+}
 function sheetHtml(c){
   const pb=pbOf(c), rage=sheetRage, list=rollList(c,rage), by=k=>list.find(r=>r.key===k);
   const live=liveHp(c), hpTxt=live?live.cur+' / '+live.max+(live.temp?' (+'+live.temp+')':''):(c.hpMax||'—');
@@ -1453,7 +1481,7 @@ function sheetHtml(c){
   if((c.attacks||[]).length) h+='<div class="card"><h3>Attacks</h3>'+c.attacks.map((a,i)=>rlRow(by('atk:'+i),'<b>'+esc(a.name)+'</b> <small>'+esc((a.damage?a.damage+' · ':'')+(a.notes||''))+'</small>')).join('')+'</div>';
   const txt=(t,v)=>v?'<details class="card"><summary>'+t+'</summary><div style="white-space:pre-wrap;font-size:14px">'+esc(v)+'</div></details>':'';
   const cur=c.currency||{};
-  h+=txt('Spellcasting',[c.spellInfo,c.spells].filter(Boolean).join('\n\n'))+txt('Features &amp; Traits',c.features)+txt('Uitrusting',(c.equipment||'')+'\n\nGeld: '+['pp','gp','ep','sp','cp'].filter(x=>cur[x]).map(x=>cur[x]+' '+x.toUpperCase()).join(', '))+txt('Languages &amp; Proficiencies',[c.languages,c.proficiencies].filter(Boolean).join('\n\n'))+txt('Uiterlijk',c.appearance)+txt('Persoonlijkheid',c.personality)+txt('Backstory',c.backstory)+((me&&c.player===me.name)?txt('Geheimen &amp; DM-haken (alleen jij ziet dit)',[c.secrets&&'Geheimen:\n'+c.secrets,c.dmHooks].filter(Boolean).join('\n\n')):'');
+  h+=txt('Spellcasting',[c.spellInfo,c.spells].filter(Boolean).join('\n\n'))+txt('Features &amp; Traits',c.features)+invHtml(c)+txt('Languages &amp; Proficiencies',[c.languages,c.proficiencies].filter(Boolean).join('\n\n'))+txt('Uiterlijk',c.appearance)+txt('Persoonlijkheid',c.personality)+txt('Backstory',c.backstory)+((me&&c.player===me.name)?txt('Geheimen &amp; DM-haken (alleen jij ziet dit)',[c.secrets&&'Geheimen:\n'+c.secrets,c.dmHooks].filter(Boolean).join('\n\n')):'');
   h+='<div class="row" style="margin-bottom:8px"><button class="b alt sm" data-edit="1">✎ Bewerk blad</button>'+(c.k&&c.k!=='_preview'?'<button class="b alt sm" data-dead="1">'+(c.dead?'↩ Weer actief maken':'☠ Gesneuveld / gepensioneerd')+'</button>':'')+'</div>';
   h+='<div id="rollpanel" class="card rollpanel"></div>';
   return h;
@@ -1517,6 +1545,8 @@ function renderSheet(el,prefix){
     el._sheetWired=true;
     el.addEventListener('click',async e=>{
       const t=e.target, q=s=>t.closest(s);
+      /* Klik ergens anders in het blad: de worp-popup onderin sluit weer. */
+      if(sheetRoll&&!q('[data-roll]')&&!q('#rollpanel')){ sheetRoll=''; el.querySelectorAll('.rl.on').forEach(x=>x.classList.remove('on')); const rp=el.querySelector('#rollpanel'); if(rp) rp.style.display='none'; }
       if(q('[data-sk]')){sheetKey=q('[data-sk]').dataset.sk; sheetEdit=false; sheetRoll=''; return renderSheet(el,prefix);}
       if(q('[data-newchar]')){sheetEdit='new'; return renderSheet(el,prefix);}
       if(q('[data-edit]')){sheetEdit=true; return renderSheet(el,prefix);}
@@ -1552,7 +1582,7 @@ function menuChars(){
 }
 function renderSheetTab(){
   if(screen!=='camp') return;
-  renderSheet($('#sheetbox'),BACK);
+  renderSheet($('#sheetbox'),'');
 }
 function sheetText(c){
   const pb=pbOf(c);
