@@ -1294,7 +1294,13 @@ async function renderDiary(){
   const wl=Object.values(wQuests||{}).filter(x=>x&&x.title&&['active','completed','failed','expired','changed'].indexOf(x.status)>=0);
   const wlab={active:'',completed:'done',failed:'done',expired:'done',changed:''}, wtxt={completed:' (afgerond)',failed:' (mislukt)',expired:' (verlopen)',changed:' (veranderd)'};
   const wq=wl.map(x=>'<div class="q '+(wlab[x.status]||'')+'">'+esc(x.title)+esc(wtxt[x.status]||'')+'</div>').join('');
-  const known=Object.values(wBack||{}).map(b=>{const rv=b.revealed||{};const ls=(b.layers||[]).filter(l=>rv[l.n]).map(l=>'<div class="q">'+esc(l.know||'')+'</div>').join('');if(!ls)return '';const nm=(S.npcs&&S.npcs[b.npc]&&S.npcs[b.npc].name)||b.npc;return '<div class="card"><b>'+esc(nm)+'</b>'+ls+'</div>'}).join('');
+  /* Backstorylagen: een eigen kaartje per NPC alleen voor gerekruteerde companions; van de anderen komen de feiten bij elkaar, met naam ervoor, zodat niet zichtbaar is wie een mogelijke companion is (aanwijzing Gerben, 2026-11-17). */
+  const known=(function(){ let own='', rest='';
+    Object.values(wBack||{}).forEach(b=>{ const rv=b.revealed||{}, ls=(b.layers||[]).filter(l=>rv[l.n]); if(!ls.length) return;
+      const wn=wNpcs&&wNpcs[b.npc], nm=(wn&&wn.name)||(S.npcs&&S.npcs[b.npc]&&S.npcs[b.npc].name)||b.npc;
+      if(wn&&wn.status==='recruited') own+='<div class="card"><b>'+esc(nm)+'</b>'+ls.map(l=>'<div class="q">'+esc(l.know||'')+'</div>').join('')+'</div>';
+      else rest+=ls.map(l=>'<div class="q"><b>'+esc(nm)+':</b> '+esc(l.know||'')+'</div>').join(''); });
+    return own+(rest?'<div class="card"><b>Verder weet je</b>'+rest+'</div>':''); })();
   const wdate=(wCal&&wCal.y)?'<div class="card"><small style="color:var(--mute)">Datum in het verhaal</small><br>'+wCal.d+' '+MOPN[wCal.m]+' '+wCal.y+' (Derde Era)'+(wCal.tod?' · '+esc(wCal.tod):'')+'</div>':'';
   const tabs=[['sum','Samenvatting'],['opd','Opdrachten'],['weet','Wat je weet'],['pers','Personen'],['log','Logboek']];
   const dt=tabs.some(t=>t[0]===diaryTab)?diaryTab:'sum';
