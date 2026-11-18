@@ -1460,7 +1460,7 @@ function invHtml(c){
   const cur=c.currency||{}, gold=items.filter(s=>/^\d+\s*(gp|sp|cp|pp|ep)\b/i.test(s)||/\b\d+\s*gp\b/i.test(s));
   items=items.filter(s=>gold.indexOf(s)<0);
   const goldTxt=gold.length?gold.join(', '):['pp','gp','ep','sp','cp'].filter(x=>cur[x]).map(x=>cur[x]+' '+x.toUpperCase()).join(', ');
-  const parse=s=>{const mg=s.match(/^(.*?)\s*\[\s*(magisch)?:?\s*([^\]]*)\]\s*$/i); if(mg) return {name:mg[1].trim(),note:mg[3].trim(),magic:!!mg[2]}; const pr=s.match(/^(.*?)\s*\(([^)]*)\)\s*$/); if(pr&&/,/.test(pr[2])&&/(pack|kit|set)/i.test(pr[1])) return {name:pr[1].trim(),note:'',parts:pr[2].split(',').map(x=>x.trim()).filter(Boolean),magic:false}; return {name:s,note:'',magic:false}};
+  const parse=s=>{const mg=s.match(/^(.*?)\s*\[\s*(magisch)?:?\s*([^\]]*)\]\s*$/i); if(mg) return {name:mg[1].trim(),note:mg[3].trim(),magic:!!mg[2]}; const pr=s.match(/^(.*?)\s*\(([^)]*)\)\s*$/); if(pr&&/,/.test(pr[2])&&/(pack|kit|set)/i.test(pr[1])) return {name:pr[1].trim(),note:'',parts:pr[2].split(',').map(x=>x.trim()).filter(Boolean),magic:false}; const q=s.match(/^(.*?)\s*\(([^)]*)\)\s*\.?\s*(.*)$/); if(q&&q[1]) return {name:q[1].trim(),note:[q[2],q[3]].filter(Boolean).join('. '),magic:false}; const d=s.match(/^(.*?)\.\s+(.+)$/); if(d) return {name:d[1].trim(),note:d[2].trim(),magic:false}; return {name:s,note:'',magic:false}};
   /* Explorer's Pack e.d.: uitsplitsen in de losse onderdelen (eerst uit het blad, anders de standaardinhoud van de 2024-regels). */
   const sheetPack=(String(c.equipment||'').match(/pack\s*\(([^)]*)\)/i)||[])[1];
   const DEF={explorer:['Backpack','Bedroll','2 Oil Flasks','10 dagen Rations','50 ft Rope','Tinderbox','10 Torches','Waterskin']};
