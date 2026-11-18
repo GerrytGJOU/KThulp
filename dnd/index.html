@@ -1468,7 +1468,7 @@ function invHtml(c){
   const R={shield:/(shield|schild|buckler)/i,armor:/\b(armou?r|hauberk|mithril|chain shirt|breastplate|hemd|brigandine)\b|\bmail\b/i,ranged:/(bow|boog|sling)/i,melee:/(axe|bijl|sword|zwaard|spear|speer|dagger|dolk|adarion|mace|hammer|blade|lemmet|rapier|club|knots|lance|javelin|staff|scimitar|flail|pike|glaive|halberd)/i,head:/\b(helm|helmet|hood|capuchon|circlet|diadeem|hat|hoed)\b/i,eyes:/\b(spectacles|lens|bril|goggles)\b/i,neck:/\b(amulet|pendant|necklace|ketting|hanger)\b/i,shoulders:/\b(pauldrons?|schoudersieraad|epaulettes?)\b/i,back:/\b(cloak|mantel|cape)\b/i,torso:/\b(clothes|clothing|kleding|tunic|tuniek|robe|gewaad|jerkin|vest|shirt)\b/i,arms:/\b(bracers?|vambraces?|armband|polsband)\b/i,hands:/\b(gloves?|handschoenen|gauntlets?)\b/i,waist:/\b(belt|gordel|riem|sash)\b/i,ring:/\bring\b/i,feet:/\b(boots?|laarzen|shoes|sandals)\b/i};
   const ammo=/\b(arrows?|pijlen|bolts?|quiver|koker)\b/i;
   const cap={armor:1,shield:1,melee:2,ranged:1,head:1,eyes:1,neck:1,shoulders:1,back:1,torso:1,arms:1,hands:1,waist:1,ring:2,feet:1};
-  const place=it=>{const n=it.name; let k=null;
+  const place=it=>{const n=String(it.name).split(/\.\s/)[0].replace(/\([^)]*\)/g,' '); let k=null; /* alleen de naam telt, niet de toelichting ("Geen armor of shield") */
     if(!ammo.test(n)&&!/\b(pack|kit)\b/i.test(n)) for(const key of ['shield','armor','ranged','melee','head','eyes','neck','shoulders','back','torso','arms','hands','waist','ring','feet']) if(R[key].test(n)){k=key;break;}
     if(k&&slots[k].length<cap[k]) slots[k].push(it); else bag.push(it);};
   items.forEach(raw=>{const it=parse(raw);
