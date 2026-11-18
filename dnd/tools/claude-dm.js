@@ -142,6 +142,7 @@ function parseDM(o, names, chars) {
   o.speakers = Array.isArray(o.speakers) ? o.speakers.filter(s => typeof s === "string").slice(0, 4) : [];
   o.newNpcs = Array.isArray(o.newNpcs) ? o.newNpcs.filter(n => n && typeof n.name === "string" && n.name.trim()) : [];
   o.rolls = Array.isArray(o.rolls) ? o.rolls.filter(r => r && typeof r.who === "string" && typeof r.what === "string" && r.total != null && isFinite(Number(r.total))).slice(0, 12).map(r => ({ who: r.who.slice(0, 40), what: r.what.slice(0, 40), natural: (r.natural != null && isFinite(Number(r.natural))) ? Number(r.natural) : null, mod: isFinite(Number(r.mod)) ? Number(r.mod) : 0, total: Number(r.total), dice: r.dice ? String(r.dice).slice(0, 20) : "", result: r.result ? String(r.result).slice(0, 30) : "" })) : [];
+  o.extraLocations = (Array.isArray(o.extraLocations) ? o.extraLocations : []).filter(x => x && typeof x.name === "string" && x.name.trim()).slice(0, 3).map(x => ({ name: x.name.trim().slice(0, 80), description: String(x.description || "").slice(0, 400), visual: String(x.visual || "").slice(0, 1500) }));
   const lc = o.location; o.location = (lc && typeof lc.name === "string" && lc.name.trim()) ? { name: lc.name.trim().slice(0, 80), description: String(lc.description || "").slice(0, 400), visual: String(lc.visual || "").slice(0, 1500) } : null;
   const res = {}; const dn = o.dmNotes;
   if (dn && typeof dn === "object" && !Array.isArray(dn)) for (const [k, v] of Object.entries(dn).slice(0, 30)) { const kk = String(k).toLowerCase().replace(/[^a-z0-9_]+/g, "_").slice(0, 40); if (!kk) continue; if (v === null || v === "") res[kk] = null; else if (typeof v === "string" || typeof v === "number") res[kk] = String(v).slice(0, 500); }
@@ -184,6 +185,7 @@ function cmdApply(cid, file, flags) {
   const nk = pushId(); msgKeys.push(nk);
   out.logEntries.forEach(l => { if (l && l.fact) { const k = pushId(); logKeys.push(k); up[cp(cid, "log/" + k)] = { fact: String(l.fact), inGameDate: String(l.inGameDate || ""), round: round + 1, t: now }; } });
   out.newNpcs.forEach(n => { const k = slug(n.name); if (!npcs[k]) up["npcs/" + k] = { name: n.name.trim(), visual: String(n.visual || "").slice(0, 1500), t: now, from: cid }; });
+  out.extraLocations.forEach(x => { const xk = slug(x.name); if (xk && !locs[xk] && !up["locations/" + xk]) up["locations/" + xk] = { name: x.name, desc: x.description, visual: x.visual, t: now, from: cid }; });
   if (out.location) { const lk = slug(out.location.name); if (!locs[lk]) { up["locations/" + lk] = { name: out.location.name, desc: out.location.description, visual: out.location.visual, t: now, from: cid }; nm.newLoc = lk; } else nm.loc = lk; up[cp(cid, "scene")] = lk; }
   up[cp(cid, "messages/" + nk)] = nm;
   const world = get("/dnd/" + cp(cid, "world"));

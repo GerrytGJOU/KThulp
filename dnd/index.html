@@ -51,7 +51,7 @@ nav button.on{color:var(--gold);border-top:2px solid var(--gold);margin-top:-1px
 .pts{display:flex;flex-direction:column;gap:6px;flex:none}
 .pt{width:64px;height:64px;object-fit:cover;object-position:top;border-radius:50%;border:2px solid var(--gold);box-shadow:0 2px 6px rgba(0,0,0,.6);cursor:pointer;background:#000}
 .mtxt{flex:1;min-width:0}
-.locpic{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:6px;margin:0 0 10px;cursor:pointer;border:1px solid #9c7f3c}
+.locpic{display:block;width:100%;max-width:340px;height:150px;object-fit:cover;border-radius:6px;margin:0 0 10px;cursor:pointer;border:1px solid #9c7f3c}
 .dtabs{display:flex;gap:6px;overflow-x:auto;margin:0 0 12px;padding-bottom:2px;position:sticky;top:0;z-index:2;background:linear-gradient(180deg,rgba(15,13,11,.95) 80%,transparent)}.dtabs button{flex:none;background:rgba(32,27,23,.82);color:var(--mute);border:1px solid #4a3d30;border-radius:16px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer}.dtabs button.on{color:#1b1307;background:var(--gold);border-color:var(--gold)}
 .mrow{margin:8px 0}.mpar{margin:8px 0}.msg .mrow:first-child,.msg .mpar:first-child{margin-top:0}
 .pts{align-items:center;width:64px}.ptn{font-size:11px;line-height:1.1;color:#6a4a12;text-align:center;word-break:break-word}
@@ -832,7 +832,7 @@ Regels:
 - Doet een PC iets waarbij een check hoort (waarnemen, sluipen, overtuigen, ...) maar staat er geen [worp: ...] in zijn actie, dan: (a) vraag de check via nextTurn.checks als er spanning of risico is, of (b) gebruik bij een kleine waarneming zijn passieve score (10 + modifier uit het karakterblad) en noem die in de tekst, bv. \"(passieve Perception 13)\". Negeer zo'n actie nooit en geef niet stilzwijgend alleen de uitkomst van de speler die wel rolde.
 - INFORMATIE PER UITKOMST: bij een waarnemings-, kennis- of onderzoekscheck hangt de hoeveelheid informatie af van het totaal, in lagen: een lage uitkomst geeft het oppervlakkige (wat iedereen ziet), een gemiddelde uitkomst een bruikbaar detail, een hoge uitkomst het verborgen of veelzeggende detail (een wapen, een insigne, een accent, een verborgen gebaar). Bedenk de lagen vooraf en geef elke speler precies de lagen die zijn totaal verdient; verklap de DC's niet.
 - Gevecht: zet "initiative" in de Stand met "active" = wie nu aan de beurt is en "order" met naam, init en enemy:true voor vijanden; werk "active" bij elke beurt bij en zet initiative op null zodra het gevecht voorbij is.
-- Locatie: geef "location" (name, description = 1-2 Nederlandse zinnen, visual = Engelse beschrijving voor een landschaps- of interieurillustratie) zodra de PC's op een andere plek zijn, een plek voor het eerst beschreven wordt, of je een bekende plek weer uitgebreid beschrijft (gebruik dan exact dezelfde naam als eerder, dan verschijnt de bestaande afbeelding bij je bericht); laat het anders weg. Houd inGame.location gelijk aan location.name.
+- Locatie: geef "location" (name, description = 1-2 Nederlandse zinnen, visual = Engelse beschrijving voor een landschaps- of interieurillustratie) zodra de PC's op een andere plek zijn, een plek voor het eerst beschreven wordt, of je een bekende plek weer uitgebreid beschrijft (gebruik dan exact dezelfde naam als eerder, dan verschijnt de bestaande afbeelding bij je bericht); laat het anders weg. Houd inGame.location gelijk aan location.name. Staan de PC's op verschillende plekken: zet bij elke PC pcs.<naam>.location op de exacte naam van een bekend gebied (zonder toevoegsels in haakjes, die mogen erachter), dan toont de app per plek een eigen kaart met afbeelding; is de tweede plek nieuw, geef die dan mee in "extraLocations": [{name,description,visual}] (zelfde velden als location; verandert de scène niet).
 - HERINNERINGEN van de spelers zijn bindend en gaan voor op je eigen aannames.
 - logEntries: korte feiten van wat NU echt gebeurd is.
 Antwoord ALLEEN met JSON in dit formaat:
@@ -898,6 +898,7 @@ function parseDM(txt,names){
   o.logEntries=Array.isArray(o.logEntries)?o.logEntries:[];
   o.rolls=Array.isArray(o.rolls)?o.rolls.filter(r=>r&&typeof r.who==='string'&&typeof r.what==='string'&&r.total!=null&&isFinite(Number(r.total))).slice(0,12).map(r=>({who:r.who.slice(0,40),what:r.what.slice(0,40),natural:(r.natural!=null&&isFinite(Number(r.natural)))?Number(r.natural):null,mod:isFinite(Number(r.mod))?Number(r.mod):0,total:Number(r.total),dice:r.dice?String(r.dice).slice(0,20):'',result:r.result?String(r.result).slice(0,30):''})):[];
   { const dn=o.dmNotes, res={}; if(dn&&typeof dn==='object'&&!Array.isArray(dn)) for(const [k,v] of Object.entries(dn).slice(0,30)){ const kk=String(k).toLowerCase().replace(/[^a-z0-9_]+/g,'_').slice(0,40); if(!kk) continue; if(v===null||v==='') res[kk]=null; else if(typeof v==='string'||typeof v==='number') res[kk]=String(v).slice(0,500); } o.dmNotes=res; }
+  o.extraLocations=(Array.isArray(o.extraLocations)?o.extraLocations:[]).filter(x=>x&&typeof x.name==='string'&&x.name.trim()).slice(0,3).map(x=>({name:x.name.trim().slice(0,80),description:String(x.description||'').slice(0,400),visual:String(x.visual||'').slice(0,1500)}));
   { const lc=o.location; o.location=(lc&&typeof lc.name==='string'&&lc.name.trim())?{name:lc.name.trim().slice(0,80),description:String(lc.description||'').slice(0,400),visual:String(lc.visual||'').slice(0,1500)}:null; }
   o.worldDelta=(o.worldDelta&&typeof o.worldDelta==='object'&&!Array.isArray(o.worldDelta))?o.worldDelta:null;
   o.place=(typeof o.place==='string'&&window.DNDMap&&DNDMap.byId[o.place])?o.place:null;
@@ -988,6 +989,7 @@ ${window.DNDMap?DNDMap.ids.join(', '):''}
     out.logEntries.forEach(l=>{if(l&&l.fact){const k=db.ref(cp('log',C)).push().key;logKeys.push(k);up[cp('log/'+k,C)]={fact:String(l.fact),inGameDate:String(l.inGameDate||''),round:round+1,t:now}}});
     out.newNpcs.forEach(n=>{const k=slug(n.name); if(!npcs[k]) up['dnd/npcs/'+k]={name:n.name.trim(),visual:String(n.visual||'').slice(0,1500),t:now,from:C}});
     if(out.location){const lk=slug(out.location.name); if(!locs[lk]){up['dnd/locations/'+lk]={name:out.location.name,desc:out.location.description,visual:out.location.visual,t:now,from:C}; nm.newLoc=lk;} else nm.loc=lk; up[cp('scene',C)]=lk;}
+    out.extraLocations.forEach(x=>{const xk=slug(x.name); if(xk&&!locs[xk]&&!up['dnd/locations/'+xk]) up['dnd/locations/'+xk]={name:x.name,desc:x.description,visual:x.visual,t:now,from:C};});
     if(window.DNDMap){
       try{
         const mapS=(await db.ref(cp('map',C)).get()).val()||null, nc=(out._wp&&out._wp.plan&&out._wp.plan.calendar)||(world&&world.calendar)||null;
@@ -1134,8 +1136,28 @@ function makeLocPrompt(n){
   return STYLE+"\nWide landscape illustration (3:2) of the location "+n.name+": "+(n.visual||'(no description yet)')+"\nNo prominent characters unless described. If this is a place from Tolkien's books, follow the written descriptions in the books.\n"+LOCSTYLE_END;
 }
 function sceneSlug(){const S=getState(); return sceneKey||(S.inGame&&S.inGame.location?slug(S.inGame.location):'');}
+/* zoek bij een vrije plaatsnaam ("Rivendell, de stallen (achter de smidse)") het bekende gebied met afbeelding: eerst exact, dan zonder haakjes, dan de langste bekende naam die erin voorkomt */
+function findLoc(text){
+  const t=String(text||'').trim(); if(!t) return null;
+  const tries=[t,t.replace(/\([^)]*\)/g,'').trim()];
+  for(const x of tries){const k=slug(x); if(k&&locs[k]) return [k,locs[k]];}
+  const low=tries[1].toLowerCase(); let best=null;
+  Object.entries(locs).forEach(([k,l])=>{const n=String(l.name||'').toLowerCase(); if(n.length>=4&&(low.includes(n)||n.includes(low))&&(!best||n.length>best[1].name.length)) best=[k,l];});
+  return best;
+}
+/* spelers op verschillende plaatsen: per plaats een kaart met de namen van wie er is */
+function splitPlaces(S){
+  const groups={};
+  Object.entries(S.pcs||{}).forEach(([nm,p])=>{if(!p||!p.location) return; const key=String(p.location).replace(/\([^)]*\)/g,'').trim().toLowerCase(); (groups[key]=groups[key]||{text:p.location,who:[]}).who.push(p.name||nm);});
+  return Object.values(groups);
+}
 function locationCard(){
-  const S=getState(), k=sceneSlug(), l=locs[k], name=l?l.name:((S.inGame&&S.inGame.location)||'');
+  const S=getState(), places=splitPlaces(S);
+  if(places.length>1){
+    return places.map(g=>{const f=findLoc(g.text), l=f&&f[1], k=f&&f[0];
+      return '<div class="card"><h3>📍 '+esc(l?l.name:g.text)+'</h3><div style="font-size:13px;color:var(--mute)">'+esc(g.who.join(' & '))+(l&&l.name!==g.text?' — '+esc(g.text):'')+'</div>'+(l&&l.img?'<img class="locimg" src="'+l.img+'" data-zoom="loc:'+k+'" alt="">':'')+(l&&l.desc?'<div style="font-size:14px">'+esc(l.desc)+'</div>':'')+'</div>';}).join('');
+  }
+  const k=sceneSlug(), l=locs[k], name=l?l.name:((S.inGame&&S.inGame.location)||'');
   if(!name) return '';
   return '<div class="card"><h3>📍 '+esc(name)+'</h3>'+(l&&l.img?'<img class="locimg" src="'+l.img+'" data-zoom="loc:'+k+'" alt="">':'')+(l&&l.desc?'<div style="font-size:14px">'+esc(l.desc)+'</div>':'')+'</div>';
 }
