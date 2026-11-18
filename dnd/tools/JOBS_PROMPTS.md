@@ -7,6 +7,7 @@ Geen geheimen in dit bestand. De wachtrij zelf (`world/jobs`) en de runner (`dnd
 Welke prompt wanneer:
 - **Prompt A: portretten** via de Chrome-plugin en ChatGPT (portretjobs, ook voor Tolkien-figuren en nieuwe NPC's).
 - **Prompt B: statblocks en dossiers** (jobs van type `statblock` en `profile`; geen browser nodig).
+- **Prompt C: itemiconen bouwen** (eenmalig, is gedaan op 2026-11-17) en **Prompt D: nieuwe itemiconen bijhouden** (telkens als er nieuwe unieke voorwerpen zijn).
 
 Voor beide geldt: elk gesprek wordt na afloop gearchiveerd. Alles wat bewaard moet blijven staat dus in de database of in de job-records, niet alleen in de chat; zie de laatste alinea van elke prompt.
 
@@ -121,3 +122,24 @@ REGELS
 - Het gesprek wordt na afloop gearchiveerd: leg alles wat bewaard moet blijven vast in de repo (catalogus, tools, JOBS_PROMPTS.md) en sluit af met een korte eindrapportage: aantal groepen en iconen, welke voorwerpen nog alleen een categorie-icoon hebben, wat nog open staat.
 - Ruim je eigen ChatGPT-gesprekken en Chrome-tabs op (archiveren, niet verwijderen) en laat geen testbestanden in de repo achter.
 ```
+
+---
+
+## Prompt D: nieuwe itemiconen bijhouden
+
+Voor een **nieuw Claude Code-gesprek** (werkmap: de KThulp-repo), zodra er nieuwe voorwerpen zijn die nog alleen een categorie-icoon hebben (unieke of magische voorwerpen met een eigen naam, of een gewoon voorwerp dat de catalogus nog niet kent). De catalogus is `dnd/items.js`, de iconen staan in `dnd/assets/items/` (128 x 128, .webp, witte achtergrond), het hulpmiddel is `dnd/tools/items.js`. Zie ook de opmerking onderaan over het inhoudsfilter van ChatGPT.
+
+```
+Je houdt de itemiconen van de Midden-aarde D&D-app bij (KThulp-repo, map dnd/). Communiceer in het Nederlands. Lees eerst CLAUDE.md (repo-root) en de kop van dnd/tools/items.js. Werkwijze met ChatGPT via de Chrome-plugin zoals Prompt A in dnd/tools/JOBS_PROMPTS.md: Chrome-tools in één ToolSearch laden, een eigen nieuwe tab, chatgpt.com; bij login, CAPTCHA of betaalmuur STOPPEN en mij vragen; typ nooit wachtwoorden. Je hebt mijn nadrukkelijke toestemming om uitsluitend de door ChatGPT gegenereerde afbeeldingen te downloaden (blob-link met anchor als er geen downloadknop is). Let op het dagelijkse beeldlimiet: stop dan en meld wanneer het weer kan.
+
+1. node dnd/tools/items.js todo  (alle voorwerpen die alleen een categorie-icoon hebben, op frequentie). Kijk kritisch: een gewoon voorwerp dat gewoon een ontbrekend trefwoord heeft hoeft geen nieuw icoon, maar een trefwoord in een bestaande groep (pas dan de regex in dnd/items.js aan en test met node dnd/tools/items.js todo). Alleen echt unieke of magische voorwerpen en gewone voorwerpen zonder passende groep krijgen een eigen icoon.
+2. node dnd/tools/items.js sheet-prompt [n]  schrijft een kant-en-klare Engelse ChatGPT-prompt (blad van maximaal 16 iconen) naar dnd/_prive/itemsheets/ en toont de id's. Plak de tekst EXACT in een nieuw ChatGPT-gesprek (typ een enkele alinea; een regeleinde verstuurt het bericht). Controleer het blad: één voorwerp per cel, geen tekst in het beeld, juiste vorm en aantal onderdelen, stijl als de bestaande iconen (zie dnd/assets/items/). Maximaal 2 herkansingen.
+3. Download het blad naar dnd/_prive/itemsheets/ (git-genegeerd) en snijd het: python -I dnd/tools/items-slice.py <blad.png> <id1,...,id16>  ('-' voor een lege plek). Bekijk de uitkomst; stipjes of afgesneden randen: snij opnieuw of pas het blad aan.
+4. Voeg per icoon een groep toe: node dnd/tools/items.js add <id> <categorie> <trefwoorden> <id>.webp  (trefwoorden = regex zonder accenten op Engelse en Nederlandse namen, enkelvoud en meervoud; onderscheid uniek/gewoon doet de volgorde in dnd/items.js). Daarna: node dnd/tools/items.js check  (moet "Alles in orde" geven) en node dnd/tools/items.js todo  (de nieuwe voorwerpen horen er niet meer in te staan).
+5. Controleer in de browser dat het icoon verschijnt in de Inventory (Karakter-tabblad). Zet dnd/items.js?v= in dnd/index.html één hoger (cachebuster).
+
+REGELS: wijzig geen canon en geen spelstatus, schrijf niets naar Firebase. Commit of push niets zonder mijn akkoord; toon eerst een overzicht (aantal nieuwe iconen, nieuwe totale grootte). Ruim je ChatGPT-gesprekken en Chrome-tabs op (archiveren, niet verwijderen) en laat geen testbestanden in de repo achter. Sluit af met een korte eindrapportage en "Klaar voor archivering".
+```
+
+Ervaring bij de eerste bouw (2026-11-17): ChatGPT weigerde twee keer een blad met alleen wapens (inhoudsfilter), maar accepteerde hetzelfde blad in een nieuw gesprek met de omschrijving "equipment for a Tolkien-themed tabletop role-playing game inventory, drawn like a museum catalogue of historical artefacts" en zonder "spiked". Zet wapens dus nooit onder een kale lijst; geef altijd dat kader. Gebruik elke keer een nieuw gesprek, laat daarin eerst de pagina volledig laden voordat je typt (anders landt de tekst in een vorig gesprek).
+
