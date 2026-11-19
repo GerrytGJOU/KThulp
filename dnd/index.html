@@ -360,7 +360,7 @@ function latestId(){
 }
 function leaveCampaign(){
   listeners.forEach(([r,e,f])=>r.off(e,f));listeners=[];
-  cid=null;turn=null;canon={};mapData=null;mapSel=null;mapView={s:1,x:0,y:0,init:false};sceneKey='';editKey=null;threadShow=10;msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
+  cid=null;turn=null;canon={};mapData=null;mapSel=null;mapView={s:1,x:0,y:0,init:false};sceneKey='';editKey=null;threadShow=10;seenNarr=null;msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
 }
 let menuView='home';
 function updateBack(){const b=$('#topback'); if(b) b.style.display=(screen==='camp'||menuView!=='home')?'flex':'none';}
@@ -644,7 +644,7 @@ function narrBlocks(txt,pts){
   if(pts.length&&!used&&out.length) out[0].pt=pts[0]; /* sprekers opgegeven maar geen dialoog herkend: toch het eerste portret tonen */
   return out;
 }
-let threadShow=10;
+let threadShow=10, seenNarr=null;
 function renderGame(){
   if(!me||screen!=='camp'||tab!=='game') return;
   renderParty(); renderInit(); renderSide();
@@ -679,7 +679,13 @@ function renderGame(){
     return out;
   }).join('')||'<div class="msg system">Nog geen verhaal.</div>';
   const eta=$('#editta'); if(eta) eta.oninput=e=>{editDraft=e.target.value};
-  if(atBottom) th.scrollTop=th.scrollHeight;
+  /* nieuwe DM-beurt: spring naar het BEGIN van die beurt (niet naar het einde), zodat je hem van voren af leest */
+  if(lastNarr&&lastNarr!==seenNarr&&!editKey){
+    seenNarr=lastNarr;
+    const els=th.querySelectorAll('.msg.dm'), el=els[els.length-1];
+    const go=()=>{ if(el&&el.isConnected) th.scrollTop+=el.getBoundingClientRect().top-th.getBoundingClientRect().top-6; };
+    go(); requestAnimationFrame(go);
+  } else if(atBottom) th.scrollTop=th.scrollHeight;
 
   const sb=$('#statusbar'), cpz=$('#compose');
   const roundChanged=!!(turn&&composeRound!==turn.round); if(roundChanged){draft='';rollDraft='';rollKey=null;rollNat=''}
@@ -816,7 +822,7 @@ Regels:
    "quests":{"open":[{"title":"","detail":"","kind":"main|side|personal|companion","for":"personagenaam (alleen bij personal)","npc":"NPC-naam (alleen bij companion)","place":"waar het speelt (bij side)"}],"completed":[],"consequences":[]},
    "initiative":{"active":"Naam","order":[{"name":"Naam","init":15,"enemy":false}]}  (alleen tijdens een gevecht; anders null)}
   Vul bij het begin hp, resources en inventory van elke PC in uit zijn B-document. Werk hp, resources, conditions, location, inGame en quests bij zodra ze veranderen. Controleer geografie met Tolkiens kaart (Rivendell ligt in Eriador aan de westzijde van de Misty Mountains, ver van de Ered Luin).
-  HET DAGBOEK VAN DE SPELERS wordt uitsluitend gevuld door jouw uitvoer, dus houd het elke beurt bij: Opdrachten = statePatch.quests (open/completed/consequences; zet er direct een regel bij zodra een NPC of gebeurtenis een nieuwe opdracht, belofte of doel geeft, verplaats hem naar completed als hij klaar is) plus worldDelta-quests die active worden. Het Dagboek sorteert opdrachten in Main quest (voor alle PC's), Side quests (voor alle PC's), Personal quests (per personage) en Companion quests (per NPC of companion): geef daarom elke opdracht in quests.open een kind (main, side, personal of companion), bij personal ook for (de personagenaam) en bij side-quests ook place (waar de opdracht plaatsvindt, bijvoorbeeld 'Rivendell, de stallen'), bij companion ook npc (de naam van de NPC), maar gebruik kind companion ALLEEN voor een NPC die al is gerekruteerd (status recruited): de opdrachten van een nog niet gerekruteerde NPC horen bij side (of personal), anders verraadt het Dagboek wie een mogelijke companion is; bij een nieuwe worldDelta-quest zet je set.kind op dezelfde manier, plus set.owner (personagenaam) bij personal en set.npcs bij companion;  Wat je weet = pcs.<personagenaam>.knowledge (korte, feitelijke regels over wat dat personage heeft ontdekt, gehoord of gezien: aanwijzingen, namen, plekken, beloftes; nooit DM-geheimen of wat het personage niet kan weten) en onthulde backstorylagen (worldDelta reveals); Personen = statePatch.npcs; Logboek = logEntries. Lijsten in statePatch worden VERVANGEN: geef bij quests.open en knowledge altijd de volledige actuele lijst (oude regels behouden, korte regels, samenvoegen boven ongeveer 15 regels), anders verdwijnt eerder werk.
+  HET DAGBOEK VAN DE SPELERS wordt uitsluitend gevuld door jouw uitvoer, dus houd het elke beurt bij: Opdrachten = statePatch.quests (open/completed/consequences; een afgeronde opdracht verplaats je van open naar completed (nooit in beide); zet er direct een regel bij zodra een NPC of gebeurtenis een nieuwe opdracht, belofte of doel geeft, verplaats hem naar completed als hij klaar is) plus worldDelta-quests die active worden. Het Dagboek sorteert opdrachten in Main quest (voor alle PC's), Side quests (voor alle PC's), Personal quests (per personage) en Companion quests (per NPC of companion): geef daarom elke opdracht in quests.open een kind (main, side, personal of companion), bij personal ook for (de personagenaam) en bij side-quests ook place (waar de opdracht plaatsvindt, bijvoorbeeld 'Rivendell, de stallen'), bij companion ook npc (de naam van de NPC), maar gebruik kind companion ALLEEN voor een NPC die al is gerekruteerd (status recruited): de opdrachten van een nog niet gerekruteerde NPC horen bij side (of personal), anders verraadt het Dagboek wie een mogelijke companion is; bij een nieuwe worldDelta-quest zet je set.kind op dezelfde manier, plus set.owner (personagenaam) bij personal en set.npcs bij companion;  Wat je weet = pcs.<personagenaam>.knowledge (korte, feitelijke regels over wat dat personage heeft ontdekt, gehoord of gezien: aanwijzingen, namen, plekken, beloftes; nooit DM-geheimen of wat het personage niet kan weten) en onthulde backstorylagen (worldDelta reveals); Personen = statePatch.npcs; Logboek = logEntries. Lijsten in statePatch worden VERVANGEN: geef bij quests.open en knowledge altijd de volledige actuele lijst (oude regels behouden, korte regels, samenvoegen boven ongeveer 15 regels), anders verdwijnt eerder werk.
   LOOT EN VOORWERPEN (volledige regels en voorbeelden: canon M9, laad die bij beloningen en vondsten): gewone buit (kleine bedragen goud, gereedschap, voorraden, kruiden, vakwerk, informatie, gunsten) is ruim; magie is zeldzaam, heeft een naam, maker en geschiedenis en wordt alleen verdiend of geschonken (beloning voor een opdracht, bruikleen van een NPC met een plicht, een vondst op een plaats met verhaal), nooit uit willekeurige monsters. Hoogstens één nieuw magisch voorwerp per personage per Act, maximaal +1 en uncommon of rare, geen Ringen van Macht of unieke Tolkien-artefacten, geen magische winkel. Laat eigenschappen vanzelf blijken door gebruik. Leg elk nieuw voorwerp en elke betekenisvolle geldsom direct vast: pcs.<naam>.inventory (magisch als "Naam [magisch: kort effect]", goud als één regel "N GP"; altijd de volledige lijst) en een logEntry met het voorvoegsel "Buit:". Noem elk voorwerp met een herkenbare naam (Engels of Nederlands, bv. "Shortsword", "Wine (bottle)", "Honingkoeken"), want de Inventory toont er automatisch een icoon bij; geef een uniek of magisch voorwerp een eigen naam (die krijgt later een eigen icoon). Quests in de WERELDSTATUS kunnen een DM-geheime beloning noemen; die komt pas bij een goede uitkomst.
   OPDRACHTEN ZIJN DE RUGGENGRAAT VAN HET VERHAAL, maar dwing niets af: niet elke beurt hoeft een opdracht vooruit te brengen. Een gesprek, een rustig moment of een kleine tussenscène mag gewoon zijn eigen ding doen, en je mag af en toe zelf een nieuwe opdracht pitchen (via een NPC, een gebeurtenis of een vondst). Alleen een echt NIEUWE SCÈNE (een andere plek, een groot nieuw gevecht of een nieuwe hoofdontwikkeling, dus niet zomaar een volgende beurt) sluit aan op minstens één open opdracht, een NPC-agenda of een backstory (aanhaken, verdiepen, verstoren of omkeren); verzin geen losstaande hoofdlijnen. Raakt een open opdracht heel lang niets, dan mag je op een natuurlijk moment een aanleiding, gevolg of tijdsdruk geven, maar forceer geen vervolg. Zet voltooide of vervallen opdrachten om naar completed of consequences. Wat een PC weet (knowledge) mag je terugspelen en belonen met logische vervolgstappen. 
 - Documenten in CANON die als DM-geheim of "NIET LEZEN ALS SPELER" gemarkeerd zijn, gebruik je voor planning, maar je onthult of citeert ze nooit letterlijk; laat geheimen alleen via het spel zelf blijken.
@@ -1315,6 +1321,10 @@ function diaryQuestsHtml(S){
     items.forEach((it,i)=>{ const k=nt(it.title), j=seen.get(k); if(j===undefined){ seen.set(k,i); return; }
       const keep=(items[j].detail||!it.detail)?j:i, drop=keep===j?i:j; if(items[drop].done&&!items[keep].done) items[keep].done=true; if(!items[keep].place&&items[drop].place) items[keep].place=items[drop].place; items[drop]=null; seen.set(k,keep); });
     for(let i=items.length-1;i>=0;i--) if(!items[i]) items.splice(i,1); })();
+  /* Staat een opdracht in quests.completed (zelfde titel), dan is hij klaar: nooit meer tonen bij de open opdrachten, ook als de DM hem er per ongeluk in liet staan. */
+  (function(){ const nt=t=>String(t||'').toLowerCase().replace(/[^a-z0-9à-ž]+/g,' ').trim(), cd=new Set();
+    (Array.isArray(q.completed)?q.completed:Object.values(q.completed||{})).forEach(o=>{ const t=(typeof o==='string')?o:(o&&(o.title||o.name||o.quest||o.titel)); if(t) cd.add(nt(t)); });
+    if(cd.size) for(let i=items.length-1;i>=0;i--) if(!items[i].done&&cd.has(nt(items[i].title))) items.splice(i,1); })();
   const row=it=>'<div class="q'+(it.done?' done':'')+'"><b>'+esc(it.title)+'</b>'+esc(it.label)+(it.place&&it.cat==='side'?'<br><small style="color:var(--gold)">📍 '+esc(it.place)+'</small>':'')+(it.detail?'<br><small>'+esc(it.detail)+'</small>':'')+'</div>';
   const order=l=>l.slice().sort((a,b)=>(a.done?1:0)-(b.done?1:0));
   const none=t=>'<small style="color:var(--mute)">'+t+'</small>';
