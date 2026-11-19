@@ -227,7 +227,7 @@ function cmdApply(cid, file, flags) {
   if ((round + 1) % 10 === 0) console.log("Tip: maak nu een samenvatting (summary-opdracht); er zijn 10 tot 15 rondes sinds de vorige.");
 }
 function cmdSummary(cid, upTo, file) {
-  const ss = get("/dnd/" + cp(cid, "summaries")) || {}; let covered = 0; vals(ss).forEach(s => { covered = Math.max(covered, s.toRound || 0); });
+  const ss = get("/dnd/" + cp(cid, "summaries")) || {}; let covered = 0; vals(ss).forEach(s => { if ((s.toRound || 0) < Number(upTo)) covered = Math.max(covered, s.toRound || 0); }); /* een samenvatting t/m dezelfde ronde overschrijven mag, zonder dat fromRound verschuift */
   update({ [cp(cid, "summaries/" + String(upTo).padStart(5, "0"))]: { fromRound: covered + 1, toRound: Number(upTo), text: fs.readFileSync(file, "utf8").trim(), t: Date.now() } });
   console.log("Samenvatting opgeslagen t/m ronde " + upTo);
 }
