@@ -12,6 +12,9 @@
   /* [id, categorie, trefwoorden (regex-bron), bestand, uniek?] */
   var GROUPS = [
     /* --- unieke voorwerpen met een eigen naam --- */
+    { id: "whetstone",     cat: "tool",     re: "slijpsteen|whetstone|sharpening stone", file: "whetstone.webp", unique: true },
+    { id: "arrow-cleft",   cat: "weapon",   re: "gekliefde pijl|cloven arrow|cleft arrow|split arrow", file: "arrow-cleft.webp", unique: true },
+    { id: "dagger-adarion", cat: "weapon",  re: "adarion", file: "dagger-adarion.webp", unique: true },
     { id: "axe-runic",     cat: "weapon",   re: "runenbijl|runic axe|rune axe|dwarven axe|dwarf axe|erebor", file: "axe-runic.webp", unique: true },
     { id: "bow-elven",     cat: "weapon",   re: "boog van de oude oever|old bank bow|bow of the old|elven bow|elven.?boog|elvenboog", file: "bow-elven.webp", unique: true },
     { id: "sword-elven",   cat: "weapon",   re: "elven.?(short)?.?(sword|blade)|lichtlemmet|light.?blade|leaf.?blade|elven.?zwaard|elven.?lemmet", file: "sword-elven.webp", unique: true },
