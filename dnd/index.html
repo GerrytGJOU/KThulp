@@ -742,7 +742,7 @@ function renderGame(){
     ${rollRowHtml()}
     <div class="row"><button class="b" id="send">${mine?'Actie vervangen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button><select id="dmsel" class="dmsel" title="Wie speelt de volgende beurt als de DM?"></select>
     ${others.length?'<button class="b alt" id="skip">Zonder '+esc(others.join(', '))+' verder</button>':''}</div>
-    ${mine?'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a></small>':''}`;
+    ${mine?(String(mine.text).length>60?'<details class="otheract"><summary>Ingediend: '+esc(String(mine.text).slice(0,60).trim())+'…</summary>'+esc(mine.text)+'</details><small><a href="#" id="editmine">wijzig</a></small>':'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a></small>'):''}`;
     const em=$('#editmine'); if(em) em.onclick=e=>{e.preventDefault(); draft=mine.text.replace(/\s*\[worp:[^\]]*\]/i,''); $('#act').value=draft; $('#act').focus()};
     $('#act').value=draft;
     $('#act').oninput=e=>draft=e.target.value; wireRoll();
