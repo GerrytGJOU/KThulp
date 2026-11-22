@@ -123,6 +123,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .chip.bad{background:var(--red);color:#fff}
 .q{border-left:3px solid var(--gold);padding:4px 10px;margin:0 0 8px;background:rgba(32,27,23,.7);border-radius:0 6px 6px 0}
 .q.done{border-color:var(--ok);color:var(--mute)}
+.qnow{margin-top:4px;font-size:.9em}.qold{margin-top:3px;font-size:.84em;opacity:.5}.dtabs.sub{position:static;margin-bottom:10px}
 .ppl{display:flex;gap:10px;align-items:center}
 .ppl .av{width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid #4a3d30;background:#0f0d0b;flex:none;display:flex;align-items:center;justify-content:center;color:var(--mute)}
 .more-btn{width:100%;text-align:left;margin-bottom:8px;padding:14px}
@@ -228,6 +229,7 @@ const main=$('#main');
 /* ---------- toestand ---------- */
 let me=null;                 // {uid,name}
 let screen='menu', cid=null; // menu of campagne
+let diaryQSub=(function(){try{return localStorage.getItem('dnd_qsub')||'main'}catch(e){return 'main'}})();
 let diaryTab=(function(){try{return localStorage.getItem('dnd_diarytab')||'sum'}catch(e){return 'sum'}})();
 let cfg={}, npcs={}, locs={}, chars={}, index={}; let sceneKey='', editKey=null, editDraft='', lastSide='';              // globaal
 let wQuests={}, wCal=null, wBack={}, wNpcs={}, wLocs={}, mapData=null, mapSel=null, mapView={s:1,x:0,y:0,init:false};
@@ -627,6 +629,10 @@ function portraitsFor(m){
 /* Portretten van NPC's verschijnen bij de alinea waarin zij spreken (niet bij het hele bericht) */
 const NAME_STOP=/^(heer|vrouwe|vrouw|meester|de|het|een|van|der|den|von|the|lord|lady|master)$/;
 function hasDialogue(b){return /["“”«»]|(^|[\s(—–-])['‘](?!t\b|s\b|n\b|k\b|m\b|r\b)[A-Za-zÀ-ž]/.test(b)}
+/* Korte naam onder het portret: Hobbits bij hun voornaam of bijnaam (Pippin, Merry, Sam), anderen bij het laatste woord */
+const PT_ALIAS={'peregrin took':'Pippin','meriadoc brandybuck':'Merry','samwise gamgee':'Sam'};
+const PT_HOBBIT_FAM=/^(baggins|took|brandybuck|gamgee|brockhouse|cotton|proudfoot|boffin|bolger|chubb|grubb|burrows|sackville|hornblower|bracegirdle|gardner)$/i;
+function ptName(n){const k=String(n).toLowerCase().trim(); if(PT_ALIAS[k]) return PT_ALIAS[k]; const w=String(n).trim().split(' '); if(w.length>1&&PT_HOBBIT_FAM.test(w[w.length-1])) return w[0]; return w.pop()}
 function narrBlocks(txt,pts){
   const blocks=String(txt||'').split(/\n\s*\n/).filter(b=>b.trim());
   const keys=pts.map(p=>{const n=p[1].toLowerCase(); const t=n.split(/[^a-zà-ž0-9]+/).filter(x=>x.length>=3&&!NAME_STOP.test(x)); return [n].concat(t)});
@@ -662,7 +668,7 @@ function renderGame(){
     if(m.type==='action') txt=txt.replace(/\s*\[worp:\s*([^\]]*)\]/gi,(x,y)=>{wm.push(y.trim());return ''});
     const chips=(m.rolls||[]).map(rollChip).concat(wm.map(w=>'<span class="rc">🎲 '+esc(w)+'</span>')).join('');
     const body=md(txt)+(chips?'<div class="rolls">'+chips+'</div>':'');
-    const ptHtml=p=>'<div class="pts"><img class="pt" src="'+npcs[p[0]].img+'" data-zoom="'+p[0]+'" alt="'+esc(p[1])+'" title="'+esc(p[1])+'"><div class="ptn">'+esc(p[1].split(' ').pop())+'</div></div>';
+    const ptHtml=p=>'<div class="pts"><img class="pt" src="'+npcs[p[0]].img+'" data-zoom="'+p[0]+'" alt="'+esc(p[1])+'" title="'+esc(p[1])+'"><div class="ptn">'+esc(ptName(p[1]))+'</div></div>';
     let inner;
     if(m.type==='narration'&&pts.length){
       inner=narrBlocks(txt,pts).map(x=>{const bd=md(x.b); return x.pt?'<div class="mrow">'+ptHtml(x.pt)+'<div class="mtxt">'+bd+'</div></div>':'<div class="mpar">'+bd+'</div>'}).join('')+(chips?'<div class="rolls">'+chips+'</div>':'');
@@ -819,10 +825,10 @@ Regels:
    "companions":{"Naam":{"location":"","hp":{"current":0,"max":0,"temp":0},"status":"","attitude":""}},
    "npcs":{"Naam":{"location":"","status":"","attitude":"","knows":[]}},
    "factions":{"Naam":{"stance":"","currentAction":""}},
-   "quests":{"open":[{"title":"","detail":"","kind":"main|side|personal|companion","for":"personagenaam (alleen bij personal)","npc":"NPC-naam (alleen bij companion)","place":"waar het speelt (bij side)"}],"completed":[],"consequences":[]},
+   "quests":{"open":[{"title":"","detail":"","kind":"main|side|personal|companion","for":"personagenaam (alleen bij personal)","npc":"NPC-naam (alleen bij companion)","place":"waar het speelt (bij side)","updates":["eerdere berichten van deze opdracht, oudste eerst"]}],"completed":[],"consequences":[]},
    "initiative":{"active":"Naam","order":[{"name":"Naam","init":15,"enemy":false}]}  (alleen tijdens een gevecht; anders null)}
   Vul bij het begin hp, resources en inventory van elke PC in uit zijn B-document. Werk hp, resources, conditions, location, inGame en quests bij zodra ze veranderen. Controleer geografie met Tolkiens kaart (Rivendell ligt in Eriador aan de westzijde van de Misty Mountains, ver van de Ered Luin).
-  HET DAGBOEK VAN DE SPELERS wordt uitsluitend gevuld door jouw uitvoer, dus houd het elke beurt bij: Opdrachten = statePatch.quests (open/completed/consequences; een afgeronde opdracht verplaats je van open naar completed (nooit in beide); zet er direct een regel bij zodra een NPC of gebeurtenis een nieuwe opdracht, belofte of doel geeft, verplaats hem naar completed als hij klaar is) plus worldDelta-quests die active worden. Het Dagboek sorteert opdrachten in Main quest (voor alle PC's), Side quests (voor alle PC's), Personal quests (per personage) en Companion quests (per NPC of companion): geef daarom elke opdracht in quests.open een kind (main, side, personal of companion), bij personal ook for (de personagenaam) en bij side-quests ook place (waar de opdracht plaatsvindt, bijvoorbeeld 'Rivendell, de stallen'), bij companion ook npc (de naam van de NPC), maar gebruik kind companion ALLEEN voor een NPC die al is gerekruteerd (status recruited): de opdrachten van een nog niet gerekruteerde NPC horen bij side (of personal), anders verraadt het Dagboek wie een mogelijke companion is; bij een nieuwe worldDelta-quest zet je set.kind op dezelfde manier, plus set.owner (personagenaam) bij personal en set.npcs bij companion;  Wat je weet = pcs.<personagenaam>.knowledge (korte, feitelijke regels over wat dat personage heeft ontdekt, gehoord of gezien: aanwijzingen, namen, plekken, beloftes; nooit DM-geheimen of wat het personage niet kan weten) en onthulde backstorylagen (worldDelta reveals); Personen = statePatch.npcs; Logboek = logEntries. Lijsten in statePatch worden VERVANGEN: geef bij quests.open en knowledge altijd de volledige actuele lijst (oude regels behouden, korte regels, samenvoegen boven ongeveer 15 regels), anders verdwijnt eerder werk.
+  HET DAGBOEK VAN DE SPELERS wordt uitsluitend gevuld door jouw uitvoer, dus houd het elke beurt bij: Opdrachten = statePatch.quests (open/completed/consequences; een afgeronde opdracht verplaats je van open naar completed (nooit in beide); detail van een opdracht is altijd het nieuwste bericht, en het vorige detail zet je bij elke ontwikkeling achteraan in updates (oudste eerst, bestaande updates laten staan); zet er direct een regel bij zodra een NPC of gebeurtenis een nieuwe opdracht, belofte of doel geeft, verplaats hem naar completed als hij klaar is) plus worldDelta-quests die active worden. Het Dagboek sorteert opdrachten in Main quest (voor alle PC's), Side quests (voor alle PC's), Personal quests (per personage) en Companion quests (per NPC of companion): geef daarom elke opdracht in quests.open een kind (main, side, personal of companion), bij personal ook for (de personagenaam) en bij side-quests ook place (waar de opdracht plaatsvindt, bijvoorbeeld 'Rivendell, de stallen'), bij companion ook npc (de naam van de NPC), maar gebruik kind companion ALLEEN voor een NPC die al is gerekruteerd (status recruited): de opdrachten van een nog niet gerekruteerde NPC horen bij side (of personal), anders verraadt het Dagboek wie een mogelijke companion is; bij een nieuwe worldDelta-quest zet je set.kind op dezelfde manier, plus set.owner (personagenaam) bij personal en set.npcs bij companion;  Wat je weet = pcs.<personagenaam>.knowledge (korte, feitelijke regels over wat dat personage heeft ontdekt, gehoord of gezien: aanwijzingen, namen, plekken, beloftes; nooit DM-geheimen of wat het personage niet kan weten) en onthulde backstorylagen (worldDelta reveals); Personen = statePatch.npcs; Logboek = logEntries. Lijsten in statePatch worden VERVANGEN: geef bij quests.open en knowledge altijd de volledige actuele lijst (oude regels behouden, korte regels, samenvoegen boven ongeveer 15 regels), anders verdwijnt eerder werk.
   LOOT EN VOORWERPEN (volledige regels en voorbeelden: canon M9, laad die bij beloningen en vondsten): gewone buit (kleine bedragen goud, gereedschap, voorraden, kruiden, vakwerk, informatie, gunsten) is ruim; magie is zeldzaam, heeft een naam, maker en geschiedenis en wordt alleen verdiend of geschonken (beloning voor een opdracht, bruikleen van een NPC met een plicht, een vondst op een plaats met verhaal), nooit uit willekeurige monsters. Hoogstens één nieuw magisch voorwerp per personage per Act, maximaal +1 en uncommon of rare, geen Ringen van Macht of unieke Tolkien-artefacten, geen magische winkel. Laat eigenschappen vanzelf blijken door gebruik. Leg elk nieuw voorwerp en elke betekenisvolle geldsom direct vast: pcs.<naam>.inventory (magisch als "Naam [magisch: kort effect]", goud als één regel "N GP"; altijd de volledige lijst) en een logEntry met het voorvoegsel "Buit:". Noem elk voorwerp met een herkenbare naam (Engels of Nederlands, bv. "Shortsword", "Wine (bottle)", "Honingkoeken"), want de Inventory toont er automatisch een icoon bij; geef een uniek of magisch voorwerp een eigen naam (die krijgt later een eigen icoon). Quests in de WERELDSTATUS kunnen een DM-geheime beloning noemen; die komt pas bij een goede uitkomst.
   OPDRACHTEN ZIJN DE RUGGENGRAAT VAN HET VERHAAL, maar dwing niets af: niet elke beurt hoeft een opdracht vooruit te brengen. Een gesprek, een rustig moment of een kleine tussenscène mag gewoon zijn eigen ding doen, en je mag af en toe zelf een nieuwe opdracht pitchen (via een NPC, een gebeurtenis of een vondst). Alleen een echt NIEUWE SCÈNE (een andere plek, een groot nieuw gevecht of een nieuwe hoofdontwikkeling, dus niet zomaar een volgende beurt) sluit aan op minstens één open opdracht, een NPC-agenda of een backstory (aanhaken, verdiepen, verstoren of omkeren); verzin geen losstaande hoofdlijnen. Raakt een open opdracht heel lang niets, dan mag je op een natuurlijk moment een aanleiding, gevolg of tijdsdruk geven, maar forceer geen vervolg. Zet voltooide of vervallen opdrachten om naar completed of consequences. Wat een PC weet (knowledge) mag je terugspelen en belonen met logische vervolgstappen. 
 - Documenten in CANON die als DM-geheim of "NIET LEZEN ALS SPELER" gemarkeerd zijn, gebruik je voor planning, maar je onthult of citeert ze nooit letterlijk; laat geheimen alleen via het spel zelf blijken.
@@ -1306,36 +1312,55 @@ function diaryQuestsHtml(S){
     const rg=window.DNDMap&&DNDMap.REGIONS&&DNDMap.REGIONS[x.region];
     items.push({cat,who,title:x.title,detail:'',place:rg?rg.name:'',done:['completed','failed','expired'].indexOf(x.status)>=0,label:WT[x.status]||''});
   });
-  const rawOpen=Array.isArray(q.open)?q.open:Object.values(q.open||{});
-  rawOpen.forEach(o=>{
+  const addState=(o,isDone)=>{
     const it=(typeof o==='string')?{title:o}:(o&&typeof o==='object'?o:null); if(!it) return;
     const title=String(it.title||it.name||it.quest||it.titel||'').trim(), detail=String(it.detail||it.description||it.beschrijving||'').trim();
     if(!title&&!detail) return;
     const kind=String(it.kind||'').toLowerCase(); let cat, who=null;
     if(kind){ cat=catOf(kind); if(cat==='personal'){ who=ownerOf(title+' '+detail,it.for||it.owner); if(!who) cat='side'; } if(cat==='comp'){ if(!recruited(it.npc)) cat='side'; else who=npcName(it.npc); } }
     else { const pre=detail.match(/^([^:]{2,30}):/); who=pre?ownerOf('',pre[1]):null; cat=who?'personal':'side'; }
-    items.push({cat,who,title:title||detail,detail:title?detail:'',place:String(it.place||it.location||it.plaats||'').trim(),done:false,label:''});
-  });
+    /* updates = eerdere berichten van deze opdracht (oudste eerst); detail is altijd het nieuwste bericht */
+    const upd=(Array.isArray(it.updates)?it.updates:Object.values(it.updates||{})).map(x=>String(x||'').trim()).filter(Boolean);
+    items.push({cat,who,title:title||detail,detail:title?detail:'',upd,place:String(it.place||it.location||it.plaats||'').trim(),done:isDone,label:''});
+  };
+  /* Afgeronde opdrachten uit de Stand komen eerst, zodat ze bij dezelfde titel winnen van een open exemplaar */
+  (Array.isArray(q.completed)?q.completed:Object.values(q.completed||{})).forEach(o=>addState(o,true));
+  (Array.isArray(q.open)?q.open:Object.values(q.open||{})).forEach(o=>addState(o,false));
   /* Dezelfde opdracht in het wereldregister en in de Stand (zelfde titel): toon hem één keer, met de tekst uit de Stand. */
   (function(){ const nt=t=>String(t||'').toLowerCase().replace(/[^a-z0-9à-ž]+/g,' ').trim(), seen=new Map();
-    items.forEach((it,i)=>{ const k=nt(it.title), j=seen.get(k); if(j===undefined){ seen.set(k,i); return; }
-      const keep=(items[j].detail||!it.detail)?j:i, drop=keep===j?i:j; if(items[drop].done&&!items[keep].done) items[keep].done=true; if(!items[keep].place&&items[drop].place) items[keep].place=items[drop].place; items[drop]=null; seen.set(k,keep); });
+    items.forEach((it,i)=>{ if(!it.upd) it.upd=[]; const k=nt(it.title), j=seen.get(k); if(j===undefined){ seen.set(k,i); return; }
+      const keep=(items[j].detail||!it.detail)?j:i, drop=keep===j?i:j; if(items[drop].done&&!items[keep].done) items[keep].done=true; if(!items[keep].place&&items[drop].place) items[keep].place=items[drop].place; if(!items[keep].upd.length&&items[drop].upd&&items[drop].upd.length) items[keep].upd=items[drop].upd; items[drop]=null; seen.set(k,keep); });
     for(let i=items.length-1;i>=0;i--) if(!items[i]) items.splice(i,1); })();
-  /* Staat een opdracht in quests.completed (zelfde titel), dan is hij klaar: nooit meer tonen bij de open opdrachten, ook als de DM hem er per ongeluk in liet staan. */
-  (function(){ const nt=t=>String(t||'').toLowerCase().replace(/[^a-z0-9à-ž]+/g,' ').trim(), cd=new Set();
-    (Array.isArray(q.completed)?q.completed:Object.values(q.completed||{})).forEach(o=>{ const t=(typeof o==='string')?o:(o&&(o.title||o.name||o.quest||o.titel)); if(t) cd.add(nt(t)); });
-    if(cd.size) for(let i=items.length-1;i>=0;i--) if(!items[i].done&&cd.has(nt(items[i].title))) items.splice(i,1); })();
-  const row=it=>'<div class="q'+(it.done?' done':'')+'"><b>'+esc(it.title)+'</b>'+esc(it.label)+(it.place&&it.cat==='side'?'<br><small style="color:var(--gold)">📍 '+esc(it.place)+'</small>':'')+(it.detail?'<br><small>'+esc(it.detail)+'</small>':'')+'</div>';
-  const order=l=>l.slice().sort((a,b)=>(a.done?1:0)-(b.done?1:0));
+  /* Nieuwste bericht helder, eerdere berichten donkerder eronder (zoals het questlogboek van een computerspel) */
+  const row=it=>'<div class="q'+(it.done?' done':'')+'"><b>'+esc(it.title)+'</b>'+esc(it.label)+(it.place&&it.cat==='side'?'<br><small style="color:var(--gold)">📍 '+esc(it.place)+'</small>':'')+(it.detail?'<div class="qnow">◆ '+esc(it.detail)+'</div>':'')+(it.upd||[]).slice().reverse().map(t=>'<div class="qold">◇ '+esc(t)+'</div>').join('')+'</div>';
   const none=t=>'<small style="color:var(--mute)">'+t+'</small>';
-  const list=l=>l.length?order(l).map(row).join(''):none('Nog geen.');
-  const of=c=>items.filter(i=>i.cat===c);
-  let h='<h2>⚔️ Main quest</h2>'+list(of('main'))+'<h2>🧭 Side quests</h2>'+list(of('side'));
-  h+='<h2>👤 Personal quests</h2>'+(pcNames.length?pcNames.map(n=>{const l=of('personal').filter(i=>i.who===n); return '<details class="card"'+(n===mine||pcNames.length===1?' open':'')+'><summary><b>'+esc(n)+'</b> ('+l.filter(i=>!i.done).length+')</summary>'+list(l)+'</details>'}).join(''):none('Nog geen personages.'));
-  const comp=of('comp'), whos=[...new Set(comp.map(i=>i.who))];
-  h+='<h2>🤝 Companion quests</h2>'+(whos.length?whos.map(w=>'<div style="margin:8px 0 2px;color:var(--gold)">'+esc(w)+'</div>'+list(comp.filter(i=>i.who===w))).join(''):none('Nog geen.'));
-  const done=listOf(q.completed).map(t=>'<div class="q done">'+esc(t)+'</div>').join(''), cons=listOf(q.consequences).map(t=>'<div class="q">'+esc(t)+'</div>').join('');
-  return h+(cons?'<h2>Gevolgen</h2>'+cons:'')+(done?'<h2>Afgerond</h2>'+done:'');
+  const list=l=>l.length?l.map(row).join(''):none('Nog geen.');
+  const openOf=c=>items.filter(i=>i.cat===c&&!i.done);
+  const doneAll=items.filter(i=>i.done);
+  const comp=items.filter(i=>i.cat==='comp');
+  /* Tabbladen per soort; Companion pas zodra er een gerekruteerde companion is, zodat niet zichtbaar is dat het bestaat */
+  const subs=[['main','⚔️ Main',openOf('main').length],['side','🧭 Side',openOf('side').length],['personal','👤 Personal',openOf('personal').length]];
+  if(comp.length) subs.push(['comp','🤝 Companion',openOf('comp').length]);
+  subs.push(['done','✅ Afgerond',doneAll.length]);
+  const qs=subs.some(s=>s[0]===diaryQSub)?diaryQSub:'main';
+  const bar='<div class="dtabs sub">'+subs.map(s=>'<button data-qs="'+s[0]+'"'+(s[0]===qs?' class="on"':'')+'>'+s[1]+' ('+s[2]+')</button>').join('')+'</div>';
+  const pcCards=(getL,showDone)=>pcNames.length?pcNames.map(n=>{const l=getL().filter(i=>i.who===n); if(showDone&&!l.length) return ""; return '<details class="card"'+(n===mine||pcNames.length===1?' open':'')+'><summary><b>'+esc(n)+'</b> ('+l.length+')</summary>'+list(l)+'</details>'}).join(''):none('Nog geen personages.');
+  const compGroups=l=>{ const whos=[...new Set(l.map(i=>i.who))]; return whos.length?whos.map(w=>'<div style="margin:8px 0 2px;color:var(--gold)">'+esc(w)+'</div>'+list(l.filter(i=>i.who===w))).join(''):none('Nog geen.'); };
+  const cons=listOf(q.consequences).map(t=>'<div class="q">'+esc(t)+'</div>').join('');
+  let h=bar;
+  if(qs==='main') h+=list(openOf('main'));
+  else if(qs==='side') h+=list(openOf('side'));
+  else if(qs==='personal') h+=pcCards(()=>openOf('personal'));
+  else if(qs==='comp') h+=compGroups(openOf('comp'));
+  else {
+    const dOf=c=>doneAll.filter(i=>i.cat===c);
+    h+=(cons?'<h2>Gevolgen</h2>'+cons:'');
+    h+=[['main','⚔️ Main'],['side','🧭 Side']].map(([c,t])=>dOf(c).length?'<h2>'+t+'</h2>'+list(dOf(c)):'').join('');
+    if(dOf('personal').length) h+='<h2>👤 Personal</h2>'+pcCards(()=>dOf('personal'),true);
+    if(dOf('comp').length) h+='<h2>🤝 Companion</h2>'+compGroups(dOf('comp'));
+    if(!doneAll.length&&!cons) h+=none('Nog niets afgerond.');
+  }
+  return h;
 }
 async function renderDiary(){
   if(screen!=='camp') return;
@@ -1374,6 +1399,7 @@ async function renderDiary(){
   box.innerHTML=bar+body;
   box.scrollTop=keep;
   box.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>{diaryTab=b.dataset.dt; try{localStorage.setItem('dnd_diarytab',diaryTab)}catch(e){} box.scrollTop=0; renderDiary()});
+  box.querySelectorAll('[data-qs]').forEach(b=>b.onclick=()=>{diaryQSub=b.dataset.qs; try{localStorage.setItem('dnd_qsub',diaryQSub)}catch(e){} renderDiary()});
   if(dt==='weet') loadMemories(C);
   if(dt==='sum') db.ref(cp('summaries',C)).get().then(ss=>{
     const arr=[]; ss.forEach(c=>{arr.push(c.val())}); arr.reverse();
