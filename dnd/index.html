@@ -222,6 +222,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="settings-westeros.js?v=1"></script>
 <script src="settings-thedas.js?v=1"></script>
 <script src="settings-theros.js?v=1"></script>
+<script src="settings-editor.js?v=1"></script>
 <script src="partytable.js?v=2"></script>
 <script src="levelup.js?v=1"></script>
 <script>
@@ -265,7 +266,8 @@ function rebindTables(){
 function ctxChanged(){applyUi(); rebindTables(); if(window.DNDWorld&&DNDWorld.configure) DNDWorld.configure(curSetting().world)}
 function applyUi(){const n=curSetting().ui.name; titleBase=n; if(!pingTimer) document.title=n; const mb=document.querySelector('nav button[data-t="map"]'); if(mb) mb.style.display=mapOn()?'':'none'; const h=document.querySelector("header h1"); if(h) h.textContent="⚔ "+n; const f=document.querySelector("footer"); if(f) f.innerHTML=esc(n)+" D&amp;D · &copy; Gerben de Jong · 2026"}
 function mapOn(){return !!window.DNDMap&&curSetting().map.enabled!==false}
-function curSetting(){return DNDSettings.get((index&&cid&&index[cid]&&index[cid].settingId)||DNDSettings.DEFAULT_ID)}
+let campSet=null; /* snapshot van de setting van de open campagne (campaigns/{cid}/setting), bij het aanmaken bewaard zodat latere aanpassingen haar niet raken */
+function curSetting(){ if(cid&&campSet) return DNDSettings.resolve(campSet); return DNDSettings.get((index&&cid&&index[cid]&&index[cid].settingId)||DNDSettings.DEFAULT_ID)}
 const cp=(p,C)=>'dnd/campaigns/'+(C||cid)+'/'+p;
 
 /* ---------- helpers ---------- */
@@ -371,6 +373,10 @@ function showNoAccess(u,extra){
 let started=false;
 function startApp(){
   if(started) return; started=true;
+  DNDSettings.lockBuiltins(); /* ingebouwde settings zijn de scripts settings-*.js; eigen settings komen uit dnd/settings */
+  db.ref('dnd/settings').on('value',s=>{ const v=s.val()||{}; DNDSettings.list().filter(x=>x.custom&&!v[x.id]).forEach(x=>DNDSettings.unregister(x.id));
+    Object.keys(v).forEach(k=>{ try{ const o=JSON.parse(v[k].json); o.id=k; DNDSettings.registerCustom(o) }catch(e){ console.warn('setting '+k+' onleesbaar',e) } });
+    if(menuView==='settings'&&screen==='menu') renderSettingsMenu(); ctxChanged() });
   rebindTables();
   db.ref('dnd/config').on('value',s=>{cfg=s.val()||{};if(screen==='menu'||tab==='set')renderSet()});
   db.ref('dnd/characters').on('value',s=>{chars=s.val()||{};markNav(); if(!sheetEdit){ if(screen==='menu'&&menuView==='chars') renderSheet($('#sheetbox')); else if(screen==='camp'&&tab==='sheet') renderSheetTab(); } if(screen==='camp') renderGame();});
@@ -388,7 +394,7 @@ function latestId(){
   const ids=Object.keys(index); if(!ids.length) return null;
   return ids.sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0))[0];
 }
-function leaveCampaign(){setTimeout(ctxChanged,0); /* na de wissel van cid: titel, kop en footer volgen de setting van de campagne */
+function leaveCampaign(){campSet=null; setTimeout(ctxChanged,0); /* na de wissel van cid: titel, kop en footer volgen de setting van de campagne */
   listeners.forEach(([r,e,f])=>r.off(e,f));listeners=[];
   cid=null;turn=null;canon={};mapData=null;mapSel=null;mapView={s:1,x:0,y:0,init:false};sceneKey='';editKey=null;threadShow=10;seenNarr=null;msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
 }
@@ -399,6 +405,7 @@ function showMenu(view){
   leaveCampaign(); screen='menu'; menuView=view; updateBack();
   if(view==='npcs') return menuNpcs();
   if(view==='set') return menuSet();
+  if(view==='settings') return menuSettings();
   if(view==='chars') return menuChars();
   if(view==='create') return menuCreate();
   main.innerHTML=`<div class="scroll">
@@ -410,12 +417,14 @@ function showMenu(view){
   </div>
   <h2>Savegames</h2><div id="savelist"></div>
   <div class="row" style="margin-top:14px"><button class="b alt" id="tonpcs" style="flex:1">🖼 Portretten &amp; NPC's</button><button class="b alt" id="toset" style="flex:1">⚙ Instellingen</button></div>
+  <div class="row" style="margin-top:8px"><button class="b alt" id="tosettings" style="flex:1">🌍 Settings</button></div>
   <div class="row" style="margin-top:8px"><button class="b alt" id="tochars" style="flex:1">🧾 Karakterblad</button><button class="b alt" id="tocreate" style="flex:1">🧙 Personage maken</button></div>
   </div>`;
   $('#goon').onclick=()=>{const id=latestId(); if(id) enterCampaign(id)};
   $('#newst').onclick=newStoryForm;
   $('#tonpcs').onclick=()=>showMenu('npcs');
   $('#toset').onclick=()=>showMenu('set');
+  $('#tosettings').onclick=()=>showMenu('settings');
   $('#tochars').onclick=()=>showMenu('chars');
   $('#tocreate').onclick=()=>showMenu('create');
   renderIndex();
@@ -426,6 +435,52 @@ function menuSet(){
   $('#back').onclick=()=>showMenu('home');
   renderSet();
 }
+/* ---------- Settings: kiezen, kopiëren, bewerken en maken (M4) ---------- */
+function menuSettings(){
+  main.innerHTML='<div class="scroll">'+backBar('Settings')+'<div id="stbox"></div></div>';
+  $('#back').onclick=()=>showMenu('home');
+  renderSettingsMenu();
+}
+let stArm=null; /* tweede klik voor verwijderen */
+function stRandom(){return Math.random().toString(36).slice(2,6)}
+/* kopie van een bestaande setting als startpunt voor een eigen setting (alle velden gevuld, ook voor Midden-aarde) */
+function stCopyOf(id){
+  const base=DNDSettings.get(id), s=JSON.parse(JSON.stringify(base)), blank=DNDSettingsFactory.blank(base.name);
+  delete s.custom; s.id=(String(id).replace(/^kopie-/,'')+'-kopie-'+stRandom()).slice(0,40); s.name=('Kopie van '+base.name).slice(0,60);
+  s.map={enabled:false};
+  if(!s.canonParts) s.canonParts=blank.canonParts; if(!s.canon) s.canon=blank.canon; if(!s.blurb) s.blurb='Eigen setting.';
+  if(!s.world){ DNDWorld.configure(); s.world={travel:JSON.parse(JSON.stringify(DNDWorld.TRAVEL)),anchors:[]}; }
+  if(s.creator.classTolk===null){ s.creator.classTolk={}; Object.keys(CC_CLASSES).forEach(k=>{ if(CC_CLASSES[k].tolk) s.creator.classTolk[k]=CC_CLASSES[k].tolk }); }
+  return s;
+}
+function stSave(s){
+  return db.ref('dnd/settings/'+s.id).set({name:s.name,blurb:s.blurb||'',json:JSON.stringify(s),updated:Date.now(),by:me?me.name:''});
+}
+function stEdit(s,opt){
+  const box=$('#stbox'); if(!box) return;
+  SettingsEditor.open(box,Object.assign({setting:s,onCancel:renderSettingsMenu},opt));
+  box.scrollIntoView();
+}
+function renderSettingsMenu(){
+  const box=$('#stbox'); if(!box||menuView!=='settings') return;
+  const L=DNDSettings.list(), row=(x,btns)=>'<div class="card"><b>'+esc(x.name)+(x.custom?' <small>(eigen)</small>':' <small>(ingebouwd)</small>')+'</b><br><small style="color:var(--mute)">'+esc(x.blurb)+'</small><div class="row" style="margin-top:6px">'+btns+'</div></div>';
+  const camps=Object.keys(index).filter(i=>index[i].snap).sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0));
+  box.innerHTML='<p class="cctip">Een setting bepaalt wereld, toon, regio\'s, personagekeuzes en beeldstijl. Ingebouwde settings kun je kopiëren naar een eigen setting. Bij een nieuw verhaal krijgt het verhaal een eigen kopie van de setting: latere aanpassingen raken lopende verhalen niet.</p>'+
+   '<div class="row"><button class="b" id="stnew" type="button">＋ Nieuwe lege setting</button></div>'+
+   '<h3>Beschikbare settings</h3>'+L.map(x=>row(x,'<button class="b alt sm" data-st="copy" data-id="'+esc(x.id)+'" type="button">⎘ Kopiëren</button>'+(x.custom?'<button class="b alt sm" data-st="edit" data-id="'+esc(x.id)+'" type="button">✎ Bewerken</button><button class="b alt sm" data-st="del" data-id="'+esc(x.id)+'" type="button">'+(stArm===x.id?'Zeker weten? Verwijder':'🗑 Verwijderen')+'</button>':''))).join('')+
+   (camps.length?'<h3>Setting van een verhaal aanpassen</h3><p class="cctip">Dit wijzigt alleen de kopie van dat ene verhaal (de DM gebruikt de aangepaste tekst vanaf de volgende beurt).</p>'+camps.map(i=>'<div class="card"><b>'+esc(index[i].title)+'</b> <small>('+esc(index[i].settingId||'')+')</small><div class="row" style="margin-top:6px"><button class="b alt sm" data-st="camp" data-id="'+i+'" type="button">✎ Setting van dit verhaal bewerken</button></div></div>').join(''):'')+
+   '<div id="stedit"></div>';
+  $('#stnew').onclick=()=>{ const s=DNDSettingsFactory.blank('Nieuwe setting'); s.id='eigen-'+stRandom(); stEdit(s,{isNew:true,title:'Nieuwe setting',onSave:async s=>{ await stSave(s); alert('Setting "'+s.name+'" opgeslagen.'); }}); };
+  box.querySelectorAll('[data-st]').forEach(b=>b.onclick=async()=>{
+    const id=b.dataset.id, a=b.dataset.st;
+    if(a==='copy') return stEdit(stCopyOf(id),{isNew:true,title:'Kopie van '+DNDSettings.get(id).name,onSave:async s=>{ await stSave(s); alert('Setting "'+s.name+'" opgeslagen.'); }});
+    if(a==='edit') return stEdit(JSON.parse(JSON.stringify(DNDSettings.SETTINGS[id])),{lockId:true,title:'Setting bewerken',onSave:async s=>{ await stSave(s); alert('Opgeslagen.'); }});
+    if(a==='del'){ if(stArm!==id){ stArm=id; return renderSettingsMenu(); } stArm=null; await db.ref('dnd/settings/'+id).remove(); return; }
+    if(a==='camp'){ const sn=await db.ref(cp('setting',id)).get(); if(!sn.exists()){alert('Dit verhaal heeft geen eigen setting-kopie.');return}
+      return stEdit(JSON.parse(sn.val()),{lockId:true,title:'Setting van "'+index[id].title+'" bewerken',onSave:async s=>{ await db.ref(cp('setting',id)).set(JSON.stringify(s)); alert('Opgeslagen voor dit verhaal.'); renderSettingsMenu(); }}); }
+  });
+}
+
 function menuNpcs(){
   main.innerHTML=`<div class="scroll">${backBar("Portretten &amp; locaties")}
   <div class="row" style="margin-bottom:8px"><button class="b" id="copyall">Kopieer alle ontbrekende prompts</button></div>
@@ -526,7 +581,7 @@ function newStoryForm(){
     const setId=$('#nset').value, mid=setId==='middenaarde', nieuw=!mid||$('#nwm').value==='nieuw';
     const copy=(!nieuw&&$('#ncopy'))?$('#ncopy').value:'';
     const id=db.ref('dnd/campaignIndex').push().key, now=Date.now(), up={};
-    up['dnd/campaignIndex/'+id]={title:t,created:now,lastPlayed:now,round:0,party:party,ownTables:true,settingId:setId};
+    up['dnd/campaignIndex/'+id]={title:t,created:now,lastPlayed:now,round:0,party:party,ownTables:true,settingId:setId,snap:true};
     if(nieuw||($('#nclaude')&&$('#nclaude').checked)){ up['dnd/campaignIndex/'+id].openingBy='claude'; up[cp('turn',id)]={round:0,status:'claude',awaiting:null,handoff:{to:'claude',reason:'Openingsbeurt van het verhaal'}}; }
     if(!mid){
       /* andere setting dan Midden-aarde: canon uit de setting (A1, C1, wereld) + het setting-neutrale regelreferentiedocument R1; leeg wereldregister */
@@ -553,6 +608,7 @@ function newStoryForm(){
     }
     /* eigen NPC-/locatietabellen (M2): begin met een kopie van de globale portretten en locatiebeelden van Midden-aarde, daarna groeit de campagne apart */
     if(mid){const [gn,gl]=await Promise.all([db.ref('dnd/npcs').get(),db.ref('dnd/locations').get()]); if(gn.exists()) up[cp('npcs',id)]=gn.val(); if(gl.exists()) up[cp('locations',id)]=gl.val();}
+    up[cp('setting',id)]=JSON.stringify(DNDSettings.get(setId));
     await db.ref().update(up);
     enterCampaign(id);
   };
@@ -561,7 +617,7 @@ function newStoryForm(){
 /* creator-data van de actieve setting (species, lineage, talen, inspiratie); zie dnd/settings-data.js */
 /* setting voor de creator: eigen keuze (cc.setting), anders die van de campagne, anders die van een verhaal waarin jij nog een personage moet maken, anders Midden-aarde */
 function ccDefaultSet(){ if(cid&&index[cid]&&index[cid].settingId) return index[cid].settingId; if(!cid&&me){ const k=Object.keys(index||{}).find(i=>index[i].party&&index[i].party[me.name]===''&&index[i].settingId); if(k) return index[k].settingId } return DNDSettings.DEFAULT_ID }
-function ccSetting(){ return DNDSettings.get((typeof cc!=='undefined'&&cc&&cc.setting)||ccDefaultSet()) }
+function ccSetting(){ if(!(typeof cc!=='undefined'&&cc&&cc.setting)&&cid&&campSet) return DNDSettings.resolve(campSet); return DNDSettings.get((typeof cc!=='undefined'&&cc&&cc.setting)||ccDefaultSet()) }
 const CCS=()=>ccSetting().creator;
 function ccClassTolk(n){const o=CCS().classTolk; return o===null?((CC_CLASSES[n]&&CC_CLASSES[n].tolk)||''):(o&&o[n])||''}
 /* ----- NPC's en portretten ----- */
@@ -635,6 +691,7 @@ function enterCampaign(id){
   on(db.ref(cp('state')),'value',s=>{stateStr=s.val()||"{}";if(tab==='stand')renderStand();if(tab==='diary')renderDiary();renderGame()});
   on(db.ref(cp('world/quests')),'value',s=>{wQuests=s.val()||{};if(tab==='diary')renderDiary()});
   on(db.ref(cp('world/backstories')),'value',s=>{wBack=s.val()||{};if(tab==='diary')renderDiary()});
+  on(db.ref(cp('setting')),'value',s=>{ try{campSet=s.exists()?JSON.parse(s.val()):null}catch(e){campSet=null} ctxChanged(); if(screen==='camp') renderGame() });
   on(db.ref(cp('map')),'value',s=>{mapData=s.val()||null;if(tab==='map')renderMap(true)});
   on(db.ref(cp('world/npcs')),'value',s=>{wNpcs=s.val()||{};if(tab==='map')renderMap(true)});
   on(db.ref(cp('world/locations')),'value',s=>{wLocs=s.val()||{};if(tab==='map')renderMap(true)});

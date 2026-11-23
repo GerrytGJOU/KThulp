@@ -53,9 +53,13 @@ W.profiles = { "$id": { ".validate": "newData.hasChildren(['text','status'])" } 
 const camp = { ".write": and(A, "!newData.exists()") }; /* een heel verhaal verwijderen */
 ["canon", "state", "stands", "messages", "ooc", "log", "summaries", "memories", "dmnotes", "pending", "turn", "players", "scene", "usage", "map", "npcs", "locations", "partyTable"].forEach(k => { camp[k] = { ".write": A }; });
 camp.world = W;
+/* snapshot van de setting van een verhaal (JSON-tekst, bij het aanmaken bewaard; later te bewerken) */
+camp.setting = { ".write": A, ".validate": "newData.isString() && newData.val().length <= 300000" };
 
 const dnd = { ".read": A };
 ["config", "npcs", "locations", "characters", "campaignIndex"].forEach(k => { dnd[k] = { ".write": A }; });
+/* eigen settings: dnd/settings/{id} = { name, blurb, json (JSON-tekst), updated, by }; de id is een veilige slug */
+dnd.settings = { "$id": { ".write": A, ".validate": and("newData.hasChildren(['name','json'])", "$id.matches(/^[a-z0-9_-]+$/) && $id.length <= 40", "newData.child('name').isString() && newData.child('name').val().length <= 80", "newData.child('json').isString() && newData.child('json').val().length <= 300000") } };
 dnd.worldTemplate = {}; /* alleen via de Firebase CLI te wijzigen */
 dnd.campaigns = { "$cid": camp };
 

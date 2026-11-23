@@ -86,5 +86,35 @@
       "- Onderscheid [C] expliciete canon, [I] interpretatie, [N] nieuwe campagne-inhoud. Canon is de baseline; leg elke door spelers veroorzaakte afwijking vast met datum, oorzaak en gevolgen. Originele NPC's vullen de tussenruimte."
     ].join("\n");
   }
-  return { build: build, STD: STD, LINEAGE_STD: LINEAGE_STD, LANGS_STD: LANGS_STD, AVOID: AVOID, premiseCanon: premiseCanon, npcCanon: npcCanon };
+  /* lege startsetting voor de editor: alles ingevuld met neutrale voorbeeldtekst die de gebruiker aanpast; één species (Human) */
+  function blank(name) {
+    name = name || "Nieuwe setting";
+    return build({
+      id: "nieuw", name: name, blurb: "Eigen setting.", world: name + " (omschrijf de wereld in een paar woorden)",
+      exYear: 1000, exRegA: "REG-NOORD", exRegB: "REG-ZUID",
+      travel: { "REG-NOORD|REG-ZUID": 6 },
+      prompt: {
+        geoCheck: "Controleer geografie met de regio's uit de canon (noord, zuid).",
+        exInGame: "{\"inGame\":{\"date\":\"1 januari 1000\",\"timeOfDay\":\"ochtend\",\"location\":\"Voorbeeldstad, de herberg\"},",
+        exPlace: "'Voorbeeldstad, de herberg'",
+        lootTone: name + " (beschrijf de sfeer van de buit)", lootNo: "geen artefacten die de hele wereld kunnen veranderen"
+      },
+      style: "Painterly fantasy illustration, dramatic lighting, believable anatomy, detailed period costume and architecture.",
+      creator: {
+        magicWorld: "krachtige magie in " + name, intro: "Dit is een nieuw personage in " + name + " (D&amp;D 2024 als regelsysteem). Vul hier de sfeer en de regels van de setting in.",
+        langsTip: "Je spreekt Common plus twee Standard Languages naar keuze.", commonLang: "Common",
+        species: { Human: { tolk: "Mensen uit deze wereld." } }, lineage: {}, langs: LANGS_STD.slice(),
+        inspiration: ["A · Eerste idee — Human · Fighter/Rogue: schrijf hier een personageconcept", "B · Tweede idee — Human · Wizard/Cleric: nog een concept"],
+        speciesTip: "Standaard toegestaan: Human. Andere species alleen als voorstel via de DM.",
+        aanleiding: "Aanleiding / startsituatie (bv. waarom ben je op reis?)"
+      },
+      canonParts: {
+        tone: "beschrijf de toon van de campagne (bv. klassieke fantasy: avontuur, wonder en gevaar).",
+        settingRules: "- " + name + " (zie S1): D&D 5e 2024 als mechanische basis. Beschrijf hier beperkingen voor species, classes en magie.",
+        premise: premiseCanon(name), canonNpcs: npcCanon()
+      },
+      canon: { s1_wereld: { title: "S1 " + name + ": de wereld (publiek voor spelers en DM)", text: "# S1 " + name + ": de wereld\nBeschrijf hier de wereld: geschiedenis, regio's (REG-id's, alleen hoofdletters), machten en magie. Gebruik de REG-id's uit het tabblad Wereld." } }
+    });
+  }
+  return { build: build, blank: blank, STD: STD, LINEAGE_STD: LINEAGE_STD, LANGS_STD: LANGS_STD, AVOID: AVOID, premiseCanon: premiseCanon, npcCanon: npcCanon };
 });

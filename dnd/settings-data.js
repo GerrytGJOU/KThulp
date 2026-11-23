@@ -181,7 +181,7 @@
   }
   /* Extra settings registreren zichzelf (settings-aldmark.js e.d.). Een onbekend id valt terug op Midden-aarde. */
   function register(s) { if (!s || !s.id) throw new Error("setting zonder id"); SETTINGS[s.id] = s; }
-  function list() { return Object.keys(SETTINGS).map(function (id) { return { id: id, name: SETTINGS[id].name, blurb: SETTINGS[id].blurb || "" }; }); }
+  function list() { return Object.keys(SETTINGS).map(function (id) { return { id: id, name: SETTINGS[id].name, blurb: SETTINGS[id].blurb || "", custom: !!SETTINGS[id].custom }; }); }
   function canonLib() { return typeof module === "object" && module.exports ? require("./settings-canon.js") : (typeof self !== "undefined" ? self : this).DNDSettingsCanon; }
   /* Canondocumenten voor een NIEUWE campagne van deze setting (a1, c1 en de eigen documenten van de setting). Midden-aarde heeft er geen:
      die gebruikt het sjabloon in Firebase (worldTemplateBijbel). Het regelreferentiedocument r1 komt uit dat sjabloon (setting-neutraal). */
@@ -192,5 +192,47 @@
     Object.keys(st.canon || {}).forEach(function (k) { docs[k] = Object.assign({ t: now }, st.canon[k]); });
     return docs;
   }
-  return { SETTINGS: SETTINGS, DEFAULT_ID: "middenaarde", resolve: resolve, get: function (id) { return resolve(SETTINGS[id]); }, register: register, list: list, canonDocs: canonDocs };
+  /* ---------- eigen settings (M4) ----------
+     Ingebouwde settings zijn de bestanden settings-*.js; na het laden daarvan beveiligt lockBuiltins() hun id's.
+     Eigen settings staan in Firebase (dnd/settings/{id}/json) en worden met registerCustom() toegevoegd of vervangen;
+     een campagne bewaart bij het aanmaken een snapshot (campaigns/{cid}/setting) zodat latere aanpassingen haar niet raken. */
+  let BUILTIN = {};
+  function lockBuiltins() { BUILTIN = {}; Object.keys(SETTINGS).forEach(function (k) { BUILTIN[k] = true; }); }
+  function isBuiltin(id) { return !!BUILTIN[id]; }
+  function registerCustom(s) { if (!s || !s.id || BUILTIN[s.id]) return false; s.custom = true; SETTINGS[s.id] = s; return true; }
+  function unregister(id) { if (BUILTIN[id]) return false; delete SETTINGS[id]; return true; }
+
+  /* Controle van een (eigen) setting; geeft een lijst met meldingen (leeg = goed). Hetzelfde geldt voor een campagne-snapshot. */
+  function validate(s) {
+    const e = [], str = function (v, n, min) { return typeof v === "string" && v.trim().length >= (min || 1) && v.length <= (n || 4000); };
+    const isO = function (o) { return o && typeof o === "object" && !Array.isArray(o); };
+    if (!isO(s)) return ["Geen geldige setting."];
+    if (!str(s.id, 40) || !/^[a-z0-9_-]+$/.test(s.id)) e.push("id: alleen kleine letters, cijfers, - en _ (max 40).");
+    if (!str(s.name, 60)) e.push("naam ontbreekt of is te lang (max 60).");
+    const P = s.prompt, C = s.creator, K = s.canonParts;
+    if (!isO(P)) e.push("prompt ontbreekt"); else {
+      ["world", "naming", "noOvershadow", "bigFigure", "geoCheck", "exInGame", "exPlace", "lootTone", "lootNo", "bookFigures", "idLegend", "noCreateFig", "canonName"].forEach(function (k) { if (!str(P[k], 3000)) e.push("prompt." + k + " ontbreekt of is te lang"); });
+      if (!/^[0-9]{1,4}$/.test(String(P.exYear)) || Number(P.exYear) < 1) e.push("prompt.exYear moet een jaar 1 t/m 9999 zijn");
+      ["exRegA", "exRegB"].forEach(function (k) { if (!/^REG-[A-Z]+$/.test(String(P[k]))) e.push("prompt." + k + " moet een REG-id zijn (REG- + hoofdletters, bv. REG-NOORD)"); });
+    }
+    if (!isO(s.style) || !str(s.style.base, 1500) || !str(s.style.avoid, 1500) || typeof s.style.portraitNote !== "string" || typeof s.style.locNote !== "string") e.push("style: base en avoid zijn verplicht, portraitNote en locNote moeten tekst zijn");
+    if (s.world != null) {
+      const T = s.world.travel; if (T != null) { if (!isO(T)) e.push("world.travel moet een object zijn"); else Object.keys(T).forEach(function (k) { if (!/^REG-[A-Z]+\|REG-[A-Z]+$/.test(k) || !(Number.isInteger(T[k]) && T[k] >= 0 && T[k] <= 400)) e.push("reistijd '" + k + "': formaat REG-A|REG-B = dagen (0 t/m 400)"); }); }
+    }
+    if (!isO(C)) e.push("creator ontbreekt"); else {
+      ["magicWorld", "intro", "langsTip", "bgNote", "spellTip", "magicTip", "commonLang", "helperSys", "speciesTip", "aanleiding"].forEach(function (k) { if (!str(C[k], 3000)) e.push("creator." + k + " ontbreekt of is te lang"); });
+      if (!isO(C.species) || !Object.keys(C.species).length) e.push("creator.species: minstens één species");
+      else Object.keys(C.species).forEach(function (k) { const x = C.species[k]; if (!isO(x) || !str(x.label, 60) || !str(x.tolk, 600) || !(x.speed >= 5 && x.speed <= 120) || !str(x.size, 40) || !Array.isArray(x.traits) || !x.traits.length || !x.traits.every(function (t) { return Array.isArray(t) && t.length === 2 && str(t[0], 80) && str(t[1], 400); })) e.push("species " + k + ": label, tolk, speed (5-120), size en traits [[naam, uitleg], ...] zijn verplicht"); });
+      if (!isO(C.lineage)) e.push("creator.lineage moet een object zijn (mag leeg)");
+      if (!Array.isArray(C.langs) || C.langs.length < 2 || !C.langs.every(function (x) { return str(x, 60); })) e.push("creator.langs: minstens twee talen");
+      if (!Array.isArray(C.inspiration) || !C.inspiration.length || !C.inspiration.every(function (x) { return str(x, 400); })) e.push("creator.inspiration: minstens één regel");
+      if (!isO(C.classTolk)) e.push("creator.classTolk moet een object zijn (mag leeg)");
+    }
+    if (!isO(K)) e.push("canonParts ontbreekt"); else ["namingRule", "tone", "settingRules", "premise", "canonNpcs", "consistent"].forEach(function (k) { if (!str(K[k], 6000)) e.push("canonParts." + k + " ontbreekt of is te lang"); });
+    if (s.canon != null) { if (!isO(s.canon)) e.push("canon moet een object met documenten zijn"); else Object.keys(s.canon).forEach(function (k) { const d = s.canon[k]; if (!/^[a-z0-9_]+$/.test(k) || !isO(d) || !str(d.title, 200) || !str(d.text, 60000)) e.push("canondocument '" + k + "': sleutel (a-z, 0-9, _), titel en tekst zijn verplicht"); }); }
+    if (JSON.stringify(s).length > 250000) e.push("de setting is te groot (max 250 KB)");
+    return e;
+  }
+  return { SETTINGS: SETTINGS, DEFAULT_ID: "middenaarde", resolve: resolve, get: function (id) { return resolve(SETTINGS[id]); }, register: register, list: list, canonDocs: canonDocs,
+    lockBuiltins: lockBuiltins, isBuiltin: isBuiltin, registerCustom: registerCustom, unregister: unregister, validate: validate };
 });

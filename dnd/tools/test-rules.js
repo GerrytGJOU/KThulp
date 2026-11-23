@@ -174,5 +174,19 @@ t("kalender: een ander jaartal dan 3018 is toegestaan (1204), een onzinnig jaar 
 t("Tafel der Draden: spelers met toegang mogen gesprekken, draden en klaar-vlag schrijven", () => { const pt = "dnd/campaigns/" + C + "/partyTable/"; allowed({ [pt + "talks/gerben/runa/state"]: "pending", [pt + "talks/gerben/runa/msgs/k1"]: { from: "speler", text: "Hallo", t: 1 }, [pt + "picks/gerben/runa"]: "reis", [pt + "ready/gerben"]: true }); });
 t("Tafel der Draden: zonder toegang niet schrijfbaar", () => { denied({ ["dnd/campaigns/" + C + "/partyTable/ready/gerben"]: true }, "niet toegestaan", NOPE); });
 
+/* eigen settings (M4): dnd/settings/{id} en de snapshot campaigns/{cid}/setting */
+t("settings: een geldige eigen setting mag worden opgeslagen, een ongeldige id of te groot bestand niet", () => {
+  allowed({ "dnd/settings/mijn-wereld": { name: "Mijn wereld", blurb: "x", json: "{}", updated: 1, by: "Gerben" } });
+  denied({ "dnd/settings/Mijn Wereld": { name: "x", json: "{}" } }, "validatie");
+  denied({ "dnd/settings/mijn-wereld": { name: "x" } }, "validatie");
+  denied({ "dnd/settings/mijn-wereld": { name: "x", json: "x".repeat(300001) } }, "validatie");
+  denied({ "dnd/settings/mijn-wereld": { name: "x", json: "{}" } }, "niet toegestaan", NOPE);
+});
+t("settings: snapshot van een verhaal is een tekst tot 300 KB, alleen met toegang", () => {
+  allowed({ ["dnd/campaigns/" + C + "/setting"]: "{}" });
+  denied({ ["dnd/campaigns/" + C + "/setting"]: { a: 1 } }, "validatie");
+  denied({ ["dnd/campaigns/" + C + "/setting"]: "{}" }, "niet toegestaan", NOPE);
+});
+
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);

@@ -27,6 +27,12 @@
       "campaignIndex": {
         ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
       },
+      "settings": {
+        "$id": {
+          ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+          ".validate": "(newData.hasChildren(['name','json'])) && ($id.matches(/^[a-z0-9_-]+$/) && $id.length <= 40) && (newData.child('name').isString() && newData.child('name').val().length <= 80) && (newData.child('json').isString() && newData.child('json').val().length <= 300000)"
+        }
+      },
       "worldTemplate": {},
       "campaigns": {
         "$cid": {
@@ -175,6 +181,10 @@
                 ".validate": "newData.hasChildren(['text','status'])"
               }
             }
+          },
+          "setting": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+            ".validate": "newData.isString() && newData.val().length <= 300000"
           }
         }
       }

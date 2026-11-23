@@ -40,7 +40,15 @@ function get(p, extra) {
 }
 const Settings = require("../settings-all.js"); /* setting per campagne (campaignIndex/{cid}/settingId); zonder id: Midden-aarde */
 let SETTING = Settings.get(Settings.DEFAULT_ID);
-function useSetting(cid) { let id = null; try { id = get("/dnd/campaignIndex/" + cid + "/settingId"); } catch (e) { id = null; } id = id || Settings.DEFAULT_ID; SETTING = Settings.get(id); World.configure(SETTING.world); return id; }
+/* Voorrang: de snapshot van het verhaal (campaigns/{cid}/setting, JSON-tekst), dan een eigen setting uit dnd/settings/{id}/json, dan de ingebouwde setting. */
+function useSetting(cid) {
+  let id = null, snap = null;
+  try { const raw = get("/dnd/campaigns/" + cid + "/setting"); snap = raw ? JSON.parse(raw) : null; } catch (e) { snap = null; }
+  if (snap && snap.id) { SETTING = Settings.resolve(snap); World.configure(SETTING.world); return snap.id; }
+  try { id = get("/dnd/campaignIndex/" + cid + "/settingId"); } catch (e) { id = null; } id = id || Settings.DEFAULT_ID;
+  if (!Settings.SETTINGS[id]) { try { const raw = get("/dnd/settings/" + id + "/json"); if (raw) Settings.registerCustom(Object.assign(JSON.parse(raw), { id: id })); } catch (e) { /* onbekend: terugval op Midden-aarde */ } }
+  SETTING = Settings.get(id); World.configure(SETTING.world); return id;
+}
 /* Blok voor de context als de campagne NIET in Midden-aarde speelt: de DM-regels in CLAUDE_DM.md zijn op Midden-aarde geschreven. */
 function settingBlock(id) {
   if (id === Settings.DEFAULT_ID) return null; const p = SETTING.prompt, regs = {}; Object.keys((SETTING.world && SETTING.world.travel) || {}).forEach(k => k.split("|").forEach(x => { regs[x] = true; }));
