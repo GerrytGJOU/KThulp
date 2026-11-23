@@ -36,7 +36,7 @@ function get(p, extra) {
   if (!out || out === "null") return null;
   try { return JSON.parse(out); } catch (e) { throw new Error("Geen JSON van " + p + ": " + out.slice(0, 200)); }
 }
-const Settings = require("../settings-data.js"); require("../settings-aldmark.js"); /* setting per campagne (campaignIndex/{cid}/settingId); zonder id: Midden-aarde */
+const Settings = require("../settings-all.js"); /* setting per campagne (campaignIndex/{cid}/settingId); zonder id: Midden-aarde */
 let SETTING = Settings.get(Settings.DEFAULT_ID);
 function useSetting(cid) { let id = null; try { id = get("/dnd/campaignIndex/" + cid + "/settingId"); } catch (e) { id = null; } id = id || Settings.DEFAULT_ID; SETTING = Settings.get(id); World.configure(SETTING.world); return id; }
 /* Blok voor de context als de campagne NIET in Midden-aarde speelt: de DM-regels in CLAUDE_DM.md zijn op Midden-aarde geschreven. */
