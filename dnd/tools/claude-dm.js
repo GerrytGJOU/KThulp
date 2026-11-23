@@ -12,6 +12,9 @@
      log-edit <cid> <bestand.json>        verwijder/vervang oude logregels: {"delete":[sleutels],"replace":[{"keys":[..],"fact":"..","inGameDate":".."}]}
      state-patch <cid> <bestand.json>    deep-merge in de Stand (lijsten vervangen, null verwijdert)
      memory-add <cid> <tekst>            voeg een Herinnering toe
+     table-set <cid> <bestand.json>      open/werk de Tafel der Draden bij: {open,phase,title,intro,cands:{"Naam":{role,demands,wants,fears,slotInfo:{reis:"..."}}}} (partyTable, zie M11)
+     table-reply <cid> <bestand.json>    antwoorden van kandidaten op gesprekken: {replies:[{player,npc,text,done,summary}],dossier:[{npc,line}],phase,final:{npc:{slot,note}}}
+     table-show <cid>                    toon gesprekken, keuzes en onthulling van de Tafel der Draden
      new <titel> [--from=<verhaal>]      maak een nieuw verhaal (standaard het canon-sjabloon, of de canon van --from; wereldsjabloon, DM-notities) waarvan Claude de opening speelt
    Geen geheimen in dit bestand: alleen het (openbare) projectnummer. */
 "use strict";
@@ -20,6 +23,7 @@ const fs = require("fs"), os = require("os"), path = require("path"), crypto = r
 const PROJECT = "kthulp-certamen";
 const World = require("../world.js");
 const MapData = require("../map-data.js");
+const PT = require("../partytable.js");
 
 /* ---------- Firebase CLI ---------- */
 function fb(args) {
@@ -101,6 +105,41 @@ function cmdStatus() {
     console.log("-", cid, "|", v.title, "| ronde", v.round || 0, "| status:", t ? t.status : "(nog niet gestart)", t && t.status === "claude" ? "<== WACHT OP CLAUDE" : "");
   }
 }
+/* Tafel der Draden (canon M11): openstaande gesprekken en keuzes voor de DM */
+function tableBlock(pt, players) {
+  const L = ["# TAFEL DER DRADEN (partyvorming, canon M11; fase: " + (pt.phase || "gesprekken") + ")"], pend = PT.pendingTalks(pt, players);
+  L.push("Beantwoord elk openstaand gesprek in karakter met 'table-reply' (kort, 2-4 zinnen, eerlijk over voorwaarden, geen geheimen; geef na het tweede bericht de bevestiging done:true en een neutrale summary voor de ander). Het is GEEN verhaalbeurt: de beurtvertelling blijft los hiervan.");
+  L.push(pend.length ? pend.map(p => "- " + p.player + " tegen " + ((pt.cands || {})[p.npc] || {}).name + ": " + p.msgs.map(m => (m.from === "speler" ? "[speler] " : "[kandidaat] ") + m.text).join(" | ")).join("\n") : "(geen openstaande gesprekken)");
+  const rd = pt.ready || {}; L.push("Klaar met leggen: " + players.map(p => p + "=" + (rd[PT.keyOf(p)] === true ? "ja" : "nee")).join(", ") + (PT.allReady(pt, players) ? " (onthuld)" : ""));
+  if (PT.allReady(pt, players)) L.push(PT.compare(pt, players).map(r => "- " + r.name + ": " + Object.entries(r.by).map(([p, s]) => p + "=" + s).join(", ") + (r.agree ? " (gelijk)" : " (VERSCHIL)")).join("\n"));
+  const vs = pt.voorspraak || {}; if (Object.keys(vs).length) L.push("Voorspraak: " + Object.entries(vs).map(([p, k]) => p + " voor " + ((pt.cands || {})[k] || {}).name).join(", "));
+  const br = pt.beraad || {}; Object.keys(br).forEach(p => Object.entries(br[p] || {}).forEach(([k, t]) => L.push("Beraad " + p + " over " + ((pt.cands || {})[k] || {}).name + ": " + t)));
+  return L.join("\n");
+}
+function cmdTableSet(cid, file) {
+  const d = JSON.parse(fs.readFileSync(file, "utf8")), up = {}, base = cp(cid, "partyTable/");
+  ["open", "phase", "title", "intro"].forEach(k => { if (d[k] !== undefined) up[base + k] = d[k]; });
+  if (d.phase && !PT.PHASES.includes(d.phase)) throw new Error("fase moet een van " + PT.PHASES.join(", ") + " zijn");
+  Object.entries(d.cands || {}).forEach(([name, c]) => { const k = PT.keyOf(name); up[base + "cands/" + k + "/name"] = name;
+    ["role", "demands", "wants", "fears"].forEach(f => { if (c[f] !== undefined) up[base + "cands/" + k + "/" + f] = c[f]; });
+    Object.entries(c.slotInfo || {}).forEach(([s, t]) => { if (!PT.SLOT_IDS.includes(s)) throw new Error("onbekende plek " + s); up[base + "cands/" + k + "/slotInfo/" + s] = t; }); });
+  update(up); console.log("Tafel bijgewerkt (" + Object.keys(up).length + " velden).");
+}
+function cmdTableReply(cid, file) {
+  const d = JSON.parse(fs.readFileSync(file, "utf8")), up = {}, base = cp(cid, "partyTable/"), now = Date.now();
+  (d.replies || []).forEach((r, i) => { const pk = PT.keyOf(r.player), ck = PT.keyOf(r.npc); if (!r.text) throw new Error("antwoord zonder tekst"); const k = pushId();
+    up[base + "talks/" + pk + "/" + ck + "/msgs/" + k] = { from: "npc", text: String(r.text).slice(0, 1200), t: now + i }; up[base + "talks/" + pk + "/" + ck + "/state"] = r.done ? "done" : "answered";
+    if (r.summary) up[base + "talks/" + pk + "/" + ck + "/summary"] = String(r.summary).slice(0, 300); });
+  (d.dossier || []).forEach((x, i) => { up[base + "cands/" + PT.keyOf(x.npc) + "/dossier/" + pushId()] = { text: String(x.line).slice(0, 300), t: now + i }; });
+  Object.entries(d.final || {}).forEach(([npc, f]) => { if (!PT.SLOT_IDS.includes(f.slot)) throw new Error("onbekende plek " + f.slot); up[base + "final/" + PT.keyOf(npc)] = { slot: f.slot, note: String(f.note || "").slice(0, 400) }; });
+  if (d.phase) { if (!PT.PHASES.includes(d.phase)) throw new Error("onbekende fase"); up[base + "phase"] = d.phase; }
+  update(up); console.log("Tafel: " + (d.replies || []).length + " antwoord(en), " + (d.dossier || []).length + " dossierregel(s)" + (d.final ? ", uitkomst vastgelegd" : "") + ".");
+}
+function cmdTableShow(cid) {
+  const pt = get("/dnd/" + cp(cid, "partyTable")); if (!pt) return console.log("Geen Tafel der Draden voor dit verhaal.");
+  const pl = ((get("/dnd/campaignIndex/" + cid) || {}).party && Object.keys(get("/dnd/campaignIndex/" + cid).party)) || ["Gerben", "Maurits"];
+  console.log(tableBlock(pt, pl));
+}
 function cmdContext(cid, flags) {
   const sid = useSetting(cid);
   const turn = get("/dnd/" + cp(cid, "turn"));
@@ -145,6 +184,7 @@ function cmdContext(cid, flags) {
   if (SETTING.map.enabled !== false) out.push("# KAARTPLAATSEN (kies hieruit het id voor \"place\")\n" + MapData.ids.join(", "));
   out.push("# DM-NOTITIES (privé)\n" + (Object.entries(notes).map(([k, v]) => "- " + k + ": " + v).join("\n") || "(nog geen)"));
   out.push("# RECENTE GESCHIEDENIS\n" + (sortedVals(msgs).filter(m => m.type !== "system").slice(-10).map(m => (m.type === "narration" ? "DM" : m.author) + ": " + m.text).join("\n\n") || "(begin van het verhaal)"));
+  { const pt = get("/dnd/" + cp(cid, "partyTable")); if (pt && pt.open) out.push(tableBlock(pt, party ? Object.keys(party) : ["Gerben", "Maurits"])); }
   out.push("# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n" + JSON.stringify(rollDice()));
   out.push("# ACTIES DEZE RONDE\n" + (pend.length ? pend.map(p => p.name + ": " + p.text).join("\n") : "(geen: open het verhaal)"));
   console.log(out.join("\n\n"));
@@ -342,6 +382,9 @@ try {
   else if (cmd === "log") cmdLog(pos[1], flags);
   else if (cmd === "log-edit") cmdLogEdit(pos[1], pos[2]);
   else if (cmd === "memory-add") cmdMemory(pos[1], pos[2]);
+  else if (cmd === "table-set") cmdTableSet(pos[1], pos[2]);
+  else if (cmd === "table-reply") cmdTableReply(pos[1], pos[2]);
+  else if (cmd === "table-show") cmdTableShow(pos[1]);
   else if (cmd === "new") cmdNew(pos[1], flags);
   else console.log("Gebruik: status | context <cid> [--canon] | apply <cid> <json> [--force] | summary <cid> <totRonde> <bestand> | canon-put <cid> <id> <titel> <bestand> | memory-add <cid> <tekst>");
 } catch (e) { console.error("FOUT:", e.message); process.exit(1); }

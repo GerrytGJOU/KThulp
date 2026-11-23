@@ -51,7 +51,7 @@ W.locations = { "$id": { ".validate": "newData.hasChildren(['id','name','region'
 W.profiles = { "$id": { ".validate": "newData.hasChildren(['text','status'])" } };
 
 const camp = { ".write": and(A, "!newData.exists()") }; /* een heel verhaal verwijderen */
-["canon", "state", "stands", "messages", "ooc", "log", "summaries", "memories", "dmnotes", "pending", "turn", "players", "scene", "usage", "map", "npcs", "locations"].forEach(k => { camp[k] = { ".write": A }; });
+["canon", "state", "stands", "messages", "ooc", "log", "summaries", "memories", "dmnotes", "pending", "turn", "players", "scene", "usage", "map", "npcs", "locations", "partyTable"].forEach(k => { camp[k] = { ".write": A }; });
 camp.world = W;
 
 const dnd = { ".read": A };

@@ -170,5 +170,9 @@ t("eigen tabellen: een onbekend kind onder een campagne blijft verboden", () => 
 /* andere settings dan Midden-aarde hebben een ander jaartal (bv. Aldmark: 1204): het jaar moet 1 t/m 9999 mogen zijn */
 t("kalender: een ander jaartal dan 3018 is toegestaan (1204), een onzinnig jaar niet", () => { allowed({ [wb + "calendar"]: { y: 1204, m: 4, d: 12 } }); denied({ [wb + "calendar"]: { y: 0, m: 4, d: 12 } }, "validatie"); denied({ [wb + "calendar"]: { y: 12040, m: 4, d: 12 } }, "validatie"); });
 
+/* Tafel der Draden (partyTable, canon M11): gesprekken, keuzes en onthulling zijn schrijfbaar voor spelers met toegang */
+t("Tafel der Draden: spelers met toegang mogen gesprekken, draden en klaar-vlag schrijven", () => { const pt = "dnd/campaigns/" + C + "/partyTable/"; allowed({ [pt + "talks/gerben/runa/state"]: "pending", [pt + "talks/gerben/runa/msgs/k1"]: { from: "speler", text: "Hallo", t: 1 }, [pt + "picks/gerben/runa"]: "reis", [pt + "ready/gerben"]: true }); });
+t("Tafel der Draden: zonder toegang niet schrijfbaar", () => { denied({ ["dnd/campaigns/" + C + "/partyTable/ready/gerben"]: true }, "niet toegestaan", NOPE); });
+
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);

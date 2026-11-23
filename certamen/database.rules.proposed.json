@@ -82,6 +82,9 @@
           "locations": {
             ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
           },
+          "partyTable": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
           "world": {
             ".write": "(auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))) && (!data.exists())",
             "$other": {

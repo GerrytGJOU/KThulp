@@ -217,6 +217,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="settings-canon.js?v=1"></script>
 <script src="settings-data.js?v=6"></script>
 <script src="settings-aldmark.js?v=2"></script>
+<script src="partytable.js?v=2"></script>
 <script>
 "use strict";
 firebase.initializeApp({
@@ -238,6 +239,7 @@ let diaryTab=(function(){try{return localStorage.getItem('dnd_diarytab')||'sum'}
 let cfg={}, npcs={}, locs={}, chars={}, index={}; let sceneKey='', editKey=null, editDraft='', lastSide='';              // globaal
 let wQuests={}, wCal=null, wBack={}, wNpcs={}, wLocs={}, mapData=null, mapSel=null, mapView={s:1,x:0,y:0,init:false};
 let turn=null, canon={}, msgs=[], oocs=[], pending={}, stateStr="{}"; // per campagne
+let ptData=null;
 let tab='game', draft="", rollDraft="", composeRound=null;
 let listeners=[];
 const LEASE_MS=3*60*1000;
@@ -614,6 +616,7 @@ function enterCampaign(id){
   <section class="tab" id="t-map"><div id="mapwrap"></div></section>
   <section class="tab" id="t-sheet"><div class="scroll" id="sheetbox"></div></section>
   <section class="tab" id="t-more"><div class="scroll" id="morebox"></div></section>
+  <section class="tab" id="t-table"><div class="scroll" id="tablebox"></div></section>
   <section class="tab" id="t-stand"><div class="scroll" id="standbox"></div></section>
   <section class="tab" id="t-canon"><div class="scroll" id="canonbox"></div></section>
   <section class="tab" id="t-set"><div class="scroll" id="setbox"></div></section>
@@ -633,6 +636,7 @@ function enterCampaign(id){
   on(db.ref(cp('canon')),'value',s=>{canon=s.val()||{};if(tab==='canon')renderCanon()});
   on(db.ref(cp('pending')),'value',s=>{pending=s.val()||{};renderGame()});
   on(db.ref(cp('scene')),'value',s=>{sceneKey=s.val()||'';renderGame()});
+  on(db.ref(cp('partyTable')),'value',s=>{ptData=s.val()||null;if(tab==='table')renderTable();if(tab==='more')renderMore();markMore()});
   const mq=db.ref(cp('messages')).limitToLast(300);
   on(mq,'value',s=>{msgs=[];s.forEach(c=>{msgs.push({...c.val(),_k:c.key})});renderGame()});
   const oq=db.ref(cp('ooc')).limitToLast(200);
@@ -642,15 +646,21 @@ function enterCampaign(id){
 function setTab(t){
   tab=t;
   document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id==='t-'+t));
-  const navT=(t==='stand'||t==='canon'||t==='set')?'more':t;
+  const navT=(t==='stand'||t==='canon'||t==='set'||t==='table')?'more':t;
   document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.t===navT));
-  ({game:renderGame,ooc:renderOoc,diary:renderDiary,map:renderMap,more:renderMore,sheet:renderSheetTab,stand:renderStand,canon:renderCanon,set:renderSet})[t]();
+  ({game:renderGame,ooc:renderOoc,diary:renderDiary,map:renderMap,more:renderMore,sheet:renderSheetTab,stand:renderStand,canon:renderCanon,set:renderSet,table:renderTable})[t]();
 }
 document.addEventListener('click',e=>{const g=e.target.closest('[data-goto]'); if(g&&screen==='camp') setTab(g.dataset.goto)});
 const BACK='<button class="b alt sm" data-goto="more" style="margin-bottom:8px">‹ Meer</button>';
+function markMore(){ const b=document.querySelector('nav button[data-t="more"]'); if(!b) return; const dot=!!(window.PartyTable&&ptData&&ptData.open&&me&&PartyTable.needsMe(ptData,me.name,playerNames())); b.textContent='Meer'+(dot?' ●':''); }
+function renderTable(){
+  if(screen!=='camp'||!window.PartyTable) return;
+  PartyTable.render($('#tablebox'),{data:ptData,cid:cid,me:me,players:playerNames(),npcs:npcs,esc:esc,db:db,base:cp('partyTable')});
+}
 function renderMore(){
   if(screen!=='camp') return;
-  $('#morebox').innerHTML='<button class="b alt more-btn" data-goto="stand">📜 Stand en versies</button><button class="b alt more-btn" data-goto="canon">📚 Canon (documenten)</button><button class="b alt more-btn" data-goto="set">⚙ Instellingen en verbruik</button>';
+  const ptOn=ptData&&ptData.open&&window.PartyTable, ptDot=ptOn&&me&&PartyTable.needsMe(ptData,me.name,playerNames())?' ●':'';
+  $('#morebox').innerHTML=(ptOn?'<button class="b alt more-btn" data-goto="table">🧵 Tafel der Draden'+ptDot+'</button>':'')+'<button class="b alt more-btn" data-goto="stand">📜 Stand en versies</button><button class="b alt more-btn" data-goto="canon">📚 Canon (documenten)</button><button class="b alt more-btn" data-goto="set">⚙ Instellingen en verbruik</button>';
 }
 
 /* ---------- spel ---------- */
