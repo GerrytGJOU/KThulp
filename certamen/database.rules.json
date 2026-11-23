@@ -76,6 +76,12 @@
           "map": {
             ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
           },
+          "npcs": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
+          "locations": {
+            ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))"
+          },
           "world": {
             ".write": "(auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))) && (!data.exists())",
             "$other": {
@@ -83,11 +89,11 @@
             },
             "calendar": {
               ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
-              ".validate": "newData.hasChildren(['y','m','d']) && newData.child('y').isNumber() && newData.child('y').val() >= 3000 && newData.child('y').val() <= 3100 && newData.child('m').isNumber() && newData.child('m').val() >= 1 && newData.child('m').val() <= 12 && newData.child('d').isNumber() && newData.child('d').val() >= 1 && newData.child('d').val() <= 31 && newData.hasChildren(['y','m','d'])"
+              ".validate": "newData.hasChildren(['y','m','d']) && newData.child('y').isNumber() && newData.child('y').val() >= 1 && newData.child('y').val() <= 9999 && newData.child('m').isNumber() && newData.child('m').val() >= 1 && newData.child('m').val() <= 12 && newData.child('d').isNumber() && newData.child('d').val() >= 1 && newData.child('d').val() <= 31 && newData.hasChildren(['y','m','d'])"
             },
             "sceneSince": {
               ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
-              ".validate": "newData.hasChildren(['y','m','d']) && newData.child('y').isNumber() && newData.child('y').val() >= 3000 && newData.child('y').val() <= 3100 && newData.child('m').isNumber() && newData.child('m').val() >= 1 && newData.child('m').val() <= 12 && newData.child('d').isNumber() && newData.child('d').val() >= 1 && newData.child('d').val() <= 31"
+              ".validate": "newData.hasChildren(['y','m','d']) && newData.child('y').isNumber() && newData.child('y').val() >= 1 && newData.child('y').val() <= 9999 && newData.child('m').isNumber() && newData.child('m').val() >= 1 && newData.child('m').val() <= 12 && newData.child('d').isNumber() && newData.child('d').val() >= 1 && newData.child('d').val() <= 31"
             },
             "sceneRegion": {
               ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",

@@ -78,7 +78,8 @@
   };
   const FELLOWSHIP = ["TOL-FRODO", "TOL-SAM", "TOL-MERRY", "TOL-PIPPIN", "TOL-GANDALF", "TOL-ARAGORN", "TOL-LEGOLAS", "TOL-GIMLI", "TOL-BOROMIR"];
   /* Canon-ankers: wie mag na welke datum niet meer in Rivendell zijn (tenzij een afwijking is vastgelegd). */
-  const LEFT_RIVENDELL = { date: { y: 3018, m: 12, d: 25 }, ids: FELLOWSHIP, region: "REG-RIVENDELL", note: "Fellowship vertrekt op 25 december 3018" };
+  const ANCHORS_DEFAULT = [{ date: { y: 3018, m: 12, d: 25 }, ids: FELLOWSHIP, region: "REG-RIVENDELL", place: "Rivendell", dateText: "25 december 3018", note: "Fellowship vertrekt op 25 december 3018" }];
+  let ANCHORS = ANCHORS_DEFAULT;
 
   const clone = o => JSON.parse(JSON.stringify(o));
   const isObj = o => o && typeof o === "object" && !Array.isArray(o);
@@ -104,6 +105,7 @@
   }
   function travelDays(a, b) {
     if (!a || !b || a === b) return 0;
+    if (!Object.keys(TRAVEL).length) return 0; /* setting zonder reistijden: vrij reizen */
     const k1 = a + "|" + b, k2 = b + "|" + a;
     if (TRAVEL[k1] != null) return TRAVEL[k1];
     if (TRAVEL[k2] != null) return TRAVEL[k2];
@@ -111,6 +113,17 @@
   }
   const knownPlace = (world, loc) => !!loc && (KNOWN_REGIONS[loc] === true || !!(String(loc).indexOf("REG-") !== 0 && regionOf(world, loc)));
   const KNOWN_REGIONS = {}; Object.keys(TRAVEL).forEach(k => k.split("|").forEach(r => { KNOWN_REGIONS[r] = true; }));
+  const TRAVEL_DEFAULT = JSON.parse(JSON.stringify(TRAVEL));
+  /* Setting-regels: reistijden en canon-ankers komen uit de setting van de campagne (dnd/settings-data.js, veld "world").
+     configure() zonder argument, of met null-velden, herstelt Midden-aarde. TRAVEL en KNOWN_REGIONS worden ter plekke aangepast,
+     zodat bestaande verwijzingen (World.TRAVEL in tools/simulate.js) geldig blijven. Een setting zonder reistijden zet de
+     reistijdcontrole (en de bijbehorende waarschuwingen) uit. */
+  function configure(rules) {
+    const tr = rules && isObj(rules.travel) ? rules.travel : TRAVEL_DEFAULT;
+    Object.keys(TRAVEL).forEach(k => { delete TRAVEL[k]; }); Object.keys(tr).forEach(k => { TRAVEL[k] = tr[k]; });
+    Object.keys(KNOWN_REGIONS).forEach(k => { delete KNOWN_REGIONS[k]; }); Object.keys(TRAVEL).forEach(k => k.split("|").forEach(x => { KNOWN_REGIONS[x] = true; }));
+    ANCHORS = rules && Array.isArray(rules.anchors) ? rules.anchors : ANCHORS_DEFAULT; CLOSURE = null;
+  }
   const reasonOk = r => typeof r === "string" && r.trim().length >= 5;
 
   /* ---------- agenda-tick: voert alle stappen uit die tot en met 'now' aan de beurt zijn ---------- */
@@ -254,7 +267,7 @@
     /* scene/party: een regiowissel kost reistijd (de party teleporteert niet); live companions reizen mee */
     if (delta.region != null) {
       if (typeof delta.region !== "string" || !/^REG-[A-Z]+$/.test(delta.region)) err("region moet een REG-id zijn (bv. REG-ERIADOR)");
-      else if (!KNOWN_REGIONS[delta.region]) warn("Onbekende regio " + delta.region + ": reistijd kan niet worden gecontroleerd");
+      else if (Object.keys(TRAVEL).length && !KNOWN_REGIONS[delta.region]) warn("Onbekende regio " + delta.region + ": reistijd kan niet worden gecontroleerd");
       if (typeof delta.region === "string" && /^REG-[A-Z]+$/.test(delta.region) && delta.region !== W.sceneRegion) {
         if (W.sceneRegion && W.sceneSince && dateOk(W.sceneSince) && now) {
           const need = travelDays(W.sceneRegion, delta.region), spent = dateCmp(now, W.sceneSince);
@@ -495,14 +508,16 @@
       plan.events.push({ type: e.type, summary: e.summary.trim(), refs: refs, canon: CANON_TAGS.indexOf(e.canon) >= 0 ? e.canon : "N", ingame: now || null, round: ctx.round || null, divergence: e.divergence === true });
     });
 
-    /* canon-anker: Fellowship-leden verlaten Rivendell op 25 december 3018 */
+    /* canon-ankers (per setting; bij Midden-aarde: Fellowship-leden verlaten Rivendell op 25 december 3018) */
     const divergent = plan.divergences.length > 0 || (W.divergences && Object.keys(W.divergences).length > 0);
-    if (now && !divergent && dateCmp(now, LEFT_RIVENDELL.date) > 0) {
-      Object.keys(plan.npcs).forEach(id => {
-        const n = plan.npcs[id];
-        if (LEFT_RIVENDELL.ids.indexOf(id) >= 0 && regionOf(W, n.location) === LEFT_RIVENDELL.region) err(n.name + " kan na 25 december 3018 niet in Rivendell zijn zonder vastgelegde canon-afwijking (" + LEFT_RIVENDELL.note + ")");
-      });
-    }
+    ANCHORS.forEach(A => {
+      if (now && !divergent && dateOk(A.date) && dateCmp(now, A.date) > 0) {
+        Object.keys(plan.npcs).forEach(id => {
+          const n = plan.npcs[id];
+          if (A.ids.indexOf(id) >= 0 && regionOf(W, n.location) === A.region) err(n.name + " kan na " + A.dateText + " niet in " + A.place + " zijn zonder vastgelegde canon-afwijking (" + A.note + ")");
+        });
+      }
+    });
 
     /* agenda's: DM-ops */
     const stepErr = (aid, s, i) => {
@@ -870,5 +885,5 @@
     return { set: set, prev: prev };
   }
 
-  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, validateDelta: validateDelta, echoCheck: echoCheck, fixAwaiting: fixAwaiting, checkSpeakers: checkSpeakers, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
+  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, configure: configure, validateDelta: validateDelta, echoCheck: echoCheck, fixAwaiting: fixAwaiting, checkSpeakers: checkSpeakers, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
 });

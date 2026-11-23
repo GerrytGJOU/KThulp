@@ -37,6 +37,7 @@ function get(p, extra) {
   if (!out || out === "null") return null;
   try { return JSON.parse(out); } catch (e) { throw new Error("Geen JSON van " + p + ": " + out.slice(0, 200)); }
 }
+const T = require("./tables.js")(get); /* NPC-/locatietabel per campagne: globaal of campaigns/{cid}/… (ownTables) */
 function update(updates) {
   const tmp = path.join(os.tmpdir(), "dnd-job-update-" + Date.now() + ".json");
   fs.writeFileSync(tmp, JSON.stringify(updates));
@@ -98,7 +99,7 @@ function transition(cid, world, job, to, patch, extra) {
 }
 
 function briefLocation(cid, world, job) {
-  const loc = (world.locations || {})[job.subject] || {}, key = locKeyOf(job, loc), g = get("/dnd/locations/" + key) || {};
+  const loc = (world.locations || {})[job.subject] || {}, key = locKeyOf(job, loc), g = get("/dnd/" + T(cid, "locations") + "/" + key) || {};
   const out = { job: job.id, type: job.type, status: job.status, locationId: job.subject, locationName: loc.name, appName: job.appName || loc.name, region: loc.region, canonTag: loc.canon, locKey: key, hasImageAlready: !!g.img };
   out.visual = g.visual || null; out.visualStatus = g.visualStatus || (g.visual ? "approved-or-legacy" : "missing");
   out.chatgptPrompt = g.visual ? locPrompt(job.appName || loc.name, g.visual) : null;
@@ -110,7 +111,7 @@ function briefLocation(cid, world, job) {
 function brief(cid, world, job) {
   if (job.type === "location") return briefLocation(cid, world, job);
   const npc = (world.npcs || {})[job.subject] || {}, key = slug(npc.name || job.subject);
-  const g = get("/dnd/npcs/" + key) || {};
+  const g = get("/dnd/" + T(cid, "npcs") + "/" + key) || {};
   const out = { job: job.id, type: job.type, status: job.status, npcId: job.subject, npcName: npc.name, npcStatus: npc.status, canonTag: npc.canon, npcKey: key, required: !!job.required, trigger: job.trigger };
   if (job.type === "portrait") {
     out.hasImageAlready = !!g.img;
@@ -163,9 +164,9 @@ function main() {
       let cur = j;
       if (cur.status === "claimed") { const rel = World.jobTransition(cur, "queued", {}, Date.now()); cur = rel.job; }
       if (isLoc ? !locRec : !npc) { transition(cid, world, cur, "cancelled", { reason: (isLoc ? "Locatie" : "NPC") + " bestaat niet meer (wees-job)" }); continue; }
-      if (isLoc) { const gi = get("/dnd/locations/" + locKeyOf(cur, locRec) + "/img"); if (gi) { const c3 = World.jobTransition(cur, "claimed", { by: flags.by, leaseUntil: Date.now() + lease }, Date.now()).job; transition(cid, world, c3, "done", { result: { notes: "Locatieafbeelding bestond al; niets gedaan" } }); console.log("(" + cur.id + " overgeslagen: afbeelding bestaat al)"); continue; } }
+      if (isLoc) { const gi = get("/dnd/" + T(cid, "locations") + "/" + locKeyOf(cur, locRec) + "/img"); if (gi) { const c3 = World.jobTransition(cur, "claimed", { by: flags.by, leaseUntil: Date.now() + lease }, Date.now()).job; transition(cid, world, c3, "done", { result: { notes: "Locatieafbeelding bestond al; niets gedaan" } }); console.log("(" + cur.id + " overgeslagen: afbeelding bestaat al)"); continue; } }
       if (cur.type === "portrait") {
-        const g = get("/dnd/npcs/" + slug(npc.name) + "/img");
+        const g = get("/dnd/" + T(cid, "npcs") + "/" + slug(npc.name) + "/img");
         if (g) { const c2 = World.jobTransition(cur, "claimed", { by: flags.by, leaseUntil: Date.now() + lease }, Date.now()).job; transition(cid, world, c2, "done", { result: { notes: "Portret bestond al; niets gedaan" } }); console.log("(" + cur.id + " overgeslagen: portret bestaat al)"); continue; }
       }
       const claimed = World.jobTransition(cur, "claimed", { by: flags.by, leaseUntil: Date.now() + lease }, Date.now());
@@ -205,7 +206,7 @@ function main() {
       const v = String(o.visual || "").trim(), d = String(o.desc || "").trim();
       if (v.length < 40 || v.length > 1500) throw new Error("visual moet 40-1500 tekens zijn");
       if (d.length < 10 || d.length > 400) throw new Error("desc moet 10-400 tekens zijn");
-      update({ ["locations/" + lkey + "/name"]: lname, ["locations/" + lkey + "/visual"]: v, ["locations/" + lkey + "/desc"]: d, ["locations/" + lkey + "/visualStatus"]: "proposed", ["locations/" + lkey + "/t"]: Date.now(), ["locations/" + lkey + "/from"]: "job " + jid });
+      update({ [T(cid, "locations") + "/" + lkey + "/name"]: lname, [T(cid, "locations") + "/" + lkey + "/visual"]: v, [T(cid, "locations") + "/" + lkey + "/desc"]: d, [T(cid, "locations") + "/" + lkey + "/visualStatus"]: "proposed", [T(cid, "locations") + "/" + lkey + "/t"]: Date.now(), [T(cid, "locations") + "/" + lkey + "/from"]: "job " + jid });
       console.log("Voorgestelde beschrijving opgeslagen voor " + lname + " (sleutel " + lkey + ", visualStatus proposed). Maak nu de afbeelding."); return;
     }
     if (cmd === "import-location") {
@@ -217,9 +218,9 @@ function main() {
       }
       if (!ok) throw new Error("Verkleinen mislukt: " + msg);
       const data = fs.readFileSync(tmp, "utf8"); fs.unlinkSync(tmp);
-      const g = get("/dnd/locations/" + lkey) || {};
-      const extra = { ["locations/" + lkey + "/img"]: data, ["locations/" + lkey + "/name"]: g.name || lname, ["locations/" + lkey + "/t"]: Date.now(), ["locations/" + lkey + "/from"]: "job " + jid };
-      transition(cid, world, job, "done", { result: { notes: "Afbeelding opgeslagen als locations/" + lkey + " (" + msg + ")", ref: "locations/" + lkey } }, extra);
+      const g = get("/dnd/" + T(cid, "locations") + "/" + lkey) || {};
+      const extra = { [T(cid, "locations") + "/" + lkey + "/img"]: data, [T(cid, "locations") + "/" + lkey + "/name"]: g.name || lname, [T(cid, "locations") + "/" + lkey + "/t"]: Date.now(), [T(cid, "locations") + "/" + lkey + "/from"]: "job " + jid };
+      transition(cid, world, job, "done", { result: { notes: "Afbeelding opgeslagen als locations/" + lkey + " (" + msg + ")", ref: T(cid, "locations") + "/" + lkey } }, extra);
       console.log("Afbeelding van " + lname + " opgeslagen (" + msg + "); job afgerond."); return;
     }
     throw new Error("Opdracht " + cmd + " hoort niet bij een locatie-job");
@@ -230,7 +231,7 @@ function main() {
   if (cmd === "set-visual") {
     if (job.type !== "portrait") throw new Error("set-visual hoort bij een portret-job");
     const v = fs.readFileSync(file, "utf8").trim(); if (v.length < 30 || v.length > 1500) throw new Error("Beschrijving moet 30-1500 tekens zijn");
-    update({ ["npcs/" + key + "/name"]: npc.name, ["npcs/" + key + "/visual"]: v, ["npcs/" + key + "/visualStatus"]: "proposed", ["npcs/" + key + "/t"]: Date.now() });
+    update({ [T(cid, "npcs") + "/" + key + "/name"]: npc.name, [T(cid, "npcs") + "/" + key + "/visual"]: v, [T(cid, "npcs") + "/" + key + "/visualStatus"]: "proposed", [T(cid, "npcs") + "/" + key + "/t"]: Date.now() });
     console.log("Voorgestelde beschrijving opgeslagen voor " + npc.name + " (visualStatus proposed). Maak nu het portret."); return;
   }
   if (cmd === "import-portrait") {
@@ -243,9 +244,9 @@ function main() {
     }
     if (!ok) throw new Error("Verkleinen mislukt: " + msg);
     const data = fs.readFileSync(tmp, "utf8"); fs.unlinkSync(tmp);
-    const g = get("/dnd/npcs/" + key) || {};
-    const extra = { ["npcs/" + key + "/img"]: data, ["npcs/" + key + "/name"]: g.name || npc.name, ["npcs/" + key + "/t"]: Date.now(), ["npcs/" + key + "/from"]: "job " + jid };
-    transition(cid, world, job, "done", { result: { notes: "Portret opgeslagen als npcs/" + key + " (" + msg + ")", ref: "npcs/" + key } }, extra);
+    const g = get("/dnd/" + T(cid, "npcs") + "/" + key) || {};
+    const extra = { [T(cid, "npcs") + "/" + key + "/img"]: data, [T(cid, "npcs") + "/" + key + "/name"]: g.name || npc.name, [T(cid, "npcs") + "/" + key + "/t"]: Date.now(), [T(cid, "npcs") + "/" + key + "/from"]: "job " + jid };
+    transition(cid, world, job, "done", { result: { notes: "Portret opgeslagen als npcs/" + key + " (" + msg + ")", ref: T(cid, "npcs") + "/" + key } }, extra);
     console.log("Portret van " + npc.name + " opgeslagen (" + msg + "); job afgerond."); return;
   }
   if (cmd === "submit-statblock") {

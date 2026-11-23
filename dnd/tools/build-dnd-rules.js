@@ -14,7 +14,7 @@ const A = cur.rules.dnd[".read"]; /* de bestaande allowlist-voorwaarde (Google-l
 const and = (...x) => x.filter(Boolean).map(s => "(" + s + ")").join(" && ");
 const oneOf = (expr, list) => list.map(v => expr + " === '" + v + "'").join(" || ");
 const num = (p, lo, hi) => "newData.child('" + p + "').isNumber() && newData.child('" + p + "').val() >= " + lo + " && newData.child('" + p + "').val() <= " + hi;
-const date = "newData.hasChildren(['y','m','d']) && " + num("y", 3000, 3100) + " && " + num("m", 1, 12) + " && " + num("d", 1, 31);
+const date = "newData.hasChildren(['y','m','d']) && " + num("y", 1, 9999) + " && " + num("m", 1, 12) + " && " + num("d", 1, 31);
 const idOk = "newData.child('id').isString() && newData.child('id').val() === $id";
 const W = {};
 
@@ -51,7 +51,7 @@ W.locations = { "$id": { ".validate": "newData.hasChildren(['id','name','region'
 W.profiles = { "$id": { ".validate": "newData.hasChildren(['text','status'])" } };
 
 const camp = { ".write": and(A, "!newData.exists()") }; /* een heel verhaal verwijderen */
-["canon", "state", "stands", "messages", "ooc", "log", "summaries", "memories", "dmnotes", "pending", "turn", "players", "scene", "usage", "map"].forEach(k => { camp[k] = { ".write": A }; });
+["canon", "state", "stands", "messages", "ooc", "log", "summaries", "memories", "dmnotes", "pending", "turn", "players", "scene", "usage", "map", "npcs", "locations"].forEach(k => { camp[k] = { ".write": A }; });
 camp.world = W;
 
 const dnd = { ".read": A };

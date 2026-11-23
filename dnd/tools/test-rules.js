@@ -89,7 +89,7 @@ let pass = 0, fail = 0;
 const t = (name, fn) => { try { fn(); pass++; } catch (e) { fail++; console.log("FAIL:", name, "\n   ", e.message); } };
 const allowed = (update, who, tr) => { const p = check(tr || tree, update, who || OK); if (p.length) throw new Error("had moeten slagen: " + p.join("; ")); };
 const denied = (update, frag, who, tr) => { const p = check(tr || tree, update, who || OK); if (!p.length) throw new Error("had moeten falen"); if (frag && p.join(" ").indexOf(frag) < 0) throw new Error("verkeerde reden: " + p.join("; ")); };
-const C = "c1", wb = "dnd/campaigns/" + C + "/world/";
+const C = (dump.campaigns && dump.campaigns.c1) ? "c1" : Object.keys(dump.campaigns)[0], wb = "dnd/campaigns/" + C + "/world/";
 const world = dump.campaigns[C].world, tpl = dump.worldTemplate;
 
 /* ---------- toegang ---------- */
@@ -160,6 +160,15 @@ t("elke fase-4..7-schrijfactie uit world.js is toegestaan: reveals, agenda-ops, 
   ];
   steps.forEach((d, i) => { const v = World.validateDelta(w0, d, { round: i + 1 }); if (!v.ok) throw new Error("stap " + (i + 1) + ": " + v.errors.join("; ")); const r = upd(w0, v); const apply = {}; Object.keys(r.c.set).forEach(p => { apply["dnd/campaigns/" + C + "/" + p] = r.c.set[p]; }); const tr = clone(tree); tr.dnd.campaigns[C].world = w0; allowed(apply, OK, tr); w0 = r.w; });
 });
+
+
+/* eigen NPC-/locatietabellen per campagne (M2): alleen met toegang; onbekende kinderen van een campagne blijven verboden */
+t("eigen tabellen: npcs en locations onder een campagne zijn schrijfbaar voor spelers met toegang", () => { allowed({ ["dnd/campaigns/" + C + "/npcs/test_npc"]: { name: "Test", visual: "x", t: 1 } }); allowed({ ["dnd/campaigns/" + C + "/locations/test_loc"]: { name: "Test", visual: "x", t: 1 } }); });
+t("eigen tabellen: zonder toegang niet schrijfbaar", () => { denied({ ["dnd/campaigns/" + C + "/npcs/test_npc"]: { name: "Test" } }, "niet toegestaan", NOPE); });
+t("eigen tabellen: een onbekend kind onder een campagne blijft verboden", () => { denied({ ["dnd/campaigns/" + C + "/geheim/x"]: 1 }, "niet toegestaan"); });
+
+/* andere settings dan Midden-aarde hebben een ander jaartal (bv. Aldmark: 1204): het jaar moet 1 t/m 9999 mogen zijn */
+t("kalender: een ander jaartal dan 3018 is toegestaan (1204), een onzinnig jaar niet", () => { allowed({ [wb + "calendar"]: { y: 1204, m: 4, d: 12 } }); denied({ [wb + "calendar"]: { y: 0, m: 4, d: 12 } }, "validatie"); denied({ [wb + "calendar"]: { y: 12040, m: 4, d: 12 } }, "validatie"); });
 
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);

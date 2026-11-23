@@ -32,6 +32,20 @@ function get(p, extra) {
   if (!out || out === "null") return null;
   try { return JSON.parse(out); } catch (e) { throw new Error("Geen JSON van " + p + ": " + out.slice(0, 200)); }
 }
+const Settings = require("../settings-data.js"); require("../settings-aldmark.js"); /* setting per campagne (campaignIndex/{cid}/settingId); zonder id: Midden-aarde */
+let SETTING = Settings.get(Settings.DEFAULT_ID);
+function useSetting(cid) { let id = null; try { id = get("/dnd/campaignIndex/" + cid + "/settingId"); } catch (e) { id = null; } id = id || Settings.DEFAULT_ID; SETTING = Settings.get(id); World.configure(SETTING.world); return id; }
+/* Blok voor de context als de campagne NIET in Midden-aarde speelt: de DM-regels in CLAUDE_DM.md zijn op Midden-aarde geschreven. */
+function settingBlock(id) {
+  if (id === Settings.DEFAULT_ID) return null; const p = SETTING.prompt, regs = {}; Object.keys((SETTING.world && SETTING.world.travel) || {}).forEach(k => k.split("|").forEach(x => { regs[x] = true; }));
+  return ["# SETTING: " + SETTING.name + " (NIET Midden-aarde)",
+    "Deze campagne speelt in " + p.world + ". Waar CLAUDE_DM.md of de prompts naar Tolkien/Midden-aarde, TOL-figuren of Eriador verwijzen: lees dat als deze setting en gebruik de canon van de campagne (S1 e.d.).",
+    "- Namen: " + p.naming, "- " + p.noOvershadow, "- Geografie: " + p.geoCheck, "- Loot: passend bij " + p.lootTone + "; " + p.lootNo + ".", "- " + p.bookFigures,
+    "- Register-id's: " + p.idLegend + "; " + p.noCreateFig + "; " + p.canonName + " (als event met divergence:true en een cause).",
+    "- Regio-id's: " + (Object.keys(regs).join(", ") || "(vrij, REG-LETTERS)") + ". Voorbeeldjaar in de kalender: " + p.exYear + ".",
+    SETTING.map && SETTING.map.enabled === false ? "- Er is geen kaart: laat place op null." : ""].filter(Boolean).join("\n");
+}
+const T = require("./tables.js")(get); /* NPC-/locatietabel per campagne: globaal of campaigns/{cid}/… (ownTables) */
 function update(updates) {
   const tmp = path.join(os.tmpdir(), "dnd-update-" + Date.now() + ".json");
   fs.writeFileSync(tmp, JSON.stringify(updates));
@@ -88,6 +102,7 @@ function cmdStatus() {
   }
 }
 function cmdContext(cid, flags) {
+  const sid = useSetting(cid);
   const turn = get("/dnd/" + cp(cid, "turn"));
   if (!turn) return console.log("Dit verhaal is nog niet gestart (geen turn).");
   const canon = get("/dnd/" + cp(cid, "canon")) || {};
@@ -97,11 +112,12 @@ function cmdContext(cid, flags) {
   const mem = get("/dnd/" + cp(cid, "memories")), sums = get("/dnd/" + cp(cid, "summaries"));
   const logs = get("/dnd/" + cp(cid, "log"), "--order-by-key --limit-to-last 40");
   const msgs = get("/dnd/" + cp(cid, "messages"), "--order-by-key --limit-to-last 24");
-  const allChars = get("/dnd/characters") || {}, npcs = get("/dnd/npcs") || {};
+  const allChars = get("/dnd/characters") || {}, npcs = get("/dnd/" + T(cid, "npcs")) || {};
   const party = (get("/dnd/campaignIndex/" + cid) || {}).party || null, chars = partyFilter(allChars, party);
   const wacht = party ? Object.entries(party).filter(([n, k]) => !k || !allChars[k]).map(([n]) => n) : [];
   const first = !Object.keys(state).length;
   const out = [];
+  { const sb = settingBlock(sid); if (sb) out.push(sb); }
   if (turn.handoff && turn.handoff.to === "claude") out.push("# OVERDRACHT (jij speelt deze beurt omdat het een groot moment is)\n" + turn.handoff.reason + ". Neem de tijd voor een thematisch sterke, rijke scène (mag langer dan 180 woorden), gebruik alle canon en de wereldstatus, en zet daarna met nextTurn.handoff:null de volgende beurt terug naar Gemini, tenzij het grote moment meerdere beurten duurt.");
   out.push("# TURN\nronde " + turn.round + ", status " + turn.status + (turn.prompt ? ", laatste vraag: " + turn.prompt : "") + (turn.checks ? ", gevraagde checks: " + JSON.stringify(turn.checks) : "") + (first ? "\n(LET OP: Stand is leeg: dit is de openingsbeurt; neem de beginsituatie uit D1/Stand #1 over)" : ""));
   out.push("# SPELERS (nextTurn.awaiting bevat altijd de SPELERNAAM, nooit de naam van het personage; de vraag in nextTurn.prompt richt je aan dezelfde speler)\n" + (party ? Object.entries(party).map(([n, k]) => n + (k && allChars[k] ? " (speelt " + allChars[k].name + ")" : " (heeft nog geen personage)")) : [...new Set([...vals(get("/dnd/" + cp(cid, "players"))), ...vals(chars).map(c => c.player).filter(Boolean)])].map(n => { const c = vals(chars).find(x => x.player === n); return n + (c ? " (speelt " + c.name + ")" : ""); })).join(", ") + (wacht.length ? "\n(LET OP: " + wacht.join(", ") + " heeft nog geen personage; speel de opening pas als alle spelers een personage hebben, en zeg dat tegen Gerben)" : ""));
@@ -126,7 +142,7 @@ function cmdContext(cid, flags) {
   out.push("# OPEN OPDRACHTEN (een echt nieuwe scène sluit hierop aan; gewone beurten en dialoog hoeven dat niet)\n" + (((state.quests || {}).open || []).map(x => "- " + (typeof x === "string" ? x : (x.title || "") + (x.detail ? ": " + x.detail : ""))).join("\n") || "(geen)"));
   const world = get("/dnd/" + cp(cid, "world"));
   out.push("# WERELDSTATUS (stabiele IDs; wijzig alleen via worldDelta)\n" + (world ? World.worldContext(world, { hay: (sortedVals(msgs).slice(-6).map(m => m.text).join(" ") + " " + pend.map(p => p.text).join(" ")).toLowerCase(), region: world.sceneRegion, maxChars: 6000 }) : "(niet actief)"));
-  out.push("# KAARTPLAATSEN (kies hieruit het id voor \"place\")\n" + MapData.ids.join(", "));
+  if (SETTING.map.enabled !== false) out.push("# KAARTPLAATSEN (kies hieruit het id voor \"place\")\n" + MapData.ids.join(", "));
   out.push("# DM-NOTITIES (privé)\n" + (Object.entries(notes).map(([k, v]) => "- " + k + ": " + v).join("\n") || "(nog geen)"));
   out.push("# RECENTE GESCHIEDENIS\n" + (sortedVals(msgs).filter(m => m.type !== "system").slice(-10).map(m => (m.type === "narration" ? "DM" : m.author) + ": " + m.text).join("\n\n") || "(begin van het verhaal)"));
   out.push("# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n" + JSON.stringify(rollDice()));
@@ -137,7 +153,7 @@ function parseDM(o, names, chars) {
   if (typeof o.narration !== "string" || !o.narration) throw new Error("narration ontbreekt");
   o.statePatch = o.statePatch && typeof o.statePatch === "object" ? o.statePatch : {};
   o.logEntries = Array.isArray(o.logEntries) ? o.logEntries : [];
-  o.place = (typeof o.place === "string" && MapData.byId[o.place]) ? o.place : null;
+  o.place = (typeof o.place === "string" && SETTING.map.enabled !== false && MapData.byId[o.place]) ? o.place : null;
   o.worldDelta = (o.worldDelta && typeof o.worldDelta === "object" && !Array.isArray(o.worldDelta)) ? o.worldDelta : null;
   o.speakers = Array.isArray(o.speakers) ? o.speakers.filter(s => typeof s === "string").slice(0, 4) : [];
   o.newNpcs = Array.isArray(o.newNpcs) ? o.newNpcs.filter(n => n && typeof n.name === "string" && n.name.trim()) : [];
@@ -159,6 +175,7 @@ function parseDM(o, names, chars) {
 /* alleen de personages van deze campagne (campaignIndex/{id}/party = {speler: sleutel}); zonder party (oud verhaal): alles */
 function partyFilter(chars, party) { if (!party) return chars; const keys = Object.values(party); return Object.fromEntries(Object.entries(chars).filter(([k]) => keys.includes(k))); }
 function cmdApply(cid, file, flags) {
+  useSetting(cid);
   const turn = get("/dnd/" + cp(cid, "turn"));
   if (!turn) throw new Error("Verhaal niet gestart.");
   if (turn.status !== "claude" && !flags.force) throw new Error("Status is '" + turn.status + "', niet 'claude'. Gebruik --force om toch te schrijven.");
@@ -173,7 +190,7 @@ function cmdApply(cid, file, flags) {
   const stateStr = get("/dnd/" + cp(cid, "state")) || "{}";
   const state = JSON.parse(typeof stateStr === "string" ? stateStr : JSON.stringify(stateStr));
   const notes = get("/dnd/" + cp(cid, "dmnotes")) || {};
-  const npcs = get("/dnd/npcs", "--shallow") || {}, locs = get("/dnd/locations", "--shallow") || {};
+  const npcs = get("/dnd/" + T(cid, "npcs"), "--shallow") || {}, locs = get("/dnd/" + T(cid, "locations"), "--shallow") || {};
   const lastS = get("/dnd/" + cp(cid, "stands"), "--order-by-key --limit-to-last 1");
   const lastKey = lastS ? Object.keys(lastS)[0] : null;
   const up = {}, msgKeys = [], logKeys = [];
@@ -184,15 +201,15 @@ function cmdApply(cid, file, flags) {
   if (out.rolls.length) nm.rolls = out.rolls;
   const nk = pushId(); msgKeys.push(nk);
   out.logEntries.forEach(l => { if (l && l.fact) { const k = pushId(); logKeys.push(k); up[cp(cid, "log/" + k)] = { fact: String(l.fact), inGameDate: String(l.inGameDate || ""), round: round + 1, t: now }; } });
-  out.newNpcs.forEach(n => { const k = slug(n.name); if (!npcs[k]) up["npcs/" + k] = { name: n.name.trim(), visual: String(n.visual || "").slice(0, 1500), t: now, from: cid }; });
-  out.extraLocations.forEach(x => { const xk = slug(x.name); if (xk && !locs[xk] && !up["locations/" + xk]) up["locations/" + xk] = { name: x.name, desc: x.description, visual: x.visual, t: now, from: cid }; });
-  if (out.location) { const lk = slug(out.location.name); if (!locs[lk]) { up["locations/" + lk] = { name: out.location.name, desc: out.location.description, visual: out.location.visual, t: now, from: cid }; nm.newLoc = lk; } else nm.loc = lk; up[cp(cid, "scene")] = lk; }
+  out.newNpcs.forEach(n => { const k = slug(n.name); if (!npcs[k]) up[T(cid, "npcs") + "/" + k] = { name: n.name.trim(), visual: String(n.visual || "").slice(0, 1500), t: now, from: cid }; });
+  out.extraLocations.forEach(x => { const xk = slug(x.name); if (xk && !locs[xk] && !up[T(cid, "locations") + "/" + xk]) up[T(cid, "locations") + "/" + xk] = { name: x.name, desc: x.description, visual: x.visual, t: now, from: cid }; });
+  if (out.location) { const lk = slug(out.location.name); if (!locs[lk]) { up[T(cid, "locations") + "/" + lk] = { name: out.location.name, desc: out.location.description, visual: out.location.visual, t: now, from: cid }; nm.newLoc = lk; } else nm.loc = lk; up[cp(cid, "scene")] = lk; }
   up[cp(cid, "messages/" + nk)] = nm;
   const world = get("/dnd/" + cp(cid, "world"));
   let wplan = null;
   if (world) { const sp = World.checkSpeakers(world, out.speakers, out.worldDelta && out.worldDelta.region); if (sp.errors.length) throw new Error("sprekers ongeldig:\n- " + sp.errors.join("\n- ") + "\nCorrigeer het JSON-bestand en probeer opnieuw (niets is opgeslagen)."); }
   if (world && out.worldDelta) {
-    const v = World.validateDelta(world, out.worldDelta, { round: round + 1, hasPortrait: n => { try { return !!get("/dnd/npcs/" + slug(n.name) + "/img"); } catch (e) { return false; } } });
+    const v = World.validateDelta(world, out.worldDelta, { round: round + 1, hasPortrait: n => { try { return !!get("/dnd/" + T(cid, "npcs") + "/" + slug(n.name) + "/img"); } catch (e) { return false; } } });
     if (!v.ok) throw new Error("worldDelta ongeldig:\n- " + v.errors.join("\n- ") + "\nCorrigeer het JSON-bestand en probeer opnieuw (niets is opgeslagen).");
     wplan = v.plan; v.warnings.forEach(w => console.log("let op:", w));
   }
@@ -200,7 +217,7 @@ function cmdApply(cid, file, flags) {
   const newNotes = { ...notes }; for (const [k, v] of Object.entries(out.dmNotes)) { if (v === null) delete newNotes[k]; else newNotes[k] = v; }
   up[cp(cid, "dmnotes")] = Object.keys(newNotes).length ? newNotes : null;
   const worldPrev = []; let mapPrev = [];
-  try {
+  if (SETTING.map.enabled !== false) try {
     const mapNow = get("/dnd/" + cp(cid, "map")), nc = (wplan && wplan.calendar) || (world && world.calendar) || null;
     const sc = (out.statePatch && out.statePatch.inGame && out.statePatch.inGame.location) || (state.inGame && state.inGame.location) || "";
     const pl = MapData.determinePlace({ id: out.place, locName: out.location && out.location.name, sceneText: sc, region: (out.worldDelta && out.worldDelta.region) || (world && world.sceneRegion) || null });

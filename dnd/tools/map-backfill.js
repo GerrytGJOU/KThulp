@@ -15,7 +15,7 @@ const world = get(base + "world"), stateStr = get(base + "state"), msgs = get(ba
 const state = JSON.parse(typeof stateStr === "string" ? stateStr : "{}"), cal = world && world.calendar ? { y: world.calendar.y, m: world.calendar.m, d: world.calendar.d } : null;
 const seq = [];
 Object.values(msgs).sort((a, b) => (a.t || 0) - (b.t || 0)).forEach(m => { if (m.newLoc) seq.push({ slug: m.newLoc, name: null }); });
-const locs = get("/dnd/locations") || {};
+const locs = get("/dnd/" + require("./tables.js")(get)(cid, "locations")) || {};
 seq.forEach(s => { s.name = locs[s.slug] && locs[s.slug].name; });
 seq.push({ slug: scene || null, name: (state.inGame && state.inGame.location) || (scene && locs[scene] && locs[scene].name) || null, last: true });
 let map = get(base + "map"), n = 0; const up = {};
