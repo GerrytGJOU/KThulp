@@ -366,7 +366,7 @@ function showLogin(){
   };
 }
 function showNoAccess(u,extra){
-  main.innerHTML='<div class="center"><p><b>Geen toegang.</b></p><p>Je bent ingelogd als '+esc(u.email||'')+'.<br>Stuur dit UID naar Gerben:</p><pre>'+esc(u.uid)+'</pre><p class="err">'+esc(extra||'')+'</p><button class="b alt" id="lo">Uitloggen</button></div>';
+  main.innerHTML='<div class="center"><p><b>Geen toegang.</b></p><p>Je bent ingelogd als '+esc(u.email||'')+'.<br>Nieuw? Laat een bestaande speler je mailadres toevoegen (Nieuw verhaal → Speler toevoegen), of stuur dit UID naar de beheerder:</p><pre>'+esc(u.uid)+'</pre><p class="err">'+esc(extra||'')+'</p><button class="b alt" id="lo">Uitloggen</button></div>';
   $('#lo').onclick=()=>auth.signOut();
 }
 
@@ -552,7 +552,7 @@ function newStoryForm(){
   const pl=playerNames();
   const opt=n=>{const cs=allChars().filter(c=>c.player===n), first=cs.find(c=>!c.dead); return '<option value="">➕ nog te maken</option>'+cs.map(c=>'<option value="'+esc(c.k)+'"'+(first&&first.k===c.k?' selected':'')+'>'+esc(c.name)+(c.dead?' (inactief)':'')+'</option>').join('')};
   f.innerHTML='<br><input type="text" id="ntitle" placeholder="Naam van het nieuwe verhaal">'+
-   '<br><br><label><small><b>Spelers in dit verhaal</b> (kies per speler een bestaand personage, of laat die zelf een nieuw personage maken)</small></label><div id="nparty">'+
+   '<br><br><label><small><b>Spelers in dit verhaal</b> (1 tot 6; kies per speler een bestaand personage, of laat die zelf een nieuw personage maken)</small></label><div id="nparty">'+
    pl.map(n=>'<div class="row" style="margin:4px 0;flex-wrap:nowrap"><label style="flex:none;min-width:90px"><input type="checkbox" data-pn="'+esc(n)+'"'+(me&&n===me.name?' checked':'')+'> '+esc(n)+'</label><select data-pc="'+esc(n)+'" style="flex:1;min-width:0">'+opt(n)+'</select></div>').join('')+'</div>'+
    '<button class="b alt sm" id="naddpl" type="button">＋ Speler toevoegen</button>'+
    '<br><br><label><small><b>Setting</b></small></label><select id="nset">'+DNDSettings.list().map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+'</option>').join('')+'</select><div id="nsetinfo" class="cctip"></div>'+
@@ -565,17 +565,20 @@ function newStoryForm(){
   if(ids.length) $('#ncopy').value='__tpl__';
   const nsync=()=>{const mid=$('#nset').value==='middenaarde', nw=!mid||$('#nwm').value==='nieuw'; $('#nwl').style.display=$('#nwm').style.display=mid?'':'none'; $('#nold').style.display=nw?'none':''; $('#nstartwrap').style.display=nw?'':'none'; if(nw) $('#nclaude').checked=true; if(!mid) document.querySelectorAll('[data-pc]').forEach(x=>{x.value=''}); const si=DNDSettings.list().find(s=>s.id===$('#nset').value); $('#nsetinfo').textContent=si?si.blurb:''};
   $('#nwm').onchange=nsync; $('#nset').onchange=nsync; nsync();
-  $('#naddpl').onclick=()=>{
-    const v=(prompt('Naam van de nieuwe speler (zoals hij in de toegangslijst staat):')||'').trim(); if(!v) return;
+  $('#naddpl').onclick=async()=>{
+    const v=(prompt('Naam van de nieuwe speler (zoals die in het spel heet):')||'').trim(); if(!v) return;
+    const em=(prompt('Google-mailadres van '+v+' (daarmee logt die speler in):')||'').trim().toLowerCase(); if(!/^[^\s@#$\[\]\/]+@[^\s@#$\[\]\/]+\.[^\s@#$\[\]\/]+$/.test(em)){alert('Dat is geen geldig e-mailadres. De speler is niet toegevoegd.');return}
     const l=playerNames(); if(l.some(x=>x.toLowerCase()===v.toLowerCase())){alert('Die speler staat er al.');return}
     l.push(v); cfg.players=l; db.ref('dnd/config/players').set(l);
-    alert('"'+v+'" is aan de lijst toegevoegd. Let op: om in te loggen heeft '+v+' ook toegang nodig; geef Gerben het Google-mailadres.');
+    await db.ref('dnd/playerRequests/'+em.replace(/\./g,',')).set({name:v,email:em,by:me?me.name:'',t:Date.now()});
+    alert('"'+v+'" staat op de spelerslijst. Voor het inloggen moet de beheerder het mailadres nog goedkeuren (node dnd/tools/speler.js apply).');
     f.innerHTML=''; newStoryForm();
   };
   $('#ncreate').onclick=async()=>{
     const t=$('#ntitle').value.trim(); if(!t){alert('Geef het verhaal een naam.');return}
     const party={}; f.querySelectorAll('[data-pn]').forEach(c=>{ if(c.checked){ const n=c.dataset.pn, sel=[...f.querySelectorAll('[data-pc]')].find(x=>x.dataset.pc===n); party[n]=sel?sel.value:''; } });
     if(!Object.keys(party).length){alert('Kies minstens één speler.');return}
+    if(Object.keys(party).length>6){alert('Maximaal 6 spelers per verhaal.');return}
     const open=Object.entries(party).filter(([n,k])=>!k).map(([n])=>n);
     /* geen confirm() meer: in sommige browsers (o.a. de ingebouwde) wordt die stil onderdrukt, waardoor de knop "niets doet". Spelers zonder personage maken dat zelf via Menu → Personage maken; dat staat al bij de spelerskeuze. */
     void open;
@@ -674,7 +677,7 @@ function enterCampaign(id){
   leaveCampaign(); cid=id; screen='camp'; tab='game'; updateBack();
   main.innerHTML=`
   <section class="tab" id="t-game"><div id="gamewrap"><div id="gamemain"><div id="scenebar"></div><div id="partybar"></div><div id="initbar"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></div><aside id="side"><div id="sidemain"></div><div id="partyside"></div></aside></div></section>
-  <section class="tab" id="t-ooc"><div class="scroll" id="oocthread"></div><div class="compose"><div class="row"><input type="text" id="oocin" placeholder="Praat met je broer (de DM leest dit niet)" style="flex:1"><button class="b" id="oocsend">Stuur</button></div></div></section>
+  <section class="tab" id="t-ooc"><div class="scroll" id="oocthread"></div><div class="compose"><div class="row"><input type="text" id="oocin" placeholder="Praat met je medespelers (de DM leest dit niet)" style="flex:1"><button class="b" id="oocsend">Stuur</button></div></div></section>
   <section class="tab" id="t-diary"><div class="scroll" id="diarybox"></div></section>
   <section class="tab" id="t-map"><div id="mapwrap"></div></section>
   <section class="tab" id="t-sheet"><div class="scroll" id="sheetbox"></div></section>
@@ -839,7 +842,7 @@ function renderGame(){
   if(!turn.blind){
     Object.values(pending).filter(p=>p.round===turn.round&&p.name!==me.name).forEach(p=>{const tx=String(p.text||''), pv=tx.length>70?tx.slice(0,70).trim()+'…':tx; st+=tx.length>70?'<details class="otheract"><summary>'+esc(p.name)+': '+esc(pv)+'</summary>'+esc(tx)+'</details>':'<br><small>'+esc(p.name)+': '+esc(tx)+'</small>'});
   } else if(Object.values(pending).some(p=>p.round===turn.round&&p.name!==me.name)){
-    st+='<br><small>(blind) De ander heeft ingediend.</small>';
+    st+='<br><small>(blind) Een andere speler heeft ingediend.</small>';
   }
   sb.innerHTML=st;
   if(!myTurn&&!mine){
@@ -853,7 +856,8 @@ function renderGame(){
     cpz.innerHTML=`<textarea id="act" placeholder="${mine?'Je actie is ingediend. Typ hier om hem te vervangen.':'Wat doe je?'}"></textarea>
     ${rollRowHtml()}
     <div class="row"><button class="b" id="send">${mine?'Actie vervangen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button><select id="dmsel" class="dmsel" title="Wie speelt de volgende beurt als de DM?"></select>
-    ${others.length?'<button class="b alt" id="skip">Zonder '+esc(others.join(', '))+' verder</button>':''}</div>
+    ${others.length>1?'<button class="b alt" id="skip">Zonder iedereen verder</button>':''}</div>
+    ${others.length?'<div class="row" id="skiprow">'+others.map(n=>'<button class="b alt sm" data-skip="'+esc(n)+'" type="button">⏭ Zonder '+esc(n)+'</button>').join('')+'</div>':''}
     ${mine?(String(mine.text).length>60?'<details class="otheract"><summary>Ingediend: '+esc(String(mine.text).slice(0,60).trim())+'…</summary>'+esc(mine.text)+'</details><small><a href="#" id="editmine">wijzig</a></small>':'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a></small>'):''}`;
     const em=$('#editmine'); if(em) em.onclick=e=>{e.preventDefault(); draft=mine.text.replace(/\s*\[worp:[^\]]*\]/i,''); $('#act').value=draft; $('#act').focus()};
     $('#act').value=draft;
@@ -861,6 +865,7 @@ function renderGame(){
     $('#send').onclick=()=>submit(false);
     $('#pass').onclick=()=>submit(true);
     const sk=$('#skip'); if(sk) sk.onclick=skipOthers;
+    document.querySelectorAll('[data-skip]').forEach(b=>b.onclick=()=>skipPlayer(b));
     const ds=$('#dmsel'); if(ds){
       const def=(dmSelRound===turn.round&&dmSelVal)?dmSelVal:dmDefault();
       ds.innerHTML='<option value="gemini">DM: Gemini</option>'+(cfg.anthropicKey?'<option value="anthropic">DM: Claude (API)</option>':'')+'<option value="claude">DM: Claude Code</option>';
@@ -896,6 +901,17 @@ async function removeAwaiting(name,round){
   });
   if(!r.committed) return 'late';
   return became?'resolve':'ok';
+}
+/* één afwezige speler overslaan: twee kliks (geen confirm(): die wordt in sommige browsers stil onderdrukt). De DM krijgt een 'overgeslagen'-regel en bestuurt dat personage niet. */
+let skipArmed=null;
+async function skipPlayer(btn){
+  const n=btn.dataset.skip, round=turn.round;
+  if(skipArmed!==n){ skipArmed=n; btn.textContent='Zeker? Zonder '+n; setTimeout(()=>{ if(skipArmed===n){ skipArmed=null; if(btn.isConnected) btn.textContent='⏭ Zonder '+n } },4000); return; }
+  skipArmed=null;
+  await db.ref(cp('pending/skip_'+slug(n))).set({round:round,name:n,text:'(overgeslagen: de speler is even afwezig; de DM bestuurt dit personage niet)',pass:true,skipped:true,by:me.name,t:Date.now()});
+  await db.ref(cp('messages')).push(sysMsg(n+' wordt overgeslagen deze ronde.'));
+  await saveDmChoice();
+  const res=await removeAwaiting(n,round); if(res==='resolve') resolve(false);
 }
 async function skipOthers(){
   const others=awaitingNames().filter(n=>n!==me.name);

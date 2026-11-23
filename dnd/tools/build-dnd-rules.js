@@ -60,6 +60,8 @@ const dnd = { ".read": A };
 ["config", "npcs", "locations", "characters", "campaignIndex"].forEach(k => { dnd[k] = { ".write": A }; });
 /* eigen settings: dnd/settings/{id} = { name, blurb, json (JSON-tekst), updated, by }; de id is een veilige slug */
 dnd.settings = { "$id": { ".write": A, ".validate": and("newData.hasChildren(['name','json'])", "$id.matches(/^[a-z0-9_-]+$/) && $id.length <= 40", "newData.child('name').isString() && newData.child('name').val().length <= 80", "newData.child('json').isString() && newData.child('json').val().length <= 300000") } };
+/* aanvragen voor nieuwe spelers: de browser schrijft alleen een aanvraag (sleutel = e-mail met komma voor punt); toegang geeft alleen de beheerder via de Firebase CLI (tools/speler.js) */
+dnd.playerRequests = { "$k": { ".write": A, ".validate": and("newData.hasChildren(['name','email'])", "$k.matches(/^[a-z0-9@_+,-]+$/) && $k.length <= 120", "newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40", "newData.child('email').isString() && newData.child('email').val().length <= 120") } };
 dnd.worldTemplate = {}; /* alleen via de Firebase CLI te wijzigen */
 dnd.campaigns = { "$cid": camp };
 

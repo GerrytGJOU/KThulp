@@ -188,5 +188,14 @@ t("settings: snapshot van een verhaal is een tekst tot 300 KB, alleen met toegan
   denied({ ["dnd/campaigns/" + C + "/setting"]: "{}" }, "niet toegestaan", NOPE);
 });
 
+/* spelersaanvragen (M5): de browser mag een aanvraag doen, maar geeft nooit zelf toegang */
+t("spelers: een aanvraag mag, toegang geven (dndAccessEmail) niet", () => {
+  allowed({ "dnd/playerRequests/piet@example,com": { name: "Piet", email: "piet@example.com", by: "Gerben", t: 1 } });
+  denied({ "dnd/playerRequests/piet@example,com": { name: "Piet" } }, "validatie");
+  denied({ "dnd/playerRequests/piet@example,com": { name: "x".repeat(41), email: "p@e.nl" } }, "validatie");
+  denied({ "dnd/playerRequests/piet@example,com": { name: "Piet", email: "p@e.nl" } }, "niet toegestaan", NOPE);
+  denied({ "dndAccessEmail/piet@example,com": "Piet" }, "niet toegestaan");
+});
+
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);

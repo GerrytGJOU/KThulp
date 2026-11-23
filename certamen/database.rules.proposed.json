@@ -33,6 +33,12 @@
           ".validate": "(newData.hasChildren(['name','json'])) && ($id.matches(/^[a-z0-9_-]+$/) && $id.length <= 40) && (newData.child('name').isString() && newData.child('name').val().length <= 80) && (newData.child('json').isString() && newData.child('json').val().length <= 300000)"
         }
       },
+      "playerRequests": {
+        "$k": {
+          ".write": "auth != null && (root.child('dndAccess/'+auth.uid).exists() || (auth.token.email_verified === true && root.child('dndAccessEmail/'+auth.token.email.toLowerCase().replace('.', ',')).exists()))",
+          ".validate": "(newData.hasChildren(['name','email'])) && ($k.matches(/^[a-z0-9@_+,-]+$/) && $k.length <= 120) && (newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40) && (newData.child('email').isString() && newData.child('email').val().length <= 120)"
+        }
+      },
       "worldTemplate": {},
       "campaigns": {
         "$cid": {
