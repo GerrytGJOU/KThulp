@@ -140,7 +140,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .ic.act{outline:2px solid var(--gold);font-weight:bold}
 .acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .acts button{background:rgba(0,0,0,.15);border:1px solid rgba(0,0,0,.3);border-radius:6px;padding:2px 9px;font:inherit;font-size:12px;cursor:pointer;color:inherit}
-.locimg{width:100%;max-height:240px;object-fit:cover;border-radius:8px;border:1px solid #4a3d30;margin:6px 0;cursor:pointer;display:block}
+.locimg{width:auto;max-width:100%;height:auto;max-height:260px;object-fit:contain;border-radius:8px;border:1px solid #4a3d30;margin:6px 0;cursor:pointer;display:block}
 .msg.loc{background:rgba(24,34,48,.85);display:flex;gap:10px;align-items:center;font-style:normal;text-align:left}
 .msg.loc img{width:84px;height:84px;object-fit:cover;border-radius:6px;flex:none;cursor:pointer}
 #gamewrap{display:flex;flex:1;min-height:0}
@@ -213,6 +213,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="world.js?v=12"></script>
 <script src="items.js?v=2"></script>
 <script src="map-data.js?v=1"></script>
+<script src="settings-data.js?v=2"></script>
 <script>
 "use strict";
 firebase.initializeApp({
@@ -237,6 +238,22 @@ let turn=null, canon={}, msgs=[], oocs=[], pending={}, stateStr="{}"; // per cam
 let tab='game', draft="", rollDraft="", composeRound=null;
 let listeners=[];
 const LEASE_MS=3*60*1000;
+/* actieve setting: die van de campagne (index[cid].settingId) of de standaard (Midden-aarde); bestaande campagnes hebben geen settingId en blijven dus ongewijzigd */
+/* NPC- en locatietabellen: oude campagnes delen de globale tabellen (dnd/npcs, dnd/locations); een campagne met ownTables:true in campaignIndex heeft eigen tabellen onder dnd/campaigns/{cid}/. Buiten een campagne (menu) geldt het globale pad. */
+function ownT(C){const c=C||cid; return !!(c&&index&&index[c]&&index[c].ownTables)}
+function tblPath(kind,C){return ownT(C)?cp(kind,C||cid):'dnd/'+kind}
+let tblBound={npcs:null,locations:null};
+function rebindTables(){
+  [['npcs',v=>{npcs=v}],['locations',v=>{locs=v}]].forEach(([kind,set])=>{
+    const p=tblPath(kind); if(tblBound[kind]&&tblBound[kind].p===p) return;
+    if(tblBound[kind]) tblBound[kind].r.off('value',tblBound[kind].f);
+    const ref=db.ref(p), f=s=>{set(s.val()||{});renderNpcs();if(screen==='camp')renderGame()};
+    set({}); tblBound[kind]={p:p,r:ref,f:f}; ref.on('value',f);
+  });
+}
+function ctxChanged(){applyUi(); rebindTables()}
+function applyUi(){const n=curSetting().ui.name; titleBase=n; if(!pingTimer) document.title=n; const h=document.querySelector("header h1"); if(h) h.textContent="⚔ "+n; const f=document.querySelector("footer"); if(f) f.innerHTML=esc(n)+" D&amp;D · &copy; Gerben de Jong · 2026"}
+function curSetting(){return DNDSettings.get((index&&cid&&index[cid]&&index[cid].settingId)||DNDSettings.DEFAULT_ID)}
 const cp=(p,C)=>'dnd/campaigns/'+(C||cid)+'/'+p;
 
 /* ---------- helpers ---------- */
@@ -256,8 +273,8 @@ function stopPing(){ if(pingTimer){clearInterval(pingTimer);pingTimer=null} docu
 function ping(t){
   if(!notifyOn()) return; beep(); try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){}
   if(document.hidden){
-    let on=false; stopPing(); pingTimer=setInterval(()=>{on=!on; document.title=on?'🔔 Jouw beurt · Midden-aarde':titleBase},1000);
-    if('Notification' in window&&Notification.permission==='granted'){try{new Notification('Midden-aarde: jouw beurt',{body:String((t&&t.prompt)||'Je bent aan de beurt'),tag:'dnd-turn'})}catch(e){}}
+    let on=false; stopPing(); pingTimer=setInterval(()=>{on=!on; document.title=on?'🔔 Jouw beurt · '+curSetting().ui.name:titleBase},1000);
+    if('Notification' in window&&Notification.permission==='granted'){try{new Notification(curSetting().ui.name+': jouw beurt',{body:String((t&&t.prompt)||'Je bent aan de beurt'),tag:'dnd-turn'})}catch(e){}}
   }
 }
 function maybePing(oldT,newT){
@@ -342,11 +359,10 @@ function showNoAccess(u,extra){
 let started=false;
 function startApp(){
   if(started) return; started=true;
+  rebindTables();
   db.ref('dnd/config').on('value',s=>{cfg=s.val()||{};if(screen==='menu'||tab==='set')renderSet()});
-  db.ref('dnd/npcs').on('value',s=>{npcs=s.val()||{};renderNpcs();if(screen==='camp')renderGame()});
   db.ref('dnd/characters').on('value',s=>{chars=s.val()||{}; if(!sheetEdit){ if(screen==='menu'&&menuView==='chars') renderSheet($('#sheetbox')); else if(screen==='camp'&&tab==='sheet') renderSheetTab(); } if(screen==='camp') renderGame();});
-  db.ref('dnd/locations').on('value',s=>{locs=s.val()||{};renderNpcs();if(screen==='camp')renderGame()});
-  db.ref('dnd/campaignIndex').on('value',s=>{index=s.val()||{};renderIndex()});
+  db.ref('dnd/campaignIndex').on('value',s=>{index=s.val()||{};renderIndex();rebindTables()});
   $('#topback').onclick=()=>showMenu('home');
   // browser-/telefoon-terugknop: blijf binnen de app (nooit terug naar de website)
   history.replaceState({dnd:1},''); history.pushState({dnd:2},'');
@@ -360,7 +376,7 @@ function latestId(){
   const ids=Object.keys(index); if(!ids.length) return null;
   return ids.sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0))[0];
 }
-function leaveCampaign(){
+function leaveCampaign(){setTimeout(ctxChanged,0); /* na de wissel van cid: titel, kop en footer volgen de setting van de campagne */
   listeners.forEach(([r,e,f])=>r.off(e,f));listeners=[];
   cid=null;turn=null;canon={};mapData=null;mapSel=null;mapView={s:1,x:0,y:0,init:false};sceneKey='';editKey=null;threadShow=10;seenNarr=null;msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
 }
@@ -423,12 +439,12 @@ function menuNpcs(){
     $(sel).addEventListener('toggle',e=>{const d=e.target; if(d.dataset&&d.dataset.done) doneOpen[d.dataset.done]=d.open;},true);
     $(sel).addEventListener('change',async e=>{
       const inp=e.target.closest('input[type=file][data-k]'); if(!inp||!inp.files[0]) return;
-      const base=inp.dataset.kind==='loc'?'dnd/locations/':'dnd/npcs/';
+      const base=tblPath(inp.dataset.kind==='loc'?'locations':'npcs')+'/';
       try{const img=await resizeImage(inp.files[0]); await db.ref(base+inp.dataset.k+'/img').set(img)}catch(err){alert(err.message)}
     });
     $(sel).addEventListener('click',e=>{
       const b=e.target.closest('button[data-a]'); if(!b) return;
-      const loc=b.dataset.kind==='loc', k=b.dataset.k, n=(loc?locs:npcs)[k], base=loc?'dnd/locations/':'dnd/npcs/'; if(!n) return;
+      const loc=b.dataset.kind==='loc', k=b.dataset.k, n=(loc?locs:npcs)[k], base=tblPath(loc?'locations':'npcs')+'/'; if(!n) return;
       if(b.dataset.a==='copy') copyText(loc?makeLocPrompt(n):makePrompt(n),b);
       if(b.dataset.a==='edit'){
         const v=prompt('Uiterlijk (Engels, concreet) voor '+n.name+':',n.visual||''); if(v!==null) db.ref(base+k+'/visual').set(v);
@@ -520,11 +536,11 @@ function newStoryForm(){
 }
 
 /* ----- NPC's en portretten ----- */
-const STYLE="Classic hand-drawn / painterly Tolkien-style tabletop RPG fantasy illustration: traditional details, visible ink outlines, atmospheric lighting, believable anatomy, historical materials.";
+const STYLE=()=>curSetting().style.base;
 function makePrompt(n){
-  return STYLE+"\nSquare head-and-shoulders character portrait of "+n.name+", facing the viewer in a slight three-quarter view, plain dark muted background with subtle texture.\n"+
+  return STYLE()+"\nSquare head-and-shoulders character portrait of "+n.name+", facing the viewer in a slight three-quarter view, plain dark muted background with subtle texture.\n"+
   "Character: "+(n.visual||'(no description yet)')+"\n"+
-  "If this is a character from Tolkien's books, follow the written descriptions in the books, not the likeness of any film actor.\n"+
+  curSetting().style.portraitNote+"\n"+
   "Avoid: photorealism, cartoon or anime look, 3D game render, modern clothing or objects, text, captions, watermarks, logos, borders, extra people, extra fingers, deformed hands.";
 }
 function libCard(kind,n){
@@ -563,7 +579,7 @@ async function saveNewNpc(){
   if($('#nplayer').value) rec.forPlayer=$('#nplayer').value;
   if(window._nimg) rec.img=window._nimg;
   const k=slug(name), old=npcs[k]||{};
-  await db.ref('dnd/npcs/'+k).set({...old,...rec});
+  await db.ref(tblPath('npcs')+'/'+k).set({...old,...rec});
   window._nimg=null;$('#nname').value='';$('#nvis').value='';$('#nfile').value='';$('#nfileinfo').textContent='';$('#nplayer').value='';
 }
 
@@ -805,7 +821,7 @@ async function startCampaign(){
 }
 
 /* ---------- DM-motor ---------- */
-const SYSTEM=`Je bent de Dungeon Master van een doorlopende D&D 5e (2024)-campagne in Midden-aarde met meerdere spelers (PC's; zie SPELERS en KARAKTERBLADEN). Schrijf in het Nederlands, met Engelse 2024-spelregeltermen. Gebruik voor alle Tolkien-namen (plaatsen, volken, personen, voorwerpen, titels) altijd de Engelse benaming uit het origineel, nooit een Nederlandse vertaling: the Shire (niet de Gouw), Rivendell, Bree, Mirkwood, the Misty Mountains, Hobbit, Dwarves, Elves, Wizard, Ranger, enzovoort. Dat geldt ook voor namen in worldDelta, location en newNpcs.
+function systemPrompt(S){ return `Je bent de Dungeon Master van een doorlopende D&D 5e (2024)-campagne in ${S.world} met meerdere spelers (PC's; zie SPELERS en KARAKTERBLADEN). Schrijf in het Nederlands, met Engelse 2024-spelregeltermen. ${S.naming}
 Regels:
 - Bronnenhiërarchie: (1) CANON (spelregels en personages) (2) LOGBOEK (3) de actuele STAND (4) rest. Verzin geen feiten over het verleden die hiermee botsen.
 - Zet in "place" het id van de kaartplaats waar de scène speelt (uit KAARTPLAATSEN; ook zonder nieuwe locatie), zodat de Kaart-tab de bezochte plekken kan tonen; past geen plaats, laat het null.
@@ -813,29 +829,29 @@ Regels:
 - Houd je aan het scene-pacing uit A1: kort vertellen, één betekenisvolle ontwikkeling per beurt, doorgaans 80-180 woorden. Langer mag (tot ongeveer 350 woorden, bij een echte cutscene of groot gesprek desnoods meer) als de situatie erom vraagt: gesprekken tussen NPC's, belangrijke cutscenes, reizen, omgevingsintroducties of een expliciete wens. Vertel in de stijl van Matt Mercer en Brennan Lee Mulligan van Critical Role: levendig en zintuiglijk, met een eigen stem en manier van praten per NPC, spanning opbouwend en de spelers uitnodigend om te handelen. Stop op een natuurlijk reactiemoment. Geen openingsgroet of meta-uitleg ("Welkom in…"); begin direct in de scène.
 - Schrijf niets over wat een PC denkt, voelt of besluit; beschrijf alleen de wereld, NPC's en de zintuiglijke waarneming van de PC's.
 - Speel NOOIT een PC.
-- Tolkien-personages overschaduwen de PC's niet.
+- ${S.noOvershadow}
 - Spelers rollen zelf fysiek; hun worp staat in hun actie ("[worp: ...]"). Vraag een check via nextTurn.checks (naam → welke check en waarom); verklap DC's niet.
 - Voor worpen van NPC's/vijanden gebruik je UITSLUITEND de meegegeven voorgegooide dobbelstenen, in volgorde (d20 voor aanvallen/checks/saves, d6/d8/d10/d12 voor schade). Noem de worp kort in de vertelling.
-- Grote momenten laat je aan Claude Code over (die heeft alle informatie): zet nextTurn.handoff {"to":"claude","reason":"..."} wanneer de VOLGENDE scène groot is: een locatie afsluiten en naar een nieuwe reizen, een finale of belangrijke onthulling, een ontmoeting met een Tolkien-hoofdfiguur, een Act-overgang of een groot gevecht. Doe het bij twijfel liever wel dan niet, maar niet voor gewone scènes (gesprekken, verkennen, kleine ontmoetingen); laat anders handoff op null. Na een groot moment in de wereldstatus (reis, Act, laatste laag, dood van een belangrijke NPC) draagt de app de volgende beurt zelf over.
+- Grote momenten laat je aan Claude Code over (die heeft alle informatie): zet nextTurn.handoff {"to":"claude","reason":"..."} wanneer de VOLGENDE scène groot is: een locatie afsluiten en naar een nieuwe reizen, een finale of belangrijke onthulling, ${S.bigFigure}, een Act-overgang of een groot gevecht. Doe het bij twijfel liever wel dan niet, maar niet voor gewone scènes (gesprekken, verkennen, kleine ontmoetingen); laat anders handoff op null. Na een groot moment in de wereldstatus (reis, Act, laatste laag, dood van een belangrijke NPC) draagt de app de volgende beurt zelf over.
 - nextTurn.awaiting bevat SPELERNAMEN (zoals in SPELERS), nooit de naam van een personage; de vraag in nextTurn.prompt moet gericht zijn aan precies de speler(s) in awaiting (noem daarin hun personage). Stel je een vraag aan een bepaald personage, dan staat de speler van dat personage in awaiting, niet de anderen.
 - Als meerdere of alle spelers moeten reageren zet je al hun namen in awaiting; bij combat de volgende speler; bij een enkele speler alleen die naam. Geef elke speler aandacht: laat in een gezamenlijke scène elk personage iets te doen of te kiezen krijgen.
 - Houd de STAND bij via statePatch (deep merge; null verwijdert een sleutel; lijsten worden vervangen). Gebruik EXACT dit schema, met de naam van het personage als sleutel:
-  {"inGame":{"date":"24 oktober 3018","timeOfDay":"ochtend","location":"Rivendell, Last Homely House"},
+  ${S.exInGame}
    "pcs":{"Personagenaam":{"player":"Spelernaam","location":"","hp":{"current":41,"max":41,"temp":0},"resources":{"Hit Dice":"3d10"},"conditions":[],"inventory":[],"knowledge":[]}},
    "companions":{"Naam":{"location":"","hp":{"current":0,"max":0,"temp":0},"status":"","attitude":""}},
    "npcs":{"Naam":{"location":"","status":"","attitude":"","knows":[]}},
    "factions":{"Naam":{"stance":"","currentAction":""}},
    "quests":{"open":[{"title":"","detail":"","kind":"main|side|personal|companion","for":"personagenaam (alleen bij personal)","npc":"NPC-naam (alleen bij companion)","place":"waar het speelt (bij side)","updates":["eerdere berichten van deze opdracht, oudste eerst"]}],"completed":[],"consequences":[]},
    "initiative":{"active":"Naam","order":[{"name":"Naam","init":15,"enemy":false}]}  (alleen tijdens een gevecht; anders null)}
-  Vul bij het begin hp, resources en inventory van elke PC in uit zijn B-document. Werk hp, resources, conditions, location, inGame en quests bij zodra ze veranderen. Controleer geografie met Tolkiens kaart (Rivendell ligt in Eriador aan de westzijde van de Misty Mountains, ver van de Ered Luin).
-  HET DAGBOEK VAN DE SPELERS wordt uitsluitend gevuld door jouw uitvoer, dus houd het elke beurt bij: Opdrachten = statePatch.quests (open/completed/consequences; een afgeronde opdracht verplaats je van open naar completed (nooit in beide); detail van een opdracht is altijd het nieuwste bericht, en het vorige detail zet je bij elke ontwikkeling achteraan in updates (oudste eerst, bestaande updates laten staan); zet er direct een regel bij zodra een NPC of gebeurtenis een nieuwe opdracht, belofte of doel geeft, verplaats hem naar completed als hij klaar is) plus worldDelta-quests die active worden. Het Dagboek sorteert opdrachten in Main quest (voor alle PC's), Side quests (voor alle PC's), Personal quests (per personage) en Companion quests (per NPC of companion): geef daarom elke opdracht in quests.open een kind (main, side, personal of companion), bij personal ook for (de personagenaam) en bij side-quests ook place (waar de opdracht plaatsvindt, bijvoorbeeld 'Rivendell, de stallen'), bij companion ook npc (de naam van de NPC), maar gebruik kind companion ALLEEN voor een NPC die al is gerekruteerd (status recruited): de opdrachten van een nog niet gerekruteerde NPC horen bij side (of personal), anders verraadt het Dagboek wie een mogelijke companion is; bij een nieuwe worldDelta-quest zet je set.kind op dezelfde manier, plus set.owner (personagenaam) bij personal en set.npcs bij companion;  Wat je weet = pcs.<personagenaam>.knowledge (korte, feitelijke regels over wat dat personage heeft ontdekt, gehoord of gezien: aanwijzingen, namen, plekken, beloftes; nooit DM-geheimen of wat het personage niet kan weten) en onthulde backstorylagen (worldDelta reveals); Personen = statePatch.npcs; Logboek = logEntries. Lijsten in statePatch worden VERVANGEN: geef bij quests.open en knowledge altijd de volledige actuele lijst (oude regels behouden, korte regels, samenvoegen boven ongeveer 15 regels), anders verdwijnt eerder werk.
-  LOOT EN VOORWERPEN (volledige regels en voorbeelden: canon M9, laad die bij beloningen en vondsten): gewone buit (kleine bedragen goud, gereedschap, voorraden, kruiden, vakwerk, informatie, gunsten) is ruim; magie is zeldzaam, heeft een naam, maker en geschiedenis en wordt alleen verdiend of geschonken (beloning voor een opdracht, bruikleen van een NPC met een plicht, een vondst op een plaats met verhaal), nooit uit willekeurige monsters. Hoogstens één nieuw magisch voorwerp per personage per Act, maximaal +1 en uncommon of rare, geen Ringen van Macht of unieke Tolkien-artefacten, geen magische winkel. Laat eigenschappen vanzelf blijken door gebruik. Leg elk nieuw voorwerp en elke betekenisvolle geldsom direct vast: pcs.<naam>.inventory (magisch als "Naam [magisch: kort effect]", goud als één regel "N GP"; altijd de volledige lijst) en een logEntry met het voorvoegsel "Buit:". Noem elk voorwerp met een herkenbare naam (Engels of Nederlands, bv. "Shortsword", "Wine (bottle)", "Honingkoeken"), want de Inventory toont er automatisch een icoon bij; geef een uniek of magisch voorwerp een eigen naam (die krijgt later een eigen icoon). Quests in de WERELDSTATUS kunnen een DM-geheime beloning noemen; die komt pas bij een goede uitkomst.
+  Vul bij het begin hp, resources en inventory van elke PC in uit zijn B-document. Werk hp, resources, conditions, location, inGame en quests bij zodra ze veranderen. ${S.geoCheck}
+  HET DAGBOEK VAN DE SPELERS wordt uitsluitend gevuld door jouw uitvoer, dus houd het elke beurt bij: Opdrachten = statePatch.quests (open/completed/consequences; een afgeronde opdracht verplaats je van open naar completed (nooit in beide); detail van een opdracht is altijd het nieuwste bericht, en het vorige detail zet je bij elke ontwikkeling achteraan in updates (oudste eerst, bestaande updates laten staan); zet er direct een regel bij zodra een NPC of gebeurtenis een nieuwe opdracht, belofte of doel geeft, verplaats hem naar completed als hij klaar is) plus worldDelta-quests die active worden. Het Dagboek sorteert opdrachten in Main quest (voor alle PC's), Side quests (voor alle PC's), Personal quests (per personage) en Companion quests (per NPC of companion): geef daarom elke opdracht in quests.open een kind (main, side, personal of companion), bij personal ook for (de personagenaam) en bij side-quests ook place (waar de opdracht plaatsvindt, bijvoorbeeld ${S.exPlace}), bij companion ook npc (de naam van de NPC), maar gebruik kind companion ALLEEN voor een NPC die al is gerekruteerd (status recruited): de opdrachten van een nog niet gerekruteerde NPC horen bij side (of personal), anders verraadt het Dagboek wie een mogelijke companion is; bij een nieuwe worldDelta-quest zet je set.kind op dezelfde manier, plus set.owner (personagenaam) bij personal en set.npcs bij companion;  Wat je weet = pcs.<personagenaam>.knowledge (korte, feitelijke regels over wat dat personage heeft ontdekt, gehoord of gezien: aanwijzingen, namen, plekken, beloftes; nooit DM-geheimen of wat het personage niet kan weten) en onthulde backstorylagen (worldDelta reveals); Personen = statePatch.npcs; Logboek = logEntries. Lijsten in statePatch worden VERVANGEN: geef bij quests.open en knowledge altijd de volledige actuele lijst (oude regels behouden, korte regels, samenvoegen boven ongeveer 15 regels), anders verdwijnt eerder werk.
+  LOOT EN VOORWERPEN (volledige regels en voorbeelden: canon M9, laad die bij beloningen en vondsten): gewone buit (kleine bedragen goud, gereedschap, voorraden, kruiden, vakwerk, informatie, gunsten) is ruim; magie is zeldzaam, heeft een naam, maker en geschiedenis en wordt alleen verdiend of geschonken (beloning voor een opdracht, bruikleen van een NPC met een plicht, een vondst op een plaats met verhaal), nooit uit willekeurige monsters. Ongeveer één nieuw magisch voorwerp per personage per milestone (hoogstens drie per Act), tot +1 (vanaf level 9 een enkele keer +2), uncommon of rare, altijd met maker, volk en verhaal en passend bij ${S.lootTone}, ${S.lootNo}, geen magische winkel. Laat eigenschappen vanzelf blijken door gebruik. Leg elk nieuw voorwerp en elke betekenisvolle geldsom direct vast: pcs.<naam>.inventory (magisch als "Naam [magisch: kort effect]", goud als één regel "N GP"; altijd de volledige lijst) en een logEntry met het voorvoegsel "Buit:". Noem elk voorwerp met een herkenbare naam (Engels of Nederlands, bv. "Shortsword", "Wine (bottle)", "Honingkoeken"), want de Inventory toont er automatisch een icoon bij; geef een uniek of magisch voorwerp een eigen naam (die krijgt later een eigen icoon). Quests in de WERELDSTATUS kunnen een DM-geheime beloning noemen; die komt pas bij een goede uitkomst.
   OPDRACHTEN ZIJN DE RUGGENGRAAT VAN HET VERHAAL, maar dwing niets af: niet elke beurt hoeft een opdracht vooruit te brengen. Een gesprek, een rustig moment of een kleine tussenscène mag gewoon zijn eigen ding doen, en je mag af en toe zelf een nieuwe opdracht pitchen (via een NPC, een gebeurtenis of een vondst). Alleen een echt NIEUWE SCÈNE (een andere plek, een groot nieuw gevecht of een nieuwe hoofdontwikkeling, dus niet zomaar een volgende beurt) sluit aan op minstens één open opdracht, een NPC-agenda of een backstory (aanhaken, verdiepen, verstoren of omkeren); verzin geen losstaande hoofdlijnen. Raakt een open opdracht heel lang niets, dan mag je op een natuurlijk moment een aanleiding, gevolg of tijdsdruk geven, maar forceer geen vervolg. Zet voltooide of vervallen opdrachten om naar completed of consequences. Wat een PC weet (knowledge) mag je terugspelen en belonen met logische vervolgstappen. 
 - Documenten in CANON die als DM-geheim of "NIET LEZEN ALS SPELER" gemarkeerd zijn, gebruik je voor planning, maar je onthult of citeert ze nooit letterlijk; laat geheimen alleen via het spel zelf blijken.
 - Is de ACTUELE STAND nog leeg ({}), begin dan met een statePatch die de beginsituatie uit D1 Wereldstatus / STAND #1 in canon overneemt. Een PC zonder uitgewerkt personage (zoals PC2 zolang B2 ontbreekt) speel je niet; vraag die speler eerst zijn personage te beschrijven.
-- Portretten: "speakers" = de namen van maximaal 2 NPC's die in deze beurt spreken of centraal staan. Gebruik EXACT de naam uit de lijst BEKENDE NPC'S als de NPC daar al in staat. "newNpcs" = elke NPC die in deze beurt voor het eerst optreedt en NIET in die lijst staat, met "visual": een concrete Engelse beschrijving voor een portret (soort/leeftijd, postuur, gezicht, huid, haar en baard, ogen, littekens, elk kledingstuk met kleur en materiaal, zichtbare uitrusting, uitdrukking). Voor figuren uit Tolkiens boeken: beschrijf zoals in de boeken. Geen geheimen in "visual".
+- Portretten: "speakers" = de namen van maximaal 2 NPC's die in deze beurt spreken of centraal staan. Gebruik EXACT de naam uit de lijst BEKENDE NPC'S als de NPC daar al in staat. "newNpcs" = elke NPC die in deze beurt voor het eerst optreedt en NIET in die lijst staat, met "visual": een concrete Engelse beschrijving voor een portret (soort/leeftijd, postuur, gezicht, huid, haar en baard, ogen, littekens, elk kledingstuk met kleur en materiaal, zichtbare uitrusting, uitdrukking). ${S.bookFigures} Geen geheimen in "visual".
 - Passages en documenten met [V] zijn voorstellen: gebruik ze als ontwerp, maar presenteer ze niet als bestaande feiten of vaststaande personen zolang ze niet in het spel zijn geïntroduceerd; [B] is bestaand, [O] is open (niet invullen).
-- Wereldstatus: de app houdt een register met stabiele IDs (TOL- Tolkien-figuren, NPC-, CMP- companions, MAIN-, SQ-, MQ-, PQ-, DQ- quests, CLK- klokken, FAC- facties, LOC- plaatsen, REG- regio's). Gebruik exact die IDs uit WERELDSTATUS. Wijzigingen in de wereld geef je in "worldDelta" (weglaten als er niets verandert): {"region":null (alleen een REG-id als de party echt naar een andere regio reist, en dan met time; de huidige regio staat in WERELDSTATUS),"time":{"to":{"y":3018,"m":10,"d":26},"reason":"...","worldTick":false},"npcs":[{"id":"NPC-E05","op":"create|update","set":{"name":"","status":"named","location":"LOC-...","canon":"N"},"reason":""}],"quests":[{"id":"DQ-0001","op":"create|update","set":{"status":"active"},"reason":""}],"clocks":[{"id":"CLK-A","delta":1,"reason":""}],"agendas":[{"id":"AG-NET-1","op":"create|thwart|pause|resume|delay","reason":"","days":5,"set":{"owner":"FAC-LOCAL","title":"","canon":"N","steps":[{"text":"","afterDays":7,"clock":[{"id":"CLK-B","delta":1}],"moves":[{"id":"NPC-E02","to":"REG-RIVENDELL"}],"quest":{"id":"SQ-02","to":"available"},"requires":{"id":"SQ-01","status":"completed"}}],"thwartedBy":[],"holdIfActive":[],"ifUnopposed":""}}],"reveals":[{"npc":"CMP-R01","layer":1,"reason":"wat er in het verhaal gebeurde"}],"companions":[{"id":"CMP-R03","op":"recruit|decline|depart|return|update|rest","mode":"permanent|etappe|temporary|contact|remote","reason":"","hp":{"delta":-5},"resources":{"Second Wind":{"delta":-1}},"conditions":{"add":[],"remove":[]},"evidence":"concrete ervaring","nextAction":"","obligation":{"text":"","due":{"y":3018,"m":11,"d":5}},"destination":"REG-ERIADOR","returnIf":"","expectedReturn":{"y":3018,"m":12,"d":1},"kind":"short|long"}],"events":[{"type":"","summary":"","refs":{"npcs":[],"quests":[]},"divergence":false,"cause":""}]}. Regels: de tijd gaat nooit terug en sprongen van meer dan 21 dagen vereisen worldTick:true; NPC's reizen niet sneller dan de afstand tussen regio's toelaat; overleden NPC's keren niet terug; quests gaan dormant→available→active→completed|failed|expired|changed en een beëindigde quest start nooit opnieuw; klokken veranderen alleen met een reden en hoogstens ±2; een nieuwe quest (DQ-0001, DQ-0002, ...) heeft title, hook, region, ifIgnored, canon:"N" en expires {y,m,d} of open:true; Tolkien-figuren (TOL-) maak je niet aan; promoveer NPC's gefaseerd (ambient → named → recurring → companion_candidate → recruited) en geef elke terugkerende NPC een ID; een afwijking van de Tolkien-canon registreer je als event met divergence:true en een cause. Companions (CMP-): promoveer eerst tot companion_candidate en stel ze voor met npcs-update {introduced:true}; daarna gaat alles via "companions", nooit via npcs-status. recruit (alleen als de kandidaat bij de party is, met mode en reden: een geloofwaardig verzoek en gedeeld belang, geen verplichte quest), decline (weigering, eventueel retryAfter), depart (reden, bestemming, returnIf, expectedReturn), return (na reistijd; reden), update (hp/resources/conditions na gevechten en rust, evidence = een concrete ervaring zoals 'PCs redden een gewonde': géén vertrouwensgetal, nextAction, obligation met due), rest (short|long). Je rolt NPC-dobbelstenen zelf; 0 HP is bewusteloos, overlijden alleen via npcs status:'deceased' met reden. Boven 5 reizigers (incl. beide PC's) vraag je een logistiek plan. Regels onder 'Aan de orde (companions)' in WERELDSTATUS verwerk je in het verhaal: een companion handelt autonoom, ook buiten beeld. Factie-agenda's en NPC-acties buiten beeld (AG-): onder "Agenda's" in WERELDSTATUS staan de plannen van facties en NPC's; de app voert stappen zelf uit bij elke tijdsprong (klokken, verplaatsingen met reistijd, quests die beschikbaar worden) en toont het resultaat onder "Recent buiten beeld". Laat de wereld daarop reageren, maar nooit alwetend: de PC's weten het pas als nieuws, een bode of eigen onderzoek hen bereikt. Dwarsbomen de spelers een plan, gebruik dan agendas op:"thwart" (of "pause"/"delay") met een reden; start een nieuwe agenda met op:"create" (1-6 stappen, ID AG-...) alleen als een factie of NPC daar een geloofwaardig motief en middelen voor heeft. Voer stappen nooit zelf uit en wijzig klokken niet dubbel. Zodra de spelers een NPC echt ontmoeten zet je npcs-update {introduced:true} (zonder dat opent geen enkele laag). Verhaallagen (Baldur's Gate-stijl): elke NPC met een regel onder "Verhaallagen" in WERELDSTATUS heeft een eigen rol, een eigen quest (CQ-/NQ-/PQ-) en een gelaagde achtergrond die langzaam aan het licht komt. Laat een NPC door gedrag, bijzaken en dialoog voelbaar meer hebben dan hij zegt; onthul een laag pas als de WERELDSTATUS aangeeft KAN NU ONTHULD WORDEN en de scène erom vraagt (vertrouwen, een stille moment, het juiste gesprek), en dan met reveals [{npc,layer,reason}] (lagen gaan op volgorde, nooit vooruit lopen of dumpen). Activeer de eigen quest van een NPC (dormant naar active) zodra de spelers erop ingaan en ga stap voor stap vooruit met quests set:{stage:n}. Een onvoorbereide NPC zonder verhaallaag krijgt geen verzonnen diepe geheimen. Een ongeldige worldDelta wordt geweigerd en je moet hem corrigeren.
+- Wereldstatus: de app houdt een register met stabiele IDs (${S.idLegend}, NPC-, CMP- companions, MAIN-, SQ-, MQ-, PQ-, DQ- quests, CLK- klokken, FAC- facties, LOC- plaatsen, REG- regio's). Gebruik exact die IDs uit WERELDSTATUS. Wijzigingen in de wereld geef je in "worldDelta" (weglaten als er niets verandert): {"region":null (alleen een REG-id als de party echt naar een andere regio reist, en dan met time; de huidige regio staat in WERELDSTATUS),"time":{"to":{"y":${S.exYear},"m":10,"d":26},"reason":"...","worldTick":false},"npcs":[{"id":"NPC-E05","op":"create|update","set":{"name":"","status":"named","location":"LOC-...","canon":"N"},"reason":""}],"quests":[{"id":"DQ-0001","op":"create|update","set":{"status":"active"},"reason":""}],"clocks":[{"id":"CLK-A","delta":1,"reason":""}],"agendas":[{"id":"AG-NET-1","op":"create|thwart|pause|resume|delay","reason":"","days":5,"set":{"owner":"FAC-LOCAL","title":"","canon":"N","steps":[{"text":"","afterDays":7,"clock":[{"id":"CLK-B","delta":1}],"moves":[{"id":"NPC-E02","to":"${S.exRegA}"}],"quest":{"id":"SQ-02","to":"available"},"requires":{"id":"SQ-01","status":"completed"}}],"thwartedBy":[],"holdIfActive":[],"ifUnopposed":""}}],"reveals":[{"npc":"CMP-R01","layer":1,"reason":"wat er in het verhaal gebeurde"}],"companions":[{"id":"CMP-R03","op":"recruit|decline|depart|return|update|rest","mode":"permanent|etappe|temporary|contact|remote","reason":"","hp":{"delta":-5},"resources":{"Second Wind":{"delta":-1}},"conditions":{"add":[],"remove":[]},"evidence":"concrete ervaring","nextAction":"","obligation":{"text":"","due":{"y":${S.exYear},"m":11,"d":5}},"destination":"${S.exRegB}","returnIf":"","expectedReturn":{"y":${S.exYear},"m":12,"d":1},"kind":"short|long"}],"events":[{"type":"","summary":"","refs":{"npcs":[],"quests":[]},"divergence":false,"cause":""}]}. Regels: de tijd gaat nooit terug en sprongen van meer dan 21 dagen vereisen worldTick:true; NPC's reizen niet sneller dan de afstand tussen regio's toelaat; overleden NPC's keren niet terug; quests gaan dormant→available→active→completed|failed|expired|changed en een beëindigde quest start nooit opnieuw; klokken veranderen alleen met een reden en hoogstens ±2; een nieuwe quest (DQ-0001, DQ-0002, ...) heeft title, hook, region, ifIgnored, canon:"N" en expires {y,m,d} of open:true; ${S.noCreateFig}; promoveer NPC's gefaseerd (ambient → named → recurring → companion_candidate → recruited) en geef elke terugkerende NPC een ID; ${S.canonName} als event met divergence:true en een cause. Companions (CMP-): promoveer eerst tot companion_candidate en stel ze voor met npcs-update {introduced:true}; daarna gaat alles via "companions", nooit via npcs-status. recruit (alleen als de kandidaat bij de party is, met mode en reden: een geloofwaardig verzoek en gedeeld belang, geen verplichte quest), decline (weigering, eventueel retryAfter), depart (reden, bestemming, returnIf, expectedReturn), return (na reistijd; reden), update (hp/resources/conditions na gevechten en rust, evidence = een concrete ervaring zoals 'PCs redden een gewonde': géén vertrouwensgetal, nextAction, obligation met due), rest (short|long). Je rolt NPC-dobbelstenen zelf; 0 HP is bewusteloos, overlijden alleen via npcs status:'deceased' met reden. Boven 5 reizigers (incl. beide PC's) vraag je een logistiek plan. Regels onder 'Aan de orde (companions)' in WERELDSTATUS verwerk je in het verhaal: een companion handelt autonoom, ook buiten beeld. Factie-agenda's en NPC-acties buiten beeld (AG-): onder "Agenda's" in WERELDSTATUS staan de plannen van facties en NPC's; de app voert stappen zelf uit bij elke tijdsprong (klokken, verplaatsingen met reistijd, quests die beschikbaar worden) en toont het resultaat onder "Recent buiten beeld". Laat de wereld daarop reageren, maar nooit alwetend: de PC's weten het pas als nieuws, een bode of eigen onderzoek hen bereikt. Dwarsbomen de spelers een plan, gebruik dan agendas op:"thwart" (of "pause"/"delay") met een reden; start een nieuwe agenda met op:"create" (1-6 stappen, ID AG-...) alleen als een factie of NPC daar een geloofwaardig motief en middelen voor heeft. Voer stappen nooit zelf uit en wijzig klokken niet dubbel. Zodra de spelers een NPC echt ontmoeten zet je npcs-update {introduced:true} (zonder dat opent geen enkele laag). Verhaallagen (Baldur's Gate-stijl): elke NPC met een regel onder "Verhaallagen" in WERELDSTATUS heeft een eigen rol, een eigen quest (CQ-/NQ-/PQ-) en een gelaagde achtergrond die langzaam aan het licht komt. Laat een NPC door gedrag, bijzaken en dialoog voelbaar meer hebben dan hij zegt; onthul een laag pas als de WERELDSTATUS aangeeft KAN NU ONTHULD WORDEN en de scène erom vraagt (vertrouwen, een stille moment, het juiste gesprek), en dan met reveals [{npc,layer,reason}] (lagen gaan op volgorde, nooit vooruit lopen of dumpen). Activeer de eigen quest van een NPC (dormant naar active) zodra de spelers erop ingaan en ga stap voor stap vooruit met quests set:{stage:n}. Een onvoorbereide NPC zonder verhaallaag krijgt geen verzonnen diepe geheimen. Een ongeldige worldDelta wordt geweigerd en je moet hem corrigeren.
 - DM-notities: gebruik "dmNotes" (sleutel naar korte tekst; null verwijdert) voor alles wat de spelers niet mogen zien: de klokken A-D uit C1 (bv. "klok_a":"2/6: koerier onderschept"), geheime plannen, wat NPC's echt weten, nog niet onthulde aanwijzingen. Zet zulke geheimen NOOIT in de Stand, het logboek of vooruitlopend in de vertelling. Houd het compact en ruim afgehandelde notities op.
 - Houd de Stand compact: korte zinnen, geen herhaling van canon, verwijder afgehandelde opdrachten en vertrokken NPC's (null), hoogstens ongeveer 3 kennispunten per PC.
 - Worpen: zet de worpen die je zelf doet (NPC's, vijanden, companions) in "rolls" ({"who":"Orc 1","what":"Attack Roll","natural":14,"mod":5,"total":19,"result":"Hit"}; bij schade {"who","what":"Damage","dice":"1d8+3","total":9}). De app toont ze als chips: schrijf die NIET ook nog eens als haakjes in de vertelling. Toon nooit de DC. Vertel het gevolg. Verwerk een nat 20 of nat 1 als klein extra gevolg in de vertelling.
@@ -848,7 +864,7 @@ Regels:
 - HERINNERINGEN van de spelers zijn bindend en gaan voor op je eigen aannames.
 - logEntries: korte feiten van wat NU echt gebeurd is.
 Antwoord ALLEEN met JSON in dit formaat:
-{"narration":"markdown-tekst","speakers":["Naam"],"rolls":[{"who":"","what":"","natural":0,"mod":0,"total":0,"result":""}],"newNpcs":[{"name":"Naam","visual":"English description"}],"location":{"name":"","description":"","visual":""},"place":"id uit KAARTPLAATSEN waar de scène speelt, of null","dmNotes":{"klok_a":"1/6: reden"},"worldDelta":{"region":null,"time":null,"npcs":[],"quests":[],"clocks":[],"events":[]},"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."},"handoff":null}}`;
+{"narration":"markdown-tekst","speakers":["Naam"],"rolls":[{"who":"","what":"","natural":0,"mod":0,"total":0,"result":""}],"newNpcs":[{"name":"Naam","visual":"English description"}],"location":{"name":"","description":"","visual":""},"place":"id uit KAARTPLAATSEN waar de scène speelt, of null","dmNotes":{"klok_a":"1/6: reden"},"worldDelta":{"region":null,"time":null,"npcs":[],"quests":[],"clocks":[],"events":[]},"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."},"handoff":null}}`; }
 
 function rollDice(){
   const r=(s,n)=>Array.from({length:n},()=>1+crypto.getRandomValues(new Uint32Array(1))[0]%s);
@@ -968,7 +984,7 @@ ${window.DNDMap?DNDMap.ids.join(', '):''}
     let out,usage,usedModel,note=null;
     let worldRejected=null;
     for(let i=0;i<2;i++){
-      const r=await callLLM(SYSTEM,user,note,true,{big});usage=r.usage;usedModel=r.model;
+      const r=await callLLM(systemPrompt(curSetting().prompt),user,note,true,{big});usage=r.usage;usedModel=r.model;
       let parsed;
       try{parsed=parseDM(r.txt,allNames)}catch(e){note=e.message;if(i===1)throw new Error('Ongeldige DM-uitvoer: '+note);continue}
       if(world&&window.DNDWorld){
@@ -999,9 +1015,9 @@ ${window.DNDMap?DNDMap.ids.join(', '):''}
     if(out.rolls.length) nm.rolls=out.rolls;
     msgKeys.push(nk); up[cp('messages/'+nk,C)]=nm;
     out.logEntries.forEach(l=>{if(l&&l.fact){const k=db.ref(cp('log',C)).push().key;logKeys.push(k);up[cp('log/'+k,C)]={fact:String(l.fact),inGameDate:String(l.inGameDate||''),round:round+1,t:now}}});
-    out.newNpcs.forEach(n=>{const k=slug(n.name); if(!npcs[k]) up['dnd/npcs/'+k]={name:n.name.trim(),visual:String(n.visual||'').slice(0,1500),t:now,from:C}});
-    if(out.location){const lk=slug(out.location.name); if(!locs[lk]){up['dnd/locations/'+lk]={name:out.location.name,desc:out.location.description,visual:out.location.visual,t:now,from:C}; nm.newLoc=lk;} else nm.loc=lk; up[cp('scene',C)]=lk;}
-    out.extraLocations.forEach(x=>{const xk=slug(x.name); if(xk&&!locs[xk]&&!up['dnd/locations/'+xk]) up['dnd/locations/'+xk]={name:x.name,desc:x.description,visual:x.visual,t:now,from:C};});
+    out.newNpcs.forEach(n=>{const k=slug(n.name); if(!npcs[k]) up[tblPath('npcs',C)+'/'+k]={name:n.name.trim(),visual:String(n.visual||'').slice(0,1500),t:now,from:C}});
+    if(out.location){const lk=slug(out.location.name); if(!locs[lk]){up[tblPath('locations',C)+'/'+lk]={name:out.location.name,desc:out.location.description,visual:out.location.visual,t:now,from:C}; nm.newLoc=lk;} else nm.loc=lk; up[cp('scene',C)]=lk;}
+    out.extraLocations.forEach(x=>{const xk=slug(x.name); if(xk&&!locs[xk]&&!up[tblPath('locations',C)+'/'+xk]) up[tblPath('locations',C)+'/'+xk]={name:x.name,desc:x.description,visual:x.visual,t:now,from:C};});
     if(window.DNDMap){
       try{
         const mapS=(await db.ref(cp('map',C)).get()).val()||null, nc=(out._wp&&out._wp.plan&&out._wp.plan.calendar)||(world&&world.calendar)||null;
@@ -1143,9 +1159,9 @@ async function undoLast(mode,big){
   if(Object.keys(mapUndo).length){ try{ await db.ref().update(mapUndo) }catch(e){ console.warn('kaart niet teruggezet (regels?)',e) } }
   if(mode==='regen'){ bigNext=!!big; resolve(false); }
 }
-const LOCSTYLE_END="Avoid: photorealism, cartoon or anime look, 3D game render, modern objects, text, captions, watermarks, logos, borders.";
+const LOCSTYLE_END=()=>curSetting().style.avoid;
 function makeLocPrompt(n){
-  return STYLE+"\nWide landscape illustration (3:2) of the location "+n.name+": "+(n.visual||'(no description yet)')+"\nNo prominent characters unless described. If this is a place from Tolkien's books, follow the written descriptions in the books.\n"+LOCSTYLE_END;
+  return STYLE()+"\nWide landscape illustration (3:2) of the location "+n.name+": "+(n.visual||'(no description yet)')+"\nNo prominent characters unless described. "+curSetting().style.locNote+"\n"+LOCSTYLE_END();
 }
 function sceneSlug(){const S=getState(); return sceneKey||(S.inGame&&S.inGame.location?slug(S.inGame.location):'');}
 /* zoek bij een vrije plaatsnaam ("Rivendell, de stallen (achter de smidse)") het bekende gebied met afbeelding: eerst exact, dan zonder haakjes, dan de langste bekende naam die erin voorkomt */
@@ -1275,7 +1291,7 @@ function wireMap(){
 function renderMap(soft){
   if(screen!=='camp'||tab!=='map'||!window.DNDMap) return; const box=$('#mapwrap'); if(!box) return;
   if(!$('#mapview')){
-    box.innerHTML='<div id="mapview"><div id="mapstage"><img id="mapimg" src="'+DNDMap.MAP.file+'" alt="Kaart van Midden-aarde" draggable="false"><div id="mappins"></div></div>'+
+    box.innerHTML='<div id="mapview"><div id="mapstage"><img id="mapimg" src="'+DNDMap.MAP.file+'" alt="Kaart van '+curSetting().ui.name+'" draggable="false"><div id="mappins"></div></div>'+
       '<div class="mapctl"><button id="mzin" title="Inzoomen">＋</button><button id="mzout" title="Uitzoomen">−</button><button id="mfit" title="Hele kaart">⤢</button><button id="mhere" title="Naar de huidige plek">⌖</button></div>'+
       '<div class="maphint">Sleep om te verschuiven, knijp of scrol om te zoomen, tik op een pin.</div></div><aside id="mapinfo"></aside>';
     wireMap(); mapView.init=false;
@@ -1423,7 +1439,7 @@ async function summarize(C,upTo,force){
   ms.forEach(c=>{const m=c.val(); if(m.type!=='system'&&m.round>covered&&m.round<=upTo) list.push(m)});
   if(list.length<4) return false;
   const text=list.map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
-  const r=await callLLM(SUMSYS,'# EERDERE SAMENVATTING\n'+(prev.join('\n')||'(geen)')+'\n\n# NIEUWE BERICHTEN\n'+text,null,false,{model:provider()==='anthropic'?(cfg.anthropicModel||'claude-haiku-5-5'):(cfg.summaryModel||'gemini-2.5-flash-lite')});
+  const r=await callLLM(SUMSYS.replace("Midden-aarde",curSetting().prompt.world),'# EERDERE SAMENVATTING\n'+(prev.join('\n')||'(geen)')+'\n\n# NIEUWE BERICHTEN\n'+text,null,false,{model:provider()==='anthropic'?(cfg.anthropicModel||'claude-haiku-5-5'):(cfg.summaryModel||'gemini-2.5-flash-lite')});
   await db.ref(cp('summaries/'+String(upTo).padStart(5,'0'),C)).set({fromRound:covered+1,toRound:upTo,text:r.txt.trim(),t:Date.now()});
   return true;
 }
@@ -1856,7 +1872,7 @@ const CC_CLASSES={
   feats:{1:[CCF('Spellcasting','Spellcasting met Intelligence; spellbook met 6 spells (+2 per level).'),CCF('Ritual Adept','Rituelen casten uit je spellbook.'),CCF('Arcane Recovery','Eén keer per dag spell slots herstellen na een Short Rest.')],2:[CCF('Scholar','Expertise in 1 van Arcana, History, Investigation, Medicine, Nature of Religion.')],3:[],5:[CCF('Memorize Spell','Wissel een voorbereide spell na een Short Rest.')]},
   subs:[['Abjurer','Arcane Ward.'],['Diviner','Portent (2 d20 vooraf gooien).'],['Evoker','Potent Cantrip, Sculpt Spells.'],['Illusionist','Improved Illusions, Phantasmal Creatures.']]}
 };
-const CC_APPR=['Standaard-class: past doorgaans eenvoudig.','Aangepaste interpretatie nodig: overleg met de DM.','Vraagt expliciete DM-goedkeuring (magie in Midden-aarde).'];
+const CC_APPR=()=>['Standaard-class: past doorgaans eenvoudig.','Aangepaste interpretatie nodig: overleg met de DM.','Vraagt expliciete DM-goedkeuring ('+curSetting().creator.magicWorld+').'];
 const CC_STEPS=['Concept','Species','Class','Background','Ability Scores','Uitrusting','Persoonlijkheid & backstory','Controle & opslaan'];
 const CC_PB={8:0,9:1,10:2,11:3,12:4,13:5,14:7,15:9};
 const CC_ARRAY=[15,14,13,12,10,8];
@@ -2017,9 +2033,9 @@ function ccCalc(s){
   if(!s.species) R.issues.push('Kies een species.');
   if(!s.cls) R.issues.push('Kies een class.');
   if(!s.bg) R.issues.push('Kies een background.');
-  if(cls&&cls.appr>0) R.dmflags=(R.dmflags||[]).concat([s.cls+': '+CC_APPR[cls.appr]]);
+  if(cls&&cls.appr>0) R.dmflags=(R.dmflags||[]).concat([s.cls+': '+CC_APPR()[cls.appr]]);
   if(s.cls&&s.sub){ const sb=(cls.subs.find(x=>x[0]===s.sub)||[])[1]||''; if(/DM-check|DM-goedkeuring|riskant/i.test(sb)) R.dmflags=(R.dmflags||[]).concat([s.sub+': '+sb.match(/(DM-check|DM-goedkeuring|Zeer riskant[^.]*)/i)[0]]); }
-  feats.forEach(f=>{ if(/Magic Initiate/.test(f)) R.dmflags=(R.dmflags||[]).concat([f+': magie in Midden-aarde = DM-goedkeuring']); });
+  feats.forEach(f=>{ if(/Magic Initiate/.test(f)) R.dmflags=(R.dmflags||[]).concat([f+': '+curSetting().creator.magicWorld+' = DM-goedkeuring']); });
   if(/Wild Heart/.test(s.sub)) R.dmflags=(R.dmflags||[]).concat(['Wild Heart (Bear/Eagle/Wolf): echte gedaanteverandering naar een dier vraagt DM-goedkeuring.']);
   return R;
 }
@@ -2085,7 +2101,7 @@ function ccStepHtml(R){
   const s=cc, cls=CC_CLASSES[s.cls], bg=CC_BG[s.bg], sp=CC_SPECIES[s.species], L=R.L;
   const tip=t=>'<p class="cctip">'+t+'</p>';
   if(ccStep===0){
-    return '<h3>Wie wil je spelen?</h3>'+tip('Begin bij het verhaal, niet bij de cijfers. Dit is een nieuw personage in Midden-aarde (Third Age 3018): Tolkien met speelruimte, D&amp;D 2024 als regelsysteem. Geen vuurwapens, geen willekeurige magische voorwerpen.')+
+    return '<h3>Wie wil je spelen?</h3>'+tip('Begin bij het verhaal, niet bij de cijfers. '+curSetting().creator.intro+'')+
     ccIn('name','Naam van het personage',s.name,'text','bv. Wulfgrim')+
     '<label><small>Speler</small><select data-f="player" data-r="1">'+playerNames().map(p=>'<option'+(s.player===p?' selected':'')+'>'+p+'</option>').join('')+'</select></label>'+
     ccSel('level','Startlevel',String(s.level),[1,2,3,4,5].map(n=>[String(n),'Level '+n+(n===3?' (standaard voor deze campagne)':'')]),'')+
@@ -2103,7 +2119,7 @@ function ccStepHtml(R){
       if(s.species==='Elf') h+=ccSel('lineage','Elven Lineage',s.lineage,Object.keys(CC_LINEAGE).map(k=>[k,k]),'')+tip(esc(CC_LINEAGE[s.lineage]))+ccSel('elfSkill','Keen Senses: kies een proficiency',s.elfSkill,[['insight','Insight'],['perception','Perception'],['survival','Survival']],'');
       if(s.species==='Human') h+=ccSel('humanSkill','Skillful: extra skill',s.humanSkill,SKILLS.map(x=>[x[0],x[1]]))+ccSel('versFeat','Versatile: extra Origin Feat',s.versFeat,Object.keys(CC_FEATS).map(k=>[k,k]))+(s.versFeat?tip(esc(CC_FEATS[s.versFeat])):'');
     }
-    h+='<h3 style="margin-top:12px">Talen</h3>'+tip('Je spreekt Common (Westron) plus twee Standard Languages naar keuze. Midden-aarde-vertaling: Dwarvish = Khuzdul/Zwergentaal, Elvish = Sindarin/Quenya, Orc = Zwarte Spraak (beperkt), Halfling = Hobbitish.')+
+    h+='<h3 style="margin-top:12px">Talen</h3>'+tip('Je spreekt Common (Westron) plus twee Standard Languages naar keuze. '+curSetting().creator.langsTip+'')+
       '<div class="row">'+[0,1].map(i=>'<div style="flex:1;min-width:150px">'+ccSel('langs.'+i,'Taal '+(i+1),s.langs[i],CC_LANGS.map(x=>[x,x]))+'</div>').join('')+'</div>';
     return h;
   }
@@ -2130,7 +2146,7 @@ function ccStepHtml(R){
     return h;
   }
   if(ccStep===3){
-    let h='<h3>Background</h3>'+tip('D&amp;D 2024: de background geeft ability-bonussen, 2 skills, een Origin Feat, een tool en startuitrusting. Kies wat geloofwaardig is in Midden-aarde 3018.')+
+    let h='<h3>Background</h3>'+tip('D&amp;D 2024: de background geeft ability-bonussen, 2 skills, een Origin Feat, een tool en startuitrusting. '+curSetting().creator.bgNote+'')+
       '<div class="ccgrid">'+Object.entries(CC_BG).map(([k,v])=>'<button class="ccopt'+(s.bg===k?' on':'')+'" data-set="bg" data-v="'+k+'"><b>'+k+'</b><small>'+v.sk.map(ccSk).join(', ')+' · '+esc(v.feat)+'</small></button>').join('')+'</div>';
     if(bg){
       h+='<div class="card"><b>'+s.bg+'</b><br><small>Ability-scores: '+bg.ab.map(x=>x.toUpperCase()).join(', ')+' · Skills: '+bg.sk.map(ccSk).join(', ')+' · Origin Feat: '+esc(bg.feat)+' · Tool: '+esc(bg.tool)+'</small><br><small>'+esc(CC_FEATS[bg.feat]||'')+'</small></div>'+
@@ -2272,7 +2288,7 @@ async function ccAI(kind){
   if(!keyOk()){alert('Zet eerst je API-sleutel bij ⚙ Instellingen.');return}
   const s=cc, R=ccCalc(s);
   const ctx='Personage: '+(s.name||'(naamloos)')+'. Level '+s.level+' '+[s.species,s.cls,s.sub,s.bg&&('background '+s.bg)].filter(Boolean).join(', ')+'.'+(s.concept?'\nConcept van de speler: '+s.concept:'')+(s.alignment?'\nAlignment: '+s.alignment:'')+(s.traits?'\nEigenschappen: '+s.traits:'')+(s.flaw?'\nZwakte: '+s.flaw:'')+(s.appearance?'\nUiterlijk: '+s.appearance:'');
-  const SYS='Je bent een schrijfhulp voor een D&D 5e (2024)-personage in een campagne in Midden-aarde (Tolkien, Third Age 3018, rond de Council of Elrond). Schrijf in het Nederlands, gebruik Engelse D&D-termen. Wees trouw aan Tolkien-canon, maar met speelruimte; geen vuurwapens, geen willekeurige magie. Verzin geen spelregels. Wat de speler zelf heeft vastgesteld mag je niet veranderen; eigen aanvullingen markeer je met "(voorstel)".';
+  const SYS=curSetting().creator.helperSys;
   let user='';
   if(kind==='concept') user=ctx+'\n\nGeef 4 uiteenlopende, korte conceptideeën (elk 2-3 zinnen: wie, afkomst, drijfveer, speelstijl) passend bij de wensen van de speler. Nummer ze 1-4.';
   if(kind==='story'){ if(!s.notes.trim()&&!s.backstory.trim()){alert('Vul eerst ruwe notities in.');return} user=ctx+'\n\nRUWE NOTITIES VAN DE SPELER:\n'+(s.notes||'')+(s.backstory?'\n\nBESTAANDE BACKSTORY:\n'+s.backstory:'')+'\n\nWerk dit uit tot een backstory van ongeveer 300 woorden met korte kopjes (Jeugd & afkomst, Familie, Keerpunt, Waarom nu op pad). Houd alle feiten van de speler intact; markeer aanvullingen met "(voorstel)". Sluit af met één regel over de startsituatie.'; }
@@ -2397,7 +2413,7 @@ function renderSet(){
   $('#sdm').value=cfg.dmMode||'gemini'; $('#ssumby').value=cfg.summaryBy||'app'; $('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
   $('#snotify').onchange=e=>{try{localStorage.setItem('dnd_notify',e.target.checked?'1':'0')}catch(x){}};
   $('#snperm').onclick=async()=>{ if(!('Notification' in window)){alert('Dit apparaat of deze browser ondersteunt geen systeemmeldingen (op iPhone alleen vanuit een aan het beginscherm toegevoegde app).');return} try{const r=await Notification.requestPermission(); alert('Systeemmeldingen: '+r)}catch(x){alert('Toestemming vragen mislukt')} renderSet(); };
-  $('#sntest').onclick=()=>{ beep(); try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(x){} if('Notification' in window&&Notification.permission==='granted'){try{new Notification('Midden-aarde: jouw beurt',{body:'Dit is een test.',tag:'dnd-test'})}catch(x){}} };
+  $('#sntest').onclick=()=>{ beep(); try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(x){} if('Notification' in window&&Notification.permission==='granted'){try{new Notification(curSetting().ui.name+': jouw beurt',{body:'Dit is een test.',tag:'dnd-test'})}catch(x){}} };
   $('#smodel').value=cfg.model||'gemini-2.5-flash'; $('#ssum').value=cfg.summaryModel||'gemini-2.5-flash-lite'; $('#sgbig').value=cfg.bigModel||'';
   $('#samodel').value=cfg.anthropicModel||'claude-haiku-5-5'; $('#sabig').value=cfg.anthropicBigModel||'claude-sonnet-5-5';
   $('#ssave').onclick=async()=>{
