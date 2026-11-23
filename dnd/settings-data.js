@@ -222,7 +222,7 @@
     if (!isO(C)) e.push("creator ontbreekt"); else {
       ["magicWorld", "intro", "langsTip", "bgNote", "spellTip", "magicTip", "commonLang", "helperSys", "speciesTip", "aanleiding"].forEach(function (k) { if (!str(C[k], 3000)) e.push("creator." + k + " ontbreekt of is te lang"); });
       if (!isO(C.species) || !Object.keys(C.species).length) e.push("creator.species: minstens één species");
-      else Object.keys(C.species).forEach(function (k) { const x = C.species[k]; if (!isO(x) || !str(x.label, 60) || !str(x.tolk, 600) || !(x.speed >= 5 && x.speed <= 120) || !str(x.size, 40) || !Array.isArray(x.traits) || !x.traits.length || !x.traits.every(function (t) { return Array.isArray(t) && t.length === 2 && str(t[0], 80) && str(t[1], 400); })) e.push("species " + k + ": label, tolk, speed (5-120), size en traits [[naam, uitleg], ...] zijn verplicht"); });
+      else Object.keys(C.species).forEach(function (k) { const x = C.species[k]; if (!isO(x) || !str(x.label, 120) || !str(x.tolk, 600) || !(x.speed >= 5 && x.speed <= 120) || !str(x.size, 40) || !Array.isArray(x.traits) || !x.traits.length || !x.traits.every(function (t) { return Array.isArray(t) && t.length === 2 && str(t[0], 80) && str(t[1], 400); })) e.push("species " + k + ": label, tolk, speed (5-120), size en traits [[naam, uitleg], ...] zijn verplicht"); });
       if (!isO(C.lineage)) e.push("creator.lineage moet een object zijn (mag leeg)");
       if (!Array.isArray(C.langs) || C.langs.length < 2 || !C.langs.every(function (x) { return str(x, 60); })) e.push("creator.langs: minstens twee talen");
       if (!Array.isArray(C.inspiration) || !C.inspiration.length || !C.inspiration.every(function (x) { return str(x, 400); })) e.push("creator.inspiration: minstens één regel");
