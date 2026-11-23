@@ -12,6 +12,8 @@
      log-edit <cid> <bestand.json>        verwijder/vervang oude logregels: {"delete":[sleutels],"replace":[{"keys":[..],"fact":"..","inGameDate":".."}]}
      state-patch <cid> <bestand.json>    deep-merge in de Stand (lijsten vervangen, null verwijdert)
      memory-add <cid> <tekst>            voeg een Herinnering toe
+     level-up <cid> <speler|personage> <naarLevel> [notitie]  kondig een level-up aan: de speler doet hem zelf op het karakterblad (knop + stip)
+     level-up-ack <cid> <speler|personage>  na verwerking in de Stand: haal de level-up-melding van het blad
      table-set <cid> <bestand.json>      open/werk de Tafel der Draden bij: {open,phase,title,intro,cands:{"Naam":{role,demands,wants,fears,slotInfo:{reis:"..."}}}} (partyTable, zie M11)
      table-reply <cid> <bestand.json>    antwoorden van kandidaten op gesprekken: {replies:[{player,npc,text,done,summary}],dossier:[{npc,line}],phase,final:{npc:{slot,note}}}
      table-show <cid>                    toon gesprekken, keuzes en onthulling van de Tafel der Draden
@@ -116,6 +118,26 @@ function tableBlock(pt, players) {
   const br = pt.beraad || {}; Object.keys(br).forEach(p => Object.entries(br[p] || {}).forEach(([k, t]) => L.push("Beraad " + p + " over " + ((pt.cands || {})[k] || {}).name + ": " + t)));
   return L.join("\n");
 }
+/* level-up: de DM kondigt aan in het verhaal, de speler kiest op het karakterblad (dnd/levelup.js), de DM verwerkt het in de Stand */
+function resolveChar(cid, who) {
+  const allC = get("/dnd/characters") || {}, party = (get("/dnd/campaignIndex/" + cid) || {}).party || {};
+  const k = party[who] || (allC[who] ? who : Object.keys(allC).find(x => slug(allC[x].name) === slug(who) || slug(allC[x].player || "") === slug(who)));
+  if (!k || !allC[k]) throw new Error("personage niet gevonden: " + who); return { key: k, c: allC[k] };
+}
+function cmdLevelUp(cid, who, to, note) {
+  const { key, c } = resolveChar(cid, who), L = Number(to); if (!(L >= 2 && L <= 12)) throw new Error("naarLevel moet 2 t/m 12 zijn");
+  if (Number(c.level) !== L - 1) throw new Error(c.name + " is level " + c.level + "; een level-up gaat één level per keer (naar " + (Number(c.level) + 1) + ")");
+  update({ ["characters/" + key + "/levelUp"]: { status: "announced", to: L, note: String(note || "").slice(0, 600), t: Date.now(), by: "Claude" } });
+  console.log("Level-up aangekondigd voor " + c.name + " (naar level " + L + "): de knop en de stip verschijnen op het karakterblad van " + c.player + ".");
+}
+function cmdLevelUpAck(cid, who) {
+  const { key, c } = resolveChar(cid, who); update({ ["characters/" + key + "/levelUp"]: null }); console.log("Level-up-melding van " + c.name + " verwijderd.");
+}
+function levelBlock(allC) {
+  const L = Object.values(allC).filter(c => c && c.levelUp); if (!L.length) return null;
+  return "# LEVEL-UP (de speler doet hem zelf op het karakterblad; jij kondigt aan met 'level-up' en verwerkt daarna de Stand)\n" + L.map(c => "- " + c.name + " (" + c.player + "): " + (c.levelUp.status === "announced"
+    ? "aangekondigd naar level " + c.levelUp.to + ", wacht op de speler" : "GEDAAN: " + (c.levelUp.summary || "") + ". Werk de Stand bij (pcs." + c.name + ".hp.max en .current, resources Hit Dice, features, spell slots) met state-patch, vertel het kort in de volgende beurt en bevestig daarna met 'level-up-ack'.")).join("\n");
+}
 function cmdTableSet(cid, file) {
   const d = JSON.parse(fs.readFileSync(file, "utf8")), up = {}, base = cp(cid, "partyTable/");
   ["open", "phase", "title", "intro"].forEach(k => { if (d[k] !== undefined) up[base + k] = d[k]; });
@@ -184,6 +206,7 @@ function cmdContext(cid, flags) {
   if (SETTING.map.enabled !== false) out.push("# KAARTPLAATSEN (kies hieruit het id voor \"place\")\n" + MapData.ids.join(", "));
   out.push("# DM-NOTITIES (privé)\n" + (Object.entries(notes).map(([k, v]) => "- " + k + ": " + v).join("\n") || "(nog geen)"));
   out.push("# RECENTE GESCHIEDENIS\n" + (sortedVals(msgs).filter(m => m.type !== "system").slice(-10).map(m => (m.type === "narration" ? "DM" : m.author) + ": " + m.text).join("\n\n") || "(begin van het verhaal)"));
+  { const lb = levelBlock(allChars); if (lb) out.push(lb); }
   { const pt = get("/dnd/" + cp(cid, "partyTable")); if (pt && pt.open) out.push(tableBlock(pt, party ? Object.keys(party) : ["Gerben", "Maurits"])); }
   out.push("# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n" + JSON.stringify(rollDice()));
   out.push("# ACTIES DEZE RONDE\n" + (pend.length ? pend.map(p => p.name + ": " + p.text).join("\n") : "(geen: open het verhaal)"));
@@ -382,6 +405,8 @@ try {
   else if (cmd === "log") cmdLog(pos[1], flags);
   else if (cmd === "log-edit") cmdLogEdit(pos[1], pos[2]);
   else if (cmd === "memory-add") cmdMemory(pos[1], pos[2]);
+  else if (cmd === "level-up") cmdLevelUp(pos[1], pos[2], pos[3], pos.slice(4).join(" "));
+  else if (cmd === "level-up-ack") cmdLevelUpAck(pos[1], pos[2]);
   else if (cmd === "table-set") cmdTableSet(pos[1], pos[2]);
   else if (cmd === "table-reply") cmdTableReply(pos[1], pos[2]);
   else if (cmd === "table-show") cmdTableShow(pos[1]);

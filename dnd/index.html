@@ -223,6 +223,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="settings-thedas.js?v=1"></script>
 <script src="settings-theros.js?v=1"></script>
 <script src="partytable.js?v=2"></script>
+<script src="levelup.js?v=1"></script>
 <script>
 "use strict";
 firebase.initializeApp({
@@ -244,7 +245,7 @@ let diaryTab=(function(){try{return localStorage.getItem('dnd_diarytab')||'sum'}
 let cfg={}, npcs={}, locs={}, chars={}, index={}; let sceneKey='', editKey=null, editDraft='', lastSide='';              // globaal
 let wQuests={}, wCal=null, wBack={}, wNpcs={}, wLocs={}, mapData=null, mapSel=null, mapView={s:1,x:0,y:0,init:false};
 let turn=null, canon={}, msgs=[], oocs=[], pending={}, stateStr="{}"; // per campagne
-let ptData=null;
+let ptData=null, luOpen=false;
 let tab='game', draft="", rollDraft="", composeRound=null;
 let listeners=[];
 const LEASE_MS=3*60*1000;
@@ -372,7 +373,7 @@ function startApp(){
   if(started) return; started=true;
   rebindTables();
   db.ref('dnd/config').on('value',s=>{cfg=s.val()||{};if(screen==='menu'||tab==='set')renderSet()});
-  db.ref('dnd/characters').on('value',s=>{chars=s.val()||{}; if(!sheetEdit){ if(screen==='menu'&&menuView==='chars') renderSheet($('#sheetbox')); else if(screen==='camp'&&tab==='sheet') renderSheetTab(); } if(screen==='camp') renderGame();});
+  db.ref('dnd/characters').on('value',s=>{chars=s.val()||{};markNav(); if(!sheetEdit){ if(screen==='menu'&&menuView==='chars') renderSheet($('#sheetbox')); else if(screen==='camp'&&tab==='sheet') renderSheetTab(); } if(screen==='camp') renderGame();});
   db.ref('dnd/campaignIndex').on('value',s=>{index=s.val()||{};renderIndex();rebindTables()});
   $('#topback').onclick=()=>showMenu('home');
   // browser-/telefoon-terugknop: blijf binnen de app (nooit terug naar de website)
@@ -641,7 +642,7 @@ function enterCampaign(id){
   on(db.ref(cp('canon')),'value',s=>{canon=s.val()||{};if(tab==='canon')renderCanon()});
   on(db.ref(cp('pending')),'value',s=>{pending=s.val()||{};renderGame()});
   on(db.ref(cp('scene')),'value',s=>{sceneKey=s.val()||'';renderGame()});
-  on(db.ref(cp('partyTable')),'value',s=>{ptData=s.val()||null;if(tab==='table')renderTable();if(tab==='more')renderMore();markMore()});
+  on(db.ref(cp('partyTable')),'value',s=>{ptData=s.val()||null;if(tab==='table')renderTable();if(tab==='more')renderMore();markNav()});
   const mq=db.ref(cp('messages')).limitToLast(300);
   on(mq,'value',s=>{msgs=[];s.forEach(c=>{msgs.push({...c.val(),_k:c.key})});renderGame()});
   const oq=db.ref(cp('ooc')).limitToLast(200);
@@ -657,7 +658,8 @@ function setTab(t){
 }
 document.addEventListener('click',e=>{const g=e.target.closest('[data-goto]'); if(g&&screen==='camp') setTab(g.dataset.goto)});
 const BACK='<button class="b alt sm" data-goto="more" style="margin-bottom:8px">‹ Meer</button>';
-function markMore(){ const b=document.querySelector('nav button[data-t="more"]'); if(!b) return; const dot=!!(window.PartyTable&&ptData&&ptData.open&&me&&PartyTable.needsMe(ptData,me.name,playerNames())); b.textContent='Meer'+(dot?' ●':''); }
+function markNav(){ if(screen!=='camp'||!me) return; const dotM=!!(window.PartyTable&&ptData&&ptData.open&&PartyTable.needsMe(ptData,me.name,playerNames())), dotK=!!(window.LevelUp&&allChars().some(c=>LevelUp.pending(c,me.name)));
+  const bm=document.querySelector('nav button[data-t="more"]'), bk=document.querySelector('nav button[data-t="sheet"]'); if(bm) bm.textContent='Meer'+(dotM?' ●':''); if(bk) bk.textContent='Karakter'+(dotK?' ●':''); }
 function renderTable(){
   if(screen!=='camp'||!window.PartyTable) return;
   PartyTable.render($('#tablebox'),{data:ptData,cid:cid,me:me,players:playerNames(),npcs:npcs,esc:esc,db:db,base:cp('partyTable')});
@@ -1628,6 +1630,7 @@ function sheetHtml(c){
   const live=liveHp(c), hpTxt=live?live.cur+' / '+live.max+(live.temp?' (+'+live.temp+')':''):(c.hpMax||'—');
   const pp=10+by('skill:perception').bonus;
   let h='<div class="card sh"'+(c.dead?' style="opacity:.7"':'')+'><div class="ppl">'+avatar(c.name)+'<div><h3 style="margin:0">'+(c.dead?'☠ ':'')+esc(c.name)+(c.dead?' <small style="color:var(--red)">(gesneuveld)</small>':'')+'</h3><small style="color:var(--mute)">Level '+esc(c.level||1)+' · '+esc([c.species,c.class+(c.subclass?' ('+c.subclass+')':''),c.background].filter(Boolean).join(' · '))+'</small><br><small style="color:var(--mute)">'+esc((c.player?'Speler: '+c.player:'')+(c.alignment?' · '+c.alignment:''))+'</small></div></div></div>';
+  if(window.LevelUp&&c.levelUp&&me&&c.player===me.name){ if(LevelUp.pending(c,me.name)) h+='<div class="card" style="border:1px solid var(--gold)"><b>⬆ Level-up beschikbaar: level '+esc(c.levelUp.to||(Number(c.level)||1)+1)+'</b>'+(c.levelUp.note?'<div style="white-space:pre-wrap;margin:4px 0">'+esc(c.levelUp.note)+'</div>':'')+'<div class="row" style="margin-top:6px"><button class="b" data-levelup="1">Level-up doen</button></div></div>'; else if(c.levelUp.status==='done') h+='<div class="card"><small>Level-up gedaan: '+esc(c.levelUp.summary||'')+'. De DM verwerkt dit bij de volgende beurt in de Stand.</small></div>'; }
   h+='<div class="sh-strip">'+
     '<div><small>Armor Class</small><b>'+esc(c.ac||'—')+'</b></div>'+
     '<div><small>Hit Points</small><b>'+esc(hpTxt)+'</b></div>'+
@@ -1701,9 +1704,11 @@ function renderSheet(el,prefix){
   let h=(prefix||'')+'<div class="row" style="margin-bottom:8px">'+list.map(c=>'<button class="b sm'+(c.k===sheetKey&&sheetEdit!=='new'?'':' alt')+'" data-sk="'+c.k+'">'+(c.dead?'☠ ':'')+esc(c.name)+'</button>').join('')+'<button class="b alt sm" data-newchar="1">＋ Nieuw personage</button></div>';
   if(sheetEdit==='new') h+=editorHtml({player:me?me.name:''},true);
   else if(sheetEdit&&chars[sheetKey]) h+=editorHtml({k:sheetKey,...chars[sheetKey]},false);
+  else if(luOpen&&sheetKey&&chars[sheetKey]&&window.LevelUp&&me&&chars[sheetKey].player===me.name&&LevelUp.pending(chars[sheetKey],me.name)) h+='<div id="lubox"></div>';
   else if(sheetKey&&chars[sheetKey]) h+=sheetHtml({k:sheetKey,...chars[sheetKey]});
   else h+='<p style="color:var(--mute)">Nog geen personage. Maak er een met "＋ Nieuw personage".</p>';
   el.innerHTML=h;
+  { const lb=el.querySelector('#lubox'); if(lb){ const k0=sheetKey; LevelUp.render(lb,{c:{k:k0,...chars[k0]},esc:esc,feats:Object.keys(CC_FEATS),featText:CC_FEATS,onClose:()=>{luOpen=false;renderSheet(el,prefix)},onDone:async(nc)=>{ const o=Object.assign({},nc); delete o.k; o.t=Date.now(); luOpen=false; await db.ref('dnd/characters/'+k0).set(o); }}); } else luOpen=false; }
   if(!el._sheetWired){
     el._sheetWired=true;
     el.addEventListener('toggle',e=>{const d=e.target; if(d&&d.dataset&&d.dataset.sec) sheetOpen[d.dataset.sec]=d.open;},true);
@@ -1712,6 +1717,7 @@ function renderSheet(el,prefix){
       /* Klik ergens anders in het blad: de worp-popup onderin sluit weer. */
       if(sheetRoll&&!q('[data-roll]')&&!q('#rollpanel')){ sheetRoll=''; el.querySelectorAll('.rl.on').forEach(x=>x.classList.remove('on')); const rp=el.querySelector('#rollpanel'); if(rp) rp.style.display='none'; }
       if(q('[data-sk]')){sheetKey=q('[data-sk]').dataset.sk; sheetEdit=false; sheetRoll=''; return renderSheet(el,prefix);}
+      if(q('[data-levelup]')){luOpen=true; return renderSheet(el,prefix);}
       if(q('[data-newchar]')){sheetEdit='new'; return renderSheet(el,prefix);}
       if(q('[data-edit]')){sheetEdit=true; return renderSheet(el,prefix);}
       if(q('[data-dead]')){ const cc0=chars[sheetKey]; if(cc0&&confirm(cc0.dead?cc0.name+' weer actief maken?':cc0.name+' markeren als gesneuveld/gepensioneerd? (Het blad blijft bewaard, maar de DM speelt dit personage niet meer mee.)')) await db.ref('dnd/characters/'+sheetKey+'/dead').set(cc0.dead?null:true); return; }
