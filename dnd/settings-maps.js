@@ -166,7 +166,7 @@
     }
   });
 
-  /* ===== Theros ===== (kaart "The World of Theros"; Kolophon staat niet op de kaart: het regiopunt wijst bij benadering naar de kust bij Sitrium) */
+  /* ===== Theros ===== (kaart "The World of Theros") */
   attach("theros", {
     enabled: true, start: "theros",
     maps: { theros: { name: "Theros", file: "assets/maps/theros.webp", w: 1800, h: 2400 } },
@@ -175,13 +175,13 @@
       P("akros", "Akros", "theros", 935, 811, ["akros", "titan's stairs", "pharagax"], { region: "REG-AKROS" }),
       P("setessa", "Setessa", "theros", 1202, 1084, ["setessa", "nessian wood", "nexus"], { region: "REG-SETESSA" }),
       P("tethmos", "Tethmos", "theros", 1188, 877, ["tethmos"]),
-      P("skophos", "Skophos", "theros", 892, 449, ["skophos", "purphoros"]),
+      P("skophos", "Skophos", "theros", 892, 449, ["skophos", "purphoros"], { region: "REG-SKOPHOS" }),
       P("odunos", "Odunos", "theros", 664, 794, ["odunos"]),
       P("deyda_harbor", "Deyda Harbor", "theros", 798, 1030, ["deyda"]),
       P("altrisos", "Altrisos", "theros", 772, 1176, ["altrisos"]),
       P("glossion", "Glossion", "theros", 806, 1216, ["glossion"]),
       P("oxus", "Oxus", "theros", 898, 1178, ["oxus"]),
-      P("sitrium", "Sitrium", "theros", 888, 1224, ["sitrium"], { region: "REG-KOLOPHON" }),
+      P("sitrium", "Sitrium", "theros", 888, 1224, ["sitrium"]),
       P("neolantin", "Neolantin", "theros", 712, 1402, ["neolantin"]),
       P("asphodel", "Asphodel", "theros", 1128, 1326, ["asphodel", "blood tree", "hetos mire"]),
       P("mt_vesios", "Mount Vesios", "theros", 1056, 541, ["vesios", "ashlands"]),
@@ -189,7 +189,7 @@
     ],
     regions: {
       "REG-MELETIS": R("Meletis", "theros", 847, 1120, "meletis"), "REG-AKROS": R("Akros", "theros", 935, 811, "akros"), "REG-SETESSA": R("Setessa", "theros", 1202, 1084, "setessa"),
-      "REG-KOLOPHON": R("Kolophon (kust, bij benadering)", "theros", 888, 1224, "sitrium"), "REG-ZEE": R("De Siren Sea", "theros", 414, 1106)
+      "REG-SKOPHOS": R("Skophos", "theros", 892, 449, "skophos"), "REG-ZEE": R("De Siren Sea", "theros", 414, 1106)
     }
   });
 

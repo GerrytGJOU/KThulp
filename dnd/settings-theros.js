@@ -13,13 +13,13 @@
     exYear: 412, exRegA: "REG-MELETIS", exRegB: "REG-AKROS",
     /* reistijden in dagen te voet, te paard of per schip; schattingen */
     travel: {
-      "REG-MELETIS|REG-AKROS": 8, "REG-MELETIS|REG-SETESSA": 7, "REG-MELETIS|REG-KOLOPHON": 5, "REG-AKROS|REG-SETESSA": 6, "REG-AKROS|REG-KOLOPHON": 9,
-      "REG-SETESSA|REG-KOLOPHON": 8, "REG-MELETIS|REG-ZEE": 1, "REG-AKROS|REG-ZEE": 1, "REG-SETESSA|REG-ZEE": 2, "REG-KOLOPHON|REG-ZEE": 1,
+      "REG-MELETIS|REG-AKROS": 8, "REG-MELETIS|REG-SETESSA": 7, "REG-MELETIS|REG-SKOPHOS": 8, "REG-AKROS|REG-SETESSA": 6, "REG-AKROS|REG-SKOPHOS": 4,
+      "REG-SETESSA|REG-SKOPHOS": 9, "REG-MELETIS|REG-ZEE": 1, "REG-AKROS|REG-ZEE": 1, "REG-SETESSA|REG-ZEE": 2, "REG-SKOPHOS|REG-ZEE": 2,
       "REG-ZEE|REG-ONDERWERELD": 3, "REG-ONDERWERELD|REG-MELETIS": 3
     },
     prompt: {
       naming: "Gebruik voor alle eigennamen (goden, plaatsen, volken, personen, voorwerpen, titels) de Griekse of Grieks klinkende vorm uit de campagnecanon (Heliod, Thassa, Erebos, Meletis, Akros enz.) en vertaal ze niet; verzin nieuwe namen in dezelfde stijl en gebruik ze daarna consequent. Dat geldt ook voor namen in worldDelta, location en newNpcs.",
-      geoCheck: "Controleer geografie met de regio's uit de canon (Meletis, Akros, Setessa, Kolophon, de Zee, de Onderwereld) en de verwijzingen naar Nyx.",
+      geoCheck: "Controleer geografie met de regio's uit de canon (Meletis, Akros, Setessa, Skophos, de Zee, de Onderwereld) en de verwijzingen naar Nyx.",
       exInGame: "{\"inGame\":{\"date\":\"7 september 412\",\"timeOfDay\":\"ochtend\",\"location\":\"Meletis, de Agora\"},",
       exPlace: "'Meletis, de Agora'",
       lootTone: "Theros (goddelijke gunsten, zegeningen en vloeken; offers, kransen en wapens met een verhaal)",
@@ -92,7 +92,7 @@
           "- REG-MELETIS: de stad van geleerden, filosofen, magiërs en kooplieden; wijsheid, boeken en discussie; Heliod en de Kring der Denkers zijn er sterk.",
           "- REG-AKROS: de krijgerspolis, zeer militaristisch; dienst aan Iroas en Mogis; atleten, soldaten en goedgekeurde rivaliteit.",
           "- REG-SETESSA: de polis van jagers, boogschutters en natuurvolgers; Nylea wordt hier vereerd; weinig muren, veel bossen en een sterke band met dieren.",
-          "- REG-KOLOPHON: een rijke handelspolis aan de kust; kooplieden, havens, geruchten en spionnen; Ephara en Phenax zijn er invloedrijk.",
+          "- REG-SKOPHOS: de polis van smeden en vuur in het noorden, aan de rand van de Ashlands onder de rokende berg Vesios; smeden, mijnwerkers en pottenbakkers, ovens die dag en nacht branden. Purphoros is er de god en zijn tempel de trots van de stad.",
           "- REG-ZEE: de zee en de kustwateren, met tritons, zeemonsters en eilanden; Thassa, godin van de zee, beschermt en bedreigt.",
           "- REG-ONDERWERELD: het rijk van Erebos, god van de doden; de zielen worden daar vastgehouden; sterfelijken die er komen betalen met aanzien of bloed.",
           "- Nyx (de sterrenhemel) is geen regio op de kaart; teken ervan zijn dromen, orakels, sterren en goddelijke zegeningen. Gebruik Nyx in de vertelling, niet als reisbestemming.",
