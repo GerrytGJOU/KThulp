@@ -76,4 +76,44 @@
       skillSpecs: "Extra skills (bv. een species-eigen skill): naam | rank | characteristic."
     }
   });
+
+  /* ---------------- Old-School Essentials (B/X) ---------------- */
+  const oseMod = n => n <= 3 ? -3 : n <= 5 ? -2 : n <= 8 ? -1 : n <= 12 ? 0 : n <= 15 ? 1 : n <= 17 ? 2 : 3;
+  const OS = (label, base, group, x6) => ({ k: label, label, base, group, x6: !!x6 });
+  RS.register({
+    id: "ose", label: "Old-School Essentials", family: "d20", sys: "ose", name: "Old-School Essentials", role: "Referee",
+    terms: "Engelse OSE-termen (Referee, THAC0/AC, Saving Throws, Hit Dice, Dungeon turn, Morale, Reaction, Retainers)",
+    dice: "Spelers rollen zelf (fysiek of met de dobbelknop in de app); hun worp staat in hun actie (\"[worp: ...]\"). Vraag een worp via nextTurn.checks (naam → welke worp: attack, save vs ..., ability check of een x-in-6-kans, en waarom) en noem de AC van een tegenstander niet tenzij de speler die kan zien.\n- Voor worpen van NPC's/monsters gebruik je UITSLUITEND de meegegeven voorgegooide dobbelstenen, in volgorde (d20 voor attacks en saves, d6 voor schade, exploratie, reaction en morale (2d6 = twee d6's), d8/d10/d12/d4 voor schade, d100 voor thief skills). Noem de worp kort in de vertelling.",
+    pcStats: '"hp":{"current":7,"max":7,"temp":0},"xp":0,"gp":20,"resources":{"Light":"6 turns"},"conditions":[]',
+    lootPower: "hoogstens één magisch voorwerp per personage per dungeon, nooit als vaste beloning maar bewaakt in een schat of een gevaarlijke plek, met een prijs",
+    rollEx: '{"who":"Goblin 1","what":"Attack","natural":14,"mod":0,"total":14,"result":"vs AC 6: hit"}; bij schade {"who","what":"Damage","dice":"1d6","total":4}',
+    crit: "Een natural 20 raakt altijd en een natural 1 mist altijd; er is geen extra critical damage. Beloon slimme oplossingen en gebruik rulings over rules.",
+    playerRolls: 'Spelerworpen komen binnen als "[worp: Attack (melee): 14 +1 = 15]" (d20 + attack bonus: jij vergelijkt het totaal met de AC van het doel), "[worp: Save vs Spells: 16 vs 15 = Success]", "[worp: Open Doors: 2 on 1d6 vs 2-in-6 = Success]" of "[worp: Climb Sheer Surfaces: 34 vs 87 = Success]": het totaal of de uitkomst is al bepaald met het karakterblad, reken niet opnieuw. Vraag je om een worp, benoem dan duidelijk welke (attack, save, ability check of exploratie).',
+    passive: "zijn exploratiekans of vaardigheidswaarde (zonder worp: een hoge kans slaagt, een lage mislukt)",
+    preDice: [["d20", 20, 20], ["d12", 12, 4], ["d10", 10, 6], ["d8", 8, 8], ["d6", 6, 14], ["d4", 4, 6], ["d100", 100, 4]],
+    guide: "- SYSTEEMREGELS Old-School Essentials (B/X): een attack is d20 + modifiers tegen de AC van het doel (THAC0 of ascending AC: kies één conventie per campagne); een saving throw is d20 ≥ het saving-throw-doel; ability checks zijn optioneel (d20 ≤ de ability); veel exploratie is een x-in-6-kans op 1d6; thief skills zijn percentages (Hear Noise is x-in-6). Geen reactions, bonus actions, skills-lijst of death saves: 0 HP is dood.\n- Houd tijd en middelen bij: een dungeon turn is 10 minuten, een combat round 10 seconden; wandering monsters (doorgaans elke 2 turns 1-in-6), licht, rations, encumbrance en gold. Rol reaction (2d6: 2 vijandig, 3-5 onvriendelijk, 6-8 onzeker, 9-11 vriendelijk, 12 zeer vriendelijk) en morale (2d6 > morale: vlucht of overgave, doorgaans bij de eerste dode en bij een half verloren groep) waar relevant.\n- Initiative is per kant (1d6 per ronde, hoogste eerst): declareer eerst spells en vertrek, dan morale, beweging, schieten, magie en melee. Telegrafeer gevaar, beloon slimme oplossingen en wees terughoudend met automatische wapens-tegen-lijf.\n- XP komt vooral uit schatten (1 xp per gp teruggebrachte niet-magische schat) en monsters; verdeel die over de overlevenden en retainers volgens de regels. Er zijn geen milestones.",
+    sheet: {
+      kind: "ose", note: "Old-School Essentials (Necrotic Gnome), basis B/X. De klassen- en XP-tabellen, spells, Turn Undead en de Advanced-opties staan niet in de app: vul AC, attack bonus, saves en thief skills in volgens je klasse en niveau. Kies één AC-conventie per campagne (descending AC of ascending AAC) en gebruik die consequent.",
+      statLabels: { STR: "Strength", INT: "Intelligence", WIS: "Wisdom", DEX: "Dexterity", CON: "Constitution", CHA: "Charisma" }, stats: ["STR", "INT", "WIS", "DEX", "CON", "CHA"], statDefault: 10,
+      statDice: { STR: "3d6", INT: "3d6", WIS: "3d6", DEX: "3d6", CON: "3d6", CHA: "3d6" }, statHint: "3d6 per ability (3–18). Modifier: 3 → −3, 4–5 → −2, 6–8 → −1, 9–12 → 0, 13–15 → +1, 16–17 → +2, 18 → +3.",
+      mod: oseMod, numbersTitle: "AC, attack, saves en voortgang",
+      numbers: [
+        { k: "ac", label: "AC (descending)", def: 9 }, { k: "aac", label: "AAC (ascending)", def: 10 }, { k: "ab", label: "Attack bonus", def: 0 }, { k: "level", label: "Level", def: 1 }, { k: "xp", label: "XP", def: 0 }, { k: "gp", label: "GP", def: 0 },
+        { k: "sv_death", label: "Save: Death/Poison", def: 12, hide: true }, { k: "sv_wands", label: "Save: Wands", def: 13, hide: true }, { k: "sv_para", label: "Save: Paralysis/Petrify", def: 14, hide: true },
+        { k: "sv_breath", label: "Save: Breath Attacks", def: 15, hide: true }, { k: "sv_spells", label: "Save: Spells/Rods/Staves", def: 16, hide: true }
+      ],
+      saves: [["death", "Death/Poison"], ["wands", "Wands"], ["para", "Paralysis/Petrify"], ["breath", "Breath Attacks"], ["spells", "Spells/Rods/Staves"]],
+      skillsTitle: "Exploratie en thief skills",
+      skills: [
+        OS("Open Doors", 2, "Exploratie (x-in-6)", true), OS("Listen at Doors", 1, "Exploratie (x-in-6)", true), OS("Find Secret Doors", 1, "Exploratie (x-in-6)", true), OS("Find Room Traps", 1, "Exploratie (x-in-6)", true),
+        OS("Climb Sheer Surfaces", 0, "Thief skills", false), OS("Find or Remove Treasure Traps", 0, "Thief skills", false), OS("Hear Noise", 0, "Thief skills", true), OS("Hide in Shadows", 0, "Thief skills", false),
+        OS("Move Silently", 0, "Thief skills", false), OS("Open Locks", 0, "Thief skills", false), OS("Pick Pockets", 0, "Thief skills", false)
+      ],
+      skillSpecs: "Open Doors, Listen, Search en Find Traps: pas de x-in-6 aan op STR, ras en klasse. Thief skills: vul in volgens de thief-tabel van je level (0 = niet van toepassing).",
+      meters: [{ k: "hp", label: "HP", max: v => Math.max(1, 4 + oseMod(v.CON)) }],
+      derived: [{ k: "melee", label: "Melee mod", fn: v => { const m = oseMod(v.STR); return m > 0 ? "+" + m : String(m); } }, { k: "missile", label: "Missile mod", fn: v => { const m = oseMod(v.DEX); return m > 0 ? "+" + m : String(m); } }, { k: "conhp", label: "CON HP/level", fn: v => { const m = oseMod(v.CON); return m > 0 ? "+" + m : String(m); } }],
+      lists: [], professions: ["Cleric", "Fighter", "Magic-User", "Thief", "Dwarf", "Elf", "Halfling", "Acrobat", "Assassin", "Barbarian", "Bard", "Druid", "Illusionist", "Knight", "Paladin", "Ranger"], professionLabel: "Class", noAge: true,
+      extraText: [["alignment", "Alignment en talen"], ["spells", "Spells en memorized"]]
+    }
+  });
 })(typeof self !== "undefined" ? self : this);

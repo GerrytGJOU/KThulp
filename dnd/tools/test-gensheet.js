@@ -94,5 +94,25 @@ eq("sw netto", JSON.stringify(require("../dobbel.js").swNet({ s: 1, f: 2, a: 3, 
 for (let i = 0; i < 200; i++) { const t = require("../dobbel.js").swRoll({ Y: 2, G: 1, P: 2, R: 1, B: 1, K: 1 }); if (t.s + t.r > 7 || t.f + t.d > 7) { bad++; console.log("FOUT: swRoll buiten bereik", t); break; } }
 eq("sw tekst", /Piloting \(Space\) 2/.test(G.sheetText(sw, s)), true);
 
+/* Old-School Essentials */
+const os = RS.get("ose"), b = G.blank(os, "Gerben");
+b.name = "Borin"; b.profession = "Fighter"; b.stats = { STR: 13, INT: 10, WIS: 10, DEX: 12, CON: 13, CHA: 10 }; b.nums = { ab: 0, ac: 4, aac: 15 };
+const ol = G.rollList(os, b), ok2 = k => ol.find(r => r.key === k);
+eq("ose melee bonus (STR 13 = +1)", ok2("atk:melee").target, 1); eq("ose missile bonus (DEX 12 = 0)", ok2("atk:missile").target, 0);
+eq("ose attack-regel", G.evaluate(os, b, ok2("atk:melee"), { nat: 14, mod: 0 }).line, "Attack (melee): 14 +1 = 15");
+eq("ose attack met situatiebonus", G.evaluate(os, b, ok2("atk:melee"), { nat: 14, mod: 2 }).line, "Attack (melee): 14 +3 = 17");
+eq("ose save slaagt", G.evaluate(os, b, ok2("save:spells"), { nat: 16, mod: 0 }).line, "Save vs Spells/Rods/Staves: 16 vs 16 = Success");
+eq("ose save mislukt", G.evaluate(os, b, ok2("save:death"), { nat: 11, mod: 0 }).j.label, "Failure");
+eq("ose x-in-6", G.evaluate(os, b, ok2("skill:Open Doors"), { nat: 2 }).line, "Open Doors: 2 on 1d6 vs 2-in-6 = Success");
+eq("ose x-in-6 mislukt", G.evaluate(os, b, ok2("skill:Open Doors"), { nat: 3 }).j.label, "Failure");
+eq("ose d6 buiten bereik", G.evaluate(os, b, ok2("skill:Open Doors"), { nat: 7 }), null);
+eq("ose ability check", G.evaluate(os, b, ok2("stat:STR"), { nat: 13 }).line, "STR check: 13 vs 13 = Success");
+eq("ose ability check mislukt", G.evaluate(os, b, ok2("stat:STR"), { nat: 14 }).j.label, "Failure");
+b.skills = { "Climb Sheer Surfaces": 87 }; eq("ose thief-skill", G.evaluate(os, b, G.rollList(os, b).find(r => r.key === "skill:Climb Sheer Surfaces"), { nat: 34 }).line, "Climb Sheer Surfaces: 34 vs 87 = Success");
+eq("ose HP-max", G.meterMax(os, b).hp, 5);
+eq("ose modifier-tabel", [3, 5, 8, 12, 15, 17, 18].map(os.sheet.mod).join(), "-3,-2,-1,0,1,2,3");
+eq("ose tekst", /AC \(descending\) 4/.test(G.sheetText(os, b)) && /Climb Sheer Surfaces 87/.test(G.sheetText(os, b)), true);
+eq("ose getal-default", G.rollList(os, G.blank(os)).find(r => r.key === "save:wands").target, 13);
+
 console.log(ok + " geslaagd, " + bad + " mislukt");
 process.exitCode = bad ? 1 : 0;

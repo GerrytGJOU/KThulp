@@ -128,4 +128,34 @@
     travel: { "REG-TOTBURH|REG-SEVERN": 1, "REG-TOTBURH|REG-WORCESTER": 3, "REG-TOTBURH|REG-GLOUCESTER": 3, "REG-TOTBURH|REG-DEAN": 2, "REG-TOTBURH|REG-MARCH": 3, "REG-SEVERN|REG-WORCESTER": 2, "REG-SEVERN|REG-GLOUCESTER": 2, "REG-GLOUCESTER|REG-DEAN": 1, "REG-GLOUCESTER|REG-WORCESTER": 3, "REG-DEAN|REG-MARCH": 2 },
     factions: [["De heer en zijn huis", "De lokale heer, zijn krijgers en zijn verplichtingen."], ["De kerk", "Priesters, monniken en nonnen; bewaarders van kennis en geloof."], ["Het gewone volk", "Boeren, ambachtslieden en kooplieden met volksverhalen."], ["De oude gebruiken", "Wijze vrouwen, genezers en overgeleverde riten."], ["Vreemde machten", "Wat aan geloof en gebruik voorbijgaat."]]
   }));
+
+  /* Eigen, neutrale dungeon-setting voor Old-School Essentials: een basisstad, wildernis en een megadungeon; geen bestaande wereld. */
+  D.register(build({
+    id: "ose-grensmarken", ruleset: "ose", rulesLabel: "Old-School Essentials", year: 412, startDate: "1 september 412", name: "Old-School Essentials — De Grensmarken",
+    blurb: "Een open dungeon-setting: de grensstad Valdrik leeft van avonturiers die uit de ruïnes van Karn-Ur schatten, gevaar en geruchten terugbrengen.",
+    source: "Old-School Essentials (Necrotic Gnome, basis B/X); eigen, neutrale setting zonder vaste canon",
+    limits: "Gevaar is echt: 0 HP is dood, en schatten zijn de belangrijkste beloning. Magie is zeldzaam en onbetrouwbaar; monsters zijn niet in balans met het niveau van de groep en vluchten is een geldige keuze.",
+    unnatural: "Magie bestaat als arcane en goddelijke spells en als magische voorwerpen uit ruïnes; ze zijn zeldzaam, hebben een prijs en een geschiedenis. De Referee houdt de wereld eerlijk: telegrafeer gevaar en beloon slimme plannen.",
+    economy: "Goud, zilver en koper (1 gp = 10 sp = 100 cp). Schatten teruggebracht naar de stad leveren XP (1 per gp aan niet-magische schat). Retainers en uitrusting kosten geld.",
+    travelNote: "Reizen gaat te voet of te paard; reisdagen zijn globaal. Een dungeon turn is 10 minuten; licht, rations en encumbrance tellen mee. Wandering monsters verstoren de rust.",
+    naming: "Gebruik eenvoudige fantasienamen passend bij de regio; behoud spelling in worldDelta, location en newNpcs.",
+    noOvershadow: "Machtige figuren in de stad (gildenmeesters, de burgemeester) lossen het gevaar niet op; ze hebben eigen belangen en geven hooguit opdrachten en geruchten.",
+    bigFigure: "een ontmoeting met een draak, een lich of de heer van de ruïnes", loot: "gold, gems, magische voorwerpen, kaarten, geruchten en gunsten van de stad",
+    lootNo: "geen onbeperkte schatten of magische winkels, schatten staan bewaakt",
+    styleBase: "klassieke fantasy-gravure en olieverf, kaarslicht, vochtige stenen gangen, houtskool en perkament; monsters zijn eng maar niet overdreven",
+    styleAvoid: "Avoid: modern objects, anime or cartoon look, 3D game render, neon colors, text, captions, watermarks, logos, borders.",
+    toneNote: "Hou het scherp, gevaarlijk en eerlijk: spelers winnen door slim plannen, niet door een goed berekende ‘encounter’.",
+    premise: ["- Nieuwe campagne; de Referee kiest een eerste dungeon of regio op basis van de backstories (of laat de spelers uit gerucht-haken kiezen) en legt die vast in C1 en de Stand.", "- De ruïnes van Karn-Ur zijn een megadungeon met meerdere niveaus; wat de groep ontdekt, blijft ontdekt.", "- Houd tijd, licht, rations en XP bij; telegrafeer gevaar."].join(NL),
+    exRegA: "REG-VALDRIK", exRegB: "REG-RUINE", exPlaceName: "de herberg De Verdronken Lantaarn",
+    regions: [
+      ["REG-VALDRIK", "Valdrik", "Grensstad met een markt, een herberg, een tempel en een avonturiersgilde; de plek om uit te rusten en schatten te verzilveren."],
+      ["REG-GRENSLAND", "De Grensmarken", "Heuvelachtig land met boerderijen, wachttorens en wegen naar de wildernis."],
+      ["REG-WOUD", "Het Oude Woud", "Een dicht woud met jagers, elfenpaden en vergeten schrijnen."],
+      ["REG-MOERAS", "Het Zwartmoeras", "Een moeras met hagedismensen, drijvende nederzettingen en verzonken ruïnes."],
+      ["REG-BERGEN", "De Gebroken Bergen", "Rotsachtige bergen met dwergenmijnen, orkenklanen en oude draken."],
+      ["REG-RUINE", "De ruïnes van Karn-Ur", "Een megadungeon onder een verlaten burcht; meerdere niveaus, geheimen en schatten."]
+    ],
+    travel: { "REG-VALDRIK|REG-GRENSLAND": 1, "REG-VALDRIK|REG-RUINE": 2, "REG-GRENSLAND|REG-WOUD": 2, "REG-GRENSLAND|REG-MOERAS": 2, "REG-GRENSLAND|REG-BERGEN": 3, "REG-WOUD|REG-RUINE": 2, "REG-BERGEN|REG-RUINE": 3, "REG-MOERAS|REG-RUINE": 3 },
+    factions: [["Het avonturiersgilde van Valdrik", "Kopen schatten, verkopen kaarten en geruchten; vragen een deel van de buit."], ["De tempel", "Genezing en bescherming tegen betaling; kent oude kerkelijke geheimen."], ["De burgerwacht", "Houdt de stad veilig en belast de rijkdom die er binnenkomt."], ["Monsterstammen", "Orken, hagedismensen en kobolden in de omliggende wildernis."], ["De bewoners van Karn-Ur", "Wat in de ruïnes woont, van kleine beesten tot oude kwaden."]]
+  }));
 })(typeof self !== "undefined" ? self : this);

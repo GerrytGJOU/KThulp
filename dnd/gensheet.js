@@ -35,8 +35,11 @@
       return o;
     }).filter(x => x.k);
   }
+  function nums(R, c) { /* losse getallen van het blad (OSE: AC, saves, attack bonus, level, xp, gp) */
+    const o = {}; (R.sheet.numbers || []).forEach(n => { const v = c && c.nums && c.nums[n.k]; o[n.k] = v == null || v === "" ? n.def : num(v, n.def); }); return o;
+  }
   function vars(R, c) {
-    const v = {}; R.sheet.stats.forEach(k => { v[k] = stat(R, c, k); });
+    const v = { N: nums(R, c) }; R.sheet.stats.forEach(k => { v[k] = stat(R, c, k); });
     const un = R.sheet.skills.find(s => s.k === "Unnatural"), my = R.sheet.skills.find(s => s.k === "Cthulhu Mythos");
     v.UNNATURAL = un ? skillVal(R, c, un) : 0; v.MYTHOS = my ? skillVal(R, c, my) : 0;
     return v;
@@ -70,6 +73,14 @@
       (R.sheet.meters || []).filter(m => m.k === "luck").forEach(m => { const t = num(c && c.luckNow, num(c && c.meterMax && c.meterMax.luck, 50)); out.push({ key: "luck", group: "Kenmerk", label: "Luck", target: t, disp: t + "%" }); });
       R.sheet.skills.forEach(s => { const t = skillVal(R, c, s); out.push({ key: "skill:" + s.k, group: "Skill", label: s.label, target: t, disp: t + "%" }); });
       extraSkills(R, c).forEach((x, i) => out.push({ key: "extra:" + i, group: "Extra skill", label: x.label, target: x.val, disp: x.val + "%" }));
+    } else if (kind === "ose") {
+      const N = nums(R, c), md = R.sheet.mod, st = k => stat(R, c, k), S = n => (n >= 0 ? "+" : "−") + Math.abs(n);
+      out.push({ key: "atk:melee", group: "Attack", label: "Attack (melee)", rt: "atk", die: 20, target: N.ab + md(st("STR")), disp: S(N.ab + md(st("STR"))) });
+      out.push({ key: "atk:missile", group: "Attack", label: "Attack (missile)", rt: "atk", die: 20, target: N.ab + md(st("DEX")), disp: S(N.ab + md(st("DEX"))) });
+      (R.sheet.saves || []).forEach(x => out.push({ key: "save:" + x[0], group: "Saving throw", label: "Save vs " + x[1], rt: "save", die: 20, target: N["sv_" + x[0]], disp: N["sv_" + x[0]] + "+" }));
+      R.sheet.stats.forEach(k => out.push({ key: "stat:" + k, group: "Ability check", label: k + " check", rt: "abil", die: 20, target: st(k), disp: "≤ " + st(k) }));
+      R.sheet.skills.forEach(s2 => { const t = skillVal(R, c, s2); out.push({ key: "skill:" + s2.k, group: s2.group || "Skill", label: s2.label, rt: s2.x6 ? "x6" : "pct", die: s2.x6 ? 6 : 100, target: t, disp: s2.x6 ? t + "-in-6" : t + "%" }); });
+      extraSkills(R, c).forEach((x, i) => out.push({ key: "extra:" + i, group: "Extra skill", label: x.label, rt: "pct", die: 100, target: x.val, disp: x.val + "%" }));
     } else if (kind === "2d6") {
       R.sheet.stats.forEach(k => out.push({ key: "stat:" + k, group: "Stat", label: k, target: stat(R, c, k), disp: sgn(stat(R, c, k)) }));
       R.sheet.skills.forEach(s => { const t = stat(R, c, s.stat); out.push({ key: "skill:" + s.k, group: s.group || "Move", label: s.label, target: t, disp: sgn(t) + " " + s.stat }); });
@@ -117,6 +128,23 @@
       },
       hint: r => "doel " + r.disp + " · vul je d100 in"
     },
+    ose: {
+      html(R, c, r, o) { return nin("rnat", "d" + r.die, o.nat, 64, r.die) + sel("rmod", "Situatiebonus of -malus op de worp", [[3, "+3"], [2, "+2"], [1, "+1"], [0, "±0"], [-1, "−1"], [-2, "−2"], [-3, "−3"]], o.mod || 0); },
+      read(R, root, o) { const q = s2 => root.querySelector(s2); if (q("#rnat")) o.nat = q("#rnat").value; if (q("#rmod")) o.mod = q("#rmod").value; },
+      digital(R, root, c, r) { root.querySelector("#rnat").value = Dice.rnd(r.die); },
+      eval(R, c, r, o) {
+        const nat = Math.floor(num(o.nat, 0)); if (!(nat >= 1 && nat <= r.die)) return null;
+        const m = num(o.mod, 0), tot = nat + m, ms = m ? (m > 0 ? " +" : " −") + Math.abs(m) : "";
+        let line, ok = null;
+        if (r.rt === "atk") { const b = r.target + m; line = r.label + ": " + nat + " " + (b >= 0 ? "+" : "−") + Math.abs(b) + " = " + (nat + b); return { j: { label: "", success: null }, roll: nat + b, line, text: "= " + (nat + b) }; }
+        if (r.rt === "save") { ok = tot >= r.target; line = r.label + ": " + nat + ms + " vs " + r.target + " = " + (ok ? "Success" : "Failure"); }
+        else if (r.rt === "abil") { ok = tot <= r.target; line = r.label + ": " + nat + ms + " vs " + r.target + " = " + (ok ? "Success" : "Failure"); }
+        else if (r.rt === "x6") { ok = nat <= r.target; line = r.label + ": " + nat + " on 1d6 vs " + r.target + "-in-6 = " + (ok ? "Success" : "Failure"); }
+        else { ok = nat <= r.target; line = r.label + ": " + nat + " vs " + r.target + " = " + (ok ? "Success" : "Failure"); }
+        return { j: { label: ok ? "Success" : "Failure", success: ok }, roll: nat, line: line.replace(/^(.*?): /, "$1: "), text: "= " + tot + " · " + (ok ? "Success" : "Failure") };
+      },
+      hint: r => r.disp + " · vul je d" + r.die + " in"
+    },
     "2d6": {
       html(R, c, r, o) { return nin("rnat", "dobbelsteen 1", o.nat, 64, 6) + nin("rd2", "dobbelsteen 2", o.d2, 64, 6) + sel("rmod", "Bijzonder: conditions, Prepared, Empowered e.d.", [[2, "+2"], [1, "+1"], [0, "±0"], [-1, "−1"], [-2, "−2"], [-3, "−3"]], o.mod || 0); },
       read(R, root, o) { const q = s => root.querySelector(s); if (q("#rnat")) o.nat = q("#rnat").value; if (q("#rd2")) o.d2 = q("#rd2").value; if (q("#rmod")) o.mod = q("#rmod").value; },
@@ -161,13 +189,13 @@
     const lists = (sh.lists || []).map(l => { const a = (c.lists && c.lists[l.k]) || []; return l.label + ": " + (a.length ? a.map(x => x.name + " " + x.score).join(", ") : "—"); });
     const txt = (t, x, n) => x ? t + ": " + String(x).replace(/\n+/g, " ").slice(0, n || 500) + "\n" : "";
     let sk;
-    if (kind === "d100") sk = "Skills boven/anders dan basis: " + (sh.skills.filter(s => skillVal(R, c, s) !== skillBase(R, c, s)).map(s => s.label + " " + skillVal(R, c, s)).concat(extraSkills(R, c).map(x => x.label + " " + x.val)).join(", ") || "—") + ". Alle andere skills staan op hun basiswaarde (zie regelset).";
+    if (kind === "d100" || kind === "ose") sk = "Skills boven/anders dan basis: " + (sh.skills.filter(s => skillVal(R, c, s) !== skillBase(R, c, s)).map(s => s.label + " " + skillVal(R, c, s)).concat(extraSkills(R, c).map(x => x.label + " " + x.val)).join(", ") || "—") + ". Alle andere skills staan op hun basiswaarde (zie regelset).";
     else if (kind === "2d6") sk = "Moves gebruiken de gekoppelde stat (" + sh.skills.map(s => s.label + " " + sgn(stat(R, c, s.stat))).join("; ") + ")" + (extraSkills(R, c).length ? "; extra: " + extraSkills(R, c).map(x => x.label + " " + sgn(stat(R, c, x.stat))).join(", ") : "") + ".";
     else sk = "Skill ranks (boven 0): " + (sh.skills.filter(s => skillVal(R, c, s) > 0).map(s => s.label + " " + skillVal(R, c, s)).concat(extraSkills(R, c).map(x => x.label + " " + x.val)).join(", ") || "—") + ".";
     const extra = (sh.extraText || []).map(x => txt(x[1].split(",")[0], c[x[0]], 400)).join("");
     return "## " + c.name + " (speler: " + c.player + ") — " + R.label + (c.profession ? ", " + c.profession : "") + (c.age ? ", " + c.age + " jaar" : "") + "\n" +
       sh.stats.map(k => k + " " + (sh.statMult > 1 ? v[k] + " (×" + sh.statMult + " = " + v[k] * sh.statMult + ")" : (kind === "2d6" ? sgn(v[k]) : v[k]))).join(", ") + "\n" +
-      "Max/start: " + sh.meters.map(m => m.label + " " + (m.start ? m.start(v) + " (max " + mm[m.k] + ")" : mm[m.k])).join(", ") + ((sh.derived || []).length ? ". " + derived(R, c).map(d => d.label + " " + d.val).join(", ") : "") + ".\n" +
+      "Max/start: " + sh.meters.map(m => m.label + " " + (m.start ? m.start(v) + " (max " + mm[m.k] + ")" : mm[m.k])).join(", ") + ((sh.derived || []).length ? ". " + derived(R, c).map(d => d.label + " " + d.val).join(", ") : "") + ".\n" + ((sh.numbers || []).length ? (sh.numbers || []).map(n => n.label + " " + nums(R, c)[n.k]).join(", ") + ".\n" : "") +
       sk + "\n" + (lists.length ? lists.join("; ") + "\n" : "") + txt("Uitrusting", c.equipment) + extra + txt("Persoonlijkheid", c.personality, 400) + txt("Haken", c.dmHooks);
   }
 
@@ -176,20 +204,22 @@
   function skillRow(R, c, s, ctx, key) {
     const kind = kindOf(R), on = ctx.rollKey === key ? " on" : "";
     if (kind === "d100") { const val = skillVal(R, c, s), base = skillBase(R, c, s); return '<div class="rl' + on + '" data-gr="' + esc(key) + '"><span style="color:' + (val > base ? "var(--gold)" : "var(--mute)") + '">' + esc(s.label) + '</span><b>' + val + '%</b></div>'; }
+    if (kind === "ose") { const val = skillVal(R, c, s), off = val === 0; return '<div class="rl' + on + '" data-gr="' + esc(key) + '"><span style="color:' + (off ? "var(--mute)" : "var(--gold)") + '">' + esc(s.label) + '</span><b>' + val + (s.x6 ? "-in-6" : "%") + '</b></div>'; }
     if (kind === "2d6") return '<div class="rl' + on + '" data-gr="' + esc(key) + '"><span>' + esc(s.label) + ' <small>' + esc(s.stat) + '</small></span><b>' + sgn(stat(R, c, s.stat)) + '</b></div>';
     const rk = skillVal(R, c, s); return '<div class="rl' + on + '" data-gr="' + esc(key) + '"><span style="color:' + (rk > 0 ? "var(--gold)" : "var(--mute)") + '">' + esc(s.label) + ' <small>' + esc(s.ch.slice(0, 2)) + '</small></span><b>' + "●".repeat(rk) + "○".repeat(Math.max(0, 5 - rk)) + '</b></div>';
   }
   function viewHtml(R, c, ctx) {
     const sh = R.sheet, kind = kindOf(R), mm = meterMax(R, c), dv = derived(R, c), live = ctx.live || null, mine = ctx.me && c.player === ctx.me, v = vars(R, c);
-    const strip = sh.meters.map(m => { const l = live && mtr(live, m.k); const txt = l ? l.cur + (l.max != null ? " / " + l.max : "") : (m.start ? m.start(v) + " / " + mm[m.k] : String(mm[m.k])); return '<div' + (m.k === "luck" ? ' data-gr="luck" class="rl"' : "") + '><small>' + esc(m.label) + '</small><b>' + esc(txt) + '</b></div>'; }).join("") + dv.map(d => '<div><small>' + esc(d.label) + '</small><b>' + esc(d.val) + '</b></div>').join("");
+    const strip = sh.meters.map(m => { const l = live && mtr(live, m.k); const txt = l ? l.cur + (l.max != null ? " / " + l.max : "") : (m.start ? m.start(v) + " / " + mm[m.k] : String(mm[m.k])); return '<div' + (m.k === "luck" ? ' data-gr="luck" class="rl"' : "") + '><small>' + esc(m.label) + '</small><b>' + esc(txt) + '</b></div>'; }).join("") + dv.map(d => '<div><small>' + esc(d.label) + '</small><b>' + esc(d.val) + '</b></div>').join("") + (sh.numbers || []).filter(n => !n.hide).map(n => '<div><small>' + esc(n.label) + '</small><b>' + esc(nums(R, c)[n.k]) + '</b></div>').join("");
     let h = '<div class="card sh"' + (c.dead ? ' style="opacity:.7"' : "") + '><div class="ppl">' + (ctx.avatar ? ctx.avatar(c.name) : "") + '<div><h3 style="margin:0">' + (c.dead ? "☠ " : "") + esc(c.name) + (c.dead ? ' <small style="color:var(--red)">(gesneuveld)</small>' : "") + '</h3><small style="color:var(--mute)">' + esc(R.label) + (c.profession ? " · " + esc(c.profession) : "") + (c.age ? " · " + esc(c.age) + " jaar" : "") + '</small><br><small style="color:var(--mute)">' + esc(c.player ? "Speler: " + c.player : "") + '</small></div></div></div>';
     h += '<div class="sh-strip">' + strip + '</div>';
     const statTitle = sh.statMult > 1 ? "Stats (× " + sh.statMult + ")" : (kind === "pool" ? "Characteristics" : "Kenmerken");
-    const statRows = sh.stats.map(k => { const r = findRoll(R, c, "stat:" + k); return '<div class="rl' + (ctx.rollKey === r.key ? " on" : "") + '" data-gr="' + r.key + '"><span><b>' + k + '</b> ' + (kind === "d100" ? stat(R, c, k) : "") + ' <small>' + esc(sh.statLabels[k] || "") + '</small></span><b>' + (kind === "d100" ? r.disp : kind === "2d6" ? sgn(stat(R, c, k)) : stat(R, c, k)) + '</b></div>'; }).join("");
+    const statRows = sh.stats.map(k => { const r = findRoll(R, c, "stat:" + k); return '<div class="rl' + (ctx.rollKey === r.key ? " on" : "") + '" data-gr="' + r.key + '"><span><b>' + k + '</b> ' + (kind === "d100" || kind === "ose" ? stat(R, c, k) : "") + ' <small>' + esc(sh.statLabels[k] || "") + '</small></span><b>' + (kind === "d100" || kind === "ose" ? r.disp : kind === "2d6" ? sgn(stat(R, c, k)) : stat(R, c, k)) + '</b></div>'; }).join("");
     const grp = sh.skills.some(s => s.group) ? [...new Set(sh.skills.map(s => s.group || ""))] : [""];
     const skillRows = grp.map(g => (g ? '<h4 style="margin:8px 0 2px;color:var(--mute);font-size:13px">' + esc(g) + '</h4>' : "") + sh.skills.filter(s => (s.group || "") === g).map(s => skillRow(R, c, s, ctx, "skill:" + s.k)).join("")).join("") +
       extraSkills(R, c).map((x, i) => '<div class="rl' + (ctx.rollKey === "extra:" + i ? " on" : "") + '" data-gr="extra:' + i + '"><span style="color:var(--gold)">' + esc(x.label) + '</span><b>' + esc(kind === "d100" ? x.val + "%" : kind === "2d6" ? sgn(stat(R, c, x.stat)) : "●".repeat(x.val)) + '</b></div>').join("");
     h += '<div class="sh-two"><div class="card"><h3>' + statTitle + '</h3>' + statRows + '</div><div class="card"><h3>' + esc(sh.skillsTitle || (kind === "2d6" ? "Moves" : "Skills")) + '</h3>' + skillRows + '</div></div>';
+    if (kind === "ose") h += '<div class="card"><h3>Attack en saving throws</h3>' + rollList(R, c).filter(r => r.rt === "atk" || r.rt === "save").map(r => '<div class="rl' + (ctx.rollKey === r.key ? " on" : "") + '" data-gr="' + esc(r.key) + '"><span>' + esc(r.label) + '</span><b>' + esc(r.disp) + '</b></div>').join("") + '</div>';
     (sh.lists || []).forEach(l => { const a = (c.lists && c.lists[l.k]) || []; if (a.length) h += '<div class="card"><h3>' + esc(l.label) + '</h3>' + a.map(x => '<div class="rl"><span>' + esc(x.name) + '</span><b>' + esc(x.score) + '</b></div>').join("") + '</div>'; });
     const txt = (t, v2) => v2 ? '<details class="card" data-sec="' + esc(t) + '"' + (ctx.open && ctx.open[t] ? " open" : "") + '><summary>' + esc(t) + '</summary><div style="white-space:pre-wrap;font-size:14px">' + esc(v2) + '</div></details>' : "";
     h += txt("Uitrusting", c.equipment) + (sh.extraText || []).map(x => txt(x[1].split(",")[0], c[x[0]])).join("") + txt("Persoonlijkheid", c.personality) + txt("Uiterlijk", c.appearance) + txt("Backstory", c.backstory) + (mine ? txt("Geheimen & DM-haken (alleen jij ziet dit)", [c.secrets && "Geheimen:\n" + c.secrets, c.dmHooks].filter(Boolean).join("\n\n")) : "");
@@ -217,10 +247,10 @@
     h += '<label><small>' + esc(sh.professionLabel || "Profession") + '</small><input type="text" id="g_prof" list="g_proflist" value="' + esc(c.profession || "") + '"><datalist id="g_proflist">' + (sh.professions || []).map(p => '<option value="' + esc(p) + '">').join("") + '</datalist></label>' + (sh.noAge ? "" : inp("g_age", "Leeftijd", c.age, "number", "90px"));
     h += '<h3 style="margin-top:10px">' + esc(kind === "pool" ? "Characteristics" : sh.statMult > 1 ? "Stats (3–18)" : "Kenmerken") + '</h3><p style="color:var(--mute);font-size:13px;margin:0 0 6px">' + esc(sh.statHint || "") + '</p><div class="sh-ed">' + sh.stats.map(k => inp("g_st_" + k, k + " <span style=\"color:var(--mute)\">" + esc(sh.statLabels[k] || "") + "</span>", stat(R, c, k), "number")).join("") + '</div>' + (sh.statDice ? '<div class="row"><button class="b alt sm" data-groll="1" type="button">🎲 Dobbel alle kenmerken</button></div>' : "");
     h += '<h3 style="margin-top:10px">Afgeleide waarden</h3><div class="sh-ed">' + sh.meters.map(m => inp("g_mm_" + m.k, esc(m.label) + " (max)", mm[m.k], "number")).join("") + '</div>' +
-      '<div class="row"><button class="b alt sm" data-gcalc="1" type="button">Herbereken uit de kenmerken</button></div><p style="color:var(--mute);font-size:13px;margin:4px 0">' + derived(R, c).map(d => esc(d.label) + ": <b>" + esc(d.val) + "</b>").join(" · ") + '</p>';
+      ((sh.numbers || []).length ? '<h3 style="margin-top:10px">' + esc(sh.numbersTitle || "Getallen") + '</h3><div class="sh-ed">' + sh.numbers.map(n => inp("g_nm_" + n.k, esc(n.label), nums(R, c)[n.k], "number")).join("") + '</div>' : "") + '<div class="row"><button class="b alt sm" data-gcalc="1" type="button">Herbereken uit de kenmerken</button></div><p style="color:var(--mute);font-size:13px;margin:4px 0">' + derived(R, c).map(d => esc(d.label) + ": <b>" + esc(d.val) + "</b>").join(" · ") + '</p>';
     if (kind === "2d6") h += '<h3 style="margin-top:10px">' + esc(sh.skillsTitle || "Moves") + '</h3><p style="color:var(--mute);font-size:13px;margin:0 0 4px">De moves staan vast en rollen met hun gekoppelde stat. Eigen moves of technieken voeg je hieronder toe.</p>';
     else h += '<h3 style="margin-top:10px">Skills</h3>' + (sh.budget && kind === "d100" ? '<p id="g_budget" style="color:var(--gold);font-size:13px;margin:0 0 6px">' + esc(sh.budget(c, aboveBase(R, c), v)) + '</p>' : "") +
-      '<div class="sh-ed">' + sh.skills.map((s, i) => '<label><small>' + esc(s.label) + (kind === "d100" ? ' <span style="color:var(--mute)">(basis ' + skillBase(R, c, s) + ')</span>' : ' <span style="color:var(--mute)">(' + esc(s.ch.slice(0, 2)) + ')</span>') + '</small><input type="number" id="g_sk_' + i + '" min="0" max="' + (kind === "pool" ? 5 : 99) + '" placeholder="' + skillBase(R, c, s) + '" value="' + (c.skills && c.skills[s.k] != null && c.skills[s.k] !== "" ? esc(c.skills[s.k]) : "") + '"></label>').join("") + '</div>';
+      '<div class="sh-ed">' + sh.skills.map((s, i) => '<label><small>' + esc(s.label) + (kind === "d100" || kind === "ose" ? ' <span style="color:var(--mute)">(basis ' + skillBase(R, c, s) + ')</span>' : ' <span style="color:var(--mute)">(' + esc(s.ch.slice(0, 2)) + ')</span>') + '</small><input type="number" id="g_sk_' + i + '" min="0" max="' + (kind === "pool" ? 5 : 99) + '" placeholder="' + skillBase(R, c, s) + '" value="' + (c.skills && c.skills[s.k] != null && c.skills[s.k] !== "" ? esc(c.skills[s.k]) : "") + '"></label>').join("") + '</div>';
     h += ta("g_extra", kind === "2d6" ? "Extra moves / technieken (één per regel: naam | stat)" : kind === "pool" ? "Extra skills (één per regel: naam | rank | characteristic)" : "Extra skills / specialisaties (één per regel: naam | waarde)", c.extra) + '<p style="color:var(--mute);font-size:13px;margin:0">' + esc(sh.skillSpecs || "") + '</p>';
     (sh.lists || []).forEach(l => { h += ta("g_ls_" + l.k, esc(l.label) + " — " + esc(l.hint || "naam | score"), ((c.lists && c.lists[l.k]) || []).map(x => x.name + " | " + x.score).join("\n")); });
     h += ta("g_eq", "Uitrusting", c.equipment) + (sh.extraText || []).map(x => ta("g_x_" + x[0], x[1], c[x[0]])).join("") + ta("g_pers", "Persoonlijkheid", c.personality) + ta("g_app", "Uiterlijk", c.appearance) + ta("g_back", "Backstory", c.backstory) + ta("g_sec", "Geheimen (voor de DM)", c.secrets) + ta("g_hooks", "Haken voor de DM", c.dmHooks);
@@ -231,6 +261,7 @@
     const q = id => el.querySelector("#" + id), sh = R.sheet, kind = kindOf(R), c = Object.assign({}, old || {}, { ruleset: R.id });
     c.name = q("g_name").value.trim(); c.player = q("g_player").value; c.profession = q("g_prof").value.trim(); c.age = q("g_age") ? q("g_age").value.trim() : (c.age || "");
     c.stats = {}; sh.stats.forEach(k => { c.stats[k] = Math.round(num(q("g_st_" + k).value, statDefault(R))); if (kind === "d100") c.stats[k] = Math.max(1, c.stats[k]); });
+    c.nums = {}; (sh.numbers || []).forEach(n => { const x = q("g_nm_" + n.k); if (x && x.value !== "") c.nums[n.k] = num(x.value, n.def); });
     c.meterMax = {}; sh.meters.forEach(m => { const x = q("g_mm_" + m.k); if (x && x.value !== "") c.meterMax[m.k] = num(x.value, 0); });
     c.skills = {}; if (kind !== "2d6") sh.skills.forEach((s, i) => { const x = q("g_sk_" + i); if (x && x.value !== "") c.skills[s.k] = Math.max(0, Math.min(kind === "pool" ? 5 : 99, Math.round(num(x.value, 0)))); });
     c.extra = q("g_extra").value; c.lists = {}; (sh.lists || []).forEach(l => { c.lists[l.k] = q("g_ls_" + l.k).value.split(/\n/).map(x => x.trim()).filter(Boolean).map(x => { const p = x.split("|"); return { name: p[0].trim(), score: num((p[1] || "").trim(), 0) }; }); });
