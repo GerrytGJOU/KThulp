@@ -1718,7 +1718,7 @@ const ITEMRULES=(function(){
   const RECH={dag:'nieuwe dag',day:'nieuwe dag','lange rust':'lange rust','long rest':'lange rust','korte rust':'korte rust','short rest':'korte rust'};
   function fromObj(o){const nm=String(o.name||o.naam||o.title||'Voorwerp').trim(), u=o.uses||o.gebruik||null;
     return {name:nm,note:String(o.note||o.effect||o.toelichting||'').trim(),magic:!!(o.magic||o.magisch),origin:String(o.origin||o.herkomst||'').trim(),rules:String(o.rules||o.regels||'').trim(),
-      uses:u&&typeof u==='object'&&Number(u.max)>0?{per:String(u.per||''),max:Number(u.max)}:null,recharge:String(o.recharge||o.herstel||(u&&u.per)||'').trim(),rich:true};}
+      uses:u&&typeof u==='object'&&Number(u.max)>0?{per:String(u.per||''),max:Number(u.max)}:null,recharge:String(o.recharge||o.herstel||(u&&u.per!=='voorraad'&&u.per)||'').trim(),rich:true};}
   function isRich(x){return !!x&&typeof x==='object'&&!Array.isArray(x)&&!!(x.name||x.naam)&&!!(x.rules||x.regels||x.uses||x.gebruik||x.origin||x.herkomst||x.magic||x.magisch||x.recharge||x.herstel);}
   const has=it=>!!it&&!it.pack&&!!(it.rich||it.magic||(it.note&&it.note.length>=20));
   const attr=it=>' data-item="'+esc(key(it.name))+'" tabindex="0"';
@@ -1729,7 +1729,7 @@ const ITEMRULES=(function(){
     return '<div class="itemov" data-itemoverlay="1"><div class="itemcard'+(it.magic?' mg':'')+'" role="dialog" aria-modal="true" aria-label="'+esc(it.name)+'"><div class="ich"><b>'+(it.magic?'✨ ':'')+esc(it.name)+'</b><button class="b alt sm" data-itemclose="1">Sluiten</button></div>'+
       (it.origin?'<div class="ior"><small>Herkomst</small> '+esc(it.origin)+'</div>':'')+
       '<div class="irl">'+esc(it.rules||it.note||'Geen aanvullende regels.')+'</div>'+
-      (u?'<div class="iuse"><small>Gebruik</small> <span class="ipips">'+Array.from({length:u.max},(_,i)=>'<button class="pip'+(i<used?' x':'')+'" data-itempip="'+(i+1)+'" aria-label="gebruik '+(i+1)+'">'+(i<used?'✕':'')+'</button>').join('')+'</span> <b>'+left+' / '+u.max+' over</b>'+(rl?' <small>herstelt: '+esc(rl)+'</small>':'')+(used?' <button class="b alt sm" data-itemreset="1">Herstel</button>':'')+'</div>':(rl?'<div class="iuse"><small>Herstelt: '+esc(rl)+'</small></div>':''))+'</div></div>';
+      (u?'<div class="iuse"><small>Gebruik</small> <span class="ipips">'+Array.from({length:u.max},(_,i)=>'<button class="pip'+(i<used?' x':'')+'" data-itempip="'+(i+1)+'" aria-label="gebruik '+(i+1)+'">'+(i<used?'✕':'')+'</button>').join('')+'</span> <b style="white-space:nowrap">'+left+' / '+u.max+' over</b>'+(rl?' <small>herstelt: '+esc(rl)+'</small>':'')+(used?' <button class="b alt sm" data-itemreset="1">Herstel</button>':'')+'</div>':(rl?'<div class="iuse"><small>Herstelt: '+esc(rl)+'</small></div>':''))+'</div></div>';
   }
   return {fromObj,isRich,has,attr,card,key,usedOf,get open(){return open},set open(v){open=v}};
 })();
