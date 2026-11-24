@@ -177,6 +177,7 @@
   function resolve(s) {
     const base = SETTINGS.middenaarde, out = Object.assign({}, base, s || {});
     ['prompt', 'ui', 'style', 'creator', 'map'].forEach(function (k) { out[k] = Object.assign({}, base[k], (s && s[k]) || {}); });
+    out.ruleset = (s && s.ruleset) || "dnd2024"; /* spelsysteem, zie settings-rulesets.js */
     return out;
   }
   /* Extra settings registreren zichzelf (settings-aldmark.js e.d.). Een onbekend id valt terug op Midden-aarde. */
@@ -209,6 +210,7 @@
     if (!isO(s)) return ["Geen geldige setting."];
     if (!str(s.id, 40) || !/^[a-z0-9_-]+$/.test(s.id)) e.push("id: alleen kleine letters, cijfers, - en _ (max 40).");
     if (!str(s.name, 60)) e.push("naam ontbreekt of is te lang (max 60).");
+    if (s.ruleset != null && !/^[a-z0-9_-]{1,40}$/.test(String(s.ruleset))) e.push("ruleset: alleen kleine letters, cijfers, - en _");
     const P = s.prompt, C = s.creator, K = s.canonParts;
     if (!isO(P)) e.push("prompt ontbreekt"); else {
       ["world", "naming", "noOvershadow", "bigFigure", "geoCheck", "exInGame", "exPlace", "lootTone", "lootNo", "bookFigures", "idLegend", "noCreateFig", "canonName"].forEach(function (k) { if (!str(P[k], 3000)) e.push("prompt." + k + " ontbreekt of is te lang"); });
