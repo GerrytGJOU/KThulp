@@ -130,6 +130,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .kgrp{margin:0 0 8px}.kgrp>summary{cursor:pointer;padding:6px 2px;color:var(--gold)}.kcnt{font-size:.8em;opacity:.6;margin-left:6px}.q.kold{opacity:.55}
 .qnow{margin-top:4px;font-size:.9em}.qold{margin-top:3px;font-size:.84em;opacity:.5}.dtabs.sub{position:static;margin-bottom:10px}
 .ppl{display:flex;gap:10px;align-items:center}
+.pgrp{color:var(--gold);margin:14px 0 6px;font-size:1em}
 .ppl .av{width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid #4a3d30;background:#0f0d0b;flex:none;display:flex;align-items:center;justify-content:center;color:var(--mute)}
 .more-btn{width:100%;text-align:left;margin-bottom:8px;padding:14px}
 .rolls{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
@@ -995,7 +996,7 @@ Regels:
   ${S.exInGame}
    "pcs":{"Personagenaam":{"player":"Spelernaam","location":"",${R.pcStats},"inventory":[],"knowledge":[]}},
    "companions":{"Naam":{"location":"","hp":{"current":0,"max":0,"temp":0},"status":"","attitude":""}},
-   "npcs":{"Naam":{"location":"","status":"","attitude":"","knows":[]}},
+   "npcs":{"Naam":{"group":"categorie voor de Personenlijst, spelerzichtbaar (bijv. Fellowship, Dwarves, Huis van Elrond); nooit Companion, dat doet de app zelf","location":"","status":"","attitude":"","knows":[]}},
    "factions":{"Naam":{"stance":"","currentAction":""}},
    "quests":{"open":[{"title":"","detail":"","kind":"main|side|personal|companion","for":"personagenaam (alleen bij personal)","npc":"NPC-naam (alleen bij companion)","place":"waar het speelt (bij side)","updates":["eerdere berichten van deze opdracht, oudste eerst"]}],"completed":[{"title":"","detail":"","reward":"wat de spelers er echt voor kregen, kort; leeg als er niets was","updates":[]}],"consequences":[]},
    "initiative":{"active":"Naam","order":[{"name":"Naam","init":15,"enemy":false}]}  (alleen tijdens een gevecht; anders null)}
@@ -1354,12 +1355,28 @@ function locationCard(){
   if(!name) return '';
   return '<div class="card"><h3>📍 '+esc(name)+'</h3>'+(l&&l.img?'<img class="locimg" src="'+l.img+'" data-zoom="loc:'+k+'" alt="">':'')+(l&&l.desc?'<div style="font-size:14px">'+esc(l.desc)+'</div>':'')+'</div>';
 }
+/* Personen per categorie en daarbinnen op alfabet. "Companions" komt alleen van een echte rekrutering (nooit uit het veld group), zodat niet zichtbaar is wie een mogelijke companion is. */
+function groupedPeople(S){
+  const comp=new Set(Object.entries(S.companions||{}).map(([k,v])=>String((v&&v.name)||k).toLowerCase()));
+  Object.values(wNpcs||{}).forEach(n=>{if(n&&n.status==='recruited'&&n.name) comp.add(String(n.name).toLowerCase())});
+  const groups={};
+  Object.entries(S.npcs||{}).forEach(([k,v])=>{
+    const o=(v&&typeof v==='object')?v:{status:v}, name=String(o.name||k);
+    let g=String(o.group||'').trim(); if(/^companions?$/i.test(g)) g='';
+    if(comp.has(name.toLowerCase())) g='Companions';
+    (groups[g||'Overig']=groups[g||'Overig']||[]).push({name,o});
+  });
+  const rank=g=>g==='Companions'?0:g==='Fellowship'?1:g==='Overig'?3:2;
+  return Object.keys(groups).sort((a,b)=>rank(a)-rank(b)||a.localeCompare(b,'nl')).map(g=>{
+    const cards=groups[g].sort((a,b)=>a.name.localeCompare(b.name,'nl')).map(({name,o})=>{
+      const lines=[o.location,o.status,o.attitude].filter(x=>x&&typeof x!=='object').map(esc).join(' · ');
+      return '<div class="card ppl">'+avatar(name)+'<div><b>'+esc(name)+'</b><br><small style="color:var(--mute)">'+(lines||'—')+'</small></div></div>';
+    }).join('');
+    return (Object.keys(groups).length>1||g!=='Overig'?'<h3 class="pgrp">'+esc(g)+'</h3>':'')+cards;
+  }).join('');
+}
 function peopleHtml(S){
-  return Object.entries(S.npcs||{}).map(([k,v])=>{
-    const o=(v&&typeof v==='object')?v:{status:v};
-    const lines=[o.location,o.status,o.attitude].filter(x=>x&&typeof x!=='object').map(esc).join(' · ');
-    return '<div class="card ppl">'+avatar((o&&o.name)||k)+'<div><b>'+esc((o&&o.name)||k)+'</b><br><small style="color:var(--mute)">'+(lines||'—')+'</small></div></div>';
-  }).join('')||'<small style="color:var(--mute)">Niemand in de Stand.</small>';
+  return groupedPeople(S)||'<small style="color:var(--mute)">Niemand in de Stand.</small>';
 }
 function renderSide(){
   const el=$('#sidemain'); if(!el) return;
@@ -1587,11 +1604,7 @@ async function renderDiary(){
   const box=$('#diarybox'), C=cid, S=getState(), q=S.quests||{};
   const qs=(arr,cls)=>listOf(arr).map(t=>'<div class="q '+cls+'">'+esc(t)+'</div>').join('');
   const open=qs(q.open,''), done=qs(q.completed,'done'), cons=listOf(q.consequences).map(t=>'<div class="q">'+esc(t)+'</div>').join('');
-  const ppl=Object.entries(S.npcs||{}).map(([k,v])=>{
-    const o=(v&&typeof v==='object')?v:{status:v};
-    const lines=[o.location,o.status,o.attitude].filter(x=>x&&typeof x!=='object').map(esc).join(' · ');
-    return '<div class="card ppl">'+avatar((o&&o.name)||k)+'<div><b>'+esc((o&&o.name)||k)+'</b><br><small style="color:var(--mute)">'+(lines||'—')+'</small></div></div>';
-  }).join('');
+  const ppl=groupedPeople(S);
   /* Opdrachten uit het wereldregister: alleen wat de spelers al kennen (actief of afgesloten); nooit dormant/available, haakjes of 'ifIgnored' */
   const MOPN=['Maanden','jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
   const wl=Object.values(wQuests||{}).filter(x=>x&&x.title&&['active','completed','failed','expired','changed'].indexOf(x.status)>=0);
