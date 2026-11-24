@@ -579,7 +579,7 @@ function newStoryForm(){
    '<div id="nstartwrap" style="display:none"><br><br><label><small><b>Startsituatie</b> (optioneel; laat leeg, dan kiest de DM die bij de opening)</small></label><textarea id="nstart" rows="3" placeholder="Bv. Jullie arriveren na een lange reis bij een dorp waar iets mis is met de oogst..."></textarea></div><br><br><label><small><input type="checkbox" id="nclaude" checked> Opening door Claude Code (aanbevolen: die heeft alle informatie voor een thematisch sterke start; Gemini speelt daarna verder)</small></label>'+
    '<br><br><button class="b" id="ncreate">Verhaal aanmaken</button>';
   if(ids.length) $('#ncopy').value='__tpl__';
-  const nsync=()=>{const mid=$('#nset').value==='middenaarde', nw=!mid||$('#nwm').value==='nieuw'; $('#nwl').style.display=$('#nwm').style.display=mid?'':'none'; $('#nold').style.display=nw?'none':''; $('#nstartwrap').style.display=nw?'':'none'; if(nw) $('#nclaude').checked=true; if(!mid) document.querySelectorAll('[data-pc]').forEach(x=>{x.value=''}); const si=DNDSettings.list().find(s=>s.id===$('#nset').value); $('#nsetinfo').textContent=si?si.blurb:''};
+  const nsync=()=>{const mid=$('#nset').value==='middenaarde', nw=!mid||$('#nwm').value==='nieuw'; $('#nwl').style.display=$('#nwm').style.display=mid?'':'none'; $('#nold').style.display=nw?'none':''; $('#nstartwrap').style.display=nw?'':'none'; if(nw) $('#nclaude').checked=true; { const rs0=(DNDSettings.get($('#nset').value).ruleset)||'dnd2024'; document.querySelectorAll('[data-pc]').forEach(x=>{ const n=x.dataset.pc, cs=allChars().filter(c=>c.player===n&&(c.ruleset||'dnd2024')===rs0), first=cs.find(c=>!c.dead); x.innerHTML='<option value="">➕ nog te maken</option>'+cs.map(c=>'<option value="'+esc(c.k)+'">'+esc(c.name)+(c.dead?' (inactief)':'')+'</option>').join(''); x.value=(mid&&first)?first.k:''; }); } const si=DNDSettings.list().find(s=>s.id===$('#nset').value); $('#nsetinfo').textContent=si?si.blurb:''};
   $('#nwm').onchange=nsync; $('#nset').onchange=nsync; nsync();
   $('#naddpl').onclick=async()=>{
     const v=(prompt('Naam van de nieuwe speler (zoals die in het spel heet):')||'').trim(); if(!v) return;
@@ -1608,7 +1608,7 @@ async function summarize(C,upTo,force){
   ms.forEach(c=>{const m=c.val(); if(m.type!=='system'&&m.round>covered&&m.round<=upTo) list.push(m)});
   if(list.length<4) return false;
   const text=list.map(m=>(m.type==='narration'?'DM':m.author)+': '+m.text).join('\n\n');
-  const r=await callLLM(SUMSYS.replace("Midden-aarde",curSetting().prompt.world),'# EERDERE SAMENVATTING\n'+(prev.join('\n')||'(geen)')+'\n\n# NIEUWE BERICHTEN\n'+text,null,false,{model:provider()==='anthropic'?(cfg.anthropicModel||'claude-haiku-5-5'):(cfg.summaryModel||'gemini-2.5-flash-lite')});
+  const r=await callLLM(SUMSYS.replace("D&D-campagne",curSetting().ruleset&&curSetting().ruleset!=='dnd2024'?DNDRulesets.get(curSetting().ruleset).name+'-campagne':'D&D-campagne').replace("Midden-aarde",curSetting().prompt.world),'# EERDERE SAMENVATTING\n'+(prev.join('\n')||'(geen)')+'\n\n# NIEUWE BERICHTEN\n'+text,null,false,{model:provider()==='anthropic'?(cfg.anthropicModel||'claude-haiku-5-5'):(cfg.summaryModel||'gemini-2.5-flash-lite')});
   await db.ref(cp('summaries/'+String(upTo).padStart(5,'0'),C)).set({fromRound:covered+1,toRound:upTo,text:r.txt.trim(),t:Date.now()});
   return true;
 }
@@ -1844,7 +1844,8 @@ function genRender(gb,el,prefix){
   Object.assign(genCtx,{R,c,me:me&&me.name,players:playerNames(),live:(screen==='camp'&&!isNew)?((getState().pcs||{})[c.name]||null):null,avatar,edit:isNew?'new':!!sheetEdit,
     canUse:!!(screen==='camp'&&me&&c.player===me.name),copy:copyText,alert:m=>alert(m),
     onEdit:b=>{sheetEdit=b; redo()},
-    onSave:async(t,nw)=>{ const k=slug(t.name), up={}; if(!nw&&chars[sheetKey]) t=Object.assign({},chars[sheetKey],t); delete t.k; up['dnd/characters/'+k]=t; if(!nw&&k!==sheetKey) up['dnd/characters/'+sheetKey]=null; sheetKey=k; sheetEdit=false; await db.ref().update(up); },
+    onSave:async(t,nw)=>{ const k=slug(t.name), up={}; if(!nw&&chars[sheetKey]) t=Object.assign({},chars[sheetKey],t); delete t.k; up['dnd/characters/'+k]=t; if(!nw&&k!==sheetKey) up['dnd/characters/'+sheetKey]=null;
+      Object.entries(index).forEach(([id,x])=>{ if(x&&x.party&&x.party[t.player]===''&&((DNDSettings.get(x.settingId||'middenaarde').ruleset)||'dnd2024')===t.ruleset) up['dnd/campaignIndex/'+id+'/party/'+t.player]=k; }); sheetKey=k; sheetEdit=false; await db.ref().update(up); },
     onDelete:async()=>{ if(confirm('Personage definitief wissen?')){const dk=sheetKey; sheetEdit=false; sheetKey=''; await db.ref('dnd/characters/'+dk).remove();} },
     onDead:async()=>{ const c0=chars[sheetKey]; if(c0&&confirm(c0.dead?c0.name+' weer actief maken?':c0.name+' markeren als gesneuveld/gepensioneerd? (Het blad blijft bewaard, maar de DM speelt dit personage niet meer mee.)')) await db.ref('dnd/characters/'+sheetKey+'/dead').set(c0.dead?null:true); },
     onUse:sel=>{ rollKey=sel.key; rollO=Object.assign({},sel.state); setTab('game'); }
@@ -2469,7 +2470,7 @@ async function ccFinish(){
   if(chars[k]&&!confirm('Er bestaat al een personage "'+chars[k].name+'". Overschrijven?')) return;
   const up={}; up['dnd/characters/'+k]=rec;
   /* verhalen waarin deze speler nog op een personage wacht: dit personage wordt zijn personage in dat verhaal */
-  Object.entries(index).forEach(([id,x])=>{ if(x&&x.party&&x.party[rec.player]==='') up['dnd/campaignIndex/'+id+'/party/'+rec.player]=k; });
+  Object.entries(index).forEach(([id,x])=>{ if(x&&x.party&&x.party[rec.player]===''&&((DNDSettings.get(x.settingId||'middenaarde').ruleset)||'dnd2024')==='dnd2024') up['dnd/campaignIndex/'+id+'/party/'+rec.player]=k; });
   try{ await db.ref().update(up); }catch(e){alert('Opslaan mislukt: '+e.message); return;}
   try{localStorage.removeItem(CC_DRAFT)}catch(e){}
   cc=null; ccStep=0; sheetKey=k; sheetEdit=false;
