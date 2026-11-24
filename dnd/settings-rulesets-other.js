@@ -116,4 +116,38 @@
       extraText: [["alignment", "Alignment en talen"], ["spells", "Spells en memorized"]]
     }
   });
+
+  /* ---------------- Companion- en NPC-statblocks per regelset (tools/statblock.js, tools/jobs.js, world.js) ----------------
+     noHp: het systeem kent geen HP; de meters staan dan in resources (zero = teller vanaf 0 die bij rust op 0 komt).
+     Zonder R.companion (D&D 2024) gelden de oorspronkelijke eisen: hp 5-200, ac 8-22, hulpbronnen met rest short|long. */
+  const MT = (k, label, max, rest, extra) => Object.assign({ k, label, max, rest }, extra || {});
+  const COMP_D100 = { noHp: false, hp: [3, 30], ac: null, text: "text bevat: kenmerken, belangrijkste skills met percentages, wapens en schade, pantser, bijzonderheden en wat de NPC weet (geen geheimen over canonieke NPC's)." };
+  RS.get("dg").companion = Object.assign({}, COMP_D100, {
+    meters: [MT("wp", "Willpower", [1, 20], "long", { required: true }), MT("san", "Sanity", [10, 99], "none", { required: true })],
+    focus: "Delta Green-NPC: STR/CON/DEX/INT/POW/CHA, HP, WP, SAN (en Breaking Point), skills als percentages, wapens met schade (Lethality% bij dodelijke wapens), Armor, Bonds. Unnatural-wezens krijgen Lethality, Armor en het SAN-verlies bij ontmoeting."
+  });
+  const COMP_COC = Object.assign({}, COMP_D100, {
+    meters: [MT("mp", "Magic Points", [1, 30], "long"), MT("san", "Sanity", [10, 99], "none", { required: true }), MT("luck", "Luck", [10, 99], "none")],
+    focus: "Call of Cthulhu-NPC: STR/CON/SIZ/DEX/APP/INT/POW/EDU, HP, MP, SAN, Luck, Build en Damage Bonus, skills en aanvallen als percentages (Regular/Hard/Extreme), pantser."
+  });
+  RS.get("coc").companion = COMP_COC;
+  RS.get("cda").companion = Object.assign({}, COMP_COC, { focus: COMP_COC.focus + " Middeleeuws: geen vuurwapens; speer, bijl, zwaard, boog, schild en mail." });
+  RS.get("ose").companion = {
+    noHp: false, hp: [1, 100], ac: [-3, 19], meters: [], text: "",
+    focus: "Old-School Essentials-monster of NPC: Hit Dice en HP, AC (gebruik de AC-conventie van de campagne: descending of ascending), attack bonus of THAC0, aantal aanvallen en schade, Saves (als een klasse en niveau), Morale (2-12), Movement, XP en een alignment; spells als memorized-lijst in de text."
+  };
+  RS.get("avatar").companion = {
+    noHp: true, hp: null, ac: null,
+    meters: [MT("fatigue", "Fatigue", [3, 6], "long", { zero: true })],
+    focus: "Avatar Legends-NPC (geen HP of AC): stats (Creativity, Focus, Harmony, Passion), principles, training en technieken met mastery (learned, practiced, mastered), gevechtsstijl, zwakke plek en hoe ze reageren op Moves. Fatigue telt van 0 omhoog tot de max. Conditions (Afraid, Angry, Guilty, Insecure, Troubled) houd je bij in conditions."
+  };
+  RS.get("sw").companion = {
+    noHp: true, hp: null, ac: null,
+    meters: [MT("wounds", "Wounds", [5, 30], "none", { zero: true, required: true }), MT("strain", "Strain", [5, 30], "short", { zero: true })],
+    focus: "Star Wars-NPC (geen HP of AC): type (Minion, Rival of Nemesis), characteristics, skills met ranks, Soak, Defense, Wound en Strain Threshold (de max van de meters), wapens (damage, crit, range), talents en Force Rating. Wounds en Strain tellen van 0 omhoog tot de threshold."
+  };
+  /* de DM-aanwijzing over companions komt bij de systeemregels */
+  RS.get("avatar").guide += "\n- Companions hebben geen HP: houd hun Fatigue bij in companions.<id>.resources.fatigue ({cur, max}) en hun Conditions in companions.<id>.conditions.";
+  RS.get("sw").guide += "\n- Companions hebben geen HP: houd hun Wounds en Strain bij in companions.<id>.resources.wounds en .strain ({cur, max}: een teller van 0 omhoog tot de threshold).";
+  ["dg", "coc", "cda"].forEach(id => { RS.get(id).guide += "\n- Companions: HP staat in hp, WP/MP/SAN/Luck in companions.<id>.resources ({cur, max}); SAN en Luck herstellen niet door rust."; });
 })(typeof self !== "undefined" ? self : this);

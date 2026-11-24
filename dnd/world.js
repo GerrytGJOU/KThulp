@@ -309,7 +309,7 @@
         if (COMPANION_MODES.indexOf(op.mode) < 0) return err("Companion " + id + ": mode moet " + COMPANION_MODES.join("/") + " zijn");
         if (!needReason()) return err("Companion " + id + ": recruteren vereist een reason (gedeeld belang, wederzijdse verwachtingen)");
         if (rec.declined && rec.declined.retryAfter && now && dateCmp(now, rec.declined.retryAfter) < 0) return err("Companion " + id + " heeft geweigerd en vraagt pas weer na " + fmt(rec.declined.retryAfter));
-        if (!(rec.hp && rec.hp.max > 0)) return err("Companion " + id + ": statblock (hp.max) ontbreekt");
+        if (!(rec.noHp || (rec.hp && rec.hp.max > 0))) return err("Companion " + id + ": statblock (hp.max) ontbreekt");
         if (rec.sheetStatus === "proposed") warn("Statblock van " + npc.name + " is nog een voorstel (niet goedgekeurd)");
         const live = op.mode !== "remote";
         if (live && partyRegion && npc.location && regionOf(W, npc.location) !== partyRegion) return err("Companion " + id + " (" + npc.name + ") is niet bij de party (" + (regionOf(W, npc.location) || "?") + " ≠ " + partyRegion + ")");
@@ -350,6 +350,7 @@
         if (live && (op.hp || op.resources || op.conditions) && rec.mode !== "remote" && rec.mode !== "contact" && partyRegion && regionOf(W, npc.location) !== partyRegion) return err("Companion " + id + " (" + npc.name + ") is niet bij de party (" + (regionOf(W, npc.location) || "?") + " ≠ " + partyRegion + ")");
         if (rec.stage === "departed" && (op.hp || op.resources || op.conditions)) return err("Companion " + id + " is vertrokken: alleen evidence/nextAction/obligation kunnen veranderen");
         if (rec.stage === "candidate" && (op.hp || op.resources || op.conditions)) return err("Companion " + id + " is nog kandidaat: geen combatstatus wijzigen");
+        if (op.hp != null && nx.noHp) return err("Companion " + id + ": dit spelsysteem kent geen HP; gebruik resources (de meters van de statblock)");
         if (op.hp != null) {
           if (!isObj(op.hp)) return err("Companion " + id + ": hp moet {cur} of {delta} zijn");
           const v = op.hp.cur != null ? op.hp.cur : (op.hp.delta != null ? nx.hp.cur + op.hp.delta : null);
@@ -387,7 +388,7 @@
         if (rec.stage !== "active") return err("Companion " + id + ": rusten kan alleen als actief");
         if (rec.mode !== "remote" && rec.mode !== "contact" && partyRegion && regionOf(W, npc.location) !== partyRegion) return err("Companion " + id + " (" + npc.name + ") is niet bij de party om te rusten");
         if (op.kind !== "short" && op.kind !== "long") return err("Companion " + id + ": rest.kind moet short of long zijn");
-        Object.keys(nx.resources || {}).forEach(k => { const r = nx.resources[k]; if (r.rest === "short" || (op.kind === "long" && r.rest === "long")) r.cur = r.max; });
+        Object.keys(nx.resources || {}).forEach(k => { const r = nx.resources[k]; if (r.rest === "short" || (op.kind === "long" && r.rest === "long")) r.cur = r.zero ? 0 : r.max; });
         if (op.kind === "long") { nx.hp.cur = nx.hp.max; nx.conditions = []; }
         eventFor("companion_rest", npc.name + " neemt een " + (op.kind === "long" ? "lange" : "korte") + " rust", refs, "V");
       }
@@ -740,7 +741,7 @@
       const res = Object.keys(r.resources || {}).map(k => k + " " + r.resources[k].cur + "/" + r.resources[k].max).join(", ");
       const ev = (r.evidence || []).slice(-2).map(e => e.text).join(" | ");
       if (r.stage === "departed") return "- " + r.id + " " + (n.name || "") + " [vertrokken " + (r.departure && r.departure.at ? fmt(r.departure.at) : "?") + " → " + (r.departure && r.departure.destination || "?") + "; reden: " + (r.departure && r.departure.reason || "?") + (r.departure && r.departure.returnIf ? "; keert terug als: " + r.departure.returnIf : "") + "]";
-      return "- " + r.id + " " + (n.name || "") + " [" + r.mode + "] HP " + r.hp.cur + "/" + r.hp.max + (res ? "; " + res : "") + ((r.conditions || []).length ? "; conditions: " + r.conditions.join(", ") : "") + (r.nextAction ? "; wil: " + r.nextAction : "") + (ev ? "; bewijs: " + ev : "");
+      return "- " + r.id + " " + (n.name || "") + " [" + r.mode + "]" + (r.noHp ? "" : " HP " + r.hp.cur + "/" + r.hp.max) + (res ? (r.noHp ? " " : "; ") + res : "") + ((r.conditions || []).length ? "; conditions: " + r.conditions.join(", ") : "") + (r.nextAction ? "; wil: " + r.nextAction : "") + (ev ? "; bewijs: " + ev : "");
     }).join("\n"));
     const due = companionDue(world, world.calendar);
     if (due.length) out.push("Aan de orde (companions):\n" + due.map(d => "- " + d).join("\n"));
@@ -800,7 +801,7 @@
       if (COMPANION_STAGES.indexOf(r.stage) < 0) return bad("companion", id, "onbekende stage " + r.stage);
       if (STAGE_NPC[r.stage] && STAGE_NPC[r.stage].indexOf(n.status) < 0) bad("companion", id, "stage " + r.stage + " past niet bij NPC-status " + n.status);
       if (r.stage === "candidate" && ["recruited", "departed"].indexOf(n.status) >= 0) bad("companion", id, "NPC is " + n.status + " maar record staat nog op candidate");
-      if (!(r.hp && Number.isInteger(r.hp.max) && r.hp.max > 0 && r.hp.cur >= 0 && r.hp.cur <= r.hp.max)) bad("companion", id, "hp ontbreekt of valt buiten bereik");
+      if (!r.noHp && !(r.hp && Number.isInteger(r.hp.max) && r.hp.max > 0 && r.hp.cur >= 0 && r.hp.cur <= r.hp.max)) bad("companion", id, "hp ontbreekt of valt buiten bereik");
       Object.keys(r.resources || {}).forEach(k => { const x = r.resources[k]; if (!(x.cur >= 0 && x.cur <= x.max)) bad("companion", id, "hulpbron " + k + " buiten bereik"); });
       if (r.stage === "departed" && !r.departure) bad("companion", id, "vertrokken zonder departure-gegevens");
       if (r.stage === "active" && (!r.mode || COMPANION_MODES.indexOf(r.mode) < 0)) bad("companion", id, "actief zonder geldige mode");

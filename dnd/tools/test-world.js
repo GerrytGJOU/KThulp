@@ -682,5 +682,18 @@ t("echoCheck: letterlijke herhaling van een speler wordt gevonden, een eigen rea
 });
 t("party-regio staat in de wereldcontext", () => { const w = cworld(); w.sceneSince = { y: 3018, m: 10, d: 24 }; const c = W.worldContext(w, { hay: "" }); yes(c.indexOf("Party-regio") >= 0 && c.indexOf("REG-RIVENDELL") >= 0, c); });
 
+/* ---------- companions zonder HP (Avatar Legends, Star Wars) ---------- */
+function nohpWorld() { const w = cworld(); w.companions["CMP-R03"] = { id: "CMP-R03", stage: "candidate", noHp: true, hp: { cur: 0, max: 0 }, resources: { wounds: { cur: 0, max: 12, rest: "none", zero: true }, strain: { cur: 0, max: 10, rest: "short", zero: true } }, conditions: [], evidence: [] }; return w; }
+t("noHp-companion: recruteren zonder hp.max", () => { const r = run(nohpWorld(), { companions: [rec3] }); yes(r.ok, r.errors.join("|")); eq(r.plan.companions["CMP-R03"].stage, "active"); yes(r.plan.companions["CMP-R03"].noHp === true); });
+t("noHp-companion: hp-wijziging wordt geweigerd", () => { let w = nohpWorld(); w = apply2(w, run(w, { companions: [rec3] }).plan); bad(run(w, { companions: [{ id: "CMP-R03", op: "update", hp: { delta: -2 }, evidence: "geraakt" }] }), "geen HP"); });
+t("noHp-companion: wounds als teller via resources", () => { let w = nohpWorld(); w = apply2(w, run(w, { companions: [rec3] }).plan); const r = run(w, { companions: [{ id: "CMP-R03", op: "update", resources: { wounds: { delta: 3 } } }] }); yes(r.ok, r.errors.join("|")); eq(r.plan.companions["CMP-R03"].resources.wounds.cur, 3); bad(run(w, { companions: [{ id: "CMP-R03", op: "update", resources: { wounds: { cur: 13 } } }] }), "buiten"); });
+t("noHp-companion: rust zet tellers met zero terug op 0, wounds (rest none) niet", () => {
+  let w = nohpWorld(); w = apply2(w, run(w, { companions: [rec3] }).plan);
+  w = apply2(w, run(w, { companions: [{ id: "CMP-R03", op: "update", resources: { wounds: { cur: 4 }, strain: { cur: 6 } } }] }).plan);
+  const r = run(w, { companions: [{ id: "CMP-R03", op: "rest", kind: "short" }] }); yes(r.ok, r.errors.join("|")); eq(r.plan.companions["CMP-R03"].resources.strain.cur, 0); eq(r.plan.companions["CMP-R03"].resources.wounds.cur, 4);
+});
+t("noHp-companion: audit en wereldcontext zonder HP", () => { let w = nohpWorld(); w = apply2(w, run(w, { companions: [rec3] }).plan); eq(W.auditWorld(w).filter(i => i.level === "fout" && i.kind === "companion").length, 0); const c = W.worldContext(w, { hay: "" }); yes(c.indexOf("wounds 0/12") >= 0 && c.indexOf("HP 0/0") < 0, "context: " + c.slice(0, 300)); });
+t("companion met HP blijft hp-validatie houden", () => { let w = cworld(); w.companions["CMP-R03"].hp = { cur: 0, max: 0 }; bad(run(w, { companions: [rec3] }), "statblock"); });
+
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);

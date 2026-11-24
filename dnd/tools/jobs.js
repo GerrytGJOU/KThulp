@@ -25,6 +25,7 @@
 const { spawnSync } = require("child_process");
 const fs = require("fs"), os = require("os"), path = require("path");
 const World = require("../world.js");
+const Statblock = require("./statblock.js"), Rulesets = Statblock.Rulesets, Settings = require("../settings-all.js"); /* statblock per regelset */
 const PROJECT = "kthulp-certamen";
 
 function fb(args) {
@@ -36,6 +37,14 @@ function get(p, extra) {
   const out = fb("database:get \"" + p + "\"" + (extra ? " " + extra : "")).trim();
   if (!out || out === "null") return null;
   try { return JSON.parse(out); } catch (e) { throw new Error("Geen JSON van " + p + ": " + out.slice(0, 200)); }
+}
+/* Regelset van een verhaal: snapshot van de setting, anders de ingebouwde setting; zonder gegevens D&D 2024. */
+function rulesetOf(cid) {
+  let snap = null, id = null;
+  try { const raw = get("/dnd/campaigns/" + cid + "/setting"); snap = raw ? JSON.parse(raw) : null; } catch (e) { snap = null; }
+  if (snap && snap.id) return Rulesets.get(Settings.resolve(snap).ruleset);
+  try { id = get("/dnd/campaignIndex/" + cid + "/settingId"); } catch (e) { id = null; }
+  return Rulesets.get(Settings.get(id || Settings.DEFAULT_ID).ruleset);
 }
 const T = require("./tables.js")(get); /* NPC-/locatietabel per campagne: globaal of campaigns/{cid}/… (ownTables) */
 function update(updates) {
@@ -123,7 +132,8 @@ function brief(cid, world, job) {
       : "Er is nog geen uiterlijkbeschrijving. Stel er één op (Engels, 1-3 zinnen, concreet: leeftijd, haar, ogen, gezicht, kleding, wapens/attributen) uit speler-zichtbare bronnen (canon B1, E3, wat in de verhaalberichten staat; voor Tolkien-figuren de boeken). Is er geen bron? Dan FAAL je de job niet: verzin zelf een passend, neutraal uiterlijk als voorstel, gebaseerd op naam, regio, rol en doel uit npcRole hieronder (een gewone, geloofwaardige Midden-aardse persoon, geen opvallende kenmerken die het verhaal vastleggen). Gebruik NOOIT DM-geheime canon (C1, C2, M-documenten, CMP-statblocks, dmnotes) voor een portretprompt. Bewaar met set-visual (status 'proposed') en maak dan het portret; meld in je eindrapport dat de beschrijving een voorstel is die Gerben kan bijsturen.";
   }
   if (job.type === "statblock") {
-    out.instructions = "Maak een vereenvoudigd NPC-statblock (2024-regels, low-magic: geen Wizard/Paladin/spellcasting Bard/Cleric; geen spells zonder goedkeuring; zie canon r1_regels_2024 en m6_companions_overzicht via node dnd/tools/claude-dm.js context " + cid + " --canon=r1_regels_2024,m6_companions_overzicht,cmp_r03). Vorm: JSON {hp, ac, resources:{naam:{max,rest:'short'|'long'}}, text:'markdown-statblock', notes}. Lees het NPC-record hieronder en eerdere verhaalfeiten; verzin geen geheimen over bestaande canonieke NPC's. Bewaar met submit-statblock; het blijft een voorstel (sheetStatus proposed).";
+    out.ruleset = rulesetOf(cid).id;
+    out.instructions = Statblock.instructions(cid, rulesetOf(cid)) || "Maak een vereenvoudigd NPC-statblock (2024-regels, low-magic: geen Wizard/Paladin/spellcasting Bard/Cleric; geen spells zonder goedkeuring; zie canon r1_regels_2024 en m6_companions_overzicht via node dnd/tools/claude-dm.js context " + cid + " --canon=r1_regels_2024,m6_companions_overzicht,cmp_r03). Vorm: JSON {hp, ac, resources:{naam:{max,rest:'short'|'long'}}, text:'markdown-statblock', notes}. Lees het NPC-record hieronder en eerdere verhaalfeiten; verzin geen geheimen over bestaande canonieke NPC's. Bewaar met submit-statblock; het blijft een voorstel (sheetStatus proposed).";
     out.npc = npc;
   }
   if (job.type === "profile") {
@@ -251,17 +261,11 @@ function main() {
   }
   if (cmd === "submit-statblock") {
     if (job.type !== "statblock") throw new Error("submit-statblock hoort bij een statblock-job");
-    const sb = JSON.parse(fs.readFileSync(file, "utf8")), er = [];
-    if (!(Number.isInteger(sb.hp) && sb.hp >= 5 && sb.hp <= 200)) er.push("hp moet een geheel getal 5-200 zijn");
-    if (!(Number.isInteger(sb.ac) && sb.ac >= 8 && sb.ac <= 22)) er.push("ac moet een geheel getal 8-22 zijn");
-    const res = {};
-    Object.keys(sb.resources || {}).forEach(k => { const r = sb.resources[k]; if (!(r && Number.isInteger(r.max) && r.max >= 1 && r.max <= 10 && (r.rest === "short" || r.rest === "long"))) er.push("hulpbron " + k + ": {max 1-10, rest short|long}"); else res[k] = { cur: r.max, max: r.max, rest: r.rest }; });
-    if (typeof sb.text !== "string" || sb.text.trim().length < 200) er.push("text (markdown-statblock) ontbreekt of is te kort");
-    if (/spellcasting\s*:\s*(yes|ja)|\b(wizard|paladin)\b/i.test(sb.text || "")) er.push("low-magic: geen Wizard/Paladin/spellcasting zonder goedkeuring");
-    if (er.length) throw new Error("Statblock ongeldig:\n- " + er.join("\n- "));
-    const rec = { id: job.subject, stage: "candidate", ac: sb.ac, hp: { cur: sb.hp, max: sb.hp }, resources: res, conditions: [], evidence: [], sheetStatus: "proposed", source: "job " + jid };
+    const sb = JSON.parse(fs.readFileSync(file, "utf8")), V = Statblock.validate(sb, rulesetOf(cid));
+    if (V.er.length) throw new Error("Statblock ongeldig:\n- " + V.er.join("\n- "));
+    const rec = Statblock.record(job.subject, V, jid);
     const extra = { [wp(cid, "companions/" + job.subject)]: rec, ["campaigns/" + cid + "/canon/" + slug(job.subject)]: { title: job.subject + " " + npc.name + ": NPC-statblock (DM-geheim, voorstel)", text: sb.text, keywords: (npc.name + "," + job.subject).toLowerCase(), secret: true, t: Date.now() } };
-    transition(cid, world, job, "done", { result: { notes: "Statblock opgeslagen als voorstel (HP " + sb.hp + ", AC " + sb.ac + "); wacht op goedkeuring" + (sb.notes ? ": " + String(sb.notes).slice(0, 200) : ""), ref: "world/companions/" + job.subject } }, extra);
+    transition(cid, world, job, "done", { result: { notes: "Statblock opgeslagen als voorstel (" + Statblock.summary(V) + "); wacht op goedkeuring" + (sb.notes ? ": " + String(sb.notes).slice(0, 200) : ""), ref: "world/companions/" + job.subject } }, extra);
     console.log("Statblock van " + npc.name + " opgeslagen (voorstel); job afgerond. De NPC kan nu worden gerecruteerd zodra hij companion_candidate en voorgesteld is."); return;
   }
   if (cmd === "submit-profile") {
