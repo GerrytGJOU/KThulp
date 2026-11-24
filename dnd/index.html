@@ -223,7 +223,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="settings-rulesets-d100.js?v=1"></script>
 <script src="settings-rulesets-other.js?v=3"></script>
 <script src="settings-ruleref.js?v=2"></script>
-<script src="gensheet.js?v=3"></script>
+<script src="gensheet.js?v=4"></script>
 <script src="settings-data.js?v=10"></script>
 <script src="settings-aldmark.js?v=2"></script>
 <script src="settings-faerun.js?v=1"></script>
@@ -1665,10 +1665,11 @@ function rollText(r,nat){const tot=nat+r.bonus; return r.label+': '+nat+' '+(r.b
 /* niet-D&D-personages (zie gensheet.js): ruleset op het personage */
 function isGen(c){return !!(c&&c.ruleset&&c.ruleset!=='dnd2024'&&window.DNDRulesets&&DNDRulesets.has(c.ruleset)&&DNDRulesets.get(c.ruleset).sheet)}
 function RSof(c){return DNDRulesets.get(c&&c.ruleset)}
+function genChar(c){return Object.assign({},c,{_live:((getState().pcs||{})[c&&c.name])||null})} /* met de actuele meters uit de Stand (voor SAN- en Luck-worpen) */
 function rollRowHtml(){
   const c=myChar();
   if(!c) return '<div class="row"><input type="text" id="roll" placeholder="Worp (bv. nat 14 +3)" style="flex:1;min-width:120px"></div>';
-  if(isGen(c)){ if(rollKey===null){const req=turn&&turn.checks&&turn.checks[me.name]; rollKey=req?DNDGenSheet.matchCheck(RSof(c),c,req):'';} return DNDGenSheet.rowHtml(RSof(c),c,Object.assign({},rollO,{key:rollKey})); }
+  if(isGen(c)){ const gcc=genChar(c); if(rollKey===null){const req=turn&&turn.checks&&turn.checks[me.name]; rollKey=req?DNDGenSheet.matchCheck(RSof(c),gcc,req):'';} return DNDGenSheet.rowHtml(RSof(c),gcc,Object.assign({},rollO,{key:rollKey})); }
   if(rollKey===null){const req=turn&&turn.checks&&turn.checks[me.name]; rollKey=req?matchCheck(req):'';}
   const list=rollList(c,rollRage), groups=[...new Set(list.map(r=>r.group))];
   const opts=groups.map(g=>'<optgroup label="'+g+'">'+list.filter(r=>r.group===g).map(r=>'<option value="'+r.key+'"'+(r.key===rollKey?' selected':'')+'>'+esc(r.label)+' ('+sgn(r.bonus)+')</option>').join('')+'</optgroup>').join('');
@@ -1686,7 +1687,7 @@ function updateRoll(){
 function wireRoll(){
   const f=$('#roll'); if(f){ f.value=rollDraft; f.oninput=e=>{rollDraft=e.target.value}; return; }
   const sel=$('#rsel'); if(!sel) return;
-  const gc=myChar();
+  const gc=genChar(myChar());
   if(isGen(gc)){
     const R=RSof(gc), root=sel.parentNode;
     const upd=()=>{ rollO.key=rollKey; rollDraft=DNDGenSheet.rowUpdate(R,gc,root,rollO); };

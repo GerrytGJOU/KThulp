@@ -19,6 +19,7 @@
      table-reply <cid> <bestand.json>    antwoorden van kandidaten op gesprekken: {replies:[{player,npc,text,done,summary}],dossier:[{npc,line}],phase,final:{npc:{slot,note}}}
      table-show <cid>                    toon gesprekken, keuzes en onthulling van de Tafel der Draden
      new <titel> [--from=<verhaal>]      maak een nieuw verhaal (standaard het canon-sjabloon, of de canon van --from; wereldsjabloon, DM-notities) waarvan Claude de opening speelt
+     new <titel> --setting=<id> --party=Speler=personagesleutel[,..] [--start="startsituatie"]   idem in een andere setting (en dus mogelijk een ander spelsysteem); canon en regelreferentie komen uit de setting
    Geen geheimen in dit bestand: alleen het (openbare) projectnummer. */
 "use strict";
 const { spawnSync } = require("child_process");
@@ -377,7 +378,8 @@ function cmdCanonPut(cid, id, title, file, flags) {
   console.log("Canon-document '" + id + "' opgeslagen (" + rec.text.length + " tekens)");
 }
 function cmdNew(title, flags) {
-  if (!title) throw new Error("Geef een titel: new \"Titel\" [--from=c1]");
+  if (!title) throw new Error("Geef een titel: new \"Titel\" [--from=c1] [--setting=<id> --party=Speler=personagesleutel,...]");
+  if (typeof flags.setting === "string" && flags.setting !== Settings.DEFAULT_ID) return cmdNewOther(title, flags);
   const tpl = get("/dnd/worldTemplate"), src = typeof flags.from === "string" ? flags.from : "sjabloon", canon = src === "sjabloon" ? (tpl && tpl.canon) : get("/dnd/" + cp(src, "canon"));
   if (!canon) throw new Error("Geen canon gevonden (" + src + "); draai build-world-template.js of gebruik --from=<verhaal>");
   if (!tpl || !tpl.world) throw new Error("Wereldsjabloon ontbreekt (draai build-world-template.js)");
@@ -387,6 +389,24 @@ function cmdNew(title, flags) {
   up[cp(id, "turn")] = { round: 0, status: "claude", awaiting: null, handoff: { to: "claude", reason: "Openingsbeurt van het verhaal" } };
   update(up);
   console.log("Verhaal aangemaakt: " + id + " (" + title + "). Speel de opening: node dnd/tools/claude-dm.js context " + id + " --canon");
+}
+/* Nieuw verhaal in een andere setting dan Midden-aarde (zelfde opbouw als "Nieuw verhaal" in de app): canon uit de setting (A1, R1 van het spelsysteem, C1, S1-S3), leeg wereldregister, snapshot van de setting. */
+function cmdNewOther(title, flags) {
+  const sid = flags.setting;
+  if (!Settings.SETTINGS[sid]) { try { const raw = get("/dnd/settings/" + sid + "/json"); if (raw) Settings.registerCustom(Object.assign(JSON.parse(raw), { id: sid })); } catch (e) { /* onbekend */ } }
+  if (!Settings.SETTINGS[sid]) throw new Error("Onbekende setting: " + sid + " (bekend: " + Settings.list().map(x => x.id).join(", ") + ")");
+  const S = Settings.get(sid), cd = Settings.canonDocs(sid); if (!cd) throw new Error("Deze setting heeft geen canon.");
+  const R = Rulesets.get(S.ruleset);
+  if (R.id === "dnd2024") { const r1 = get("/dnd/worldTemplateBijbel/canon/r1_regels_2024"); if (r1) cd.r1_regels_2024 = r1; }
+  const party = {}; String(flags.party || "").split(",").map(x => x.trim()).filter(Boolean).forEach(x => { const i = x.indexOf("="); party[i < 0 ? x : x.slice(0, i)] = i < 0 ? "" : x.slice(i + 1); });
+  if (!Object.keys(party).length) throw new Error("Geef de spelers: --party=Gerben=<personagesleutel>[,Maurits=<sleutel>] (een lege sleutel = nog een personage te maken)");
+  const id = pushId(), now = Date.now(), up = {};
+  if (typeof flags.start === "string" && flags.start.trim()) cd.p1_startsituatie = { title: "P1 Startsituatie (opgegeven door de spelers)", text: "# P1 Startsituatie\n" + flags.start.trim(), t: now };
+  up["campaignIndex/" + id] = { title: title, created: now, lastPlayed: now, round: 0, party: party, ownTables: true, settingId: sid, snap: true, openingBy: "claude" };
+  up[cp(id, "canon")] = cd; up[cp(id, "world")] = { lastRound: 0 }; up[cp(id, "setting")] = JSON.stringify(S);
+  up[cp(id, "turn")] = { round: 0, status: "claude", awaiting: null, handoff: { to: "claude", reason: "Openingsbeurt van het verhaal" } };
+  update(up);
+  console.log("Verhaal aangemaakt: " + id + " (" + title + "; setting " + S.name + ", spelsysteem " + R.label + "). Speel de opening: node dnd/tools/claude-dm.js context " + id + " --canon");
 }
 /* Losse statePatch (bijv. dagboek aanvullen) zonder beurt: deep merge in de Stand en in de laatste Stand-versie; ronde, status en aan-zet blijven onaangeroerd. */
 function cmdStatePatch(cid, file) {
@@ -429,7 +449,7 @@ function cmdLogEdit(cid, file) {
 
 /* ---------- main ---------- */
 const argv = process.argv.slice(2), flags = {}, pos = [];
-for (const a of argv) { if (a.startsWith("--")) { const [k, v] = a.slice(2).split("="); flags[k] = v === undefined ? true : v; } else pos.push(a); }
+for (const a of argv) { if (a.startsWith("--")) { const i = a.indexOf("="), k = i < 0 ? a.slice(2) : a.slice(2, i); flags[k] = i < 0 ? true : a.slice(i + 1); } else pos.push(a); } /* waarde = alles na het eerste = (ook --party=Gerben=sleutel) */
 try {
   const cmd = pos[0];
   if (cmd === "status") cmdStatus();

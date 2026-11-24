@@ -114,5 +114,15 @@ eq("ose modifier-tabel", [3, 5, 8, 12, 15, 17, 18].map(os.sheet.mod).join(), "-3
 eq("ose tekst", /AC \(descending\) 4/.test(G.sheetText(os, b)) && /Climb Sheer Surfaces 87/.test(G.sheetText(os, b)), true);
 eq("ose getal-default", G.rollList(os, G.blank(os)).find(r => r.key === "save:wands").target, 13);
 
+/* SAN-worp tegen de actuele SAN uit de Stand */
+const dgc = G.blank(RS.get("dg")); dgc.stats = { STR: 12, CON: 13, DEX: 13, INT: 14, POW: 12, CHA: 11 };
+eq("san zonder live = startwaarde (POW×5)", G.rollList(RS.get("dg"), dgc).find(r => r.key === "san").target, 60);
+dgc._live = { san: { current: 52, max: 99 } };
+const sanR = G.rollList(RS.get("dg"), dgc).find(r => r.key === "san");
+eq("san met live", sanR.target, 52); eq("san-worp", G.evaluate(RS.get("dg"), dgc, sanR, { nat: 48 }).line, "SAN: 48 vs 52 = Success"); eq("san-worp mislukt", G.evaluate(RS.get("dg"), dgc, sanR, { nat: 53 }).j.label, "Failure");
+eq("san-check uit DM-vraag", G.matchCheck(RS.get("dg"), dgc, "SAN check: 0/1d4"), "san");
+const cocc = G.blank(RS.get("coc")); cocc._live = { san: 44, luck: { current: 35, max: 99 } };
+eq("coc san als getal", G.rollList(RS.get("coc"), cocc).find(r => r.key === "san").target, 44); eq("coc luck live", G.rollList(RS.get("coc"), cocc).find(r => r.key === "luck").target, 35);
+
 console.log(ok + " geslaagd, " + bad + " mislukt");
 process.exitCode = bad ? 1 : 0;

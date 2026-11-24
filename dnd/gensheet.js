@@ -70,7 +70,7 @@
     const kind = kindOf(R), out = [], mult = R.sheet.statMult || 1;
     if (kind === "d100") {
       R.sheet.stats.forEach(k => out.push({ key: "stat:" + k, group: mult > 1 ? "Stat × " + mult : "Kenmerk", label: k + (mult > 1 ? "×" + mult : ""), target: stat(R, c, k) * mult, disp: stat(R, c, k) * mult + "%" }));
-      (R.sheet.meters || []).filter(m => m.k === "luck").forEach(m => { const t = num(c && c.luckNow, num(c && c.meterMax && c.meterMax.luck, 50)); out.push({ key: "luck", group: "Kenmerk", label: "Luck", target: t, disp: t + "%" }); });
+      (R.sheet.meters || []).filter(m => m.k === "luck" || m.k === "san").forEach(m => { const lv = c && c._live && c._live[m.k], cur = lv == null ? null : (typeof lv === "object" ? num(lv.current != null ? lv.current : lv.cur, null) : num(lv, null)); const t = cur != null ? cur : (m.k === "luck" ? num(c && c.luckNow, num(c && c.meterMax && c.meterMax.luck, 50)) : (m.start ? m.start(vars(R, c)) : 0)); out.push({ key: m.k, group: "Kenmerk", label: m.k === "san" ? "SAN" : "Luck", target: t, disp: t + "%" }); });
       R.sheet.skills.forEach(s => { const t = skillVal(R, c, s); out.push({ key: "skill:" + s.k, group: "Skill", label: s.label, target: t, disp: t + "%" }); });
       extraSkills(R, c).forEach((x, i) => out.push({ key: "extra:" + i, group: "Extra skill", label: x.label, target: x.val, disp: x.val + "%" }));
     } else if (kind === "ose") {
@@ -210,7 +210,7 @@
   }
   function viewHtml(R, c, ctx) {
     const sh = R.sheet, kind = kindOf(R), mm = meterMax(R, c), dv = derived(R, c), live = ctx.live || null, mine = ctx.me && c.player === ctx.me, v = vars(R, c);
-    const strip = sh.meters.map(m => { const l = live && mtr(live, m.k); const txt = l ? l.cur + (l.max != null ? " / " + l.max : "") : (m.start ? m.start(v) + " / " + mm[m.k] : String(mm[m.k])); return '<div' + (m.k === "luck" ? ' data-gr="luck" class="rl"' : "") + '><small>' + esc(m.label) + '</small><b>' + esc(txt) + '</b></div>'; }).join("") + dv.map(d => '<div><small>' + esc(d.label) + '</small><b>' + esc(d.val) + '</b></div>').join("") + (sh.numbers || []).filter(n => !n.hide).map(n => '<div><small>' + esc(n.label) + '</small><b>' + esc(nums(R, c)[n.k]) + '</b></div>').join("");
+    const strip = sh.meters.map(m => { const l = live && mtr(live, m.k); const txt = l ? l.cur + (l.max != null ? " / " + l.max : "") : (m.start ? m.start(v) + " / " + mm[m.k] : String(mm[m.k])); return '<div' + (m.k === "luck" || m.k === "san" ? ' data-gr="' + m.k + '" class="rl"' : "") + '><small>' + esc(m.label) + '</small><b>' + esc(txt) + '</b></div>'; }).join("") + dv.map(d => '<div><small>' + esc(d.label) + '</small><b>' + esc(d.val) + '</b></div>').join("") + (sh.numbers || []).filter(n => !n.hide).map(n => '<div><small>' + esc(n.label) + '</small><b>' + esc(nums(R, c)[n.k]) + '</b></div>').join("");
     let h = '<div class="card sh"' + (c.dead ? ' style="opacity:.7"' : "") + '><div class="ppl">' + (ctx.avatar ? ctx.avatar(c.name) : "") + '<div><h3 style="margin:0">' + (c.dead ? "☠ " : "") + esc(c.name) + (c.dead ? ' <small style="color:var(--red)">(gesneuveld)</small>' : "") + '</h3><small style="color:var(--mute)">' + esc(R.label) + (c.profession ? " · " + esc(c.profession) : "") + (c.age ? " · " + esc(c.age) + " jaar" : "") + '</small><br><small style="color:var(--mute)">' + esc(c.player ? "Speler: " + c.player : "") + '</small></div></div></div>';
     h += '<div class="sh-strip">' + strip + '</div>';
     const statTitle = sh.statMult > 1 ? "Stats (× " + sh.statMult + ")" : (kind === "pool" ? "Characteristics" : "Kenmerken");
@@ -286,12 +286,13 @@
       };
       return;
     }
-    el.innerHTML = viewHtml(R, c, ctx);
+    const cl = () => Object.assign({}, ctx.c, { _live: ctx.live || null });
+    el.innerHTML = viewHtml(R, cl(), ctx);
     ctx.panel = el.querySelector("#gsroll");
-    if (ctx.rollKey) { rollPanel(R, c, ctx); }
+    if (ctx.rollKey) { rollPanel(R, cl(), ctx); }
     el.onclick = e => {
       const t = e.target, q = s => t.closest(s);
-      if (q("[data-gr]")) { ctx.rollKey = q("[data-gr]").dataset.gr; ctx.rollState = {}; el.querySelectorAll(".rl").forEach(x => x.classList.toggle("on", x.dataset.gr === ctx.rollKey)); rollPanel(R, c, ctx); if (ctx.panel) ctx.panel.scrollIntoView({ block: "nearest" }); return; }
+      if (q("[data-gr]")) { ctx.rollKey = q("[data-gr]").dataset.gr; ctx.rollState = {}; el.querySelectorAll(".rl").forEach(x => x.classList.toggle("on", x.dataset.gr === ctx.rollKey)); rollPanel(R, cl(), ctx); if (ctx.panel) ctx.panel.scrollIntoView({ block: "nearest" }); return; }
       if (q("[data-gedit]")) return ctx.onEdit(true);
       if (q("[data-gdead]")) return ctx.onDead();
       if (q("[data-gcopy]")) { if (ctx.last) ctx.copy("[worp: " + ctx.last.line + "]", q("[data-gcopy]")); else ctx.alert("Vul eerst je worp in."); return; }
