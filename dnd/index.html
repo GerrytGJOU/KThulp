@@ -124,6 +124,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .chip.bad{background:var(--red);color:#fff}
 .q{border-left:3px solid var(--gold);padding:4px 10px;margin:0 0 8px;background:rgba(32,27,23,.7);border-radius:0 6px 6px 0}
 .q.done{border-color:var(--ok);color:var(--mute)}
+.qd>summary{cursor:pointer}.qtag{font-size:.78em;color:var(--ok);border:1px solid var(--ok);border-radius:10px;padding:0 7px;margin-left:6px;white-space:nowrap}.qrew{font-size:.86em;color:var(--gold);margin-top:2px}
 .kgrp{margin:0 0 8px}.kgrp>summary{cursor:pointer;padding:6px 2px;color:var(--gold)}.kcnt{font-size:.8em;opacity:.6;margin-left:6px}.q.kold{opacity:.55}
 .qnow{margin-top:4px;font-size:.9em}.qold{margin-top:3px;font-size:.84em;opacity:.5}.dtabs.sub{position:static;margin-bottom:10px}
 .ppl{display:flex;gap:10px;align-items:center}
@@ -969,7 +970,7 @@ Regels:
    "companions":{"Naam":{"location":"","hp":{"current":0,"max":0,"temp":0},"status":"","attitude":""}},
    "npcs":{"Naam":{"location":"","status":"","attitude":"","knows":[]}},
    "factions":{"Naam":{"stance":"","currentAction":""}},
-   "quests":{"open":[{"title":"","detail":"","kind":"main|side|personal|companion","for":"personagenaam (alleen bij personal)","npc":"NPC-naam (alleen bij companion)","place":"waar het speelt (bij side)","updates":["eerdere berichten van deze opdracht, oudste eerst"]}],"completed":[],"consequences":[]},
+   "quests":{"open":[{"title":"","detail":"","kind":"main|side|personal|companion","for":"personagenaam (alleen bij personal)","npc":"NPC-naam (alleen bij companion)","place":"waar het speelt (bij side)","updates":["eerdere berichten van deze opdracht, oudste eerst"]}],"completed":[{"title":"","detail":"","reward":"wat de spelers er echt voor kregen, kort; leeg als er niets was","updates":[]}],"consequences":[]},
    "initiative":{"active":"Naam","order":[{"name":"Naam","init":15,"enemy":false}]}  (alleen tijdens een gevecht; anders null)}
   Vul bij het begin hp, resources en inventory van elke PC in uit zijn B-document. Werk hp, resources, conditions, location, inGame en quests bij zodra ze veranderen. ${S.geoCheck}
   HET DAGBOEK VAN DE SPELERS wordt uitsluitend gevuld door jouw uitvoer, dus houd het elke beurt bij: Opdrachten = statePatch.quests (open/completed/consequences; een afgeronde opdracht verplaats je van open naar completed (nooit in beide); detail van een opdracht is altijd het nieuwste bericht, en het vorige detail zet je bij elke ontwikkeling achteraan in updates (oudste eerst, bestaande updates laten staan); zet er direct een regel bij zodra een NPC of gebeurtenis een nieuwe opdracht, belofte of doel geeft, verplaats hem naar completed als hij klaar is) plus worldDelta-quests die active worden. Het Dagboek sorteert opdrachten in Main quest (voor alle PC's), Side quests (voor alle PC's), Personal quests (per personage) en Companion quests (per NPC of companion): geef daarom elke opdracht in quests.open een kind (main, side, personal of companion), bij personal ook for (de personagenaam) en bij side-quests ook place (waar de opdracht plaatsvindt, bijvoorbeeld ${S.exPlace}), bij companion ook npc (de naam van de NPC), maar gebruik kind companion ALLEEN voor een NPC die al is gerekruteerd (status recruited): de opdrachten van een nog niet gerekruteerde NPC horen bij side (of personal), anders verraadt het Dagboek wie een mogelijke companion is; bij een nieuwe worldDelta-quest zet je set.kind op dezelfde manier, plus set.owner (personagenaam) bij personal en set.npcs bij companion;  Wat je weet = pcs.<personagenaam>.knowledge (korte, feitelijke regels over wat dat personage heeft ontdekt, gehoord of gezien: aanwijzingen, namen, plekken, beloftes; nooit DM-geheimen of wat het personage niet kan weten) en onthulde backstorylagen (worldDelta reveals); Personen = statePatch.npcs; Logboek = logEntries. Elke knowledge-regel begint met een onderwerp gevolgd door ' » ' (spatie, dubbele pijl, spatie), bijvoorbeeld 'De Raad van Elrond » Frodo neemt de Ring op zich'. Hergebruik bestaande onderwerpen (kort, 1 tot 4 woorden, zoals De Raad van Elrond, Orcs en Dol Guldur, Beorn en Grimbeorn, Dwarves van Erebor, Het spoor in de gastenvleugel) en maak alleen een nieuw onderwerp als het echt nieuw is; regels over hetzelfde onderwerp blijven bij elkaar en staan in tijdsvolgorde, nieuwste achteraan. Het Dagboek toont ze gegroepeerd per onderwerp. Lijsten in statePatch worden VERVANGEN: geef bij quests.open en knowledge altijd de volledige actuele lijst (oude regels behouden, korte regels, samenvoegen boven ongeveer 15 regels), anders verdwijnt eerder werk.
@@ -1475,6 +1476,7 @@ function renderMap(soft){
   } else mapApply();
 }
 /* Opdrachten in het Dagboek, per soort: Main quest, Side quest, Personal quest (per personage), Companion quests (per NPC). Bron: wereldregister (kind) en de Stand (quests.open met kind/for/npc). */
+const diaryOpenQ=new Set(); /* opengeklapte afgeronde opdrachten blijven open bij opnieuw tekenen */
 function diaryQuestsHtml(S){
   const q=S.quests||{}, mine=myChar()&&myChar().name;
   const pcNames=(function(){const n=campChars().filter(c=>c.player&&!c.dead).map(c=>c.name); return n.length?n:Object.keys(S.pcs||{})})();
@@ -1508,7 +1510,7 @@ function diaryQuestsHtml(S){
     else { const pre=detail.match(/^([^:]{2,30}):/); who=pre?ownerOf('',pre[1]):null; cat=who?'personal':'side'; }
     /* updates = eerdere berichten van deze opdracht (oudste eerst); detail is altijd het nieuwste bericht */
     const upd=(Array.isArray(it.updates)?it.updates:Object.values(it.updates||{})).map(x=>String(x||'').trim()).filter(Boolean);
-    items.push({cat,who,title:title||detail,detail:title?detail:'',upd,place:String(it.place||it.location||it.plaats||'').trim(),done:isDone,label:''});
+    items.push({cat,who,title:title||detail,detail:title?detail:'',upd,reward:String(it.reward||it.beloning||'').trim(),place:String(it.place||it.location||it.plaats||'').trim(),done:isDone,label:''});
   };
   /* Afgeronde opdrachten uit de Stand komen eerst, zodat ze bij dezelfde titel winnen van een open exemplaar */
   (Array.isArray(q.completed)?q.completed:Object.values(q.completed||{})).forEach(o=>addState(o,true));
@@ -1516,10 +1518,14 @@ function diaryQuestsHtml(S){
   /* Dezelfde opdracht in het wereldregister en in de Stand (zelfde titel): toon hem één keer, met de tekst uit de Stand. */
   (function(){ const nt=t=>String(t||'').toLowerCase().replace(/[^a-z0-9à-ž]+/g,' ').trim(), seen=new Map();
     items.forEach((it,i)=>{ if(!it.upd) it.upd=[]; const k=nt(it.title), j=seen.get(k); if(j===undefined){ seen.set(k,i); return; }
-      const keep=(items[j].detail||!it.detail)?j:i, drop=keep===j?i:j; if(items[drop].done&&!items[keep].done) items[keep].done=true; if(!items[keep].place&&items[drop].place) items[keep].place=items[drop].place; if(!items[keep].upd.length&&items[drop].upd&&items[drop].upd.length) items[keep].upd=items[drop].upd; items[drop]=null; seen.set(k,keep); });
+      const keep=(items[j].detail||!it.detail)?j:i, drop=keep===j?i:j; if(items[drop].done&&!items[keep].done) items[keep].done=true; if(!items[keep].place&&items[drop].place) items[keep].place=items[drop].place; if(!items[keep].reward&&items[drop].reward) items[keep].reward=items[drop].reward; if(!items[keep].label&&items[drop].label&&items[drop].done) items[keep].label=items[drop].label; if(!items[keep].upd.length&&items[drop].upd&&items[drop].upd.length) items[keep].upd=items[drop].upd; items[drop]=null; seen.set(k,keep); });
     for(let i=items.length-1;i>=0;i--) if(!items[i]) items.splice(i,1); })();
   /* Nieuwste bericht helder, eerdere berichten donkerder eronder (zoals het questlogboek van een computerspel) */
-  const row=it=>'<div class="q'+(it.done?' done':'')+'"><b>'+esc(it.title)+'</b>'+esc(it.label)+(it.place&&it.cat==='side'?'<br><small style="color:var(--gold)">📍 '+esc(it.place)+'</small>':'')+(it.detail?'<div class="qnow">◆ '+esc(it.detail)+'</div>':'')+(it.upd||[]).slice().reverse().map(t=>'<div class="qold">◇ '+esc(t)+'</div>').join('')+'</div>';
+  /* Afgeronde opdrachten zijn dichtgeklapt, met status en beloning (alleen uit de Stand) naast de titel */
+  const body=it=>(it.place&&it.cat==='side'?'<br><small style="color:var(--gold)">📍 '+esc(it.place)+'</small>':'')+(it.detail?'<div class="qnow">◆ '+esc(it.detail)+'</div>':'')+(it.upd||[]).slice().reverse().map(t=>'<div class="qold">◇ '+esc(t)+'</div>').join('');
+  const row=it=>it.done
+    ?'<details class="q done qd" data-q="'+esc(it.title)+'"'+(diaryOpenQ.has(it.title)?' open':'')+'><summary><b>'+esc(it.title)+'</b> <span class="qtag">'+(/mislukt/.test(it.label)?'✖ Mislukt':/verlopen/.test(it.label)?'⌛ Verlopen':'✔ Afgerond')+'</span>'+(it.reward?'<div class="qrew">🎁 Beloning: '+esc(it.reward)+'</div>':'')+'</summary>'+body(it)+'</details>'
+    :'<div class="q"><b>'+esc(it.title)+'</b>'+esc(it.label)+body(it)+'</div>';
   const none=t=>'<small style="color:var(--mute)">'+t+'</small>';
   const list=l=>l.length?l.map(row).join(''):none('Nog geen.');
   const openOf=c=>items.filter(i=>i.cat===c&&!i.done);
@@ -1587,6 +1593,7 @@ async function renderDiary(){
   box.scrollTop=keep;
   box.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>{diaryTab=b.dataset.dt; try{localStorage.setItem('dnd_diarytab',diaryTab)}catch(e){} box.scrollTop=0; renderDiary()});
   box.querySelectorAll('[data-qs]').forEach(b=>b.onclick=()=>{diaryQSub=b.dataset.qs; try{localStorage.setItem('dnd_qsub',diaryQSub)}catch(e){} renderDiary()});
+  box.querySelectorAll('details[data-q]').forEach(d=>d.ontoggle=()=>{d.open?diaryOpenQ.add(d.dataset.q):diaryOpenQ.delete(d.dataset.q)});
   if(dt==='weet') loadMemories(C);
   if(dt==='sum') db.ref(cp('summaries',C)).get().then(ss=>{
     const arr=[]; ss.forEach(c=>{arr.push(c.val())}); arr.reverse();
