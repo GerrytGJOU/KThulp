@@ -218,7 +218,11 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="settings-canon.js?v=1"></script>
 <script src="settings-factory.js?v=1"></script>
 <script src="settings-spec.js?v=1"></script>
+<script src="dobbel.js?v=1"></script>
 <script src="settings-rulesets.js?v=1"></script>
+<script src="settings-rulesets-d100.js?v=1"></script>
+<script src="settings-ruleref.js?v=1"></script>
+<script src="gensheet.js?v=1"></script>
 <script src="settings-data.js?v=10"></script>
 <script src="settings-aldmark.js?v=2"></script>
 <script src="settings-faerun.js?v=1"></script>
@@ -229,6 +233,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="settings-witcher.js?v=1"></script>
 <script src="settings-tamriel.js?v=1"></script>
 <script src="settings-discworld.js?v=1"></script>
+<script src="settings-d100.js?v=1"></script>
 <script src="map-lib.js?v=1"></script>
 <script src="settings-maps.js?v=3"></script>
 <script src="settings-editor.js?v=2"></script>
@@ -598,7 +603,7 @@ function newStoryForm(){
     if(!mid){
       /* andere setting dan Midden-aarde: canon uit de setting (A1, C1, wereld) + het setting-neutrale regelreferentiedocument R1; leeg wereldregister */
       const rs=await db.ref('dnd/worldTemplateBijbel/canon/r1_regels_2024').get(), cd=DNDSettings.canonDocs(setId); if(!cd){alert('Deze setting heeft geen canon.');return}
-      if(rs.exists()) cd.r1_regels_2024=rs.val();
+      if(rs.exists()&&(DNDSettings.get(setId).ruleset||'dnd2024')==='dnd2024') cd.r1_regels_2024=rs.val();
       const st=($('#nstart')&&$('#nstart').value||'').trim(); if(st) cd.p1_startsituatie={title:'P1 Startsituatie (opgegeven door de spelers)',text:['# P1 Startsituatie',st].join(String.fromCharCode(10)),t:now};
       up[cp('canon',id)]=cd; up[cp('world',id)]={lastRound:0};
     } else if(nieuw){
@@ -817,7 +822,7 @@ function renderGame(){
   } else if(atBottom) th.scrollTop=th.scrollHeight;
 
   const sb=$('#statusbar'), cpz=$('#compose');
-  const roundChanged=!!(turn&&composeRound!==turn.round); if(roundChanged){draft='';rollDraft='';rollKey=null;rollNat=''}
+  const roundChanged=!!(turn&&composeRound!==turn.round); if(roundChanged){draft='';rollDraft='';rollKey=null;rollNat='';rollExt=''}
   const cEl=$('#compose'); const keepDraft=!roundChanged&&!!(cEl&&document.activeElement&&cEl!==document.activeElement&&cEl.contains(document.activeElement));
   if(!turn){
     sb.innerHTML='Nog geen campagne gestart.';
@@ -885,10 +890,10 @@ function renderGame(){
 async function submit(pass){
   const text=pass?'(past / wacht af)':draft.trim();
   if(!text){alert('Typ eerst een actie.');return}
-  if(!pass&&$('#rsel')&&!rollDraft.trim()&&(rollKey||String(rollNat).trim())&&!confirm('Je worp is nog niet compleet ('+(rollKey?'je d20 ontbreekt':'je hebt geen worp gekozen')+'), dus hij wordt NIET meegestuurd. Toch versturen zonder worp?')) return;
+  if(!pass&&$('#rsel')&&!rollDraft.trim()&&(rollKey||String(rollNat).trim())&&!confirm('Je worp is nog niet compleet ('+(rollKey?'je dobbelworp ontbreekt':'je hebt geen worp gekozen')+'), dus hij wordt NIET meegestuurd. Toch versturen zonder worp?')) return;
   const round=turn.round, full=text+(rollDraft.trim()&&!pass?'  [worp: '+rollDraft.trim()+']':'');
   await db.ref(cp('pending/'+me.uid)).set({round,name:me.name,text:full,pass:!!pass,t:Date.now()});
-  draft="";rollDraft="";rollKey=null;rollNat=""; { const ta=$('#act'); if(ta) ta.value=''; }
+  draft="";rollDraft="";rollKey=null;rollNat="";rollExt=""; { const ta=$('#act'); if(ta) ta.value=''; }
   await saveDmChoice();
   const ok=await removeAwaiting(me.name,round);
   if(ok==='resolve') resolve(false);
@@ -941,7 +946,7 @@ async function startCampaign(){
 }
 
 /* ---------- DM-motor ---------- */
-function systemPrompt(S, R){ R = R || DNDRulesets.get();  return `Je bent de Dungeon Master van een doorlopende ${R.name}-campagne in ${S.world} met meerdere spelers (PC's; zie SPELERS en KARAKTERBLADEN). Schrijf in het Nederlands, met ${R.terms}. ${S.naming}
+function systemPrompt(S, R){ R = R || DNDRulesets.get();  return `Je bent de ${R.role} van een doorlopende ${R.name}-campagne in ${S.world} met meerdere spelers (PC's; zie SPELERS en KARAKTERBLADEN). Schrijf in het Nederlands, met ${R.terms}. ${S.naming}
 Regels:
 - Bronnenhiërarchie: (1) CANON (spelregels en personages) (2) LOGBOEK (3) de actuele STAND (4) rest. Verzin geen feiten over het verleden die hiermee botsen.
 - Zet in "place" het id van de kaartplaats waar de scène speelt (uit KAARTPLAATSEN; ook zonder nieuwe locatie), zodat de Kaart-tab de bezochte plekken kan tonen; past geen plaats, laat het null.
@@ -980,14 +985,14 @@ Regels:
 - INFORMATIE PER UITKOMST: bij een waarnemings-, kennis- of onderzoekscheck hangt de hoeveelheid informatie af van het totaal, in lagen: een lage uitkomst geeft het oppervlakkige (wat iedereen ziet), een gemiddelde uitkomst een bruikbaar detail, een hoge uitkomst het verborgen of veelzeggende detail (een wapen, een insigne, een accent, een verborgen gebaar). Bedenk de lagen vooraf en geef elke speler precies de lagen die zijn totaal verdient; verklap de DC's niet.
 - Gevecht: zet "initiative" in de Stand met "active" = wie nu aan de beurt is en "order" met naam, init en enemy:true voor vijanden; werk "active" bij elke beurt bij en zet initiative op null zodra het gevecht voorbij is.
 - Locatie: geef "location" (name, description = 1-2 Nederlandse zinnen, visual = Engelse beschrijving voor een landschaps- of interieurillustratie) zodra de PC's op een andere plek zijn, een plek voor het eerst beschreven wordt, of je een bekende plek weer uitgebreid beschrijft (gebruik dan exact dezelfde naam als eerder, dan verschijnt de bestaande afbeelding bij je bericht); laat het anders weg. Houd inGame.location gelijk aan location.name. Staan de PC's op verschillende plekken: zet bij elke PC pcs.<naam>.location op de exacte naam van een bekend gebied (zonder toevoegsels in haakjes, die mogen erachter), dan toont de app per plek een eigen kaart met afbeelding; is de tweede plek nieuw, geef die dan mee in "extraLocations": [{name,description,visual}] (zelfde velden als location; verandert de scène niet).
-- HERINNERINGEN van de spelers zijn bindend en gaan voor op je eigen aannames.
+- HERINNERINGEN van de spelers zijn bindend en gaan voor op je eigen aannames.${R.guide?(String.fromCharCode(10)+R.guide):''}
 - logEntries: korte feiten van wat NU echt gebeurd is.
 Antwoord ALLEEN met JSON in dit formaat:
 {"narration":"markdown-tekst","speakers":["Naam"],"rolls":[{"who":"","what":"","natural":0,"mod":0,"total":0,"result":""}],"newNpcs":[{"name":"Naam","visual":"English description"}],"location":{"name":"","description":"","visual":""},"place":"id uit KAARTPLAATSEN waar de scène speelt, of null","dmNotes":{"klok_a":"1/6: reden"},"worldDelta":{"region":null,"time":null,"npcs":[],"quests":[],"clocks":[],"events":[]},"statePatch":{},"logEntries":[{"fact":"","inGameDate":""}],"nextTurn":{"awaiting":["Naam"],"blind":false,"prompt":"korte vraag aan de spelers","checks":{"Naam":"Perception, omdat ..."},"handoff":null}}`; }
 
-function rollDice(){
+function rollDice(R){
   const r=(s,n)=>Array.from({length:n},()=>1+crypto.getRandomValues(new Uint32Array(1))[0]%s);
-  return {d20:r(20,20),d12:r(12,6),d10:r(10,6),d8:r(8,8),d6:r(6,10),d4:r(4,6)};
+  const o={}; (R||DNDRulesets.get(curSetting().ruleset)).preDice.forEach(([k,s,n])=>{o[k]=r(s,n)}); return o;
 }
 async function callGemini(sys,user,retryNote,json,modelOverride,maxOut){
   const model=modelOverride||cfg.model||'gemini-2.5-flash';
@@ -1043,7 +1048,7 @@ function parseDM(txt,names){
   if(typeof o.narration!=='string'||!o.narration) throw new Error('narration ontbreekt');
   o.statePatch=o.statePatch&&typeof o.statePatch==='object'?o.statePatch:{};
   o.logEntries=Array.isArray(o.logEntries)?o.logEntries:[];
-  o.rolls=Array.isArray(o.rolls)?o.rolls.filter(r=>r&&typeof r.who==='string'&&typeof r.what==='string'&&r.total!=null&&isFinite(Number(r.total))).slice(0,12).map(r=>({who:r.who.slice(0,40),what:r.what.slice(0,40),natural:(r.natural!=null&&isFinite(Number(r.natural)))?Number(r.natural):null,mod:isFinite(Number(r.mod))?Number(r.mod):0,total:Number(r.total),dice:r.dice?String(r.dice).slice(0,20):'',result:r.result?String(r.result).slice(0,30):''})):[];
+  o.rolls=Array.isArray(o.rolls)?o.rolls.filter(r=>r&&typeof r.who==='string'&&typeof r.what==='string'&&r.total!=null&&isFinite(Number(r.total))).slice(0,12).map(r=>({who:r.who.slice(0,40),what:r.what.slice(0,40),natural:(r.natural!=null&&isFinite(Number(r.natural)))?Number(r.natural):null,mod:isFinite(Number(r.mod))?Number(r.mod):0,total:Number(r.total),dice:r.dice?String(r.dice).slice(0,20):'',result:r.result?String(r.result).slice(0,30):'',target:(r.target!=null&&isFinite(Number(r.target)))?Number(r.target):null})):[];
   { const dn=o.dmNotes, res={}; if(dn&&typeof dn==='object'&&!Array.isArray(dn)) for(const [k,v] of Object.entries(dn).slice(0,30)){ const kk=String(k).toLowerCase().replace(/[^a-z0-9_]+/g,'_').slice(0,40); if(!kk) continue; if(v===null||v==='') res[kk]=null; else if(typeof v==='string'||typeof v==='number') res[kk]=String(v).slice(0,500); } o.dmNotes=res; }
   o.extraLocations=(Array.isArray(o.extraLocations)?o.extraLocations:[]).filter(x=>x&&typeof x.name==='string'&&x.name.trim()).slice(0,3).map(x=>({name:x.name.trim().slice(0,80),description:String(x.description||'').slice(0,400),visual:String(x.visual||'').slice(0,1500)}));
   { const lc=o.location; o.location=(lc&&typeof lc.name==='string'&&lc.name.trim())?{name:lc.name.trim().slice(0,80),description:String(lc.description||'').slice(0,400),visual:String(lc.visual||'').slice(0,1500)}:null; }
@@ -1093,7 +1098,7 @@ async function resolve(retry,forceGemini){
     const mems=[]; meS.forEach(c=>{mems.push('- '+c.val().text)});
     const world=woS.val()||null; const worldTxt=(world&&window.DNDWorld)?DNDWorld.worldContext(world,{hay:hay,region:world.sceneRegion,maxChars:4500}):'';
     const notes=dnS.val()||{}; const notesTxt=Object.entries(notes).map(([k,v])=>'- '+k+': '+v).join('\n');
-    const sheets=campChars(C).filter(c=>c.player&&!c.dead).map(sheetText).join('\n\n');
+    const sheets=campChars(C).filter(c=>c.player&&!c.dead).map(c=>isGen(c)?DNDGenSheet.sheetText(RSof(c),c):sheetText(c)).join('\n\n');
     const npcNames=Object.values(npcs).filter(n=>!n.forPlayer).map(n=>n.name);
     const user=
 `# SPELERS (awaiting bevat altijd de SPELERNAAM, nooit de naam van het personage)\n${allNames.map(n=>{const pk=party&&party[n]; const c=pk?chars[pk]:Object.values(chars||{}).find(x=>x&&x.player===n);return n+(c?' (speelt '+c.name+')':'')}).join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# KARAKTERBLADEN (rekenkundig leidend; de Stand heeft de actuele HP)\n${sheets||'(geen)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# LOGBOEK (laatste 40)\n${logs.slice(-40).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# OPEN OPDRACHTEN (een echt nieuwe scène sluit hierop aan; gewone beurten en dialoog hoeven dat niet)\n${listOf((state.quests||{}).open).map(t=>'- '+t).join('\n')||'(geen)'}\n\n# WERELDSTATUS (stabiele IDs; wijzig alleen via worldDelta)\n${worldTxt||'(niet actief)'}\n\n# KAARTPLAATSEN (kies hieruit het id voor "place")
@@ -1219,7 +1224,8 @@ function renderParty(){
   const phtml=members.map(m=>{
     const c=m.c, hp=hpOf(c);
     const pct=hp?Math.max(0,Math.min(100,Math.round(hp.cur/hp.max*100))):0, cls=pct<=25?'low':pct<=60?'mid':'';
-    const res=listOf(c.resources).slice(0,4).map(r=>'<span class="chip">'+esc(r)+'</span>').join('');
+    const gmt=((window.DNDRulesets&&DNDRulesets.get(curSetting().ruleset).partyMeters)||[]).filter(x=>x[0]!=='hp').map(([k,l])=>{const v=c[k]; if(v==null||v==='') return ''; const t=typeof v==='object'?(v.current!=null?v.current:v.cur)+(v.max!=null?'/'+v.max:''):String(v); return '<span class="chip">'+esc(l)+' '+esc(t)+'</span>'}).join('');
+    const res=gmt+listOf(c.resources).slice(0,4).map(r=>'<span class="chip">'+esc(r)+'</span>').join('');
     const con=listOf(c.conditions).slice(0,3).map(r=>'<span class="chip bad">'+esc(r)+'</span>').join('');
     return '<div class="pc">'+avatar(m.name)+'<div class="pi"><b>'+esc(m.name)+'</b>'+(m.comp?' <small>metgezel</small>':'')+
       (hp?'<div class="hpb"><i class="'+cls+'" style="width:'+pct+'%"></i></div><small>HP '+hp.cur+'/'+hp.max+(hp.temp?' (+'+hp.temp+')':'')+'</small>':'')+
@@ -1229,11 +1235,11 @@ function renderParty(){
 }
 function rollChip(r){
   const nat=r.natural!=null&&isFinite(Number(r.natural))?Number(r.natural):null, mod=Number(r.mod)||0;
-  const expr=nat!==null?nat+(mod?(mod>0?' + ':' − ')+Math.abs(mod):'')+' = '+r.total:(r.dice?r.dice+' = ':'')+r.total;
+  const hasT=r.target!=null&&isFinite(Number(r.target)), expr=hasT?nat+' vs '+r.target:nat!==null?nat+(mod?(mod>0?' + ':' − ')+Math.abs(mod):'')+' = '+r.total:(r.dice?r.dice+' = ':'')+r.total;
   const res=String(r.result||'').toLowerCase();
-  const good=/succ|hit|raak|geslaagd|slaagt|gelukt/.test(res), bad=/fail|miss|mis|mislukt|faalt/.test(res);
-  const cls='rc '+(nat===20?'n20':nat===1?'n1':good?'ok':bad?'ko':'');
-  return '<span class="'+cls+'">🎲 <b>'+esc(r.who)+'</b> · '+esc(r.what)+': '+esc(expr)+(r.result?' · '+esc(r.result):'')+(nat===20?' ✨':nat===1?' 💥':'')+'</span>';
+  const good=/succ|hit|raak|geslaagd|slaagt|gelukt/.test(res), bad=/fail|fumble|miss|mis|mislukt|faalt/.test(res);
+  const cls='rc '+(!hasT&&nat===20?'n20':!hasT&&nat===1?'n1':good?'ok':bad?'ko':'');
+  return '<span class="'+cls+'">🎲 <b>'+esc(r.who)+'</b> · '+esc(r.what)+': '+esc(expr)+(r.result?' · '+esc(r.result):'')+(!hasT&&nat===20?' ✨':!hasT&&nat===1?' 💥':'')+'</span>';
 }
 function renderInit(){
   const bar=$('#initbar'); if(!bar) return;
@@ -1610,7 +1616,7 @@ const SKILLS=[['acrobatics','Acrobatics','dex'],['animal handling','Animal Handl
 const SKNL={atletiek:'athletics',waarneming:'perception',overleven:'survival',inzicht:'insight',intimidatie:'intimidation',intimideren:'intimidation',overtuigen:'persuasion',overtuigingskracht:'persuasion',heimelijkheid:'stealth',sluipen:'stealth',acrobatiek:'acrobatics',geschiedenis:'history',natuurkennis:'nature',onderzoek:'investigation',geneeskunde:'medicine',religie:'religion',bedrog:'deception',misleiden:'deception',optreden:'performance',vingervlugheid:'sleight of hand',dierenhandling:'animal handling',omgaan:'animal handling'};
 const ABNL={kracht:'str',behendigheid:'dex',lichaamsbouw:'con',conditie:'con',intelligentie:'int',wijsheid:'wis',charisma:'cha'};
 let sheetKey='', sheetRage=false, sheetRoll='', sheetEdit=false, sheetOpen={Inventory:true};
-let rollKey=null, rollNat='', rollRage=false;
+let rollKey=null, rollNat='', rollRage=false, rollMod=0, rollMode='', rollExt='', newSys='', genCtx=null;
 
 function amod(c,k){return Math.floor((((c.abilities||{})[k])||10)/2-5)}
 function pbOf(c){return Math.floor(((Number(c.level)||1)-1)/4)+2}
@@ -1653,9 +1659,13 @@ function matchCheck(text){
 function rollText(r,nat){const tot=nat+r.bonus; return r.label+': '+nat+' '+(r.bonus>=0?'+ ':'− ')+Math.abs(r.bonus)+' = '+tot;}
 
 /* --- in het spel: worp bij de actie --- */
+/* niet-D&D-personages (zie gensheet.js): ruleset op het personage */
+function isGen(c){return !!(c&&c.ruleset&&c.ruleset!=='dnd2024'&&window.DNDRulesets&&DNDRulesets.has(c.ruleset)&&DNDRulesets.get(c.ruleset).sheet)}
+function RSof(c){return DNDRulesets.get(c&&c.ruleset)}
 function rollRowHtml(){
   const c=myChar();
   if(!c) return '<div class="row"><input type="text" id="roll" placeholder="Worp (bv. nat 14 +3)" style="flex:1;min-width:120px"></div>';
+  if(isGen(c)){ if(rollKey===null){const req=turn&&turn.checks&&turn.checks[me.name]; rollKey=req?DNDGenSheet.matchCheck(RSof(c),c,req):'';} return DNDGenSheet.rowHtml(RSof(c),c,{key:rollKey,nat:rollNat,mod:rollMod,mode:rollMode,ext:rollExt}); }
   if(rollKey===null){const req=turn&&turn.checks&&turn.checks[me.name]; rollKey=req?matchCheck(req):'';}
   const list=rollList(c,rollRage), groups=[...new Set(list.map(r=>r.group))];
   const opts=groups.map(g=>'<optgroup label="'+g+'">'+list.filter(r=>r.group===g).map(r=>'<option value="'+r.key+'"'+(r.key===rollKey?' selected':'')+'>'+esc(r.label)+' ('+sgn(r.bonus)+')</option>').join('')+'</optgroup>').join('');
@@ -1665,7 +1675,7 @@ function rollRowHtml(){
     ((c.rageSkills&&c.rageSkills.length)?'<label style="font-size:13px"><input type="checkbox" id="rrage"'+(rollRage?' checked':'')+'> Rage</label>':'')+'</div>';
 }
 function updateRoll(){
-  const c=myChar(), out=$('#rout'); if(!c||!out) return;
+  const c=myChar(), out=$('#rout'); if(!c||!out||isGen(c)) return;
   const r=rollKey?findRoll(c,rollKey,rollRage):null, nat=Number(rollNat);
   if(r&&nat>=1&&nat<=20){ rollDraft=rollText(r,nat); out.textContent='= '+(nat+r.bonus)+(nat===20?' ✨':nat===1?' 💥':''); }
   else { rollDraft=''; out.textContent=r?('bonus '+sgn(r.bonus)+' · vul je d20 in'):(String(rollNat).trim()?'kies eerst welke worp →':'—'); }
@@ -1673,6 +1683,15 @@ function updateRoll(){
 function wireRoll(){
   const f=$('#roll'); if(f){ f.value=rollDraft; f.oninput=e=>{rollDraft=e.target.value}; return; }
   const sel=$('#rsel'); if(!sel) return;
+  const gc=myChar();
+  if(isGen(gc)){
+    const R=RSof(gc), root=sel.parentNode;
+    const upd=()=>{ const o={key:rollKey}; DNDGenSheet.readCtl(R,root,o); rollNat=o.nat; if(R.sys==='dg') rollMod=o.mod; else rollMode=o.mode||''; rollExt=o.ext||''; rollDraft=DNDGenSheet.rowUpdate(R,gc,root,{key:rollKey,nat:rollNat,mod:rollMod,mode:rollMode,ext:rollExt}); };
+    sel.onchange=e=>{rollKey=e.target.value; upd()};
+    root.querySelectorAll('#rnat,#rmod,#rext').forEach(x=>{x.oninput=upd; x.onchange=upd});
+    $('#rdig').onclick=()=>{ $('#rnat').value=DNDDice.d100(); const x=$('#rext'); if(x&&rollMode) x.value=String(DNDDice.rnd(10)-1); upd(); };
+    upd(); return;
+  }
   sel.onchange=e=>{rollKey=e.target.value; updateRoll()};
   $('#rnat').oninput=e=>{rollNat=e.target.value; updateRoll()};
   const rg=$('#rrage'); if(rg) rg.onchange=e=>{rollRage=e.target.checked; e.target.blur(); renderGame(); }
@@ -1812,17 +1831,36 @@ function updateRollPanel(el){
   const upd=()=>{const nat=Number(p.querySelector('#rn').value); p.querySelector('#rt').textContent=(nat>=1&&nat<=20)?('= '+(nat+r.bonus)+(nat===20?' ✨':nat===1?' 💥':'')):'—'};
   p.querySelector('#rn').oninput=upd; upd();
 }
+/* Generiek blad (gensheet.js) in #gsbox van de bladtab of het menu */
+function genRender(gb,el,prefix){
+  const isNew=sheetEdit==='new', R=isNew?DNDRulesets.get(newSys):RSof(chars[sheetKey]);
+  const c=isNew?DNDGenSheet.blank(R,me?me.name:''):{k:sheetKey,...chars[sheetKey]};
+  const gk=(isNew?'new:'+newSys:sheetKey);
+  if(!genCtx||genCtx.k!==gk) genCtx={k:gk,open:sheetOpen,rollKey:'',rollState:null};
+  const redo=()=>renderSheet(el,prefix);
+  Object.assign(genCtx,{R,c,me:me&&me.name,players:playerNames(),live:(screen==='camp'&&!isNew)?((getState().pcs||{})[c.name]||null):null,avatar,edit:isNew?'new':!!sheetEdit,
+    canUse:!!(screen==='camp'&&me&&c.player===me.name),copy:copyText,alert:m=>alert(m),
+    onEdit:b=>{sheetEdit=b; redo()},
+    onSave:async(t,nw)=>{ const k=slug(t.name), up={}; if(!nw&&chars[sheetKey]) t=Object.assign({},chars[sheetKey],t); delete t.k; up['dnd/characters/'+k]=t; if(!nw&&k!==sheetKey) up['dnd/characters/'+sheetKey]=null; sheetKey=k; sheetEdit=false; await db.ref().update(up); },
+    onDelete:async()=>{ if(confirm('Personage definitief wissen?')){const dk=sheetKey; sheetEdit=false; sheetKey=''; await db.ref('dnd/characters/'+dk).remove();} },
+    onDead:async()=>{ const c0=chars[sheetKey]; if(c0&&confirm(c0.dead?c0.name+' weer actief maken?':c0.name+' markeren als gesneuveld/gepensioneerd? (Het blad blijft bewaard, maar de DM speelt dit personage niet meer mee.)')) await db.ref('dnd/characters/'+sheetKey+'/dead').set(c0.dead?null:true); },
+    onUse:sel=>{ rollKey=sel.key; rollNat=String(sel.state.nat||''); rollMod=sel.state.mod||0; rollMode=sel.state.mode||''; rollExt=sel.state.ext||''; setTab('game'); }
+  });
+  DNDGenSheet.render(gb,genCtx);
+}
 function renderSheet(el,prefix){
   if(!el) return;
   const list=allChars();
   if(!sheetKey||!chars[sheetKey]){const m=myChar(); sheetKey=m?m.k:(list[0]?list[0].k:'');}
   let h=(prefix||'')+'<div class="row" style="margin-bottom:8px">'+list.map(c=>'<button class="b sm'+(c.k===sheetKey&&sheetEdit!=='new'?'':' alt')+'" data-sk="'+c.k+'">'+(c.dead?'☠ ':'')+esc(c.name)+'</button>').join('')+'<button class="b alt sm" data-newchar="1">＋ Nieuw personage</button></div>';
-  if(sheetEdit==='new') h+=editorHtml({player:me?me.name:''},true);
-  else if(sheetEdit&&chars[sheetKey]) h+=editorHtml({k:sheetKey,...chars[sheetKey]},false);
+  const gcur=sheetEdit!=='new'&&sheetKey&&chars[sheetKey]&&isGen(chars[sheetKey]);
+  if(sheetEdit==='new'){ if(!newSys) newSys=((screen==='camp'&&curSetting().ruleset)||'dnd2024'); h+='<div class="row" style="margin-bottom:8px"><label><small>Spelsysteem</small> <select data-newsys="1">'+DNDRulesets.list().map(r=>'<option value="'+r.id+'"'+(r.id===newSys?' selected':'')+'>'+esc(r.name)+'</option>').join('')+'</select></label></div>'; h+=newSys==='dnd2024'?editorHtml({player:me?me.name:''},true):'<div id="gsbox"></div>'; }
+  else if(sheetEdit&&chars[sheetKey]) h+=gcur?'<div id="gsbox"></div>':editorHtml({k:sheetKey,...chars[sheetKey]},false);
   else if(luOpen&&sheetKey&&chars[sheetKey]&&window.LevelUp&&me&&chars[sheetKey].player===me.name&&LevelUp.pending(chars[sheetKey],me.name)) h+='<div id="lubox"></div>';
-  else if(sheetKey&&chars[sheetKey]) h+=sheetHtml({k:sheetKey,...chars[sheetKey]});
+  else if(sheetKey&&chars[sheetKey]) h+=gcur?'<div id="gsbox"></div>':sheetHtml({k:sheetKey,...chars[sheetKey]});
   else h+='<p style="color:var(--mute)">Nog geen personage. Maak er een met "＋ Nieuw personage".</p>';
   el.innerHTML=h;
+  { const gb=el.querySelector('#gsbox'); if(gb) genRender(gb,el,prefix); }
   { const lb=el.querySelector('#lubox'); if(lb){ const k0=sheetKey; LevelUp.render(lb,{c:{k:k0,...chars[k0]},esc:esc,feats:Object.keys(CC_FEATS),featText:CC_FEATS,onClose:()=>{luOpen=false;renderSheet(el,prefix)},onDone:async(nc)=>{ const o=Object.assign({},nc); delete o.k; o.t=Date.now(); luOpen=false; await db.ref('dnd/characters/'+k0).set(o); }}); } else luOpen=false; }
   if(!el._sheetWired){
     el._sheetWired=true;
@@ -1833,7 +1871,7 @@ function renderSheet(el,prefix){
       if(sheetRoll&&!q('[data-roll]')&&!q('#rollpanel')){ sheetRoll=''; el.querySelectorAll('.rl.on').forEach(x=>x.classList.remove('on')); const rp=el.querySelector('#rollpanel'); if(rp) rp.style.display='none'; }
       if(q('[data-sk]')){sheetKey=q('[data-sk]').dataset.sk; sheetEdit=false; sheetRoll=''; return renderSheet(el,prefix);}
       if(q('[data-levelup]')){luOpen=true; return renderSheet(el,prefix);}
-      if(q('[data-newchar]')){sheetEdit='new'; return renderSheet(el,prefix);}
+      if(q('[data-newchar]')){sheetEdit='new'; newSys=''; return renderSheet(el,prefix);}
       if(q('[data-edit]')){sheetEdit=true; return renderSheet(el,prefix);}
       if(q('[data-dead]')){ const cc0=chars[sheetKey]; if(cc0&&confirm(cc0.dead?cc0.name+' weer actief maken?':cc0.name+' markeren als gesneuveld/gepensioneerd? (Het blad blijft bewaard, maar de DM speelt dit personage niet meer mee.)')) await db.ref('dnd/characters/'+sheetKey+'/dead').set(cc0.dead?null:true); return; }
       if(q('[data-cancel]')){sheetEdit=false; return renderSheet(el,prefix);}
@@ -1856,7 +1894,7 @@ function renderSheet(el,prefix){
         rollKey=sheetRoll; rollNat=String(nat); rollRage=sheetRage; setTab('game'); return;
       }
     });
-    el.addEventListener('change',e=>{ if(e.target.id==='shrage'){sheetRage=e.target.checked; renderSheet(el,prefix);} });
+    el.addEventListener('change',e=>{ if(e.target.id==='shrage'){sheetRage=e.target.checked; renderSheet(el,prefix);} if(e.target.dataset&&e.target.dataset.newsys){newSys=e.target.value; renderSheet(el,prefix);} });
   }
   updateRollPanel(el);
 }

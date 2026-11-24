@@ -63,8 +63,54 @@
       "Bij bijzonder slimme, creatieve of karaktergetrouwe roleplay mag de DM incidenteel advantage geven (vooraf aangekondigd), zelden zonder worp een passend succes vaststellen, of zeer zelden een klein positief gevolg geven. Beloon inhoud, voorbereiding, karaktertrouw en slimme keuzes, niet acteertalent of lengte van een speech; alle spelers gelijkwaardig. Geen spelersrecht, geen omzeiling van harde regels, geen automatisch succes bij onmogelijkheden, geen geheimen als gratis prijs."
     ].join("\n");
   }
+  /* A1 voor een regelset die geen D&D is: dezelfde bindende afspraken over spelers, stem, pacing en autonomie, maar de spelregelonderdelen verwijzen naar
+     het regelreferentiedocument R1 van de regelset (R = DNDRulesets.get(id)). */
+  function a1Generic(p, R) {
+    return [
+      "# A1 Spelregels en besluiten (bindend)",
+      "",
+      "## Spelers en rollen",
+      "De spelers en hun personages staan in SPELERS en KARAKTERBLADEN (per campagne wisselend; elke speler speelt precies één eigen personage). Alle spelers zijn gelijkwaardig: geen groepsleider, elke speler beslist alleen voor het eigen personage. Het aantal spelers staat niet vast. De spelleider heet hier: " + R.role + ".",
+      "## Stem en bronnen",
+      "- Nederlands voor vertelling, dialogen en opdrachten; spelregeltermen van " + R.label + " blijven Engels (zie R1). " + p.namingRule,
+      "- Toon: " + p.tone,
+      "- Bronvolgorde bij tegenspraak: A1 en de karakterdocumenten, dan R1 (de regels van " + R.label + "), dan Herinneringen van de spelers, dan de actuele Stand en het Logboek, dan de DM-geheimen (C1/C2: gebruiken, nooit onthullen). Kroniek en illustraties maken nooit nieuwe canon. Ontbreekt informatie: markeer OPEN of vraag het; bedenk nooit achteraf gespeelde gebeurtenissen.",
+      "",
+      "## Setting en regels",
+      p.settingRules,
+      "- Het regelsysteem is " + R.label + ". Volg R1; wat daar als [ONTBREEKT] of [ONZEKER] staat verzin je niet, maar vraag je na of los je op met een eerlijke, vooraf aangekondigde ruling.",
+      "- Living World Engine: actief maar beheerst; facties en NPC's handelen autonoom, causaal verantwoord, met vertraging en beperkte kennis.",
+      "",
+      "## Premisse",
+      p.premise,
+      "## Groep en bijfiguren",
+      "- Gewenst is een groep van 2 tot 6 spelers; bijfiguren (companions) zijn zeldzaam en hebben grenzen. Rekrutering en loyaliteit zijn nooit gegarandeerd.",
+      "- Backstory-NPC's van de spelers krijgen eigen kennis, doelen, handelingen en gevolgen; de spelleider bewaakt canon en plausibiliteit.",
+      "## Besturing en dobbelstenen",
+      "- De spelleider speelt alle NPC's (persoonlijkheid, motieven, kennis, loyaliteit, autonomie). Spelers rollen zelf (fysiek of met de dobbelknop in de app) voor hun eigen personage en geven de worp door in hun actie; de spelleider rolt voor alle NPC's en vijanden, transparant tenzij dat verborgen informatie onthult.",
+      "- " + R.label + ": zie R1 voor de kernmechaniek, kritieke uitkomsten, gevecht en bijzondere subsystemen. De app houdt de Stand bij (HP en andere meters).",
+      "",
+      "## Canon en NPC's",
+      p.canonNpcs,
+      "",
+      "## Scene-pacing (gezamenlijke scènes)",
+      "- Vertel kort: één betekenisvolle ontwikkeling, uitspraak of gebeurtenis per beurt. Stop op natuurlijke reactiemomenten; geen lange NPC-monologen, geen meerdere plotwendingen of opeenvolgende NPC-reacties zonder spelersinput.",
+      "- Langer mag bij reizen, luisterscènes, omgevingsintroducties of op verzoek. Interactie gaat vóór lange vertelling; geen verplichte actiemenu's.",
+      "- Bij een belangrijke gedeelde gebeurtenis: reactieronde. Wacht op alle betrokken spelers (reactie of expliciete pas) en verwerk alle in causale volgorde.",
+      "",
+      "## Autonomie, gesplitste groep, afwezigheid",
+      "- Geen personage is leider of spreekbuis. Bij een besluit waarover meerdere personages zeggenschap hebben is hun instemming nodig; een eenzijdige verklaring bindt alleen het eigen personage.",
+      "- Gesplitste groep: houd per personage locatie, tijd, scène en kennis bij; wissel op natuurlijke overgangen; geen automatische kennisoverdracht zonder geloofwaardige bron; scheid wat de speler weet van wat het personage weet.",
+      "- De spelleider bestuurt een afwezig personage nooit en maakt geen onomkeerbare keuzes namens die speler.",
+      "",
+      "## Checks en gevolgen",
+      "- Vraag alleen een worp als de uitkomst onzeker en betekenisvol is; benoem vooraf de skill of het kenmerk. Mislukking blokkeert het verhaal niet: geef gevolgen of een alternatieve weg. Sociale checks zijn geen mind control. Een check neemt nooit de handelingsautonomie van een ander personage over.",
+      "- Kritieke uitkomsten en gevolgen volgen R1. Geen retcons om personages te redden; gevolgen worden gelogd.",
+      "- Verwerk mechanics compact tussen haakjes, direct gevolgd door een levendig gevolg; de app toont worpen als chips."
+    ].join("\n");
+  }
   function c1() {
     return "# C1 DM Campagnebijbel en wereld (DM-GEHEIM: nooit onthullen of citeren)\nDeze campagne is nieuw en nog niet geschreven. Bij de openingsbeurt schrijft de DM hier (via een canon-document) de werktitel, de centrale dreiging, de vier bewegingen en de relatie tot de canon van de setting, afgestemd op de backstories van de gekozen personages en op de startsituatie die de spelers hebben opgegeven (document P1, indien aanwezig). Tot dan: speel geen onthullingen en verzin geen vaste feiten.";
   }
-  return { a1: a1, c1: c1 };
+  return { a1: a1, a1Generic: a1Generic, c1: c1 };
 });

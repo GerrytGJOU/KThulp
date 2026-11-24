@@ -188,7 +188,9 @@
      die gebruikt het sjabloon in Firebase (worldTemplateBijbel). Het regelreferentiedocument r1 komt uit dat sjabloon (setting-neutraal). */
   function canonDocs(id) {
     const st = SETTINGS[id]; if (!st || !st.canonParts) return null; const L = canonLib(), now = Date.now(), docs = {};
-    docs.a1_spelregels_en_besluiten = { title: "A1 Spelregels en besluiten", text: L.a1(st.canonParts), t: now };
+    const RSL = typeof module === "object" && module.exports ? require("./settings-rulesets.js") : (typeof self !== "undefined" ? self : this).DNDRulesets, R = RSL && st.ruleset && st.ruleset !== "dnd2024" && RSL.has(st.ruleset) ? RSL.get(st.ruleset) : null;
+    docs.a1_spelregels_en_besluiten = { title: "A1 Spelregels en besluiten", text: R ? L.a1Generic(st.canonParts, R) : L.a1(st.canonParts), t: now };
+    if (R && R.ref) docs.r1_regelreferentie = { title: "R1 Regelreferentie — " + R.label, text: R.ref, t: now };
     docs.c1_dm_campagnebijbel_en_wereld = { title: "C1 DM Campagnebijbel en wereld (DM-geheim)", text: L.c1(), secret: true, t: now };
     Object.keys(st.canon || {}).forEach(function (k) { docs[k] = Object.assign({ t: now }, st.canon[k]); });
     return docs;
@@ -221,7 +223,8 @@
     if (s.world != null) {
       const T = s.world.travel; if (T != null) { if (!isO(T)) e.push("world.travel moet een object zijn"); else Object.keys(T).forEach(function (k) { if (!/^REG-[A-Z]+\|REG-[A-Z]+$/.test(k) || !(Number.isInteger(T[k]) && T[k] >= 0 && T[k] <= 400)) e.push("reistijd '" + k + "': formaat REG-A|REG-B = dagen (0 t/m 400)"); }); }
     }
-    if (!isO(C)) e.push("creator ontbreekt"); else {
+    const gen = s.ruleset && s.ruleset !== "dnd2024"; /* niet-D&D: geen D&D-creator nodig */
+    if (gen) { /* creator niet vereist */ } else if (!isO(C)) e.push("creator ontbreekt"); else {
       ["magicWorld", "intro", "langsTip", "bgNote", "spellTip", "magicTip", "commonLang", "helperSys", "speciesTip", "aanleiding"].forEach(function (k) { if (!str(C[k], 3000)) e.push("creator." + k + " ontbreekt of is te lang"); });
       if (!isO(C.species) || !Object.keys(C.species).length) e.push("creator.species: minstens één species");
       else Object.keys(C.species).forEach(function (k) { const x = C.species[k]; if (!isO(x) || !str(x.label, 120) || !str(x.tolk, 600) || !(x.speed >= 5 && x.speed <= 120) || !str(x.size, 40) || !Array.isArray(x.traits) || !x.traits.length || !x.traits.every(function (t) { return Array.isArray(t) && t.length === 2 && str(t[0], 80) && str(t[1], 400); })) e.push("species " + k + ": label, tolk, speed (5-120), size en traits [[naam, uitleg], ...] zijn verplicht"); });

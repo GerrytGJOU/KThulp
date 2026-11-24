@@ -40,7 +40,7 @@ function get(p, extra) {
   if (!out || out === "null") return null;
   try { return JSON.parse(out); } catch (e) { throw new Error("Geen JSON van " + p + ": " + out.slice(0, 200)); }
 }
-const Settings = require("../settings-all.js"); /* setting per campagne (campaignIndex/{cid}/settingId); zonder id: Midden-aarde */
+const Settings = require("../settings-all.js"); const Rulesets = require("../settings-rulesets.js"), GenSheet = require("../gensheet.js"); /* regelsets en generiek blad (niet-D&D) */ /* setting per campagne (campaignIndex/{cid}/settingId); zonder id: Midden-aarde */
 let SETTING = Settings.get(Settings.DEFAULT_ID);
 /* Voorrang: de snapshot van het verhaal (campaigns/{cid}/setting, JSON-tekst), dan een eigen setting uit dnd/settings/{id}/json, dan de ingebouwde setting. */
 function useSetting(cid) {
@@ -60,6 +60,12 @@ function settingBlock(id) {
     "- Register-id's: " + p.idLegend + "; " + p.noCreateFig + "; " + p.canonName + " (als event met divergence:true en een cause).",
     "- Regio-id's: " + (Object.keys(regs).join(", ") || "(vrij, REG-LETTERS)") + ". Voorbeeldjaar in de kalender: " + p.exYear + ".",
     SETTING.map && SETTING.map.enabled === false ? "- Er is geen kaart: laat place op null." : ""].filter(Boolean).join("\n");
+}
+/* Blok voor de context als de campagne een ander spelsysteem dan D&D 2024 gebruikt (settings-rulesets-d100.js). */
+function rulesetBlock() {
+  const R = Rulesets.get(SETTING.ruleset); if (R.id === "dnd2024") return null;
+  return ["# REGELSET: " + R.label + " (NIET D&D 5e)", "De D&D-regels in CLAUDE_DM.md (d20, Advantage, AC, Hit Dice, level, milestone, Death Saves, Proficiency) gelden hier NIET; speel " + R.label + " volgens R1 (canon). Rol van de spelleider: " + R.role + ".",
+    "- Spelerworpen: " + R.playerRolls, "- Dobbelstenen en checks: " + R.dice, "- Stand per PC (pcs.<naam>, in plaats van hp/resources/conditions uit de D&D-regels): " + R.pcStats, "- Rolls-chips (rolls): " + R.rollEx, "- " + R.crit, R.guide].filter(Boolean).join("\n");
 }
 const T = require("./tables.js")(get); /* NPC-/locatietabel per campagne: globaal of campaigns/{cid}/… (ownTables) */
 function update(updates) {
@@ -104,7 +110,8 @@ function sheetText(c) {
     (c.spellInfo || c.spells ? "Spellcasting: " + [c.spellInfo, c.spells].filter(Boolean).join(" ").replace(/\n+/g, " ") + "\n" : "") +
     (c.appearance ? "Uiterlijk: " + String(c.appearance).replace(/\n+/g, " ").slice(0, 400) + "\n" : "") + (c.features ? "Features: " + c.features.replace(/\n+/g, " ") + "\n" : "") + (c.equipment ? "Uitrusting: " + c.equipment.replace(/\n+/g, " ") + "\n" : "");
 }
-const rollDice = () => { const r = (s, n) => Array.from({ length: n }, () => 1 + crypto.randomInt(s)); return { d20: r(20, 20), d12: r(12, 6), d10: r(10, 6), d8: r(8, 8), d6: r(6, 10), d4: r(4, 6) }; };
+const rollDice = () => { const r = (s, n) => Array.from({ length: n }, () => 1 + crypto.randomInt(s)), o = {}; Rulesets.get(SETTING.ruleset).preDice.forEach(([k, s, n]) => { o[k] = r(s, n); }); return o; };
+const isGen = c => !!(c && c.ruleset && c.ruleset !== "dnd2024" && Rulesets.has(c.ruleset) && Rulesets.get(c.ruleset).sheet);
 const vals = o => o ? Object.values(o) : [];
 const sortedVals = o => o ? Object.keys(o).sort().map(k => o[k]) : [];
 
@@ -188,7 +195,7 @@ function cmdContext(cid, flags) {
   const wacht = party ? Object.entries(party).filter(([n, k]) => !k || !allChars[k]).map(([n]) => n) : [];
   const first = !Object.keys(state).length;
   const out = [];
-  { const sb = settingBlock(sid); if (sb) out.push(sb); }
+  { const sb = settingBlock(sid); if (sb) out.push(sb); const rb = rulesetBlock(); if (rb) out.push(rb); }
   if (turn.handoff && turn.handoff.to === "claude") out.push("# OVERDRACHT (jij speelt deze beurt omdat het een groot moment is)\n" + turn.handoff.reason + ". Neem de tijd voor een thematisch sterke, rijke scène (mag langer dan 180 woorden), gebruik alle canon en de wereldstatus, en zet daarna met nextTurn.handoff:null de volgende beurt terug naar Gemini, tenzij het grote moment meerdere beurten duurt.");
   out.push("# TURN\nronde " + turn.round + ", status " + turn.status + (turn.prompt ? ", laatste vraag: " + turn.prompt : "") + (turn.checks ? ", gevraagde checks: " + JSON.stringify(turn.checks) : "") + (first ? "\n(LET OP: Stand is leeg: dit is de openingsbeurt; neem de beginsituatie uit D1/Stand #1 over)" : ""));
   out.push("# SPELERS (nextTurn.awaiting bevat altijd de SPELERNAAM, nooit de naam van het personage; de vraag in nextTurn.prompt richt je aan dezelfde speler)\n" + (party ? Object.entries(party).map(([n, k]) => n + (k && allChars[k] ? " (speelt " + allChars[k].name + ")" : " (heeft nog geen personage)")) : [...new Set([...vals(get("/dnd/" + cp(cid, "players"))), ...vals(chars).map(c => c.player).filter(Boolean)])].map(n => { const c = vals(chars).find(x => x.player === n); return n + (c ? " (speelt " + c.name + ")" : ""); })).join(", ") + (wacht.length ? "\n(LET OP: " + wacht.join(", ") + " heeft nog geen personage; speel de opening pas als alle spelers een personage hebben, en zeg dat tegen Gerben)" : ""));
@@ -201,7 +208,7 @@ function cmdContext(cid, flags) {
     else cparts.push("- " + d.title + " " + meta + ", " + d.text.length + " tekens");
   }
   out.push(cparts.join(flags.canon ? "\n\n" : "\n"));
-  out.push("# KARAKTERBLADEN\n" + vals(chars).filter(c => c.player).map(sheetText).join("\n") || "(geen)");
+  out.push("# KARAKTERBLADEN\n" + vals(chars).filter(c => c.player).map(c => isGen(c) ? GenSheet.sheetText(Rulesets.get(c.ruleset), c) : sheetText(c)).join("\n") || "(geen)");
   out.push("# SAMENVATTINGEN\n" + (sortedVals(sums).map(s => "(ronde " + s.fromRound + "-" + s.toRound + ") " + s.text).join("\n") || "(geen)"));
   out.push("# HERINNERINGEN VAN DE SPELERS (bindend)\n" + (sortedVals(mem).map(m => "- " + m.text).join("\n") || "(geen)"));
   out.push("# BEKENDE NPC'S (exacte namen voor speakers)\n" + (vals(npcs).filter(n => !n.forPlayer).map(n => n.name).join(", ") || "(geen)"));
@@ -230,7 +237,7 @@ function parseDM(o, names, chars) {
   o.worldDelta = (o.worldDelta && typeof o.worldDelta === "object" && !Array.isArray(o.worldDelta)) ? o.worldDelta : null;
   o.speakers = Array.isArray(o.speakers) ? o.speakers.filter(s => typeof s === "string").slice(0, 4) : [];
   o.newNpcs = Array.isArray(o.newNpcs) ? o.newNpcs.filter(n => n && typeof n.name === "string" && n.name.trim()) : [];
-  o.rolls = Array.isArray(o.rolls) ? o.rolls.filter(r => r && typeof r.who === "string" && typeof r.what === "string" && r.total != null && isFinite(Number(r.total))).slice(0, 12).map(r => ({ who: r.who.slice(0, 40), what: r.what.slice(0, 40), natural: (r.natural != null && isFinite(Number(r.natural))) ? Number(r.natural) : null, mod: isFinite(Number(r.mod)) ? Number(r.mod) : 0, total: Number(r.total), dice: r.dice ? String(r.dice).slice(0, 20) : "", result: r.result ? String(r.result).slice(0, 30) : "" })) : [];
+  o.rolls = Array.isArray(o.rolls) ? o.rolls.filter(r => r && typeof r.who === "string" && typeof r.what === "string" && r.total != null && isFinite(Number(r.total))).slice(0, 12).map(r => ({ who: r.who.slice(0, 40), what: r.what.slice(0, 40), natural: (r.natural != null && isFinite(Number(r.natural))) ? Number(r.natural) : null, mod: isFinite(Number(r.mod)) ? Number(r.mod) : 0, total: Number(r.total), dice: r.dice ? String(r.dice).slice(0, 20) : "", result: r.result ? String(r.result).slice(0, 30) : "", target: (r.target != null && isFinite(Number(r.target))) ? Number(r.target) : null })) : [];
   o.extraLocations = (Array.isArray(o.extraLocations) ? o.extraLocations : []).filter(x => x && typeof x.name === "string" && x.name.trim()).slice(0, 3).map(x => ({ name: x.name.trim().slice(0, 80), description: String(x.description || "").slice(0, 400), visual: String(x.visual || "").slice(0, 1500) }));
   const lc = o.location; o.location = (lc && typeof lc.name === "string" && lc.name.trim()) ? { name: lc.name.trim().slice(0, 80), description: String(lc.description || "").slice(0, 400), visual: String(lc.visual || "").slice(0, 1500) } : null;
   const res = {}; const dn = o.dmNotes;
