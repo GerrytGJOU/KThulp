@@ -1720,15 +1720,44 @@ const ITEMRULES=(function(){
     return {name:nm,note:String(o.note||o.effect||o.toelichting||'').trim(),magic:!!(o.magic||o.magisch),origin:String(o.origin||o.herkomst||'').trim(),rules:String(o.rules||o.regels||'').trim(),
       uses:u&&typeof u==='object'&&Number(u.max)>0?{per:String(u.per||''),max:Number(u.max)}:null,recharge:String(o.recharge||o.herstel||(u&&u.per!=='voorraad'&&u.per)||'').trim(),rich:true};}
   function isRich(x){return !!x&&typeof x==='object'&&!Array.isArray(x)&&!!(x.name||x.naam)&&!!(x.rules||x.regels||x.uses||x.gebruik||x.origin||x.herkomst||x.magic||x.magisch||x.recharge||x.herstel);}
-  const has=it=>!!it&&!it.pack&&!!(it.rich||it.magic||(it.note&&it.note.length>=20));
+  /* Standaardregels (D&D 2024, in eigen woorden) voor gewone uitrusting zonder eigen regelblok; eerste treffer op de naam telt. */
+  const M={Cleave:'Cleave: na een treffer in melee mag je een tweede wezen binnen 5 ft van het eerste (en binnen je bereik) aanvallen; die schade is zonder ability modifier. Eén keer per beurt.',Vex:'Vex: raak je en doe je schade, dan heb je advantage op je volgende aanval op hetzelfde doelwit, tot het eind van je volgende beurt.',Sap:'Sap: raak je, dan heeft het doelwit disadvantage op zijn volgende aanvalsworp vóór het begin van je volgende beurt.',Nick:'Nick: de extra aanval met een tweede Light-wapen hoort bij je Attack action in plaats van je Bonus Action. Eén keer per beurt.'};
+  const w=(t,m)=>t+String.fromCharCode(10)+M[m]+' (Mastery werkt alleen als je die voor dit wapen hebt gekozen.)';
+  const STD=[
+    [/greataxe/i,w('1d12 slashing. Heavy, Two-Handed.','Cleave')],
+    [/handaxe/i,w('1d6 slashing. Light, Thrown (20/60 ft).','Vex')],
+    [/spear|speer/i,w('1d6 piercing (met twee handen 1d8). Thrown (20/60 ft), Versatile.','Sap')],
+    [/shortbow/i,w('1d6 piercing. Ammunition (80/320 ft), Two-Handed. Verbruikt per schot een pijl.','Vex')],
+    [/shortsword/i,w('1d6 piercing. Finesse (STR of DEX), Light.','Vex')],
+    [/dagger|dolk|adarion/i,w('1d4 piercing. Finesse (STR of DEX), Light, Thrown (20/60 ft).','Nick')],
+    [/arrows?\b|quiver|koker/i,'Munitie voor een boog. Elk schot kost één pijl; na een gevecht kun je met 1 minuut zoeken ongeveer de helft terugvinden.'],
+    [/studded leather/i,'Light armor. AC 12 + je DEX modifier. Aantrekken en uittrekken kost 1 minuut.'],
+    [/healer.?s kit/i,'Als Utilize action stabiliseer je een wezen op 0 hit points, zonder Medicine-check. Elke keer kost één van de 10 gebruiken.',{per:'voorraad',max:10}],
+    [/herbalism kit/i,'Tool voor kruiden (Intelligence): planten herkennen en kruidenmiddelen maken, zoals Antitoxin of een Potion of Healing (met tijd en grondstoffen). Ben je proficient, dan tel je je proficiency bonus op.'],
+    [/dice set/i,'Spelset: gokken en dobbelspelen (Wisdom-check). Proficient: je telt je proficiency bonus op.'],
+    [/backpack|rugzak/i,'Draagt tot 30 lb aan spullen (ongeveer 1 kubieke voet).'],
+    [/bedroll/i,'Slaapzak voor één persoon; zorgt voor een behoorlijke nachtrust buiten.'],
+    [/mess kit/i,'Eetgerei: pannetje, bord en bestek om onderweg te koken en te eten.'],
+    [/tinderbox/i,'Maakt vuur: een fakkel, lamp of iets met open brandstof aansteken kost een Bonus Action, ander vuur 1 minuut.'],
+    [/torch|fakkel/i,'Brandt 1 uur: helder licht 20 ft, daarbuiten 20 ft schemerlicht. Als wapen: 1 fire damage.'],
+    [/oil/i,'Lampolie: 6 uur licht in een lamp of lantaarn. Je kunt hem ook uitgieten of gooien; vat de olie vlam, dan doet dat extra fire damage.'],
+    [/ration|proviand/i,'Reisvoedsel: elke portie is eten voor één dag.'],
+    [/lembas/i,'Elven reisbrood: elke portie is genoeg voedsel voor een dag en houdt je op de been.'],
+    [/waterskin|waterzak/i,'Bevat water voor ongeveer één dag.'],
+    [/rope|touw/i,'50 ft touw: klimmen, vastbinden, spannen. Er is een zware Strength-check nodig om het te breken.'],
+    [/clothes|clothing|kleding/i,'Gewone kleding, geschikt voor de reis; geeft geen AC.']
+  ];
+  const std=n=>{const r=STD.find(x=>x[0].test(n)); return r?{text:r[1],uses:r[2]||null}:null;};
+  const has=it=>!!it;
   const attr=it=>' data-item="'+esc(key(it.name))+'" tabindex="0"';
   function usedOf(c,it){const m=(c.itemUse||{})[key(it.name)]; return Math.max(0,Math.min(it.uses?it.uses.max:0,Number(m)||0));}
   function card(c,all){
     if(!open) return ''; const it=all.find(x=>key(x.name)===open); if(!it||!has(it)) return '';
-    const u=it.uses, used=u?usedOf(c,it):0, left=u?u.max-used:0, rl=RECH[(it.recharge||'').toLowerCase()]||it.recharge;
+    const sd=it.rich?null:std(it.name), own=it.pack?'':(it.rules||it.note);
+    const u=it.uses||(sd&&sd.uses)||null, used=u?usedOf(c,Object.assign({},it,{uses:u})):0, left=u?u.max-used:0, rl=RECH[(it.recharge||'').toLowerCase()]||it.recharge;
     return '<div class="itemov" data-itemoverlay="1"><div class="itemcard'+(it.magic?' mg':'')+'" role="dialog" aria-modal="true" aria-label="'+esc(it.name)+'"><div class="ich"><b>'+(it.magic?'✨ ':'')+esc(it.name)+'</b><button class="b alt sm" data-itemclose="1">Sluiten</button></div>'+
-      (it.origin?'<div class="ior"><small>Herkomst</small> '+esc(it.origin)+'</div>':'')+
-      '<div class="irl">'+esc(it.rules||it.note||'Geen aanvullende regels.')+'</div>'+
+      (it.origin||it.pack?'<div class="ior"><small>Herkomst</small> '+esc(it.origin||it.note.replace(/^uit /,''))+'</div>':'')+
+      (own?'<div class="irl">'+esc(own)+'</div>':'')+(sd?'<div class="irl"><small>Standaardregels (D&amp;D 2024)</small><br>'+esc(sd.text)+'</div>':'')+(own||sd?'':'<div class="irl">Geen bijzondere regels. Vraag de DM als je er iets mee wilt doen.</div>')+
       (u?'<div class="iuse"><small>Gebruik</small> <span class="ipips">'+Array.from({length:u.max},(_,i)=>'<button class="pip'+(i<used?' x':'')+'" data-itempip="'+(i+1)+'" aria-label="gebruik '+(i+1)+'">'+(i<used?'✕':'')+'</button>').join('')+'</span> <b style="white-space:nowrap">'+left+' / '+u.max+' over</b>'+(rl?' <small>herstelt: '+esc(rl)+'</small>':'')+(used?' <button class="b alt sm" data-itemreset="1">Herstel</button>':'')+'</div>':(rl?'<div class="iuse"><small>Herstelt: '+esc(rl)+'</small></div>':''))+'</div></div>';
   }
   return {fromObj,isRich,has,attr,card,key,usedOf,get open(){return open},set open(v){open=v}};
@@ -1740,7 +1769,7 @@ function invHtml(c){
   const cur=c.currency||{}, gold=items.filter(s=>typeof s==='string'&&(/^\d+\s*(gp|sp|cp|pp|ep)\b/i.test(s)||/\b\d+\s*gp\b/i.test(s)));
   items=items.filter(s=>gold.indexOf(s)<0);
   const goldTxt=gold.length?gold.join(', '):['pp','gp','ep','sp','cp'].filter(x=>cur[x]).map(x=>cur[x]+' '+x.toUpperCase()).join(', ');
-  const parse=s=>{if(typeof s==='object') return ITEMRULES.fromObj(s); const mg=s.match(/^(.*?)\s*\[\s*(magisch)?:?\s*([^\]]*)\]\s*$/i); if(mg) return {name:mg[1].trim(),note:mg[3].trim(),magic:!!mg[2]}; const pr=s.match(/^(.*?)\s*\(([^)]*)\)\s*$/); if(pr&&/,/.test(pr[2])&&/(pack|kit|set)/i.test(pr[1])) return {name:pr[1].trim(),note:'',parts:pr[2].split(',').map(x=>x.trim()).filter(Boolean),magic:false}; const q=s.match(/^(.*?)\s*\(([^)]*)\)\s*\.?\s*(.*)$/); if(q&&q[1]) return {name:q[1].trim(),note:[q[2],q[3]].filter(Boolean).join('. '),magic:false}; const d=s.match(/^(.*?)\.\s+(.+)$/); if(d) return {name:d[1].trim(),note:d[2].trim(),magic:false}; return {name:s,note:'',magic:false}};
+  const parse=s=>{if(typeof s==='object') return ITEMRULES.fromObj(s); const mg=s.match(/^(.*?)\s*\[\s*(magisch)?:?\s*([^\]]*)\]\s*$/i); if(mg) return {name:mg[1].trim(),note:mg[3].trim(),magic:!!mg[2]}; const pr=s.match(/^(.*?)\s*\(([^)]*)\)\s*$/); if(pr&&/,/.test(pr[2])&&/\b(pack|kit|set)\b/i.test(pr[1])) return {name:pr[1].trim(),note:'',parts:pr[2].split(',').map(x=>x.trim()).filter(Boolean),magic:false}; const q=s.match(/^(.*?)\s*\(([^)]*)\)\s*\.?\s*(.*)$/); if(q&&q[1]) return {name:q[1].trim(),note:[q[2],q[3]].filter(Boolean).join('. '),magic:false}; const d=s.match(/^(.*?)\.\s+(.+)$/); if(d) return {name:d[1].trim(),note:d[2].trim(),magic:false}; return {name:s,note:'',magic:false}};
   /* Explorer's Pack e.d.: uitsplitsen in de losse onderdelen (eerst uit het blad, anders de standaardinhoud van de 2024-regels). */
   const sheetPack=(String(c.equipment||'').match(/pack\s*\(([^)]*)\)/i)||[])[1];
   const DEF={explorer:['Backpack','Bedroll','2 Oil Flasks','10 dagen Rations','50 ft Rope','Tinderbox','10 Torches','Waterskin']};
@@ -1754,9 +1783,9 @@ function invHtml(c){
   items.forEach(raw=>{const it=parse(raw); all.push(it);
     if(/explorer'?s pack|pack$/i.test(it.name)){
       const parts=it.parts||(sheetPack?sheetPack.split(',').map(x=>x.trim()).filter(Boolean):(/explorer/i.test(it.name)?DEF.explorer:null));
-      if(parts){ parts.forEach(p=>bag.push({name:p,note:'uit '+it.name,magic:false,pack:true})); return; }
+      if(parts){ parts.forEach(p=>{const q={name:p,note:'uit '+it.name,magic:false,pack:true}; all.push(q); bag.push(q);}); return; }
     }
-    if(it.parts){ it.parts.forEach(p=>bag.push({name:p,note:'uit '+it.name,magic:false,pack:true})); return; }
+    if(it.parts){ it.parts.forEach(p=>{const q={name:p,note:'uit '+it.name,magic:false,pack:true}; all.push(q); bag.push(q);}); return; }
     place(it);});
   const ico=it=>{ if(!window.DNDItems||!it) return ''; try{const m=DNDItems.match((it.magic?'[magisch] ':'')+it.name); return '<img class="itico" src="'+m.src+'" alt="" loading="lazy" onerror="this.remove()">';}catch(e){return ''}};
   const sl=(label,key,n)=>{const l=slots[key]; let o=''; for(let i=0;i<n;i++){const it=l[i]; o+='<div class="invsl'+(it?'':' empty')+(it&&it.magic?' mg':'')+(it&&ITEMRULES.has(it)?' ik':'')+'"'+(it&&ITEMRULES.has(it)?ITEMRULES.attr(it):'')+'><small>'+label+(n>1?' #'+(i+1):'')+'</small><span'+(it?' class="it"':'')+'>'+(it?ico(it)+'<span class="tx">'+(it.magic?'✨ ':'')+esc(it.name)+(it.note&&!ITEMRULES.has(it)?' <em>('+esc(it.note)+')</em>':'')+'</span>':'&nbsp;')+'</span></div>';} return o;};

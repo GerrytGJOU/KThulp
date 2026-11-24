@@ -31,10 +31,10 @@ t("object en tekst: gold uit objecten blijft werken, geen crash", () => {
   const { invHtml } = mk(inv); const h = invHtml(c);
   ok(/Raafveer van Haleth/.test(h) && /Slijpsteen van Erebor/.test(h) && /25 GP/.test(h), "namen en geld zichtbaar");
 });
-t("voorwerpen met regels zijn klikbaar, gewone niet", () => {
+t("alle voorwerpen zijn klikbaar, ook oude en gewone", () => {
   const h = mk(inv).invHtml(c);
   ok(/data-item="raafveer_van_haleth"/.test(h) && /data-item="slijpsteen_van_erebor"/.test(h) && /data-item="ring_van_hoop"/.test(h), "klikbaar");
-  ok(!/data-item="greataxe"/.test(h) && !/data-item="backpack"/.test(h), "gewone voorwerpen niet");
+  ok(/data-item="greataxe"/.test(h) && /data-item="backpack"/.test(h), "gewone voorwerpen ook");
   ok(/data-item="tinderbox"/.test(h), "lange toelichting krijgt ook een kaart");
 });
 t("open kaart toont herkomst, regels en teller; tekstitem toont zijn toelichting", () => {
@@ -52,9 +52,17 @@ t("hostile tekst wordt ge-escaped", () => {
   const m = mk([{ name: "Boom<img>", rules: "<script>x</script>", magic: true }]); m.ITEMRULES.open = "boom_img"; const h = m.invHtml(c);
   ok(!/<script>/.test(h) && /&lt;script&gt;/.test(h));
 });
-t("lange toelichting staat niet in het vak, wel in de pop-up; korte blijft zichtbaar", () => {
+t("lange toelichting staat niet in het vak, wel in de pop-up; ook een korte niet", () => {
   const m = mk(["Aldrics ring (erfstuk, geen magie; anker tegen de woede)", "Longsword (oud)"]); let h = m.invHtml(c);
-  ok(/data-item="aldrics_ring"/.test(h) && !/anker tegen de woede/.test(h) && h.includes("<em>(oud)</em>"));
+  ok(/data-item="aldrics_ring"/.test(h) && !/anker tegen de woede/.test(h) && !h.includes("<em>(oud)</em>"));
   m.ITEMRULES.open = "aldrics_ring"; ok(/anker tegen de woede/.test(m.invHtml(c)));
+});
+t("standaardregels: wapen, pakonderdeel, Healer's Kit met teller, onbekend voorwerp", () => {
+  const m = mk(["4 Handaxes", "Explorer's Pack (Backpack, 10 Torches)", "Healer's Kit", "Vreemd ding"]);
+  const open = k => { m.ITEMRULES.open = k; return m.invHtml({ ...c, itemUse: { healer_s_kit: 3 } }); };
+  ok(/1d6 slashing/.test(open("4_handaxes")) && /Vex:/.test(open("4_handaxes")));
+  ok(/Brandt 1 uur/.test(open("10_torches")) && /Explorer/.test(open("10_torches")));
+  ok(open("healer_s_kit").includes("7 / 10 over"));
+  ok(/Geen bijzondere regels/.test(open("vreemd_ding")));
 });
 console.log(pass + " geslaagd, " + fail + " mislukt"); process.exit(fail ? 1 : 0);
