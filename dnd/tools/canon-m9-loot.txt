@@ -32,3 +32,11 @@ BEWUSTE KOPPELINGEN [V]
 
 GOUD [V]
 - Wulfgrim heeft 29 GP. Tharon heeft nog geen goudregel: 150 GP startbudget min 103 GP uitgaven = 47 GP; neem dat op in zijn inventory bij de eerstvolgende statePatch.
+
+REGELBLOK PER VOORWERP MET EEN REGEL [V]
+- Elk voorwerp met een spelregel (magisch, geschenk of bruikleen, gebruik per dag of rust) staat in inventory als object, niet als losse tekst: {"name","origin","rules","magic","uses":{"per","max"},"recharge"}. De speler tikt het voorwerp op het karakterblad open en leest daar de volledige uitleg; de gebruiksteller (aantal keer per dag of rust) houdt de speler zelf bij.
+- "rules" is de uitleg in 1 tot 4 zinnen: wat het doet, hoe je het activeert, bereik, duur en eventuele plicht of prijs. "origin" noemt de gever of vindplaats. "recharge" is "korte rust", "lange rust" of "nieuwe dag".
+- Bij een quest-beloning of schenking lever je de regels altijd mee in dezelfde statePatch als het voorwerp zelf.
+- Bestaande voorwerpen met regels (herstel hun regelblok zo, ook als ze nog als tekst in de Stand staan):
+  - Slijpsteen van Erebor (Wulfgrim; geschenk uit Erebor): 10 minuten onderhoud bij een korte rust; de eerste geslaagde wapentreffer van elk gevecht doet +1 schade tot de volgende lange rust. Voorbeeld: {"name":"Slijpsteen van Erebor","origin":"Erebor","rules":"10 minuten onderhoud bij een korte rust: de eerste geslaagde wapentreffer van elk gevecht doet +1 schade, tot de volgende lange rust.","magic":true}
+  - Raafveer van Haleth (Wulfgrim): één keer per dag, 10 minuten, Speak with Animals als ritueel: een raaf kijkt iets na of haalt iets, geeft een kort antwoord, bereik ongeveer een dagreis. Voorbeeld: {"name":"Raafveer van Haleth","origin":"Haleth","rules":"Eén keer per dag 10 minuten Speak with Animals als ritueel: een raaf kijkt iets na of haalt iets en geeft een kort antwoord; bereik ongeveer een dagreis.","magic":true,"uses":{"per":"dag","max":1},"recharge":"nieuwe dag"}
