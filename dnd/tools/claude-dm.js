@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-/* Claude als DM voor de Midden-aarde D&D-app (dnd/).
+/* Claude als DM voor de rollenspel-app in dnd/ (Midden-aarde en andere settings; D&D 2024 of een ander spelsysteem).
    Lokaal hulpmiddel voor een Claude Code-sessie; draait via de Firebase CLI (al ingelogd).
    Opdrachten:
      status                              welke verhalen wachten op een beurt
      context <cid> [--canon[=id,id]]     alles wat de DM moet weten (canon alleen als index, tenzij --canon)
+     prompt <cid>                        de volledige DM-systeemprompt van dit verhaal (spelregels, Stand-schema, uitvoerformaat) voor de setting en het spelsysteem van het verhaal
      apply <cid> <bestand.json> [--force]  schrijf de beurt terug naar de database
      summary <cid> <totRonde> <bestand>  bewaar een samenvatting
      summary-todo [cid] [--force]        welke samenvattingen zijn nodig (eerdere samenvatting, nieuwe berichten, schrijfregels)
@@ -66,6 +67,15 @@ function rulesetBlock() {
   const R = Rulesets.get(SETTING.ruleset); if (R.id === "dnd2024") return null;
   return ["# REGELSET: " + R.label + " (NIET D&D 5e)", "De D&D-regels in CLAUDE_DM.md (d20, Advantage, AC, Hit Dice, level, milestone, Death Saves, Proficiency) gelden hier NIET; speel " + R.label + " volgens R1 (canon). Rol van de spelleider: " + R.role + ".",
     "- Spelerworpen: " + R.playerRolls, "- Dobbelstenen en checks: " + R.dice, "- Stand per PC (pcs.<naam>, in plaats van hp/resources/conditions uit de D&D-regels): " + R.pcStats, "- Rolls-chips (rolls): " + R.rollEx, "- " + R.crit, R.guide].filter(Boolean).join("\n");
+}
+/* De setting van een verhaal zonder SETTING te wijzigen: snapshot, anders de ingebouwde of eigen setting, anders Midden-aarde. */
+function settingOf(cid) {
+  let snap = null, id = null;
+  try { const raw = get("/dnd/campaigns/" + cid + "/setting"); snap = raw ? JSON.parse(raw) : null; } catch (e) { snap = null; }
+  if (snap && snap.id) return Settings.resolve(snap);
+  try { id = get("/dnd/campaignIndex/" + cid + "/settingId"); } catch (e) { id = null; } id = id || Settings.DEFAULT_ID;
+  if (!Settings.SETTINGS[id]) { try { const raw = get("/dnd/settings/" + id + "/json"); if (raw) Settings.registerCustom(Object.assign(JSON.parse(raw), { id: id })); } catch (e) { /* onbekend */ } }
+  return Settings.get(id);
 }
 const T = require("./tables.js")(get); /* NPC-/locatietabel per campagne: globaal of campaigns/{cid}/… (ownTables) */
 function update(updates) {
@@ -178,6 +188,15 @@ function cmdTableShow(cid) {
   const pt = get("/dnd/" + cp(cid, "partyTable")); if (!pt) return console.log("Geen Tafel der Draden voor dit verhaal.");
   const pl = ((get("/dnd/campaignIndex/" + cid) || {}).party && Object.keys(get("/dnd/campaignIndex/" + cid).party)) || ["Gerben", "Maurits"];
   console.log(tableBlock(pt, pl));
+}
+/* Toont de DM-systeemprompt zoals de app hem voor dit verhaal gebruikt (dezelfde functie als in index.html). */
+function cmdPrompt(cid) {
+  if (!cid) throw new Error("gebruik: prompt <cid>");
+  useSetting(cid);
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8"), a = html.indexOf("function systemPrompt("), b = html.indexOf("`; }", a) + 4;
+  if (a < 0 || b < a) throw new Error("systemPrompt niet gevonden in index.html");
+  const f = new Function("DNDRulesets", html.slice(a, b) + "; return systemPrompt;")(Rulesets);
+  console.log("# DM-SYSTEEMPROMPT (setting: " + SETTING.name + "; spelsysteem: " + Rulesets.get(SETTING.ruleset).label + ")\n" + f(SETTING.prompt, Rulesets.get(SETTING.ruleset)));
 }
 function cmdContext(cid, flags) {
   const sid = useSetting(cid);
@@ -334,6 +353,7 @@ function cmdSummaryTodo(cid, flags) {
   const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
   const i0 = html.indexOf("const SUMSYS='"), i1 = i0 < 0 ? -1 : html.indexOf("';", i0);
   const rules = i1 > i0 ? html.slice(i0 + 14, i1).split("\\'").join("'") : "Vat de nieuwe berichten samen in helder Nederlands, maximaal 180 woorden.";
+  const rulesFor = (id, txt) => { const S0 = settingOf(id), R0 = Rulesets.get(S0.ruleset); return txt.replace("D&D-campagne", R0.id === "dnd2024" ? "D&D-campagne" : R0.name + "-campagne").replace("Midden-aarde", S0.prompt.world); };
   const min = flags.force ? 4 : 10, max = 15; /* per 10 tot 15 rondes; nooit losse kleine stukjes */ let n = 0;
   for (const [id, v] of Object.entries(idx)) {
     if (cid && cid !== id) continue;
@@ -344,7 +364,7 @@ function cmdSummaryTodo(cid, flags) {
     const upTo = msgs.reduce((a, x) => Math.max(a, x.round || 0), 0);
     if (upTo - covered < min || msgs.length < 4) { console.log("- " + id + " | " + v.title + ": nog niets te doen (gedekt t/m ronde " + covered + ", laatste ronde " + upTo + ")"); continue; }
     n++;
-    console.log(["", "===== " + id + " | " + v.title + " | samenvatting nodig voor ronde " + (covered + 1) + " t/m " + upTo + " =====", "# SCHRIJFREGELS", rules, "", "# EERDERE SAMENVATTING", sortedVals(ss).map(s => s.text).join("\n\n") || "(geen)", "", "# NIEUWE BERICHTEN", msgs.map(x => (x.type === "narration" ? "DM" : x.author) + ": " + x.text).join("\n\n"), "", "# OPSLAAN", "Schrijf de samenvatting (zonder kopjes) naar een tijdelijk bestand en draai: node dnd/tools/claude-dm.js summary " + id + " " + upTo + " <bestand>"].join("\n"));
+    console.log(["", "===== " + id + " | " + v.title + " | samenvatting nodig voor ronde " + (covered + 1) + " t/m " + upTo + " =====", "# SCHRIJFREGELS", rulesFor(id, rules), "", "# EERDERE SAMENVATTING", sortedVals(ss).map(s => s.text).join("\n\n") || "(geen)", "", "# NIEUWE BERICHTEN", msgs.map(x => (x.type === "narration" ? "DM" : x.author) + ": " + x.text).join("\n\n"), "", "# OPSLAAN", "Schrijf de samenvatting (zonder kopjes) naar een tijdelijk bestand en draai: node dnd/tools/claude-dm.js summary " + id + " " + upTo + " <bestand>"].join("\n"));
   }
   if (!n) console.log("Geen samenvattingen nodig (gebruik --force om vanaf 4 berichten toch samen te vatten).");
 }
@@ -414,6 +434,7 @@ try {
   const cmd = pos[0];
   if (cmd === "status") cmdStatus();
   else if (cmd === "context") cmdContext(pos[1], flags);
+  else if (cmd === "prompt") cmdPrompt(pos[1]);
   else if (cmd === "apply") cmdApply(pos[1], pos[2], flags);
   else if (cmd === "summary") cmdSummary(pos[1], pos[2], pos[3]);
   else if (cmd === "summary-todo") cmdSummaryTodo(pos[1], flags);
