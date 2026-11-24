@@ -886,5 +886,20 @@
     return { set: set, prev: prev };
   }
 
-  return { NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, configure: configure, validateDelta: validateDelta, echoCheck: echoCheck, fixAwaiting: fixAwaiting, checkSpeakers: checkSpeakers, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
+  /* Kennisregels (Dagboek, Wat je weet): elke regel hoort met "Onderwerp » " te beginnen (onderwerp max. 48 tekens). Meldt regels zonder onderwerp; wijzigt niets. */
+  function knowledgeCheck(state) {
+    const pcs = (state && state.pcs) || {}, out = [];
+    Object.keys(pcs).forEach(n => {
+      const k = pcs[n] && pcs[n].knowledge;
+      (k && typeof k === "object" ? Object.values(k) : []).forEach(s => { const t = String(s), p = t.indexOf(" » "); if (!(p > 0 && p <= 48 && t.slice(0, p).trim() && t.slice(p + 3).trim())) out.push({ pc: n, text: t }); });
+    });
+    return out;
+  }
+  function knowledgeNote(list) {
+    if (!list || !list.length) return null;
+    return list.length + " kennisregel(s) zonder onderwerp (die staan nu onder \"Overig\"). Stuur in de volgende statePatch de volledige knowledge-lijst van dat personage mee en begin elke regel met \"Onderwerp » \" (bestaand onderwerp hergebruiken): " +
+      list.slice(-8).map(x => x.pc + ": \"" + x.text.slice(0, 80) + "\"").join("; ") + (list.length > 8 ? "; en " + (list.length - 8) + " eerdere" : "") + ". De spelers zien deze notitie niet.";
+  }
+
+  return { knowledgeCheck: knowledgeCheck, knowledgeNote: knowledgeNote, NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, configure: configure, validateDelta: validateDelta, echoCheck: echoCheck, fixAwaiting: fixAwaiting, checkSpeakers: checkSpeakers, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
 });

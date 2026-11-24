@@ -315,6 +315,8 @@ function cmdApply(cid, file, flags) {
   }
   const newState = deepMerge(state, out.statePatch);
   const newNotes = { ...notes }; for (const [k, v] of Object.entries(out.dmNotes)) { if (v === null) delete newNotes[k]; else newNotes[k] = v; }
+  const kn = World.knowledgeNote(World.knowledgeCheck(newState));
+  if (kn) { newNotes.kenniscontrole = kn; console.log("let op:", kn); } else delete newNotes.kenniscontrole;
   up[cp(cid, "dmnotes")] = Object.keys(newNotes).length ? newNotes : null;
   const worldPrev = []; let mapPrev = [];
   if (MAPL) try {
@@ -413,8 +415,11 @@ function cmdStatePatch(cid, file) {
   const patch = JSON.parse(fs.readFileSync(file, "utf8"));
   if (!patch || typeof patch !== "object" || Array.isArray(patch)) throw new Error("Patch moet een JSON-object zijn.");
   const stateStr = get("/dnd/" + cp(cid, "state")) || "{}";
-  const merged = JSON.stringify(deepMerge(JSON.parse(typeof stateStr === "string" ? stateStr : JSON.stringify(stateStr)), patch));
-  const up = { [cp(cid, "state")]: merged };
+  const mergedState = deepMerge(JSON.parse(typeof stateStr === "string" ? stateStr : JSON.stringify(stateStr)), patch);
+  const merged = JSON.stringify(mergedState);
+  const kn = World.knowledgeNote(World.knowledgeCheck(mergedState));
+  const up = { [cp(cid, "state")]: merged, [cp(cid, "dmnotes/kenniscontrole")]: kn };
+  if (kn) console.log("let op:", kn);
   const lastS = get("/dnd/" + cp(cid, "stands"), "--order-by-key --limit-to-last 1");
   const lastKey = lastS ? Object.keys(lastS)[0] : null;
   if (lastKey) up[cp(cid, "stands/" + lastKey + "/json")] = merged;

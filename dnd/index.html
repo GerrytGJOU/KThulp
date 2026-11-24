@@ -212,7 +212,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
-<script src="world.js?v=14"></script>
+<script src="world.js?v=15"></script>
 <script src="items.js?v=3"></script>
 <script src="map-data.js?v=1"></script>
 <script src="settings-canon.js?v=1"></script>
@@ -1157,6 +1157,7 @@ ${mapOn()?MapL().ids.join(', '):''}
     }
     const newNotes={...notes}; for(const [k,v] of Object.entries(out.dmNotes)){ if(v===null) delete newNotes[k]; else newNotes[k]=v; }
     if(worldRejected) newNotes.wereldcontrole='De vorige beurt is deels geweigerd door de wereldcontrole: '+worldRejected.join('; ')+' Pas je voorstel aan (de spelers zien dit niet).'; else delete newNotes.wereldcontrole;
+    if(window.DNDWorld){ const kn=DNDWorld.knowledgeNote(DNDWorld.knowledgeCheck(newState)); if(kn){ newNotes.kenniscontrole=kn; console.warn('kenniscontrole:',kn); } else delete newNotes.kenniscontrole; }
     up[cp('dmnotes',C)]=Object.keys(newNotes).length?newNotes:null;
     const worldPrev=[]; let mapPrev=[]; const mapUp={};
     if(world&&window.DNDWorld&&(out._wp||(out.worldDelta&&out.worldDelta.region))){
