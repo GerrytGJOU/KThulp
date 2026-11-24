@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#14110f">
-<title>Midden-aarde</title>
+<title>Verhalenvuur TTRPG</title>
 <style>
 :root{--bg:#14110f;--panel:#201b17;--panel2:#2a231d;--gold:#c8a24a;--text:#ece3d0;--mute:#9a8f7a;--red:#a8432f;--ok:#6a9a5a}
 *{box-sizing:border-box}
@@ -31,6 +31,8 @@ body>*{position:relative;z-index:1}
 .portal-back{cursor:pointer;position:fixed!important;top:8px;left:8px;z-index:9999;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--gold);border-radius:50%;color:var(--gold)}
 header{padding:10px 12px 8px 52px;border-bottom:1px solid rgba(200,162,74,.45);background:linear-gradient(180deg,rgba(11,18,32,.85),rgba(11,18,32,.4));display:flex;justify-content:space-between;align-items:center;gap:8px}
 header h1{font-size:20px;margin:0;letter-spacing:.14em;text-transform:uppercase;font-weight:normal;background:linear-gradient(180deg,#f3df9c,#b8892f);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 2px #000)}
+header h1 small{font-size:.6em;letter-spacing:.1em}
+@media (max-width:430px){header h1{font-size:17px;letter-spacing:.08em}}
 header small{color:var(--mute);white-space:nowrap}
 #menubtn{background:none;border:1px solid var(--gold);color:var(--gold);border-radius:6px;padding:4px 10px;font:inherit;font-size:14px;cursor:pointer;display:none}
 main{flex:1;min-height:0;display:flex;flex-direction:column}
@@ -206,9 +208,9 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 </head>
 <body>
 <button class="portal-back" id="topback" aria-label="Terug" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-<header><h1>⚔ Midden-aarde</h1><span><small id="who"></small></span></header>
+<header><h1>⚔ Verhalenvuur <small>TTRPG</small></h1><span><small id="who"></small></span></header>
 <main id="main"><div class="center" id="boot">Laden…</div></main>
-<footer>Midden-aarde D&amp;D · &copy; Gerben de Jong · 2026</footer>
+<footer>Verhalenvuur TTRPG · &copy; Gerben de Jong · 2026</footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
@@ -283,7 +285,10 @@ function rebindTables(){
   });
 }
 function ctxChanged(){applyUi(); rebindTables(); if(window.DNDWorld&&DNDWorld.configure) DNDWorld.configure(curSetting().world)}
-function applyUi(){const n=curSetting().ui.name; titleBase=n; if(!pingTimer) document.title=n; const mb=document.querySelector('nav button[data-t="map"]'); if(mb) mb.style.display=mapOn()?'':'none'; const h=document.querySelector("header h1"); if(h) h.textContent="⚔ "+n; const f=document.querySelector("footer"); if(f) f.innerHTML=esc(n)+" D&amp;D · &copy; Gerben de Jong · 2026"}
+const APPNAME='Verhalenvuur TTRPG';
+/* in een verhaal tonen titel en kop de setting, daarbuiten de naam van de app; de footer toont altijd de app */
+function uiName(){return cid?curSetting().ui.name:APPNAME}
+function applyUi(){const n=uiName(); titleBase=n; if(!pingTimer) document.title=n; const mb=document.querySelector('nav button[data-t="map"]'); if(mb) mb.style.display=mapOn()?'':'none'; const h=document.querySelector("header h1"); if(h) h.innerHTML=cid?"⚔ "+esc(n):"⚔ Verhalenvuur <small>TTRPG</small>"; const f=document.querySelector("footer"); if(f) f.innerHTML=APPNAME+" · &copy; Gerben de Jong · 2026"}
 function mapOn(){return !!MapL()}
 let campSet=null; /* snapshot van de setting van de open campagne (campaigns/{cid}/setting), bij het aanmaken bewaard zodat latere aanpassingen haar niet raken */
 function curSetting(){ if(cid&&campSet) return DNDSettings.resolve(campSet); return DNDSettings.get((index&&cid&&index[cid]&&index[cid].settingId)||DNDSettings.DEFAULT_ID)}
@@ -306,8 +311,8 @@ function stopPing(){ if(pingTimer){clearInterval(pingTimer);pingTimer=null} docu
 function ping(t){
   if(!notifyOn()) return; beep(); try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){}
   if(document.hidden){
-    let on=false; stopPing(); pingTimer=setInterval(()=>{on=!on; document.title=on?'🔔 Jouw beurt · '+curSetting().ui.name:titleBase},1000);
-    if('Notification' in window&&Notification.permission==='granted'){try{new Notification(curSetting().ui.name+': jouw beurt',{body:String((t&&t.prompt)||'Je bent aan de beurt'),tag:'dnd-turn'})}catch(e){}}
+    let on=false; stopPing(); pingTimer=setInterval(()=>{on=!on; document.title=on?'🔔 Jouw beurt · '+uiName():titleBase},1000);
+    if('Notification' in window&&Notification.permission==='granted'){try{new Notification(uiName()+': jouw beurt',{body:String((t&&t.prompt)||'Je bent aan de beurt'),tag:'dnd-turn'})}catch(e){}}
   }
 }
 function maybePing(oldT,newT){
@@ -2681,7 +2686,7 @@ function renderSet(){
   $('#sdm').value=cfg.dmMode||'gemini'; $('#ssumby').value=cfg.summaryBy||'app'; $('#stemp').value=cfg.temperature!=null?cfg.temperature:0.9;
   $('#snotify').onchange=e=>{try{localStorage.setItem('dnd_notify',e.target.checked?'1':'0')}catch(x){}};
   $('#snperm').onclick=async()=>{ if(!('Notification' in window)){alert('Dit apparaat of deze browser ondersteunt geen systeemmeldingen (op iPhone alleen vanuit een aan het beginscherm toegevoegde app).');return} try{const r=await Notification.requestPermission(); alert('Systeemmeldingen: '+r)}catch(x){alert('Toestemming vragen mislukt')} renderSet(); };
-  $('#sntest').onclick=()=>{ beep(); try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(x){} if('Notification' in window&&Notification.permission==='granted'){try{new Notification(curSetting().ui.name+': jouw beurt',{body:'Dit is een test.',tag:'dnd-test'})}catch(x){}} };
+  $('#sntest').onclick=()=>{ beep(); try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(x){} if('Notification' in window&&Notification.permission==='granted'){try{new Notification(uiName()+': jouw beurt',{body:'Dit is een test.',tag:'dnd-test'})}catch(x){}} };
   $('#smodel').value=cfg.model||'gemini-2.5-flash'; $('#ssum').value=cfg.summaryModel||'gemini-2.5-flash-lite'; $('#sgbig').value=cfg.bigModel||'';
   $('#samodel').value=cfg.anthropicModel||'claude-haiku-5-5'; $('#sabig').value=cfg.anthropicBigModel||'claude-sonnet-5-5';
   $('#ssave').onclick=async()=>{
