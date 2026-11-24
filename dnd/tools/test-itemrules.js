@@ -52,4 +52,9 @@ t("hostile tekst wordt ge-escaped", () => {
   const m = mk([{ name: "Boom<img>", rules: "<script>x</script>", magic: true }]); m.ITEMRULES.open = "boom_img"; const h = m.invHtml(c);
   ok(!/<script>/.test(h) && /&lt;script&gt;/.test(h));
 });
+t("lange toelichting staat niet in het vak, wel in de pop-up; korte blijft zichtbaar", () => {
+  const m = mk(["Aldrics ring (erfstuk, geen magie; anker tegen de woede)", "Longsword (oud)"]); let h = m.invHtml(c);
+  ok(/data-item="aldrics_ring"/.test(h) && !/anker tegen de woede/.test(h) && h.includes("<em>(oud)</em>"));
+  m.ITEMRULES.open = "aldrics_ring"; ok(/anker tegen de woede/.test(m.invHtml(c)));
+});
 console.log(pass + " geslaagd, " + fail + " mislukt"); process.exit(fail ? 1 : 0);
