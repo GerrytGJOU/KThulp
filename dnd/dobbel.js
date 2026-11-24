@@ -82,5 +82,42 @@
     if (ids.some(function (w) { return names.indexOf(w) < 0 && ["floor", "ceil", "min", "max"].indexOf(w) < 0; })) return null;
     try { return Function.apply(null, names.concat(["floor", "ceil", "min", "max", "return (" + String(formula).replace(/×/g, "*") + ");"])).apply(null, names.map(n => vars[n]).concat([Math.floor, Math.ceil, Math.min, Math.max])); } catch (e) { return null; }
   }
-  return { roll, d100, rnd, cocTens, judge, judgeCoc, judgeDg, dgOpposed, rollLine, calc, LEVELS };
+  /* ---------- Avatar Legends: 2d6 + stat; 10+ strong hit, 7-9 weak hit, 6- miss ---------- */
+  function judge2d6(d1, d2, bonus) {
+    const total = d1 + d2 + bonus, label = total >= 10 ? "strong hit" : total >= 7 ? "weak hit" : "miss";
+    return { total, label, level: total >= 10 ? 2 : total >= 7 ? 1 : 0, success: total >= 7 };
+  }
+  function line2d6(label, d1, d2, bonus, j) { return label + ": 2d6(" + d1 + "," + d2 + ")" + (bonus < 0 ? "-" : "+") + Math.abs(bonus) + " = " + j.total + ", " + j.label; }
+
+  /* ---------- Star Wars (FFG/Edge): dobbelpool met symbolen ----------
+     s success, f failure, a advantage, t threat, r triumph (telt ook als success), d despair (telt ook als failure). */
+  const SW_FACES = {
+    G: ["", "s", "s", "ss", "a", "a", "sa", "aa"],                                   /* Ability d8, groen */
+    Y: ["", "s", "s", "ss", "ss", "a", "sa", "sa", "sa", "aa", "aa", "r"],           /* Proficiency d12, geel */
+    P: ["", "f", "ff", "t", "t", "t", "ft", "tt"],                                   /* Difficulty d8, paars */
+    R: ["", "f", "f", "ff", "ff", "t", "t", "ft", "ft", "tt", "tt", "d"],            /* Challenge d12, rood */
+    B: ["", "", "s", "sa", "aa", "a"],                                               /* Boost d6, blauw */
+    K: ["", "", "f", "f", "t", "t"]                                                  /* Setback d6, zwart */
+  };
+  const SW_NAMES = { G: "Ability (d8)", Y: "Proficiency (d12)", P: "Difficulty (d8)", R: "Challenge (d12)", B: "Boost (d6)", K: "Setback (d6)" };
+  /* pool = {Y:1,G:1,B:0,P:2,R:0,K:0}: digitaal gooien → telling van de symbolen (voor het annuleren) */
+  function swRoll(pool, rng) {
+    const R = rng || rnd, t = { s: 0, f: 0, a: 0, t: 0, r: 0, d: 0 };
+    Object.keys(SW_FACES).forEach(k => { for (let i = 0; i < (pool[k] || 0); i++) { const face = SW_FACES[k][R(SW_FACES[k].length) - 1]; for (const ch of face) t[ch]++; } });
+    return { s: t.s, f: t.f, a: t.a, t: t.t, r: t.r, d: t.d };
+  }
+  /* t = symbolen (r telt ook als success, d ook als failure) → netto uitkomst */
+  function swNet(t) {
+    const S = (t.s || 0) + (t.r || 0), F = (t.f || 0) + (t.d || 0), A = t.a || 0, T = t.t || 0, ns = S - F, na = A - T;
+    return { success: ns >= 1, ns, na, triumph: t.r || 0, despair: t.d || 0 };
+  }
+  function swText(n) {
+    const p = [];
+    p.push(n.ns >= 0 ? n.ns + " Success" : -n.ns + " Failure");
+    if (n.na !== 0) p.push(n.na > 0 ? n.na + " Advantage" : -n.na + " Threat");
+    if (n.triumph) p.push(n.triumph + " Triumph"); if (n.despair) p.push(n.despair + " Despair");
+    return p.join(", ");
+  }
+  function swPoolText(pool) { return ["Y", "G", "B", "P", "R", "K"].filter(k => pool[k]).map(k => pool[k] + k).join(" ") || "geen dobbelstenen"; }
+  return { roll, d100, rnd, cocTens, judge, judgeCoc, judgeDg, dgOpposed, rollLine, calc, LEVELS, judge2d6, line2d6, SW_FACES, SW_NAMES, swRoll, swNet, swText, swPoolText };
 });
