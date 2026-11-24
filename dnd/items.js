@@ -12,6 +12,11 @@
   /* [id, categorie, trefwoorden (regex-bron), bestand, uniek?] */
   var GROUPS = [
     /* --- unieke voorwerpen met een eigen naam --- */
+    { id: "honey-cakes",   cat: "food",     re: "honingkoek|honey.?cake", file: "honey-cakes.webp", unique: true },
+    { id: "honey-crock",   cat: "food",     re: "\\bhoning\\b|honingkruik|honingpot|honey (jar|pot|crock)|(jar|pot|crock) of honey", file: "honey-crock.webp", unique: true },
+    { id: "raven-feather", cat: "tool",     re: "raafveer|ravenveer|raven.?veer|raven.?feather", file: "raven-feather.webp", unique: true },
+    { id: "athelas-vial",  cat: "drink",    re: "athelas.?aftreksel|flesje athelas|athelas (infusion|vial|draught)", file: "athelas-vial.webp", unique: true },
+    { id: "herb-satchel",  cat: "container",re: "kruidentas|kruidenbuidel|kruidenzak|herb (satchel|pouch|bag)", file: "herb-satchel.webp", unique: true },
     { id: "whetstone",     cat: "tool",     re: "slijpsteen|whetstone|sharpening stone", file: "whetstone.webp", unique: true },
     { id: "arrow-cleft",   cat: "weapon",   re: "gekliefde pijl|cloven arrow|cleft arrow|split arrow", file: "arrow-cleft.webp", unique: true },
     { id: "dagger-adarion", cat: "weapon",  re: "adarion", file: "dagger-adarion.webp", unique: true },
