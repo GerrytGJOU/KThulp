@@ -193,6 +193,108 @@
     }
   });
 
+  /* ===== The Witcher ===== (kaart "The Continent" van Nolan Kotulan) */
+  attach("witcher", {
+    enabled: true, start: "witcher",
+    maps: { witcher: { name: "Het Continent", file: "assets/maps/witcher.webp", w: 1800, h: 2560 } },
+    places: [
+      P("vizima", "Vizima", "witcher", 1005, 700, ["vizima", "foltest"], { region: "REG-TEMERIA" }),
+      P("novigrad", "Novigrad", "witcher", 733, 635, ["novigrad", "oxenfurt", "eeuwig vuur"], { region: "REG-NOVIGRAD" }),
+      P("tretogor", "Tretogor", "witcher", 951, 506, ["tretogor", "redania"], { region: "REG-REDANIA" }),
+      P("ard_carraigh", "Ard Carraigh", "witcher", 1469, 239, ["ard carraigh", "kaedwen"], { region: "REG-KAEDWEN" }),
+      P("kaer_morhen", "Kaer Morhen", "witcher", 1631, 166, ["kaer morhen", "vesemir"]),
+      P("vengerberg", "Vengerberg", "witcher", 1475, 749, ["vengerberg", "aedirn"], { region: "REG-AEDIRN" }),
+      P("dol_blathanna", "Dol Blathanna", "witcher", 1573, 586, ["dol blathanna", "elfenvallei"], { region: "REG-DOLBLATHANNA" }),
+      P("rivia", "Rivia (Lyria en Rivia)", "witcher", 1395, 887, ["rivia", "lyria", "meve"], { region: "REG-LYRIA" }),
+      P("cintra", "Cintra", "witcher", 806, 1143, ["cintra"], { region: "REG-CINTRA" }),
+      P("sodden", "Sodden", "witcher", 1137, 1066, ["sodden"], { region: "REG-SODDEN" }),
+      P("brugge", "Brugge", "witcher", 975, 1030, ["brugge"], { region: "REG-BRUGGE" }),
+      P("kerack", "Kerack", "witcher", 719, 911, ["kerack"], { region: "REG-KERACK" }),
+      P("kaer_trolde", "Kaer Trolde (Skellige)", "witcher", 346, 1011, ["kaer trolde", "skellige"], { region: "REG-SKELLIGE" }),
+      P("kovir", "Kovir en Poviss", "witcher", 541, 138, ["kovir", "poviss"], { region: "REG-KOVIR" }),
+      P("nilfgaard", "Nilfgaard", "witcher", 1068, 2392, ["nilfgaard", "emhyr"], { region: "REG-NILFGAARD" }),
+      P("nazair", "Nazair", "witcher", 896, 1434, ["nazair"], { region: "REG-NAZAIR" }),
+      P("mahakam", "Mahakam", "witcher", 1237, 647, ["mahakam", "brouver"], { region: "REG-MAHAKAM" }),
+      P("brokilon", "Brokilon", "witcher", 813, 947, ["brokilon", "eithné", "dryaden"], { region: "REG-BROKILON" }),
+      P("thanedd", "Thanedd (Gors Velen)", "witcher", 753, 765, ["thanedd", "gors velen", "aretuza"], { region: "REG-THANEDD" }),
+      P("angren", "Angren", "witcher", 1239, 924, ["angren"], { region: "REG-ANGREN" }),
+      P("toussaint", "Toussaint", "witcher", 1457, 1414, ["toussaint"], { region: "REG-TOUSSAINT" })
+    ],
+    regions: {
+      "REG-TEMERIA": R("Temeria", "witcher", 1005, 700, "vizima"), "REG-REDANIA": R("Redania", "witcher", 951, 506, "tretogor"), "REG-KAEDWEN": R("Kaedwen", "witcher", 1469, 239, "ard_carraigh"),
+      "REG-AEDIRN": R("Aedirn", "witcher", 1475, 749, "vengerberg"), "REG-LYRIA": R("Lyria en Rivia", "witcher", 1395, 887, "rivia"), "REG-CINTRA": R("Cintra", "witcher", 806, 1143, "cintra"),
+      "REG-SODDEN": R("Sodden", "witcher", 1137, 1066, "sodden"), "REG-BRUGGE": R("Brugge", "witcher", 975, 1030, "brugge"), "REG-KERACK": R("Kerack", "witcher", 719, 911, "kerack"),
+      "REG-SKELLIGE": R("Skellige", "witcher", 346, 1011, "kaer_trolde"), "REG-KOVIR": R("Kovir en Poviss", "witcher", 541, 138, "kovir"), "REG-NILFGAARD": R("Nilfgaard", "witcher", 1068, 2392, "nilfgaard"),
+      "REG-NAZAIR": R("Nazair", "witcher", 896, 1434, "nazair"), "REG-MAHAKAM": R("Mahakam", "witcher", 1237, 647, "mahakam"), "REG-BROKILON": R("Brokilon", "witcher", 813, 947, "brokilon"),
+      "REG-THANEDD": R("Thanedd", "witcher", 753, 765, "thanedd"), "REG-NOVIGRAD": R("Novigrad", "witcher", 733, 635, "novigrad"), "REG-DOLBLATHANNA": R("Dol Blathanna", "witcher", 1573, 586, "dol_blathanna"),
+      "REG-ANGREN": R("Angren", "witcher", 1239, 924, "angren"), "REG-TOUSSAINT": R("Toussaint", "witcher", 1457, 1414, "toussaint")
+    }
+  });
+
+  /* ===== Tamriel ===== (kaart "Tamriel, circa 4E 200") */
+  attach("tamriel", {
+    enabled: true, start: "tamriel",
+    maps: { tamriel: { name: "Tamriel", file: "assets/maps/tamriel.webp", w: 2300, h: 1900 } },
+    places: [
+      P("whiterun", "Whiterun", "tamriel", 1116, 504, ["whiterun", "riverwood", "jorrvaskr", "balgruuf"], { region: "REG-WHITERUN" }),
+      P("windhelm", "Windhelm", "tamriel", 1254, 334, ["windhelm", "ulfric", "stormcloak"], { region: "REG-EASTMARCH" }),
+      P("solitude", "Solitude", "tamriel", 951, 306, ["solitude", "elisif"], { region: "REG-HAAFINGAR" }),
+      P("markarth", "Markarth", "tamriel", 754, 472, ["markarth", "forsworn"], { region: "REG-REACH" }),
+      P("riften", "Riften", "tamriel", 1484, 693, ["riften", "thieves guild", "maven"], { region: "REG-RIFT" }),
+      P("falkreath", "Falkreath", "tamriel", 1076, 651, ["falkreath"], { region: "REG-FALKREATH" }),
+      P("morthal", "Morthal", "tamriel", 1041, 403, ["morthal", "hjaalmarch"], { region: "REG-HJAALMARCH" }),
+      P("dawnstar", "Dawnstar", "tamriel", 1110, 313, ["dawnstar", "the pale"], { region: "REG-PALE" }),
+      P("winterhold", "Winterhold (het College)", "tamriel", 1311, 270, ["winterhold", "college of winterhold", "savos aren"], { region: "REG-WINTERHOLD" }),
+      P("imperial_city", "Imperial City", "tamriel", 1271, 981, ["imperial city", "cyrodiil", "heartland"], { region: "REG-CYRODIIL" }),
+      P("wayrest", "Wayrest (High Rock)", "tamriel", 506, 592, ["wayrest", "high rock"], { region: "REG-HIGHROCK" }),
+      P("sentinel", "Sentinel (Hammerfell)", "tamriel", 339, 753, ["sentinel", "hammerfell", "alik'r", "alik’r"], { region: "REG-HAMMERFELL" }),
+      P("orsinium", "Orsinium", "tamriel", 945, 624, ["orsinium"], { region: "REG-ORSINIUM" }),
+      P("ebonheart", "Ebonheart (Morrowind)", "tamriel", 1714, 851, ["ebonheart", "morrowind", "dunmer", "great houses"], { region: "REG-MORROWIND" }),
+      P("raven_rock", "Raven Rock (Solstheim)", "tamriel", 1530, 273, ["raven rock", "solstheim", "skaal"], { region: "REG-SOLSTHEIM" }),
+      P("helstrom", "Black Marsh (Helstrom)", "tamriel", 1777, 1432, ["black marsh", "helstrom", "argonian"], { region: "REG-BLACKMARSH" }),
+      P("elsweyr", "Elsweyr", "tamriel", 1271, 1389, ["elsweyr", "khajiit", "anequina", "pellitine"], { region: "REG-ELSWEYR" }),
+      P("valenwood", "Valenwood", "tamriel", 851, 1484, ["valenwood", "bosmer", "green pact"], { region: "REG-VALENWOOD" }),
+      P("alinor", "Alinor (Summerset)", "tamriel", 161, 1645, ["alinor", "summerset", "altmer", "thalmor"], { region: "REG-SUMMERSET" })
+    ],
+    regions: {
+      "REG-WHITERUN": R("Whiterun Hold", "tamriel", 1116, 504, "whiterun"), "REG-EASTMARCH": R("Eastmarch", "tamriel", 1254, 334, "windhelm"), "REG-HAAFINGAR": R("Haafingar", "tamriel", 951, 306, "solitude"),
+      "REG-REACH": R("The Reach", "tamriel", 754, 472, "markarth"), "REG-RIFT": R("The Rift", "tamriel", 1484, 693, "riften"), "REG-FALKREATH": R("Falkreath", "tamriel", 1076, 651, "falkreath"),
+      "REG-HJAALMARCH": R("Hjaalmarch", "tamriel", 1041, 403, "morthal"), "REG-PALE": R("The Pale", "tamriel", 1110, 313, "dawnstar"), "REG-WINTERHOLD": R("Winterhold", "tamriel", 1311, 270, "winterhold"),
+      "REG-CYRODIIL": R("Cyrodiil", "tamriel", 1271, 981, "imperial_city"), "REG-HIGHROCK": R("High Rock", "tamriel", 506, 592, "wayrest"), "REG-HAMMERFELL": R("Hammerfell", "tamriel", 745, 841, "sentinel"),
+      "REG-MORROWIND": R("Morrowind", "tamriel", 1915, 934, "ebonheart"), "REG-SOLSTHEIM": R("Solstheim", "tamriel", 1530, 273, "raven_rock"), "REG-BLACKMARSH": R("Black Marsh", "tamriel", 1811, 1357, "helstrom"),
+      "REG-ELSWEYR": R("Elsweyr", "tamriel", 1271, 1389, "elsweyr"), "REG-VALENWOOD": R("Valenwood", "tamriel", 851, 1484, "valenwood"), "REG-SUMMERSET": R("Summerset", "tamriel", 282, 1639, "alinor"),
+      "REG-ORSINIUM": R("Orsinium", "tamriel", 945, 624, "orsinium")
+    }
+  });
+
+  /* ===== Discworld ===== (kaart "The Discworld", Stephen Briggs/Terry Pratchett; niet alle regio's staan er benoemd op) */
+  attach("discworld", {
+    enabled: true, start: "discworld",
+    maps: { discworld: { name: "De Schijfwereld", file: "assets/maps/discworld.webp", w: 1397, h: 1410 } },
+    places: [
+      P("ankh_morpork", "Ankh-Morpork", "discworld", 722, 967, ["ankh-morpork", "ankh morpork", "unseen university", "city watch", "patrician", "shades"], { region: "REG-ANKHMORPORK" }),
+      P("sto_plains", "Sto Plains (Sto Lat)", "discworld", 706, 938, ["sto plains", "sto lat", "sto helit"], { region: "REG-STOPLAINS" }),
+      P("lancre", "Lancre", "discworld", 730, 882, ["lancre", "heks", "witches"], { region: "REG-LANCRE" }),
+      P("ramtops", "De Ramtops", "discworld", 715, 808, ["ramtops"], { region: "REG-RAMTOPS" }),
+      P("uberwald", "Überwald", "discworld", 862, 852, ["überwald", "uberwald", "bonk"], { region: "REG-UBERWALD" }),
+      P("genua", "Genua", "discworld", 1062, 742, ["genua"], { region: "REG-GENUA" }),
+      P("al_khali", "Al Khali (Klatch)", "discworld", 672, 1062, ["al khali", "klatch"], { region: "REG-KLATCH" }),
+      P("hersheba", "Hersheba", "discworld", 537, 1056, ["hersheba"], { region: "REG-HERSHEBA" }),
+      P("howondaland", "Howondaland", "discworld", 528, 1203, ["howondaland"], { region: "REG-HOWND" }),
+      P("omnia", "Omnia (Kom)", "discworld", 750, 1072, ["omnia", "kom", "omnian"], { region: "REG-OMNIA" }),
+      P("agatean", "Het Agatean Empire (Hunghung)", "discworld", 350, 520, ["agatean", "hunghung", "counterweight"], { region: "REG-AGATEAN" }),
+      P("fourecks", "XXXX (Bugarup)", "discworld", 950, 255, ["xxxx", "bugarup", "fourecks"], { region: "REG-FOURECKS" }),
+      P("cori_celesti", "Cori Celesti", "discworld", 690, 745, ["cori celesti", "hub"], { region: "REG-HUB" })
+    ],
+    regions: {
+      "REG-ANKHMORPORK": R("Ankh-Morpork", "discworld", 722, 967, "ankh_morpork"), "REG-STO": R("Sto Lat", "discworld", 706, 938, "sto_plains"), "REG-STOPLAINS": R("Sto Plains", "discworld", 706, 938, "sto_plains"),
+      "REG-LANCRE": R("Lancre", "discworld", 730, 882, "lancre"), "REG-RAMTOPS": R("Ramtops", "discworld", 715, 808, "ramtops"), "REG-UBERWALD": R("Überwald", "discworld", 862, 852, "uberwald"),
+      "REG-GENUA": R("Genua", "discworld", 1062, 742, "genua"), "REG-KLATCH": R("Al Khali", "discworld", 672, 1062, "al_khali"), "REG-HERSHEBA": R("Hersheba", "discworld", 537, 1056, "hersheba"),
+      "REG-HOWND": R("Howondaland", "discworld", 528, 1203, "howondaland"), "REG-OMNIA": R("Kom", "discworld", 750, 1072, "omnia"), "REG-AGATEAN": R("Hunghung", "discworld", 350, 520, "agatean"),
+      "REG-FOURECKS": R("Bugarup", "discworld", 950, 255, "fourecks"), "REG-HUB": R("Cori Celesti", "discworld", 690, 745, "cori_celesti")
+    }
+  });
+
   /* ===== Faerûn: de Zwaardkust en het Noorden, met een detailkaart van de omgeving van Neverwinter ===== */
   attach("faerun", {
     enabled: true, start: "zwaardkust",
