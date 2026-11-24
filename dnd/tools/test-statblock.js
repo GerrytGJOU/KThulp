@@ -50,6 +50,6 @@ eq("sw instructies zonder hp", /laat hp weg/.test(SB.instructions("c1", sw)), tr
 eq("sw instructies met cid", /context c1 /.test(SB.instructions("c1", sw)), true);
 
 /* elke niet-D&D-regelset heeft een statblock-definitie */
-["dg", "coc", "cda", "ose", "avatar", "sw"].forEach(id => eq("companion-definitie " + id, !!RS.get(id).companion, true));
+["dg", "coc", "cda", "ose", "avatar", "sw", "ww"].forEach(id => eq("companion-definitie " + id, !!RS.get(id).companion, true));
 console.log(ok + " geslaagd, " + bad + " mislukt");
 process.exitCode = bad ? 1 : 0;

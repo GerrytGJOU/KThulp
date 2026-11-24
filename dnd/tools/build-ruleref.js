@@ -3,7 +3,7 @@
 "use strict";
 const fs = require("fs"), path = require("path");
 const DIR = path.join(__dirname, "dossiers"), OUT = path.join(__dirname, "..", "settings-ruleref.js");
-const MAP = { dg: "delta-green", coc: "call-of-cthulhu", cda: "cthulhu-dark-ages", ose: "old-school-essentials", sw: "star-wars-rpg", avatar: "avatar-legends" };
+const MAP = { dg: "delta-green", coc: "call-of-cthulhu", cda: "cthulhu-dark-ages", ose: "old-school-essentials", sw: "star-wars-rpg", avatar: "avatar-legends", ww: "wands-and-wizards" };
 const out = {};
 Object.keys(MAP).forEach(id => {
   const f = path.join(DIR, MAP[id] + "-regeldossier.md"); if (!fs.existsSync(f)) return;

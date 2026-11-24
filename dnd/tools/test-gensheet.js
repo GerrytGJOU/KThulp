@@ -124,5 +124,29 @@ eq("san-check uit DM-vraag", G.matchCheck(RS.get("dg"), dgc, "SAN check: 0/1d4")
 const cocc = G.blank(RS.get("coc")); cocc._live = { san: 44, luck: { current: 35, max: 99 } };
 eq("coc san als getal", G.rollList(RS.get("coc"), cocc).find(r => r.key === "san").target, 44); eq("coc luck live", G.rollList(RS.get("coc"), cocc).find(r => r.key === "luck").target, 35);
 
+/* Wands & Wizards (5e 2014) */
+const ww = RS.get("ww"), h = G.blank(ww, "Gerben");
+h.name = "Alice Hart"; h.profession = "Intellect"; h.stats = { STR: 8, DEX: 14, CON: 13, INT: 16, WIS: 13, CHA: 10 }; h.nums = { level: 1, ac: 12 }; h.skills = { Investigation: 1, "Magical Theory": 1 };
+const hl = G.rollList(ww, h), hr = k => hl.find(r => r.key === k);
+eq("ww hp level 1 (d8+CON)", G.meterMax(ww, h).hp, 9);
+const hd = G.derived(ww, h), hv = k => hd.find(d => d.k === k).val;
+eq("ww pb", hv("pb"), "+2"); eq("ww spell DC", hv("dc"), 13); eq("ww spell attack", hv("satk"), "+5"); eq("ww slots", hv("slots"), "1:2");
+eq("ww skill proficient", hr("skill:Magical Theory").target, 5); eq("ww skill niet proficient", hr("skill:Stealth").target, 2);
+eq("ww save proficient INT", hr("save:INT").target, 5); eq("ww save niet proficient WIS", hr("save:WIS").target, 1);
+eq("ww init", hr("init").target, 2); eq("ww spellatk in lijst", hr("spellatk").target, 5);
+eq("ww worp", G.evaluate(ww, h, hr("skill:Magical Theory"), { nat: 12 }).line, "Magical Theory: 12 +5 = 17");
+eq("ww disadvantage", G.evaluate(ww, h, hr("skill:Stealth"), { nat: 16, d2: 7, mode: "dis" }).line, "Stealth: disadvantage (16,7) +2 = 9");
+eq("ww advantage", G.evaluate(ww, h, hr("skill:Stealth"), { nat: 3, d2: 18, mode: "adv", mod: 1 }).line, "Stealth: advantage (3,18) +3 = 21");
+eq("ww advantage zonder 2e d20", G.evaluate(ww, h, hr("skill:Stealth"), { nat: 3, mode: "adv" }), null);
+const wL5 = Object.assign({}, h, { nums: { level: 5 }, profession: "Willpower" });
+eq("ww level 5 slots", G.derived(ww, wL5).find(d => d.k === "slots").val, "1:4 2:3 3:2"); eq("ww level 5 SP willpower", G.derived(ww, wL5).find(d => d.k === "sp").val, 5); eq("ww hp willpower L5", G.meterMax(ww, wL5).hp, 10 + 1 + 4 * (6 + 1));
+eq("ww zonder stijl geen spell DC", G.derived(ww, G.blank(ww)).find(d => d.k === "dc").val, "—");
+h.extra = "Parseltongue | 1 | CHA"; eq("ww extra skill", G.rollList(ww, h).find(r => r.key === "extra:0").target, 2);
+eq("ww tekst", /Magical Theory \+5/.test(G.sheetText(ww, h)) && /Spell DC 13/.test(G.sheetText(ww, h)), true);
+eq("ww check uit DM-vraag", G.matchCheck(ww, h, "Magical Theory, om de rune te lezen"), "skill:Magical Theory");
+
+eq("ww volledige ability-naam in vraag", G.matchCheck(ww, h, "Dexterity Saving Throw, de vloek komt op je af"), "save:DEX");
+eq("ww ability check in woorden", G.matchCheck(ww, h, "Intelligence check"), "stat:INT");
+
 console.log(ok + " geslaagd, " + bad + " mislukt");
 process.exitCode = bad ? 1 : 0;

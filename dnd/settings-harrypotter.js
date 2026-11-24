@@ -1,0 +1,78 @@
+/* Setting "Harry Potter — The Wizarding World" (1 september 1991; zeven romans als primaire canon). Aangeleverd als JSON door Gerben, met de regelset "ww"
+   (Wands & Wizards 1.4, 5e 2014; zie settings-rulesets-other.js en tools/dossiers/wands-and-wizards-regeldossier.md).
+   Afwijkingen t.o.v. de JSON: ruleset "ww" toegevoegd; in de blurb is "Gebruik wizarding-d20" vervangen (die tegensprak de spelregels, die Wands & Wizards voorschrijven);
+   de verwijzing in S2 naar "wands-and-wizards.json" is nu naar R1; helperSys en classTolk (D&D-creator) blijven ongebruikt bij deze regelset. */
+(function (root) {
+  "use strict";
+  const D = typeof module === "object" && module.exports ? require("./settings-data.js") : root.DNDSettings;
+  const LEGACY = "Legacy veld; gebruik Casting Styles uit wands-and-wizards.";
+  D.register({
+    "id": "harry-potter", "name": "Harry Potter — The Wizarding World", "version": 2, "ruleset": "ww",
+    "blurb": "Britse tovenaarswereld vanaf 1 september 1991; schoolavonturen, mysteries en verborgen magie. Speelt met Wands & Wizards (5e 2014).",
+    "world": {
+      "travel": {
+        "REG-HOGWARTS|REG-HOGSMEADE": 1, "REG-HOGWARTS|REG-FOREST": 1, "REG-HOGWARTS|REG-LAKE": 1, "REG-HOGSMEADE|REG-KINGS": 1, "REG-KINGS|REG-LONDON": 1, "REG-LONDON|REG-DIAGON": 1, "REG-DIAGON|REG-KNOCKTURN": 1,
+        "REG-LONDON|REG-MINISTRY": 1, "REG-LONDON|REG-MUNGOS": 1, "REG-LONDON|REG-GRIMMAULD": 1, "REG-LONDON|REG-PRIVET": 1, "REG-LONDON|REG-OTTERY": 1, "REG-OTTERY|REG-BURROW": 1, "REG-OTTERY|REG-GODRIC": 1,
+        "REG-LONDON|REG-MALFOY": 1, "REG-LONDON|REG-LITTLEHANGLETON": 1, "REG-MINISTRY|REG-AZKABAN": 2, "REG-LONDON|REG-BEAUX": 2, "REG-LONDON|REG-DURM": 3
+      },
+      "anchors": []
+    },
+    "map": { "enabled": false },
+    "ui": { "name": "Harry Potter — The Wizarding World" },
+    "prompt": {
+      "world": "Wizarding World, 1 september 1991; zeven romans als primaire canon; toekomst veranderbaar.",
+      "naming": "Britse en internationaal passende namen; behoud canonieke spelling.",
+      "noOvershadow": "Canonfiguren handelen zelfstandig maar lossen geen PC-mysteries op.",
+      "bigFigure": "ontmoeting met een bekende tovenaar of magisch wezen",
+      "geoCheck": "Gebruik S1: REG-HOGWARTS, REG-HOGSMEADE, REG-FOREST, REG-LAKE, REG-LONDON, REG-DIAGON, REG-KNOCKTURN, REG-MINISTRY, REG-MUNGOS, REG-KINGS, REG-PRIVET, REG-BURROW, REG-GODRIC, REG-MALFOY, REG-AZKABAN, REG-GRIMMAULD, REG-LITTLEHANGLETON, REG-OTTERY, REG-BEAUX, REG-DURM. Integer dagen zijn grove routekosten; lokale reistijd in minuten/uren apart bijhouden.",
+      "exInGame": "{\"inGame\":{\"date\":\"1 september 1991\",\"timeOfDay\":\"ochtend\",\"location\":\"King’s Cross\"},",
+      "exPlace": "King’s Cross", "exYear": "1991", "exRegA": "REG-HOGWARTS", "exRegB": "REG-HOGSMEADE",
+      "lootTone": "Schoolspullen, boeken, ingrediënten, geld, aanwijzingen en contacten; geen automatische magische loot.",
+      "lootNo": "Geen Horcruxes, Deathly Hallows of unieke wands als willekeurige buit.",
+      "bookFigures": "S3; alleen kennis en status op huidige datum.",
+      "idLegend": "FIG- vaste canonfiguren; REG- regio’s", "noCreateFig": "Maak FIG-figuren niet opnieuw aan.", "canonName": "Log afwijkingen met datum, oorzaak en gevolgen."
+    },
+    "style": {
+      "base": "Traditional hand-drawn painterly British magical fantasy illustration, visible ink lines, atmospheric lighting, 1990s material culture, believable anatomy",
+      "portraitNote": "Square head-and-shoulders portrait, book descriptions rather than film actors, muted background",
+      "locNote": "Wide 3:2 landscape, Gothic school architecture and ordinary 1990s British details, no prominent people unless requested",
+      "avoid": "Photorealism, film actor likeness, modern smartphones, anime, 3D renders, text, logos, watermarks"
+    },
+    "creator": {
+      "magicWorld": "Wands & Wizards 1.4, met 5e 2014 als basis.",
+      "intro": "Kies school/House, Casting Style, School of Magic, ability scores, Wand of Background, feat en spells.",
+      "langsTip": "English standaard; andere talen op basis van achtergrond. Parseltongue is zeldzaam en geen standaardkeuze.",
+      "bgNote": "Muggle-born, Half-blood en Pure-blood zijn sociale achtergronden, geen machtsbonussen.",
+      "spellTip": "Gebruik uitsluitend de Wands & Wizards-catalogus; ontbrekende spell records handmatig controleren.",
+      "magicTip": "Magie vereist kennis, concentratie en doorgaans een wand; geen automatische oplossing.",
+      "commonLang": "English", "helperSys": "Laad wands-and-wizards; negeer legacy species en classTolk als mechanische keuzes.",
+      "species": { "Human": { "label": "Human (witch/wizard)", "speed": 30, "size": "Medium of Small", "traits": [["Magical Training", "Mechanische keuzes komen uitsluitend uit de ruleset."]], "tolk": "Menselijke tovenaar of heks; Squibs en Muggles zijn optionele niet-magische concepten." } },
+      "lineage": {}, "langs": ["English", "French", "German", "Latin", "Gobbledegook", "Mermish"],
+      "inspiration": ["A. Muggle-born eerstejaars die een verborgen kamer onderzoekt.", "B. Hufflepuff met talent voor Herbology.", "C. Slytherin die familiedruk weerstaat.", "D. Ravenclaw met interesse in oude runen.", "E. Gryffindor die een schoolrivaal beschermt.", "F. Volwassen Ministry-onderzoeker met een geheim."],
+      "speciesTip": "Human is wereldlore; House vervangt Race mechanisch.", "aanleiding": "Een gezamenlijke ontdekking, schoolopdracht of onderzoek verbindt alle spelers.",
+      "classTolk": { "Barbarian": LEGACY, "Bard": LEGACY, "Cleric": LEGACY, "Druid": LEGACY, "Fighter": LEGACY, "Monk": LEGACY, "Paladin": LEGACY, "Ranger": LEGACY, "Rogue": LEGACY, "Sorcerer": LEGACY, "Warlock": LEGACY, "Wizard": LEGACY }
+    },
+    "canonParts": {
+      "namingRule": "Britse en internationaal passende namen; behoud canonieke spelling.",
+      "tone": "Britse schoolfantasy, verwondering, humor, groeiend gevaar; geen verplichte herhaling van de boeken.",
+      "settingRules": "Gebruik wands-and-wizards v1.4 (5e 2014), niet D&D 2024. Spelers rollen eigen checks; HM beheert NPC’s en geheimen. Nederlands verhaal, Engelse regels. Geen menu aan einde. Ontbrekende regels niet improviseren zonder akkoord.",
+      "premise": "Start 1 september 1991; leerlingen reizen naar Hogwarts of volwassenen beginnen een gezamenlijk onderzoek. Kies één leeftijdsgroep tenzij expliciet anders afgesproken.",
+      "canonNpcs": "FIG-figuren uit S3 zijn vast; eigen agenda en kennisgrenzen.",
+      "consistent": "[C] boekcanon, [I] interpretatie, [N] nieuwe campagne-inhoud. Log afwijkingen; geen retcon van eerlijke uitkomsten."
+    },
+    "canon": {
+      "s1_wereld": {
+        "title": "Wereld en geografie",
+        "text": "# S1 — Wereld\n\n[C] Britse magische samenleving leeft verborgen naast Muggles. International Statute of Wizarding Secrecy beschermt geheimhouding. Hogwarts Express vertrekt op 1 september; schooljaar loopt tot de zomer. Kerst en Pasen kennen vakanties.\n\n## Regio’s\n- REG-HOGWARTS — **Hogwarts**: Kasteel, vier afdelingen, bibliotheek, ziekenzaal, geheime gangen; toegang tot verboden ruimtes is beperkt.\n- REG-HOGSMEADE — **Hogsmeade**: Tovenaarsdorp met Three Broomsticks, Honeydukes en Hog’s Head; schoolbezoek vereist toestemming vanaf derde jaar.\n- REG-FOREST — **Forbidden Forest**: Centauren, gevaarlijke dieren en onbekende paden; leerlingen mogen niet vrij naar binnen.\n- REG-LAKE — **Great Lake**: Merpeople en grindylows; onderwaterreizen vereisen voorbereiding.\n- REG-LONDON — **Muggle London**: Gewone Britse stad; geheimhouding en openbaar vervoer.\n- REG-DIAGON — **Diagon Alley**: Ollivanders, Gringotts, boekwinkels en schoolbenodigdheden.\n- REG-KNOCKTURN — **Knockturn Alley**: Duistere handel, Borgin and Burkes; niet iedere bezoeker is crimineel.\n- REG-MINISTRY — **Ministry of Magic**: Bestuur, Aurors, rechtspraak en geheime afdelingen.\n- REG-MUNGOS — **St Mungo’s**: Magische geneeskunde; geen gegarandeerde remedie voor elke vloek.\n- REG-KINGS — **King’s Cross**: Platform 9¾ en Hogwarts Express op geplande dagen.\n- REG-PRIVET — **Little Whinging**: Mugglewijk in Surrey; Dursleys wonen hier.\n- REG-BURROW — **The Burrow**: Familiehuis van de Weasleys bij Ottery St Catchpole.\n- REG-GODRIC — **Godric’s Hollow**: Gemengd dorp, Pottergeschiedenis en kerkhof.\n- REG-MALFOY — **Malfoy Manor**: Privélandgoed in Wiltshire; toegang afhankelijk van eigenaar.\n- REG-AZKABAN — **Azkaban**: Gevangenis in de Noordzee, bewaakt door Dementors.\n- REG-GRIMMAULD — **Grimmauld Place**: Familiehuis van de Blacks; in 1991 nog geen hoofdkwartier van de Order.\n- REG-LITTLEHANGLETON — **Little Hangleton**: Riddle House en Gauntgeschiedenis; verborgen verbanden.\n- REG-OTTERY — **Ottery St Catchpole**: Landelijk gebied met verspreide tovenaarsfamilies.\n- REG-BEAUX — **Beauxbatons**: Franse magische school; precieze ligging niet vastleggen.\n- REG-DURM — **Durmstrang**: Geheime Noord-Europese school; exacte locatie onbekend.\n\n## Reizen [I]\nReistabel is een grove dagengraaf; korte trajecten duren minuten of uren. Hogwarts Express is een dagreis. Floo Network vereist aangesloten haarden; Apparition vereist training en is op Hogwarts normaal geblokkeerd. Portkeys zijn gecontroleerd; bezems zijn weersafhankelijk. Geen automatische toegang tot privéplaatsen of gevangenissen.\n\n## Facties\n- **Gryffindor**: Moed en initiatief; geen verplichte persoonlijkheid.\n- **Hufflepuff**: Loyaliteit en inzet; geen mechanisch nadeel.\n- **Ravenclaw**: Nieuwsgierigheid en geleerdheid.\n- **Slytherin**: Ambitie en vindingrijkheid; niet inherent kwaadaardig.\n- **Ministry**: Handhaaft geheimhouding en wetten; interne rivaliteit.\n- **Aurors**: Onderzoeken zware duistere magie; beperkte bevoegdheden.\n- **Death Eaters**: Verspreid na 1981; verborgen loyaliteiten.\n- **Order of the Phoenix**: Voormalig verzetsnetwerk; in 1991 niet actief als in 1995.\n- **Gringotts**: Goblin-bank; eigen belangen en eigendomsopvattingen.\n- **International Confederation of Wizards**: Internationale samenwerking en geheimhouding.\n- **Hogwarts staff**: Onderwijs, veiligheid en uiteenlopende belangen.\n\n## Economie\n1 Galleon = 17 Sickles; 1 Sickle = 29 Knuts. Gringotts beheert kluizen. Geen vaste wisselkoers naar ponden. Schoolpunten zijn geen geld.\n\n## School\nJaar 1–2: Charms, Transfiguration, Potions, Herbology, Defence Against the Dark Arts, History of Magic, Astronomy; Flying in jaar 1. Vanaf jaar 3 keuzevakken zoals Care of Magical Creatures, Divination, Ancient Runes, Arithmancy en Muggle Studies. OWLs in jaar 5, NEWTs in jaar 7. Prefects doorgaans vanaf jaar 5. Quidditch heeft zeven spelers per team; schoolregels en selectie gelden.\n\n## Tijdlijn\n1981: Voldemort verdwijnt na aanval op Potters. 1991: Harry begint Hogwarts; Quirrell doceert DADA. Latere gebeurtenissen zijn mogelijke ontwikkelingen, geen verplicht scenario. Geheimen alleen onthullen via bewijs."
+      },
+      "s2_goden": {
+        "title": "Magie en bovennatuur",
+        "text": "# S2 — Magie en bovennatuur\n\n[C] Magie is doorgaans aangeboren; wands helpen spreuken richten. Kennis, intentie en oefening tellen. Wandloos en non-verbaal casten zijn uitzonderlijke vaardigheden. Magie kan geen gewone doden terugbrengen. Voedsel kan niet uit niets worden geschapen volgens de bekende uitzondering op Gamp’s Law.\n\n## Disciplines\nCharms verandert eigenschappen of gedrag; Transfiguration verandert vorm; Potions vereist ingrediënten en tijd; Herbology levert plantenkennis; DADA bestrijdt gevaren; Dark Arts omvat schadelijke magie. Divination is onbetrouwbaar buiten echte profetie. Occlumency en Legilimency zijn specialistisch. Animagus vereist langdurige training en registratie; lycanthropy is een aandoening, geen standaard talent.\n\n## Wezens\nHouse-elves hebben eigen magie en worden vaak onderdrukt; goblins hebben eigen cultuur en bankwezen; centauren zijn onafhankelijk; merpeople leven in water; Dementors veroorzaken wanhoop; boggarts nemen angstvorm aan; dragons zijn gevaarlijk; phoenixes zijn zeldzaam. Geen soort is automatisch een vijand.\n\n## Grenzen\nUnforgivable Curses zijn ernstig verboden tegen mensen; geen standaard spelersspreuken. Horcruxes en Deathly Hallows zijn unieke plotzaken. Patronus vereist training en emotionele concentratie. Magische genezing kent grenzen.\n\n[I] Mechanica: Wands & Wizards v1.4; zie R1.\n\n[ N ] Schoolrooster, examens en House Points zijn optionele appregels; geen automatische mechanische bonus voor bloedstatus."
+      },
+      "s3_volken_en_helden": {
+        "title": "Personages en canonfiguren",
+        "text": "# S3 — Personages en vaste figuren\n\n## Spelers\nLeerlingen of volwassen tovenaars; Casting Style vervangt Class; House geeft mechanische traits, maar bepaalt geen alignment. Bloedstatus geeft geen mechanische superioriteit. Kies een persoonlijke ambitie, angst, relatie en reden om samen te werken.\n\n## Vaste figuren [C]\n- FIG-DUMBLEDORE — **Albus Dumbledore**: Headmaster; beschermt leerlingen, houdt gevaarlijke kennis achter.\n- FIG-MCGONAGALL — **Minerva McGonagall**: Transfiguration, Gryffindor; streng en rechtvaardig.\n- FIG-SNAPE — **Severus Snape**: Potions, Slytherin; vijandig gedrag, geheime loyaliteiten.\n- FIG-FLITWICK — **Filius Flitwick**: Charms, Ravenclaw; deskundig en bemoedigend.\n- FIG-SPROUT — **Pomona Sprout**: Herbology, Hufflepuff; praktisch en zorgzaam.\n- FIG-QUIRRELL — **Quirinus Quirrell**: Defence Against the Dark Arts in 1991; verborgen gevaar, niet publiek bekend.\n- FIG-HAGRID — **Rubeus Hagrid**: Gamekeeper; houdt van gevaarlijke dieren.\n- FIG-HARRY — **Harry Potter**: Eerstejaars, beroemd door overleving in 1981; geen voorkennis.\n- FIG-RON — **Ron Weasley**: Eerstejaars; loyaal, onzeker over familiearmoede.\n- FIG-HERMIONE — **Hermione Granger**: Eerstejaars; ijverig, Muggle-born.\n- FIG-DRACO — **Draco Malfoy**: Eerstejaars; statusbewust en bevooroordeeld.\n- FIG-NEVILLE — **Neville Longbottom**: Eerstejaars; onzeker, aanleg voor Herbology.\n- FIG-FRED — **Fred Weasley**: Derdejaars; grappen en experimenten.\n- FIG-GEORGE — **George Weasley**: Derdejaars; grappen en experimenten.\n- FIG-PERCY — **Percy Weasley**: Vijfdejaars prefect; ambitie en regels.\n- FIG-GINNY — **Ginny Weasley**: Nog geen leerling in 1991.\n- FIG-LUNA — **Luna Lovegood**: Nog geen leerling in 1991.\n- FIG-FUDGE — **Cornelius Fudge**: Minister; institutionele reputatie en politieke druk.\n- FIG-LUCIUS — **Lucius Malfoy**: Invloedrijke aristocraat; voormalige Death Eater.\n- FIG-SIRIUS — **Sirius Black**: Gevangene in Azkaban; waarheid over verraad is geheim.\n- FIG-LUPIN — **Remus Lupin**: Oud-leerling, weerwolf; nog geen docent.\n- FIG-VOLDEMORT — **Lord Voldemort**: Lichamelijk verzwakt; zijn terugkeer is geen publiek feit.\n- FIG-DOBBY — **Dobby**: House-elf van Malfoy-familie; zoekt vrijheid.\n- FIG-OLLIVANDER — **Garrick Ollivander**: Wandmaker; bewaart kennis over wands.\n- FIG-POMFREY — **Poppy Pomfrey**: Schoolgenezer; medische privacy.\n- FIG-FILCH — **Argus Filch**: Caretaker, Squib; handhaaft regels.\n- FIG-BINS — **Cuthbert Binns**: Geest en docent History of Magic.\n- FIG-HOOCH — **Rolanda Hooch**: Vlieginstructie en Quidditch.\n- FIG-ARTHUR — **Arthur Weasley**: Ministry-medewerker; belangstelling voor Muggle-techniek.\n- FIG-MOLLY — **Molly Weasley**: Beschermende moeder; huiselijke magie.\n\n## DM\nGeef nieuwe NPC’s eigen doelen, waarden, angst en geheim. Canonfiguren hebben geen vooraf vastgelegde statblocks; gebruik passende NPC-profielen uit de ruleset. Houd geheimen buiten spelerstate."
+      }
+    }
+  });
+})(typeof self !== "undefined" ? self : this);

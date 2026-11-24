@@ -150,4 +150,55 @@
   RS.get("avatar").guide += "\n- Companions hebben geen HP: houd hun Fatigue bij in companions.<id>.resources.fatigue ({cur, max}) en hun Conditions in companions.<id>.conditions.";
   RS.get("sw").guide += "\n- Companions hebben geen HP: houd hun Wounds en Strain bij in companions.<id>.resources.wounds en .strain ({cur, max}: een teller van 0 omhoog tot de threshold).";
   ["dg", "coc", "cda"].forEach(id => { RS.get(id).guide += "\n- Companions: HP staat in hp, WP/MP/SAN/Luck in companions.<id>.resources ({cur, max}); SAN en Luck herstellen niet door rust."; });
+
+  /* ---------------- Wands & Wizards (Harry Potter; 5e 2014) ---------------- */
+  const WW_SLOTS = [[2], [3], [4, 2], [4, 3], [4, 3, 2], [4, 3, 3], [4, 3, 3, 1], [4, 3, 3, 2], [4, 3, 3, 3, 1], [4, 3, 3, 3, 2], [4, 3, 3, 3, 2, 1], [4, 3, 3, 3, 2, 1], [4, 3, 3, 3, 2, 1, 1], [4, 3, 3, 3, 2, 1, 1], [4, 3, 3, 3, 2, 1, 1, 1], [4, 3, 3, 3, 2, 1, 1, 1], [4, 3, 3, 3, 2, 1, 1, 1, 1], [4, 3, 3, 3, 3, 1, 1, 1, 1], [4, 3, 3, 3, 3, 2, 1, 1, 1], [4, 3, 3, 3, 3, 2, 2, 1, 1]];
+  const WW_SP = { Willpower: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], Technique: [0, 3, 4, 5, 7, 8, 9, 10, 12, 13, 14, 15, 17, 18, 19, 20, 22, 23, 24, 25] };
+  const wwLv = n => Math.max(1, Math.min(20, Math.floor(n) || 1));
+  const wwMod = n => Math.floor((n - 10) / 2);
+  const wwPb = L => { L = wwLv(L); return L <= 4 ? 2 : L <= 8 ? 3 : L <= 12 ? 4 : L <= 16 ? 5 : 6; };
+  const WW_STYLES = { Willpower: { ability: "CHA", hd: 10, fixed: 6, saves: ["CON", "CHA"] }, Technique: { ability: "WIS", hd: 6, fixed: 4, saves: ["WIS", "INT"] }, Intellect: { ability: "INT", hd: 8, fixed: 5, saves: ["DEX", "INT"] } };
+  const WS = (label, stat) => ({ k: label, label, base: 0, stat, group: { STR: "Strength", DEX: "Dexterity", INT: "Intelligence", WIS: "Wisdom", CHA: "Charisma" }[stat] });
+  const sgnS = n => (n >= 0 ? "+" : "−") + Math.abs(n);
+  RS.register({
+    id: "ww", label: "Wands & Wizards (5e 2014)", family: "d20", sys: "ww", name: "Wands & Wizards", role: "Game Master (HM)",
+    terms: "Engelse Wands & Wizards-termen (5e 2014: Houses, Casting Styles, Schools of Magic, spell slots, Sorcery Points, Corruption)",
+    dice: "Spelers rollen zelf een d20 (fysiek of met de dobbelknop in de app); hun worp staat in hun actie (\"[worp: ...]\"). Vraag een check via nextTurn.checks (naam → welke check, advantage of disadvantage en waarom); verklap DC's niet. Dit zijn de 5e 2014-regels, geen 2024.\n- Voor worpen van NPC's/vijanden gebruik je UITSLUITEND de meegegeven voorgegooide dobbelstenen, in volgorde (d20 voor aanvallen/checks/saves, d6/d8/d10/d12 voor schade). Noem de worp kort in de vertelling.",
+    pcStats: '"hp":{"current":9,"max":9,"temp":0},"spellSlots":{"1":{"current":2,"max":2}},"sorceryPoints":0,"corruption":0,"concentration":null,"dedication":null,"resources":{},"conditions":[]',
+    lootPower: "hoogstens één bijzonder magisch voorwerp met een verhaal per schooljaar, nooit als gewone buit en nooit een unieke plotzaak (Horcrux, Deathly Hallow)",
+    rollEx: '{"who":"Troll","what":"Attack Roll","natural":14,"mod":5,"total":19,"result":"Hit"}; bij schade {"who","what":"Damage","dice":"2d6+4","total":11}',
+    crit: "Een natural 20 op een attack raakt en verdubbelt de damage dice; een natural 1 mist. Gewone checks hebben geen automatische critical; verwerk een nat 20 of nat 1 als klein extra gevolg in de vertelling (huisregel).",
+    playerRolls: 'Spelerworpen komen binnen als "[worp: Magical Theory: 12 +5 = 17]" (d20 + modifier + proficiency, dus het totaal) of "[worp: Stealth: disadvantage (16,7) +2 = 9]": het totaal is al uitgerekend met het karakterblad, reken niet opnieuw. Vraag je om een check, benoem dan de skill of save duidelijk (bv. "Magical Theory", "Dexterity Saving Throw") en noem advantage of disadvantage als die gelden.',
+    passive: "zijn passieve score (10 + modifier + proficiency als hij proficient is)",
+    preDice: [["d20", 20, 20], ["d12", 12, 6], ["d10", 10, 6], ["d8", 8, 8], ["d6", 6, 10], ["d4", 4, 6]],
+    guide: "- SYSTEEMREGELS Wands & Wizards (Harry Potter): 5e 2014 met Houses, Casting Styles (Willpower, Technique, Intellect) en Schools of Magic; gebruik nooit stilzwijgend de 2024-regels. Een check is d20 + modifier + proficiency tegen een DC; advantage is de hoogste van 2d20, disadvantage de laagste, en ze heffen elkaar op. Een attack met natural 20 raakt en verdubbelt de schade; death saves volgens 2014, behalve bij niet-dodelijke spreuken.\n- Houd bij in de Stand: HP, spell slots per level (spellSlots), Sorcery Points, Corruption, concentration en dedication, en reactions. Concentration-save: CON, DC = max(10, helft van de schade). Controleer de Dark-tag en de resourcekosten van elke spreuk; gewone spreuken zijn niet dodelijk.\n- Ontbrekende mechanica (spellcatalogus, House-traits, feats, potions, apparition, Corruption-effecten) verzin je niet: vraag de speler het bronrecord aan te leveren of beslis met een vooraf aangekondigde ruling.\n- Laat onderzoek niet stranden op één worp en gebruik canonfiguren (Dumbledore e.a.) niet als automatische redding. Magie lost niet alles op; geen automatische magische loot.\n- Companions en NPC's: HP en AC in hp en ac; spell slots en Sorcery Points in companions.<id>.resources ({cur, max}, herstel bij long rest).",
+    partyMeters: [["sorceryPoints", "SP"], ["corruption", "Corruption"]],
+    companion: {
+      noHp: false, hp: [4, 150], ac: [8, 22],
+      meters: [MT("slots", "Spell slots", [1, 20], "long"), MT("sorcery", "Sorcery Points", [1, 25], "long")],
+      focus: "Wands & Wizards-NPC (5e 2014): ability scores, HP, AC, speed, proficiency bonus, saves, skills, aanvallen en spreuken met schade (gebruik uitsluitend bekende spreuken; Dark-spreuken alleen met reden), en bijzondere eigenschappen. Geen D&D 2024-features."
+    },
+    sheet: {
+      kind: "d20", note: "Wands & Wizards v1.4 (fanmateriaal, 5e 2014). House-traits, School-features, feats, achtergronden en de spellcatalogus staan niet in de app: noteer ze in de tekstvelden en laat ze controleren met je regelboek. Kies een Casting Style bij 'Casting Style' om saves, hit points, spell DC en spell attack te laten berekenen.",
+      statLabels: { STR: "Strength", DEX: "Dexterity", CON: "Constitution", INT: "Intelligence", WIS: "Wisdom", CHA: "Charisma" }, stats: ["STR", "DEX", "CON", "INT", "WIS", "CHA"], statDefault: 10,
+      statHint: "Standard array 15, 14, 13, 12, 10, 8 of 27 point buy (8–15, kosten 8:0, 9:1, 10:2, 11:3, 12:4, 13:5, 14:7, 15:9), plus de ability-verhogingen van je House. Normaal maximum 20.",
+      d20: { mod: wwMod, pb: wwPb, styles: WW_STYLES },
+      numbersTitle: "Level, AC en snelheid",
+      numbers: [{ k: "level", label: "Level", def: 1 }, { k: "ac", label: "AC", def: 10 }, { k: "speed", label: "Speed (ft)", def: 30 }],
+      skillsTitle: "Skills (0 = niet, 1 = proficient, 2 = expertise)",
+      skills: [WS("Athletics", "STR"), WS("Acrobatics", "DEX"), WS("Sleight of Hand", "DEX"), WS("Stealth", "DEX"), WS("Herbology", "INT"), WS("Investigation", "INT"), WS("Magical Theory", "INT"), WS("Muggle Studies", "INT"),
+        WS("Magical Creatures", "WIS"), WS("Insight", "WIS"), WS("Medicine", "WIS"), WS("Perception", "WIS"), WS("Potion-Making", "WIS"), WS("Survival", "WIS"), WS("Deception", "CHA"), WS("Intimidation", "CHA"), WS("Performance", "CHA"), WS("Persuasion", "CHA")],
+      skillSpecs: "Extra skills of House-bonussen als regel: naam | rank 0-2 | ability (bv. Parseltongue | 1 | CHA).",
+      meters: [{ k: "hp", label: "HP", max: v => { const st = WW_STYLES[v.PROFESSION] || { hd: 8, fixed: 5 }, L = wwLv(v.N.level), cm = wwMod(v.CON); return Math.max(1, st.hd + cm + (L - 1) * (st.fixed + cm)); } }],
+      derived: [
+        { k: "pb", label: "Proficiency", fn: v => "+" + wwPb(v.N.level) },
+        { k: "dc", label: "Spell DC", fn: v => { const st = WW_STYLES[v.PROFESSION]; return st ? 8 + wwPb(v.N.level) + wwMod(v[st.ability]) : "—"; } },
+        { k: "satk", label: "Spell attack", fn: v => { const st = WW_STYLES[v.PROFESSION]; return st ? sgnS(wwPb(v.N.level) + wwMod(v[st.ability])) : "—"; } },
+        { k: "slots", label: "Spell slots", fn: v => WW_SLOTS[wwLv(v.N.level) - 1].map((n, i) => (i + 1) + ":" + n).join(" ") },
+        { k: "sp", label: "Sorcery Points", fn: v => { const t = WW_SP[v.PROFESSION]; return t ? t[wwLv(v.N.level) - 1] : "—"; } }
+      ],
+      lists: [], professions: ["Willpower", "Technique", "Intellect"], professionLabel: "Casting Style", noAge: true,
+      extraText: [["house", "House en school"], ["magicschool", "School of Magic"], ["wand", "Wand en achtergrond"], ["feats", "Feat en House-traits"], ["spells", "Spells en bekende spreuken"]]
+    }
+  });
 })(typeof self !== "undefined" ? self : this);

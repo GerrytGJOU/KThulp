@@ -159,7 +159,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .invcol{display:flex;flex-direction:column;gap:6px}.invbot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;align-items:start}
 .invsl{border:2px solid #2b2012;border-radius:3px;padding:3px 7px;background:rgba(255,248,225,.55);min-height:44px}.invsl small{display:block;font-variant:small-caps;font-weight:bold;letter-spacing:.05em;color:#2b2012;font-size:12px}.invsl span{font-size:14px;display:block;line-height:1.25}.invsl em{font-size:12px;opacity:.75}.invsl.mg{background:rgba(255,226,140,.75);box-shadow:0 0 8px rgba(160,100,0,.55)}.invsl.mg span{font-weight:bold}
 .invbag{border:2px solid #2b2012;border-radius:3px;background:rgba(255,248,225,.45);padding:6px 8px}.invbag>b{display:block;font-variant:small-caps;letter-spacing:.05em;font-size:13px;margin-bottom:2px}.invbag table{width:100%;border-collapse:collapse;font-size:13px}.invbag th{text-align:left;font-weight:bold;font-size:11px;border-bottom:2px solid #2b2012;padding:2px 3px}.invbag td{padding:3px;border-bottom:1px solid rgba(43,32,18,.35)}.invbag td:last-child{opacity:.75;font-size:12px}.invbag tr.mg td{font-weight:bold;background:rgba(255,226,140,.6)}.invnone{opacity:.7;font-size:13px}
-.ik{cursor:pointer}.ik:hover,.ik:focus{outline:2px solid #8a6a24}.itemcard{margin:8px 0;padding:10px 12px;border:2px solid #2b2012;border-radius:4px;background:rgba(255,248,225,.85);color:#2b2012}.itemcard.mg{border-color:#7a5aa8;box-shadow:0 0 6px rgba(122,90,168,.45)}.itemcard .ich{display:flex;justify-content:space-between;align-items:center;gap:8px}.itemcard .ior{margin:4px 0;font-style:italic}.itemcard .irl{white-space:pre-wrap;margin:6px 0;font-size:14px}.itemcard .iuse{margin-top:6px}.ipips{display:inline-flex;gap:6px;vertical-align:middle}.pip{width:34px;height:34px;border:2px solid #2b2012;border-radius:50%;background:#fff8e1;color:#7a2a20;font-weight:bold;font-size:16px;padding:0;cursor:pointer}.pip.x{background:#d9c9a0}.itico{width:40px;height:40px;flex:none;object-fit:contain;mix-blend-mode:multiply;display:block}.invsl .it{display:flex;align-items:center;gap:6px}.invsl .it .tx{flex:1;min-width:0}.invbag td.itic{width:46px;padding:2px 3px}.invbag td.itic .itico{width:36px;height:36px}.invbag td.nm{word-break:break-word}
+.ik{cursor:pointer}.ik:hover,.ik:focus{outline:2px solid #8a6a24}.itemov{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,8,5,.65);cursor:pointer}.itemcard{width:100%;max-width:440px;max-height:85vh;overflow:auto;padding:12px 14px;border:2px solid #2b2012;border-radius:6px;background:#f6ecce;color:#2b2012;cursor:auto;box-shadow:0 10px 30px rgba(0,0,0,.5);text-align:left}.itemcard.mg{border-color:#7a5aa8;box-shadow:0 0 14px rgba(122,90,168,.8)}.itemcard .ich{display:flex;justify-content:space-between;align-items:center;gap:8px}.itemcard .ior{margin:4px 0;font-style:italic}.itemcard .irl{white-space:pre-wrap;margin:6px 0;font-size:14px}.itemcard .iuse{margin-top:6px}.ipips{display:inline-flex;gap:6px;vertical-align:middle}.pip{width:34px;height:34px;border:2px solid #2b2012;border-radius:50%;background:#fff8e1;color:#7a2a20;font-weight:bold;font-size:16px;padding:0;cursor:pointer}.pip.x{background:#d9c9a0}.itico{width:40px;height:40px;flex:none;object-fit:contain;mix-blend-mode:multiply;display:block}.invsl .it{display:flex;align-items:center;gap:6px}.invsl .it .tx{flex:1;min-width:0}.invbag td.itic{width:46px;padding:2px 3px}.invbag td.itic .itico{width:36px;height:36px}.invbag td.nm{word-break:break-word}
 .feat summary,.inv>summary{cursor:pointer;font-variant:small-caps;letter-spacing:.06em;font-size:20px;font-weight:bold;color:#2b2012}.feat[open] summary,.inv[open]>summary{margin-bottom:8px;border-bottom:2px solid #2b2012;padding-bottom:4px}.feat .fh{font-variant:small-caps;letter-spacing:.06em;font-weight:bold;margin-top:12px;padding-bottom:2px;border-bottom:1px solid rgba(43,32,18,.55)}.feat .frow{display:grid;grid-template-columns:minmax(130px,26%) 1fr;gap:4px 16px;padding:6px 0;border-bottom:1px solid rgba(43,32,18,.25)}.feat .fn{font-weight:bold}.feat .fd{font-size:14px;line-height:1.45}@media(max-width:620px){.feat .frow{grid-template-columns:1fr;gap:1px}}
 .psh{--gold:#6b3d00;--mute:rgba(43,32,18,.68);--text:#2b2012;--red:#8b1a1a}
 .psh .card,.psh .sh-strip>div{background:radial-gradient(ellipse at 30% 20%,#efd9a4,#d9b878 70%,#c79f5c);color:#2b2012;border:2px solid #7a5a2a;box-shadow:inset 0 0 40px rgba(110,70,20,.45)}
@@ -221,9 +221,9 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="dobbel.js?v=2"></script>
 <script src="settings-rulesets.js?v=1"></script>
 <script src="settings-rulesets-d100.js?v=1"></script>
-<script src="settings-rulesets-other.js?v=3"></script>
-<script src="settings-ruleref.js?v=2"></script>
-<script src="gensheet.js?v=4"></script>
+<script src="settings-rulesets-other.js?v=4"></script>
+<script src="settings-ruleref.js?v=3"></script>
+<script src="gensheet.js?v=5"></script>
 <script src="settings-data.js?v=10"></script>
 <script src="settings-aldmark.js?v=2"></script>
 <script src="settings-faerun.js?v=1"></script>
@@ -237,6 +237,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="settings-d100.js?v=2"></script>
 <script src="settings-swtor.js?v=1"></script>
 <script src="settings-avatar.js?v=1"></script>
+<script src="settings-harrypotter.js?v=1"></script>
 <script src="map-lib.js?v=1"></script>
 <script src="settings-maps.js?v=3"></script>
 <script src="settings-editor.js?v=2"></script>
@@ -1725,10 +1726,10 @@ const ITEMRULES=(function(){
   function card(c,all){
     if(!open) return ''; const it=all.find(x=>key(x.name)===open); if(!it||!has(it)) return '';
     const u=it.uses, used=u?usedOf(c,it):0, left=u?u.max-used:0, rl=RECH[(it.recharge||'').toLowerCase()]||it.recharge;
-    return '<div class="itemcard'+(it.magic?' mg':'')+'"><div class="ich"><b>'+(it.magic?'✨ ':'')+esc(it.name)+'</b><button class="b alt sm" data-itemclose="1">Sluiten</button></div>'+
+    return '<div class="itemov" data-itemoverlay="1"><div class="itemcard'+(it.magic?' mg':'')+'" role="dialog" aria-modal="true" aria-label="'+esc(it.name)+'"><div class="ich"><b>'+(it.magic?'✨ ':'')+esc(it.name)+'</b><button class="b alt sm" data-itemclose="1">Sluiten</button></div>'+
       (it.origin?'<div class="ior"><small>Herkomst</small> '+esc(it.origin)+'</div>':'')+
       '<div class="irl">'+esc(it.rules||it.note||'Geen aanvullende regels.')+'</div>'+
-      (u?'<div class="iuse"><small>Gebruik</small> <span class="ipips">'+Array.from({length:u.max},(_,i)=>'<button class="pip'+(i<used?' x':'')+'" data-itempip="'+(i+1)+'" aria-label="gebruik '+(i+1)+'">'+(i<used?'✕':'')+'</button>').join('')+'</span> <b>'+left+' / '+u.max+' over</b>'+(rl?' <small>herstelt: '+esc(rl)+'</small>':'')+(used?' <button class="b alt sm" data-itemreset="1">Herstel</button>':'')+'</div>':(rl?'<div class="iuse"><small>Herstelt: '+esc(rl)+'</small></div>':''))+'</div>';
+      (u?'<div class="iuse"><small>Gebruik</small> <span class="ipips">'+Array.from({length:u.max},(_,i)=>'<button class="pip'+(i<used?' x':'')+'" data-itempip="'+(i+1)+'" aria-label="gebruik '+(i+1)+'">'+(i<used?'✕':'')+'</button>').join('')+'</span> <b>'+left+' / '+u.max+' over</b>'+(rl?' <small>herstelt: '+esc(rl)+'</small>':'')+(used?' <button class="b alt sm" data-itemreset="1">Herstel</button>':'')+'</div>':(rl?'<div class="iuse"><small>Herstelt: '+esc(rl)+'</small></div>':''))+'</div></div>';
   }
   return {fromObj,isRich,has,attr,card,key,usedOf,get open(){return open},set open(v){open=v}};
 })();
@@ -1891,12 +1892,14 @@ function renderSheet(el,prefix){
   { const lb=el.querySelector('#lubox'); if(lb){ const k0=sheetKey; LevelUp.render(lb,{c:{k:k0,...chars[k0]},esc:esc,feats:Object.keys(CC_FEATS),featText:CC_FEATS,onClose:()=>{luOpen=false;renderSheet(el,prefix)},onDone:async(nc)=>{ const o=Object.assign({},nc); delete o.k; o.t=Date.now(); luOpen=false; await db.ref('dnd/characters/'+k0).set(o); }}); } else luOpen=false; }
   if(!el._sheetWired){
     el._sheetWired=true;
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&ITEMRULES.open&&el.querySelector('.itemov')){ITEMRULES.open=''; renderSheet(el,prefix);}});
     el.addEventListener('toggle',e=>{const d=e.target; if(d&&d.dataset&&d.dataset.sec) sheetOpen[d.dataset.sec]=d.open;},true);
     el.addEventListener('click',async e=>{
       const t=e.target, q=s=>t.closest(s);
       /* Klik ergens anders in het blad: de worp-popup onderin sluit weer. */
       if(sheetRoll&&!q('[data-roll]')&&!q('#rollpanel')){ sheetRoll=''; el.querySelectorAll('.rl.on').forEach(x=>x.classList.remove('on')); const rp=el.querySelector('#rollpanel'); if(rp) rp.style.display='none'; }
       if(q('[data-sk]')){sheetKey=q('[data-sk]').dataset.sk; sheetEdit=false; sheetRoll=''; return renderSheet(el,prefix);}
+      if(t.dataset&&t.dataset.itemoverlay){ITEMRULES.open=''; return renderSheet(el,prefix);}
       if(q('[data-itemclose]')){ITEMRULES.open=''; return renderSheet(el,prefix);}
       if(q('[data-itempip]')||q('[data-itemreset]')){
         const c0=chars[sheetKey], k=ITEMRULES.open; if(!c0||!k) return;
