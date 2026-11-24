@@ -204,6 +204,17 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 .ccinsp div{font-size:13px;color:var(--mute);padding:2px 0}
 .ccnav{position:sticky;bottom:0;background:rgba(20,17,15,.95);padding:8px 0;flex-wrap:nowrap}
 .ccbody input[type=radio]{width:auto;accent-color:var(--gold)}
+/* Settings-scherm: tegels die openklappen; "dense" vult de rij van de gekozen tegel eerst op, het paneel komt eronder */
+.stgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-flow:row dense;gap:10px;margin-bottom:14px}
+.sttile{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:14px 8px 10px;background:var(--panel);border:1px solid rgba(200,162,74,.3);border-radius:10px;color:var(--text);font:inherit;text-align:center;cursor:pointer;min-width:0}
+.sttile:hover,.sttile:focus-visible{border-color:var(--gold);background:var(--panel2)}
+.sttile.on{border:2px solid var(--gold);padding:13px 7px 9px;background:var(--panel2)}
+.sttile svg{width:56px;height:56px;margin-bottom:4px}
+.sttile b{font-size:16px;line-height:1.2;overflow-wrap:anywhere}
+.sttile span{font-size:12px;line-height:1.25;color:var(--mute)}
+.sttile em{margin-top:auto;padding-top:4px;font-size:11px;font-style:normal;letter-spacing:.06em;color:var(--gold)}
+.stpanel{grid-column:1/-1;margin:0;border:1px solid var(--gold)}
+.stpanel p{margin:6px 0;color:var(--mute)}
 </style>
 </head>
 <body>
@@ -244,6 +255,7 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="map-lib.js?v=1"></script>
 <script src="settings-maps.js?v=3"></script>
 <script src="settings-editor.js?v=2"></script>
+<script src="settings-icons.js?v=1"></script>
 <script src="partytable.js?v=2"></script>
 <script src="levelup.js?v=1"></script>
 <script>
@@ -461,11 +473,13 @@ function menuSet(){
 }
 /* ---------- Settings: kiezen, kopiëren, bewerken en maken (M4) ---------- */
 function menuSettings(){
+  stOpen=null; stArm=null;
   main.innerHTML='<div class="scroll">'+backBar('Settings')+'<div id="stbox"></div></div>';
   $('#back').onclick=()=>showMenu('home');
   renderSettingsMenu();
 }
 let stArm=null; /* tweede klik voor verwijderen */
+let stOpen=null; /* id van de opengeklapte tegel */
 function stRandom(){return Math.random().toString(36).slice(2,6)}
 /* kopie van een bestaande setting als startpunt voor een eigen setting (alle velden gevuld, ook voor Midden-aarde) */
 function stCopyOf(id){
@@ -487,14 +501,22 @@ function stEdit(s,opt){
 }
 function renderSettingsMenu(){
   const box=$('#stbox'); if(!box||menuView!=='settings') return;
-  const L=DNDSettings.list(), row=(x,btns)=>'<div class="card"><b>'+esc(x.name)+(x.custom?' <small>(eigen)</small>':' <small>(ingebouwd)</small>')+'</b><br><small style="color:var(--mute)">'+esc(x.blurb)+'</small><div class="row" style="margin-top:6px">'+btns+'</div></div>';
+  const L=DNDSettings.list();
+  /* "Reeks — Ondertitel (systeem)": de reeks groot op de tegel, de rest eronder */
+  const tile=x=>{ const set=DNDSettings.get(x.id), p=String(x.name).split(' — '), sys=DNDRulesets.get(set.ruleset||'dnd2024').name, open=stOpen===x.id;
+    const t='<button class="sttile'+(open?' on':'')+'" data-tile="'+esc(x.id)+'" aria-expanded="'+open+'" type="button">'+DNDSettingIcons.svg(x.id)+'<b>'+esc(p[0])+'</b>'+(p.length>1?'<span>'+esc(p.slice(1).join(' — ').replace(/ \([^)]*\)$/,''))+'</span>':'')+'<em>'+esc(sys)+(x.custom?' · eigen':'')+'</em></button>';
+    if(!open) return t;
+    const btns='<button class="b alt sm" data-st="copy" data-id="'+esc(x.id)+'" type="button">⎘ Kopiëren</button>'+(x.custom?'<button class="b alt sm" data-st="edit" data-id="'+esc(x.id)+'" type="button">✎ Bewerken</button><button class="b alt sm" data-st="del" data-id="'+esc(x.id)+'" type="button">'+(stArm===x.id?'Zeker weten? Verwijder':'🗑 Verwijderen')+'</button>':'');
+    return t+'<div class="card stpanel"><b>'+esc(x.name)+'</b> <small>('+(x.custom?'eigen':'ingebouwd')+' · '+esc(sys)+')</small><p>'+esc(x.blurb)+'</p><div class="row">'+btns+'</div></div>'; };
   const camps=Object.keys(index).filter(i=>index[i].snap).sort((a,b)=>(index[b].lastPlayed||0)-(index[a].lastPlayed||0));
   box.innerHTML='<p class="cctip">Een setting bepaalt wereld, toon, regio\'s, personagekeuzes en beeldstijl. Ingebouwde settings kun je kopiëren naar een eigen setting. Bij een nieuw verhaal krijgt het verhaal een eigen kopie van de setting: latere aanpassingen raken lopende verhalen niet.</p>'+
    '<div class="row"><button class="b" id="stnew" type="button">＋ Nieuwe lege setting</button></div>'+
-   '<h3>Beschikbare settings</h3>'+L.map(x=>row(x,'<button class="b alt sm" data-st="copy" data-id="'+esc(x.id)+'" type="button">⎘ Kopiëren</button>'+(x.custom?'<button class="b alt sm" data-st="edit" data-id="'+esc(x.id)+'" type="button">✎ Bewerken</button><button class="b alt sm" data-st="del" data-id="'+esc(x.id)+'" type="button">'+(stArm===x.id?'Zeker weten? Verwijder':'🗑 Verwijderen')+'</button>':''))).join('')+
+   '<h3>Beschikbare settings</h3><div class="stgrid">'+L.map(tile).join('')+'</div>'+
    (camps.length?'<h3>Setting van een verhaal aanpassen</h3><p class="cctip">Dit wijzigt alleen de kopie van dat ene verhaal (de DM gebruikt de aangepaste tekst vanaf de volgende beurt).</p>'+camps.map(i=>'<div class="card"><b>'+esc(index[i].title)+'</b> <small>('+esc(index[i].settingId||'')+')</small><div class="row" style="margin-top:6px"><button class="b alt sm" data-st="camp" data-id="'+i+'" type="button">✎ Setting van dit verhaal bewerken</button></div></div>').join(''):'')+
    '<div id="stedit"></div>';
   $('#stnew').onclick=()=>{ const s=DNDSettingsFactory.blank('Nieuwe setting'); s.id='eigen-'+stRandom(); stEdit(s,{isNew:true,title:'Nieuwe setting',onSave:async s=>{ await stSave(s); alert('Setting "'+s.name+'" opgeslagen.'); }}); };
+  box.querySelectorAll('[data-tile]').forEach(b=>b.onclick=()=>{ const id=b.dataset.tile; stOpen=stOpen===id?null:id; stArm=null; renderSettingsMenu();
+    const n=[...box.querySelectorAll('[data-tile]')].find(t=>t.dataset.tile===id); if(n){ n.focus({preventScroll:true}); const pn=box.querySelector('.stpanel'); if(pn) pn.scrollIntoView({block:'nearest'}); } });
   box.querySelectorAll('[data-st]').forEach(b=>b.onclick=async()=>{
     const id=b.dataset.id, a=b.dataset.st;
     if(a==='copy') return stEdit(stCopyOf(id),{isNew:true,title:'Kopie van '+DNDSettings.get(id).name,onSave:async s=>{ await stSave(s); alert('Setting "'+s.name+'" opgeslagen.'); }});
