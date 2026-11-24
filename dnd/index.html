@@ -95,6 +95,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 #mapview.drag{cursor:grabbing}
 #mapstage{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
 #mapimg{display:block;width:100%;height:auto;pointer-events:none;-webkit-user-drag:none}
+.mapnav{position:absolute;left:10px;top:10px;right:64px;display:flex;flex-wrap:wrap;gap:6px;z-index:5}.mapnav button.on{background:var(--gold);color:#2b2012}
 .mapctl{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:5}
 .mapctl button{width:42px;height:42px;border-radius:8px;border:1px solid rgba(200,162,74,.6);background:rgba(20,17,15,.88);color:var(--gold);font-size:20px;line-height:1;padding:0}
 .maphint{position:absolute;left:10px;bottom:8px;right:70px;font-size:12px;color:#f3e9d2;text-shadow:0 1px 3px #000;pointer-events:none}
@@ -216,14 +217,16 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 <script src="map-data.js?v=1"></script>
 <script src="settings-canon.js?v=1"></script>
 <script src="settings-factory.js?v=1"></script>
-<script src="settings-data.js?v=7"></script>
+<script src="settings-data.js?v=9"></script>
 <script src="settings-aldmark.js?v=2"></script>
 <script src="settings-faerun.js?v=1"></script>
 <script src="settings-westeros.js?v=1"></script>
 <script src="settings-thedas.js?v=1"></script>
 <script src="settings-theros.js?v=1"></script>
 <script src="settings-grieks.js?v=2"></script>
-<script src="settings-editor.js?v=1"></script>
+<script src="map-lib.js?v=1"></script>
+<script src="settings-maps.js?v=1"></script>
+<script src="settings-editor.js?v=2"></script>
 <script src="partytable.js?v=2"></script>
 <script src="levelup.js?v=1"></script>
 <script>
@@ -245,7 +248,7 @@ let screen='menu', cid=null; // menu of campagne
 let diaryQSub=(function(){try{return localStorage.getItem('dnd_qsub')||'main'}catch(e){return 'main'}})();
 let diaryTab=(function(){try{return localStorage.getItem('dnd_diarytab')||'sum'}catch(e){return 'sum'}})();
 let cfg={}, npcs={}, locs={}, chars={}, index={}; let sceneKey='', editKey=null, editDraft='', lastSide='';              // globaal
-let wQuests={}, wCal=null, wBack={}, wNpcs={}, wLocs={}, mapData=null, mapSel=null, mapView={s:1,x:0,y:0,init:false};
+let wQuests={}, wCal=null, wBack={}, wNpcs={}, wLocs={}, mapData=null, mapSel=null, mapView={s:1,x:0,y:0,init:false,map:null};
 let turn=null, canon={}, msgs=[], oocs=[], pending={}, stateStr="{}"; // per campagne
 let ptData=null, luOpen=false;
 let tab='game', draft="", rollDraft="", composeRound=null;
@@ -266,7 +269,7 @@ function rebindTables(){
 }
 function ctxChanged(){applyUi(); rebindTables(); if(window.DNDWorld&&DNDWorld.configure) DNDWorld.configure(curSetting().world)}
 function applyUi(){const n=curSetting().ui.name; titleBase=n; if(!pingTimer) document.title=n; const mb=document.querySelector('nav button[data-t="map"]'); if(mb) mb.style.display=mapOn()?'':'none'; const h=document.querySelector("header h1"); if(h) h.textContent="⚔ "+n; const f=document.querySelector("footer"); if(f) f.innerHTML=esc(n)+" D&amp;D · &copy; Gerben de Jong · 2026"}
-function mapOn(){return !!window.DNDMap&&curSetting().map.enabled!==false}
+function mapOn(){return !!MapL()}
 let campSet=null; /* snapshot van de setting van de open campagne (campaigns/{cid}/setting), bij het aanmaken bewaard zodat latere aanpassingen haar niet raken */
 function curSetting(){ if(cid&&campSet) return DNDSettings.resolve(campSet); return DNDSettings.get((index&&cid&&index[cid]&&index[cid].settingId)||DNDSettings.DEFAULT_ID)}
 const cp=(p,C)=>'dnd/campaigns/'+(C||cid)+'/'+p;
@@ -397,7 +400,7 @@ function latestId(){
 }
 function leaveCampaign(){campSet=null; setTimeout(ctxChanged,0); /* na de wissel van cid: titel, kop en footer volgen de setting van de campagne */
   listeners.forEach(([r,e,f])=>r.off(e,f));listeners=[];
-  cid=null;turn=null;canon={};mapData=null;mapSel=null;mapView={s:1,x:0,y:0,init:false};sceneKey='';editKey=null;threadShow=10;seenNarr=null;msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
+  cid=null;turn=null;canon={};mapData=null;mapSel=null;mapView={s:1,x:0,y:0,init:false,map:null};sceneKey='';editKey=null;threadShow=10;seenNarr=null;msgs=[];oocs=[];pending={};stateStr="{}";draft="";rollDraft="";
 }
 let menuView='home';
 function updateBack(){const b=$('#topback'); if(b) b.style.display=(screen==='camp'||menuView!=='home')?'flex':'none';}
@@ -1041,7 +1044,7 @@ function parseDM(txt,names){
   o.extraLocations=(Array.isArray(o.extraLocations)?o.extraLocations:[]).filter(x=>x&&typeof x.name==='string'&&x.name.trim()).slice(0,3).map(x=>({name:x.name.trim().slice(0,80),description:String(x.description||'').slice(0,400),visual:String(x.visual||'').slice(0,1500)}));
   { const lc=o.location; o.location=(lc&&typeof lc.name==='string'&&lc.name.trim())?{name:lc.name.trim().slice(0,80),description:String(lc.description||'').slice(0,400),visual:String(lc.visual||'').slice(0,1500)}:null; }
   o.worldDelta=(o.worldDelta&&typeof o.worldDelta==='object'&&!Array.isArray(o.worldDelta))?o.worldDelta:null;
-  o.place=(typeof o.place==='string'&&mapOn()&&DNDMap.byId[o.place])?o.place:null;
+  o.place=(typeof o.place==='string'&&mapOn()&&MapL().byId[o.place])?o.place:null;
   o.speakers=Array.isArray(o.speakers)?o.speakers.filter(s=>typeof s==='string').slice(0,4):[];
   o.newNpcs=Array.isArray(o.newNpcs)?o.newNpcs.filter(n=>n&&typeof n.name==='string'&&n.name.trim()):[];
   const nt=o.nextTurn||{};
@@ -1090,7 +1093,7 @@ async function resolve(retry,forceGemini){
     const npcNames=Object.values(npcs).filter(n=>!n.forPlayer).map(n=>n.name);
     const user=
 `# SPELERS (awaiting bevat altijd de SPELERNAAM, nooit de naam van het personage)\n${allNames.map(n=>{const pk=party&&party[n]; const c=pk?chars[pk]:Object.values(chars||{}).find(x=>x&&x.player===n);return n+(c?' (speelt '+c.name+')':'')}).join(', ')}\n\n# CANON\n${canonTxt||'(nog leeg)'}\n\n# KARAKTERBLADEN (rekenkundig leidend; de Stand heeft de actuele HP)\n${sheets||'(geen)'}\n\n# SAMENVATTING VAN EERDERE RONDES\n${sums.join('\n')||'(nog geen)'}\n\n# HERINNERINGEN VAN DE SPELERS (bindend)\n${mems.join('\n')||'(geen)'}\n\n# BEKENDE NPC'S (voor "speakers")\n${npcNames.join(', ')||'(nog geen)'}\n\n# LOGBOEK (laatste 40)\n${logs.slice(-40).map(l=>'- ['+(l.inGameDate||'')+'] '+l.fact).join('\n')||'(leeg)'}\n\n# ACTUELE STAND\n${JSON.stringify(state)}\n\n# OPEN OPDRACHTEN (een echt nieuwe scène sluit hierop aan; gewone beurten en dialoog hoeven dat niet)\n${listOf((state.quests||{}).open).map(t=>'- '+t).join('\n')||'(geen)'}\n\n# WERELDSTATUS (stabiele IDs; wijzig alleen via worldDelta)\n${worldTxt||'(niet actief)'}\n\n# KAARTPLAATSEN (kies hieruit het id voor "place")
-${mapOn()?DNDMap.ids.join(', '):''}
+${mapOn()?MapL().ids.join(', '):''}
 
 # DM-NOTITIES (privé: nooit tonen of citeren)\n${notesTxt||'(nog geen)'}\n\n# RECENTE GESCHIEDENIS\n${hist||'(begin van het verhaal)'}\n\n# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n${JSON.stringify(rollDice())}\n\n# ACTIES DEZE RONDE\n${pend.length?pend.map(p=>p.name+': '+p.text).join('\n'):'(geen: open het verhaal met de startsituatie uit canon/stand)'}`;
     let out,usage,usedModel,note=null;
@@ -1134,8 +1137,8 @@ ${mapOn()?DNDMap.ids.join(', '):''}
       try{
         const mapS=(await db.ref(cp('map',C)).get()).val()||null, nc=(out._wp&&out._wp.plan&&out._wp.plan.calendar)||(world&&world.calendar)||null;
         const sc=(out.statePatch&&out.statePatch.inGame&&out.statePatch.inGame.location)||(state.inGame&&state.inGame.location)||'';
-        const pl=DNDMap.determinePlace({id:out.place,locName:out.location&&out.location.name,sceneText:sc,region:(out.worldDelta&&out.worldDelta.region)||(world&&world.sceneRegion)||null});
-        const vis=DNDMap.planVisit(mapS,pl,nc&&nc.y?{y:nc.y,m:nc.m,d:nc.d}:null,out.location?slug(out.location.name):(sceneKey||null),now);
+        const pl=MapL().determinePlace({id:out.place,locName:out.location&&out.location.name,sceneText:sc,region:(out.worldDelta&&out.worldDelta.region)||(world&&world.sceneRegion)||null});
+        const vis=MapL().planVisit(mapS,pl,nc&&nc.y?{y:nc.y,m:nc.m,d:nc.d}:null,out.location?slug(out.location.name):(sceneKey||null),now);
         Object.keys(vis.set).forEach(pth=>{mapUp[cp(pth,C)]=vis.set[pth]}); mapPrev=vis.prev;
       }catch(e){console.warn('kaart bijwerken mislukt',e)}
     }
@@ -1333,21 +1336,35 @@ async function loadMemories(C){
 /* ---------- Kaart ---------- */
 const MAPMON=['','jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 function fmtD(d){return d&&d.d?d.d+' '+MAPMON[d.m]+' '+d.y:''}
+/* kaartlaag van de actieve setting (js/map-lib.js): meerdere kaarten per setting, Midden-aarde = één kaart uit map-data.js */
+let _mapCache=new WeakMap(), _legacyLib=null;
+function MapL(){
+  const m=curSetting().map; if(!m||m.enabled===false||!window.DNDMapLib) return null;
+  if(m.maps){ let l=_mapCache.get(m.maps); if(!l){ l=DNDMapLib.make(m); if(l) _mapCache.set(m.maps,l) } return l }
+  if(window.DNDMap) return _legacyLib||(_legacyLib=DNDMapLib.make(DNDMapLib.fromLegacy(DNDMap)));
+  return null;
+}
 function mapPlaceOf(id){
-  if(!mapOn()||!id) return null; if(DNDMap.byId[id]) return DNDMap.byId[id];
-  if(String(id).indexOf('regio:')===0){const r=String(id).slice(6), R=DNDMap.REGIONS[r]; return R?{id:id,name:R.name,x:R.x,y:R.y,region:r,regionOnly:true,alias:[]}:null}
+  const L=MapL(); if(!L||!id) return null; if(L.byId[id]) return L.byId[id];
+  if(String(id).indexOf('regio:')===0){ const r=String(id).slice(6); return L.REGIONS[r]?L.resolvePlace({region:r}):null }
   return null;
 }
 function mapNpcPlace(n){
-  const L=n&&n.location; if(!L) return null;
-  if(String(L).indexOf('LOC-')===0){const lo=wLocs[L]; return lo?DNDMap.determinePlace({id:lo.place,locName:lo.name,region:lo.region}):null}
-  const R=DNDMap.REGIONS[L]; return R?DNDMap.byId[R.primary]:null;
+  const L=MapL(), loc=n&&n.location; if(!L||!loc) return null;
+  if(String(loc).indexOf('LOC-')===0){ const lo=wLocs[loc]; return lo?L.determinePlace({id:lo.place,locName:lo.name,region:lo.region}):null }
+  const R=L.REGIONS[loc]; return R?L.byId[R.primary]:null;
+}
+/* de kaart die nu getoond wordt (eigen keuze, anders die van de huidige plek, anders de beginkaart) */
+function mapCurId(){
+  const L=MapL(); if(!L) return null; if(mapView.map&&L.maps[mapView.map]) return mapView.map;
+  const c=mapData&&mapData.current&&mapPlaceOf(mapData.current.id); return c?L.mapOf(c):L.start;
 }
 function mapInfoHtml(id){
-  const pl=mapPlaceOf(id); if(!pl) return '<small style="color:var(--mute)">Tik op een pin voor details. Nog geen bezochte plekken: ze verschijnen op de kaart zodra jullie ergens aankomen.</small>';
+  const L=MapL(), pl=mapPlaceOf(id); if(!pl) return '<small style="color:var(--mute)">Tik op een pin voor details. Nog geen bezochte plekken: ze verschijnen op de kaart zodra jullie ergens aankomen.</small>';
   const vis=(mapData&&mapData.visited&&mapData.visited[id])||null;
   let h='<h3>📍 '+esc(pl.name)+'</h3><small style="color:var(--mute)">'+(vis?'bezocht'+(vis.n>1?' ('+vis.n+'×)':'')+(vis.first?' · eerste keer '+esc(fmtD(vis.first)):''):'nog niet bezocht')+'</small>';
-  const here=Object.entries(locs).filter(([k,l])=>l&&((vis&&vis.locs&&vis.locs[k])||((DNDMap.resolvePlace({name:l.name})||{}).id===id))).slice(0,6);
+  if(pl.zoom&&L&&L.maps[pl.zoom]&&pl.zoom!==mapCurId()) h+='<div class="row" style="margin:6px 0"><button class="b alt sm" data-mapgo="'+esc(pl.zoom)+'" data-mapfocus="'+esc(pl.id)+'" type="button">🔍 Open kaart: '+esc(L.maps[pl.zoom].name)+'</button></div>';
+  const here=Object.entries(locs).filter(([k,l])=>l&&((vis&&vis.locs&&vis.locs[k])||((L.resolvePlace({name:l.name})||{}).id===id))).slice(0,6);
   here.forEach(([k,l])=>{h+=(l.img?'<img class="locimg" src="'+l.img+'" data-zoom="loc:'+k+'" alt="">':'')+'<div style="font-size:14px"><b>'+esc(l.name)+'</b>'+(l.desc?'<br>'+esc(l.desc):'')+'</div>'});
   const ppl=Object.values(wNpcs).filter(n=>n&&n.introduced===true&&n.status!=='deceased'&&((mapNpcPlace(n)||{}).id===id));
   if(ppl.length) h+='<h2>Personen hier</h2>'+ppl.map(n=>'<div class="card ppl">'+avatar(n.name)+'<div><b>'+esc(n.name)+'</b></div></div>').join('');
@@ -1356,35 +1373,47 @@ function mapInfoHtml(id){
   if(!here.length&&!ppl.length&&!qs.length) h+='<p><small style="color:var(--mute)">Nog niets bijzonders vastgelegd op deze plek.</small></p>';
   return h;
 }
+/* schaal waarbij de hele kaart in beeld past (hoge kaarten zoals Westeros passen dan op hoogte) */
+function mapMin(){ const L=MapL(), v=$('#mapview'); if(!L||!v||!v.clientWidth) return 1; const m=L.maps[mapCurId()], ratio=m.h/m.w; return Math.min(1,v.clientHeight/(v.clientWidth*ratio)) }
 function mapClamp(){
-  const v=$('#mapview'); if(!v) return; const cw=v.clientWidth, ch=v.clientHeight, ratio=DNDMap.MAP.h/DNDMap.MAP.w, sw=cw*mapView.s, sh=cw*ratio*mapView.s;
+  const L=MapL(), v=$('#mapview'); if(!v||!L) return; const m=L.maps[mapCurId()], cw=v.clientWidth, ch=v.clientHeight, ratio=m.h/m.w, sw=cw*mapView.s, sh=cw*ratio*mapView.s;
   mapView.x=sw<=cw?(cw-sw)/2:Math.min(0,Math.max(cw-sw,mapView.x));
   mapView.y=sh<=ch?(ch-sh)/2:Math.min(0,Math.max(ch-sh,mapView.y));
 }
 function mapApply(){
-  const v=$('#mapview'), st=$('#mapstage'); if(!v||!st||!v.clientWidth) return; mapClamp();
+  const v=$('#mapview'), st=$('#mapstage'); if(!v||!st||!v.clientWidth) return; mapView.s=Math.max(mapMin(),mapView.s); mapClamp();
   st.style.width=v.clientWidth+'px'; st.style.transform='translate('+mapView.x+'px,'+mapView.y+'px) scale('+mapView.s+')';
-  st.style.setProperty('--inv',(1/mapView.s).toFixed(4)); st.classList.toggle('lab',mapView.s>=1.8);
+  st.style.setProperty('--inv',(1/mapView.s).toFixed(4)); st.classList.toggle('lab',mapView.s>=1.8*mapMin());
 }
-function mapZoomAt(px,py,f){const ns=Math.max(1,Math.min(8,mapView.s*f)), k=ns/mapView.s; mapView.x=px-(px-mapView.x)*k; mapView.y=py-(py-mapView.y)*k; mapView.s=ns; mapApply()}
+function mapZoomAt(px,py,f){const ns=Math.max(mapMin(),Math.min(8,mapView.s*f)), k=ns/mapView.s; mapView.x=px-(px-mapView.x)*k; mapView.y=py-(py-mapView.y)*k; mapView.s=ns; mapApply()}
 function mapCenter(id,s){
-  const pl=mapPlaceOf(id), v=$('#mapview'); if(!pl||!v) return; const cw=v.clientWidth, ch=v.clientHeight, ratio=DNDMap.MAP.h/DNDMap.MAP.w;
-  mapView.s=s||3; const sw=cw*mapView.s, sh=cw*ratio*mapView.s; mapView.x=cw/2-(pl.x/DNDMap.MAP.w)*sw; mapView.y=ch/2-(pl.y/DNDMap.MAP.h)*sh; mapApply();
+  const L=MapL(), pl=mapPlaceOf(id), v=$('#mapview'); if(!L||!pl||!v) return; const mid=mapCurId(), p=L.pos(pl,mid); if(!p) return;
+  const m=L.maps[mid], cw=v.clientWidth, ch=v.clientHeight, ratio=m.h/m.w;
+  mapView.s=Math.max(mapMin(),s||3); const sw=cw*mapView.s, sh=cw*ratio*mapView.s; mapView.x=cw/2-(p.x/m.w)*sw; mapView.y=ch/2-(p.y/m.h)*sh; mapApply();
 }
 function mapDrawPins(){
-  const el=$('#mappins'); if(!el) return; const vis=(mapData&&mapData.visited)||{}, cur=mapData&&mapData.current&&mapData.current.id;
+  const L=MapL(), el=$('#mappins'); if(!el||!L) return; const mid=mapCurId(), m=L.maps[mid], vis=(mapData&&mapData.visited)||{}, cur=mapData&&mapData.current&&mapData.current.id;
+  const ids=Object.keys(vis).concat(cur&&!vis[cur]?[cur]:[]).filter(id=>{const pl=mapPlaceOf(id); return pl&&L.pos(pl,mid)});
   if(!mapSel||(!vis[mapSel]&&mapSel!==cur)) mapSel=cur||Object.keys(vis)[0]||null;
-  el.innerHTML=Object.keys(vis).concat(cur&&!vis[cur]?[cur]:[]).map(id=>{
-    const pl=mapPlaceOf(id); if(!pl) return '';
-    return '<button class="pin'+(id===cur?' cur':'')+(id===mapSel?' sel':'')+'" data-pid="'+esc(id)+'" style="left:'+(pl.x/DNDMap.MAP.w*100)+'%;top:'+(pl.y/DNDMap.MAP.h*100)+'%" title="'+esc(pl.name)+'"><i></i><b>'+esc(pl.name)+'</b></button>';
+  el.innerHTML=ids.map(id=>{
+    const pl=mapPlaceOf(id), p=L.pos(pl,mid);
+    return '<button class="pin'+(id===cur?' cur':'')+(id===mapSel?' sel':'')+'" data-pid="'+esc(id)+'" style="left:'+(p.x/m.w*100)+'%;top:'+(p.y/m.h*100)+'%" title="'+esc(pl.name)+'"><i></i><b>'+esc(pl.name)+'</b></button>';
   }).join('');
+  const nav=$('#mapnav'); if(nav) nav.innerHTML=L.mapIds.length>1?L.mapIds.map(k=>'<button class="b alt sm'+(k===mid?' on':'')+'" data-mapgo="'+esc(k)+'" type="button">'+esc(L.maps[k].name)+'</button>').join(''):'';
   const inf=$('#mapinfo'); if(inf) inf.innerHTML=mapInfoHtml(mapSel);
+}
+/* naar een andere kaart van de setting; eventueel gecentreerd op een plaats */
+function mapSwitch(id,focus){
+  const L=MapL(); if(!L||!L.maps[id]) return; mapView.map=id; mapView.init=false;
+  const img=$('#mapimg'); if(img) img.src=L.maps[id].file; mapDrawPins();
+  const go=()=>{ mapView.s=mapMin(); mapView.x=0; mapView.y=0; mapApply(); mapView.init=true; if(focus&&mapPlaceOf(focus)&&L.pos(mapPlaceOf(focus),id)) mapCenter(focus,Math.max(2.2*mapMin(),2.2)); };
+  if(img&&!img.complete) img.onload=go; else go();
 }
 let mapWired=false;
 function wireMap(){
   const v=$('#mapview'); if(!v) return; const ptrs=new Map(); let drag=null, last=null, downPin=null, moved=0;
   v.addEventListener('pointerdown',e=>{
-    if(e.target.closest('.mapctl')) return;
+    if(e.target.closest('.mapctl')||e.target.closest('.mapnav')) return;
     v.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); v.classList.add('drag');
     if(ptrs.size===1){drag={x:e.clientX,y:e.clientY,vx:mapView.x,vy:mapView.y}; downPin=e.target.closest('.pin'); moved=0}
     if(ptrs.size===2){const a=[...ptrs.values()]; last={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),cx:(a[0].x+a[1].x)/2,cy:(a[0].y+a[1].y)/2}; drag=null; downPin=null}
@@ -1403,21 +1432,29 @@ function wireMap(){
   v.addEventListener('wheel',e=>{e.preventDefault(); const r=v.getBoundingClientRect(); mapZoomAt(e.clientX-r.left,e.clientY-r.top,e.deltaY<0?1.2:1/1.2)},{passive:false});
   $('#mzin').onclick=()=>mapZoomAt(v.clientWidth/2,v.clientHeight/2,1.5);
   $('#mzout').onclick=()=>mapZoomAt(v.clientWidth/2,v.clientHeight/2,1/1.5);
-  $('#mfit').onclick=()=>{mapView.s=1; mapApply()};
-  $('#mhere').onclick=()=>{const c=mapData&&mapData.current&&mapData.current.id; if(c){mapSel=c; mapDrawPins(); mapCenter(c,3)} else {mapView.s=1; mapApply()}};
+  $('#mfit').onclick=()=>{mapView.s=mapMin(); mapApply()};
+  $('#mhere').onclick=()=>{
+    const L=MapL(), c=mapData&&mapData.current&&mapData.current.id, pl=c&&mapPlaceOf(c);
+    if(pl){ mapSel=c; const mid=L.mapOf(pl); if(L.pos(pl,mapCurId())) { mapDrawPins(); mapCenter(c,3) } else mapSwitch(mid,c) } else {mapView.s=mapMin(); mapApply()}
+  };
+  /* kaartknoppen (boven de kaart en in het infovenster) */
+  const bw=$('#mapwrap'); if(!bw._mg){ bw._mg=1; bw.addEventListener('click',e=>{ const b=e.target.closest('[data-mapgo]'); if(!b) return; mapSwitch(b.dataset.mapgo,b.dataset.mapfocus||null) }); }
   if(!mapWired){mapWired=true; window.addEventListener('resize',()=>{if(screen==='camp'&&tab==='map') mapApply()})}
 }
 function renderMap(soft){
-  if(screen!=='camp'||tab!=='map'||!mapOn()) return; const box=$('#mapwrap'); if(!box) return;
+  if(screen!=='camp'||tab!=='map'||!mapOn()) return; const box=$('#mapwrap'), L=MapL(); if(!box) return;
   if(!$('#mapview')){
-    box.innerHTML='<div id="mapview"><div id="mapstage"><img id="mapimg" src="'+DNDMap.MAP.file+'" alt="Kaart van '+curSetting().ui.name+'" draggable="false"><div id="mappins"></div></div>'+
+    const mid=mapCurId();
+    box.innerHTML='<div id="mapview"><div id="mapstage"><img id="mapimg" src="'+esc(L.maps[mid].file)+'" alt="Kaart van '+esc(curSetting().ui.name)+'" draggable="false"><div id="mappins"></div></div>'+
+      '<div class="mapnav" id="mapnav"></div>'+
       '<div class="mapctl"><button id="mzin" title="Inzoomen">＋</button><button id="mzout" title="Uitzoomen">−</button><button id="mfit" title="Hele kaart">⤢</button><button id="mhere" title="Naar de huidige plek">⌖</button></div>'+
       '<div class="maphint">Sleep om te verschuiven, knijp of scrol om te zoomen, tik op een pin.</div></div><aside id="mapinfo"></aside>';
     wireMap(); mapView.init=false;
   }
   mapDrawPins();
   if(!mapView.init){
-    const img=$('#mapimg'), go=()=>{const c=mapData&&mapData.current&&mapData.current.id; mapApply(); if(c&&mapPlaceOf(c)) mapCenter(c,2.2); mapView.init=true};
+    const img=$('#mapimg'), cur=mapCurId(), go=()=>{const c=mapData&&mapData.current&&mapData.current.id; mapView.s=mapMin(); mapView.x=0; mapView.y=0; mapApply(); if(c&&mapPlaceOf(c)&&L.pos(mapPlaceOf(c),cur)) mapCenter(c,Math.max(2.2*mapMin(),2.2)); mapView.init=true};
+    if(img.getAttribute('src')!==L.maps[cur].file) img.src=L.maps[cur].file;
     if(img.complete) go(); else img.onload=go;
     requestAnimationFrame(()=>{if(!mapView.init&&img.complete) go()});
   } else mapApply();
@@ -1444,7 +1481,7 @@ function diaryQuestsHtml(S){
     let cat=catOf(x.kind), who=null;
     if(cat==='personal'){ who=ownerOf(x.id+' '+x.title+' '+(x.hook||''),x.owner); if(!who) cat='side'; }
     if(cat==='comp'){ if(!(Array.isArray(x.npcs)&&x.npcs.length&&x.npcs.some(recruited))) cat='side'; else who=x.npcs.map(npcName).join(', '); }
-    const rg=window.DNDMap&&DNDMap.REGIONS&&DNDMap.REGIONS[x.region];
+    const rg=MapL()&&MapL().REGIONS[x.region];
     items.push({cat,who,title:x.title,detail:'',place:rg?rg.name:'',done:['completed','failed','expired'].indexOf(x.status)>=0,label:WT[x.status]||''});
   });
   const addState=(o,isDone)=>{

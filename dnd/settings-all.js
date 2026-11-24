@@ -2,4 +2,5 @@
 "use strict";
 const D = require("./settings-data.js");
 ["./settings-aldmark.js", "./settings-faerun.js", "./settings-westeros.js", "./settings-thedas.js", "./settings-theros.js", "./settings-grieks.js"].forEach(f => require(f));
+require("./settings-maps.js"); /* kaarten van de vaste settings */
 module.exports = D;

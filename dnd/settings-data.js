@@ -230,6 +230,7 @@
     }
     if (!isO(K)) e.push("canonParts ontbreekt"); else ["namingRule", "tone", "settingRules", "premise", "canonNpcs", "consistent"].forEach(function (k) { if (!str(K[k], 6000)) e.push("canonParts." + k + " ontbreekt of is te lang"); });
     if (s.canon != null) { if (!isO(s.canon)) e.push("canon moet een object met documenten zijn"); else Object.keys(s.canon).forEach(function (k) { const d = s.canon[k]; if (!/^[a-z0-9_]+$/.test(k) || !isO(d) || !str(d.title, 200) || !str(d.text, 60000)) e.push("canondocument '" + k + "': sleutel (a-z, 0-9, _), titel en tekst zijn verplicht"); }); }
+    if (s.map && s.map.enabled !== false && s.map.maps) { const ML = typeof module === "object" && module.exports ? require("./map-lib.js") : (typeof self !== "undefined" ? self.DNDMapLib : null); if (ML) ML.validate(s.map).forEach(function (m) { e.push("kaart: " + m); }); }
     if (JSON.stringify(s).length > 250000) e.push("de setting is te groot (max 250 KB)");
     return e;
   }

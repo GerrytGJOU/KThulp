@@ -36,6 +36,8 @@
       ["creator.species", "Species (JSON: { \"Naam\": { \"label\", \"speed\", \"size\", \"tolk\", \"traits\": [[\"naam\", \"uitleg\"]] } })", "json"],
       ["creator.lineage", "Elf-lineages (JSON: { \"High Elf\": \"tekst\" }, mag leeg)", "json"],
       ["creator.classTolk", "Opmerking per class (JSON: { \"Wizard\": \"tekst\" }, mag leeg)", "json"]] },
+    { t: "Kaart", f: [
+      ["map", "Kaart (JSON: { enabled, start, maps, places, regions }; zie dnd/map-lib.js en settings-maps.js). Kaartbestanden staan in dnd/assets. enabled:false = geen Kaart-tab.", "json"]] },
     { t: "Canon", f: [
       ["canonParts.tone", "Toon van de campagne", "area"], ["canonParts.namingRule", "Regel voor eigennamen in het spelregeldocument (A1)", "area"],
       ["canonParts.settingRules", "Setting en regels (A1; regels beginnen met \"- \")", "area"], ["canonParts.premise", "Premisse (A1)", "area"],
@@ -68,7 +70,7 @@
       } else v = v.trim();
       setP(s, p, v);
     });
-    s.map = { enabled: false };
+    if (!s.map || typeof s.map !== "object") s.map = { enabled: false };
     if (!s.world) s.world = {}; if (!Array.isArray(s.world.anchors)) s.world.anchors = [];
     if (!s.ui || !s.ui.name) setP(s, "ui.name", s.name);
     return { s: s, errs: errs };

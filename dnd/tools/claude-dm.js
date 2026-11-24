@@ -24,7 +24,9 @@ const { spawnSync } = require("child_process");
 const fs = require("fs"), os = require("os"), path = require("path"), crypto = require("crypto");
 const PROJECT = "kthulp-certamen";
 const World = require("../world.js");
-const MapData = require("../map-data.js");
+const MapData = require("../map-data.js"), MapLib = require("../map-lib.js");
+let MAPL = null; /* kaartlaag van de setting van deze campagne (null = geen kaart) */
+function buildMapLib(S) { const m = S.map; if (!m || m.enabled === false) return null; if (m.maps) return MapLib.make(m); return MapLib.make(MapLib.fromLegacy(MapData)); }
 const PT = require("../partytable.js");
 
 /* ---------- Firebase CLI ---------- */
@@ -44,10 +46,10 @@ let SETTING = Settings.get(Settings.DEFAULT_ID);
 function useSetting(cid) {
   let id = null, snap = null;
   try { const raw = get("/dnd/campaigns/" + cid + "/setting"); snap = raw ? JSON.parse(raw) : null; } catch (e) { snap = null; }
-  if (snap && snap.id) { SETTING = Settings.resolve(snap); World.configure(SETTING.world); return snap.id; }
+  if (snap && snap.id) { SETTING = Settings.resolve(snap); World.configure(SETTING.world); MAPL = buildMapLib(SETTING); return snap.id; }
   try { id = get("/dnd/campaignIndex/" + cid + "/settingId"); } catch (e) { id = null; } id = id || Settings.DEFAULT_ID;
   if (!Settings.SETTINGS[id]) { try { const raw = get("/dnd/settings/" + id + "/json"); if (raw) Settings.registerCustom(Object.assign(JSON.parse(raw), { id: id })); } catch (e) { /* onbekend: terugval op Midden-aarde */ } }
-  SETTING = Settings.get(id); World.configure(SETTING.world); return id;
+  SETTING = Settings.get(id); World.configure(SETTING.world); MAPL = buildMapLib(SETTING); return id;
 }
 /* Blok voor de context als de campagne NIET in Midden-aarde speelt: de DM-regels in CLAUDE_DM.md zijn op Midden-aarde geschreven. */
 function settingBlock(id) {
@@ -211,7 +213,7 @@ function cmdContext(cid, flags) {
   out.push("# OPEN OPDRACHTEN (een echt nieuwe scène sluit hierop aan; gewone beurten en dialoog hoeven dat niet)\n" + (((state.quests || {}).open || []).map(x => "- " + (typeof x === "string" ? x : (x.title || "") + (x.detail ? ": " + x.detail : ""))).join("\n") || "(geen)"));
   const world = get("/dnd/" + cp(cid, "world"));
   out.push("# WERELDSTATUS (stabiele IDs; wijzig alleen via worldDelta)\n" + (world ? World.worldContext(world, { hay: (sortedVals(msgs).slice(-6).map(m => m.text).join(" ") + " " + pend.map(p => p.text).join(" ")).toLowerCase(), region: world.sceneRegion, maxChars: 6000 }) : "(niet actief)"));
-  if (SETTING.map.enabled !== false) out.push("# KAARTPLAATSEN (kies hieruit het id voor \"place\")\n" + MapData.ids.join(", "));
+  if (MAPL) out.push("# KAARTPLAATSEN (kies hieruit het id voor \"place\")\n" + MAPL.ids.join(", "));
   out.push("# DM-NOTITIES (privé)\n" + (Object.entries(notes).map(([k, v]) => "- " + k + ": " + v).join("\n") || "(nog geen)"));
   out.push("# RECENTE GESCHIEDENIS\n" + (sortedVals(msgs).filter(m => m.type !== "system").slice(-10).map(m => (m.type === "narration" ? "DM" : m.author) + ": " + m.text).join("\n\n") || "(begin van het verhaal)"));
   { const lb = levelBlock(allChars); if (lb) out.push(lb); }
@@ -224,7 +226,7 @@ function parseDM(o, names, chars) {
   if (typeof o.narration !== "string" || !o.narration) throw new Error("narration ontbreekt");
   o.statePatch = o.statePatch && typeof o.statePatch === "object" ? o.statePatch : {};
   o.logEntries = Array.isArray(o.logEntries) ? o.logEntries : [];
-  o.place = (typeof o.place === "string" && SETTING.map.enabled !== false && MapData.byId[o.place]) ? o.place : null;
+  o.place = (typeof o.place === "string" && MAPL && MAPL.byId[o.place]) ? o.place : null;
   o.worldDelta = (o.worldDelta && typeof o.worldDelta === "object" && !Array.isArray(o.worldDelta)) ? o.worldDelta : null;
   o.speakers = Array.isArray(o.speakers) ? o.speakers.filter(s => typeof s === "string").slice(0, 4) : [];
   o.newNpcs = Array.isArray(o.newNpcs) ? o.newNpcs.filter(n => n && typeof n.name === "string" && n.name.trim()) : [];
@@ -288,11 +290,11 @@ function cmdApply(cid, file, flags) {
   const newNotes = { ...notes }; for (const [k, v] of Object.entries(out.dmNotes)) { if (v === null) delete newNotes[k]; else newNotes[k] = v; }
   up[cp(cid, "dmnotes")] = Object.keys(newNotes).length ? newNotes : null;
   const worldPrev = []; let mapPrev = [];
-  if (SETTING.map.enabled !== false) try {
+  if (MAPL) try {
     const mapNow = get("/dnd/" + cp(cid, "map")), nc = (wplan && wplan.calendar) || (world && world.calendar) || null;
     const sc = (out.statePatch && out.statePatch.inGame && out.statePatch.inGame.location) || (state.inGame && state.inGame.location) || "";
-    const pl = MapData.determinePlace({ id: out.place, locName: out.location && out.location.name, sceneText: sc, region: (out.worldDelta && out.worldDelta.region) || (world && world.sceneRegion) || null });
-    const vis = MapData.planVisit(mapNow, pl, nc && nc.y ? { y: nc.y, m: nc.m, d: nc.d } : null, out.location ? slug(out.location.name) : null, now);
+    const pl = MAPL.determinePlace({ id: out.place, locName: out.location && out.location.name, sceneText: sc, region: (out.worldDelta && out.worldDelta.region) || (world && world.sceneRegion) || null });
+    const vis = MAPL.planVisit(mapNow, pl, nc && nc.y ? { y: nc.y, m: nc.m, d: nc.d } : null, out.location ? slug(out.location.name) : null, now);
     Object.keys(vis.set).forEach(p => { up[cp(cid, p)] = vis.set[p]; }); mapPrev = vis.prev;
   } catch (e) { console.log("let op: kaart niet bijgewerkt (" + e.message + ")"); }
   if (world && (wplan || (out.worldDelta && out.worldDelta.region))) {
