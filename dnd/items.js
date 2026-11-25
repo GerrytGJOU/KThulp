@@ -12,6 +12,12 @@
   /* [id, categorie, trefwoorden (regex-bron), bestand, uniek?] */
   var GROUPS = [
     /* --- unieke voorwerpen met een eigen naam --- */
+    { id: "healing-draught", cat: "drink",  re: "genezende drank|genezingsdrank|healing (potion|draught)|potion of healing", file: "healing-draught.webp", unique: true },
+    { id: "rush-bracelet", cat: "clothing", re: "biezen armband|rush bracelet", file: "rush-bracelet.webp", unique: true },
+    { id: "blackhewer",    cat: "weapon",   re: "blackhewer|naragfelak", file: "blackhewer.webp", unique: true },
+    { id: "axe-dwarf-throwing", cat: "weapon", re: "werpbijl|dwar(f|ven) throwing axe", file: "axe-dwarf-throwing.webp", unique: true },
+    { id: "ranger-token",  cat: "clothing", re: "wegteken|ranger.?token|way.?token", file: "ranger-token.webp", unique: true },
+    { id: "watchstone-arnor", cat: "magic", re: "wachtsteen|watchstone|watch stone", file: "watchstone-arnor.webp", unique: true },
     { id: "honey-cakes",   cat: "food",     re: "honingkoek|honey.?cake", file: "honey-cakes.webp", unique: true },
     { id: "honey-crock",   cat: "food",     re: "\\bhoning\\b|honingkruik|honingpot|honey (jar|pot|crock)|(jar|pot|crock) of honey", file: "honey-crock.webp", unique: true },
     { id: "raven-feather", cat: "tool",     re: "raafveer|ravenveer|raven.?veer|raven.?feather", file: "raven-feather.webp", unique: true },
