@@ -102,7 +102,8 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 #mapwrap{flex:1;display:flex;min-height:0;position:relative}
 #mapview{position:relative;flex:1;min-width:0;overflow:hidden;background:#14100d;touch-action:none;cursor:grab;user-select:none}
 #mapview.drag{cursor:grabbing}
-#mapstage{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+/* bewust geen will-change: anders tekent de browser kaart en labels op 1× en rekt hij dat plaatje op bij het inzoomen */
+#mapstage{position:absolute;left:0;top:0;transform-origin:0 0}
 #mapimg{display:block;width:100%;height:auto;pointer-events:none;-webkit-user-drag:none}
 .mapnav{position:absolute;left:10px;top:10px;right:64px;display:flex;flex-wrap:wrap;gap:6px;z-index:5}.mapnav button.on{background:var(--gold);color:#2b2012}
 .mapctl{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:5}
