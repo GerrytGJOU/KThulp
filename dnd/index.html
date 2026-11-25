@@ -64,6 +64,11 @@ textarea,input[type=text],input[type=password],input[type=number],select{width:1
 textarea{resize:vertical;min-height:70px}
 @media(max-height:760px){.compose textarea{min-height:44px;height:48px}.compose{padding:5px 12px 6px;gap:4px}.compose select,.compose input[type=text],.compose input[type=number]{padding:5px 8px}.compose .b{padding:7px 14px}.status{padding:4px 12px;font-size:13px}}
 .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.rollbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.rollbar>.row{flex-basis:100%}.rollbar>.rmain,.rollbar>.rxadds{display:contents}
+.rollbar #rsel{flex:0 1 250px;width:250px;min-width:150px}.rollbar #rnat,.rollbar #rnat2{width:70px;flex:none}.rollbar #radv{width:auto;flex:none}
+.rollbar #rfree{flex:1 1 150px;width:auto;min-width:150px}.rollbar>#rtgtrow,.rollbar>#rdmgrow{flex:0 1 auto;order:1}.rollbar #rtgt{flex:0 1 220px;width:220px;min-width:150px}.rollbar>.rxlist{order:2}
+.rollbar select,.rollbar input[type=text],.rollbar input[type=number]{padding:5px 8px}.rollbar .b{padding:5px 10px}
+.mineline{flex-wrap:nowrap;align-items:baseline;gap:10px}.mineline .otheract{margin-top:0;min-width:0;flex:0 1 auto}
 button.b,label.b{background:var(--gold);color:#1a140c;border:0;border-radius:6px;padding:9px 14px;font:inherit;font-weight:bold;cursor:pointer;display:inline-block}
 button.b.alt,label.b.alt{background:#3a3027;color:var(--text)}
 button.b.red{background:var(--red);color:#fff}
@@ -907,12 +912,11 @@ function renderGame(){
   if(!keepDraft){
     composeRound=turn.round;
     cpz.innerHTML=`<textarea id="act" placeholder="${mine?'Je actie is ingediend. Typ hier om hem te vervangen.':'Wat doe je?'}"></textarea>
-    ${rollRowHtml()}
-    ${rollExtraHtml()}
+    <div class="rollbar">${rollRowHtml()}${rollExtraHtml()}</div>
     <div class="row"><button class="b" id="send">${mine?'Actie vervangen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button><select id="dmsel" class="dmsel" title="Wie speelt de volgende beurt als de DM?"></select>
-    ${others.length>1?'<button class="b alt" id="skip">Zonder iedereen verder</button>':''}</div>
-    ${others.length?'<div class="row" id="skiprow">'+others.map(n=>'<button class="b alt sm" data-skip="'+esc(n)+'" type="button">⏭ Zonder '+esc(n)+'</button>').join('')+'</div>':''}
-    ${mine?(String(mine.text).length>60?'<details class="otheract"><summary>Ingediend: '+esc(String(mine.text).slice(0,60).trim())+'…</summary>'+esc(mine.text)+'</details><small><a href="#" id="editmine">wijzig</a></small>':'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a></small>'):''}`;
+    ${others.length>1?'<button class="b alt" id="skip">Zonder iedereen verder</button>':''}
+    ${others.map(n=>'<button class="b alt sm" data-skip="'+esc(n)+'" type="button">⏭ Zonder '+esc(n)+'</button>').join('')}</div>
+    ${mine?(String(mine.text).length>60?'<div class="row mineline"><details class="otheract"><summary>Ingediend: '+esc(String(mine.text).slice(0,60).trim())+'…</summary>'+esc(mine.text)+'</details><small><a href="#" id="editmine">wijzig</a></small></div>':'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a></small>'):''}`;
     const em=$('#editmine'); if(em) em.onclick=e=>{e.preventDefault(); const sp=rollSplit(mine.text); draft=sp.text; rollExtras=sp.rolls; rollDraft='';rollKey='';rollNat='';rollNat2='';rollAdv='';rollO={};rollFree='';rollDmg='';rollDmgX='';rollTgt='';rollCleave=false; if(document.activeElement) document.activeElement.blur(); renderGame(); const a=$('#act'); if(a) a.focus()};
     $('#act').value=draft;
     $('#act').oninput=e=>draft=e.target.value; wireRoll();
@@ -1793,7 +1797,7 @@ function dmgText(d,v,vx){
   return {total,text:'schade: '+bits.join(' + ').replace(/\+ -/g,'− ')+(x?' + extra '+x.parts.join(' + '):'')+' = '+total+(d.type?' '+d.type:'')};
 }
 function dmgRowHtml(){
-  return '<div class="row" id="rtgtrow" style="display:none"><select id="rtgt" aria-label="Doelwit" style="flex:1;min-width:150px"></select>'+
+  return '<div class="row" id="rtgtrow" style="display:none"><select id="rtgt" aria-label="Doelwit"></select>'+
     '<label id="rcleavewrap" style="font-size:13px"><input type="checkbox" id="rcleave"'+(rollCleave?' checked':'')+'> Cleave-aanval</label></div>'+
     '<div class="row" id="rdmgrow" style="display:none"><span id="rdmglbl" style="font-size:13px;color:var(--gold)"></span>'+
     '<input type="text" id="rdmg" inputmode="tel" aria-label="Uitkomst van de schadedobbels" value="'+esc(rollDmg)+'" style="width:130px">'+
@@ -1807,7 +1811,7 @@ function rollReset(){rollTgt='';rollCleave=false;rollDmg='';rollDmgX='';rollAdv=
 function rollExtraHtml(){
   if(!myChar()&&!rollExtras.length) return '';
   return (rollExtras.length?'<div class="row rxlist">'+rollExtras.map((x,i)=>'<span class="chip">🎲 '+esc(x)+' <button type="button" class="rxdel" data-rxdel="'+i+'" aria-label="Worp verwijderen">✕</button></span>').join('')+'</div>':'')+
-    '<div class="row"><button type="button" class="b alt sm" id="rxadd">➕ Nog een worp</button><input type="text" id="rfree" placeholder="Andere dobbels (bv. Cleave 4+3 = 7)" value="'+esc(rollFree)+'" style="flex:1;min-width:180px"></div>';
+    '<div class="row rxadds"><button type="button" class="b alt sm" id="rxadd">➕ Nog een worp</button><input type="text" id="rfree" placeholder="Andere dobbels (bv. Cleave 4+3 = 7)" value="'+esc(rollFree)+'"></div>';
 }
 function wireRollExtra(){
   const redraw=()=>{ if(document.activeElement) document.activeElement.blur(); renderGame(); };
@@ -1828,10 +1832,10 @@ function rollRowHtml(){
   if(rollKey===null){const req=turn&&turn.checks&&turn.checks[me.name]; rollKey=req?matchCheck(req):'';}
   const list=rollList(c,rollRage), groups=[...new Set(list.map(r=>r.group))];
   const opts=groups.map(g=>'<optgroup label="'+g+'">'+list.filter(r=>r.group===g).map(r=>'<option value="'+r.key+'"'+(r.key===rollKey?' selected':'')+'>'+esc(r.label)+' ('+sgn(r.bonus)+')</option>').join('')+'</optgroup>').join('');
-  return '<div class="row"><select id="rsel" style="flex:2;min-width:150px"><option value="">🎲 Geen worp meegeven</option>'+opts+'</select>'+
-    '<input type="number" id="rnat" inputmode="numeric" min="1" max="20" placeholder="d20" value="'+esc(rollNat)+'" style="width:78px">'+
-    (rollAdv?'<input type="number" id="rnat2" inputmode="numeric" min="1" max="20" placeholder="2e d20" value="'+esc(rollNat2)+'" style="width:78px">':'')+
-    '<select id="radv" aria-label="Voordeel of nadeel" style="width:auto;flex:0 0 auto"><option value="">Normaal</option><option value="adv"'+(rollAdv==='adv'?' selected':'')+'>Voordeel</option><option value="dis"'+(rollAdv==='dis'?' selected':'')+'>Nadeel</option></select>'+
+  return '<div class="row rmain"><select id="rsel"><option value="">🎲 Geen worp meegeven</option>'+opts+'</select>'+
+    '<input type="number" id="rnat" inputmode="numeric" min="1" max="20" placeholder="d20" value="'+esc(rollNat)+'">'+
+    (rollAdv?'<input type="number" id="rnat2" inputmode="numeric" min="1" max="20" placeholder="2e d20" value="'+esc(rollNat2)+'">':'')+
+    '<select id="radv" aria-label="Voordeel of nadeel"><option value="">Normaal</option><option value="adv"'+(rollAdv==='adv'?' selected':'')+'>Voordeel</option><option value="dis"'+(rollAdv==='dis'?' selected':'')+'>Nadeel</option></select>'+
     '<span id="rout" class="chip" style="font-size:13px;padding:4px 10px"></span>'+
     ((c.rageSkills&&c.rageSkills.length)?'<label style="font-size:13px"><input type="checkbox" id="rrage"'+(rollRage?' checked':'')+'> Rage</label>':'')+'</div>'+dmgRowHtml();
 }
