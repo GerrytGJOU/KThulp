@@ -68,6 +68,7 @@ textarea{resize:vertical;min-height:70px}
 .rollbar #rsel{flex:0 1 250px;width:250px;min-width:150px}.rollbar #rnat,.rollbar #rnat2{width:70px;flex:none}.rollbar #radv{width:auto;flex:none}
 .rollbar #rfree{flex:1 1 150px;width:auto;min-width:150px}.rollbar>#rtgtrow,.rollbar>#rdmgrow{flex:0 1 auto;order:1}.rollbar #rtgt{flex:0 1 220px;width:220px;min-width:150px}.rollbar>.rxlist{order:2}
 .rollbar select,.rollbar input[type=text],.rollbar input[type=number]{padding:5px 8px}.rollbar .b{padding:5px 10px}
+#rolltgl{display:none}
 .mineline{flex-wrap:nowrap;align-items:baseline;gap:10px}.mineline .otheract{margin-top:0;min-width:0;flex:0 1 auto}
 button.b,label.b{background:var(--gold);color:#1a140c;border:0;border-radius:6px;padding:9px 14px;font:inherit;font-weight:bold;cursor:pointer;display:inline-block}
 button.b.alt,label.b.alt{background:#3a3027;color:var(--text)}
@@ -228,6 +229,31 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 .sttile em{margin-top:auto;padding-top:4px;font-size:11px;font-style:normal;letter-spacing:.06em;color:var(--gold)}
 .stpanel{grid-column:1/-1;margin:0;border:1px solid var(--gold)}
 .stpanel p{margin:6px 0;color:var(--mute)}
+@media(max-width:600px){
+header{padding-top:5px;padding-bottom:4px}header h1{font-size:15px}
+#scenebar{font-size:12px;padding:2px 10px}
+#partybar{gap:6px;padding:4px 8px}
+#partybar .pc{flex:1 1 0;min-width:150px;max-width:none;gap:6px;padding:3px 6px}
+#partybar .pc .av{width:30px;height:30px}#partybar .pc b{font-size:13px}#partybar .pc small{font-size:11px}
+#partybar .hpb{margin:2px 0 1px;height:5px}#partybar .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}#partybar .chip{flex:none;font-size:10px}
+#initbar{padding:3px 8px}
+.scroll{padding:6px 8px}
+.status{padding:4px 10px;font-size:13px;max-height:17vh}
+.compose{padding:5px 8px 6px;gap:5px}
+.compose textarea{min-height:44px;height:52px}
+.compose .b{padding:7px 11px;font-size:14px}
+.compose select,.compose input[type=text],.compose input[type=number]{padding:5px 7px}
+.rollbar:not(.open){display:none}
+/* tijdens het invullen van een worp: partijkaarten weg en de vraag van de DM lager (scrollt) */
+#gamemain:has(.rollbar.open) #partybar{display:none}#gamemain:has(.rollbar.open) .status{max-height:11vh}
+.rollbar{gap:5px}.rollbar #rsel{flex:1 1 130px;width:130px;min-width:120px}.rollbar #rnat,.rollbar #rnat2{width:56px}.rollbar #radv{font-size:14px}
+#rdmg,#rdmgx{width:98px!important}#rdmglbl{flex-basis:100%}.rollbar #rout,.rollbar #rdmgout{font-size:12px!important;padding:3px 8px!important}
+.rollbar #rfree{flex-basis:110px;min-width:110px}
+#rolltgl{display:inline-block}
+.compose .dmsel{flex:1 1 110px;font-size:14px}
+nav button{padding:7px 2px;font-size:13px}
+footer{padding-top:2px;padding-bottom:2px;font-size:10px}
+}
 </style>
 </head>
 <body>
@@ -913,7 +939,7 @@ function renderGame(){
     composeRound=turn.round;
     cpz.innerHTML=`<textarea id="act" placeholder="${mine?'Je actie is ingediend. Typ hier om hem te vervangen.':'Wat doe je?'}"></textarea>
     <div class="rollbar">${rollRowHtml()}${rollExtraHtml()}</div>
-    <div class="row"><button class="b" id="send">${mine?'Actie vervangen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button><select id="dmsel" class="dmsel" title="Wie speelt de volgende beurt als de DM?"></select>
+    <div class="row"><button class="b" id="send">${mine?'Actie vervangen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button><button class="b alt" id="rolltgl" type="button">🎲 Worp</button><select id="dmsel" class="dmsel" title="Wie speelt de volgende beurt als de DM?"></select>
     ${others.length>1?'<button class="b alt" id="skip">Zonder iedereen verder</button>':''}
     ${others.map(n=>'<button class="b alt sm" data-skip="'+esc(n)+'" type="button">⏭ Zonder '+esc(n)+'</button>').join('')}</div>
     ${mine?(String(mine.text).length>60?'<div class="row mineline"><details class="otheract"><summary>Ingediend: '+esc(String(mine.text).slice(0,60).trim())+'…</summary>'+esc(mine.text)+'</details><small><a href="#" id="editmine">wijzig</a></small></div>':'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a></small>'):''}`;
@@ -921,6 +947,13 @@ function renderGame(){
     $('#act').value=draft;
     $('#act').oninput=e=>draft=e.target.value; wireRoll();
     $('#send').onclick=()=>submit(false);
+    /* telefoon: het worpblok is ingeklapt, tenzij de DM een worp vraagt of er al iets is ingevuld */
+    const rb=cpz.querySelector('.rollbar'), rt=$('#rolltgl');
+    if(rb&&rt){
+      const show=o=>{rb.classList.toggle('open',o); rt.textContent='🎲 Worp '+(o?'▴':'▾'); rt.setAttribute('aria-expanded',o)};
+      show(rollOpen!==null?rollOpen:!!(checks||rollKey||rollDraft||rollExtras.length||rollFree));
+      rt.onclick=()=>{rollOpen=!rb.classList.contains('open'); show(rollOpen)};
+    }
     $('#pass').onclick=()=>submit(true);
     const sk=$('#skip'); if(sk) sk.onclick=skipOthers;
     document.querySelectorAll('[data-skip]').forEach(b=>b.onclick=()=>skipPlayer(b));
@@ -1729,6 +1762,7 @@ let sheetKey='', sheetRage=false, sheetRoll='', sheetEdit=false, sheetOpen={Inve
 let rollKey=null, rollNat='', rollRage=false, rollO={}, newSys='', genCtx=null;
 let rollAdv='', rollNat2='', rollExtras=[], rollFree=''; /* meerdere worpen per actie: toegevoegde worpen + vrij veld voor schade e.d. */
 let rollDmg='', rollDmgX=''; /* schade bij een aanvalsworp: dobbelsteenresultaat en extra schadedobbels */
+let rollOpen=null; /* telefoon: worpblok open of dicht (null = automatisch) */
 let rollTgt='', rollCleave=false; /* doelwit uit de initiatieflijst en of dit de Cleave-aanval is */
 
 function amod(c,k){return Math.floor((((c.abilities||{})[k])||10)/2-5)}
@@ -1807,7 +1841,7 @@ function dmgRowHtml(){
 function rollAll(){return rollExtras.concat([rollDraft,rollFree]).map(x=>String(x||'').replace(/[\[\]]/g,'').trim()).filter(Boolean)}
 function rollTags(list){return list.map(x=>'  [worp: '+x+']').join('')}
 function rollSplit(t){const rolls=[]; const text=String(t||'').replace(/\s*\[worp:([^\]]*)\]/gi,(m,x)=>{rolls.push(x.trim()); return ''}); return {text,rolls};}
-function rollReset(){rollTgt='';rollCleave=false;rollDmg='';rollDmgX='';rollAdv='';rollNat2='';rollExtras=[];rollFree=''}
+function rollReset(){rollOpen=null;rollTgt='';rollCleave=false;rollDmg='';rollDmgX='';rollAdv='';rollNat2='';rollExtras=[];rollFree=''}
 function rollExtraHtml(){
   if(!myChar()&&!rollExtras.length) return '';
   return (rollExtras.length?'<div class="row rxlist">'+rollExtras.map((x,i)=>'<span class="chip">🎲 '+esc(x)+' <button type="button" class="rxdel" data-rxdel="'+i+'" aria-label="Worp verwijderen">✕</button></span>').join('')+'</div>':'')+
