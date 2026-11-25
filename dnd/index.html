@@ -133,7 +133,7 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 .pgrp{color:var(--gold);margin:14px 0 6px;font-size:1em}
 .ppl .av{width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid #4a3d30;background:#0f0d0b;flex:none;display:flex;align-items:center;justify-content:center;color:var(--mute)}
 .more-btn{width:100%;text-align:left;margin-bottom:8px;padding:14px}
-.rolls{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.rxlist{flex-wrap:wrap}.rxdel{background:none;border:0;color:inherit;font-size:14px;cursor:pointer;padding:2px 6px;min-width:30px;min-height:30px}.rolls{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 .rc{font-size:12px;padding:3px 8px;border-radius:12px;background:#3a3027;color:#f3e9d2;border:1px solid #6a5a44;line-height:1.3}
 .rc.ok{border-color:#6a9a5a;background:#2c3a28}.rc.ko{border-color:#a8432f;background:#3d2420}
 .rc.n20{border-color:#f3df9c;background:#5a4515;box-shadow:0 0 8px rgba(243,223,156,.7)}
@@ -855,7 +855,7 @@ function renderGame(){
   } else if(atBottom) th.scrollTop=th.scrollHeight;
 
   const sb=$('#statusbar'), cpz=$('#compose');
-  const roundChanged=!!(turn&&composeRound!==turn.round); if(roundChanged){draft='';rollDraft='';rollKey=null;rollNat='';rollO={}}
+  const roundChanged=!!(turn&&composeRound!==turn.round); if(roundChanged){draft='';rollDraft='';rollKey=null;rollNat='';rollO={};rollReset()}
   const cEl=$('#compose'); const keepDraft=!roundChanged&&!!(cEl&&document.activeElement&&cEl!==document.activeElement&&cEl.contains(document.activeElement));
   if(!turn){
     sb.innerHTML='Nog geen campagne gestart.';
@@ -901,11 +901,12 @@ function renderGame(){
     composeRound=turn.round;
     cpz.innerHTML=`<textarea id="act" placeholder="${mine?'Je actie is ingediend. Typ hier om hem te vervangen.':'Wat doe je?'}"></textarea>
     ${rollRowHtml()}
+    ${rollExtraHtml()}
     <div class="row"><button class="b" id="send">${mine?'Actie vervangen':'Verstuur'}</button><button class="b alt" id="pass">Ik pas</button><select id="dmsel" class="dmsel" title="Wie speelt de volgende beurt als de DM?"></select>
     ${others.length>1?'<button class="b alt" id="skip">Zonder iedereen verder</button>':''}</div>
     ${others.length?'<div class="row" id="skiprow">'+others.map(n=>'<button class="b alt sm" data-skip="'+esc(n)+'" type="button">⏭ Zonder '+esc(n)+'</button>').join('')+'</div>':''}
     ${mine?(String(mine.text).length>60?'<details class="otheract"><summary>Ingediend: '+esc(String(mine.text).slice(0,60).trim())+'…</summary>'+esc(mine.text)+'</details><small><a href="#" id="editmine">wijzig</a></small>':'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a></small>'):''}`;
-    const em=$('#editmine'); if(em) em.onclick=e=>{e.preventDefault(); draft=mine.text.replace(/\s*\[worp:[^\]]*\]/i,''); $('#act').value=draft; $('#act').focus()};
+    const em=$('#editmine'); if(em) em.onclick=e=>{e.preventDefault(); const sp=rollSplit(mine.text); draft=sp.text; rollExtras=sp.rolls; rollDraft='';rollKey='';rollNat='';rollNat2='';rollAdv='';rollO={};rollFree=''; if(document.activeElement) document.activeElement.blur(); renderGame(); const a=$('#act'); if(a) a.focus()};
     $('#act').value=draft;
     $('#act').oninput=e=>draft=e.target.value; wireRoll();
     $('#send').onclick=()=>submit(false);
@@ -924,9 +925,9 @@ async function submit(pass){
   const text=pass?'(past / wacht af)':draft.trim();
   if(!text){alert('Typ eerst een actie.');return}
   if(!pass&&$('#rsel')&&!rollDraft.trim()&&(rollKey||String(rollNat).trim())&&!confirm('Je worp is nog niet compleet ('+(rollKey?'je dobbelworp ontbreekt':'je hebt geen worp gekozen')+'), dus hij wordt NIET meegestuurd. Toch versturen zonder worp?')) return;
-  const round=turn.round, full=text+(rollDraft.trim()&&!pass?'  [worp: '+rollDraft.trim()+']':'');
+  const round=turn.round, full=text+(pass?'':rollTags(rollAll()));
   await db.ref(cp('pending/'+me.uid)).set({round,name:me.name,text:full,pass:!!pass,t:Date.now()});
-  draft="";rollDraft="";rollKey=null;rollNat="";rollO={}; { const ta=$('#act'); if(ta) ta.value=''; }
+  draft="";rollDraft="";rollKey=null;rollNat="";rollO={};rollReset(); { const ta=$('#act'); if(ta) ta.value=''; }
   await saveDmChoice();
   const ok=await removeAwaiting(me.name,round);
   if(ok==='resolve') resolve(false);
@@ -1014,6 +1015,7 @@ Regels:
 - Worpen: zet de worpen die je zelf doet (NPC's, vijanden, companions) in "rolls" (${R.rollEx}). De app toont ze als chips: schrijf die NIET ook nog eens als haakjes in de vertelling. Toon nooit de DC. Vertel het gevolg. ${R.crit}
 - ${R.playerRolls}
 - SPELERCHECKS IN DE VERTELLING: een worp van een speler zet je NIET in "rolls" maar noem je op de plek in de tekst waar hij telt, direct na de handeling van het personage, met skill en totaal: \"Wulfgrim kijkt naar de twee gestaltes (Perception 14) en ziet meteen dat de linker een kop groter is dan de ander...\". Doe dat voor ELKE speler die een check deed of kreeg, in dezelfde beurt, ieder met zijn eigen totaal en zijn eigen, bij die uitkomst passende waarneming. Laat nooit de worp van de één de uitkomst van de ander bepalen.
+- Een actie kan meerdere [worp: ...]-blokken bevatten (bv. de aanvalsworp, de schade en een extra effect zoals Dreadful Strike, of twee aanvallen). Verwerk ze allemaal, in de logische volgorde. Vraag in nextTurn.checks alle dobbels die je nodig hebt in één keer (bv. "Aanval met voordeel, schade 1d8+3 en 2d6 Dreadful Strike").
 - Doet een PC iets waarbij een check hoort (waarnemen, sluipen, overtuigen, ...) maar staat er geen [worp: ...] in zijn actie, dan: (a) vraag de check via nextTurn.checks als er spanning of risico is, of (b) gebruik bij een kleine waarneming ${R.passive} en noem die in de tekst, bv. \"(passieve Perception 13)\". Negeer zo'n actie nooit en geef niet stilzwijgend alleen de uitkomst van de speler die wel rolde.
 - INFORMATIE PER UITKOMST: bij een waarnemings-, kennis- of onderzoekscheck hangt de hoeveelheid informatie af van het totaal, in lagen: een lage uitkomst geeft het oppervlakkige (wat iedereen ziet), een gemiddelde uitkomst een bruikbaar detail, een hoge uitkomst het verborgen of veelzeggende detail (een wapen, een insigne, een accent, een verborgen gebaar). Bedenk de lagen vooraf en geef elke speler precies de lagen die zijn totaal verdient; verklap de DC's niet.
 - Gevecht: zet "initiative" in de Stand met "active" = wie nu aan de beurt is en "order" met naam, init en enemy:true voor vijanden; werk "active" bij elke beurt bij en zet initiative op null zodra het gevecht voorbij is.
@@ -1669,6 +1671,7 @@ const SKNL={atletiek:'athletics',waarneming:'perception',overleven:'survival',in
 const ABNL={kracht:'str',behendigheid:'dex',lichaamsbouw:'con',conditie:'con',intelligentie:'int',wijsheid:'wis',charisma:'cha'};
 let sheetKey='', sheetRage=false, sheetRoll='', sheetEdit=false, sheetOpen={Inventory:true};
 let rollKey=null, rollNat='', rollRage=false, rollO={}, newSys='', genCtx=null;
+let rollAdv='', rollNat2='', rollExtras=[], rollFree=''; /* meerdere worpen per actie: toegevoegde worpen + vrij veld voor schade e.d. */
 
 function amod(c,k){return Math.floor((((c.abilities||{})[k])||10)/2-5)}
 function pbOf(c){return Math.floor(((Number(c.level)||1)-1)/4)+2}
@@ -1709,6 +1712,23 @@ function matchCheck(text){
   return '';
 }
 function rollText(r,nat){const tot=nat+r.bonus; return r.label+': '+nat+' '+(r.bonus>=0?'+ ':'− ')+Math.abs(r.bonus)+' = '+tot;}
+/* met voordeel of nadeel telt de hoogste of laagste van twee d20's */
+function rollTextAdv(r,a,b,adv){const nat=adv==='dis'?Math.min(a,b):Math.max(a,b); return rollText(Object.assign({},r,{label:r.label+' ('+(adv==='dis'?'nadeel':'voordeel')+': '+a+' en '+b+')'}),nat);}
+function rollAll(){return rollExtras.concat([rollDraft,rollFree]).map(x=>String(x||'').replace(/[\[\]]/g,'').trim()).filter(Boolean)}
+function rollTags(list){return list.map(x=>'  [worp: '+x+']').join('')}
+function rollSplit(t){const rolls=[]; const text=String(t||'').replace(/\s*\[worp:([^\]]*)\]/gi,(m,x)=>{rolls.push(x.trim()); return ''}); return {text,rolls};}
+function rollReset(){rollAdv='';rollNat2='';rollExtras=[];rollFree=''}
+function rollExtraHtml(){
+  if(!myChar()&&!rollExtras.length) return '';
+  return (rollExtras.length?'<div class="row rxlist">'+rollExtras.map((x,i)=>'<span class="chip">🎲 '+esc(x)+' <button type="button" class="rxdel" data-rxdel="'+i+'" aria-label="Worp verwijderen">✕</button></span>').join('')+'</div>':'')+
+    '<div class="row"><button type="button" class="b alt sm" id="rxadd">➕ Nog een worp</button><input type="text" id="rfree" placeholder="Schade of andere dobbels (bv. Schade 3+3 = 6)" value="'+esc(rollFree)+'" style="flex:1;min-width:180px"></div>';
+}
+function wireRollExtra(){
+  const redraw=()=>{ if(document.activeElement) document.activeElement.blur(); renderGame(); };
+  const fr=$('#rfree'); if(fr) fr.oninput=e=>{rollFree=e.target.value};
+  const add=$('#rxadd'); if(add) add.onclick=()=>{ const x=rollDraft.trim(); if(!x){alert('Vul eerst de worp hierboven in (kies de worp en je dobbel). Daarna kun je een volgende toevoegen.');return} rollExtras.push(x); rollDraft='';rollKey='';rollNat='';rollNat2='';rollAdv='';rollO={}; redraw(); };
+  document.querySelectorAll('[data-rxdel]').forEach(b=>b.onclick=()=>{rollExtras.splice(Number(b.dataset.rxdel),1); redraw();});
+}
 
 /* --- in het spel: worp bij de actie --- */
 /* niet-D&D-personages (zie gensheet.js): ruleset op het personage */
@@ -1724,16 +1744,20 @@ function rollRowHtml(){
   const opts=groups.map(g=>'<optgroup label="'+g+'">'+list.filter(r=>r.group===g).map(r=>'<option value="'+r.key+'"'+(r.key===rollKey?' selected':'')+'>'+esc(r.label)+' ('+sgn(r.bonus)+')</option>').join('')+'</optgroup>').join('');
   return '<div class="row"><select id="rsel" style="flex:2;min-width:150px"><option value="">🎲 Geen worp meegeven</option>'+opts+'</select>'+
     '<input type="number" id="rnat" inputmode="numeric" min="1" max="20" placeholder="d20" value="'+esc(rollNat)+'" style="width:78px">'+
+    (rollAdv?'<input type="number" id="rnat2" inputmode="numeric" min="1" max="20" placeholder="2e d20" value="'+esc(rollNat2)+'" style="width:78px">':'')+
+    '<select id="radv" aria-label="Voordeel of nadeel" style="width:auto;flex:0 0 auto"><option value="">Normaal</option><option value="adv"'+(rollAdv==='adv'?' selected':'')+'>Voordeel</option><option value="dis"'+(rollAdv==='dis'?' selected':'')+'>Nadeel</option></select>'+
     '<span id="rout" class="chip" style="font-size:13px;padding:4px 10px"></span>'+
     ((c.rageSkills&&c.rageSkills.length)?'<label style="font-size:13px"><input type="checkbox" id="rrage"'+(rollRage?' checked':'')+'> Rage</label>':'')+'</div>';
 }
 function updateRoll(){
   const c=myChar(), out=$('#rout'); if(!c||!out||isGen(c)) return;
   const r=rollKey?findRoll(c,rollKey,rollRage):null, nat=Number(rollNat);
-  if(r&&nat>=1&&nat<=20){ rollDraft=rollText(r,nat); out.textContent='= '+(nat+r.bonus)+(nat===20?' ✨':nat===1?' 💥':''); }
-  else { rollDraft=''; out.textContent=r?('bonus '+sgn(r.bonus)+' · vul je d20 in'):(String(rollNat).trim()?'kies eerst welke worp →':'—'); }
+  const nat2=Number(rollNat2), ok1=nat>=1&&nat<=20, ok2=!rollAdv||(nat2>=1&&nat2<=20);
+  if(r&&ok1&&ok2){ const use=!rollAdv?nat:(rollAdv==='dis'?Math.min(nat,nat2):Math.max(nat,nat2)); rollDraft=rollAdv?rollTextAdv(r,nat,nat2,rollAdv):rollText(r,nat); out.textContent='= '+(use+r.bonus)+(use===20?' ✨':use===1?' 💥':''); }
+  else { rollDraft=''; out.textContent=r?('bonus '+sgn(r.bonus)+' · vul '+(rollAdv?'beide d20\'s':'je d20')+' in'):(String(rollNat).trim()?'kies eerst welke worp →':'—'); }
 }
 function wireRoll(){
+  wireRollExtra();
   const f=$('#roll'); if(f){ f.value=rollDraft; f.oninput=e=>{rollDraft=e.target.value}; return; }
   const sel=$('#rsel'); if(!sel) return;
   const gc=genChar(myChar());
@@ -1747,6 +1771,8 @@ function wireRoll(){
   }
   sel.onchange=e=>{rollKey=e.target.value; updateRoll()};
   $('#rnat').oninput=e=>{rollNat=e.target.value; updateRoll()};
+  const n2=$('#rnat2'); if(n2) n2.oninput=e=>{rollNat2=e.target.value; updateRoll()};
+  const ad=$('#radv'); if(ad) ad.onchange=e=>{rollAdv=e.target.value; if(!rollAdv) rollNat2=''; e.target.blur(); renderGame(); };
   const rg=$('#rrage'); if(rg) rg.onchange=e=>{rollRage=e.target.checked; e.target.blur(); renderGame(); }
   updateRoll();
 }

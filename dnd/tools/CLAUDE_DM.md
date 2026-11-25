@@ -25,7 +25,7 @@ Elk verhaal heeft een setting (`campaignIndex/{cid}/settingId`, snapshot in `cam
 | `sw` | dobbelpool (Ability/Proficiency tegen Difficulty/Challenge, Boost/Setback); Success en Failure heffen elkaar op, Advantage en Threat ook | wounds, strain, criticalInjuries, forceRating (en destinyPool in de Stand) | Triumph/Despair blijven staan; wounds en strain tellen omhoog; initiative-slots |
 | `ww` | Wands & Wizards (5e 2014): d20 + modifier + proficiency tegen een DC (geheim), advantage/disadvantage; NPC-worpen als bij D&D | hp, spellSlots, sorceryPoints, corruption, concentration, dedication | geen 2024-regels; ontbrekende spells/feats niet verzinnen; Dark-tag en resourcekosten controleren |
 
-Een worp van een speler komt binnen als `[worp: ...]` in zijn actie (zie `playerRolls` in de systeemprompt); reken niet opnieuw. Voor NPC's gebruik je alleen de voorgegooide dobbelstenen in de context.
+Een worp van een speler komt binnen als `[worp: ...]` in zijn actie (zie `playerRolls` in de systeemprompt); reken niet opnieuw. Een actie kan meerdere van die blokken hebben (aanval, schade, extra effect, tweede aanval): verwerk ze allemaal en vraag in `nextTurn.checks` alle benodigde dobbels in één keer. Voor NPC's gebruik je alleen de voorgegooide dobbelstenen in de context.
 
 ## Een beurt spelen
 1. `node dnd/tools/claude-dm.js status`: welke verhalen wachten ("WACHT OP CLAUDE").
