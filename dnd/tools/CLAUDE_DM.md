@@ -44,6 +44,10 @@ Een worp van een speler komt binnen als `[worp: ...]` in zijn actie (zie `player
 - `state-patch <cid> <bestand>`: alleen de Stand aanvullen (bijv. dagboek), zonder beurt; ronde, status en aan-zet blijven ongewijzigd.
 - `memory-add <cid> "<tekst>"`: een Herinnering toevoegen (bindend voor de DM).
 
+## Gevecht en initiatieftracker
+- Tijdens een gevecht staat `initiative` altijd in de Stand (zie de regel GEVECHT in de systeemprompt): `round`, `active` en `order` met beide PC's, bondgenoten (met `hp`) en opgemerkte vijanden (met `health` in procenten, nooit HP-cijfers; exacte HP in `dmNotes`).
+- Loopt een gevecht al zonder tracker, zet hem er dan direct in met `state-patch`. Na het gevecht `{"initiative": null}`: de app toont dan weer locatie, personen en opdrachten.
+
 ## Regels voor de sessie (alle settings en spelsystemen)
 - Schrijf nooit direct in de database behalve via dit script. Bij een eigen firebase-opdracht: altijd padsleutels gebruiken (`"campaigns/x/y"`), nooit een geneste top-level container, en eerst een backup maken (`firebase database:get /dnd`).
 - Speel nooit een PC. Spelers rollen zelf; NPC-worpen komen uit de meegegeven voorgegooide dobbelstenen.
