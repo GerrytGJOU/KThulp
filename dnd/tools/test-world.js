@@ -695,5 +695,35 @@ t("noHp-companion: rust zet tellers met zero terug op 0, wounds (rest none) niet
 t("noHp-companion: audit en wereldcontext zonder HP", () => { let w = nohpWorld(); w = apply2(w, run(w, { companions: [rec3] }).plan); eq(W.auditWorld(w).filter(i => i.level === "fout" && i.kind === "companion").length, 0); const c = W.worldContext(w, { hay: "" }); yes(c.indexOf("wounds 0/12") >= 0 && c.indexOf("HP 0/0") < 0, "context: " + c.slice(0, 300)); });
 t("companion met HP blijft hp-validatie houden", () => { let w = cworld(); w.companions["CMP-R03"].hp = { cur: 0, max: 0 }; bad(run(w, { companions: [rec3] }), "statblock"); });
 
+/* ---------- companions leveren mee ---------- */
+function lworld() {
+  const w = cworld(), r = w.companions["CMP-R03"];
+  r.level = 3; r.ac = 18; r.resources = { "Second Wind": { cur: 1, max: 2, rest: "long" } };
+  r.progression = { 4: { hp: 42, pb: 2, features: ["Kracht +2"], resources: { "Second Wind": { max: 3, rest: "long" } } }, 5: { hp: 51, ac: 19, pb: 3, features: ["Extra Attack"], resources: { "Action Surge": { max: 1, rest: "short" } } } };
+  return w;
+}
+t("level-up past HP, AC, hulpbronnen en features op volgorde toe", () => {
+  const rec = lworld().companions["CMP-R03"]; rec.stage = "active"; rec.hp = { cur: 20, max: 33 };
+  const up = W.companionLevelUp(rec, 5); yes(!up.error, up.error);
+  eq(up.rec.level, 5); eq(up.rec.hp.max, 51); eq(up.rec.hp.cur, 38); eq(up.rec.ac, 19); eq(up.rec.pb, 3);
+  eq(up.rec.resources["Second Wind"].max, 3); eq(up.rec.resources["Second Wind"].cur, 2); eq(up.rec.resources["Action Surge"].cur, 1); eq(up.rec.gained.length, 2); eq(rec.level, 3, "origineel ongewijzigd");
+});
+t("bewusteloze companion blijft op 0 HP; omlaag en ontbrekende progressie geweigerd", () => {
+  const rec = lworld().companions["CMP-R03"]; rec.stage = "active"; rec.hp = { cur: 0, max: 33 };
+  eq(W.companionLevelUp(rec, 4).rec.hp.cur, 0); yes(W.companionLevelUp(rec, 3).error); yes(W.companionLevelUp(rec, 6).error); eq(W.companionTarget(rec, 8), 5); eq(W.companionTarget(rec, 3), null);
+});
+t("recruteren brengt de companion meteen op het level van de PC's", () => {
+  const r = W.validateDelta(lworld(), { companions: [rec3] }, { partyLevel: 5 }); yes(r.ok, r.errors.join("|"));
+  const c = r.plan.companions["CMP-R03"]; eq(c.level, 5); eq(c.hp.cur, 51); eq(c.hp.max, 51); eq(c.stage, "active");
+});
+t("op level werkt en mag niet boven de PC's uit", () => {
+  let w = lworld(); w = apply2(w, W.validateDelta(w, { companions: [rec3] }, { partyLevel: 3 }).plan); eq(w.companions["CMP-R03"].level, 3);
+  bad(W.validateDelta(w, { companions: [{ id: "CMP-R03", op: "level", level: 5 }] }, { partyLevel: 4 }), "boven");
+  const r = W.validateDelta(w, { companions: [{ id: "CMP-R03", op: "level", level: 4 }] }, { partyLevel: 4 }); yes(r.ok, r.errors.join("|")); eq(r.plan.companions["CMP-R03"].hp.max, 42);
+  const state = {}; const names = W.syncStandCompanions(state, r.plan.companions, w.npcs, w.companions); eq(names.length, 1); eq(state.companions[names[0]].level, 4); eq(state.companions[names[0]].hp.max, 42);
+  const w2 = apply2(w, r.plan); yes(W.companionSheets(w2, 5).indexOf("LOOPT ACHTER") >= 0); yes(W.companionSheets(w2, 4).indexOf("Kracht +2") >= 0);
+});
+t("partyLevel is het laagste level van de levende PC's", () => eq(W.partyLevel({ a: { player: "x", level: 5 }, b: { player: "y", level: 4 }, c: { player: "z", level: 1, dead: true }, d: { level: 2 } }), 4));
+
 console.log(pass + " geslaagd, " + fail + " mislukt");
 process.exit(fail ? 1 : 0);

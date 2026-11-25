@@ -44,6 +44,9 @@ Een worp van een speler komt binnen als `[worp: ...]` in zijn actie (zie `player
 - `state-patch <cid> <bestand>`: alleen de Stand aanvullen (bijv. dagboek), zonder beurt; ronde, status en aan-zet blijven ongewijzigd.
 - `memory-add <cid> "<tekst>"`: een Herinnering toevoegen (bindend voor de DM).
 
+## "De DM is bezig"
+- Staat het verhaal op status "claude", dan zet `context` het veld `turn/busy`: de spelers zien "De DM is bezig met jullie beurt" tot `apply` de nieuwe beurt schrijft (of 15 minuten). Draai daarom altijd `context` zodra je de beurt oppakt. Kijk je alleen mee (bijvoorbeeld bij het uitwerken van companions), gebruik dan `--stil`.
+
 ## Gevecht en initiatieftracker
 - Tijdens een gevecht staat `initiative` altijd in de Stand (zie de regel GEVECHT in de systeemprompt): `round`, `active` en `order` met beide PC's, bondgenoten (met `hp`) en opgemerkte vijanden (met `health` in procenten, nooit HP-cijfers; exacte HP in `dmNotes`).
 - Loopt een gevecht al zonder tracker, zet hem er dan direct in met `state-patch`. Na het gevecht `{"initiative": null}`: de app toont dan weer locatie, personen en opdrachten.
@@ -120,6 +123,14 @@ De DM kondigt een level-up aan in het verhaal; de speler doet hem zelf op het ka
 
 ## Companions en statblocks in andere regelsets
 Voor een campagne met een ander spelsysteem dan D&D 2024 (Delta Green, Call of Cthulhu, Cthulhu Dark Ages, Old-School Essentials, Avatar Legends, Star Wars) maakt `node dnd/tools/jobs.js next` een statblock-opdracht met de systeemspecifieke eisen (`dnd/tools/statblock.js`, `companion` in `dnd/settings-rulesets-other.js`). Avatar Legends en Star Wars kennen geen HP of AC: de meters (fatigue; wounds en strain) staan in `world/companions/{id}.resources` als tellers vanaf 0 (`zero`), en `hp` wijzigen via worldDelta wordt geweigerd. Bij Delta Green en Call of Cthulhu staan WP, MP, SAN en Luck in resources (SAN en Luck herstellen niet door rust). Controle: `node dnd/tools/test-statblock.js`.
+
+## Companions meeleveren (sinds 2026-11-25)
+- Companions zijn altijd van het level van de PC's. Elk record in `world/companions` heeft een `level` en een `progression` (per level HP-max, AC, PB, hulpbronnen en nieuwe features passend bij de eigen class); de teksten staan alleen in de database.
+- Vanzelf: bij `recruit` en `return` stijgt de companion in dezelfde beurt tot het level van de PC's; `level-up-ack` laat de actieve companions meestijgen.
+- Handmatig: `node dnd/tools/claude-dm.js companion-level <cid> [level] [CMP-id,...]`, of in een beurt `worldDelta.companions` met `{id, op:"level", level:N}`. Nooit hoger dan de PC's, nooit omlaag.
+- Het blok "# COMPANION-LEVEL" in `context` toont per actieve companion wat er bovenop het canon-statblock geldt, en meldt wie achterloopt. De Stand krijgt level en HP vanzelf; hulpbronnen in de Stand werk je zelf bij.
+- Heeft een record een `variant`, kies die dan zo nodig vóór de rekrutering: `node dnd/tools/claude-dm.js companion-variant <cid> <CMP-id>`.
+- Een nieuwe companion zonder `progression` blijft staan en geeft een waarschuwing: voeg die dan toe.
 
 ## Items met regels (sinds 2026-11-24)
 - Een voorwerp met een spelregel (magisch, geschenk, bruikleen, gebruik per dag of rust, bijzonder effect) zet je in `pcs.<naam>.inventory` als **object**: `{"name","origin","rules","magic","uses":{"per","max"},"recharge"}`. Gewone voorwerpen blijven korte tekst; de oude vormen "Naam (toelichting)" en "Naam [magisch: effect]" blijven geldig.

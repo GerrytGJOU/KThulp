@@ -21,7 +21,7 @@
   /* Companion-engine (Bible §15): npc.status blijft de levenscyclus (companion_candidate → recruited ⇄ departed, deceased);
      world/companions/{CMP-id} bewaart het combat-statblock-gedeelte: hp, hulpbronnen, conditions, bewijslogboek (geen vertrouwensmeter),
      vertrek/terugkeer, weigering en een verplichting die een vertrek kan afdwingen. */
-  const COMPANION_OPS = ["recruit", "decline", "depart", "return", "update", "rest"];
+  const COMPANION_OPS = ["recruit", "decline", "depart", "return", "update", "rest", "level"];
   const COMPANION_MODES = ["permanent", "etappe", "temporary", "contact", "remote"];
   const COMPANION_STAGES = ["candidate", "active", "departed", "deceased"];
   const PARTY_SOFT_LIMIT = 5; // reizigers incl. 2 PC's: richtwaarde (Bible §15.2), geen harde limiet
@@ -125,6 +125,76 @@
     ANCHORS = rules && Array.isArray(rules.anchors) ? rules.anchors : ANCHORS_DEFAULT; CLOSURE = null;
   }
   const reasonOk = r => typeof r === "string" && r.trim().length >= 5;
+
+  /* ---------- companions leveren mee met de PC's ----------
+     Een companion-record kan een "level" en een "progression" hebben: per level {hp (nieuw maximum), ac?, pb?, features:[tekst],
+     resources:{naam:{max,rest}|null}}. Opklimmen past alle tussenliggende levels op volgorde toe; schade en verbruik blijven staan,
+     nieuwe hulpbronnen komen vol binnen. Wat erbij komt, staat in rec.gained (de uitbreiding op het canon-statblock). */
+  function companionLevelUp(rec, to) {
+    if (!rec || !Number.isInteger(rec.level)) return { error: "record heeft geen level" };
+    if (!Number.isInteger(to) || to <= rec.level) return { error: "level moet hoger zijn dan het huidige level " + rec.level };
+    const nx = clone(rec), gained = [];
+    for (let L = rec.level + 1; L <= to; L++) {
+      const e = (rec.progression || {})[L];
+      if (!isObj(e)) return { error: "geen progressie voor level " + L };
+      if (e.hp != null) {
+        if (!(Number.isInteger(e.hp) && e.hp >= 1 && e.hp <= 300) || !nx.hp) return { error: "progressie level " + L + ": hp ongeldig" };
+        const cur = nx.stage === "candidate" ? e.hp : nx.hp.cur === 0 ? 0 : Math.max(0, Math.min(e.hp, nx.hp.cur + e.hp - nx.hp.max));
+        nx.hp = { cur: cur, max: e.hp };
+      }
+      if (e.ac != null) nx.ac = e.ac;
+      if (e.pb != null) nx.pb = e.pb;
+      Object.keys(e.resources || {}).forEach(k => {
+        const r = e.resources[k];
+        nx.resources = nx.resources || {};
+        if (r === null || r.max === 0) { delete nx.resources[k]; return; }
+        const old = nx.resources[k];
+        nx.resources[k] = { cur: old ? Math.max(0, Math.min(r.max, old.cur + r.max - old.max)) : r.max, max: r.max, rest: r.rest || (old && old.rest) || "long" };
+      });
+      (e.features || []).forEach(text => gained.push({ level: L, text: String(text) }));
+      nx.level = L;
+    }
+    nx.gained = (rec.gained || []).concat(gained);
+    return { rec: nx, gained: gained };
+  }
+  /* Hoogste aaneengesloten haalbare level, begrensd door het level van de PC's; null als er niets te doen is. */
+  function companionTarget(rec, level) {
+    if (!rec || !Number.isInteger(rec.level) || !Number.isInteger(level)) return null;
+    let L = rec.level;
+    while (L < level && isObj((rec.progression || {})[L + 1])) L++;
+    return L > rec.level ? L : null;
+  }
+  /* Level van de groep: het laagste level van de levende PC's. */
+  function partyLevel(chars) {
+    const ls = Object.values(chars || {}).filter(c => c && c.player && !c.dead).map(c => Number(c.level)).filter(n => Number.isInteger(n) && n > 0);
+    return ls.length ? Math.min.apply(null, ls) : null;
+  }
+  /* Tekstblok voor de DM: level en verworven features van de actieve companions. */
+  function companionSheets(world, level) {
+    const npcs = (world && world.npcs) || {};
+    const list = Object.values((world && world.companions) || {}).filter(r => r.stage === "active" && Number.isInteger(r.level));
+    return list.map(r => {
+      const head = "- " + r.id + " " + ((npcs[r.id] || {}).name || "") + ": level " + r.level + (r.noHp || !r.hp ? "" : ", HP-max " + r.hp.max) + (r.ac != null ? ", AC " + r.ac : "") + (r.pb ? ", PB +" + r.pb : "") +
+        (Number.isInteger(level) && r.level < level ? " | LOOPT ACHTER op de PC's (level " + level + "): worldDelta companions {id, op:'level', level:" + level + "}" : "");
+      const res = Object.keys(r.resources || {}).map(k => k + " " + r.resources[k].max + " (" + r.resources[k].rest + ")").join(", ");
+      return head + (res ? "\n  hulpbronnen: " + res : "") + (r.gained || []).map(g => "\n  L" + g.level + ": " + g.text).join("");
+    }).join("\n");
+  }
+  /* Zet level en HP van gewijzigde actieve companions ook in de Stand. Wijzigt het meegegeven object; geeft de namen terug. */
+  function syncStandCompanions(state, records, npcs, before) {
+    const done = [];
+    Object.keys(records || {}).forEach(id => {
+      const r = records[id], b = (before || {})[id], name = ((npcs || {})[id] || {}).name;
+      if (!r || r.stage !== "active" || !Number.isInteger(r.level) || !name || (b && b.level === r.level && b.stage === r.stage)) return;
+      state.companions = isObj(state.companions) ? state.companions : {};
+      const key = Object.keys(state.companions).find(k => k.toLowerCase() === name.toLowerCase() || String((state.companions[k] || {}).name || "").toLowerCase() === name.toLowerCase()) || name;
+      const cur = isObj(state.companions[key]) ? state.companions[key] : {};
+      const hp = isObj(cur.hp) ? cur.hp : {};
+      state.companions[key] = Object.assign({}, cur, { level: r.level }, r.noHp || !r.hp ? {} : { hp: { current: r.hp.cur, max: r.hp.max, temp: hp.temp || 0 } });
+      done.push(name);
+    });
+    return done;
+  }
 
   /* ---------- agenda-tick: voert alle stappen uit die tot en met 'now' aan de beurt zijn ---------- */
   function tickAgendas(world, now) {
@@ -296,6 +366,12 @@
       if (!rec) return err("Companion " + id + " (" + npc.name + ") heeft geen companion-record (statblock); een companion zonder statblock kan niet meedoen aan combat" + (W.jobs[jobId("statblock", id)] ? " (statblock-job " + jobId("statblock", id) + " staat " + W.jobs[jobId("statblock", id)].status + ")" : ""));
       if (rec.stage === "deceased") return err("Companion " + id + " is overleden");
       const nx = clone(rec), refs = { npcs: [id] };
+      /* wie (weer) aansluit, is meteen op het level van de PC's */
+      const catchUp = (r, name) => {
+        const to = companionTarget(r, ctx.partyLevel);
+        if (to) { const up = companionLevelUp(r, to); if (up.error) warn("Companion " + id + ": " + up.error); else { Object.assign(r, up.rec); eventFor("companion_level", name + " is nu level " + to, refs, "V"); } }
+        if (Number.isInteger(ctx.partyLevel) && Number.isInteger(r.level) && r.level < ctx.partyLevel) warn("Companion " + id + " (" + name + ") blijft op level " + r.level + ": geen progressie tot level " + ctx.partyLevel);
+      };
       const needReason = () => reasonOk(op.reason);
       if (op.op === "decline") {
         if (rec.stage !== "candidate") return err("Companion " + id + ": weigeren kan alleen bij een kandidaat (stage " + rec.stage + ")");
@@ -315,6 +391,7 @@
         if (live && partyRegion && npc.location && regionOf(W, npc.location) !== partyRegion) return err("Companion " + id + " (" + npc.name + ") is niet bij de party (" + (regionOf(W, npc.location) || "?") + " ≠ " + partyRegion + ")");
         nx.stage = "active"; nx.mode = op.mode; nx.joinedAt = now ? clone(now) : null; nx.departure = null; delete nx.declined;
         nx.hp = { cur: rec.hp.max, max: rec.hp.max };
+        catchUp(nx, npc.name);
         const nn = clone(npc); nn.status = "recruited"; if (live && partyRegion) { nn.location = partyRegion; if (now) nn.locationSince = clone(now); }
         W.npcs[id] = nn; plan.npcs[id] = nn;
         eventFor("companion_recruited", npc.name + " gaat mee (" + op.mode + "): " + op.reason, refs, "V");
@@ -342,6 +419,7 @@
           else if (spent < need && !(isObj(op.travel) && reasonOk(op.travel.reason))) return err("Companion " + id + " (" + npc.name + ") kan niet in " + spent + " dag(en) van " + from + " naar " + partyRegion + " terugkeren (minimaal ~" + need + " dagen)");
         }
         nx.stage = "active"; nx.history = (rec.history || []).concat(rec.departure ? [rec.departure] : []); nx.departure = null;
+        catchUp(nx, npc.name);
         const nn = clone(npc); nn.status = "recruited"; if (partyRegion) { nn.location = partyRegion; if (now) nn.locationSince = clone(now); }
         W.npcs[id] = nn; plan.npcs[id] = nn;
         eventFor("companion_returned", npc.name + " keert terug: " + op.reason, refs, "V");
@@ -384,6 +462,12 @@
           nx.obligation = { text: op.obligation.text.trim(), due: op.obligation.due ? clone(op.obligation.due) : null };
         }
         if (!live && rec.stage !== "departed" && rec.stage !== "candidate") return err("Companion " + id + ": onbekende stage");
+      } else if (op.op === "level") {
+        const up = companionLevelUp(rec, op.level);
+        if (up.error) return err("Companion " + id + " (" + npc.name + "): " + up.error);
+        if (Number.isInteger(ctx.partyLevel) && op.level > ctx.partyLevel) return err("Companion " + id + ": level " + op.level + " ligt boven dat van de PC's (" + ctx.partyLevel + ")");
+        Object.assign(nx, up.rec);
+        eventFor("companion_level", npc.name + " is nu level " + op.level, refs, "V");
       } else if (op.op === "rest") {
         if (rec.stage !== "active") return err("Companion " + id + ": rusten kan alleen als actief");
         if (rec.mode !== "remote" && rec.mode !== "contact" && partyRegion && regionOf(W, npc.location) !== partyRegion) return err("Companion " + id + " (" + npc.name + ") is niet bij de party om te rusten");
@@ -741,7 +825,7 @@
       const res = Object.keys(r.resources || {}).map(k => k + " " + r.resources[k].cur + "/" + r.resources[k].max).join(", ");
       const ev = (r.evidence || []).slice(-2).map(e => e.text).join(" | ");
       if (r.stage === "departed") return "- " + r.id + " " + (n.name || "") + " [vertrokken " + (r.departure && r.departure.at ? fmt(r.departure.at) : "?") + " → " + (r.departure && r.departure.destination || "?") + "; reden: " + (r.departure && r.departure.reason || "?") + (r.departure && r.departure.returnIf ? "; keert terug als: " + r.departure.returnIf : "") + "]";
-      return "- " + r.id + " " + (n.name || "") + " [" + r.mode + "]" + (r.noHp ? "" : " HP " + r.hp.cur + "/" + r.hp.max) + (res ? (r.noHp ? " " : "; ") + res : "") + ((r.conditions || []).length ? "; conditions: " + r.conditions.join(", ") : "") + (r.nextAction ? "; wil: " + r.nextAction : "") + (ev ? "; bewijs: " + ev : "");
+      return "- " + r.id + " " + (n.name || "") + " [" + r.mode + (Number.isInteger(r.level) ? ", level " + r.level : "") + "]" + (r.noHp ? "" : " HP " + r.hp.cur + "/" + r.hp.max) + (res ? (r.noHp ? " " : "; ") + res : "") + ((r.conditions || []).length ? "; conditions: " + r.conditions.join(", ") : "") + (r.nextAction ? "; wil: " + r.nextAction : "") + (ev ? "; bewijs: " + ev : "");
     }).join("\n"));
     const due = companionDue(world, world.calendar);
     if (due.length) out.push("Aan de orde (companions):\n" + due.map(d => "- " + d).join("\n"));
@@ -901,5 +985,5 @@
       list.slice(-8).map(x => x.pc + ": \"" + x.text.slice(0, 80) + "\"").join("; ") + (list.length > 8 ? "; en " + (list.length - 8) + " eerdere" : "") + ". De spelers zien deze notitie niet.";
   }
 
-  return { knowledgeCheck: knowledgeCheck, knowledgeNote: knowledgeNote, NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, configure: configure, validateDelta: validateDelta, echoCheck: echoCheck, fixAwaiting: fixAwaiting, checkSpeakers: checkSpeakers, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
+  return { companionLevelUp: companionLevelUp, companionTarget: companionTarget, partyLevel: partyLevel, companionSheets: companionSheets, syncStandCompanions: syncStandCompanions, knowledgeCheck: knowledgeCheck, knowledgeNote: knowledgeNote, NPC_STATUS: NPC_STATUS, QUEST_STATUS: QUEST_STATUS, QUEST_NEXT: QUEST_NEXT, ID_RE: ID_RE, TRAVEL: TRAVEL, FELLOWSHIP: FELLOWSHIP, configure: configure, validateDelta: validateDelta, echoCheck: echoCheck, fixAwaiting: fixAwaiting, checkSpeakers: checkSpeakers, gateOk: gateOk, gateText: gateText, evaluateEndings: evaluateEndings, tickAgendas: tickAgendas, AGENDA_STATUS: AGENDA_STATUS, JOB_TYPES: JOB_TYPES, JOB_STATUS: JOB_STATUS, JOB_NEXT: JOB_NEXT, JOB_MAX_ATTEMPTS: JOB_MAX_ATTEMPTS, jobId: jobId, jobTransition: jobTransition, pendingJobs: pendingJobs, companionDue: companionDue, COMPANION_MODES: COMPANION_MODES, auditWorld: auditWorld, commitPaths: commitPaths, worldContext: worldContext, travelDays: travelDays, regionOf: regionOf, dateCmp: dateCmp, dateOk: dateOk };
 });

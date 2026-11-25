@@ -3,7 +3,8 @@
    Lokaal hulpmiddel voor een Claude Code-sessie; draait via de Firebase CLI (al ingelogd).
    Opdrachten:
      status                              welke verhalen wachten op een beurt
-     context <cid> [--canon[=id,id]]     alles wat de DM moet weten (canon alleen als index, tenzij --canon)
+     context <cid> [--canon[=id,id]] [--stil]  alles wat de DM moet weten (canon alleen als index, tenzij --canon); wacht het verhaal op Claude,
+                                        dan zien de spelers "De DM is bezig" (niet bij --stil: alleen meekijken)
      prompt <cid>                        de volledige DM-systeemprompt van dit verhaal (spelregels, Stand-schema, uitvoerformaat) voor de setting en het spelsysteem van het verhaal
      apply <cid> <bestand.json> [--force]  schrijf de beurt terug naar de database
      summary <cid> <totRonde> <bestand>  bewaar een samenvatting
@@ -14,7 +15,9 @@
      state-patch <cid> <bestand.json>    deep-merge in de Stand (lijsten vervangen, null verwijdert)
      memory-add <cid> <tekst>            voeg een Herinnering toe
      level-up <cid> <speler|personage> <naarLevel> [notitie]  kondig een level-up aan: de speler doet hem zelf op het karakterblad (knop + stip)
-     level-up-ack <cid> <speler|personage>  na verwerking in de Stand: haal de level-up-melding van het blad
+     level-up-ack <cid> <speler|personage>  na verwerking in de Stand: haal de level-up-melding van het blad (en laat actieve companions meestijgen)
+     companion-variant <cid> <CMP-id>     kies vóór de rekrutering de alternatieve uitwerking van een companion (record.variant)
+     companion-level <cid> [level] [CMP-id,...]  laat companions meestijgen volgens hun progressie (standaard: actieve companions, naar het level van de PC's); HP, AC, hulpbronnen, features en de Stand
      table-set <cid> <bestand.json>      open/werk de Tafel der Draden bij: {open,phase,title,intro,cands:{"Naam":{role,demands,wants,fears,slotInfo:{reis:"..."}}}} (partyTable, zie M11)
      table-reply <cid> <bestand.json>    antwoorden van kandidaten op gesprekken: {replies:[{player,npc,text,done,summary}],dossier:[{npc,line}],phase,final:{npc:{slot,note}}}
      table-show <cid>                    toon gesprekken, keuzes en onthulling van de Tafel der Draden
@@ -160,6 +163,55 @@ function cmdLevelUp(cid, who, to, note) {
 }
 function cmdLevelUpAck(cid, who) {
   const { key, c } = resolveChar(cid, who); update({ ["characters/" + key + "/levelUp"]: null }); console.log("Level-up-melding van " + c.name + " verwijderd.");
+  cmdCompanionLevel(cid, null, null);
+}
+/* Alternatieve uitwerking (record.variant: {name, hp, ac, resources, progression}), alleen zolang de companion nog kandidaat is. */
+function cmdCompanionVariant(cid, id) {
+  if (!cid || !id) throw new Error("gebruik: companion-variant <cid> <CMP-id>");
+  const r = get("/dnd/" + cp(cid, "world/companions/" + id));
+  if (!r || !r.variant) throw new Error(id + " heeft geen variant (of die is al gekozen)");
+  if (r.stage !== "candidate") throw new Error("Kiezen kan alleen vóór de rekrutering (stage " + r.stage + ")");
+  const v = r.variant, next = Object.assign({}, r, { hp: v.hp, ac: v.ac, resources: v.resources, progression: v.progression, variantChosen: v.name });
+  delete next.variant;
+  update({ [cp(cid, "world/companions/" + id)]: next });
+  console.log(id + ": variant '" + v.name + "' gekozen.");
+}
+/* Level van de PC's in dit verhaal (het laagste). */
+function partyLevelOf(cid) {
+  const party = (get("/dnd/campaignIndex/" + cid) || {}).party || null;
+  return World.partyLevel(partyFilter(get("/dnd/characters") || {}, party));
+}
+/* Companions meeleveren buiten een beurt om: wereldrecord en Stand; ronde, status en aan-zet blijven onaangeroerd. */
+function cmdCompanionLevel(cid, level, ids) {
+  if (!cid) throw new Error("gebruik: companion-level <cid> [level] [CMP-id,...]");
+  useSetting(cid);
+  const world = get("/dnd/" + cp(cid, "world")); if (!world || !world.companions) return console.log("Geen companions in dit verhaal.");
+  const pl = partyLevelOf(cid), to = level ? Number(level) : pl;
+  if (!Number.isInteger(to)) throw new Error("geen level: geef het mee of controleer de karakterbladen");
+  const list = ids ? ids.split(",") : Object.keys(world.companions).filter(id => world.companions[id].stage === "active");
+  const ops = [];
+  list.forEach(id => {
+    const r = world.companions[id]; if (!r) throw new Error("onbekende companion " + id);
+    const t = World.companionTarget(r, to);
+    if (t) ops.push({ id, op: "level", level: t });
+    if ((t || r.level) < to || !Number.isInteger(r.level)) console.log("let op: " + id + " haalt level " + to + " niet (geen progressie)");
+  });
+  if (!ops.length) return console.log("Companions: niets te doen (level " + to + ").");
+  const now = Date.now(), v = World.validateDelta(world, { companions: ops }, { partyLevel: pl });
+  if (!v.ok) throw new Error(v.errors.join("\n- "));
+  const cm = World.commitPaths(world, v.plan, { now, newKey: pushId }), up = {};
+  Object.keys(cm.set).forEach(p => { up[cp(cid, p)] = cm.set[p]; });
+  const stateStr = get("/dnd/" + cp(cid, "state"));
+  if (stateStr) {
+    const state = JSON.parse(typeof stateStr === "string" ? stateStr : JSON.stringify(stateStr));
+    if (World.syncStandCompanions(state, v.plan.companions, world.npcs, world.companions).length) {
+      up[cp(cid, "state")] = JSON.stringify(state);
+      const lastS = get("/dnd/" + cp(cid, "stands"), "--order-by-key --limit-to-last 1"), k = lastS ? Object.keys(lastS)[0] : null;
+      if (k) up[cp(cid, "stands/" + k + "/json")] = up[cp(cid, "state")];
+    }
+  }
+  update(up);
+  console.log("Companions meegestegen: " + ops.map(o => o.id + " naar level " + o.level).join(", ") + ". Details staan in 'context' onder # COMPANION-LEVEL.");
 }
 function levelBlock(allC) {
   const L = Object.values(allC).filter(c => c && c.levelUp); if (!L.length) return null;
@@ -202,6 +254,7 @@ function cmdPrompt(cid) {
 function cmdContext(cid, flags) {
   const sid = useSetting(cid);
   const turn = get("/dnd/" + cp(cid, "turn"));
+  if (turn && turn.status === "claude" && !flags.stil) { try { update({ [cp(cid, "turn/busy")]: Date.now() }); } catch (err) { console.error("let op: 'DM is bezig' niet gezet: " + err.message); } }
   if (!turn) return console.log("Dit verhaal is nog niet gestart (geen turn).");
   const canon = get("/dnd/" + cp(cid, "canon")) || {};
   const state = JSON.parse(get("/dnd/" + cp(cid, "state")) || "{}");
@@ -244,6 +297,7 @@ function cmdContext(cid, flags) {
   out.push("# DM-NOTITIES (privé)\n" + (Object.entries(notes).map(([k, v]) => "- " + k + ": " + v).join("\n") || "(nog geen)"));
   out.push("# RECENTE GESCHIEDENIS\n" + (sortedVals(msgs).filter(m => m.type !== "system").slice(-10).map(m => (m.type === "narration" ? "DM" : m.author) + ": " + m.text).join("\n\n") || "(begin van het verhaal)"));
   { const lb = levelBlock(allChars); if (lb) out.push(lb); }
+  { const pl = World.partyLevel(chars), cs = world ? World.companionSheets(world, pl) : ""; if (cs) out.push("# COMPANION-LEVEL (level van de PC's: " + pl + "; actieve companions zijn altijd van dit level. Dit komt BOVENOP het canon-statblock en gaat bij verschil voor)\n" + cs); }
   { const pt = get("/dnd/" + cp(cid, "partyTable")); if (pt && pt.open) out.push(tableBlock(pt, party ? Object.keys(party) : ["Gerben", "Maurits"])); }
   out.push("# VOORGEGOOIDE DOBBELSTENEN VOOR NPC/VIJAND (in volgorde gebruiken)\n" + JSON.stringify(rollDice()));
   out.push("# ACTIES DEZE RONDE\n" + (pend.length ? pend.map(p => p.name + ": " + p.text).join("\n") : "(geen: open het verhaal)"));
@@ -277,6 +331,7 @@ function partyFilter(chars, party) { if (!party) return chars; const keys = Obje
 function cmdApply(cid, file, flags) {
   useSetting(cid);
   const turn = get("/dnd/" + cp(cid, "turn"));
+  if (turn) delete turn.busy; /* niet bewaren in het terugdraairecord */
   if (!turn) throw new Error("Verhaal niet gestart.");
   if (turn.status !== "claude" && !flags.force) throw new Error("Status is '" + turn.status + "', niet 'claude'. Gebruik --force om toch te schrijven.");
   const round = turn.round, now = Date.now();
@@ -309,11 +364,12 @@ function cmdApply(cid, file, flags) {
   let wplan = null;
   if (world) { const sp = World.checkSpeakers(world, out.speakers, out.worldDelta && out.worldDelta.region); if (sp.errors.length) throw new Error("sprekers ongeldig:\n- " + sp.errors.join("\n- ") + "\nCorrigeer het JSON-bestand en probeer opnieuw (niets is opgeslagen)."); }
   if (world && out.worldDelta) {
-    const v = World.validateDelta(world, out.worldDelta, { round: round + 1, hasPortrait: n => { try { return !!get("/dnd/" + T(cid, "npcs") + "/" + slug(n.name) + "/img"); } catch (e) { return false; } } });
+    const v = World.validateDelta(world, out.worldDelta, { round: round + 1, partyLevel: World.partyLevel(chars), hasPortrait: n => { try { return !!get("/dnd/" + T(cid, "npcs") + "/" + slug(n.name) + "/img"); } catch (e) { return false; } } });
     if (!v.ok) throw new Error("worldDelta ongeldig:\n- " + v.errors.join("\n- ") + "\nCorrigeer het JSON-bestand en probeer opnieuw (niets is opgeslagen).");
     wplan = v.plan; v.warnings.forEach(w => console.log("let op:", w));
   }
   const newState = deepMerge(state, out.statePatch);
+  if (wplan && wplan.companions) World.syncStandCompanions(newState, wplan.companions, Object.assign({}, world.npcs, wplan.npcs), world.companions);
   const newNotes = { ...notes }; for (const [k, v] of Object.entries(out.dmNotes)) { if (v === null) delete newNotes[k]; else newNotes[k] = v; }
   const kn = World.knowledgeNote(World.knowledgeCheck(newState));
   if (kn) { newNotes.kenniscontrole = kn; console.log("let op:", kn); } else delete newNotes.kenniscontrole;
@@ -470,6 +526,8 @@ try {
   else if (cmd === "memory-add") cmdMemory(pos[1], pos[2]);
   else if (cmd === "level-up") cmdLevelUp(pos[1], pos[2], pos[3], pos.slice(4).join(" "));
   else if (cmd === "level-up-ack") cmdLevelUpAck(pos[1], pos[2]);
+  else if (cmd === "companion-level") cmdCompanionLevel(pos[1], pos[2], pos[3]);
+  else if (cmd === "companion-variant") cmdCompanionVariant(pos[1], pos[2]);
   else if (cmd === "table-set") cmdTableSet(pos[1], pos[2]);
   else if (cmd === "table-reply") cmdTableReply(pos[1], pos[2]);
   else if (cmd === "table-show") cmdTableShow(pos[1]);
