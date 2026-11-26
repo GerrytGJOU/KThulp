@@ -47,6 +47,9 @@ Een worp van een speler komt binnen als `[worp: ...]` in zijn actie (zie `player
 ## "De DM is bezig"
 - Staat het verhaal op status "claude", dan zet `context` het veld `turn/busy`: de spelers zien "De DM is bezig met jullie beurt" tot `apply` de nieuwe beurt schrijft (of 15 minuten). Draai daarom altijd `context` zodra je de beurt oppakt. Kijk je alleen mee (bijvoorbeeld bij het uitwerken van companions), gebruik dan `--stil`.
 
+## Uitrusting
+- Zegt een speler dat hij een wapen of voorwerp pakt, wisselt of weglegt: zet in dezelfde beurt `pcs.<naam>.equipped` (volledige lijst namen, hoofdwapen eerst); bijzondere wapens krijgen in `inventory` het veld `weapon` `{"base","bonus"}` (zie de regel UITRUSTING in de systeemprompt). Lijsten worden vervangen: geef `inventory` altijd volledig mee.
+
 ## Gevecht en initiatieftracker
 - Tijdens een gevecht staat `initiative` altijd in de Stand (zie de regel GEVECHT in de systeemprompt): `round`, `active` en `order` met beide PC's, bondgenoten (met `hp`) en opgemerkte vijanden (met `health` in procenten, nooit HP-cijfers; exacte HP in `dmNotes`).
 - Loopt een gevecht al zonder tracker, zet hem er dan direct in met `state-patch`. Na het gevecht `{"initiative": null}`: de app toont dan weer locatie, personen en opdrachten.

@@ -1056,6 +1056,7 @@ Regels:
    "initiative":{"round":1,"active":"Naam","order":[{"name":"Personagenaam","init":15,"enemy":false},{"name":"Bondgenoot","init":12,"enemy":false,"hp":{"current":20,"max":27},"conditions":[]},{"name":"Orc 1","init":10,"enemy":true,"health":100,"conditions":[]}]}  (alleen tijdens een gevecht; anders null)}
   Vul bij het begin hp, resources en inventory van elke PC in uit zijn B-document. Werk hp, resources, conditions, location, inGame en quests bij zodra ze veranderen. ${S.geoCheck}
   HET DAGBOEK VAN DE SPELERS wordt uitsluitend gevuld door jouw uitvoer, dus houd het elke beurt bij: Opdrachten = statePatch.quests (open/completed/consequences; een afgeronde opdracht verplaats je van open naar completed (nooit in beide); detail van een opdracht is altijd het nieuwste bericht, en het vorige detail zet je bij elke ontwikkeling achteraan in updates (oudste eerst, bestaande updates laten staan); zet er direct een regel bij zodra een NPC of gebeurtenis een nieuwe opdracht, belofte of doel geeft, verplaats hem naar completed als hij klaar is) plus worldDelta-quests die active worden. Het Dagboek sorteert opdrachten in Main quest (voor alle PC's), Side quests (voor alle PC's), Personal quests (per personage) en Companion quests (per NPC of companion): geef daarom elke opdracht in quests.open een kind (main, side, personal of companion), bij personal ook for (de personagenaam) en bij side-quests ook place (waar de opdracht plaatsvindt, bijvoorbeeld ${S.exPlace}), bij companion ook npc (de naam van de NPC), maar gebruik kind companion ALLEEN voor een NPC die al is gerekruteerd (status recruited): de opdrachten van een nog niet gerekruteerde NPC horen bij side (of personal), anders verraadt het Dagboek wie een mogelijke companion is; bij een nieuwe worldDelta-quest zet je set.kind op dezelfde manier, plus set.owner (personagenaam) bij personal en set.npcs bij companion;  Wat je weet = pcs.<personagenaam>.knowledge (korte, feitelijke regels over wat dat personage heeft ontdekt, gehoord of gezien: aanwijzingen, namen, plekken, beloftes; nooit DM-geheimen of wat het personage niet kan weten) en onthulde backstorylagen (worldDelta reveals); Personen = statePatch.npcs; Logboek = logEntries. Elke knowledge-regel begint met een onderwerp gevolgd door ' » ' (spatie, dubbele pijl, spatie), bijvoorbeeld 'De Raad van Elrond » Frodo neemt de Ring op zich'. Hergebruik bestaande onderwerpen (kort, 1 tot 4 woorden, zoals De Raad van Elrond, Orcs en Dol Guldur, Beorn en Grimbeorn, Dwarves van Erebor, Het spoor in de gastenvleugel) en maak alleen een nieuw onderwerp als het echt nieuw is; regels over hetzelfde onderwerp blijven bij elkaar en staan in tijdsvolgorde, nieuwste achteraan. Het Dagboek toont ze gegroepeerd per onderwerp. Lijsten in statePatch worden VERVANGEN: geef bij quests.open en knowledge altijd de volledige actuele lijst (oude regels behouden, korte regels, samenvoegen boven ongeveer 15 regels), anders verdwijnt eerder werk.
+  UITRUSTING: zegt een speler dat zijn personage iets pakt, aantrekt, wisselt, wegstopt of weggeeft, dan verwerk je dat in dezelfde beurt in de Stand. pcs.<naam>.equipped = de volledige lijst van namen (exact zoals in inventory) van wat in gebruik is: wapens (hoogstens twee melee en een ranged, het hoofdwapen eerst), armor, shield en gedragen magische voorwerpen. De app toont alleen die wapens in de wapenvakken. Een weggegeven of achtergelaten voorwerp haal je uit inventory. Is een wapen een bijzondere versie van een gewoon wapen, geef het inventory-object dan "weapon":{"base":"naam van de aanval op het blad, bv. Greataxe","bonus":1}; is het uitgerust, dan vervangt het die aanval in het worpmenu, met de bonus op aanval en schade (bonus 0 als het wapen niets extra geeft).
   LOOT EN VOORWERPEN (volledige regels en voorbeelden: canon M9, laad die bij beloningen en vondsten): gewone buit (kleine bedragen goud, gereedschap, voorraden, kruiden, vakwerk, informatie, gunsten) is ruim; magie is zeldzaam, heeft een naam, maker en geschiedenis en wordt alleen verdiend of geschonken (beloning voor een opdracht, bruikleen van een NPC met een plicht, een vondst op een plaats met verhaal), nooit uit willekeurige monsters. ${R.lootPower}, altijd met maker, volk en verhaal en passend bij ${S.lootTone}, ${S.lootNo}, geen magische winkel. Laat eigenschappen vanzelf blijken door gebruik. Leg elk nieuw voorwerp en elke betekenisvolle geldsom direct vast: pcs.<naam>.inventory (magisch als "Naam [magisch: kort effect]", goud als één regel "N GP"; altijd de volledige lijst) en een logEntry met het voorvoegsel "Buit:". Noem elk voorwerp met een herkenbare naam (Engels of Nederlands, bv. "Shortsword", "Wine (bottle)", "Honingkoeken"), want de Inventory toont er automatisch een icoon bij; geef een uniek of magisch voorwerp een eigen naam (die krijgt later een eigen icoon). ITEMS MET REGELS: heeft een voorwerp een spelregel (magisch, geschenk, gebruik per dag of rust, of een bijzonder effect), zet het dan in inventory als object in plaats van als tekst: {"name":"Raafveer van Haleth","origin":"geschenk van …","rules":"volledige uitleg in 1 tot 4 zinnen: wat het doet, hoe je het gebruikt, bereik en duur","magic":true,"uses":{"per":"dag","max":1},"recharge":"nieuwe dag"} (herstel: "korte rust", "lange rust" of "nieuwe dag"; uses en recharge alleen bij beperkt gebruik; de teller houdt de speler zelf bij op het blad, jij hoeft hem niet te zetten). Gewone voorwerpen blijven korte tekst. Bij een quest-beloning, een schenking of elke vondst met een regel lever je de regels altijd mee, ook als de speler er niet naar vraagt; zonder uitleg weet de speler niet wat hij bezit. Bestaande tekstregels ("Naam [magisch: effect]") blijven geldig. Quests in de WERELDSTATUS kunnen een DM-geheime beloning noemen; die komt pas bij een goede uitkomst.
   OPDRACHTEN ZIJN DE RUGGENGRAAT VAN HET VERHAAL, maar dwing niets af: niet elke beurt hoeft een opdracht vooruit te brengen. Een gesprek, een rustig moment of een kleine tussenscène mag gewoon zijn eigen ding doen, en je mag af en toe zelf een nieuwe opdracht pitchen (via een NPC, een gebeurtenis of een vondst). Alleen een echt NIEUWE SCÈNE (een andere plek, een groot nieuw gevecht of een nieuwe hoofdontwikkeling, dus niet zomaar een volgende beurt) sluit aan op minstens één open opdracht, een NPC-agenda of een backstory (aanhaken, verdiepen, verstoren of omkeren); verzin geen losstaande hoofdlijnen. Raakt een open opdracht heel lang niets, dan mag je op een natuurlijk moment een aanleiding, gevolg of tijdsdruk geven, maar forceer geen vervolg. Zet voltooide of vervallen opdrachten om naar completed of consequences. Wat een PC weet (knowledge) mag je terugspelen en belonen met logische vervolgstappen. 
 - Documenten in CANON die als DM-geheim of "NIET LEZEN ALS SPELER" gemarkeerd zijn, gebruik je voor planning, maar je onthult of citeert ze nooit letterlijk; laat geheimen alleen via het spel zelf blijken.
@@ -1798,7 +1799,7 @@ function rollList(c,rage){
   ABIL.forEach(([k,n,s])=>out.push({key:'abil:'+k,group:'Ability Check',label:n+' check',bonus:amod(c,k)}));
   ABIL.forEach(([k,n,s])=>out.push({key:'save:'+k,group:'Saving Throw',label:n+' Saving Throw',bonus:amod(c,k)+((c.saves||[]).includes(k)?pb:0)}));
   SKILLS.forEach(([k,n,a])=>out.push({key:'skill:'+k,group:'Skill',label:n,bonus:skillBonus(c,k,rage)}));
-  (c.attacks||[]).forEach((a,i)=>out.push({key:'atk:'+i,group:'Attack',label:(a.name||'Aanval')+' (attack)',bonus:amod(c,a.ability||'str')+(a.prof===false?0:pb)+(Number(a.extra)||0)}));
+  attacksOf(c).forEach((a,i)=>out.push({key:'atk:'+i,group:'Attack',label:(a.name||'Aanval')+' (attack)',bonus:amod(c,a.ability||'str')+(a.prof===false?0:pb)+(Number(a.extra)||0)}));
   return out;
 }
 function findRoll(c,key,rage){return rollList(c,rage).find(r=>r.key===key)||null}
@@ -1820,7 +1821,7 @@ function rollTextAdv(r,a,b,adv){const nat=adv==='dis'?Math.min(a,b):Math.max(a,b
 /* schade bij een wapen: dobbels en vaste bonus uit de schadetekst ("1d12+3 slashing (Rage: 1d12+5)"); met Rage de Rage-variant of de Rage Damage erbij op Strength-aanvallen */
 function dmgInfo(c,key,rage,cleave){
   if(String(key).indexOf('atk:')!==0) return null;
-  const a=(c.attacks||[])[Number(String(key).slice(4))]; if(!a||!a.damage) return null;
+  const a=attacksOf(c)[Number(String(key).slice(4))]; if(!a||!a.damage) return null;
   const txt=String(a.damage).replace(/−/g,'-');
   const re=/^\s*(\d+d\d+|\d+)((?:\s*[+-]\s*\d+(?!d))*)\s*([a-z]+)?/i;
   const base=txt.match(re); if(!base) return null;
@@ -1994,6 +1995,25 @@ const ITEMRULES=(function(){
   }
   return {fromObj,isRich,has,attr,card,key,usedOf,get open(){return open},set open(v){open=v}};
 })();
+/* Uitgerust: pcs.<naam>.equipped in de Stand (door de DM bijgehouden). Een wapen met eigen regels kan {weapon:{base:"Greataxe",bonus:1}} hebben. */
+function equippedOf(c){const p=((getState().pcs)||{})[c&&c.name]; return p&&Array.isArray(p.equipped)?p.equipped.map(itemText).filter(Boolean):null}
+function equipIdx(list,name){
+  const n=x=>String(x||'').toLowerCase().replace(/^\s*\d+\s+/,'').replace(/\([^)]*\)/g,'').trim().replace(/s$/,'');
+  const w=n(name); let i=(list||[]).findIndex(e=>n(e)===w); if(i<0) i=(list||[]).findIndex(e=>n(e).length>3&&(w.indexOf(n(e))>=0)); return i;
+}
+/* aanvallen van het blad, waarbij een uitgerust wapen met "weapon" zijn basiswapen vervangt (naam, aanvals- en schadebonus) */
+function attacksOf(c){
+  const list=(c&&c.attacks||[]).slice(), eq=equippedOf(c); if(!eq) return list;
+  const inv=(((getState().pcs)||{})[c.name]||{}).inventory||[];
+  inv.forEach(it=>{
+    if(!it||typeof it!=='object'||!it.weapon||!it.weapon.base||equipIdx(eq,it.name)<0) return;
+    const b=Number(it.weapon.bonus)||0, base=String(it.weapon.base).toLowerCase(), i=list.findIndex(a=>String(a.name||'').toLowerCase()===base);
+    if(i<0) return;
+    const a=list[i], dmg=String(a.damage||'').replace(/(\d+d\d+)(\s*[+\-−]\s*\d+)?/g,(m,die,mod)=>{const t=(mod?Number(mod.replace(/−/,'-').replace(/\s/g,'')):0)+b; return die+(t?(t>0?'+':'−')+Math.abs(t):'')});
+    list[i]=Object.assign({},a,{name:it.name,extra:(Number(a.extra)||0)+b,damage:b?dmg:a.damage});
+  });
+  return list;
+}
 function invHtml(c){
   const st=getState(), pc=(st.pcs||{})[c.name]||null;
   let items=pc&&Array.isArray(pc.inventory)&&pc.inventory.length?pc.inventory.map(x=>ITEMRULES.isRich(x)?x:itemText(x)):String(c.equipment||'').split(/;|\n+(?![^(]*\))/);
@@ -2009,16 +2029,21 @@ function invHtml(c){
   const R={shield:/(shield|schild|buckler)/i,armor:/\b(armou?r|hauberk|mithril|chain shirt|breastplate|hemd|brigandine)\b|\bmail\b/i,ranged:/(bow|boog|sling)/i,melee:/(axe|bijl|sword|zwaard|spear|speer|dagger|dolk|adarion|mace|hammer|blade|lemmet|rapier|club|knots|lance|javelin|staff|scimitar|flail|pike|glaive|halberd)/i,head:/\b(helm|helmet|hood|capuchon|circlet|diadeem|hat|hoed)\b/i,eyes:/\b(spectacles|lens|bril|goggles)\b/i,neck:/\b(amulet|pendant|necklace|ketting|hanger)\b/i,shoulders:/\b(pauldrons?|schoudersieraad|epaulettes?)\b/i,back:/\b(cloak|mantel|cape)\b/i,torso:/\b(clothes|clothing|kleding|tunic|tuniek|robe|gewaad|jerkin|vest|shirt)\b/i,arms:/\b(bracers?|vambraces?|armband|polsband)\b/i,hands:/\b(gloves?|handschoenen|gauntlets?)\b/i,waist:/\b(belt|gordel|riem|sash)\b/i,ring:/\bring\b/i,feet:/\b(boots?|laarzen|shoes|sandals)\b/i};
   const ammo=/\b(arrows?|pijlen|bolts?|quiver|koker)\b/i;
   const cap={armor:1,shield:1,melee:2,ranged:1,head:1,eyes:1,neck:1,shoulders:1,back:1,torso:1,arms:1,hands:1,waist:1,ring:2,feet:1};
-  const place=it=>{const n=String(it.name).split(/\.\s/)[0].replace(/\([^)]*\)/g,' '); let k=null; /* alleen de naam telt, niet de toelichting ("Geen armor of shield") */
+  const place=it=>{const n=String((it.weapon&&it.weapon.base)||it.name).split(/\.\s/)[0].replace(/\([^)]*\)/g,' '); let k=null; /* alleen de naam telt, niet de toelichting ("Geen armor of shield") */
     if(!ammo.test(n)&&!/\b(pack|kit)\b/i.test(n)) for(const key of ['shield','armor','ranged','melee','head','eyes','neck','shoulders','back','torso','arms','hands','waist','ring','feet']) if(R[key].test(n)){k=key;break;}
-    if(k&&slots[k].length<cap[k]) slots[k].push(it); else bag.push(it);};
-  items.forEach(raw=>{const it=parse(raw); all.push(it);
+    const stowed=eq&&(k==='melee'||k==='ranged')&&equipIdx(eq,it.name)<0; /* met een uitrustingslijst staan alleen die wapens in de wapenvakken */
+    if(k&&!stowed&&slots[k].length<cap[k]) slots[k].push(it); else bag.push(it);};
+  const eq=equippedOf(c), loose=[];
+  items.forEach(raw=>{const it=parse(raw); if(raw&&raw.weapon) it.weapon=raw.weapon; all.push(it);
     if(/explorer'?s pack|pack$/i.test(it.name)){
       const parts=it.parts||(sheetPack?sheetPack.split(',').map(x=>x.trim()).filter(Boolean):(/explorer/i.test(it.name)?DEF.explorer:null));
       if(parts){ parts.forEach(p=>{const q={name:p,note:'uit '+it.name,magic:false,pack:true}; all.push(q); bag.push(q);}); return; }
     }
     if(it.parts){ it.parts.forEach(p=>{const q={name:p,note:'uit '+it.name,magic:false,pack:true}; all.push(q); bag.push(q);}); return; }
-    place(it);});
+    loose.push(it);});
+  /* eerst wat uitgerust is, in de volgorde van de lijst */
+  const rank=it=>{const i=eq?equipIdx(eq,it.name):-1; return i<0?999:i};
+  loose.slice().sort((a,b)=>rank(a)-rank(b)).forEach(place);
   const ico=it=>{ if(!window.DNDItems||!it) return ''; try{const m=DNDItems.match((it.magic?'[magisch] ':'')+it.name); return '<img class="itico" src="'+m.src+'" alt="" loading="lazy" onerror="this.remove()">';}catch(e){return ''}};
   const sl=(label,key,n)=>{const l=slots[key]; let o=''; for(let i=0;i<n;i++){const it=l[i]; o+='<div class="invsl'+(it?'':' empty')+(it&&it.magic?' mg':'')+(it&&ITEMRULES.has(it)?' ik':'')+'"'+(it&&ITEMRULES.has(it)?ITEMRULES.attr(it):'')+'><small>'+label+(n>1?' #'+(i+1):'')+'</small><span'+(it?' class="it"':'')+'>'+(it?ico(it)+'<span class="tx">'+(it.magic?'✨ ':'')+esc(it.name)+(it.note&&!ITEMRULES.has(it)?' <em>('+esc(it.note)+')</em>':'')+'</span>':'&nbsp;')+'</span></div>';} return o;};
   const fig='<img src="assets/inventory-figuur.jpg" alt="">';
@@ -2066,7 +2091,7 @@ function sheetHtml(c){
       rlRow(by('abil:'+k),'<b>'+s+'</b> '+esc((c.abilities||{})[k]||10)+' <small>check</small>')+
       rlRow(by('save:'+k),dot((c.saves||[]).includes(k)?1:0)+' <small>Save '+s+'</small>')).join('')+'</div>'+
     '<div class="card"><h3>Skills</h3>'+SKILLS.map(([k,n,a])=>rlRow(by('skill:'+k),dot((c.skills||{})[k]||0)+' '+esc(n)+' <small>'+a.toUpperCase()+(rage&&(c.rageSkills||[]).includes(k)?'→STR':'')+'</small>')).join('')+'</div></div>';
-  if((c.attacks||[]).length) h+='<div class="card"><h3>Attacks</h3>'+c.attacks.map((a,i)=>rlRow(by('atk:'+i),'<b>'+esc(a.name)+'</b> <small>'+esc((a.damage?a.damage+' · ':'')+(a.notes||''))+'</small>')).join('')+'</div>';
+  if((c.attacks||[]).length) h+='<div class="card"><h3>Attacks</h3>'+attacksOf(c).map((a,i)=>rlRow(by('atk:'+i),'<b>'+esc(a.name)+'</b> <small>'+esc((a.damage?a.damage+' · ':'')+(a.notes||''))+'</small>')).join('')+'</div>';
   const txt=(t,v)=>v?'<details class="card" data-sec="'+t+'"'+(sheetOpen[t]?' open':'')+'><summary>'+t+'</summary><div style="white-space:pre-wrap;font-size:14px">'+esc(v)+'</div></details>':'';
   const cur=c.currency||{};
   h+=txt('Spellcasting',[c.spellInfo,c.spells].filter(Boolean).join('\n\n'))+invHtml(c)+featHtml(c)+txt('Languages &amp; Proficiencies',[c.languages,c.proficiencies].filter(Boolean).join('\n\n'))+txt('Uiterlijk',c.appearance)+txt('Persoonlijkheid',c.personality)+txt('Backstory',c.backstory)+((me&&c.player===me.name)?txt('Geheimen &amp; DM-haken (alleen jij ziet dit)',[c.secrets&&'Geheimen:\n'+c.secrets,c.dmHooks].filter(Boolean).join('\n\n')):'');

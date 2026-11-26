@@ -65,4 +65,20 @@ t("standaardregels: wapen, pakonderdeel, Healer's Kit met teller, onbekend voorw
   ok(open("healer_s_kit").includes("7 / 10 over"));
   ok(/Geen bijzondere regels/.test(open("vreemd_ding")));
 });
+t("uitgerust: alleen die wapens in de vakken, en een bijzonder wapen vervangt zijn basisaanval", () => {
+  const hew = { name: "Blackhewer", rules: "Greataxe +1", magic: true, weapon: { base: "Greataxe", bonus: 1 } };
+  const lijst = ["4 Handaxes", "Spear", "Shortbow", hew, "Dwarf-werpbijl"];
+  const env = { inv: lijst, itemUse: null };
+  const fn = new Function("env", "const window={};const slug=s=>String(s).toLowerCase().replace(/[^a-z0-9]+/g,'_');const esc=s=>String(s==null?'':s);const sheetOpen={};" +
+    "const getState=()=>({pcs:{Wulfgrim:{inventory:env.inv,equipped:env.eq}}});function itemText(x){return x==null?'':typeof x!=='object'?String(x):x.name||''}" + code + "return {invHtml,attacksOf};");
+  const m = fn(env), k = { ...c, attacks: [{ name: "Greataxe", ability: "str", damage: "1d12+3 slashing (Rage: 1d12+5)" }, { name: "Spear", damage: "1d6+3 piercing" }] };
+  ok(m.attacksOf(k)[0].name === "Greataxe", "zonder lijst verandert er niets");
+  env.eq = ["Blackhewer", "Dwarf-werpbijl", "Shortbow"];
+  const h = m.invHtml(k), vak = h.split('class="invbag"')[0], tas = h.split('class="invbag"')[1];
+  ok(vak.indexOf("Blackhewer") < vak.indexOf("Dwarf-werpbijl") && vak.includes("Blackhewer") && vak.includes("Shortbow"), "uitgerust in de vakken, hoofdwapen eerst");
+  ok(!vak.includes("Spear") && tas.includes("Spear") && tas.includes("Handaxes"), "de rest in de tas");
+  const a = m.attacksOf(k)[0];
+  ok(a.name === "Blackhewer" && a.extra === 1 && a.damage === "1d12+4 slashing (Rage: 1d12+6)", JSON.stringify(a));
+  ok(m.attacksOf(k).length === 2 && k.attacks[0].name === "Greataxe", "blad zelf ongewijzigd");
+});
 console.log(pass + " geslaagd, " + fail + " mislukt"); process.exit(fail ? 1 : 0);
