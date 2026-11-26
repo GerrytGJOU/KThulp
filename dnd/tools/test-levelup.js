@@ -47,7 +47,8 @@ t("zelf gooien: waarde buiten de dobbelsteen wordt geweigerd, een geldige worp t
 });
 t("feat in plaats van ASI, met +1 op een ability; zonder feat een fout; ability boven 20 wordt geweigerd", () => {
   ok(LU.apply(wulf(), { hpMode: "avg", asiMode: "feat" }).error);
-  const r = LU.apply(wulf(), { hpMode: "avg", asiMode: "feat", feat: "Lucky", featAb: "str", mastery: "Spear (Sap)" }); ok(!r.error, r.error); eq(r.c.abilities.str, 18); ok(/Feat \(level 4\): Lucky \(\+1 Strength\)/.test(r.c.features));
+  const r = LU.apply(wulf(), { hpMode: "avg", asiMode: "feat", feat: "Sentinel", featAb: "str", mastery: "Spear (Sap)" }); ok(!r.error, r.error); eq(r.c.abilities.str, 18); ok(/Feat \(level 4\): Sentinel \(\+1 Strength\)/.test(r.c.features));
+  const l = LU.apply(wulf(), { hpMode: "avg", asiMode: "feat", feat: "Lucky", featAb: "str", mastery: "Spear (Sap)" }); ok(!l.error, l.error); eq(l.c.abilities.str, 17, "Origin feat geeft geen +1");
   const w = wulf(); w.abilities.str = 20; ok(LU.apply(w, { hpMode: "avg", asiMode: "asi", asi1: "str", asi2: "dex", mastery: "Spear (Sap)" }).error);
 });
 t("level zonder ASI (5): geen ASI-keuze nodig; level 8 weer wel; Fighter krijgt extra ASI op 6", () => {
@@ -69,5 +70,25 @@ t("weergave: verschillende keuzes voor Barbarian en Ranger (nepdocument)", () =>
   const a = mk(), b = mk(); LU.render(a, { c: w, esc: esc, feats: ["Lucky", "Alert"], featText: {}, onDone: () => {}, onClose: () => {} }); LU.render(b, { c: tr, esc: esc, feats: ["Lucky"], featText: {}, onDone: () => {}, onClose: () => {} });
   ["Level-up: Wulfgrim", "Weapon Mastery", "Vaste waarde (7", "Tough", "Het beraad is gesloten."].forEach(x => ok(a.innerHTML.includes(x), "Wulfgrim mist: " + x));
   ["Level-up: Tharon", "voorbereide spell", "Vaste waarde (6"].forEach(x => ok(b.innerHTML.includes(x), "Tharon mist: " + x)); ok(!b.innerHTML.includes("Weapon Mastery: kies"));
+});
+t("PHB 2024: alle feats aanwezig, eisen en +1-keuzes kloppen", () => {
+  const n = cat => LU.FEAT_DATA.filter(f => f.cat === cat).length; eq([n("O"), n("G"), n("S")], [12, 42, 10]);
+  eq(new Set(LU.FEAT_DATA.map(f => f.name)).size, LU.FEAT_DATA.length);
+  const w = wulf(), why = x => LU.featBlock(w, LU.featInfo(x), 4);
+  ok(!why("Great Weapon Master") && !why("Sentinel") && !why("Shield Master") && !why("Heavily Armored"));
+  ok(why("War Caster") && why("Actor") && why("Heavy Armor Master") && why("Archery"));
+  ok(!LU.featBlock(tha(), LU.featInfo("War Caster"), 4) && !LU.featBlock(tha(), LU.featInfo("Defense"), 4));
+  const go = (c, feat, featAb) => LU.apply(c, { hpMode: "avg", asiMode: "feat", feat: feat, featAb: featAb, mastery: "Spear (Sap)" });
+  ok(go(wulf(), "Great Weapon Master", "dex").error && go(wulf(), "Great Weapon Master", "").error && go(wulf(), "War Caster", "wis").error);
+  const sp = go(wulf(), "Speedy", "con"); eq(sp.c.speed, 40);
+  const rs = go(Object.assign(wulf(), { saves: ["str", "con"] }), "Resilient", "wis"); eq(rs.c.saves, ["str", "con", "wis"]); ok(go(Object.assign(wulf(), { saves: ["str", "con"] }), "Resilient", "str").error);
+});
+t("weergave feats: gegroepeerd, eis zichtbaar, geen Fighting Styles voor een Barbarian; Healer's Kit telt niet als Healer", () => {
+  const box = { innerHTML: "", querySelectorAll: () => [] }, w = wulf(); w.k = "x1"; w.levelUp = { status: "announced", to: 4 }; w.features += " Healer's Kit.";
+  const els = []; const b2 = { innerHTML: "", querySelectorAll: () => els };
+  const radio = { dataset: { lu: "asim" }, tagName: "INPUT", type: "radio", value: "feat" }; els.push(radio);
+  LU.render(b2, { c: w, esc: s => String(s), onDone: () => {}, onClose: () => {} }); radio.onchange();
+  ["General Feats", "Origin Feats", "Great Weapon Master", "Actor — vereist Charisma 13+", '<option value="Healer">'].forEach(x => ok(b2.innerHTML.includes(x), "mist: " + x));
+  ok(!b2.innerHTML.includes("Fighting Style Feats") && !b2.innerHTML.includes('<option value="Tough">'));
 });
 console.log(pass + " geslaagd, " + fail + " mislukt"); process.exit(fail ? 1 : 0);
