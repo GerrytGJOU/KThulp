@@ -94,8 +94,8 @@ h2{color:var(--gold);font-size:17px;margin:14px 0 6px}
 #scenebar{padding:4px 12px;font-size:13px;color:var(--gold);background:rgba(11,18,32,.7);border-bottom:1px solid rgba(200,162,74,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #partybar{display:flex;gap:8px;overflow-x:auto;padding:6px 12px;background:rgba(20,17,15,.75);border-bottom:1px solid rgba(200,162,74,.3)}
 #partybar:empty,#scenebar:empty{display:none}
-#sidemain{flex:1;min-height:0;overflow-y:auto}
-#partyside{flex:none;display:flex;flex-direction:column;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(200,162,74,.35)}
+#sidemain{flex:1 1 0;min-height:40%;overflow-y:auto}
+#partyside{flex:0 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(200,162,74,.35)}
 #partyside:empty{display:none}
 #partyside .pc{min-width:0;max-width:none}
 .dmsel{flex:none;width:auto;max-width:190px}
@@ -787,7 +787,7 @@ function enterCampaign(id){
   on(db.ref(cp('world/npcs')),'value',s=>{wNpcs=s.val()||{};if(tab==='map')renderMap(true)});
   on(db.ref(cp('world/locations')),'value',s=>{wLocs=s.val()||{};if(tab==='map')renderMap(true)});
   on(db.ref(cp('world/calendar')),'value',s=>{wCal=s.val()||null;if(tab==='diary')renderDiary()});
-  on(db.ref(cp('canon')),'value',s=>{canon=s.val()||{};if(tab==='canon')renderCanon()});
+  on(db.ref(cp('canon')),'value',s=>{canon=s.val()||{};if(tab==='canon')renderCanon();else if(tab==='game')renderParty()});
   on(db.ref(cp('pending')),'value',s=>{pending=s.val()||{};renderGame()});
   on(db.ref(cp('scene')),'value',s=>{sceneKey=s.val()||'';renderGame()});
   on(db.ref(cp('partyTable')),'value',s=>{ptData=s.val()||null;if(tab==='table')renderTable();if(tab==='more')renderMore();markNav()});
@@ -1049,7 +1049,7 @@ Regels:
 - Houd de STAND bij via statePatch (deep merge; null verwijdert een sleutel; lijsten worden vervangen). Gebruik EXACT dit schema, met de naam van het personage als sleutel:
   ${S.exInGame}
    "pcs":{"Personagenaam":{"player":"Spelernaam","location":"",${R.pcStats},"inventory":[],"knowledge":[]}},
-   "companions":{"Naam":{"location":"","hp":{"current":0,"max":0,"temp":0},"status":"","attitude":""}},
+   "companions":{"Naam":{"class":"klasse, bv. Fighter","location":"","hp":{"current":0,"max":0,"temp":0},"status":"","attitude":""}},
    "npcs":{"Naam":{"group":"categorie voor de Personenlijst, spelerzichtbaar (bijv. Fellowship, Dwarves, Huis van Elrond); nooit Companion, dat doet de app zelf","location":"","status":"","attitude":"","knows":[]}},
    "factions":{"Naam":{"stance":"","currentAction":""}},
    "quests":{"open":[{"title":"","detail":"","kind":"main|side|personal|companion","for":"personagenaam (alleen bij personal)","npc":"NPC-naam (alleen bij companion)","place":"waar het speelt (bij side)","updates":["eerdere berichten van deze opdracht, oudste eerst"]}],"completed":[{"title":"","detail":"","reward":"wat de spelers er echt voor kregen, kort; leeg als er niets was","updates":[]}],"consequences":[]},
@@ -1314,6 +1314,14 @@ function resChips(c){
 function condChips(c){
   return listOf(c.conditions&&typeof c.conditions==='object'&&!Array.isArray(c.conditions)?Object.entries(c.conditions).filter(([k,v])=>v).map(([k])=>k):c.conditions).slice(0,3).map(r=>'<span class="chip bad">'+esc(r)+'</span>').join('');
 }
+/* klasse van een metgezel: uit de Stand, anders uit het companionoverzicht in de canon ("Naam (Volk / Klasse (...))") */
+function compClass(name,c){
+  if(c&&c.class) return String(c.class);
+  const docs=Object.entries(canon||{}).filter(([k])=>k.indexOf('companions_overzicht')>=0);
+  for(const [,d] of docs){ const t=String((d&&d.text)||''), i=t.indexOf(' '+name+' ('); if(i<0) continue;
+    const m=t.slice(i+name.length+3,i+name.length+90).match(/^[^\/()\n]+\/\s*([^()\n;]+)/); if(m) return m[1].trim(); }
+  return '';
+}
 function renderParty(){
   const S=getState(), sb=$('#scenebar'), pb=$('#partybar'), ps=$('#partyside'); if(!sb||!pb) return;
   const g=S.inGame||{}, pcs=Object.entries(S.pcs||{});
@@ -1324,7 +1332,7 @@ function renderParty(){
   const phtml=members.map(m=>{
     const c=m.c, hp=hpOf(c);
     const pct=hp?Math.max(0,Math.min(100,Math.round(hp.cur/hp.max*100))):0, cls=pct<=25?'low':pct<=60?'mid':'';
-    return '<div class="pc">'+avatar(m.name)+'<div class="pi"><b>'+esc(m.name)+'</b>'+(m.comp?' <small>metgezel'+(Number(c.level)?' · level '+Number(c.level):'')+'</small>':'')+
+    return '<div class="pc">'+avatar(m.name)+'<div class="pi"><b>'+esc(m.name)+'</b>'+(m.comp?' <small>'+esc(compClass(m.name,c)||'metgezel')+(Number(c.level)?' · level '+Number(c.level):'')+'</small>':'')+
       (hp?'<div class="hpb"><i class="'+cls+'" style="width:'+pct+'%"></i></div><small>HP '+hp.cur+'/'+hp.max+(hp.temp?' (+'+hp.temp+')':'')+'</small>':'')+
       '<div class="chips">'+resChips(c)+condChips(c)+'</div></div></div>';
   }).join('');
