@@ -91,4 +91,12 @@ t("weergave feats: gegroepeerd, eis zichtbaar, geen Fighting Styles voor een Bar
   ["General Feats", "Origin Feats", "Great Weapon Master", "Actor — vereist Charisma 13+", '<option value="Healer">'].forEach(x => ok(b2.innerHTML.includes(x), "mist: " + x));
   ok(!b2.innerHTML.includes("Fighting Style Feats") && !b2.innerHTML.includes('<option value="Tough">'));
 });
+t("een hogere modifier schuift de schade op het blad mee", () => {
+  const w = Object.assign(wulf(), { abilities: { str: 17, dex: 14, con: 16, int: 8, wis: 10, cha: 8 }, attacks: [
+    { name: "Greataxe", ability: "str", damage: "1d12+3 slashing (Rage: 1d12+5)" }, { name: "Spear", ability: "str", damage: "1d6+3 piercing (two-handed 1d8+3)" },
+    { name: "Shortbow", ability: "dex", damage: "1d6+2 piercing" }, { name: "Unarmed Strike", ability: "str", damage: "4 bludgeoning" }] });
+  const r = LU.apply(w, { hpMode: "avg", asiMode: "feat", feat: "Great Weapon Master", featAb: "str", mastery: "Spear (Sap)" });
+  eq(r.c.attacks.map(a => a.damage), ["1d12+4 slashing (Rage: 1d12+6)", "1d6+4 piercing (two-handed 1d8+4)", "1d6+2 piercing", "5 bludgeoning"]);
+  eq(w.attacks[0].damage, "1d12+3 slashing (Rage: 1d12+5)");
+});
 console.log(pass + " geslaagd, " + fail + " mislukt"); process.exit(fail ? 1 : 0);

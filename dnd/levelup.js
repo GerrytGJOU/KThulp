@@ -171,6 +171,15 @@
   }
   function slotText(a) { return a.map((n, i) => n + "× " + ORD[i]).join(", "); }
 
+  /* de ability modifier zit vast in de schadetekst: schuif elke "1d12+3" (ook de Rage- en tweehandige variant) en een kale schade ("4 bludgeoning") mee */
+  function shiftDamage(txt, d, old) {
+    const fmt = n => n ? (n > 0 ? "+" : "−") + Math.abs(n) : "";
+    const t = String(txt).replace(/(\d+d\d+)(\s*[+\-−]\s*\d+(?![\dd]))?/g, (m, die, md) => {
+      if (!md && old !== 0) return m; /* zonder modifier (bv. tweede wapen) blijft zonder */
+      return die + fmt((md ? Number(md.replace("−", "-").replace(/\s/g, "")) : 0) + d); });
+    return t.replace(/^\s*(\d+)(?=\s|$)/, (m, n) => String(Math.max(0, Number(n) + d)));
+  }
+
   /* uitvoeren: geeft {c: nieuw blad, summary} of {error} */
   function apply(c, picks) {
     const p = plan(c, picks && picks.to); if (!p.ok) return { error: p.notes.join(" ") };
@@ -201,7 +210,8 @@
     const conNew = mod(ab.con), base = picks.hpMode === "roll" ? Math.max(1, Math.min(p.hd, Number(picks.hpRoll) || 0)) : p.avg;
     if (picks.hpMode === "roll" && !(Number(picks.hpRoll) >= 1 && Number(picks.hpRoll) <= p.hd)) return { error: "Vul je worp in (1 t/m " + p.hd + ")." };
     const gain = base + conNew + (p.tough ? 2 : 0) + (conNew - conOld) * (L - 1) + (gotFeat === "Tough" && !p.tough ? 2 * L : 0);
-    const out = Object.assign({}, c); out.level = L; out.abilities = ab; out.hpMax = (Number(c.hpMax) || 0) + gain;
+    const out = Object.assign({}, c); out.level = L; out.abilities = ab;
+    if (Array.isArray(c.attacks)) out.attacks = c.attacks.map(a => { const k = a.ability || "str", old = mod((c.abilities || {})[k] || 10), d = mod(ab[k] || 10) - old; return d && a.damage ? Object.assign({}, a, { damage: shiftDamage(a.damage, d, old) }) : a; }); out.hpMax = (Number(c.hpMax) || 0) + gain;
     out.hitDice = String(c.hitDice || "").replace(/^(\d+)(d\d+)/, (m, n, d) => (Number(n) + 1) + d) || (L + "d" + p.hd);
     if (gotSave) out.saves = (c.saves || []).concat([gotSave]);
     if (gotFeat === "Speedy") out.speed = (Number(c.speed) || 30) + 10;

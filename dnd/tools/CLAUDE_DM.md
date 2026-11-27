@@ -50,6 +50,11 @@ Een worp van een speler komt binnen als `[worp: ...]` in zijn actie (zie `player
 ## Uitrusting
 - Zegt een speler dat hij een wapen of voorwerp pakt, wisselt of weglegt: zet in dezelfde beurt `pcs.<naam>.equipped` (volledige lijst namen, hoofdwapen eerst); bijzondere wapens krijgen in `inventory` het veld `weapon` `{"base","bonus"}` (zie de regel UITRUSTING in de systeemprompt). Lijsten worden vervangen: geef `inventory` altijd volledig mee.
 
+## Great Weapon Master en Sharpshooter
+- De app telt de Heavy-bonus (+PB) zelf mee in de schade ("incl. Great Weapon Master +N"); niet nogmaals optellen.
+- "(Hew, alleen na crit of kill)" is voorwaardelijk en kost de Bonus Action; anders "(Hew vervalt)". Zie de regel AANVALLEN VAN SPELERS in de systeemprompt.
+- "[Sharpshooter]": geen nadeel van dichtbij of op lange afstand, half en ¾ cover tellen niet.
+
 ## Gevecht en initiatieftracker
 - Tijdens een gevecht staat `initiative` altijd in de Stand (zie de regel GEVECHT in de systeemprompt): `round`, `active` en `order` met beide PC's, bondgenoten (met `hp`) en opgemerkte vijanden (met `health` in procenten, nooit HP-cijfers; exacte HP in `dmNotes`).
 - Loopt een gevecht al zonder tracker, zet hem er dan direct in met `state-patch`. Na het gevecht `{"initiative": null}`: de app toont dan weer locatie, personen en opdrachten.

@@ -81,4 +81,19 @@ t("uitgerust: alleen die wapens in de vakken, en een bijzonder wapen vervangt zi
   ok(a.name === "Blackhewer" && a.extra === 1 && a.damage === "1d12+4 slashing (Rage: 1d12+6)", JSON.stringify(a));
   ok(m.attacksOf(k).length === 2 && k.attacks[0].name === "Greataxe", "blad zelf ongewijzigd");
 });
+t("Great Weapon Master en Sharpshooter tellen mee in de schade", () => {
+  const cut = (x, y) => src.slice(src.indexOf(x), src.indexOf(y, src.indexOf(x)));
+  const m = new Function("const pbOf=c=>2,amod=(c,k)=>4,attacksOf=c=>c.attacks;" + cut("const CC_W=[", "/* naam, regex op de itemregel") +
+    cut("function weaponOf(a)", "function dmgRowHtml") + "return {dmgInfo,dmgText,weaponOf};")();
+  const w = { features: "Feat (level 4): Great Weapon Master (+1 Strength)", rageSkills: [], attacks: [
+    { name: "Blackhewer", base: "Greataxe", ability: "str", damage: "1d12+5 slashing (Rage: 1d12+7)", notes: "Heavy; mastery Cleave" }, { name: "Handaxe", damage: "1d6+4 slashing" }, { name: "Unarmed Strike", damage: "5 bludgeoning" }] };
+  const g = (k, cl, hw) => m.dmgInfo(w, "atk:" + k, true, cl, hw);
+  ok(g(0).mod === 9 && g(0).gwm === 2 && g(0).canHew, "Heavy: +PB bovenop Rage");
+  ok(g(0, true).mod === 5, "Cleave: geen ability modifier, wel Rage en GWM");
+  ok(g(0, false, true).mod === 7 && !g(0, false, true).gwm, "Hew: zonder Heavy-bonus");
+  ok(!g(1).gwm && g(1).canHew && !g(2).canHew, "Handaxe niet Heavy; Unarmed geen wapen");
+  ok(/incl\. Great Weapon Master \+2/.test(m.dmgText(g(0), "7", "").text));
+  const th = { features: "Feat (level 4): Sharpshooter (+1 Dexterity)", attacks: [{ name: "Shortbow", ability: "dex", damage: "1d6+4 piercing" }, { name: "Elven Shortsword", damage: "1d6+4 piercing" }] };
+  ok(m.dmgInfo(th, "atk:0").sharp && !m.dmgInfo(th, "atk:1").sharp && !m.dmgInfo(th, "atk:0").gwm);
+});
 console.log(pass + " geslaagd, " + fail + " mislukt"); process.exit(fail ? 1 : 0);

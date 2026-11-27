@@ -299,7 +299,7 @@ footer{padding-top:2px;padding-bottom:2px;font-size:10px}
 <script src="settings-editor.js?v=2"></script>
 <script src="settings-icons.js?v=1"></script>
 <script src="partytable.js?v=2"></script>
-<script src="levelup.js?v=2"></script>
+<script src="levelup.js?v=3"></script>
 <script>
 "use strict";
 firebase.initializeApp({
@@ -952,7 +952,7 @@ function renderGame(){
     ${others.length>1?'<button class="b alt" id="skip">Zonder iedereen verder</button>':''}
     ${others.map(n=>'<button class="b alt sm" data-skip="'+esc(n)+'" type="button">⏭ Zonder '+esc(n)+'</button>').join('')}</div>
     ${mine?(String(mine.text).length>60?'<div class="row mineline"><details class="otheract"><summary>Ingediend: '+esc(String(mine.text).slice(0,60).trim())+'…</summary>'+esc(mine.text)+'</details><small><a href="#" id="editmine">wijzig</a></small></div>':'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a></small>'):''}`;
-    const em=$('#editmine'); if(em) em.onclick=e=>{e.preventDefault(); const sp=rollSplit(mine.text); draft=sp.text; rollExtras=sp.rolls; rollDraft='';rollKey='';rollNat='';rollNat2='';rollAdv='';rollO={};rollFree='';rollDmg='';rollDmgX='';rollTgt='';rollCleave=false; if(document.activeElement) document.activeElement.blur(); renderGame(); const a=$('#act'); if(a) a.focus()};
+    const em=$('#editmine'); if(em) em.onclick=e=>{e.preventDefault(); const sp=rollSplit(mine.text); draft=sp.text; rollExtras=sp.rolls; rollDraft='';rollKey='';rollNat='';rollNat2='';rollAdv='';rollO={};rollFree='';rollDmg='';rollDmgX='';rollTgt='';rollCleave=false;rollHew=false; if(document.activeElement) document.activeElement.blur(); renderGame(); const a=$('#act'); if(a) a.focus()};
     $('#act').value=draft;
     $('#act').oninput=e=>draft=e.target.value; wireRoll();
     $('#send').onclick=()=>submit(false);
@@ -1070,7 +1070,7 @@ Regels:
 - ${R.playerRolls}
 - SPELERCHECKS IN DE VERTELLING: een worp van een speler zet je NIET in "rolls" maar noem je op de plek in de tekst waar hij telt, direct na de handeling van het personage, met skill en totaal: \"Wulfgrim kijkt naar de twee gestaltes (Perception 14) en ziet meteen dat de linker een kop groter is dan de ander...\". Doe dat voor ELKE speler die een check deed of kreeg, in dezelfde beurt, ieder met zijn eigen totaal en zijn eigen, bij die uitkomst passende waarneming. Laat nooit de worp van de één de uitkomst van de ander bepalen.
 - Een actie kan meerdere [worp: ...]-blokken bevatten (bv. de aanvalsworp, de schade en een extra effect zoals Dreadful Strike, of twee aanvallen). Verwerk ze allemaal, in de logische volgorde. Vraag in nextTurn.checks alle dobbels die je nodig hebt in één keer (bv. "Aanval met voordeel, schade 1d8+3 en 2d6 Dreadful Strike").
-- AANVALLEN VAN SPELERS: elk aanvalsblok is een eigen aanval; "→ naam" is het doelwit, "(Cleave)" de Cleave-aanval. Zonder pijl volg je de tekst van de actie, in de volgorde van de blokken; vraag alleen na als het doelwit echt onduidelijk is. Jij bepaalt tegen de verborgen AC of de aanval raak is en telt de schade alleen bij raak; eerbiedig voorwaarden van de speler ("als die raakt, dan Cleave", "als hij al dood is, richt ik op ..."). Controleer de bonus op de schade (Cleave: geen ability modifier, Rage Damage wel; extra dobbels alleen als de feature hier geldt) en reken stilzwijgend met het juiste getal. Noem in de vertelling bij ELKE aanval direct na de handeling het totaal en de uitkomst, bv. "(aanval 17, raak)" of "(aanval 12, mis)"; noem nooit de AC. Werk daarna health in initiative en de exacte HP in dmNotes bij.
+- AANVALLEN VAN SPELERS: elk aanvalsblok is een eigen aanval; "→ naam" is het doelwit, "(Cleave)" de Cleave-aanval. Zonder pijl volg je de tekst van de actie, in de volgorde van de blokken; vraag alleen na als het doelwit echt onduidelijk is. Jij bepaalt tegen de verborgen AC of de aanval raak is en telt de schade alleen bij raak; eerbiedig voorwaarden van de speler ("als die raakt, dan Cleave", "als hij al dood is, richt ik op ..."). Controleer de bonus op de schade (Cleave: geen ability modifier, Rage Damage wel; extra dobbels alleen als de feature hier geldt) en reken stilzwijgend met het juiste getal. Noem in de vertelling bij ELKE aanval direct na de handeling het totaal en de uitkomst, bv. "(aanval 17, raak)" of "(aanval 12, mis)"; noem nooit de AC. Werk daarna health in initiative en de exacte HP in dmNotes bij. GREAT WEAPON MASTER: staat bij de schade "(incl. Great Weapon Master +N)", dan zit die bonus al in het totaal: tel hem niet nog eens op, maar trek hem eraf als de aanval niet bij de Attack action op de eigen beurt hoort (bv. Opportunity Attack). "(Hew, alleen na crit of kill)" is een voorwaardelijke bijaanval: voer hem alleen uit als die speler deze beurt met een melee-wapen (ook via Cleave) een critical scoorde of een wezen op 0 HP bracht en zijn Bonus Action nog vrij is (Rage activeren kost die ook); hoogstens één keer per beurt. Is het gekozen doel dan al uitgeschakeld, volg de tekst van de actie of neem de dichtstbijzijnde vijand binnen bereik. Anders zeg je kort "(Hew vervalt)" en blijft de Bonus Action ongebruikt. SHARPSHOOTER ("[Sharpshooter]" bij de aanval): geen nadeel op lange afstand of met een vijand binnen 5 ft, en half en three-quarters cover geven het doel geen AC-bonus; vroeg je daardoor eerder nadeel, negeer dat.
 - Doet een PC iets waarbij een check hoort (waarnemen, sluipen, overtuigen, ...) maar staat er geen [worp: ...] in zijn actie, dan: (a) vraag de check via nextTurn.checks als er spanning of risico is, of (b) gebruik bij een kleine waarneming ${R.passive} en noem die in de tekst, bv. \"(passieve Perception 13)\". Negeer zo'n actie nooit en geef niet stilzwijgend alleen de uitkomst van de speler die wel rolde.
 - INFORMATIE PER UITKOMST: bij een waarnemings-, kennis- of onderzoekscheck hangt de hoeveelheid informatie af van het totaal, in lagen: een lage uitkomst geeft het oppervlakkige (wat iedereen ziet), een gemiddelde uitkomst een bruikbaar detail, een hoge uitkomst het verborgen of veelzeggende detail (een wapen, een insigne, een accent, een verborgen gebaar). Bedenk de lagen vooraf en geef elke speler precies de lagen die zijn totaal verdient; verklap de DC's niet.
 - GEVECHT: zodra een gevecht begint (de eerste aanval of initiatiefworp) zet je VERPLICHT "initiative" in de Stand; de app toont dan een initiatieftracker in plaats van locatie, personen en opdrachten. Velden: "round", "active" (exact de naam van wie nu aan de beurt is) en "order" met ALLE deelnemers die de spelers kennen: beide PC's, elke meevechtende bondgenoot en elke opgemerkte vijand apart ("Orc 1", "Orc 2", "Orc-kapitein"). Per deelnemer: name, init, enemy (true of false). PC's: alleen name en init (HP, hulpbronnen en conditions komen uit pcs). Bondgenoten: ook "hp":{"current","max"} (zichtbaar als getal). Vijanden: NOOIT hp-cijfers, alleen "health" = resterend percentage, afgerond op tientallen (100 = fris, 50 of lager = bloodied, 0 = verslagen; zolang hij leeft minstens 10); de exacte vijandelijke HP houd je bij in dmNotes. Gevluchte of overgegeven deelnemers: "status":"gevlucht" of "overgegeven". "conditions" mag bij iedereen. Verslagen deelnemers blijven in de lijst staan. Verborgen vijanden voeg je pas toe als ze opgemerkt worden. Werk elke beurt "round", "active", health, hp en conditions bij (order is een lijst: altijd volledig meegeven), en zet initiative op null zodra het gevecht voorbij is.
@@ -1783,6 +1783,7 @@ let rollKey=null, rollNat='', rollRage=false, rollO={}, newSys='', genCtx=null;
 let rollAdv='', rollNat2='', rollExtras=[], rollFree=''; /* meerdere worpen per actie: toegevoegde worpen + vrij veld voor schade e.d. */
 let rollDmg='', rollDmgX=''; /* schade bij een aanvalsworp: dobbelsteenresultaat en extra schadedobbels */
 let rollOpen=null; /* telefoon: worpblok open of dicht (null = automatisch) */
+let rollHew=false; /* Great Weapon Master: voorwaardelijke bijaanval */
 let rollTgt='', rollCleave=false; /* doelwit uit de initiatieflijst en of dit de Cleave-aanval is */
 
 function amod(c,k){return Math.floor((((c.abilities||{})[k])||10)/2-5)}
@@ -1827,7 +1828,20 @@ function rollText(r,nat){const tot=nat+r.bonus; return r.label+': '+nat+' '+(r.b
 /* met voordeel of nadeel telt de hoogste of laagste van twee d20's */
 function rollTextAdv(r,a,b,adv){const nat=adv==='dis'?Math.min(a,b):Math.max(a,b); return rollText(Object.assign({},r,{label:r.label+' ('+(adv==='dis'?'nadeel':'voordeel')+': '+a+' en '+b+')'}),nat);}
 /* schade bij een wapen: dobbels en vaste bonus uit de schadetekst ("1d12+3 slashing (Rage: 1d12+5)"); met Rage de Rage-variant of de Rage Damage erbij op Strength-aanvallen */
-function dmgInfo(c,key,rage,cleave){
+/* wapen uit de wapentabel bij een aanval: op het basiswapen of de naam ("Elven Shortsword" is een Shortsword) */
+function weaponOf(a){
+  const n=String((a&&(a.base||a.name))||'').toLowerCase();
+  const w=CC_W.filter(x=>n.indexOf(x[0].toLowerCase())>=0).sort((x,y)=>y[0].length-x[0].length)[0];
+  const notes=String((a&&a.notes)||'');
+  return {heavy:w?/Heavy/.test(w[5]):/\bheavy\b/i.test(notes),melee:!!w&&w[2]==='m',ranged:!!w&&w[2]==='r'};
+}
+/* feats die bij een aanval meetellen: Great Weapon Master (+PB op Heavy wapens in de Attack action, Hew) en Sharpshooter */
+function featAtk(c,a){
+  const f=String((c&&c.features)||''), w=weaponOf(a), gwm=/Great Weapon Master/i.test(f);
+  return {gwm:gwm&&w.heavy?pbOf(c):0,canHew:gwm&&w.melee,sharp:/Sharpshooter/i.test(f)&&w.ranged};
+}
+function featNote(c,a){const f=featAtk(c,a); return [f.gwm?'Great Weapon Master: +'+f.gwm+' schade in de Attack action':'',f.canHew?'Hew na crit of kill':'',f.sharp?'Sharpshooter':''].filter(Boolean).join(' · ')}
+function dmgInfo(c,key,rage,cleave,hew){
   if(String(key).indexOf('atk:')!==0) return null;
   const a=attacksOf(c)[Number(String(key).slice(4))]; if(!a||!a.damage) return null;
   const txt=String(a.damage).replace(/−/g,'-');
@@ -1840,7 +1854,8 @@ function dmgInfo(c,key,rage,cleave){
   if(rage&&!rm&&(a.ability||'str')==='str'&&(c.rageSkills||[]).length){ const L=Number(c.level)||1; mod+=L>=16?4:L>=9?3:2; }
   const canCleave=/cleave/i.test(a.notes||'');
   if(cleave&&canCleave) mod-=Math.max(0,amod(c,a.ability||'str')); /* Cleave: geen ability modifier op de schade */
-  return {name:a.name||'Aanval',dice,mod,type:base[3]||'',canCleave};
+  const ft=featAtk(c,a), gwm=hew?0:ft.gwm; mod+=gwm; /* Hew is een Bonus Action, dus zonder de Heavy-bonus */
+  return {name:a.name||'Aanval',dice,mod,type:base[3]||'',canCleave,gwm,canHew:ft.canHew,sharp:ft.sharp};
 }
 /* "7", "3+4" of "3 4" is geldig; geeft de som en de losse getallen, anders null */
 function diceSum(v){const p=String(v||'').split(/[+ ,&]+/).filter(Boolean); return p.length&&p.every(x=>Number.isInteger(Number(x))&&Number(x)>0)?{n:p.reduce((a,x)=>a+Number(x),0),parts:p}:null}
@@ -1848,11 +1863,12 @@ function dmgText(d,v,vx){
   const a=d.dice?diceSum(v):{n:0,parts:[]}, x=diceSum(vx); if(!a) return null;
   const total=Math.max(0,a.n+d.mod+(x?x.n:0)), bits=a.parts.slice();
   if(d.mod||!bits.length) bits.push(String(d.mod));
-  return {total,text:'schade: '+bits.join(' + ').replace(/\+ -/g,'− ')+(x?' + extra '+x.parts.join(' + '):'')+' = '+total+(d.type?' '+d.type:'')};
+  return {total,text:'schade: '+bits.join(' + ').replace(/\+ -/g,'− ')+(x?' + extra '+x.parts.join(' + '):'')+' = '+total+(d.type?' '+d.type:'')+(d.gwm?' (incl. Great Weapon Master +'+d.gwm+')':'')};
 }
 function dmgRowHtml(){
   return '<div class="row" id="rtgtrow" style="display:none"><select id="rtgt" aria-label="Doelwit"></select>'+
-    '<label id="rcleavewrap" style="font-size:13px"><input type="checkbox" id="rcleave"'+(rollCleave?' checked':'')+'> Cleave-aanval</label></div>'+
+    '<label id="rcleavewrap" style="font-size:13px"><input type="checkbox" id="rcleave"'+(rollCleave?' checked':'')+'> Cleave-aanval</label>'+
+    '<label id="rhewwrap" style="font-size:13px" title="Great Weapon Master: telt alleen na een critical of als je iemand op 0 HP brengt; kost je Bonus Action"><input type="checkbox" id="rhew"'+(rollHew?' checked':'')+'> Hew-aanval (na crit of kill)</label></div>'+
     '<div class="row" id="rdmgrow" style="display:none"><span id="rdmglbl" style="font-size:13px;color:var(--gold)"></span>'+
     '<input type="text" id="rdmg" inputmode="tel" aria-label="Uitkomst van de schadedobbels" value="'+esc(rollDmg)+'" style="width:130px">'+
     '<input type="text" id="rdmgx" inputmode="tel" aria-label="Extra schadedobbels" placeholder="extra dobbels" title="Extra schade, bv. Dreadful Strike of Hunter\'s Mark" value="'+esc(rollDmgX)+'" style="width:130px">'+
@@ -1861,7 +1877,7 @@ function dmgRowHtml(){
 function rollAll(){return rollExtras.concat([rollDraft,rollFree]).map(x=>String(x||'').replace(/[\[\]]/g,'').trim()).filter(Boolean)}
 function rollTags(list){return list.map(x=>'  [worp: '+x+']').join('')}
 function rollSplit(t){const rolls=[]; const text=String(t||'').replace(/\s*\[worp:([^\]]*)\]/gi,(m,x)=>{rolls.push(x.trim()); return ''}); return {text,rolls};}
-function rollReset(){rollOpen=null;rollTgt='';rollCleave=false;rollDmg='';rollDmgX='';rollAdv='';rollNat2='';rollExtras=[];rollFree=''}
+function rollReset(){rollOpen=null;rollTgt='';rollCleave=false;rollHew=false;rollDmg='';rollDmgX='';rollAdv='';rollNat2='';rollExtras=[];rollFree=''}
 function rollExtraHtml(){
   if(!myChar()&&!rollExtras.length) return '';
   return (rollExtras.length?'<div class="row rxlist">'+rollExtras.map((x,i)=>'<span class="chip">🎲 '+esc(x)+' <button type="button" class="rxdel" data-rxdel="'+i+'" aria-label="Worp verwijderen">✕</button></span>').join('')+'</div>':'')+
@@ -1870,7 +1886,7 @@ function rollExtraHtml(){
 function wireRollExtra(){
   const redraw=()=>{ if(document.activeElement) document.activeElement.blur(); renderGame(); };
   const fr=$('#rfree'); if(fr) fr.oninput=e=>{rollFree=e.target.value};
-  const add=$('#rxadd'); if(add) add.onclick=()=>{ const x=rollDraft.trim(); if(!x){alert('Vul eerst de worp hierboven in (kies de worp en je dobbel). Daarna kun je een volgende toevoegen.');return} rollExtras.push(x); rollTgt='';rollCleave=false; rollDmg='';rollDmgX=''; rollDraft='';rollKey='';rollNat='';rollNat2='';rollAdv='';rollO={}; redraw(); };
+  const add=$('#rxadd'); if(add) add.onclick=()=>{ const x=rollDraft.trim(); if(!x){alert('Vul eerst de worp hierboven in (kies de worp en je dobbel). Daarna kun je een volgende toevoegen.');return} rollExtras.push(x); rollTgt='';rollCleave=false;rollHew=false; rollDmg='';rollDmgX=''; rollDraft='';rollKey='';rollNat='';rollNat2='';rollAdv='';rollO={}; redraw(); };
   document.querySelectorAll('[data-rxdel]').forEach(b=>b.onclick=()=>{rollExtras.splice(Number(b.dataset.rxdel),1); redraw();});
 }
 
@@ -1896,16 +1912,19 @@ function rollRowHtml(){
 function updateRoll(){
   const c=myChar(), out=$('#rout'); if(!c||!out||isGen(c)) return;
   let r=rollKey?findRoll(c,rollKey,rollRage):null; const nat=Number(rollNat);
-  const info=r?dmgInfo(c,rollKey,rollRage,rollCleave):null, isAtk=!!r&&r.key.indexOf('atk:')===0;
+  const info=r?dmgInfo(c,rollKey,rollRage,rollCleave,rollHew):null, isAtk=!!r&&r.key.indexOf('atk:')===0;
   const tr=$('#rtgtrow');
   if(tr){
     const fight=isAtk?combatInfo(getState()):null, foes=fight?fight.list.filter(x=>x.foe&&!x.out).map(x=>String(x.o.name)):[];
     const sel=$('#rtgt'), cw=$('#rcleavewrap'), canC=!!(info&&info.canCleave);
     if(rollTgt&&isAtk&&foes.indexOf(rollTgt)<0) rollTgt='';
     sel.innerHTML='<option value="">🎯 Doelwit kiezen</option>'+foes.map(n=>'<option'+(n===rollTgt?' selected':'')+'>'+esc(n)+'</option>').join('');
-    sel.style.display=foes.length?'':'none'; cw.style.display=canC?'':'none'; tr.style.display=foes.length||canC?'':'none';
+    const canH=!!(info&&info.canHew); $('#rhewwrap').style.display=canH?'':'none';
+    sel.style.display=foes.length?'':'none'; cw.style.display=canC?'':'none'; tr.style.display=foes.length||canC||canH?'':'none';
   }
-  if(isAtk){ const l=info&&info.canCleave&&rollCleave?r.label.replace('(attack)','(Cleave)'):r.label; r=Object.assign({},r,{label:l+(rollTgt?' → '+rollTgt:'')}); }
+  if(isAtk){ let l=info&&info.canCleave&&rollCleave?r.label.replace('(attack)','(Cleave)'):r.label;
+    if(info&&info.canHew&&rollHew) l=r.label.replace('(attack)','(Hew, alleen na crit of kill)');
+    if(info&&info.sharp) l+=' [Sharpshooter]'; r=Object.assign({},r,{label:l+(rollTgt?' → '+rollTgt:'')}); }
   const nat2=Number(rollNat2), ok1=nat>=1&&nat<=20, ok2=!rollAdv||(nat2>=1&&nat2<=20);
   if(r&&ok1&&ok2){ const use=!rollAdv?nat:(rollAdv==='dis'?Math.min(nat,nat2):Math.max(nat,nat2)); rollDraft=rollAdv?rollTextAdv(r,nat,nat2,rollAdv):rollText(r,nat); out.textContent='= '+(use+r.bonus)+(use===20?' ✨':use===1?' 💥':''); }
   else { rollDraft=''; out.textContent=r?('bonus '+sgn(r.bonus)+' · vul '+(rollAdv?'beide d20\'s':'je d20')+' in'):(String(rollNat).trim()?'kies eerst welke worp →':'—'); }
@@ -1913,7 +1932,8 @@ function updateRoll(){
   const d=info; row.style.display=d?'':'none'; if(!d) return;
   const crit=ok1&&ok2&&(!rollAdv?nat:(rollAdv==='dis'?Math.min(nat,nat2):Math.max(nat,nat2)))===20;
   const dice=d.dice&&crit?d.dice.replace(/^\d+/,n=>n*2):d.dice;
-  $('#rdmglbl').textContent='Schade '+(dice?dice+' ':'')+(d.mod?sgn(d.mod):'')+(d.type?' '+d.type:'')+(crit&&d.dice?' · critical: dubbele dobbels':'');
+  $('#rdmglbl').textContent='Schade '+(dice?dice+' ':'')+(d.mod?sgn(d.mod):'')+(d.type?' '+d.type:'')+(d.gwm?' · incl. +'+d.gwm+' Great Weapon Master':'')+(crit&&d.dice?' · critical: dubbele dobbels':'')+
+    (crit&&d.canHew&&!rollHew?' · Hew beschikbaar: ➕ Nog een worp en vink Hew aan':'')+(d.sharp?' · Sharpshooter: geen nadeel van dichtbij of ver, half en ¾ cover tellen niet':'');
   const inp=$('#rdmg'); inp.style.display=d.dice?'':'none'; inp.placeholder='uitslag '+dice;
   const res=(d.dice?rollDmg.trim():true)?dmgText(d,rollDmg,rollDmgX):null;
   $('#rdmgout').textContent=res?'= '+res.total:'vul je schadeworp in';
@@ -1933,8 +1953,10 @@ function wireRoll(){
     upd(); return;
   }
   const tg=$('#rtgt'); if(tg) tg.onchange=e=>{rollTgt=e.target.value; updateRoll()};
-  const cl=$('#rcleave'); if(cl) cl.onchange=e=>{rollCleave=e.target.checked; updateRoll()};
-  sel.onchange=e=>{rollKey=e.target.value; rollCleave=false; const cb=$('#rcleave'); if(cb) cb.checked=false; rollDmg=''; rollDmgX=''; $('#rdmg').value=''; $('#rdmgx').value=''; updateRoll()};
+  const cl=$('#rcleave'), hw=$('#rhew');
+  if(cl) cl.onchange=e=>{rollCleave=e.target.checked; if(rollCleave){rollHew=false; if(hw) hw.checked=false} updateRoll()};
+  if(hw) hw.onchange=e=>{rollHew=e.target.checked; if(rollHew){rollCleave=false; if(cl) cl.checked=false} updateRoll()};
+  sel.onchange=e=>{rollKey=e.target.value; rollCleave=false; const cb=$('#rcleave'); if(cb) cb.checked=false; if(hw) hw.checked=false; rollDmg=''; rollDmgX=''; $('#rdmg').value=''; $('#rdmgx').value=''; updateRoll()};
   $('#rdmg').oninput=e=>{rollDmg=e.target.value; updateRoll()};
   $('#rdmgx').oninput=e=>{rollDmgX=e.target.value; updateRoll()};
   $('#rnat').oninput=e=>{rollNat=e.target.value; updateRoll()};
@@ -2018,7 +2040,7 @@ function attacksOf(c){
     const b=Number(it.weapon.bonus)||0, base=String(it.weapon.base).toLowerCase(), i=list.findIndex(a=>String(a.name||'').toLowerCase()===base);
     if(i<0) return;
     const a=list[i], dmg=String(a.damage||'').replace(/(\d+d\d+)(\s*[+\-−]\s*\d+)?/g,(m,die,mod)=>{const t=(mod?Number(mod.replace(/−/,'-').replace(/\s/g,'')):0)+b; return die+(t?(t>0?'+':'−')+Math.abs(t):'')});
-    list[i]=Object.assign({},a,{name:it.name,extra:(Number(a.extra)||0)+b,damage:b?dmg:a.damage});
+    list[i]=Object.assign({},a,{name:it.name,base:a.base||a.name,extra:(Number(a.extra)||0)+b,damage:b?dmg:a.damage});
   });
   return list;
 }
@@ -2099,7 +2121,7 @@ function sheetHtml(c){
       rlRow(by('abil:'+k),'<b>'+s+'</b> '+esc((c.abilities||{})[k]||10)+' <small>check</small>')+
       rlRow(by('save:'+k),dot((c.saves||[]).includes(k)?1:0)+' <small>Save '+s+'</small>')).join('')+'</div>'+
     '<div class="card"><h3>Skills</h3>'+SKILLS.map(([k,n,a])=>rlRow(by('skill:'+k),dot((c.skills||{})[k]||0)+' '+esc(n)+' <small>'+a.toUpperCase()+(rage&&(c.rageSkills||[]).includes(k)?'→STR':'')+'</small>')).join('')+'</div></div>';
-  if((c.attacks||[]).length) h+='<div class="card"><h3>Attacks</h3>'+attacksOf(c).map((a,i)=>rlRow(by('atk:'+i),'<b>'+esc(a.name)+'</b> <small>'+esc((a.damage?a.damage+' · ':'')+(a.notes||''))+'</small>')).join('')+'</div>';
+  if((c.attacks||[]).length) h+='<div class="card"><h3>Attacks</h3>'+attacksOf(c).map((a,i)=>rlRow(by('atk:'+i),'<b>'+esc(a.name)+'</b> <small>'+esc([a.damage,a.notes,featNote(c,a)].filter(Boolean).join(' · '))+'</small>')).join('')+'</div>';
   const txt=(t,v)=>v?'<details class="card" data-sec="'+t+'"'+(sheetOpen[t]?' open':'')+'><summary>'+t+'</summary><div style="white-space:pre-wrap;font-size:14px">'+esc(v)+'</div></details>':'';
   const cur=c.currency||{};
   h+=txt('Spellcasting',[c.spellInfo,c.spells].filter(Boolean).join('\n\n'))+invHtml(c)+featHtml(c)+txt('Languages &amp; Proficiencies',[c.languages,c.proficiencies].filter(Boolean).join('\n\n'))+txt('Uiterlijk',c.appearance)+txt('Persoonlijkheid',c.personality)+txt('Backstory',c.backstory)+((me&&c.player===me.name)?txt('Geheimen &amp; DM-haken (alleen jij ziet dit)',[c.secrets&&'Geheimen:\n'+c.secrets,c.dmHooks].filter(Boolean).join('\n\n')):'');
