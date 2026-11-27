@@ -12,6 +12,13 @@
   /* [id, categorie, trefwoorden (regex-bron), bestand, uniek?] */
   var GROUPS = [
     /* --- unieke voorwerpen met een eigen naam --- */
+    { id: "tent-cloth",    cat: "tool",     re: "tentdoek|waxed canvas|tent canvas|\btarp\b", file: "tent-cloth.webp", unique: true },
+    { id: "saddlebags",    cat: "container",re: "zadeltas|saddle.?bags?", file: "saddlebags.webp", unique: true },
+    { id: "rain-hood",     cat: "clothing", re: "regenkap|rain.?hood|oiled hood", file: "rain-hood.webp", unique: true },
+    { id: "climbing-irons", cat: "tool",    re: "klimijzers?|climbing irons?|crampons?", file: "climbing-irons.webp", unique: true },
+    { id: "grappling-hook", cat: "tool",    re: "^werphaak|^werpanker|^grappling hook", file: "grappling-hook.webp", unique: true },
+    { id: "cloak-rivendell", cat: "clothing", re: "reismantel van rivendell|rivendell travell?ing cloak|cloak of rivendell", file: "cloak-rivendell.webp", unique: true },
+    { id: "arrows-rivendell", cat: "weapon", re: "pijlen van rivendell|rivendell arrows|arrows of rivendell", file: "arrows-rivendell.webp", unique: true },
     { id: "healing-draught", cat: "drink",  re: "genezende drank|genezingsdrank|healing (potion|draught)|potion of healing", file: "healing-draught.webp", unique: true },
     { id: "rush-bracelet", cat: "clothing", re: "biezen armband|rush bracelet", file: "rush-bracelet.webp", unique: true },
     { id: "blackhewer",    cat: "weapon",   re: "blackhewer|naragfelak", file: "blackhewer.webp", unique: true },
@@ -40,7 +47,7 @@
     { id: "quiver-arrows", cat: "weapon",   re: "arrows?|pijlen|pijl\\b|bolts?|quiver|koker|ammunition|munitie", file: "quiver-arrows.webp" },
     { id: "crossbow",      cat: "weapon",   re: "crossbow|kruisboog", file: "crossbow.webp" },
     { id: "bow-long",      cat: "weapon",   re: "long.?bow|lange boog|langboog", file: "bow-long.webp" },
-    { id: "bow-short",     cat: "weapon",   re: "short.?bow|korte boog|\\bbow\\b|\\bboog\\b|\\bbogen\\b", file: "bow-short.webp" },
+    { id: "bow-short",     cat: "weapon",   re: "jagersboog|hunting bow|short.?bow|korte boog|\\bbow\\b|\\bboog\\b|\\bbogen\\b", file: "bow-short.webp" },
     { id: "sling",         cat: "weapon",   re: "\\bsling\\b|slinger|katapult", file: "sling.webp" },
     { id: "sword-long",    cat: "weapon",   re: "long.?sword|langzwaard|bastard sword|greatsword|great sword|tweehander|claymore", file: "sword-long.webp" },
     { id: "dagger",        cat: "weapon",   re: "dagger|dolk|adarion|knife|\\bmes\\b|stiletto|\\bdirk\\b", file: "dagger.webp" },
