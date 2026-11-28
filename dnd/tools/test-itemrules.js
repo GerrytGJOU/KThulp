@@ -80,6 +80,10 @@ t("uitgerust: alleen die wapens in de vakken, en een bijzonder wapen vervangt zi
   const a = m.attacksOf(k)[0];
   ok(a.name === "Blackhewer" && a.extra === 1 && a.damage === "1d12+4 slashing (Rage: 1d12+6)", JSON.stringify(a));
   ok(m.attacksOf(k).length === 2 && k.attacks[0].name === "Greataxe", "blad zelf ongewijzigd");
+  env.inv = [...lijst, "Biezen armbandje", "Reismantel van Rivendell", "Shield"];
+  const v2 = m.invHtml(k).split('class="invbag"');
+  ok(v2[0].includes("Biezen armbandje") && v2[0].includes("Reismantel van Rivendell"), "armbandje en reismantel krijgen een vak");
+  ok(!/class="tx">Shield\b/.test(v2[0]) && v2[1].includes("Shield"), "een niet-uitgerust schild blijft in de tas"); /* het vak zelf heet ook Shield */
 });
 t("Great Weapon Master en Sharpshooter tellen mee in de schade", () => {
   const cut = (x, y) => src.slice(src.indexOf(x), src.indexOf(y, src.indexOf(x)));
