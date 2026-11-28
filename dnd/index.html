@@ -887,10 +887,11 @@ function renderGame(){
     return out;
   }).join('')||'<div class="msg system">Nog geen verhaal.</div>';
   const eta=$('#editta'); if(eta) eta.oninput=e=>{editDraft=e.target.value};
-  /* nieuwe DM-beurt: spring naar het BEGIN van die beurt (niet naar het einde), zodat je hem van voren af leest */
+  /* nieuwe DM-beurt: spring naar de inbreng van de spelers waar die beurt op reageert (zonder inbreng: naar het begin van de beurt) */
   if(lastNarr&&lastNarr!==seenNarr&&!editKey){
     seenNarr=lastNarr;
-    const els=th.querySelectorAll('.msg.dm'), el=els[els.length-1];
+    const els=th.querySelectorAll('.msg.dm'); let el=els[els.length-1];
+    for(let p=el&&el.previousElementSibling; p&&!p.classList.contains('dm'); p=p.previousElementSibling) if(p.classList.contains('action')) el=p;
     const go=()=>{ if(el&&el.isConnected) th.scrollTop+=el.getBoundingClientRect().top-th.getBoundingClientRect().top-6; };
     go(); requestAnimationFrame(go);
   } else if(atBottom) th.scrollTop=th.scrollHeight;
