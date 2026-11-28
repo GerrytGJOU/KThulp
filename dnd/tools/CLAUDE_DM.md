@@ -55,6 +55,13 @@ Een worp van een speler komt binnen als `[worp: ...]` in zijn actie (zie `player
 - "(Hew, alleen na crit of kill)" is voorwaardelijk en kost de Bonus Action; anders "(Hew vervalt)". Zie de regel AANVALLEN VAN SPELERS in de systeemprompt.
 - "[Sharpshooter]": geen nadeel van dichtbij of op lange afstand, half en ¾ cover tellen niet.
 
+## Gevechtskaart
+- Begin je een gevecht, zet dan naast `initiative` ook `battle` (title, grid, pos, size, speed): zie GEVECHTSKAART in de systeemprompt. `context` toont de kaart als tekst met onderlinge afstanden.
+- De zetten van de spelers (`[kaart: ...]`) verwerkt `apply` zelf; geef in `statePatch.battle.pos` alleen wie jij verzet. `apply` weigert een ongeldige plek (muur, dubbel vakje, buiten de kaart) en waarschuwt bij een te lange zet.
+- Verzet je iets buiten een beurt, gebruik dan `state-patch`; controleer daarna met `context --stil`.
+- Om de beurt: `nextTurn.awaiting` is alleen wie in de initiatiefvolgorde aan de beurt is (twee PC's direct na elkaar: beide). Gevecht voorbij: `initiative` en `battle` op null.
+- Na een wijziging aan `dnd/battlemap.js`: `node dnd/tools/test-battlemap.js`.
+
 ## Gevecht en initiatieftracker
 - Tijdens een gevecht staat `initiative` altijd in de Stand (zie de regel GEVECHT in de systeemprompt): `round`, `active` en `order` met beide PC's, bondgenoten (met `hp`) en opgemerkte vijanden (met `health` in procenten, nooit HP-cijfers; exacte HP in `dmNotes`).
 - Loopt een gevecht al zonder tracker, zet hem er dan direct in met `state-patch`. Na het gevecht `{"initiative": null}`: de app toont dan weer locatie, personen en opdrachten.

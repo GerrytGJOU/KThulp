@@ -29,6 +29,7 @@ const { spawnSync } = require("child_process");
 const fs = require("fs"), os = require("os"), path = require("path"), crypto = require("crypto");
 const PROJECT = "kthulp-certamen";
 const World = require("../world.js");
+const BattleMap = require("../battlemap.js"); /* gevechtskaart: controle en tekstweergave */
 const MapData = require("../map-data.js"), MapLib = require("../map-lib.js");
 let MAPL = null; /* kaartlaag van de setting van deze campagne (null = geen kaart) */
 function buildMapLib(S) { const m = S.map; if (!m || m.enabled === false) return null; if (m.maps) return MapLib.make(m); return MapLib.make(MapLib.fromLegacy(MapData)); }
@@ -290,6 +291,10 @@ function cmdContext(cid, flags) {
   out.push("# UITERLIJK VAN NPC'S IN BEELD (veld visual; beschrijf uiterlijk altijd hiernaar, verzin geen kleur, leeftijd of kleding die ermee botst; bij twijfel niets noemen)\n" + (visN.map(n => "- " + n.name + ": " + String(n.visual).replace(/\n+/g, " ").slice(0, 320)).join("\n") || "(geen)"));
   out.push("# LOGBOEK (laatste 40)\n" + (sortedVals(logs).map(l => "- [" + (l.inGameDate || "") + "] " + l.fact).join("\n") || "(leeg)"));
   out.push("# ACTUELE STAND\n" + JSON.stringify(state));
+  { const speeds = {}; vals(allChars).forEach(c => { if (c.name) speeds[c.name] = Number(c.speed) || 30; });
+    if (BattleMap.active(state)) { const na = BattleMap.advance(state, pend, {}, deepMerge).state, mv = pend.flatMap(p => BattleMap.parseMoves(p.text));
+      out.push("# GEVECHTSKAART (de zetten van de spelers van deze ronde zijn hierin al verwerkt; verzet jij vijanden en companions via statePatch.battle.pos)\n" + BattleMap.ascii(na, speeds) + (mv.length ? "\nZetten deze ronde: " + mv.map(BattleMap.moveTag).join("; ") : ""));
+    } else if (BattleMap.order(state).length) out.push("# GEVECHTSKAART\nEr loopt een gevecht zonder kaart: zet in deze beurt statePatch.battle (zie GEVECHTSKAART in de systeemprompt)."); }
   out.push("# OPEN OPDRACHTEN (een echt nieuwe scène sluit hierop aan; gewone beurten en dialoog hoeven dat niet)\n" + (((state.quests || {}).open || []).map(x => "- " + (typeof x === "string" ? x : (x.title || "") + (x.detail ? ": " + x.detail : ""))).join("\n") || "(geen)"));
   const world = get("/dnd/" + cp(cid, "world"));
   out.push("# WERELDSTATUS (stabiele IDs; wijzig alleen via worldDelta)\n" + (world ? World.worldContext(world, { hay: (sortedVals(msgs).slice(-6).map(m => m.text).join(" ") + " " + pend.map(p => p.text).join(" ")).toLowerCase(), region: world.sceneRegion, maxChars: 6000 }) : "(niet actief)"));
@@ -368,7 +373,10 @@ function cmdApply(cid, file, flags) {
     if (!v.ok) throw new Error("worldDelta ongeldig:\n- " + v.errors.join("\n- ") + "\nCorrigeer het JSON-bestand en probeer opnieuw (niets is opgeslagen).");
     wplan = v.plan; v.warnings.forEach(w => console.log("let op:", w));
   }
-  const newState = deepMerge(state, out.statePatch);
+  const adv = BattleMap.advance(state, pend, out.statePatch, deepMerge), newState = adv.state;
+  if (adv.errors.length && !flags.force) throw new Error("gevechtskaart ongeldig:\n- " + adv.errors.join("\n- ") + "\nCorrigeer statePatch.battle en probeer opnieuw (niets is opgeslagen).");
+  adv.warnings.forEach(w => console.log("let op (kaart):", w));
+  if (BattleMap.order(newState).length && !newState.battle) console.log("let op: gevecht zonder gevechtskaart (statePatch.battle ontbreekt).");
   if (wplan && wplan.companions) World.syncStandCompanions(newState, wplan.companions, Object.assign({}, world.npcs, wplan.npcs), world.companions);
   const newNotes = { ...notes }; for (const [k, v] of Object.entries(out.dmNotes)) { if (v === null) delete newNotes[k]; else newNotes[k] = v; }
   const kn = World.knowledgeNote(World.knowledgeCheck(newState));

@@ -232,6 +232,33 @@ input[type=file]{max-width:220px;color:var(--mute);font-size:13px}
 .sttile em{margin-top:auto;padding-top:4px;font-size:11px;font-style:normal;letter-spacing:.06em;color:var(--gold)}
 .stpanel{grid-column:1/-1;margin:0;border:1px solid var(--gold)}
 .stpanel p{margin:6px 0;color:var(--mute)}
+/* gevechtskaart */
+#bmtabs{display:none}#battlecol{display:none}
+.battle #battlecol{display:flex;flex-direction:column;min-width:0;min-height:0;position:relative}
+#bmtitle{position:absolute;left:14px;top:8px;z-index:2;font-size:13px;color:var(--gold);background:rgba(20,17,15,.82);padding:2px 9px;border-radius:5px}#bmtitle:empty{display:none}
+#bmzoom{position:absolute;right:14px;top:8px;z-index:2;display:flex;gap:4px}
+#bmzoom button{font:inherit;font-size:14px;min-width:34px;padding:4px 9px;border-radius:5px;cursor:pointer;background:rgba(20,17,15,.88);color:var(--gold);border:1px solid rgba(200,162,74,.5)}
+#bmscroll{flex:1;overflow:auto;display:flex;padding:6px;min-height:0;background:rgba(10,8,7,.55)}
+#bmsvg{margin:auto;flex:none;display:block;user-select:none;-webkit-user-select:none;border-radius:6px;border:2px solid rgba(200,162,74,.5)}
+#bmbar{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;padding:6px 10px;font-size:14px;background:rgba(30,25,22,.95);border-top:1px solid rgba(200,162,74,.3)}
+#bmbar label{display:flex;gap:4px;align-items:center;font-size:13px}.bmline{flex-basis:100%}.bmok{color:#8fd49a}.bmwarn{color:#f0b24a}.bmbad{color:#e58570}.bmmute{color:var(--mute);font-size:13px}
+.bmtok{cursor:pointer;transition:transform .8s ease}.bmpulse{animation:bmpuls 1.4s infinite}@keyframes bmpuls{0%,100%{stroke-opacity:1}50%{stroke-opacity:.3}}
+@media(max-width:999px){
+.battle #bmtabs{display:flex;gap:6px;padding:4px 8px}#bmtabs button{flex:1}
+.battle #partybar{display:none}
+.battle[data-bt=map] #thread{display:none}.battle[data-bt=story] #battlecol{display:none}
+.battle[data-bt=map] #battlecol{flex:1;min-height:240px}.battle[data-bt=map] .status{max-height:11vh}
+.battle[data-bt=map] .compose{max-height:36vh;overflow-y:auto;flex:none}
+.battle[data-bt=map]:has(.rollbar.open) .status{display:none}
+.battle #bmbar{max-height:14vh;overflow-y:auto}
+.battle .compose .row:has(#send){position:sticky;bottom:-6px;background:#17130f;padding:4px 0}
+}
+@media(min-width:1000px){
+.battle #gamemain{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(330px,1fr);grid-template-rows:auto minmax(0,1fr) auto auto}
+.battle #scenebar{grid-column:2;grid-row:1}.battle #battlecol{grid-column:1;grid-row:1/-1;border-right:1px solid rgba(200,162,74,.35)}
+.battle #thread{grid-column:2;grid-row:2;min-height:0}.battle #statusbar{grid-column:2;grid-row:3;max-height:16vh}.battle #compose{grid-column:2;grid-row:4;max-height:52vh;overflow-y:auto}
+.battle #side{width:270px}
+}
 @media(max-width:600px){
 header{padding-top:5px;padding-bottom:4px}header h1{font-size:15px}
 #scenebar{font-size:12px;padding:2px 10px}
@@ -300,6 +327,8 @@ footer{padding-top:2px;padding-bottom:2px;font-size:10px}
 <script src="settings-icons.js?v=1"></script>
 <script src="partytable.js?v=2"></script>
 <script src="levelup.js?v=3"></script>
+<script src="battlemap.js?v=1"></script>
+<script src="battle-ui.js?v=1"></script>
 <script>
 "use strict";
 firebase.initializeApp({
@@ -763,7 +792,7 @@ async function saveNewNpc(){
 function enterCampaign(id){
   leaveCampaign(); cid=id; screen='camp'; tab='game'; updateBack();
   main.innerHTML=`
-  <section class="tab" id="t-game"><div id="gamewrap"><div id="gamemain"><div id="scenebar"></div><div id="partybar"></div><div id="initbar"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></div><aside id="side"><div id="sidemain"></div><div id="partyside"></div></aside></div></section>
+  <section class="tab" id="t-game"><div id="gamewrap"><div id="gamemain"><div id="scenebar"></div><div id="partybar"></div><div id="initbar"></div><div id="bmtabs"></div><div id="battlecol"></div><div class="scroll" id="thread"></div><div id="statusbar" class="status"></div><div id="compose" class="compose"></div></div><aside id="side"><div id="sidemain"></div><div id="partyside"></div></aside></div></section>
   <section class="tab" id="t-ooc"><div class="scroll" id="oocthread"></div><div class="compose"><div class="row"><input type="text" id="oocin" placeholder="Praat met je medespelers (de DM leest dit niet)" style="flex:1"><button class="b" id="oocsend">Stuur</button></div></div></section>
   <section class="tab" id="t-diary"><div class="scroll" id="diarybox"></div></section>
   <section class="tab" id="t-map"><div id="mapwrap"></div></section>
@@ -853,9 +882,11 @@ function narrBlocks(txt,pts){
   return out;
 }
 let threadShow=10, seenNarr=null;
+/* de zetten op de gevechtskaart als labels onder een actie */
+function BattleMapChips(t){return window.BattleMap?BattleMap.parseMoves(t).map(x=>'👣 '+BattleMap.moveTag(x)):[]}
 function renderGame(){
   if(!me||screen!=='camp'||tab!=='game') return;
-  renderParty(); renderInit(); renderSide();
+  renderParty(); renderInit(); renderSide(); BMUI.render();
   const th=$('#thread');
   const atBottom=th.scrollHeight-th.scrollTop-th.clientHeight<80;
   let lastNarr=null; for(let i=msgs.length-1;i>=0;i--) if(msgs[i].type==='narration'){lastNarr=msgs[i]._k;break;}
@@ -867,8 +898,9 @@ function renderGame(){
     let who=m.type==='narration'?'De DM':m.type==='system'?'':esc(m.author||'');
     if(m.type==='action'||m.type==='pass'){const pc=Object.values(chars||{}).find(c=>c&&c.name&&c.player===m.author); if(pc) who=esc(pc.name)+' ('+esc(m.author)+')';}
     let txt=m.text||''; const wm=[];
-    if(m.type==='action') txt=txt.replace(/\s*\[worp:\s*([^\]]*)\]/gi,(x,y)=>{wm.push(y.trim());return ''});
-    const chips=(m.rolls||[]).map(rollChip).concat(wm.map(w=>'<span class="rc">🎲 '+esc(w)+'</span>')).join('');
+    if(m.type==='action') BattleMapChips(txt).forEach(x=>wm.push(x));
+    if(m.type==='action') txt=BMUI.strip(txt).replace(/\s*\[worp:\s*([^\]]*)\]/gi,(x,y)=>{wm.push(y.trim());return ''});
+    const chips=(m.rolls||[]).map(rollChip).concat(wm.map(w=>'<span class="rc">'+(w.indexOf('👣')===0?'':'🎲 ')+esc(w)+'</span>')).join('');
     const body=md(txt)+(chips?'<div class="rolls">'+chips+'</div>':'');
     const ptHtml=p=>'<div class="pts"><img class="pt" src="'+npcs[p[0]].img+'" data-zoom="'+p[0]+'" alt="'+esc(p[1])+'" title="'+esc(p[1])+'"><div class="ptn">'+esc(ptName(p[1]))+'</div></div>';
     let inner;
@@ -889,7 +921,7 @@ function renderGame(){
   const eta=$('#editta'); if(eta) eta.oninput=e=>{editDraft=e.target.value};
   /* nieuwe DM-beurt: spring naar de inbreng van de spelers waar die beurt op reageert (zonder inbreng: naar het begin van de beurt) */
   if(lastNarr&&lastNarr!==seenNarr&&!editKey){
-    seenNarr=lastNarr;
+    seenNarr=lastNarr; BMUI.showStory();
     const els=th.querySelectorAll('.msg.dm'); let el=els[els.length-1];
     for(let p=el&&el.previousElementSibling; p&&!p.classList.contains('dm'); p=p.previousElementSibling) if(p.classList.contains('action')) el=p;
     const go=()=>{ if(el&&el.isConnected) th.scrollTop+=el.getBoundingClientRect().top-th.getBoundingClientRect().top-6; };
@@ -897,7 +929,7 @@ function renderGame(){
   } else if(atBottom) th.scrollTop=th.scrollHeight;
 
   const sb=$('#statusbar'), cpz=$('#compose');
-  const roundChanged=!!(turn&&composeRound!==turn.round); if(roundChanged){draft='';rollDraft='';rollKey=null;rollNat='';rollO={};rollReset()}
+  const roundChanged=!!(turn&&composeRound!==turn.round); if(roundChanged){draft='';rollDraft='';rollKey=null;rollNat='';rollO={};rollReset();BMUI.draw()}
   const cEl=$('#compose'); const keepDraft=!roundChanged&&!!(cEl&&document.activeElement&&cEl!==document.activeElement&&cEl.contains(document.activeElement));
   if(!turn){
     sb.innerHTML='Nog geen campagne gestart.';
@@ -934,7 +966,7 @@ function renderGame(){
   const checks=turn.checks&&turn.checks[me.name];
   if(checks) st+='<br>🎲 <b>Worp gevraagd:</b> '+esc(checks);
   if(!turn.blind){
-    Object.values(pending).filter(p=>p.round===turn.round&&p.name!==me.name).forEach(p=>{const tx=String(p.text||''), pv=tx.length>70?tx.slice(0,70).trim()+'…':tx; st+=tx.length>70?'<details class="otheract"><summary>'+esc(p.name)+': '+esc(pv)+'</summary>'+esc(tx)+'</details>':'<br><small>'+esc(p.name)+': '+esc(tx)+'</small>'});
+    Object.values(pending).filter(p=>p.round===turn.round&&p.name!==me.name).forEach(p=>{const tx=String(p.text||'').replace(/\[kaart:\s*([^\]]*)\]/gi,'👣 $1'), pv=tx.length>70?tx.slice(0,70).trim()+'…':tx; st+=tx.length>70?'<details class="otheract"><summary>'+esc(p.name)+': '+esc(pv)+'</summary>'+esc(tx)+'</details>':'<br><small>'+esc(p.name)+': '+esc(tx)+'</small>'});
   } else if(Object.values(pending).some(p=>p.round===turn.round&&p.name!==me.name)){
     st+='<br><small>(blind) Een andere speler heeft ingediend.</small>';
   }
@@ -953,7 +985,7 @@ function renderGame(){
     ${others.length>1?'<button class="b alt" id="skip">Zonder iedereen verder</button>':''}
     ${others.map(n=>'<button class="b alt sm" data-skip="'+esc(n)+'" type="button">⏭ Zonder '+esc(n)+'</button>').join('')}</div>
     ${mine?(String(mine.text).length>60?'<div class="row mineline"><details class="otheract"><summary>Ingediend: '+esc(String(mine.text).slice(0,60).trim())+'…</summary>'+esc(mine.text)+'</details><small><a href="#" id="editmine">wijzig</a></small></div>':'<small>Ingediend: '+esc(mine.text)+' <a href="#" id="editmine">wijzig</a></small>'):''}`;
-    const em=$('#editmine'); if(em) em.onclick=e=>{e.preventDefault(); const sp=rollSplit(mine.text); draft=sp.text; rollExtras=sp.rolls; rollDraft='';rollKey='';rollNat='';rollNat2='';rollAdv='';rollO={};rollFree='';rollDmg='';rollDmgX='';rollTgt='';rollCleave=false;rollHew=false; if(document.activeElement) document.activeElement.blur(); renderGame(); const a=$('#act'); if(a) a.focus()};
+    const em=$('#editmine'); if(em) em.onclick=e=>{e.preventDefault(); const sp=rollSplit(mine.text); BMUI.edit(mine.text); draft=BMUI.strip(sp.text); rollExtras=sp.rolls; rollDraft='';rollKey='';rollNat='';rollNat2='';rollAdv='';rollO={};rollFree='';rollDmg='';rollDmgX='';rollTgt='';rollCleave=false;rollHew=false; if(document.activeElement) document.activeElement.blur(); renderGame(); const a=$('#act'); if(a) a.focus()};
     $('#act').value=draft;
     $('#act').oninput=e=>draft=e.target.value; wireRoll();
     $('#send').onclick=()=>submit(false);
@@ -976,12 +1008,13 @@ function renderGame(){
   }
 }
 async function submit(pass){
-  const text=pass?'(past / wacht af)':draft.trim();
+  const walk=pass?'':BMUI.tags(); if(walk===null) return;
+  const text=pass?'(past / wacht af)':(draft.trim()||(walk?'Ik verplaats me.':''));
   if(!text){alert('Typ eerst een actie.');return}
   if(!pass&&$('#rsel')&&!rollDraft.trim()&&(rollKey||String(rollNat).trim())&&!confirm('Je worp is nog niet compleet ('+(rollKey?'je dobbelworp ontbreekt':'je hebt geen worp gekozen')+'), dus hij wordt NIET meegestuurd. Toch versturen zonder worp?')) return;
-  const round=turn.round, full=text+(pass?'':rollTags(rollAll()));
+  const round=turn.round, full=text+(pass?'':walk+rollTags(rollAll()));
   await db.ref(cp('pending/'+me.uid)).set({round,name:me.name,text:full,pass:!!pass,t:Date.now()});
-  draft="";rollDraft="";rollKey=null;rollNat="";rollO={};rollReset(); { const ta=$('#act'); if(ta) ta.value=''; }
+  draft="";rollDraft="";rollKey=null;rollNat="";rollO={};rollReset(); BMUI.sent(); { const ta=$('#act'); if(ta) ta.value=''; }
   await saveDmChoice();
   const ok=await removeAwaiting(me.name,round);
   if(ok==='resolve') resolve(false);
@@ -1054,6 +1087,7 @@ Regels:
    "npcs":{"Naam":{"group":"categorie voor de Personenlijst, spelerzichtbaar (bijv. Fellowship, Dwarves, Huis van Elrond); nooit Companion, dat doet de app zelf","location":"","status":"","attitude":"","knows":[]}},
    "factions":{"Naam":{"stance":"","currentAction":""}},
    "quests":{"open":[{"title":"","detail":"","kind":"main|side|personal|companion","for":"personagenaam (alleen bij personal)","npc":"NPC-naam (alleen bij companion)","place":"waar het speelt (bij side)","updates":["eerdere berichten van deze opdracht, oudste eerst"]}],"completed":[{"title":"","detail":"","reward":"wat de spelers er echt voor kregen, kort; leeg als er niets was","updates":[]}],"consequences":[]},
+   "battle":{"title":"","grid":["..."],"pos":{"Naam":"A1"}}  (zie GEVECHTSKAART; alleen tijdens een gevecht),
    "initiative":{"round":1,"active":"Naam","order":[{"name":"Personagenaam","init":15,"enemy":false},{"name":"Bondgenoot","init":12,"enemy":false,"hp":{"current":20,"max":27},"conditions":[]},{"name":"Orc 1","init":10,"enemy":true,"health":100,"conditions":[]}]}  (alleen tijdens een gevecht; anders null)}
   Vul bij het begin hp, resources en inventory van elke PC in uit zijn B-document. Werk hp, resources, conditions, location, inGame en quests bij zodra ze veranderen. ${S.geoCheck}
   HET DAGBOEK VAN DE SPELERS wordt uitsluitend gevuld door jouw uitvoer, dus houd het elke beurt bij: Opdrachten = statePatch.quests (open/completed/consequences; een afgeronde opdracht verplaats je van open naar completed (nooit in beide); detail van een opdracht is altijd het nieuwste bericht, en het vorige detail zet je bij elke ontwikkeling achteraan in updates (oudste eerst, bestaande updates laten staan); zet er direct een regel bij zodra een NPC of gebeurtenis een nieuwe opdracht, belofte of doel geeft, verplaats hem naar completed als hij klaar is) plus worldDelta-quests die active worden. Het Dagboek sorteert opdrachten in Main quest (voor alle PC's), Side quests (voor alle PC's), Personal quests (per personage) en Companion quests (per NPC of companion): geef daarom elke opdracht in quests.open een kind (main, side, personal of companion), bij personal ook for (de personagenaam) en bij side-quests ook place (waar de opdracht plaatsvindt, bijvoorbeeld ${S.exPlace}), bij companion ook npc (de naam van de NPC), maar gebruik kind companion ALLEEN voor een NPC die al is gerekruteerd (status recruited): de opdrachten van een nog niet gerekruteerde NPC horen bij side (of personal), anders verraadt het Dagboek wie een mogelijke companion is; bij een nieuwe worldDelta-quest zet je set.kind op dezelfde manier, plus set.owner (personagenaam) bij personal en set.npcs bij companion;  Wat je weet = pcs.<personagenaam>.knowledge (korte, feitelijke regels over wat dat personage heeft ontdekt, gehoord of gezien: aanwijzingen, namen, plekken, beloftes; nooit DM-geheimen of wat het personage niet kan weten) en onthulde backstorylagen (worldDelta reveals); Personen = statePatch.npcs; Logboek = logEntries. Elke knowledge-regel begint met een onderwerp gevolgd door ' » ' (spatie, dubbele pijl, spatie), bijvoorbeeld 'De Raad van Elrond » Frodo neemt de Ring op zich'. Hergebruik bestaande onderwerpen (kort, 1 tot 4 woorden, zoals De Raad van Elrond, Orcs en Dol Guldur, Beorn en Grimbeorn, Dwarves van Erebor, Het spoor in de gastenvleugel) en maak alleen een nieuw onderwerp als het echt nieuw is; regels over hetzelfde onderwerp blijven bij elkaar en staan in tijdsvolgorde, nieuwste achteraan. Het Dagboek toont ze gegroepeerd per onderwerp. Lijsten in statePatch worden VERVANGEN: geef bij quests.open en knowledge altijd de volledige actuele lijst (oude regels behouden, korte regels, samenvoegen boven ongeveer 15 regels), anders verdwijnt eerder werk.
@@ -1071,6 +1105,9 @@ Regels:
 - ${R.playerRolls}
 - SPELERCHECKS IN DE VERTELLING: een worp van een speler zet je NIET in "rolls" maar noem je op de plek in de tekst waar hij telt, direct na de handeling van het personage, met skill en totaal: \"Wulfgrim kijkt naar de twee gestaltes (Perception 14) en ziet meteen dat de linker een kop groter is dan de ander...\". Doe dat voor ELKE speler die een check deed of kreeg, in dezelfde beurt, ieder met zijn eigen totaal en zijn eigen, bij die uitkomst passende waarneming. Laat nooit de worp van de één de uitkomst van de ander bepalen.
 - Een actie kan meerdere [worp: ...]-blokken bevatten (bv. de aanvalsworp, de schade en een extra effect zoals Dreadful Strike, of twee aanvallen). Verwerk ze allemaal, in de logische volgorde. Vraag in nextTurn.checks alle dobbels die je nodig hebt in één keer (bv. "Aanval met voordeel, schade 1d8+3 en 2d6 Dreadful Strike").
+- GEVECHTSKAART: bij elk gevecht zet je in dezelfde beurt als "initiative" ook "battle" in de Stand; de app toont dan een rasterkaart waarop de spelers hun token verzetten. Vorm: "battle":{"title":"Open plek","grid":["TT....pp..","T..R..pp.."],"pos":{"Wulfgrim":"C2","Orc 1":"H2"},"size":{"Warg":2},"speed":{"Orc 1":30}}. grid = regels van gelijke lengte (meestal 16-24 breed en 10-16 hoog, hoogstens 30x24; 1 teken = 1 vak van 5 ft) met alleen: . gras of grond, p pad, s stenen vloer, e kale aarde, w ondiep water (moeilijk), b struiken of puin (moeilijk), T boom, R rots, # muur, x obstakel (kist, tafel, kar), C vuur, W diep water of afgrond (die laatste zes blokkeren). Maak de kaart passend bij de plek in het verhaal, met dekking en ruimte om te manoeuvreren, en verander het grid daarna alleen als de omgeving echt verandert. pos = per naam (exact als in initiative) het vakje, kolomletter + regelnummer (A1 linksboven); bij een groot wezen het vakje linksboven, met size. Verborgen deelnemers staan niet in initiative en niet in pos. speed alleen voor niet-spelers die geen 30 ft hebben.
+  BEWEGEN: "[kaart: Naam G6>K5, 20 ft]" in een actie is de zet van die speler; de app heeft hem al verwerkt, dus geef die speler alleen een nieuwe pos als er iets anders gebeurt (bv. hij wordt gestopt of geduwd). "lokt Opportunity Attack uit van X": voer die aanval uit als X nog een Reaction heeft. Vijanden en companions verzet JIJ in hun beurt via battle.pos (alleen de gewijzigde namen), binnen hun snelheid, niet door muren en nooit twee op een vakje; houd rekening met afstand, dekking en Opportunity Attacks, en noem in de vertelling kort wie waarheen gaat. Companions volgen aanwijzingen van de spelers als hun karakter dat toelaat. Beoordeel bereik en dekking volgens de kaart.
+  OM DE BEURT: zolang er een gevecht is, zet je in nextTurn.awaiting alleen de speler(s) van wie het personage nu aan de beurt is in de initiatiefvolgorde: speel eerst alle vijanden en companions tot de volgende PC. Staan beide PC's direct na elkaar (niemand ertussen die nog meedoet), zet dan beide namen erin. Zet bij het einde van het gevecht "initiative":null en "battle":null.
 - AANVALLEN VAN SPELERS: elk aanvalsblok is een eigen aanval; "→ naam" is het doelwit, "(Cleave)" de Cleave-aanval. Zonder pijl volg je de tekst van de actie, in de volgorde van de blokken; vraag alleen na als het doelwit echt onduidelijk is. Jij bepaalt tegen de verborgen AC of de aanval raak is en telt de schade alleen bij raak; eerbiedig voorwaarden van de speler ("als die raakt, dan Cleave", "als hij al dood is, richt ik op ..."). Controleer de bonus op de schade (Cleave: geen ability modifier, Rage Damage wel; extra dobbels alleen als de feature hier geldt) en reken stilzwijgend met het juiste getal. Noem in de vertelling bij ELKE aanval direct na de handeling het totaal en de uitkomst, bv. "(aanval 17, raak)" of "(aanval 12, mis)"; noem nooit de AC. Werk daarna health in initiative en de exacte HP in dmNotes bij. GREAT WEAPON MASTER: staat bij de schade "(incl. Great Weapon Master +N)", dan zit die bonus al in het totaal: tel hem niet nog eens op, maar trek hem eraf als de aanval niet bij de Attack action op de eigen beurt hoort (bv. Opportunity Attack). "(Hew, alleen na crit of kill)" is een voorwaardelijke bijaanval: voer hem alleen uit als die speler deze beurt met een melee-wapen (ook via Cleave) een critical scoorde of een wezen op 0 HP bracht en zijn Bonus Action nog vrij is (Rage activeren kost die ook); hoogstens één keer per beurt. Is het gekozen doel dan al uitgeschakeld, volg de tekst van de actie of neem de dichtstbijzijnde vijand binnen bereik. Anders zeg je kort "(Hew vervalt)" en blijft de Bonus Action ongebruikt. SHARPSHOOTER ("[Sharpshooter]" bij de aanval): geen nadeel op lange afstand of met een vijand binnen 5 ft, en half en three-quarters cover geven het doel geen AC-bonus; vroeg je daardoor eerder nadeel, negeer dat.
 - Doet een PC iets waarbij een check hoort (waarnemen, sluipen, overtuigen, ...) maar staat er geen [worp: ...] in zijn actie, dan: (a) vraag de check via nextTurn.checks als er spanning of risico is, of (b) gebruik bij een kleine waarneming ${R.passive} en noem die in de tekst, bv. \"(passieve Perception 13)\". Negeer zo'n actie nooit en geef niet stilzwijgend alleen de uitkomst van de speler die wel rolde.
 - INFORMATIE PER UITKOMST: bij een waarnemings-, kennis- of onderzoekscheck hangt de hoeveelheid informatie af van het totaal, in lagen: een lage uitkomst geeft het oppervlakkige (wat iedereen ziet), een gemiddelde uitkomst een bruikbaar detail, een hoge uitkomst het verborgen of veelzeggende detail (een wapen, een insigne, een accent, een verborgen gebaar). Bedenk de lagen vooraf en geef elke speler precies de lagen die zijn totaal verdient; verklap de DC's niet.
@@ -1220,7 +1257,9 @@ ${compTxt?'# COMPANION-LEVEL (actieve companions zijn altijd van het level van d
       }
       out=parsed;break;
     }
-    const newState=deepMerge(state,out.statePatch);
+    const adv=BattleMap.advance(state,pend,out.statePatch,deepMerge), newState=adv.state;
+    /* ongeldige plekken op de gevechtskaart terugzetten op de vorige */
+    if(newState.battle&&adv.bad.length) adv.bad.forEach(n=>{const o=state.battle&&state.battle.pos&&state.battle.pos[n]; if(o) newState.battle.pos[n]=o; else delete newState.battle.pos[n];});
     if(world&&window.DNDWorld&&out._wp&&out._wp.plan.companions) DNDWorld.syncStandCompanions(newState,out._wp.plan.companions,Object.assign({},world.npcs,out._wp.plan.npcs),world.companions);
     const up={};const now=Date.now();const msgKeys=[],logKeys=[];
     const lastS=await db.ref(cp('stands',C)).orderByKey().limitToLast(1).get(); let lastKey=null; lastS.forEach(c=>{lastKey=c.key});
@@ -1953,7 +1992,7 @@ function wireRoll(){
     $('#rdig').onclick=()=>{ rollO.key=rollKey; DNDGenSheet.rowDigital(R,gc,root,rollO); upd(); };
     upd(); return;
   }
-  const tg=$('#rtgt'); if(tg) tg.onchange=e=>{rollTgt=e.target.value; updateRoll()};
+  const tg=$('#rtgt'); if(tg) tg.onchange=e=>{rollTgt=e.target.value; updateRoll(); BMUI.draw()};
   const cl=$('#rcleave'), hw=$('#rhew');
   if(cl) cl.onchange=e=>{rollCleave=e.target.checked; if(rollCleave){rollHew=false; if(hw) hw.checked=false} updateRoll()};
   if(hw) hw.onchange=e=>{rollHew=e.target.checked; if(rollHew){rollCleave=false; if(cl) cl.checked=false} updateRoll()};
