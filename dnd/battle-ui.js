@@ -6,10 +6,10 @@ const BMUI = (function () {
   const q = s => document.querySelector(s), low = s => String(s).toLowerCase();
   function reset() { moves = []; dest = null; dash = false; diseng = false; editing = false; note = ""; }
   const speeds = () => { const r = {}; allChars().forEach(c => { if (c.name) r[c.name] = Number(c.speed) || 30; }); return r; };
-  function pic(name) {
+  function pic(name, side) {
     let n = npcs[slug(name)]; if (n && n.img) return n.img;
     const p = String(name).split(" "); if (p.length > 1 && /^(\d+|[A-Z])$/.test(p[p.length - 1])) n = npcs[slug(p.slice(0, -1).join(" "))];
-    return n && n.img ? n.img : "";
+    return n && n.img ? n.img : side === "foe" || side === "neutral" ? BattleMap.foeArt(name) : "";
   }
   const myPend = () => me && turn && pending[me.uid] && pending[me.uid].round === turn.round ? pending[me.uid] : null;
 

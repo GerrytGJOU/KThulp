@@ -249,7 +249,7 @@ function cmdPrompt(cid) {
   useSetting(cid);
   const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8"), a = html.indexOf("function systemPrompt("), b = html.indexOf("`; }", a) + 4;
   if (a < 0 || b < a) throw new Error("systemPrompt niet gevonden in index.html");
-  const f = new Function("DNDRulesets", html.slice(a, b) + "; return systemPrompt;")(Rulesets);
+  const f = new Function("DNDRulesets", "BattleMap", html.slice(a, b) + "; return systemPrompt;")(Rulesets, BattleMap);
   console.log("# DM-SYSTEEMPROMPT (setting: " + SETTING.name + "; spelsysteem: " + Rulesets.get(SETTING.ruleset).label + ")\n" + f(SETTING.prompt, Rulesets.get(SETTING.ruleset)));
 }
 function cmdContext(cid, flags) {

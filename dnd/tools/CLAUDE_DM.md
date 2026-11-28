@@ -56,8 +56,9 @@ Een worp van een speler komt binnen als `[worp: ...]` in zijn actie (zie `player
 - "[Sharpshooter]": geen nadeel van dichtbij of op lange afstand, half en ¾ cover tellen niet.
 
 ## Gevechtskaart
-- Begin je een gevecht, zet dan naast `initiative` ook `battle` (title, grid, pos, size, speed): zie GEVECHTSKAART in de systeemprompt. `context` toont de kaart als tekst met onderlinge afstanden.
+- Begin je een gevecht, zet dan naast `initiative` ook `battle` (title, grid, pos, size, speed, floor, decor): zie GEVECHTSKAART in de systeemprompt. `context` toont de kaart als tekst met onderlinge afstanden.
 - De zetten van de spelers (`[kaart: ...]`) verwerkt `apply` zelf; geef in `statePatch.battle.pos` alleen wie jij verzet. `apply` weigert een ongeldige plek (muur, dubbel vakje, buiten de kaart) en waarschuwt bij een te lange zet.
+- Beeld: kies `floor` (ondergrond) en zet met `decor` sfeervoorwerpen (namen in de systeemprompt; bij een nieuwe kaart eerst `"decor":null` of opnieuw invullen). Vijanden zonder eigen portret krijgen er een op naam (Orc, Orc-boogschutter, Goblin, Warg, Trol, reuzenspin, grafgeest, skelet, struikrover enz.).
 - Verzet je iets buiten een beurt, gebruik dan `state-patch`; controleer daarna met `context --stil`.
 - Om de beurt: `nextTurn.awaiting` is alleen wie in de initiatiefvolgorde aan de beurt is (twee PC's direct na elkaar: beide). Gevecht voorbij: `initiative` en `battle` op null.
 - Na een wijziging aan `dnd/battlemap.js`: `node dnd/tools/test-battlemap.js`.

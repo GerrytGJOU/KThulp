@@ -2,6 +2,7 @@
 /* Test van de gevechtskaart-logica (dnd/battlemap.js). Gebruik: node dnd/tools/test-battlemap.js */
 "use strict";
 const B = require("../battlemap.js");
+const has = u => require("fs").existsSync(require("path").join(__dirname, "..", u.split("?")[0]));
 let pass = 0, fail = 0;
 const t = (n, f) => { try { f(); pass++; } catch (e) { fail++; console.log("MISLUKT: " + n + "\n  " + e.message); } };
 const ok = (v, m) => { if (!v) throw new Error(m || "onwaar"); };
@@ -54,6 +55,19 @@ t("controle: muur, dubbel vakje, onbekend teken, te ver, ontbrekende deelnemer",
   ok(B.check({ ...stand(), battle: { grid: ["..?", ".."], pos: {} } }).errors.length >= 2);
   const far = B.advance(stand(), [], { battle: { pos: { "Orc 1": "J6" } } }, merge); eq(far.errors, []); ok(B.advance(stand(), [], { battle: { pos: { Tharon: "J1" } } }, merge).warnings.some(w => /Tharon/.test(w)));
   const s = stand(); delete s.battle.pos.Tharon; ok(B.check(s).warnings.some(w => /Tharon staat in initiative/.test(w)));
+});
+t("afbeeldingen: elk bestand bestaat, ondergrond en decor gecontroleerd", () => {
+  Object.keys(B.PROPS).forEach(n => ok(has(B.art("o-" + n)), n));
+  [...Object.values(B.FLOORS), "karrenpad", "water", "diepwater", "muur", "rotswand"].forEach(n => ok(has(B.art("g-" + n)), n));
+  const s = stand(); s.battle.floor = "sneeuw"; s.battle.decor = { A1: "tent", C2: "dodeboom" }; eq(B.check(s).errors, []);
+  const m = B.model(s), th = B.things(m); eq(B.ground(m, 2, 1), "sneeuw"); eq(th.filter(o => o.x === 2 && o.y === 1).map(o => o.name), ["dodeboom"]); ok(th.every(o => B.PROPS[o.name]), "onbekend voorwerp");
+  s.battle.floor = "lava"; s.battle.decor = { Z99: "draak" }; eq(B.check(s).errors.length, 3);
+});
+t("vijandportret op naam", () => {
+  const f = n => (/v-(\w+)/.exec(B.foeArt(n)) || [, ""])[1];
+  eq(["Orc 1", "Orc-boogschutter 2", "Orc-kapitein", "Uruk", "Goblin A", "Warg", "Warg-ruiter", "Wolf 3", "Trol", "Reuzenspin", "Struikrover"].map(f), ["ork", "orkboog", "orkhoofd", "orkzwaar", "goblin", "warg", "wargruiter", "wolf", "trol", "spin", "rover"]);
+  ["Orc 1", "Skelet", "Grafgeest", "Oosterling", "Vleermuizen", "Gestalte"].forEach(n => ok(has(B.foeArt(n)), n));
+  eq(["Wulfgrim", "Tharon", "Mereth", "Spinner"].map(f), ["", "", "", ""]);
 });
 t("tekstkaart voor de DM", () => { const a = B.ascii(stand(), { Wulfgrim: 30 }); ok(/ABCDEFGHIJ/.test(a) && /1 = Wulfgrim \[pc\] B2/.test(a) && /Orc 1 20 ft/.test(a), a); });
 console.log(pass + " geslaagd, " + fail + " mislukt"); process.exit(fail ? 1 : 0);

@@ -10,6 +10,23 @@
   const OPEN = { ".": "gras of grond", p: "pad", s: "stenen vloer", e: "kale aarde" };
   const MAXW = 30, MAXH = 24;
 
+  /* ---------- afbeeldingen (gesneden door tools/slice-battle-sheets.py) ---------- */
+  const ART = "assets/battle/", ARTV = "?v=1";
+  const art = f => ART + f + ".webp" + ARTV;
+  /* battle.floor = ondergrond onder "." en onder voorwerpen */
+  const FLOORS = { gras: "gras", bos: "bos", aarde: "aarde", keien: "keien", plavuis: "plavuis", grot: "grot", planken: "planken", sneeuw: "sneeuw", zand: "zand", moeras: "moeras", puin: "puingrond" };
+  /* battle.decor = {"C4":"tent"}; de waarde is de schaal ten opzichte van een vak */
+  const PROPS = { loofboom: 1.5, den: 1.5, dodeboom: 1.5, stronk: 1.1, rots: 1.2, rotsblokken: 1.1, struik: 1.15, doornstruik: 1.15, boomstam: 1.5, riet: 1.1, waterlelies: 1, paddenstoelen: .9, varens: 1.15, wortels: 1.15, brandhout: 1, graspol: 1,
+    kampvuur: 1.15, tent: 1.6, slaaprol: 1, kist: .95, ton: .95, kratten: 1.05, tafel: 1.15, kar: 1.5, zuil: 1.4, muurstuk: 1.3, puin: 1.15, sokkel: 1.05, put: 1.2, vuurkorf: 1, altaar: 1.2, deur: 1 };
+  /* standaardvoorwerp per terreinteken */
+  const THING = { T: ["loofboom", "den"], R: ["rots", "rots", "rotsblokken"], b: ["struik", "struik", "varens", "doornstruik"], x: ["kratten", "ton", "kist"], C: ["kampvuur"] };
+  /* portret voor een vijand zonder eigen portret, op naam; eerste treffer telt */
+  const FOES = [[/warg.*(ruiter|rider|berijder)|(ruiter|rider).*warg/, "wargruiter"], [/\bwarg/, "warg"], [/\b(wolf|wolven)\b/, "wolf"], [/goblin|snaga/, "goblin"],
+    [/\bor[ck].*(boog|schutter|archer)/, "orkboog"], [/\bor[ck].*(hoofd|aanvoerder|kapitein|captain|leider)/, "orkhoofd"], [/\buruk|\bor[ck].*(zwaar|grote?\b|gepantserd)|(zware|grote) or[ck]/, "orkzwaar"], [/\b(orcs?|ork(s|en)?)\b/, "ork"],
+    [/\btroll?(en)?\b/, "trol"], [/\b(reuzen)?spin(nen)?\b|spider/, "spin"], [/grafgeest|wight|wraith/, "grafgeest"], [/skelet|skeleton/, "skelet"], [/rover|bandiet|bandit/, "rover"],
+    [/oosterling|easterling|haradrim|southron/, "oosterling"], [/vleermui[sz]|\bbats\b/, "vleermuizen"], [/gestalte|onbekende/, "gestalte"]];
+  const foeArt = name => { const f = FOES.find(x => x[0].test(String(name).toLowerCase())); return f ? art("v-" + f[1]) : ""; };
+
   /* ---------- vakjes ---------- */
   const col = x => (x >= 26 ? "A" : "") + String.fromCharCode(65 + x % 26);
   const sq = (x, y) => col(x) + (y + 1);
@@ -41,7 +58,7 @@
       const speed = Number((b.speed || {})[name]) || Number((speeds || {})[name]) || 30;
       tokens.push({ name, x: p[0], y: p[1], size, side, out, speed });
     });
-    return { grid, W, H, tokens, title: String(b.title || ""), from: b.from || {} };
+    return { grid, W, H, tokens, title: String(b.title || ""), from: b.from || {}, floor: FLOORS[b.floor] ? b.floor : "gras", decor: b.decor || {} };
   }
   const terrain = (m, x, y) => (x < 0 || y < 0 || x >= m.W || y >= m.H) ? "" : (m.grid[y][x] || ".");
   const wall = (m, x, y) => { const c = terrain(m, x, y); return !c || !!BLOCK[c]; };
@@ -100,6 +117,12 @@
     if (b.grid.some(r => r.length !== w)) errors.push("niet alle regels van battle.grid zijn even lang");
     const onbekend = [...new Set(b.grid.join("").split(""))].filter(c => !BLOCK[c] && !HARD[c] && !OPEN[c]);
     if (onbekend.length) errors.push("onbekende terreintekens: " + onbekend.join(" "));
+    if (b.floor && !FLOORS[b.floor]) errors.push("onbekende battle.floor \"" + b.floor + "\" (kies uit: " + Object.keys(FLOORS).join(", ") + ")");
+    Object.entries(b.decor || {}).forEach(([at, n]) => {
+      const p = parse(at);
+      if (!p || p[0] >= w || p[1] < 0 || p[1] >= b.grid.length) errors.push("battle.decor: vakje \"" + at + "\" ligt niet op de kaart");
+      if (!Object.prototype.hasOwnProperty.call(PROPS, n)) errors.push("battle.decor: onbekend voorwerp \"" + n + "\" (kies uit: " + Object.keys(PROPS).join(", ") + ")");
+    });
     Object.entries(b.pos || {}).forEach(([n, at]) => { if (!parse(at)) { errors.push(n + ": ongeldig vakje \"" + at + "\""); bad.push(n); } });
     const m = model(state); const names = order(state).map(o => o.name);
     m.tokens.forEach((t, i) => {
@@ -152,29 +175,51 @@
   /* ---------- tekenen (browser) ---------- */
   const S = 50;
   function el(tag, a, parent) { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in a) e.setAttribute(k, a[k]); if (parent) parent.appendChild(e); return e; }
-  function drawTerrain(svg, m) {
-    let seed = 7; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-    const g = el("g", {}, svg), ink = "#4a3a22";
+  /* grondtegel: eigen tegel per teken; onder een voorwerp de meest voorkomende vrije grond ernaast */
+  function ground(m, x, y) {
+    const own = { ".": FLOORS[m.floor], p: "karrenpad", s: "plavuis", e: "aarde", w: "water", W: "diepwater", "#": m.floor === "grot" ? "rotswand" : "muur" };
+    const ch = terrain(m, x, y) || ".";
+    if (own[ch]) return own[ch];
+    const n = {}; let best = FLOORS[m.floor], max = 1;
+    [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => { const c = terrain(m, x + dx, y + dy); if (OPEN[c]) { n[c] = (n[c] || 0) + 1; if (n[c] > max) { max = n[c]; best = own[c]; } } });
+    return best;
+  }
+  /* voorwerpen met hun vakje; decor vervangt het standaardvoorwerp van dat vak */
+  function things(m) {
+    const at = {};
+    for (let y = 0; y < m.H; y++) for (let x = 0; x < m.W; x++) { const l = THING[terrain(m, x, y)]; if (l) at[x + "," + y] = { x, y, name: l[((((x + 1) * 73856093) ^ ((y + 1) * 19349663)) >>> 4) % l.length] }; }
+    Object.entries(m.decor || {}).forEach(([k, name]) => { const p = parse(k); if (p && PROPS[name] && p[0] < m.W && p[1] >= 0 && p[1] < m.H) at[p[0] + "," + p[1]] = { x: p[0], y: p[1], name }; });
+    return Object.values(at).sort((a, b) => a.y - b.y || a.x - b.x);
+  }
+  const TILE = { muur: 100, planken: 100 }; /* hoe groot een grondtegel herhaalt (1 vak = 50) */
+  const FLAT = { gras: "#8f9440", bos: "#555a2c", aarde: "#9a7248", karrenpad: "#71543a", keien: "#a2937b", plavuis: "#a89a80", grot: "#6f6558", planken: "#7a5230", water: "#587b6c", diepwater: "#143c3e", sneeuw: "#dfe4ee", zand: "#cfa968", moeras: "#5b5a30", puingrond: "#8d7a64", muur: "#a89878", rotswand: "#6c675f" };
+  function drawTerrain(svg, m, defs) {
+    const g = el("g", {}, svg), used = {}, ink = "#241a0e";
+    /* de karrensporen op de tegel lopen schuin: draai ze mee met de richting van het pad */
+    const pc = []; m.grid.forEach((r, y) => [...r].forEach((c, x) => { if (c === "p") pc.push([x, y]); }));
+    const span = i => Math.max(...pc.map(p => p[i])) - Math.min(...pc.map(p => p[i])), turn = pc.length && span(1) >= span(0) ? -31 : 59;
     el("rect", { x: -22, y: -22, width: m.W * S + 30, height: m.H * S + 30, fill: "#2a2118" }, g);
     for (let y = 0; y < m.H; y++) for (let x = 0; x < m.W; x++) {
-      const ch = terrain(m, x, y) || ".", X = x * S, Y = y * S;
-      const fill = { p: "#cdb585", w: "#7ea3a8", W: "#2f4a55", s: "#bdb4a0", "#": "#bdb4a0", x: "#bdb4a0", e: "#a8916b", T: "#93a064", b: "#a6ab6e" }[ch] || (rnd() < .5 ? "#b9b27e" : "#b3ae78");
-      el("rect", { x: X, y: Y, width: S + .5, height: S + .5, fill }, g);
-      if (ch === ".") for (let i = 0; i < 3; i++) { const a = X + 6 + rnd() * 38, b = Y + 10 + rnd() * 34; el("path", { d: "M" + a + " " + b + "l2 -6M" + (a + 4) + " " + b + "l1 -5", stroke: "#7d8248", "stroke-width": 1.2, fill: "none" }, g); }
-      if (ch === "p" || ch === "e") for (let i = 0; i < 5; i++) el("circle", { cx: X + rnd() * S, cy: Y + rnd() * S, r: 1 + rnd() * 2, fill: "#8d7550", opacity: .8 }, g);
-      if (ch === "w" || ch === "W") for (let i = 0; i < 2; i++) { const a = X + 4 + rnd() * 20, b = Y + 12 + i * 22 + rnd() * 6; el("path", { d: "M" + a + " " + b + "q6 -6 12 0t12 0", stroke: "#e6efe6", "stroke-width": 1.6, fill: "none", opacity: ch === "W" ? .35 : .75 }, g); }
-      if (ch === "s") el("path", { d: "M" + (X + 2) + " " + (Y + S / 2) + "H" + (X + S - 2) + "M" + (X + S * .4) + " " + (Y + 2) + "V" + (Y + S / 2) + "M" + (X + S * .65) + " " + (Y + S / 2) + "V" + (Y + S - 2), stroke: "#8d8471", "stroke-width": 1.2, fill: "none" }, g);
+      const t = ground(m, x, y), a = { x: x * S, y: y * S, width: S + .5, height: S + .5 };
+      if (!used[t]) { used[t] = true; const d = TILE[t] || 150, p = el("pattern", { id: "bmg-" + t, patternUnits: "userSpaceOnUse", width: d, height: d }, defs); if (t === "karrenpad") p.setAttribute("patternTransform", "rotate(" + turn + ")"); el("image", { href: art("g-" + t), width: d + .5, height: d + .5, preserveAspectRatio: "none" }, p); }
+      el("rect", Object.assign({ fill: FLAT[t] }, a), g); /* kleur eronder zolang de afbeelding laadt */
+      el("rect", Object.assign({ fill: "url(#bmg-" + t + ")" }, a), g);
     }
-    /* voorwerpen bovenop, zodat ze over de vakrand mogen steken */
+    /* rand om muren en diep water, zodat blokkades goed te zien zijn */
+    let edge = "";
     for (let y = 0; y < m.H; y++) for (let x = 0; x < m.W; x++) {
-      const ch = terrain(m, x, y), cx = x * S + S / 2, cy = y * S + S / 2, X = x * S, Y = y * S;
-      if (ch === "#") { el("rect", { x: X + 1, y: Y + 1, width: S - 2, height: S - 2, rx: 4, fill: "#6f6657", stroke: ink, "stroke-width": 2.5 }, g); el("path", { d: "M" + (X + 3) + " " + cy + "H" + (X + S - 3) + "M" + cx + " " + (Y + 3) + "V" + cy + "M" + (cx - 12) + " " + cy + "V" + (Y + S - 3), stroke: ink, "stroke-width": 1.5, fill: "none" }, g); }
-      if (ch === "x") { el("rect", { x: X + 7, y: Y + 7, width: S - 14, height: S - 14, rx: 3, fill: "#9a6f3f", stroke: ink, "stroke-width": 2.5 }, g); el("path", { d: "M" + (X + 9) + " " + (Y + 9) + "L" + (X + S - 9) + " " + (Y + S - 9) + "M" + (X + S - 9) + " " + (Y + 9) + "L" + (X + 9) + " " + (Y + S - 9), stroke: ink, "stroke-width": 1.8, fill: "none" }, g); }
-      if (ch === "b") for (let i = 0; i < 6; i++) el("circle", { cx: cx - 15 + rnd() * 30, cy: cy - 15 + rnd() * 30, r: 6 + rnd() * 5, fill: "#6f8340", stroke: "#3f5224", "stroke-width": 1.2, opacity: .9 }, g);
-      if (ch === "R") { const p = []; for (let i = 0; i < 7; i++) { const a = i / 7 * 6.283, r = 17 + rnd() * 8; p.push((cx + Math.cos(a) * r) + "," + (cy + Math.sin(a) * r)); } el("polygon", { points: p.join(" "), fill: "#8f877a", stroke: ink, "stroke-width": 2.5, "stroke-linejoin": "round" }, g); el("path", { d: "M" + (cx - 10) + " " + (cy - 2) + "l9 -9l11 6M" + (cx - 2) + " " + (cy - 8) + "l2 14", stroke: ink, "stroke-width": 1.2, fill: "none" }, g); }
-      if (ch === "T") { el("ellipse", { cx: cx + 5, cy: cy + 7, rx: 24, ry: 21, fill: "#000", opacity: .18 }, g); const p = []; for (let i = 0; i < 14; i++) { const a = i / 14 * 6.283, r = (i % 2 ? 20 : 28) + rnd() * 4; p.push((cx + Math.cos(a) * r) + "," + (cy + Math.sin(a) * r)); } el("polygon", { points: p.join(" "), fill: rnd() < .5 ? "#4f7038" : "#5d7d3c", stroke: "#243a18", "stroke-width": 2, "stroke-linejoin": "round" }, g); el("circle", { cx: cx - 5, cy: cy - 5, r: 9, fill: "#7c9a4d", opacity: .8 }, g); }
-      if (ch === "C") { for (let i = 0; i < 8; i++) { const a = i / 8 * 6.283; el("circle", { cx: cx + Math.cos(a) * 17, cy: cy + Math.sin(a) * 17, r: 5, fill: "#7d756a", stroke: ink }, g); } el("path", { d: "M" + cx + " " + (cy - 14) + "q14 14 0 24q-14 -10 0 -24z", fill: "#e0782a", stroke: "#8a2f10", "stroke-width": 1.5 }, g); el("path", { d: "M" + cx + " " + (cy - 4) + "q6 7 0 12q-6 -5 0 -12z", fill: "#f6c94a" }, g); }
+      const c = terrain(m, x, y); if (c !== "#" && c !== "W") continue;
+      const X = x * S, Y = y * S, open = (a, b) => { const o = terrain(m, a, b); return o && o !== c; };
+      if (open(x, y - 1)) edge += "M" + X + " " + Y + "h" + S; if (open(x, y + 1)) edge += "M" + X + " " + (Y + S) + "h" + S;
+      if (open(x - 1, y)) edge += "M" + X + " " + Y + "v" + S; if (open(x + 1, y)) edge += "M" + (X + S) + " " + Y + "v" + S;
     }
+    if (edge) el("path", { d: edge, stroke: ink, "stroke-width": 4, "stroke-linecap": "round", fill: "none" }, g);
+    /* voorwerpen bovenop, zodat ze over de vakrand mogen steken */
+    things(m).forEach(o => {
+      const d = S * PROPS[o.name], cx = o.x * S + S / 2, cy = o.y * S + S / 2;
+      if (o.name !== "waterlelies" && o.name !== "deur") el("ellipse", { cx: cx + 5, cy: cy + 8, rx: d * .38, ry: d * .3, fill: "#000", opacity: .22 }, g);
+      el("image", { href: art("o-" + o.name), x: cx - d / 2, y: cy - d / 2, width: d, height: d }, g);
+    });
     const lines = el("g", { stroke: "#3c2f1c", "stroke-width": 1, opacity: .28 }, svg);
     for (let x = 0; x <= m.W; x++) el("line", { x1: x * S, y1: 0, x2: x * S, y2: m.H * S }, lines);
     for (let y = 0; y <= m.H; y++) el("line", { x1: 0, y1: y * S, x2: m.W * S, y2: y * S }, lines);
@@ -183,12 +228,12 @@
   }
   /* view = {pic(naam), pct(naam), current:[namen], budget:{routes, left} | null, path, target, mover} */
   function render(svg, m, view) {
-    const sig = JSON.stringify(m.grid);
+    const sig = JSON.stringify([m.grid, m.floor, m.decor]);
     if (svg._sig !== sig) {
       svg._sig = sig; svg.innerHTML = ""; svg._tok = {};
       svg.setAttribute("viewBox", "-22 -22 " + (m.W * S + 30) + " " + (m.H * S + 30));
       const defs = el("defs", {}, svg), clip = el("clipPath", { id: "bmrond", clipPathUnits: "objectBoundingBox" }, defs); el("circle", { cx: .5, cy: .5, r: .5 }, clip);
-      drawTerrain(svg, m);
+      drawTerrain(svg, m, defs);
       svg._hi = el("g", { "pointer-events": "none" }, svg); svg._tg = el("g", {}, svg); svg._over = el("g", { "pointer-events": "none" }, svg);
     }
     const hi = svg._hi, over = svg._over; hi.innerHTML = ""; over.innerHTML = "";
@@ -205,7 +250,7 @@
     const seen = {};
     m.tokens.forEach(t => {
       seen[t.name] = true;
-      const d = t.size * S, r = d / 2 - 3, c = d / 2, pic = view.pic(t.name), key = (pic ? "p" : "t") + t.size + t.side;
+      const d = t.size * S, r = d / 2 - 3, c = d / 2, pic = view.pic(t.name, t.side), key = (pic ? "p" : "t") + t.size + t.side;
       let o = svg._tok[t.name];
       if (!o || o.key !== key) {
         if (o) o.g.remove();
@@ -238,5 +283,5 @@
   /* vakje onder de muis of vinger */
   function cellAt(svg, ev) { const p = svg.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse()); return [Math.floor(q.x / S), Math.floor(q.y / S)]; }
 
-  return { BLOCK, HARD, OPEN, S, col, sq, parse, order, hasGrid, active, model, terrain, wall, cells, occ, foes, dist, routes, canStop, pathOf, opportunity, cover, moveTag, parseMoves, check, advance, ascii, render, cellAt };
+  return { BLOCK, HARD, OPEN, FLOORS, PROPS, S, art, foeArt, ground, things, col, sq, parse, order, hasGrid, active, model, terrain, wall, cells, occ, foes, dist, routes, canStop, pathOf, opportunity, cover, moveTag, parseMoves, check, advance, ascii, render, cellAt };
 });
